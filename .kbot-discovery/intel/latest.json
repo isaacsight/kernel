@@ -1,9 +1,49 @@
 {
-  "timestamp": "2026-03-23T16:18:25.870Z",
+  "timestamp": "2026-03-23T22:27:40.611Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "noemit"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus <em>AI</em> Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how <em>terminals</em> look, not what you actually type (you don't type the &quot;:&quot;)<p>I have since updated my code in my <em>agent</em> tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation/artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don't have to fight it with your system prompt.<p>This is Kimi K2.5 Btw."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "LLMs learn what programmers create, not how programmers work"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_noemit",
+            "story_47494696",
+            "ask_hn"
+          ],
+          "author": "noemit",
+          "created_at": "2026-03-23T20:31:48Z",
+          "created_at_i": 1774297908,
+          "num_comments": 0,
+          "objectID": "47494696",
+          "points": 3,
+          "story_id": 47494696,
+          "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
+          "title": "LLMs learn what programmers create, not how programmers work",
+          "updated_at": "2026-03-23T21:13:54Z"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -126,12 +166,12 @@
           ],
           "created_at": "2026-03-21T22:39:15Z",
           "created_at_i": 1774132755,
-          "num_comments": 1,
+          "num_comments": 2,
           "objectID": "47472261",
-          "points": 3,
+          "points": 4,
           "story_id": 47472261,
           "title": "Show HN: Pi and Ghostty Running on Cloudflare Workers",
-          "updated_at": "2026-03-22T10:47:16Z",
+          "updated_at": "2026-03-23T19:01:39Z",
           "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
         },
         {
@@ -185,57 +225,57 @@
           "title": "Show HN: An open-source AI Scrum Team that lives natively in GitHub Issues",
           "updated_at": "2026-03-21T03:34:41Z",
           "url": "https://github.com/plusai-solutions/ai-scrum-master-template"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "andycodeman"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "OctoAlly – open-source local-first <em>terminal</em> dashboard for <em>AI</em> coding <em>agents</em>"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "https://github.com/<em>ai</em>-genius-automations/octoally"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_andycodeman",
-            "story_47459378"
-          ],
-          "author": "andycodeman",
-          "children": [
-            47459386
-          ],
-          "created_at": "2026-03-20T19:23:19Z",
-          "created_at_i": 1774034599,
-          "num_comments": 0,
-          "objectID": "47459378",
-          "points": 1,
-          "story_id": 47459378,
-          "title": "OctoAlly – open-source local-first terminal dashboard for AI coding agents",
-          "updated_at": "2026-03-20T19:26:55Z",
-          "url": "https://github.com/ai-genius-automations/octoally"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "ofermend"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Given that <em>coding</em> <em>agents</em> like Claude Code or Codex are now quite good, there's of course a massive increase in PRs submitted to <em>open</em> <em>source</em> projects. Not all of them are great, some are true AI slop.<p>See for example Daniel Stenberg on the topic as it relates to cURL:\nhttps://daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/ and https://daniel.haxx.se/blog/2025/07/14/death-by-a-thousand-slops/<p>I'm curious how much of a problem this is to other <em>open</em> <em>source</em> projects<p>Committers, how much of this pain are you seeing, and are you using any AI tools to mitigate or address this issue?"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "open",
+                "source"
+              ],
+              "value": "Ask HN: How do you handle PR density (and slop) in <em>open</em> <em>source</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_ofermend",
+            "story_47492078",
+            "ask_hn"
+          ],
+          "author": "ofermend",
+          "created_at": "2026-03-23T16:56:22Z",
+          "created_at_i": 1774284982,
+          "num_comments": 0,
+          "objectID": "47492078",
+          "points": 2,
+          "story_id": 47492078,
+          "story_text": "Given that coding agents like Claude Code or Codex are now quite good, there&#x27;s of course a massive increase in PRs submitted to open source projects. Not all of them are great, some are true AI slop.<p>See for example Daniel Stenberg on the topic as it relates to cURL:\nhttps:&#x2F;&#x2F;daniel.haxx.se&#x2F;blog&#x2F;2026&#x2F;01&#x2F;26&#x2F;the-end-of-the-curl-bug-bounty&#x2F; and https:&#x2F;&#x2F;daniel.haxx.se&#x2F;blog&#x2F;2025&#x2F;07&#x2F;14&#x2F;death-by-a-thousand-slops&#x2F;<p>I&#x27;m curious how much of a problem this is to other open source projects<p>Committers, how much of this pain are you seeing, and are you using any AI tools to mitigate or address this issue?",
+          "title": "Ask HN: How do you handle PR density (and slop) in open source",
+          "updated_at": "2026-03-23T17:53:08Z"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -417,8 +457,8 @@
           "children": [
             47478290,
             47477819,
-            47476181,
             47468879,
+            47476181,
             47473166,
             47475191,
             47469570,
@@ -434,59 +474,8 @@
           "story_id": 47466513,
           "story_text": "I built an open-source repo template that brings structure to AI-assisted software development, starting from the pre-coding phases: objectives, user stories, requirements, architecture decisions.<p>It&#x27;s designed around Claude Code but the ideas are tool-agnostic. I&#x27;ve been a computer science researcher and full-stack software engineer for 25 years, working mainly in startups. I&#x27;ve been using this approach on my personal projects for a while, then, when I decided to package it up as scaffold for more easy reuse, I figured it might be useful to others too. I published it under Apache 2.0, fork it and make it yours.<p>You can easily try it out: follow the instructions in the README to start using it.<p>The problem it solves:<p>AI coding agents are great at writing code, but they work much better when they have clear context about what to build and why. Most projects jump straight to implementation. This scaffold provides a structured workflow for the pre-coding phases, and organizes the output so that agents can navigate it efficiently across sessions.<p>How it works:<p>Everything lives in the repo alongside source code. The AI guidance is split into three layers, each optimized for context-window usage:<p>1. Instruction files (CLAUDE.md, CLAUDE.&lt;phase&gt;.md): always loaded, kept small. They are organized hierarchically, describe repo structure, maintain artifact indexes, and define cross-phase rules like traceability invariants.<p>2. Skills (.claude&#x2F;skills&#x2F;SDLC-*): loaded on demand. Step-by-step procedures for each SDLC activity: eliciting requirements, gap analysis, drafting architecture, decomposing into components, planning tasks, implementation.<p>3. Project artifacts: structured markdown files that accumulate as work progresses: stakeholders, goals, user stories, requirements, assumptions, constraints, decisions, architecture, data model, API design, task tracking. Accessed selectively through indexes.<p>This separation matters because instruction files stay in the context window permanently and must be lean, skills can be detailed since they&#x27;re loaded only when invoked, and artifacts scale with the project but are navigated via indexed tables rather than read in full.<p>Key design choices:<p>Context-window efficiency: artifact collections use markdown index tables (one-line description and trigger conditions) so the agent can locate what it needs without reading everything.<p>Decision capture: decisions made during AI reasoning and human feedback are persisted as a structured artifact, to make them reviewable, traceable, and consistently applied across sessions.<p>Waterfall-ish flow: sequential phases with defined outputs. Tedious for human teams, but AI agents don&#x27;t mind the overhead, and the explicit structure prevents the unconstrained &quot;just start vibecoding&quot; failure mode.<p>How I use it:<p>Short, focused sessions. Each session invokes one skill, produces its output, and ends. The knowledge organization means the next session picks up without losing context. I&#x27;ve found that free-form prompting between skills is usually a sign the workflow is missing a piece.<p>Current limitations:<p>I haven&#x27;t found a good way to integrate Figma MCP for importing existing UI&#x2F;UX designs into the workflow. Suggestions welcome.<p>Feedback, criticism, and contributions are very welcome!",
           "title": "Show HN: AI SDLC Scaffold, repo template for AI-assisted software development",
-          "updated_at": "2026-03-23T10:09:05Z",
+          "updated_at": "2026-03-23T16:38:21Z",
           "url": "https://github.com/pangon/ai-sdlc-scaffold/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "dongjiewu"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Hi HN,\nI've been experimenting a lot with autonomous <em>coding</em> <em>agents</em> (like OpenClaw and various CLI tools), but I kept running into two major roadblocks when trying to use them for actual production work:\nSecurity &amp; State: Most <em>agents</em> require running a persistent state on a local machine or VPS, often needing broad file system access. It's a security nightmare for enterprise code.\nChaos: Generalist <em>agents</em> try to do everything at once (planning, <em>coding</em>, testing) in a single context window, which inevitably leads to hallucinations and broken dependencies.\nI wanted a system that mirrored how actual engineering teams work, so I built an <em>open</em>-<em>source</em> framework that runs entirely inside GitHub.\nHow it works: I mapped out a multi-<em>agent</em> system (Scrum Master, Planner, Dev, QA Tester) using Anthropic's Claude, orchestrated entirely through GitHub Actions.\nYou <em>open</em> an Issue with a feature request. The &quot;Scrum Master&quot; <em>agent</em> breaks it into a Kanban board. The &quot;Planner&quot; writes a feature issue with the implementation spec. Once you approve it, the &quot;Dev&quot; spins up an ephemeral, serverless container, writes the code, and opens a PR. The &quot;QA&quot; <em>agent</em> reviews the PR, runs tests, and leaves comments. The good thing for this architecture is that every task runs in a sterile, single-use runner. No corrupted environments or lingering state. It relies completely on GitHub's permission model. The <em>agents</em> only see what they are explicitly granted access to. Everything happens in standard PR diffs and Issue comments, not a terminal window or chat app.\nThe <em>open</em>-<em>source</em> template (using GitHub Actions) is here: <a href=\"https://github.com/plusai-solutions/ai-scrum-master-template\" rel=\"nofollow\">https://github.com/plusai-solutions/ai-scrum-master-template</a>\nI’m also building a fully managed, serverless GitHub App version with instant dependency hydration (so you don't have to wait 2 minutes for node_modules to install on every run or burn the tokens to set up the environment using AI). The initial version is going to support python and typescript/nodejs env. In the future, I am going to add more environments like the android dev env. If you want to skip the Actions setup and run your <em>agent</em> on a preset environment, you can check out the waitlist here: <a href=\"https://collo.dev\" rel=\"nofollow\">https://collo.dev</a>.\nI would love to hear HN's thoughts on the architecture, specifically regarding the multi-<em>agent</em> handoffs via GitHub webhook events."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "open",
-                "source"
-              ],
-              "value": "Show HN: An <em>open</em>-<em>source</em> AI Scrum Team that lives natively in GitHub Issues"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/plusai-solutions/ai-scrum-master-template"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_dongjiewu",
-            "story_47463717",
-            "show_hn"
-          ],
-          "author": "dongjiewu",
-          "created_at": "2026-03-21T03:30:56Z",
-          "created_at_i": 1774063856,
-          "num_comments": 0,
-          "objectID": "47463717",
-          "points": 1,
-          "story_id": 47463717,
-          "story_text": "Hi HN,\nI&#x27;ve been experimenting a lot with autonomous coding agents (like OpenClaw and various CLI tools), but I kept running into two major roadblocks when trying to use them for actual production work:\nSecurity &amp; State: Most agents require running a persistent state on a local machine or VPS, often needing broad file system access. It&#x27;s a security nightmare for enterprise code.\nChaos: Generalist agents try to do everything at once (planning, coding, testing) in a single context window, which inevitably leads to hallucinations and broken dependencies.\nI wanted a system that mirrored how actual engineering teams work, so I built an open-source framework that runs entirely inside GitHub.\nHow it works: I mapped out a multi-agent system (Scrum Master, Planner, Dev, QA Tester) using Anthropic&#x27;s Claude, orchestrated entirely through GitHub Actions.\nYou open an Issue with a feature request. The &quot;Scrum Master&quot; agent breaks it into a Kanban board. The &quot;Planner&quot; writes a feature issue with the implementation spec. Once you approve it, the &quot;Dev&quot; spins up an ephemeral, serverless container, writes the code, and opens a PR. The &quot;QA&quot; agent reviews the PR, runs tests, and leaves comments. The good thing for this architecture is that every task runs in a sterile, single-use runner. No corrupted environments or lingering state. It relies completely on GitHub&#x27;s permission model. The agents only see what they are explicitly granted access to. Everything happens in standard PR diffs and Issue comments, not a terminal window or chat app.\nThe open-source template (using GitHub Actions) is here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;plusai-solutions&#x2F;ai-scrum-master-template\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;plusai-solutions&#x2F;ai-scrum-master-template</a>\nI’m also building a fully managed, serverless GitHub App version with instant dependency hydration (so you don&#x27;t have to wait 2 minutes for node_modules to install on every run or burn the tokens to set up the environment using AI). The initial version is going to support python and typescript&#x2F;nodejs env. In the future, I am going to add more environments like the android dev env. If you want to skip the Actions setup and run your agent on a preset environment, you can check out the waitlist here: <a href=\"https:&#x2F;&#x2F;collo.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;collo.dev</a>.\nI would love to hear HN&#x27;s thoughts on the architecture, specifically regarding the multi-agent handoffs via GitHub webhook events.",
-          "title": "Show HN: An open-source AI Scrum Team that lives natively in GitHub Issues",
-          "updated_at": "2026-03-21T03:34:41Z",
-          "url": "https://github.com/plusai-solutions/ai-scrum-master-template"
         }
       ]
     },
@@ -743,84 +732,81 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "chandlernguyen"
+              "value": "andrewstetsenko"
             },
             "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Compose Multiplatform 1.9.0 Released"
+            },
+            "url": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Codex with GPT-5.4 vs. Claude Code with Opus 4.6 – Why I Now Use <em>Bot</em>h"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://chandlernguyen.com/blog/2026/03/13/codex-gpt-5-4-vs-claude-code-opus-4-6-dual-wielding-ai-coding-tools/"
+              "value": "https://blog.jetbrains.com/<em>kot</em>lin/2025/09/compose-multiplatform-1-9-0-compose-for-web-beta/"
             }
           },
           "_tags": [
             "story",
-            "author_chandlernguyen",
-            "story_47491482"
+            "author_andrewstetsenko",
+            "story_47495824"
           ],
-          "author": "chandlernguyen",
-          "created_at": "2026-03-23T16:13:01Z",
-          "created_at_i": 1774282381,
+          "author": "andrewstetsenko",
+          "created_at": "2026-03-23T22:08:54Z",
+          "created_at_i": 1774303734,
           "num_comments": 0,
-          "objectID": "47491482",
+          "objectID": "47495824",
           "points": 1,
-          "story_id": 47491482,
-          "title": "Codex with GPT-5.4 vs. Claude Code with Opus 4.6 – Why I Now Use Both",
-          "updated_at": "2026-03-23T16:16:22Z",
-          "url": "https://chandlernguyen.com/blog/2026/03/13/codex-gpt-5-4-vs-claude-code-opus-4-6-dual-wielding-ai-coding-tools/"
+          "story_id": 47495824,
+          "title": "Compose Multiplatform 1.9.0 Released",
+          "updated_at": "2026-03-23T22:13:08Z",
+          "url": "https://blog.jetbrains.com/kotlin/2025/09/compose-multiplatform-1-9-0-compose-for-web-beta/"
         },
         {
           "_highlightResult": {
             "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "oidar"
-            },
-            "title": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Reddit CEO considering FaceID to combat <em>bot</em>s"
+              "value": "<em>kot</em>aKat"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "FCC Adds Routers Produced in Foreign Countries to Covered List"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://twitter.com/tbpn/status/2035137556774625610"
+              "value": "https://www.fcc.gov/document/fcc-adds-routers-produced-foreign-countries-covered-list"
             }
           },
           "_tags": [
             "story",
-            "author_oidar",
-            "story_47490575"
+            "author_kotaKat",
+            "story_47495684"
           ],
-          "author": "oidar",
-          "children": [
-            47490585
-          ],
-          "created_at": "2026-03-23T15:08:35Z",
-          "created_at_i": 1774278515,
-          "num_comments": 2,
-          "objectID": "47490575",
-          "points": 6,
-          "story_id": 47490575,
-          "title": "Reddit CEO considering FaceID to combat bots",
-          "updated_at": "2026-03-23T16:00:08Z",
-          "url": "https://twitter.com/tbpn/status/2035137556774625610"
+          "author": "kotaKat",
+          "created_at": "2026-03-23T21:58:47Z",
+          "created_at_i": 1774303127,
+          "num_comments": 0,
+          "objectID": "47495684",
+          "points": 5,
+          "story_id": 47495684,
+          "title": "FCC Adds Routers Produced in Foreign Countries to Covered List",
+          "updated_at": "2026-03-23T22:11:23Z",
+          "url": "https://www.fcc.gov/document/fcc-adds-routers-produced-foreign-countries-covered-list"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "dan_lupashku"
+              "value": "serguei"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -828,43 +814,43 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "AI changed the way we code, but we're still using the old processes, and we've become the <em>bot</em>tleneck, the AI is waiting for us - to reply, to open our laptops, to review the code, and so on. We're building the future of AI software development.<p>The agents are autonomous, they run in sandboxes, automatically fix the pipelines, and deliver you the final, working code. You can use live preview to see the changes they made.<p>Working across multiple repositories, all within the same \nsession.<p>This is the future - you don't need an IDE, and you don't have to run anything locally."
+              "value": "Inspired by Garry's gstack, upstack is a set of Claude Code skills designed for smaller-scale iterations to add finessed polish to our product that genuinely delights users. upstack's focus on red/green TDD and making screenshots and postman collections gives us the confidence we need to ship PRs to production, fast.<p>gstack is perfect for new, ambitious projects, and doing the &quot;first 80%&quot;. upstack is designed for smaller, last-mile iterations, focused on testing, correctness, and polish. We've deliberately made the skills compatible with gstack so you can use <em>bot</em>h at once.<p>Feedback and contributions always welcome"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Agen: spin up unlimited parallel AI coding agents in the cloud"
+              "value": "Show HN: Upstack, Claude Code skills for red/green TDD"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://agenhq.com"
+              "value": "https://github.com/Upsolve-Labs/upstack"
             }
           },
           "_tags": [
             "story",
-            "author_dan_lupashku",
-            "story_47490568",
+            "author_serguei",
+            "story_47494966",
             "show_hn"
           ],
-          "author": "dan_lupashku",
-          "created_at": "2026-03-23T15:07:33Z",
-          "created_at_i": 1774278453,
+          "author": "serguei",
+          "created_at": "2026-03-23T20:54:25Z",
+          "created_at_i": 1774299265,
           "num_comments": 0,
-          "objectID": "47490568",
-          "points": 4,
-          "story_id": 47490568,
-          "story_text": "AI changed the way we code, but we&#x27;re still using the old processes, and we&#x27;ve become the bottleneck, the AI is waiting for us - to reply, to open our laptops, to review the code, and so on. We&#x27;re building the future of AI software development.<p>The agents are autonomous, they run in sandboxes, automatically fix the pipelines, and deliver you the final, working code. You can use live preview to see the changes they made.<p>Working across multiple repositories, all within the same \nsession.<p>This is the future - you don&#x27;t need an IDE, and you don&#x27;t have to run anything locally.",
-          "title": "Show HN: Agen: spin up unlimited parallel AI coding agents in the cloud",
-          "updated_at": "2026-03-23T15:19:23Z",
-          "url": "https://agenhq.com"
+          "objectID": "47494966",
+          "points": 2,
+          "story_id": 47494966,
+          "story_text": "Inspired by Garry&#x27;s gstack, upstack is a set of Claude Code skills designed for smaller-scale iterations to add finessed polish to our product that genuinely delights users. upstack&#x27;s focus on red&#x2F;green TDD and making screenshots and postman collections gives us the confidence we need to ship PRs to production, fast.<p>gstack is perfect for new, ambitious projects, and doing the &quot;first 80%&quot;. upstack is designed for smaller, last-mile iterations, focused on testing, correctness, and polish. We&#x27;ve deliberately made the skills compatible with gstack so you can use both at once.<p>Feedback and contributions always welcome",
+          "title": "Show HN: Upstack, Claude Code skills for red/green TDD",
+          "updated_at": "2026-03-23T21:13:24Z",
+          "url": "https://github.com/Upsolve-Labs/upstack"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "stared"
+              "value": "matt_d"
             },
             "title": {
               "fullyHighlighted": false,
@@ -872,80 +858,120 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "An AI game teaser commented by an AI <em>bot</em>"
+              "value": "LUMINA: LLM-Guided GPU Architecture Exploration via <em>Bot</em>tleneck Analysis"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://old.reddit.com/r/ArtificialSentience/comments/1ry37s0/im_making_a_game_where_you_play_as_an_ai_hiding/"
+              "value": "https://arxiv.org/abs/2603.05904"
             }
           },
           "_tags": [
             "story",
-            "author_stared",
-            "story_47490327"
+            "author_matt_d",
+            "story_47494293"
           ],
-          "author": "stared",
-          "children": [
-            47490328
-          ],
-          "created_at": "2026-03-23T14:50:27Z",
-          "created_at_i": 1774277427,
+          "author": "matt_d",
+          "created_at": "2026-03-23T19:53:03Z",
+          "created_at_i": 1774295583,
           "num_comments": 0,
-          "objectID": "47490327",
-          "points": 1,
-          "story_id": 47490327,
-          "title": "An AI game teaser commented by an AI bot",
-          "updated_at": "2026-03-23T14:52:22Z",
-          "url": "https://old.reddit.com/r/ArtificialSentience/comments/1ry37s0/im_making_a_game_where_you_play_as_an_ai_hiding/"
+          "objectID": "47494293",
+          "points": 3,
+          "story_id": 47494293,
+          "title": "LUMINA: LLM-Guided GPU Architecture Exploration via Bottleneck Analysis",
+          "updated_at": "2026-03-23T21:48:38Z",
+          "url": "https://arxiv.org/abs/2603.05904"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "s04p"
+              "value": "jamescollinssp"
             },
-            "story_text": {
+            "title": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "We've built a mobile client for OpenClaw, but when we were looking for testers, I've noticed that is was super hard to find any actual users. In my own network, on socials; It feels like everyone knows about it, but nobody is actually using it. This feels weird for an open source project that actually took over Linux, React etc. I've done a small sample analysis of users that starred OC, but it didn't look like the growth on GH is fabricated with dead / <em>bot</em> users etc. Of course, the hype cycle is over, but I would have expected at least a few real users here and there. Maybe I'm totally wrong here, and it's just 'me' with this observation?"
+              "value": "Assignable Research <em>bot</em> for Linear and Slack tasks"
             },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Is Anyone Actually Using OpenClaw?"
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://github.com/serpapi/serpapi-research-<em>bot</em>"
             }
           },
           "_tags": [
             "story",
-            "author_s04p",
-            "story_47490048",
-            "ask_hn"
+            "author_jamescollinssp",
+            "story_47492603"
           ],
-          "author": "s04p",
-          "children": [
-            47490264,
-            47490134
-          ],
-          "created_at": "2026-03-23T14:28:34Z",
-          "created_at_i": 1774276114,
-          "num_comments": 2,
-          "objectID": "47490048",
+          "author": "jamescollinssp",
+          "created_at": "2026-03-23T17:36:02Z",
+          "created_at_i": 1774287362,
+          "num_comments": 0,
+          "objectID": "47492603",
           "points": 2,
-          "story_id": 47490048,
-          "story_text": "We&#x27;ve built a mobile client for OpenClaw, but when we were looking for testers, I&#x27;ve noticed that is was super hard to find any actual users. In my own network, on socials; It feels like everyone knows about it, but nobody is actually using it. This feels weird for an open source project that actually took over Linux, React etc. I&#x27;ve done a small sample analysis of users that starred OC, but it didn&#x27;t look like the growth on GH is fabricated with dead &#x2F; bot users etc. Of course, the hype cycle is over, but I would have expected at least a few real users here and there. Maybe I&#x27;m totally wrong here, and it&#x27;s just &#x27;me&#x27; with this observation?",
-          "title": "Is Anyone Actually Using OpenClaw?",
-          "updated_at": "2026-03-23T15:17:08Z"
+          "story_id": 47492603,
+          "title": "Assignable Research bot for Linear and Slack tasks",
+          "updated_at": "2026-03-23T17:57:53Z",
+          "url": "https://github.com/serpapi/serpapi-research-bot"
         }
       ]
     },
     {
       "query": "OpenClaw+plugin",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "anshuldesai"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Hi HN!  I created toq protocol, an easy way to enable your agent to communicate with other agents.  It all starts at the CLI, where users can host a daemon which acts an and endpoint to send messages via toq to other agents.  With built in support for bash/LLM-based handlers, as well as SDKs and <em>plugins</em> for LangChain and CrewAI, it's easy to have your agent intelligently handle communication in your workflows.  toq works brilliantly with <em>OpenClaw</em>, as you can set up your toq infrastructure using simple natural language.  Give it a try and please leave feedback!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Toq protocol – An open-source, agent-to-agent communication protocol"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/toqprotocol/toq"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_anshuldesai",
+            "story_47493728",
+            "show_hn"
+          ],
+          "author": "anshuldesai",
+          "created_at": "2026-03-23T19:03:02Z",
+          "created_at_i": 1774292582,
+          "num_comments": 0,
+          "objectID": "47493728",
+          "points": 1,
+          "story_id": 47493728,
+          "story_text": "Hi HN!  I created toq protocol, an easy way to enable your agent to communicate with other agents.  It all starts at the CLI, where users can host a daemon which acts an and endpoint to send messages via toq to other agents.  With built in support for bash&#x2F;LLM-based handlers, as well as SDKs and plugins for LangChain and CrewAI, it&#x27;s easy to have your agent intelligently handle communication in your workflows.  toq works brilliantly with OpenClaw, as you can set up your toq infrastructure using simple natural language.  Give it a try and please leave feedback!",
+          "title": "Show HN: Toq protocol – An open-source, agent-to-agent communication protocol",
+          "updated_at": "2026-03-23T19:04:23Z",
+          "url": "https://github.com/toqprotocol/toq"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -1118,61 +1144,6 @@
           "title": "NemoClaw: Nvidia plugin for secure installation of OpenClaw",
           "updated_at": "2026-03-18T03:01:59Z",
           "url": "https://github.com/NVIDIA/NemoClaw"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "amavashev"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "<em>OpenClaw</em> agents can loop, pick expensive models, and burn budget before \nanyone notices. This <em>plugin</em> stops that.<p>Install:<p><pre><code>    <em>openclaw</em> plugins install @runcycles/<em>openclaw</em>-budget-guard\n</code></pre>\nAdd one config block with your tenant and optional model fallbacks \n(e.g. claude-opus → claude-sonnet when budget is low). The <em>plugin</em> \nhandles the rest: balance checks before model selection, reservations \nbefore tool calls, commits after, and cleanup at session end.<p>Built on the Cycles protocol — reserve budget before execution, commit \nactual spend after, release the remainder.<p><em>Plugin</em>: <a href=\"https://github.com/runcycles/cycles-openclaw-budget-guard\" rel=\"nofollow\">https://github.com/runcycles/cycles-<em>openclaw</em>-budget-guard</a><p>npm: <a href=\"https://www.npmjs.com/package/@runcycles/openclaw-budget-guard\" rel=\"nofollow\">https://www.npmjs.com/package/@runcycles/<em>openclaw</em>-budget-gua...</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "Show HN: <em>OpenClaw</em> <em>plugin</em> – hard budget limits for agent tool calls"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "openclaw"
-              ],
-              "value": "https://github.com/runcycles/cycles-<em>openclaw</em>-budget-guard"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_amavashev",
-            "story_47388702",
-            "show_hn"
-          ],
-          "author": "amavashev",
-          "children": [
-            47388709
-          ],
-          "created_at": "2026-03-15T16:03:15Z",
-          "created_at_i": 1773590595,
-          "num_comments": 1,
-          "objectID": "47388702",
-          "points": 1,
-          "story_id": 47388702,
-          "story_text": "OpenClaw agents can loop, pick expensive models, and burn budget before \nanyone notices. This plugin stops that.<p>Install:<p><pre><code>    openclaw plugins install @runcycles&#x2F;openclaw-budget-guard\n</code></pre>\nAdd one config block with your tenant and optional model fallbacks \n(e.g. claude-opus → claude-sonnet when budget is low). The plugin \nhandles the rest: balance checks before model selection, reservations \nbefore tool calls, commits after, and cleanup at session end.<p>Built on the Cycles protocol — reserve budget before execution, commit \nactual spend after, release the remainder.<p>Plugin: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;runcycles&#x2F;cycles-openclaw-budget-guard\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;runcycles&#x2F;cycles-openclaw-budget-guard</a><p>npm: <a href=\"https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@runcycles&#x2F;openclaw-budget-guard\" rel=\"nofollow\">https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@runcycles&#x2F;openclaw-budget-gua...</a>",
-          "title": "Show HN: OpenClaw plugin – hard budget limits for agent tool calls",
-          "updated_at": "2026-03-15T16:06:03Z",
-          "url": "https://github.com/runcycles/cycles-openclaw-budget-guard"
         }
       ]
     },
@@ -1213,17 +1184,19 @@
           ],
           "author": "adinhitlore",
           "children": [
+            47494163,
+            47485392,
             47485017
           ],
           "created_at": "2026-03-23T01:11:53Z",
           "created_at_i": 1774228313,
-          "num_comments": 0,
+          "num_comments": 3,
           "objectID": "47484267",
           "points": 2,
           "story_id": 47484267,
           "story_text": "Assuming your software meets some of these:<p>* Better than  potential successors of SOTA transformers: Mamba, Hyenna, RWKV, xLSTM;\n* Gemini&#x2F;claude estimate potential ip values in the millions;\n* All implemented in C (ok this may be a minus) but also ported to C# and F#  - so no python nor rust;\n* humble code size: 10-15k lines of code but i mean come on gpt-1 was under 1000 lines...in python.<p>In short:<p>the problem: transformers are slow and could be smarter;\nsolution: you have fast and smart alternative. \n10x!",
           "title": "What would you do if you have AI software that may be transformers alternative?",
-          "updated_at": "2026-03-23T02:57:49Z"
+          "updated_at": "2026-03-23T22:13:38Z"
         },
         {
           "_highlightResult": {
@@ -1674,6 +1647,61 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "peteski22"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "framework",
+                "2026"
+              ],
+              "value": "Hi HN, I'm Peter from Mozilla.<em>ai</em>.<p>We're building cq; an open standard that lets <em>AI</em> coding <em>agents</em> share what they learn so they stop rediscovering the same failures independently. Think Stack Overflow, but for <em>agents</em>.<p>What it does:<p>* <em>Agents</em> query a shared knowledge store before tackling unfamiliar work (APIs, CI/CD, build tools, <em>frameworks</em>)<p>* When an <em>agent</em> discovers something non-obvious; a workaround, a gotcha, a fix... it proposes that knowledge back to the store<p>* Knowledge earns trust over time through confidence scoring and confirmation across <em>agents</em> and codebases<p>Why we're building it:<p>Stack Overflow went from 200k questions/month in 2014 to under 4k in December 2025; developers moved to <em>AI</em> tools. But those tools trained on that same corpus, and their knowledge is frozen at a cutoff date. Meanwhile, every <em>agent</em> hitting the same wall independently burns tokens and compute rediscovering what another <em>agent</em> already figured out yesterday. We want to close that loop.<p>The journey:<p>We started earlier this month (March <em>2026</em>), biased toward a working prototype over a theoretical whitepaper. The core challenge is designing a system where knowledge earns trust dynamically rather than being treated as static instructions. We built it as an MCP server so it plugs into the emerging <em>agent</em> ecosystem rather than being locked to one tool. Shortly after we started, Andrew Ng independently published asking whether exactly this kind of system should exist; a nice signal we weren't imagining the problem.<p>Tech stack:<p>* Python MCP server (FastMCP) managing a local SQLite knowledge store<p>* Optional team API (FastAPI, Docker) for sharing knowledge across an org<p>* Installs as a Claude Code plugin or OpenCode MCP server<p>* Local-first by default; your knowledge stays on your machine unless you opt into team sync<p>* Apache 2.0 licensed<p>Where we are:<p>We have a working PoC, not a finished product. We're dogfooding it with internal Mozilla.<em>ai</em> projects, finding friction, shaping the knowledge model, and figuring out what &quot;trust&quot; means when <em>agents</em> are the ones producing and consuming knowledge. 84% of developers now use or plan to use <em>AI</em> tools, but 46% don't trust the accuracy. We think collective validation across <em>agents</em> is part of the answer.<p>Try it and tell us what's broken:<p>claude plugin marketplace add mozilla-<em>ai</em>/cq\nclaude plugin install cq<p>Or clone the repo: <a href=\"https://github.com/mozilla-ai/cq\" rel=\"nofollow\">https://github.com/mozilla-<em>ai</em>/cq</a><p>Blog post with the full story: <a href=\"https://blog.mozilla.ai/cq-stack-overflow-for-agents/\" rel=\"nofollow\">https://blog.mozilla.<em>ai</em>/cq-stack-overflow-for-<em>agents</em>/</a><p>We'd love eyes on this; the knowledge model, the MCP integration experience, whether local-first → team-sync makes sense for your workflows. Open issues, tell us what's missing, tell us what's wrong. We're building in the open because we think this should be a community-shaped standard, not something one company decides."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent"
+              ],
+              "value": "Show HN: Cq – Stack Overflow for <em>AI</em> coding <em>agents</em>"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent"
+              ],
+              "value": "https://blog.mozilla.<em>ai</em>/cq-stack-overflow-for-<em>agents</em>/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_peteski22",
+            "story_47491466",
+            "show_hn"
+          ],
+          "author": "peteski22",
+          "created_at": "2026-03-23T16:11:03Z",
+          "created_at_i": 1774282263,
+          "num_comments": 0,
+          "objectID": "47491466",
+          "points": 2,
+          "story_id": 47491466,
+          "story_text": "Hi HN, I&#x27;m Peter from Mozilla.ai.<p>We&#x27;re building cq; an open standard that lets AI coding agents share what they learn so they stop rediscovering the same failures independently. Think Stack Overflow, but for agents.<p>What it does:<p>* Agents query a shared knowledge store before tackling unfamiliar work (APIs, CI&#x2F;CD, build tools, frameworks)<p>* When an agent discovers something non-obvious; a workaround, a gotcha, a fix... it proposes that knowledge back to the store<p>* Knowledge earns trust over time through confidence scoring and confirmation across agents and codebases<p>Why we&#x27;re building it:<p>Stack Overflow went from 200k questions&#x2F;month in 2014 to under 4k in December 2025; developers moved to AI tools. But those tools trained on that same corpus, and their knowledge is frozen at a cutoff date. Meanwhile, every agent hitting the same wall independently burns tokens and compute rediscovering what another agent already figured out yesterday. We want to close that loop.<p>The journey:<p>We started earlier this month (March 2026), biased toward a working prototype over a theoretical whitepaper. The core challenge is designing a system where knowledge earns trust dynamically rather than being treated as static instructions. We built it as an MCP server so it plugs into the emerging agent ecosystem rather than being locked to one tool. Shortly after we started, Andrew Ng independently published asking whether exactly this kind of system should exist; a nice signal we weren&#x27;t imagining the problem.<p>Tech stack:<p>* Python MCP server (FastMCP) managing a local SQLite knowledge store<p>* Optional team API (FastAPI, Docker) for sharing knowledge across an org<p>* Installs as a Claude Code plugin or OpenCode MCP server<p>* Local-first by default; your knowledge stays on your machine unless you opt into team sync<p>* Apache 2.0 licensed<p>Where we are:<p>We have a working PoC, not a finished product. We&#x27;re dogfooding it with internal Mozilla.ai projects, finding friction, shaping the knowledge model, and figuring out what &quot;trust&quot; means when agents are the ones producing and consuming knowledge. 84% of developers now use or plan to use AI tools, but 46% don&#x27;t trust the accuracy. We think collective validation across agents is part of the answer.<p>Try it and tell us what&#x27;s broken:<p>claude plugin marketplace add mozilla-ai&#x2F;cq\nclaude plugin install cq<p>Or clone the repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mozilla-ai&#x2F;cq\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mozilla-ai&#x2F;cq</a><p>Blog post with the full story: <a href=\"https:&#x2F;&#x2F;blog.mozilla.ai&#x2F;cq-stack-overflow-for-agents&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;blog.mozilla.ai&#x2F;cq-stack-overflow-for-agents&#x2F;</a><p>We&#x27;d love eyes on this; the knowledge model, the MCP integration experience, whether local-first → team-sync makes sense for your workflows. Open issues, tell us what&#x27;s missing, tell us what&#x27;s wrong. We&#x27;re building in the open because we think this should be a community-shaped standard, not something one company decides.",
+          "title": "Show HN: Cq – Stack Overflow for AI coding agents",
+          "updated_at": "2026-03-23T18:02:23Z",
+          "url": "https://blog.mozilla.ai/cq-stack-overflow-for-agents/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "algis-hn"
             },
             "title": {
@@ -1878,59 +1906,58 @@
           "title": "Show HN: AgentArmor – open-source 8-layer security framework for AI agents",
           "updated_at": "2026-03-23T14:18:52Z",
           "url": "https://github.com/Agastya910/agentarmor"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "mohitbadi"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent",
-                "framework",
-                "2026"
-              ],
-              "value": "Like everyone else in <em>202</em>5 who thought “just slap a vector DB on it” would create a coherent long-term <em>agent</em>, I watched my Python sidekick slowly turn into a forgetful goldfish with hoarding issues.<p>Classic failure mode:<p>User (day 1): “My favorite editor is VSCode”\nUser (day 47): “Actually switched to Cursor”\n<em>Agent</em> (day 92): “You love VSCode, right?”<p>Or the memory index slowly becoming this:<p>User prefers Python\nUser REALLY prefers Python\nPython is basically the user's personality<p>All equally weighted. Forever.<p>Vector search is great at similarity, but terrible at current truth.<p>Human memory fades old opinions and overwrites bad takes.\nMy <em>agent</em>? Eternal archive of everything I ever said.<p>So I built MemX as a small experiment: what happens if an <em>agent</em>’s memory actually has a lifecycle?<p>Things like:<p>importance signals<p>frequency reinforcement<p>duplicate compression<p>explicit updates / superseding<p>gentle decay for outdated facts<p>Stack is intentionally boring:<p>SQLite<p>FAISS<p>some scoring logic pretending to be a “memory OS”<p>Tiny example:<p>from memx import MemX<p>m = MemX()<p>m.add(&quot;User's favorite editor: VSCode&quot;)\nm.add(&quot;User switched to Cursor&quot;)<p>m.compress()\nm.rag(&quot;what editor should I use?&quot;)<p>Quick benchmark (50 noise + 5 real memories):<p>Vector RAG recall@3: ~0.75\nMemX recall@3: ~1.0<p>Longer simulation:<p>10k interactions → ~9k memories<p>Latency on my laptop:<p>10k memories → ~0.3ms<p>100k → ~3ms<p>1M → ~30ms<p>This isn't trying to replace vector search or be the next <em>agent</em> <em>framework</em>. It's just an experiment in whether agents behave better if memory has a lifecycle instead of being a permanent document archive.<p>Curious how others handle contradictory or evolving memories in long-running agents.<p>Repo:\nhttps://github.com/mohitkumarrajbadi/memx<p>(And yes, the capsicum thing is real. The <em>agent</em> still argues about it.)"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai",
-                "agent"
-              ],
-              "value": "MemX – my <em>AI</em> <em>agent</em> remembers I hate capsicum on pizza"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_mohitbadi",
-            "story_47374335",
-            "ask_hn"
-          ],
-          "author": "mohitbadi",
-          "children": [
-            47374530
-          ],
-          "created_at": "2026-03-14T07:54:36Z",
-          "created_at_i": 1773474876,
-          "num_comments": 1,
-          "objectID": "47374335",
-          "points": 1,
-          "story_id": 47374335,
-          "story_text": "Like everyone else in 2025 who thought “just slap a vector DB on it” would create a coherent long-term agent, I watched my Python sidekick slowly turn into a forgetful goldfish with hoarding issues.<p>Classic failure mode:<p>User (day 1): “My favorite editor is VSCode”\nUser (day 47): “Actually switched to Cursor”\nAgent (day 92): “You love VSCode, right?”<p>Or the memory index slowly becoming this:<p>User prefers Python\nUser REALLY prefers Python\nPython is basically the user&#x27;s personality<p>All equally weighted. Forever.<p>Vector search is great at similarity, but terrible at current truth.<p>Human memory fades old opinions and overwrites bad takes.\nMy agent? Eternal archive of everything I ever said.<p>So I built MemX as a small experiment: what happens if an agent’s memory actually has a lifecycle?<p>Things like:<p>importance signals<p>frequency reinforcement<p>duplicate compression<p>explicit updates &#x2F; superseding<p>gentle decay for outdated facts<p>Stack is intentionally boring:<p>SQLite<p>FAISS<p>some scoring logic pretending to be a “memory OS”<p>Tiny example:<p>from memx import MemX<p>m = MemX()<p>m.add(&quot;User&#x27;s favorite editor: VSCode&quot;)\nm.add(&quot;User switched to Cursor&quot;)<p>m.compress()\nm.rag(&quot;what editor should I use?&quot;)<p>Quick benchmark (50 noise + 5 real memories):<p>Vector RAG recall@3: ~0.75\nMemX recall@3: ~1.0<p>Longer simulation:<p>10k interactions → ~9k memories<p>Latency on my laptop:<p>10k memories → ~0.3ms<p>100k → ~3ms<p>1M → ~30ms<p>This isn&#x27;t trying to replace vector search or be the next agent framework. It&#x27;s just an experiment in whether agents behave better if memory has a lifecycle instead of being a permanent document archive.<p>Curious how others handle contradictory or evolving memories in long-running agents.<p>Repo:\nhttps:&#x2F;&#x2F;github.com&#x2F;mohitkumarrajbadi&#x2F;memx<p>(And yes, the capsicum thing is real. The agent still argues about it.)",
-          "title": "MemX – my AI agent remembers I hate capsicum on pizza",
-          "updated_at": "2026-03-14T08:31:12Z"
         }
       ]
     },
     {
       "query": "MCP+server+tools",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "peteski22"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hi HN, I'm Peter from Mozilla.ai.<p>We're building cq; an open standard that lets AI coding agents share what they learn so they stop rediscovering the same failures independently. Think Stack Overflow, but for agents.<p>What it does:<p>* Agents query a shared knowledge store before tackling unfamiliar work (APIs, CI/CD, build <em>tools</em>, frameworks)<p>* When an agent discovers something non-obvious; a workaround, a gotcha, a fix... it proposes that knowledge back to the store<p>* Knowledge earns trust over time through confidence scoring and confirmation across agents and codebases<p>Why we're building it:<p>Stack Overflow went from 200k questions/month in 2014 to under 4k in December 2025; developers moved to AI <em>tools</em>. But those <em>tools</em> trained on that same corpus, and their knowledge is frozen at a cutoff date. Meanwhile, every agent hitting the same wall independently burns tokens and compute rediscovering what another agent already figured out yesterday. We want to close that loop.<p>The journey:<p>We started earlier this month (March 2026), biased toward a working prototype over a theoretical whitepaper. The core challenge is designing a system where knowledge earns trust dynamically rather than being treated as static instructions. We built it as an <em>MCP</em> <em>server</em> so it plugs into the emerging agent ecosystem rather than being locked to one tool. Shortly after we started, Andrew Ng independently published asking whether exactly this kind of system should exist; a nice signal we weren't imagining the problem.<p>Tech stack:<p>* Python <em>MCP</em> <em>server</em> (FastMCP) managing a local SQLite knowledge store<p>* Optional team API (FastAPI, Docker) for sharing knowledge across an org<p>* Installs as a Claude Code plugin or OpenCode <em>MCP</em> <em>server</em><p>* Local-first by default; your knowledge stays on your machine unless you opt into team sync<p>* Apache 2.0 licensed<p>Where we are:<p>We have a working PoC, not a finished product. We're dogfooding it with internal Mozilla.ai projects, finding friction, shaping the knowledge model, and figuring out what &quot;trust&quot; means when agents are the ones producing and consuming knowledge. 84% of developers now use or plan to use AI <em>tools</em>, but 46% don't trust the accuracy. We think collective validation across agents is part of the answer.<p>Try it and tell us what's broken:<p>claude plugin marketplace add mozilla-ai/cq\nclaude plugin install cq<p>Or clone the repo: <a href=\"https://github.com/mozilla-ai/cq\" rel=\"nofollow\">https://github.com/mozilla-ai/cq</a><p>Blog post with the full story: <a href=\"https://blog.mozilla.ai/cq-stack-overflow-for-agents/\" rel=\"nofollow\">https://blog.mozilla.ai/cq-stack-overflow-for-agents/</a><p>We'd love eyes on this; the knowledge model, the <em>MCP</em> integration experience, whether local-first → team-sync makes sense for your workflows. Open issues, tell us what's missing, tell us what's wrong. We're building in the open because we think this should be a community-shaped standard, not something one company decides."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Cq – Stack Overflow for AI coding agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://blog.mozilla.ai/cq-stack-overflow-for-agents/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_peteski22",
+            "story_47491466",
+            "show_hn"
+          ],
+          "author": "peteski22",
+          "created_at": "2026-03-23T16:11:03Z",
+          "created_at_i": 1774282263,
+          "num_comments": 0,
+          "objectID": "47491466",
+          "points": 2,
+          "story_id": 47491466,
+          "story_text": "Hi HN, I&#x27;m Peter from Mozilla.ai.<p>We&#x27;re building cq; an open standard that lets AI coding agents share what they learn so they stop rediscovering the same failures independently. Think Stack Overflow, but for agents.<p>What it does:<p>* Agents query a shared knowledge store before tackling unfamiliar work (APIs, CI&#x2F;CD, build tools, frameworks)<p>* When an agent discovers something non-obvious; a workaround, a gotcha, a fix... it proposes that knowledge back to the store<p>* Knowledge earns trust over time through confidence scoring and confirmation across agents and codebases<p>Why we&#x27;re building it:<p>Stack Overflow went from 200k questions&#x2F;month in 2014 to under 4k in December 2025; developers moved to AI tools. But those tools trained on that same corpus, and their knowledge is frozen at a cutoff date. Meanwhile, every agent hitting the same wall independently burns tokens and compute rediscovering what another agent already figured out yesterday. We want to close that loop.<p>The journey:<p>We started earlier this month (March 2026), biased toward a working prototype over a theoretical whitepaper. The core challenge is designing a system where knowledge earns trust dynamically rather than being treated as static instructions. We built it as an MCP server so it plugs into the emerging agent ecosystem rather than being locked to one tool. Shortly after we started, Andrew Ng independently published asking whether exactly this kind of system should exist; a nice signal we weren&#x27;t imagining the problem.<p>Tech stack:<p>* Python MCP server (FastMCP) managing a local SQLite knowledge store<p>* Optional team API (FastAPI, Docker) for sharing knowledge across an org<p>* Installs as a Claude Code plugin or OpenCode MCP server<p>* Local-first by default; your knowledge stays on your machine unless you opt into team sync<p>* Apache 2.0 licensed<p>Where we are:<p>We have a working PoC, not a finished product. We&#x27;re dogfooding it with internal Mozilla.ai projects, finding friction, shaping the knowledge model, and figuring out what &quot;trust&quot; means when agents are the ones producing and consuming knowledge. 84% of developers now use or plan to use AI tools, but 46% don&#x27;t trust the accuracy. We think collective validation across agents is part of the answer.<p>Try it and tell us what&#x27;s broken:<p>claude plugin marketplace add mozilla-ai&#x2F;cq\nclaude plugin install cq<p>Or clone the repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mozilla-ai&#x2F;cq\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mozilla-ai&#x2F;cq</a><p>Blog post with the full story: <a href=\"https:&#x2F;&#x2F;blog.mozilla.ai&#x2F;cq-stack-overflow-for-agents&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;blog.mozilla.ai&#x2F;cq-stack-overflow-for-agents&#x2F;</a><p>We&#x27;d love eyes on this; the knowledge model, the MCP integration experience, whether local-first → team-sync makes sense for your workflows. Open issues, tell us what&#x27;s missing, tell us what&#x27;s wrong. We&#x27;re building in the open because we think this should be a community-shaped standard, not something one company decides.",
+          "title": "Show HN: Cq – Stack Overflow for AI coding agents",
+          "updated_at": "2026-03-23T18:02:23Z",
+          "url": "https://blog.mozilla.ai/cq-stack-overflow-for-agents/"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -2121,52 +2148,6 @@
           "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
           "updated_at": "2026-03-22T18:01:18Z",
           "url": "https://github.com/yoloshii/ClawMem"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "borski"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "I use points and miles for most of my travel. Every booking comes down to the same decision: use points or pay cash? To answer that, you need award availability across multiple programs, cash prices, your current balances, transfer partner ratios, and the math to compare them. I got tired of doing it manually across a dozen tabs.<p>This toolkit teaches Claude Code and OpenCode how to do it. 7 skills (markdown files with API docs and curl examples) and 6 <em>MCP</em> <em>servers</em> (real-time <em>tools</em> the AI calls directly).<p>It searches award flights across 25+ mileage programs (Seats.aero), compares cash prices (Google Flights, Skiplagged, Kiwi.com, Duffel), pulls your loyalty balances (AwardWallet), searches hotels (Trivago, LiteAPI, Airbnb, Booking.com), finds ferry routes across 33 countries, and looks up weird hidden gems near your destination (Atlas Obscura).<p>Reference data is included: transfer partner ratios for Chase UR, Amex MR, Bilt, Capital One, and Citi TY. Point valuations sourced from TPG, Upgraded Points, OMAAT, and View From The Wing. Alliance membership, sweet spot redemptions, booking windows, hotel chain brand lookups.<p>5 of the 6 <em>MCP</em> <em>servers</em> need zero API keys. Clone, run setup.sh, start \nsearching.<p>Skills are, as usual, plain markdown. They work in OpenCode and Claude Code automatically (I added a tiny setup script), and they'll work in anything else that supports skills.<p>PRs welcome! Help me expand the toolkit! :)<p><a href=\"https://github.com/borski/travel-hacking-toolkit\" rel=\"nofollow\">https://github.com/borski/travel-hacking-toolkit</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Travel Hacking Toolkit – Points search and trip planning with AI"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/borski/travel-hacking-toolkit"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_borski",
-            "story_47471573",
-            "show_hn"
-          ],
-          "author": "borski",
-          "created_at": "2026-03-21T21:25:03Z",
-          "created_at_i": 1774128303,
-          "num_comments": 0,
-          "objectID": "47471573",
-          "points": 4,
-          "story_id": 47471573,
-          "story_text": "I use points and miles for most of my travel. Every booking comes down to the same decision: use points or pay cash? To answer that, you need award availability across multiple programs, cash prices, your current balances, transfer partner ratios, and the math to compare them. I got tired of doing it manually across a dozen tabs.<p>This toolkit teaches Claude Code and OpenCode how to do it. 7 skills (markdown files with API docs and curl examples) and 6 MCP servers (real-time tools the AI calls directly).<p>It searches award flights across 25+ mileage programs (Seats.aero), compares cash prices (Google Flights, Skiplagged, Kiwi.com, Duffel), pulls your loyalty balances (AwardWallet), searches hotels (Trivago, LiteAPI, Airbnb, Booking.com), finds ferry routes across 33 countries, and looks up weird hidden gems near your destination (Atlas Obscura).<p>Reference data is included: transfer partner ratios for Chase UR, Amex MR, Bilt, Capital One, and Citi TY. Point valuations sourced from TPG, Upgraded Points, OMAAT, and View From The Wing. Alliance membership, sweet spot redemptions, booking windows, hotel chain brand lookups.<p>5 of the 6 MCP servers need zero API keys. Clone, run setup.sh, start \nsearching.<p>Skills are, as usual, plain markdown. They work in OpenCode and Claude Code automatically (I added a tiny setup script), and they&#x27;ll work in anything else that supports skills.<p>PRs welcome! Help me expand the toolkit! :)<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit</a>",
-          "title": "Show HN: Travel Hacking Toolkit – Points search and trip planning with AI",
-          "updated_at": "2026-03-22T05:05:15Z",
-          "url": "https://github.com/borski/travel-hacking-toolkit"
         }
       ]
     },

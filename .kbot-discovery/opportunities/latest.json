@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-23T16:18:29.303Z",
+  "timestamp": "2026-03-23T22:27:44.059Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,22 +88,22 @@
     },
     {
       "source": "github-issue",
+      "title": "Bring coding agent guardrails to OpenCode",
+      "url": "https://github.com/neuradex/llm-rail/issues/3",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "[GA4-Error] 5 runtime errors on /insights (last 2h)",
+      "url": "https://github.com/kubestellar/console/issues/3320",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "MCP server: use Specter as a tool from Claude Code",
       "url": "https://github.com/ghostwright/specter/issues/4",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "CLI treats flags as paths; should show help when no valid path is provided",
-      "url": "https://github.com/gaureshpai/reclaimspace/issues/19",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Feature] 🚀 Introduce \"Debuggable Deep Search\" Strategy — Make the AI CMO's Reasoning Transparent!",
-      "url": "https://github.com/study8677/OpenCMO/issues/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(channels): preserve external catalog overrides",
-      "url": "https://github.com/openclaw/openclaw/pull/52988",
+      "title": "Doctor: prune stale plugin allowlist and entry refs",
+      "url": "https://github.com/openclaw/openclaw/pull/53187",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Feature/add qq channel",
-      "url": "https://github.com/openclaw/openclaw/pull/52986",
+      "title": "feat(platform): OpenClaw addon — install, configure, and manage on Pi 5",
+      "url": "https://github.com/slomin/potato-os/issues/163",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Sync/upstream 2026 03 23",
-      "url": "https://github.com/QVerisAI/QVerisBot/pull/108",
+      "title": "Fix transcript repair build error",
+      "url": "https://github.com/dominant-strategies/openclaw/pull/7",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,13 +193,6 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "Found a new promising AI agent waitlist, called Apex - top 3 spots win $1,000-$1,500 - sharing the link, just takes a name and email to join!",
-      "url": "https://reddit.com/r/artificial/comments/1s1kv3h/found_a_new_promising_ai_agent_waitlist_called/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
       "title": "How to build CLI tool + skill to work longer without compacting",
       "url": "https://reddit.com/r/artificial/comments/1s1jpxt/how_to_build_cli_tool_skill_to_work_longer/",
       "why": "Discussion in r/artificial about AI agents",
@@ -207,8 +200,15 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "I had an AI psychosis episode, got a Bipolar diagnosis, used AI to beat 20-year OCD, then built an AI governance platform. The actual story.",
-      "url": "https://reddit.com/r/artificial/comments/1s1i61s/i_had_an_ai_psychosis_episode_got_a_bipolar/",
+      "title": "Where are the actual paying clients for AI chatbots and voice agents? (Not theory — real businesses that need this NOW",
+      "url": "https://reddit.com/r/artificial/comments/1s1fwod/where_are_the_actual_paying_clients_for_ai/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Xiaomi's MiMo models are making the AI pricing conversation uncomfortable",
+      "url": "https://reddit.com/r/artificial/comments/1s1cpap/xiaomis_mimo_models_are_making_the_ai_pricing/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
