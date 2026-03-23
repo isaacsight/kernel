@@ -455,12 +455,18 @@ async function main(): Promise<void> {
       console.log(chalk.dim(`  Interval: ${config.pollIntervalMinutes}m`))
       console.log()
 
-      // Initial cycle
+      // Initial cycle: outreach + extended (tools, agents, papers)
+      const { runExtendedDiscovery } = await import('./discovery.js')
       await runDiscoveryCycle(config)
+      const extended = await runExtendedDiscovery(config)
+      if (extended.tools > 0) printInfo(`  Discovered ${extended.tools} new tools`)
+      if (extended.agents > 0) printInfo(`  Proposed ${extended.agents} new agents`)
+      if (extended.papers > 0) printInfo(`  Found ${extended.papers} new papers`)
 
-      // Poll
+      // Poll: outreach every interval, extended every 6 hours
       setInterval(() => runDiscoveryCycle(config!), config.pollIntervalMinutes * 60 * 1000)
-      console.log(`Polling every ${config.pollIntervalMinutes}m. Ctrl+C to stop.`)
+      setInterval(() => runExtendedDiscovery(config!), 6 * 60 * 60 * 1000)
+      console.log(`Polling: outreach every ${config.pollIntervalMinutes}m, tools/agents/papers every 6h. Ctrl+C to stop.`)
       await new Promise(() => {}) // keep alive
     })
 
@@ -542,6 +548,70 @@ async function main(): Promise<void> {
       rl.close()
       saveConfig(config)
       printSuccess('Credentials updated.')
+      process.exit(0)
+    })
+
+  discoveryCmd
+    .command('tools')
+    .description('Show discovered tools from npm, GitHub, MCP servers')
+    .action(async () => {
+      const { getDiscoveredTools } = await import('./discovery.js')
+      const tools = getDiscoveredTools()
+      if (tools.length === 0) {
+        printInfo('No tools discovered yet. Run: kbot discovery start')
+        process.exit(0)
+      }
+      console.log()
+      printInfo(`${tools.length} tools discovered:`)
+      for (const t of tools.slice(-15)) {
+        console.log(`  [${t.source}] ${t.name}`)
+        console.log(`    ${t.description.slice(0, 80)}`)
+        console.log(`    ${t.url}`)
+        console.log()
+      }
+      process.exit(0)
+    })
+
+  discoveryCmd
+    .command('agents')
+    .description('Show proposed new specialist agents')
+    .action(async () => {
+      const { getProposedAgents } = await import('./discovery.js')
+      const agents = getProposedAgents()
+      if (agents.length === 0) {
+        printInfo('No new agents proposed yet. Run: kbot discovery start')
+        process.exit(0)
+      }
+      console.log()
+      printInfo(`${agents.length} agents proposed:`)
+      for (const a of agents) {
+        console.log(`  ${a.name} (${a.id})`)
+        console.log(`    Why: ${a.reason}`)
+        console.log(`    Prompt: ${a.systemPrompt.slice(0, 100)}...`)
+        console.log()
+      }
+      process.exit(0)
+    })
+
+  discoveryCmd
+    .command('papers')
+    .description('Show discovered academic papers from arXiv')
+    .action(async () => {
+      const { getDiscoveredPapers } = await import('./discovery.js')
+      const papers = getDiscoveredPapers()
+      if (papers.length === 0) {
+        printInfo('No papers discovered yet. Run: kbot discovery start')
+        process.exit(0)
+      }
+      console.log()
+      printInfo(`${papers.length} papers found:`)
+      for (const p of papers.slice(-10)) {
+        console.log(`  ${p.title}`)
+        console.log(`    ${p.authors}`)
+        console.log(`    ${p.abstract.slice(0, 120)}...`)
+        console.log(`    ${p.url}`)
+        console.log()
+      }
       process.exit(0)
     })
 

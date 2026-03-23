@@ -467,3 +467,273 @@ export function getRecentLog(lines = 20): string {
   const content = readFileSync(LOG_FILE, 'utf8')
   return content.split('\n').filter(Boolean).slice(-lines).join('\n')
 }
+
+// ══════════════════════════════════════════════════════════════════════
+// Tool Discovery — find new tools from npm, MCP servers, GitHub
+// ══════════════════════════════════════════════════════════════════════
+
+export interface DiscoveredTool {
+  name: string
+  source: 'npm' | 'github' | 'mcp'
+  description: string
+  url: string
+  relevance: string
+  foundAt: string
+}
+
+async function discoverTools(config: DiscoveryConfig): Promise<DiscoveredTool[]> {
+  const tools: DiscoveredTool[] = []
+  const queries = ['mcp server', 'ai agent tool', 'cli tool ai', ...config.topics.map(t => `${t} tool`)]
+
+  // npm search
+  for (const q of queries.slice(0, 3)) {
+    try {
+      const data = await fetchJson(
+        `https://registry.npmjs.org/-/v1/search?text=${encodeURIComponent(q)}&size=5`
+      ) as { objects: Array<{ package: { name: string; description: string; links: { npm: string } } }> }
+
+      for (const obj of (data.objects || [])) {
+        const pkg = obj.package
+        if (pkg.description && pkg.description.length > 10) {
+          tools.push({
+            name: pkg.name,
+            source: 'npm',
+            description: pkg.description.slice(0, 200),
+            url: pkg.links?.npm || `https://www.npmjs.com/package/${pkg.name}`,
+            relevance: q,
+            foundAt: new Date().toISOString(),
+          })
+        }
+      }
+    } catch { /* skip */ }
+  }
+
+  // GitHub repos with "mcp-server" or "ai-agent-tool"
+  for (const q of ['mcp-server', 'ai-agent-tools'].slice(0, 2)) {
+    try {
+      const data = await fetchJson(
+        `https://api.github.com/search/repositories?q=${q}+in:name&sort=updated&order=desc&per_page=5`
+      ) as { items: Array<{ full_name: string; html_url: string; description: string }> }
+
+      for (const repo of (data.items || [])) {
+        if (repo.description) {
+          tools.push({
+            name: repo.full_name,
+            source: 'github',
+            description: (repo.description || '').slice(0, 200),
+            url: repo.html_url,
+            relevance: q,
+            foundAt: new Date().toISOString(),
+          })
+        }
+      }
+    } catch { /* skip */ }
+  }
+
+  return tools
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Agent Discovery — propose new specialists based on gaps
+// ══════════════════════════════════════════════════════════════════════
+
+export interface ProposedAgent {
+  id: string
+  name: string
+  reason: string
+  systemPrompt: string
+  proposedAt: string
+}
+
+async function discoverAgents(config: DiscoveryConfig): Promise<ProposedAgent[]> {
+  const proposals: ProposedAgent[] = []
+
+  // Scan trending topics to find agent gaps
+  const trendingQueries = [
+    'AI agent specialist 2026',
+    'emerging AI use case developer',
+    'new programming paradigm tool',
+  ]
+
+  for (const q of trendingQueries.slice(0, 2)) {
+    try {
+      const data = await fetchJson(
+        `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(q)}&tags=story&hitsPerPage=5`
+      ) as { hits: Array<{ title: string; objectID: string }> }
+
+      // Use Ollama to analyze if any of these suggest a new agent type
+      const titles = (data.hits || []).map(h => h.title).join('\n')
+      if (!titles) continue
+
+      try {
+        const res = await fetch(`${config.ollamaUrl}/api/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: config.ollamaModel,
+            prompt: `Given these trending HN posts about AI/tech:\n${titles}\n\nDoes any of these suggest a specialist agent type that doesn't exist yet? Existing agents: kernel, researcher, coder, writer, analyst, aesthete, guardian, curator, strategist, infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter, hacker, operator, dreamer, creative, developer, gamedev, playtester.\n\nIf yes, reply with ONLY this JSON (no markdown):\n{"id": "agent-id", "name": "Agent Name", "reason": "why this agent is needed", "prompt": "system prompt for the agent"}\n\nIf no new agent needed, reply: {"id": "none"}`,
+            stream: false,
+            options: { num_predict: 400, temperature: 0.7 },
+          }),
+        })
+
+        if (res.ok) {
+          const result = await res.json() as { response?: string }
+          const raw = (result.response || '').replace(/<think>[\s\S]*?<\/think>/g, '').trim()
+          const jsonMatch = raw.match(/\{[\s\S]*\}/)
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0])
+            if (parsed.id && parsed.id !== 'none' && parsed.name) {
+              proposals.push({
+                id: parsed.id,
+                name: parsed.name,
+                reason: parsed.reason || '',
+                systemPrompt: parsed.prompt || '',
+                proposedAt: new Date().toISOString(),
+              })
+            }
+          }
+        }
+      } catch { /* Ollama unavailable */ }
+    } catch { /* search failed */ }
+  }
+
+  return proposals
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Academic Discovery — track arXiv papers on AI agents & tool use
+// ══════════════════════════════════════════════════════════════════════
+
+export interface AcademicPaper {
+  title: string
+  authors: string
+  abstract: string
+  url: string
+  relevance: string
+  publishedAt: string
+  foundAt: string
+}
+
+async function discoverPapers(): Promise<AcademicPaper[]> {
+  const papers: AcademicPaper[] = []
+  const queries = [
+    'AI agent tool use',
+    'autonomous coding agent',
+    'cognitive architecture LLM',
+    'multi-agent system benchmark',
+    'local LLM inference optimization',
+  ]
+
+  for (const q of queries.slice(0, 3)) {
+    try {
+      const encoded = encodeURIComponent(q)
+      const res = await fetch(
+        `http://export.arxiv.org/api/query?search_query=all:${encoded}&start=0&max_results=3&sortBy=submittedDate&sortOrder=descending`,
+        { signal: AbortSignal.timeout(10000) },
+      )
+
+      if (!res.ok) continue
+      const xml = await res.text()
+
+      // Parse Atom XML entries
+      const entries = xml.match(/<entry>[\s\S]*?<\/entry>/g) || []
+      for (const entry of entries) {
+        const title = entry.match(/<title>([\s\S]*?)<\/title>/)?.[1]?.trim().replace(/\n/g, ' ') || ''
+        const abstract = entry.match(/<summary>([\s\S]*?)<\/summary>/)?.[1]?.trim().replace(/\n/g, ' ').slice(0, 300) || ''
+        const url = entry.match(/<id>([\s\S]*?)<\/id>/)?.[1]?.trim() || ''
+        const authors = (entry.match(/<author>[\s\S]*?<name>([\s\S]*?)<\/name>/g) || [])
+          .map(a => a.match(/<name>([\s\S]*?)<\/name>/)?.[1]?.trim() || '')
+          .slice(0, 3)
+          .join(', ')
+        const published = entry.match(/<published>([\s\S]*?)<\/published>/)?.[1]?.trim() || ''
+
+        if (title && url) {
+          papers.push({
+            title,
+            authors,
+            abstract,
+            url,
+            relevance: q,
+            publishedAt: published,
+            foundAt: new Date().toISOString(),
+          })
+        }
+      }
+    } catch { /* skip */ }
+  }
+
+  return papers
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Extended Discovery Cycle — tools + agents + academia
+// ══════════════════════════════════════════════════════════════════════
+
+const TOOLS_FILE = join(DISCOVERY_DIR, 'discovered-tools.json')
+const AGENTS_FILE = join(DISCOVERY_DIR, 'proposed-agents.json')
+const PAPERS_FILE = join(DISCOVERY_DIR, 'papers.json')
+
+function loadJsonArray<T>(file: string): T[] {
+  if (!existsSync(file)) return []
+  try { return JSON.parse(readFileSync(file, 'utf8')) } catch { return [] }
+}
+
+function saveJsonArray<T>(file: string, data: T[]): void {
+  ensureDir()
+  writeFileSync(file, JSON.stringify(data, null, 2))
+}
+
+export async function runExtendedDiscovery(config: DiscoveryConfig): Promise<{
+  tools: number
+  agents: number
+  papers: number
+}> {
+  log('Extended discovery: scanning tools, agents, academia...')
+
+  // Run all three in parallel
+  const [toolsResult, agentsResult, papersResult] = await Promise.allSettled([
+    discoverTools(config),
+    discoverAgents(config),
+    discoverPapers(),
+  ])
+
+  const newTools = toolsResult.status === 'fulfilled' ? toolsResult.value : []
+  const newAgents = agentsResult.status === 'fulfilled' ? agentsResult.value : []
+  const newPapers = papersResult.status === 'fulfilled' ? papersResult.value : []
+
+  // Dedup and save tools
+  const existingTools = loadJsonArray<DiscoveredTool>(TOOLS_FILE)
+  const existingToolNames = new Set(existingTools.map(t => t.name))
+  const freshTools = newTools.filter(t => !existingToolNames.has(t.name))
+  if (freshTools.length > 0) {
+    saveJsonArray(TOOLS_FILE, [...existingTools, ...freshTools].slice(-100))
+    log(`  Tools: ${freshTools.length} new (${freshTools.map(t => t.name).slice(0, 3).join(', ')}${freshTools.length > 3 ? '...' : ''})`)
+  }
+
+  // Save agent proposals
+  const existingAgents = loadJsonArray<ProposedAgent>(AGENTS_FILE)
+  const existingAgentIds = new Set(existingAgents.map(a => a.id))
+  const freshAgents = newAgents.filter(a => !existingAgentIds.has(a.id))
+  if (freshAgents.length > 0) {
+    saveJsonArray(AGENTS_FILE, [...existingAgents, ...freshAgents].slice(-50))
+    log(`  Agents: ${freshAgents.length} proposed (${freshAgents.map(a => a.name).join(', ')})`)
+  }
+
+  // Dedup and save papers
+  const existingPapers = loadJsonArray<AcademicPaper>(PAPERS_FILE)
+  const existingPaperUrls = new Set(existingPapers.map(p => p.url))
+  const freshPapers = newPapers.filter(p => !existingPaperUrls.has(p.url))
+  if (freshPapers.length > 0) {
+    saveJsonArray(PAPERS_FILE, [...existingPapers, ...freshPapers].slice(-100))
+    log(`  Papers: ${freshPapers.length} new (${freshPapers.map(p => p.title.slice(0, 50)).join('; ')}...)`)
+  }
+
+  log(`Extended discovery done: ${freshTools.length} tools, ${freshAgents.length} agents, ${freshPapers.length} papers`)
+
+  return { tools: freshTools.length, agents: freshAgents.length, papers: freshPapers.length }
+}
+
+export function getDiscoveredTools(): DiscoveredTool[] { return loadJsonArray(TOOLS_FILE) }
+export function getProposedAgents(): ProposedAgent[] { return loadJsonArray(AGENTS_FILE) }
+export function getDiscoveredPapers(): AcademicPaper[] { return loadJsonArray(PAPERS_FILE) }
