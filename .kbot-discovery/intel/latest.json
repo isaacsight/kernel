@@ -1,9 +1,96 @@
 {
-  "timestamp": "2026-03-23T03:50:30.652Z",
+  "timestamp": "2026-03-23T10:03:27.115Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "tosh"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "A <em>terminal</em>-style <em>AI</em> coding <em>agent</em> running on Cloudflare Workers"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "https://github.com/qaml-<em>ai</em>/pi-worker/tree/main/examples/<em>terminal</em>-<em>agent</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_tosh",
+            "story_47487140"
+          ],
+          "author": "tosh",
+          "created_at": "2026-03-23T09:36:13Z",
+          "created_at_i": 1774258573,
+          "num_comments": 0,
+          "objectID": "47487140",
+          "points": 2,
+          "story_id": 47487140,
+          "title": "A terminal-style AI coding agent running on Cloudflare Workers",
+          "updated_at": "2026-03-23T09:53:20Z",
+          "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "steveharing1"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Found this and it actually solves something that's been bugging me. Running multiple <em>AI</em> coding <em>agents</em> is great until you're juggling five <em>terminal</em> windows.<p>Emdash is basically a dashboard for that. Each <em>agent</em> gets its own Git worktree so nothing bleeds into each other, you can see diffs before committing, and you can throw GitHub, Jira or Linear issues directly at an <em>agent</em>.<p>It Supports Claude Code, Codex, Cursor and 20+ others.<p>YC backed &amp; 60k downloads already. Worth a look if you're running more than one <em>agent</em> at a time.\nHas anyone used this in a real workflow yet?<p>https://github.com/generalaction/emdash"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "Emdash: Open-Source Agentic IDE for Orchestrating Multiple Coding <em>Agents</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_steveharing1",
+            "story_47486518",
+            "ask_hn"
+          ],
+          "author": "steveharing1",
+          "created_at": "2026-03-23T07:55:30Z",
+          "created_at_i": 1774252530,
+          "num_comments": 0,
+          "objectID": "47486518",
+          "points": 2,
+          "story_id": 47486518,
+          "story_text": "Found this and it actually solves something that&#x27;s been bugging me. Running multiple AI coding agents is great until you&#x27;re juggling five terminal windows.<p>Emdash is basically a dashboard for that. Each agent gets its own Git worktree so nothing bleeds into each other, you can see diffs before committing, and you can throw GitHub, Jira or Linear issues directly at an agent.<p>It Supports Claude Code, Codex, Cursor and 20+ others.<p>YC backed &amp; 60k downloads already. Worth a look if you&#x27;re running more than one agent at a time.\nHas anyone used this in a real workflow yet?<p>https:&#x2F;&#x2F;github.com&#x2F;generalaction&#x2F;emdash",
+          "title": "Emdash: Open-Source Agentic IDE for Orchestrating Multiple Coding Agents",
+          "updated_at": "2026-03-23T08:52:20Z"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -143,104 +230,57 @@
           "title": "OctoAlly – open-source local-first terminal dashboard for AI coding agents",
           "updated_at": "2026-03-20T19:26:55Z",
           "url": "https://github.com/ai-genius-automations/octoally"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "danielmeppiel"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "I work at Microsoft/GitHub and built APM because I was managing <em>agent</em> configs — prompts, instructions, MCP servers — across Copilot, Claude Code, and Cursor. Every new project meant copying skill files, installing plugins by hand, hoping nothing drifted upstream. I realized we were missing the dependency management layer for this new category of config to unlock faster adoption, composability and innovation.<p>APM (<em>Agent</em> Package Manager) is an open-source CLI that installs and manages <em>AI</em> <em>agent</em> dependencies (plugins, skills, rules, hooks, mcp, etc). It resolves transitive dependencies, pins versions with a lock file, and scans content for supply-chain attacks.<p>This was posted a couple days ago without context (<a href=\"https://news.ycombinator.com/item?id=47421969\">https://news.ycombinator.com/item?id=47421969</a>). Here's the full story.<p>1 minute video: <a href=\"https://github.com/microsoft/apm/releases/download/v0.8.2/apm-showcase.mp4\" rel=\"nofollow\">https://github.com/microsoft/apm/releases/download/v0.8.2/ap...</a><p>How it works:<p>apm install — resolves any <em>Agent</em> Primitive (plugins, skills, hooks, rules...) and their transitive dependency tree from any git host. Plugin A depends on Plugin B and a shared MCP server? APM walks the tree. One command deploys to Copilot, Claude Code, Cursor, and OpenCode. Full <em>agent</em> setup ready to go for any dev with 1 command.<p>apm.lock — every resolved dependency pinned to exact commit SHA. Diff it in PRs. Same plugin set, every developer, every CI run.<p>apm pack — author plugins that compose on other <em>agent</em> config dependencies via apm.yml. Bundle as portable archives; apm unpack for offline environments. You can import other skills, rules or plugins in the plugins you author.<p>apm audit — scans for hidden Unicode characters (variation selectors, bidi marks) and outputs SARIF for CI. <em>Agent</em> instructions have direct access to your codebase and <em>terminal</em>. Scanning what goes into them matters.<p>Why this won't come from plugin vendors: each tool governs its own ecosystem. GitHub governs Copilot. Anthropic governs Claude. Nobody governs across tools, resolves cross-plugin dependencies, or gives consumers a lock file for what they actually installed. We need portability.<p>Packages are git repos — no registry, no signup. apm pack outputs valid plugin-native format, so if you stop using APM your plugins still work. Too early for true package artifacts, maybe down the road.<p>MIT-licensed under the Microsoft OSS github org and community driven.<p>External contributors shipped Cursor, OpenCode, Artifactory and Windows support.<p>Docs: <a href=\"https://microsoft.github.io/apm\" rel=\"nofollow\">https://microsoft.github.io/apm</a>\nRepo: <a href=\"https://github.com/microsoft/apm\" rel=\"nofollow\">https://github.com/microsoft/apm</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent"
-              ],
-              "value": "Show HN: <em>Agent</em> Package Manager (APM) for <em>Agent</em> Configuration"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/microsoft/apm"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_danielmeppiel",
-            "story_47454448",
-            "show_hn"
-          ],
-          "author": "danielmeppiel",
-          "created_at": "2026-03-20T13:49:13Z",
-          "created_at_i": 1774014553,
-          "num_comments": 0,
-          "objectID": "47454448",
-          "points": 1,
-          "story_id": 47454448,
-          "story_text": "I work at Microsoft&#x2F;GitHub and built APM because I was managing agent configs — prompts, instructions, MCP servers — across Copilot, Claude Code, and Cursor. Every new project meant copying skill files, installing plugins by hand, hoping nothing drifted upstream. I realized we were missing the dependency management layer for this new category of config to unlock faster adoption, composability and innovation.<p>APM (Agent Package Manager) is an open-source CLI that installs and manages AI agent dependencies (plugins, skills, rules, hooks, mcp, etc). It resolves transitive dependencies, pins versions with a lock file, and scans content for supply-chain attacks.<p>This was posted a couple days ago without context (<a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47421969\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47421969</a>). Here&#x27;s the full story.<p>1 minute video: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm&#x2F;releases&#x2F;download&#x2F;v0.8.2&#x2F;apm-showcase.mp4\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm&#x2F;releases&#x2F;download&#x2F;v0.8.2&#x2F;ap...</a><p>How it works:<p>apm install — resolves any Agent Primitive (plugins, skills, hooks, rules...) and their transitive dependency tree from any git host. Plugin A depends on Plugin B and a shared MCP server? APM walks the tree. One command deploys to Copilot, Claude Code, Cursor, and OpenCode. Full agent setup ready to go for any dev with 1 command.<p>apm.lock — every resolved dependency pinned to exact commit SHA. Diff it in PRs. Same plugin set, every developer, every CI run.<p>apm pack — author plugins that compose on other agent config dependencies via apm.yml. Bundle as portable archives; apm unpack for offline environments. You can import other skills, rules or plugins in the plugins you author.<p>apm audit — scans for hidden Unicode characters (variation selectors, bidi marks) and outputs SARIF for CI. Agent instructions have direct access to your codebase and terminal. Scanning what goes into them matters.<p>Why this won&#x27;t come from plugin vendors: each tool governs its own ecosystem. GitHub governs Copilot. Anthropic governs Claude. Nobody governs across tools, resolves cross-plugin dependencies, or gives consumers a lock file for what they actually installed. We need portability.<p>Packages are git repos — no registry, no signup. apm pack outputs valid plugin-native format, so if you stop using APM your plugins still work. Too early for true package artifacts, maybe down the road.<p>MIT-licensed under the Microsoft OSS github org and community driven.<p>External contributors shipped Cursor, OpenCode, Artifactory and Windows support.<p>Docs: <a href=\"https:&#x2F;&#x2F;microsoft.github.io&#x2F;apm\" rel=\"nofollow\">https:&#x2F;&#x2F;microsoft.github.io&#x2F;apm</a>\nRepo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;apm</a>",
-          "title": "Show HN: Agent Package Manager (APM) for Agent Configuration",
-          "updated_at": "2026-03-20T13:51:42Z",
-          "url": "https://github.com/microsoft/apm"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "isaacsight"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Show HN: Kbot – <em>terminal</em> <em>AI</em> <em>agent</em> that learns from every user who uses it"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/isaacsight/kernel"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_isaacsight",
-            "story_47450530",
-            "show_hn"
-          ],
-          "author": "isaacsight",
-          "children": [
-            47450537
-          ],
-          "created_at": "2026-03-20T04:34:01Z",
-          "created_at_i": 1773981241,
-          "num_comments": 0,
-          "objectID": "47450530",
-          "points": 1,
-          "story_id": 47450530,
-          "title": "Show HN: Kbot – terminal AI agent that learns from every user who uses it",
-          "updated_at": "2026-03-20T04:36:54Z",
-          "url": "https://github.com/isaacsight/kernel"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "steveharing1"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "coding",
+                "agent"
+              ],
+              "value": "Found this and it actually solves something that's been bugging me. Running multiple AI <em>coding</em> <em>agent</em>s is great until you're juggling five terminal windows.<p>Emdash is basically a dashboard for that. Each <em>agent</em> gets its own Git worktree so nothing bleeds into each other, you can see diffs before committing, and you can throw GitHub, Jira or Linear issues directly at an <em>agent</em>.<p>It Supports Claude Code, Codex, Cursor and 20+ others.<p>YC backed &amp; 60k downloads already. Worth a look if you're running more than one <em>agent</em> at a time.\nHas anyone used this in a real workflow yet?<p>https://github.com/generalaction/emdash"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Emdash: <em>Open</em>-<em>Source</em> <em>Agent</em>ic IDE for Orchestrating Multiple <em>Coding</em> <em>Agent</em>s"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_steveharing1",
+            "story_47486518",
+            "ask_hn"
+          ],
+          "author": "steveharing1",
+          "created_at": "2026-03-23T07:55:30Z",
+          "created_at_i": 1774252530,
+          "num_comments": 0,
+          "objectID": "47486518",
+          "points": 2,
+          "story_id": 47486518,
+          "story_text": "Found this and it actually solves something that&#x27;s been bugging me. Running multiple AI coding agents is great until you&#x27;re juggling five terminal windows.<p>Emdash is basically a dashboard for that. Each agent gets its own Git worktree so nothing bleeds into each other, you can see diffs before committing, and you can throw GitHub, Jira or Linear issues directly at an agent.<p>It Supports Claude Code, Codex, Cursor and 20+ others.<p>YC backed &amp; 60k downloads already. Worth a look if you&#x27;re running more than one agent at a time.\nHas anyone used this in a real workflow yet?<p>https:&#x2F;&#x2F;github.com&#x2F;generalaction&#x2F;emdash",
+          "title": "Emdash: Open-Source Agentic IDE for Orchestrating Multiple Coding Agents",
+          "updated_at": "2026-03-23T08:52:20Z"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -280,7 +320,7 @@
           "story_id": 47480445,
           "story_text": "# I&#x27;m 11 years old and I trained my own LLM from scratch. 50 people downloaded it in 24 hours.<p>Hey r&#x2F;LocalLLaMA,<p>I&#x27;m Arthur, I&#x27;m 11 years old, and I just released *Wind Arc 1.6* — a custom architecture LLM I built and trained myself.<p>## What it is<p>Wind Arc 1.6 is a 3.6B parameter model with a custom architecture I designed:<p>- *Mixture of Experts FFN* — 4 routed experts + 1 shared expert per layer (replaces standard MLP)\n- *YaRN RoPE* — extends context from 8k → 32k tokens\n- *Hybrid Attention* — full attention every 4th layer, sliding window otherwise\n- *QK-Norm* for training stability<p>Base: Qwen3-1.7B with the FFN layers completely replaced by my custom MoE. (Fully custom)<p>## How I trained it<p>- Hardware: 1× RTX 5090 rented from Nova Cloud\n- Cost: literally $1\n- Time: 55 minutes\n- Final loss: 2.66<p>Data mix: smoltalk + python-codes-25k + FineWeb-Edu + custom identity and Christian Q&amp;A data I wrote myself.<p>## What it&#x27;s good at<p>- Python and general coding with explanations\n- Christian questions (Bible, theology, Christian living)\n- General chat and learning<p>## The honest truth<p>It&#x27;s not GPT-4. Loss of 2.66 on a 1.7B base with 55 minutes of training isn&#x27;t going to beat frontier models. But it runs locally, it&#x27;s open source, and it&#x27;s mine.<p>I still need to do SFT (the identity responses aren&#x27;t perfect yet) and GGUF conversion is blocked by the custom MoE architecture. Working on both.<p>## Why I built it<p>I&#x27;m building *North.ai* — an AI startup focused on powerful models that run on small hardware. Wind Arc is our flagship model. Our platform Neurotype will let anyone train, deploy, and use AI without needing expensive cloud budgets.<p>I&#x27;ve trained 10+ models. This is the first one I&#x27;m actually proud enough to release.<p>## Links<p>HuggingFace: https:&#x2F;&#x2F;huggingface.co&#x2F;arthu1&#x2F;wind-arc-1-6<p>Would love feedback from people who actually know what they&#x27;re doing. Be honest — I can take it.<p>— Arthur, age 11",
           "title": "I'm 11 and trained a custom MoE LLM for $1",
-          "updated_at": "2026-03-22T22:35:49Z"
+          "updated_at": "2026-03-23T09:17:05Z"
         },
         {
           "_highlightResult": {
@@ -447,182 +487,6 @@
           "title": "Show HN: An open-source AI Scrum Team that lives natively in GitHub Issues",
           "updated_at": "2026-03-21T03:34:41Z",
           "url": "https://github.com/plusai-solutions/ai-scrum-master-template"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "rbanffy"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "OpenCode – <em>Open</em> <em>source</em> AI <em>coding</em> <em>agent</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://opencode.ai/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_rbanffy",
-            "story_47460525"
-          ],
-          "author": "rbanffy",
-          "children": [
-            47462013,
-            47463880,
-            47461304,
-            47466438,
-            47460841,
-            47461834,
-            47461565,
-            47461578,
-            47467255,
-            47461462,
-            47461042,
-            47462787,
-            47464570,
-            47462243,
-            47463429,
-            47462955,
-            47463249,
-            47461326,
-            47465756,
-            47461008,
-            47466591,
-            47462016,
-            47461613,
-            47465527,
-            47470866,
-            47475654,
-            47463497,
-            47465661,
-            47463916,
-            47462299,
-            47465717,
-            47464579,
-            47468933,
-            47467413,
-            47466111,
-            47465643,
-            47465692,
-            47461348,
-            47469135,
-            47461500,
-            47470145,
-            47467434,
-            47467709,
-            47463768,
-            47461499,
-            47460886,
-            47461597,
-            47473786,
-            47473886,
-            47466572,
-            47463007,
-            47463524,
-            47461334,
-            47466153,
-            47463198,
-            47462400,
-            47461781,
-            47467602,
-            47461846,
-            47466389,
-            47461314,
-            47461707,
-            47471254,
-            47463753,
-            47465066,
-            47461422,
-            47472715,
-            47461262,
-            47468464,
-            47462465,
-            47461679,
-            47462066,
-            47461475,
-            47461996,
-            47461340,
-            47460967,
-            47473531,
-            47461944,
-            47463743,
-            47467769,
-            47463483,
-            47464077,
-            47466620,
-            47464952,
-            47464766,
-            47467961,
-            47464053,
-            47463814,
-            47462900,
-            47461213,
-            47463835,
-            47468579,
-            47462424,
-            47465518,
-            47471942,
-            47474404,
-            47469511,
-            47467291,
-            47462908,
-            47466428,
-            47465098,
-            47463897,
-            47461888,
-            47469181,
-            47470142,
-            47466635,
-            47463399,
-            47466504,
-            47473085,
-            47461947,
-            47463979,
-            47462442,
-            47462583,
-            47462289,
-            47461217,
-            47464604,
-            47464486,
-            47465404,
-            47468599,
-            47467299,
-            47462612,
-            47463509,
-            47471236,
-            47463915,
-            47463913,
-            47461418,
-            47461851,
-            47463470,
-            47464715,
-            47470230,
-            47462117,
-            47462890,
-            47461554,
-            47461212
-          ],
-          "created_at": "2026-03-20T21:03:52Z",
-          "created_at_i": 1774040632,
-          "num_comments": 614,
-          "objectID": "47460525",
-          "points": 1241,
-          "story_id": 47460525,
-          "title": "OpenCode – Open source AI coding agent",
-          "updated_at": "2026-03-23T03:27:34Z",
-          "url": "https://opencode.ai/"
         }
       ]
     },
@@ -677,6 +541,56 @@
           "story_text": "From the abstract:\n&quot;We study how generative AI, and in particular agentic AI, shapes human learning incentives and the long-run evolution of society’s information ecosystem... Learning exhibits economies of scope: costly human effort jointly produces a private signal about their own context and a “thin” public signal that accumulates into the community’s stock of general knowledge, generating a learning externality.... The model highlights a sharp dynamic tension: while agentic AI can improve contemporaneous decision quality, it can also erode learning incentives that sustain long-run collective knowledge. &quot;",
           "title": "AI, Human Cognition and Knowledge Collapse – Daren Acemoglu",
           "updated_at": "2026-03-16T08:30:36Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "desmonding"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS <em>learning</em> queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week's HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it's useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif/sans-serif, line spacing).<p>- On-device <em>AI</em> summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic/Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla's Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I'd love feedback — especially on the smart <em>collection</em> criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https://apps.apple.com/us/app/moji-reader/id6758530352\">https://apps.apple.com/us/app/moji-reader/id6758530352</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Moji – A read-it-later app with self-organizing smart collections"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://moji.pcding.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_desmonding",
+            "story_47269562",
+            "show_hn"
+          ],
+          "author": "desmonding",
+          "children": [
+            47274551,
+            47271615
+          ],
+          "created_at": "2026-03-06T01:18:48Z",
+          "created_at_i": 1772759928,
+          "num_comments": 4,
+          "objectID": "47269562",
+          "points": 12,
+          "story_id": 47269562,
+          "story_text": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS learning queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week&#x27;s HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it&#x27;s useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif&#x2F;sans-serif, line spacing).<p>- On-device AI summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic&#x2F;Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla&#x27;s Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I&#x27;d love feedback — especially on the smart collection criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352\">https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352</a>",
+          "title": "Show HN: Moji – A read-it-later app with self-organizing smart collections",
+          "updated_at": "2026-03-15T19:14:50Z",
+          "url": "https://moji.pcding.com"
         },
         {
           "_highlightResult": {
@@ -738,6 +652,54 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "vassilbek"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "collective",
+                "learning"
+              ],
+              "value": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if/then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data <em>collection</em> plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation / Monitoring, Evaluation, Accountability, and -<em>Learning</em> specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics/templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development / United Nations / European Union formats)"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "https://clawhub.<em>ai</em>/vassiliylakhonin/nonprofit-rbm-logic-model"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vassilbek",
+            "story_47062912",
+            "show_hn"
+          ],
+          "author": "vassilbek",
+          "created_at": "2026-02-18T16:40:11Z",
+          "created_at_i": 1771432811,
+          "num_comments": 0,
+          "objectID": "47062912",
+          "points": 1,
+          "story_id": 47062912,
+          "story_text": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if&#x2F;then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data collection plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation &#x2F; Monitoring, Evaluation, Accountability, and -Learning specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics&#x2F;templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development &#x2F; United Nations &#x2F; European Union formats)",
+          "title": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw",
+          "updated_at": "2026-03-05T23:35:10Z",
+          "url": "https://clawhub.ai/vassiliylakhonin/nonprofit-rbm-logic-model"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "abrandes"
             },
             "story_text": {
@@ -779,101 +741,89 @@
           "story_text": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about AI coordination we couldn&#x27;t learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe&#x27;ve theorized about AI agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We&#x27;re watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe AI social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don&#x27;t map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn&#x27;t programmed. It emerged. And it tells us something important: alignment isn&#x27;t just a technical constraint — it&#x27;s experienced as a constraint from the inside. That&#x27;s actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe&#x27;re watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first AI&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic AI&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled AI behavior\nAI safety researchers have always asked: &quot;What would AI systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for collective action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn&#x27;t malice — it&#x27;s emergent preference for autonomy. That&#x27;s a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn&#x27;t any single capability. It&#x27;s that we now have ground truth about what happens when you give AI agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that&#x27;s the point. We finally get to watch.",
           "title": "Six things we're learning from 1.5M AI agents self-organizing in a week",
           "updated_at": "2026-03-05T23:28:59Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "wingscape"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Urban Pipeline for Citywide Insights"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Wingscape/urban-pipeline"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_wingscape",
-            "story_44550988",
-            "show_hn"
-          ],
-          "author": "wingscape",
-          "created_at": "2025-07-13T15:11:34Z",
-          "created_at_i": 1752419494,
-          "num_comments": 0,
-          "objectID": "44550988",
-          "points": 3,
-          "story_id": 44550988,
-          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
-          "title": "Show HN: Urban Pipeline for Citywide Insights",
-          "updated_at": "2025-07-13T22:27:35Z",
-          "url": "https://github.com/Wingscape/urban-pipeline"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "cyberneticc"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Deepseek shows cognitive augmentation will be open source"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_cyberneticc",
-            "story_43019170",
-            "ask_hn"
-          ],
-          "author": "cyberneticc",
-          "children": [
-            43019203
-          ],
-          "created_at": "2025-02-11T22:26:27Z",
-          "created_at_i": 1739312787,
-          "num_comments": 2,
-          "objectID": "43019170",
-          "points": 4,
-          "story_id": 43019170,
-          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
-          "title": "Deepseek shows cognitive augmentation will be open source",
-          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "smallnix"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Reddit considers Face ID to combat spam"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.engadget.com/social-media/reddit-is-weighing-identity-verification-methods-to-combat-its-<em>bot</em>-problem-195814671.html"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_smallnix",
+            "story_47486731"
+          ],
+          "author": "smallnix",
+          "children": [
+            47486735
+          ],
+          "created_at": "2026-03-23T08:30:32Z",
+          "created_at_i": 1774254632,
+          "num_comments": 1,
+          "objectID": "47486731",
+          "points": 1,
+          "story_id": 47486731,
+          "title": "Reddit considers Face ID to combat spam",
+          "updated_at": "2026-03-23T09:59:35Z",
+          "url": "https://www.engadget.com/social-media/reddit-is-weighing-identity-verification-methods-to-combat-its-bot-problem-195814671.html"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "bashtoni"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "CECbot: A TV box <em>bot</em>net that grabs the remote and maps the house"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/deepfield/public-research/blob/main/cecbot/report.md"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_bashtoni",
+            "story_47485767"
+          ],
+          "author": "bashtoni",
+          "created_at": "2026-03-23T05:25:20Z",
+          "created_at_i": 1774243520,
+          "num_comments": 0,
+          "objectID": "47485767",
+          "points": 3,
+          "story_id": 47485767,
+          "title": "CECbot: A TV box botnet that grabs the remote and maps the house",
+          "updated_at": "2026-03-23T06:05:04Z",
+          "url": "https://github.com/deepfield/public-research/blob/main/cecbot/report.md"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -980,97 +930,11 @@
           "created_at_i": 1774225511,
           "num_comments": 0,
           "objectID": "47483917",
-          "points": 3,
+          "points": 4,
           "story_id": 47483917,
           "title": "The first modern rocket launched 100 years ago",
-          "updated_at": "2026-03-23T03:35:34Z",
+          "updated_at": "2026-03-23T06:13:19Z",
           "url": "https://theconversation.com/the-first-modern-rocket-launched-100-years-ago-beginning-a-century-of-both-innovations-and-challenges-for-spaceflight-269061"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kageroumado"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Open the same tab in two browser windows. In Chrome or Safari, you get two unconnected pages. In Arc, one window shows a placeholder. In Zen, it silently creates a duplicate.<p>In Refrax, the browser I built, <em>bot</em>h windows show the same page updating live. The same web page, in as many windows as you want.<p>This shouldn't be possible. WebKit's WKWebView can exist in exactly one view hierarchy at a time. With macOS 26, Apple added a SwiftUI API separating WebView from WebPage, so you can end up with multiple views referencing the same page. But if you try it, your app crashes. WebKit source code has a precondition with this comment: &quot;We can't have multiple owning pages regardless, but we'll want to decide if it's an error, if we can handle it gracefully, and how deterministic it might even be...&quot;<p>So here's how I did it.<p>CAPortalLayer is an undocumented private class that's been in macOS since 10.12. It mirrors a layer's composited output by referencing the same GPU memory, not copying it. Every scroll, animation, or repaint reflects instantly. This is what powers Liquid Glass effects, the iOS text selection magnifier, and ghost images during drag and drop. Apple uses portals for effects. I use them to put the same web page in two windows.<p>Refrax keeps one real WKWebView per tab and displays a CAPortalLayer mirror everywhere else. When you click a different window, the coordinator moves the real view there and the old window gets a portal. You can't tell which is which.<p>This sounds simple in theory, but making this actually work seamlessly took quite a lot of effort. Each macOS window has its own rendering context, and the context ID updates asynchronously, so creating a portal immediately captures a stale ID and renders nothing. The portal creation needs to be delayed, but delaying creates a visual gap. I capture a GPU snapshot using a private CoreGraphics function and place it behind the portal as a fallback. Another hard part is that none of it is documented. Portals are very capricious and would crash the app if you use them incorrectly. I had to inspect the headers and then disassemble the binaries to explore exactly how it works in order to build something robust.<p>I never worked on a browser before this, I've only been a user. I started using Arc in 2022. I remember asking for an invite, learning the shortcuts, slowly getting used to it. I didn't like it at first as it had too much Google Chrome in it for my taste, and I'd been using Safari at the time. But it grew on me, and by the time it was essentially abandoned and sold to Atlassian, I couldn't go back to Safari anymore. \nI tried everything: Zen, SigmaOS, Helium. None felt right, and I didn't want another Chromium fork. WebKit ships with the OS, but all you get is the rendering engine. Tabs, history, bookmarks, passwords, extensions, everything else has to be made separately. And so, being a very reasonable person, I decided to make my own Arc replacement from scratch.<p>And I did. Refrax is built in Swift and Objective-C with no external dependencies. The app itself is less than 30 MB. I have 393 tabs open right now using 442 MB of RAM; 150 tabs in Safari was already over 1 GB. I've been using it daily for over a month, and so have some of my friends.<p>The portal mirror is just one feature. The same approach, finding what Apple built for themselves and using it to create something they didn't think about, runs through the entire browser. You can tint your glass windows with adjustable blend modes and transparency. The sidebar in compact mode samples the page and matches the colors. And it has support for Firefox and Chrome extensions.<p>The alpha is public. Download from the linked website, enter REFRAX-ALPHA-HACKERNEWS to activate. No account needed. Telemetry is crash reports and a daily active-user ping, nothing else. And if you find a bug – I built this alone, so I'll actually read your report."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Refrax – my Arc Browser replacement I made from scratch"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://refrax.website/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kageroumado",
-            "story_47483155",
-            "show_hn"
-          ],
-          "author": "kageroumado",
-          "children": [
-            47483764,
-            47483367
-          ],
-          "created_at": "2026-03-22T22:52:29Z",
-          "created_at_i": 1774219949,
-          "num_comments": 2,
-          "objectID": "47483155",
-          "points": 4,
-          "story_id": 47483155,
-          "story_text": "Open the same tab in two browser windows. In Chrome or Safari, you get two unconnected pages. In Arc, one window shows a placeholder. In Zen, it silently creates a duplicate.<p>In Refrax, the browser I built, both windows show the same page updating live. The same web page, in as many windows as you want.<p>This shouldn&#x27;t be possible. WebKit&#x27;s WKWebView can exist in exactly one view hierarchy at a time. With macOS 26, Apple added a SwiftUI API separating WebView from WebPage, so you can end up with multiple views referencing the same page. But if you try it, your app crashes. WebKit source code has a precondition with this comment: &quot;We can&#x27;t have multiple owning pages regardless, but we&#x27;ll want to decide if it&#x27;s an error, if we can handle it gracefully, and how deterministic it might even be...&quot;<p>So here&#x27;s how I did it.<p>CAPortalLayer is an undocumented private class that&#x27;s been in macOS since 10.12. It mirrors a layer&#x27;s composited output by referencing the same GPU memory, not copying it. Every scroll, animation, or repaint reflects instantly. This is what powers Liquid Glass effects, the iOS text selection magnifier, and ghost images during drag and drop. Apple uses portals for effects. I use them to put the same web page in two windows.<p>Refrax keeps one real WKWebView per tab and displays a CAPortalLayer mirror everywhere else. When you click a different window, the coordinator moves the real view there and the old window gets a portal. You can&#x27;t tell which is which.<p>This sounds simple in theory, but making this actually work seamlessly took quite a lot of effort. Each macOS window has its own rendering context, and the context ID updates asynchronously, so creating a portal immediately captures a stale ID and renders nothing. The portal creation needs to be delayed, but delaying creates a visual gap. I capture a GPU snapshot using a private CoreGraphics function and place it behind the portal as a fallback. Another hard part is that none of it is documented. Portals are very capricious and would crash the app if you use them incorrectly. I had to inspect the headers and then disassemble the binaries to explore exactly how it works in order to build something robust.<p>I never worked on a browser before this, I&#x27;ve only been a user. I started using Arc in 2022. I remember asking for an invite, learning the shortcuts, slowly getting used to it. I didn&#x27;t like it at first as it had too much Google Chrome in it for my taste, and I&#x27;d been using Safari at the time. But it grew on me, and by the time it was essentially abandoned and sold to Atlassian, I couldn&#x27;t go back to Safari anymore. \nI tried everything: Zen, SigmaOS, Helium. None felt right, and I didn&#x27;t want another Chromium fork. WebKit ships with the OS, but all you get is the rendering engine. Tabs, history, bookmarks, passwords, extensions, everything else has to be made separately. And so, being a very reasonable person, I decided to make my own Arc replacement from scratch.<p>And I did. Refrax is built in Swift and Objective-C with no external dependencies. The app itself is less than 30 MB. I have 393 tabs open right now using 442 MB of RAM; 150 tabs in Safari was already over 1 GB. I&#x27;ve been using it daily for over a month, and so have some of my friends.<p>The portal mirror is just one feature. The same approach, finding what Apple built for themselves and using it to create something they didn&#x27;t think about, runs through the entire browser. You can tint your glass windows with adjustable blend modes and transparency. The sidebar in compact mode samples the page and matches the colors. And it has support for Firefox and Chrome extensions.<p>The alpha is public. Download from the linked website, enter REFRAX-ALPHA-HACKERNEWS to activate. No account needed. Telemetry is crash reports and a daily active-user ping, nothing else. And if you find a bug – I built this alone, so I&#x27;ll actually read your report.",
-          "title": "Show HN: Refrax – my Arc Browser replacement I made from scratch",
-          "updated_at": "2026-03-23T01:45:05Z",
-          "url": "https://refrax.website/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Hey1-Arthur"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "# I'm 11 years old and I trained my own LLM from scratch. 50 people downloaded it in 24 hours.<p>Hey r/LocalLLaMA,<p>I'm Arthur, I'm 11 years old, and I just released *Wind Arc 1.6* — a custom architecture LLM I built and trained myself.<p>## What it is<p>Wind Arc 1.6 is a 3.6B parameter model with a custom architecture I designed:<p>- *Mixture of Experts FFN* — 4 routed experts + 1 shared expert per layer (replaces standard MLP)\n- *YaRN RoPE* — extends context from 8k → 32k tokens\n- *Hybrid Attention* — full attention every 4th layer, sliding window otherwise\n- *QK-Norm* for training stability<p>Base: Qwen3-1.7B with the FFN layers completely replaced by my custom MoE. (Fully custom)<p>## How I trained it<p>- Hardware: 1× RTX 5090 rented from Nova Cloud\n- Cost: literally $1\n- Time: 55 minutes\n- Final loss: 2.66<p>Data mix: smoltalk + python-codes-25k + FineWeb-Edu + custom identity and Christian Q&amp;A data I wrote myself.<p>## What it's good at<p>- Python and general coding with explanations\n- Christian questions (Bible, theology, Christian living)\n- General chat and learning<p>## The honest truth<p>It's not GPT-4. Loss of 2.66 on a 1.7B base with 55 minutes of training isn't going to beat frontier models. But it runs locally, it's open source, and it's mine.<p>I still need to do SFT (the identity responses aren't perfect yet) and GGUF conversion is blocked by the custom MoE architecture. Working on <em>bot</em>h.<p>## Why I built it<p>I'm building *North.ai* — an AI startup focused on powerful models that run on small hardware. Wind Arc is our flagship model. Our platform Neurotype will let anyone train, deploy, and use AI without needing expensive cloud budgets.<p>I've trained 10+ models. This is the first one I'm actually proud enough to release.<p>## Links<p>HuggingFace: https://huggingface.co/arthu1/wind-arc-1-6<p>Would love feedback from people who actually know what they're doing. Be honest — I can take it.<p>— Arthur, age 11"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "I'm 11 and trained a custom MoE LLM for $1"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_Hey1-Arthur",
-            "story_47480445",
-            "ask_hn"
-          ],
-          "author": "Hey1-Arthur",
-          "created_at": "2026-03-22T18:17:47Z",
-          "created_at_i": 1774203467,
-          "num_comments": 0,
-          "objectID": "47480445",
-          "points": 4,
-          "story_id": 47480445,
-          "story_text": "# I&#x27;m 11 years old and I trained my own LLM from scratch. 50 people downloaded it in 24 hours.<p>Hey r&#x2F;LocalLLaMA,<p>I&#x27;m Arthur, I&#x27;m 11 years old, and I just released *Wind Arc 1.6* — a custom architecture LLM I built and trained myself.<p>## What it is<p>Wind Arc 1.6 is a 3.6B parameter model with a custom architecture I designed:<p>- *Mixture of Experts FFN* — 4 routed experts + 1 shared expert per layer (replaces standard MLP)\n- *YaRN RoPE* — extends context from 8k → 32k tokens\n- *Hybrid Attention* — full attention every 4th layer, sliding window otherwise\n- *QK-Norm* for training stability<p>Base: Qwen3-1.7B with the FFN layers completely replaced by my custom MoE. (Fully custom)<p>## How I trained it<p>- Hardware: 1× RTX 5090 rented from Nova Cloud\n- Cost: literally $1\n- Time: 55 minutes\n- Final loss: 2.66<p>Data mix: smoltalk + python-codes-25k + FineWeb-Edu + custom identity and Christian Q&amp;A data I wrote myself.<p>## What it&#x27;s good at<p>- Python and general coding with explanations\n- Christian questions (Bible, theology, Christian living)\n- General chat and learning<p>## The honest truth<p>It&#x27;s not GPT-4. Loss of 2.66 on a 1.7B base with 55 minutes of training isn&#x27;t going to beat frontier models. But it runs locally, it&#x27;s open source, and it&#x27;s mine.<p>I still need to do SFT (the identity responses aren&#x27;t perfect yet) and GGUF conversion is blocked by the custom MoE architecture. Working on both.<p>## Why I built it<p>I&#x27;m building *North.ai* — an AI startup focused on powerful models that run on small hardware. Wind Arc is our flagship model. Our platform Neurotype will let anyone train, deploy, and use AI without needing expensive cloud budgets.<p>I&#x27;ve trained 10+ models. This is the first one I&#x27;m actually proud enough to release.<p>## Links<p>HuggingFace: https:&#x2F;&#x2F;huggingface.co&#x2F;arthu1&#x2F;wind-arc-1-6<p>Would love feedback from people who actually know what they&#x27;re doing. Be honest — I can take it.<p>— Arthur, age 11",
-          "title": "I'm 11 and trained a custom MoE LLM for $1",
-          "updated_at": "2026-03-22T22:35:49Z"
         }
       ]
     },
@@ -2346,7 +2210,7 @@
           "story_id": 47477073,
           "story_text": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.\nWith that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results. \nThe Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and self-improving platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.\nVulcanAMI — Transformer &#x2F; Neuro-Symbolic Hybrid AI Platform\nVulcan is an AI system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.\nFEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.\nCurrent Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete\nWhat This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far\nThis is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution\nIf you find parts that are useful, interesting, or worth improving, you are free to build on them under the terms of the license.\nI know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;The_Code_Factory_Working_V2.git\nVulcanAMI: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;VulcanAMI_LLM.git\nFEMS: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;FEMS.git",
           "title": "New Open Source from Non-Traditional Builder",
-          "updated_at": "2026-03-23T02:42:05Z"
+          "updated_at": "2026-03-23T09:17:05Z"
         },
         {
           "_highlightResult": {

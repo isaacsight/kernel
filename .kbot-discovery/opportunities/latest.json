@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-23T03:50:33.841Z",
+  "timestamp": "2026-03-23T10:03:30.374Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,22 +88,22 @@
     },
     {
       "source": "github-issue",
+      "title": "CLI treats flags as paths; should show help when no valid path is provided",
+      "url": "https://github.com/gaureshpai/reclaimspace/issues/19",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "[Feature] 🚀 Introduce \"Debuggable Deep Search\" Strategy — Make the AI CMO's Reasoning Transparent!",
+      "url": "https://github.com/study8677/OpenCMO/issues/1",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Update README.md",
       "url": "https://github.com/SamaelxLunafreya/turborepo/pull/2",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add --format json flag to minutes search",
-      "url": "https://github.com/silverstein/minutes/issues/9",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] Cards missing demo data support",
-      "url": "https://github.com/kubestellar/console/issues/3189",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "[Digest - Main] 2026-03-23",
-      "url": "https://github.com/e1134171019/agrnt/issues/161",
+      "title": "Weekly Tech Report - 2026-03-23",
+      "url": "https://github.com/Tectonica-Campaigns-Solutions/Tectonica-Dev-Team-Standards-Practices/issues/38",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(cli): add @shadowob/cli with comprehensive tests",
-      "url": "https://github.com/buggyblues/shadow/pull/52",
+      "title": "chore(deps): bump the python-dependencies group with 62 updates",
+      "url": "https://github.com/po4yka/bite-size-reader/pull/204",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(fs): route FreeBSD writes through legacy fallback",
-      "url": "https://github.com/openclaw/openclaw/pull/52601",
+      "title": "chore(frontend)(deps): bump the production-dependencies group across 1 directory with 14 updates",
+      "url": "https://github.com/ActiveClientMods/Studienarbeit/pull/112",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Andrej Karpathy's autonomous AI research agent ran 700 experiments in 2 days and gave a glimpse of where AI is heading",
+      "url": "https://reddit.com/r/artificial/comments/1s1b1zm/andrej_karpathys_autonomous_ai_research_agent_ran/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "AI agents are about to start using your SaaS on behalf of your customers. Is your product ready?",
       "url": "https://reddit.com/r/artificial/comments/1rzduy4/ai_agents_are_about_to_start_using_your_saas_on/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Meta is having trouble with rogue AI agents",
       "url": "https://reddit.com/r/artificial/comments/1ryg65v/meta_is_having_trouble_with_rogue_ai_agents/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "We built a free digest that translates AI security research papers into plain language -- first issue covers cross-stack attacks on compound AI systems and LLMs automating their own adversarial attacks",
-      "url": "https://reddit.com/r/artificial/comments/1rycyzn/we_built_a_free_digest_that_translates_ai/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
