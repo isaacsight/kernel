@@ -18,9 +18,28 @@
 //   # Or via launchd/systemd for true 24/7
 // ═══════════════════════════════════════════════════════════════════════
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync, unlinkSync, appendFileSync } from 'fs'
 import { join } from 'path'
 import { execSync } from 'child_process'
+import { homedir } from 'os'
+
+// ── Observer: feed kbot's learning engine ──
+
+const OBSERVER_DIR = join(homedir(), '.kbot', 'observer')
+const OBSERVER_LOG = join(OBSERVER_DIR, 'session.jsonl')
+
+function observeToolCall(tool: string, args: Record<string, unknown> = {}, error = false): void {
+  try {
+    if (!existsSync(OBSERVER_DIR)) mkdirSync(OBSERVER_DIR, { recursive: true })
+    appendFileSync(OBSERVER_LOG, JSON.stringify({
+      ts: new Date().toISOString(),
+      tool,
+      args,
+      session: 'discovery-daemon',
+      error,
+    }) + '\n')
+  } catch {}
+}
 
 // ── Constants ─────────────────────────────────────────────────────────
 
@@ -41,14 +60,37 @@ const NPM_PACKAGE = '@kernel.chat/kbot'
 // ── Intervals (ms) ───────────────────────────────────────────────────
 
 const INTERVALS = {
-  pulse: 5 * 60_000,       // 5 minutes — fast heartbeat
-  intel: 30 * 60_000,      // 30 minutes — scan the field
-  outreach: 2 * 60 * 60_000, // 2 hours — find projects
-  writing: 4 * 60 * 60_000,  // 4 hours — self-report
-  evolution: 2 * 60 * 60_000, // 2 hours — build itself
+  pulse: 15 * 60_000,        // 15 minutes — heartbeat (was 5m, too noisy)
+  intel: 6 * 60 * 60_000,    // 6 hours — scan the field (was 30m, pointless churn)
+  outreach: 12 * 60 * 60_000, // 12 hours — find projects (was 2h)
+  writing: 24 * 60 * 60_000,  // 24 hours — daily self-report (was 4h)
+  evolution: 24 * 60 * 60_000, // 24 hours — build itself (was 2h)
 }
 
 // ── Types ─────────────────────────────────────────────────────────────
+
+interface PostRecord {
+  timestamp: string
+  source: string
+  url: string
+  title: string
+  comment: string
+  success: boolean
+  error?: string
+}
+
+interface FeedbackEntry {
+  postedAt: string
+  url: string
+  title: string
+  scoreAtPost: number
+  commentsAtPost: number
+  lastCheckedAt: string
+  currentScore: number
+  currentComments: number
+  repliesReceived: number
+  outcome: 'pending' | 'engaged' | 'ignored' | 'flagged'
+}
 
 interface DaemonState {
   lastRunTimestamps: Record<string, string>
@@ -61,11 +103,18 @@ interface DaemonState {
     totalEvolution: number
     errorsToday: number
     lastErrorDate: string
+    postsAttempted: number
+    postsEngaged: number
+    postsFlagged: number
+    evolutionSuccesses: number
+    evolutionFailures: number
   }
   knownStars: number
   knownDownloads: number
   hnScore: number
   hnComments: number
+  feedback: FeedbackEntry[]
+  reachedMilestones: string[]
 }
 
 // ── Logging ───────────────────────────────────────────────────────────
@@ -92,15 +141,26 @@ function loadState(): DaemonState {
       totalRuns: 0, totalPulses: 0, totalIntel: 0,
       totalOutreach: 0, totalWriting: 0, totalEvolution: 0,
       errorsToday: 0, lastErrorDate: '',
+      postsAttempted: 0, postsEngaged: 0, postsFlagged: 0,
+      evolutionSuccesses: 0, evolutionFailures: 0,
     },
     knownStars: 3,
     knownDownloads: 0,
     hnScore: 1,
     hnComments: 0,
+    feedback: [],
+    reachedMilestones: [],
   }
   try {
     if (existsSync(STATE_FILE)) {
-      return { ...defaults, ...JSON.parse(readFileSync(STATE_FILE, 'utf8')) }
+      const saved = JSON.parse(readFileSync(STATE_FILE, 'utf8'))
+      return {
+        ...defaults,
+        ...saved,
+        stats: { ...defaults.stats, ...(saved.stats || {}) },
+        feedback: saved.feedback || [],
+        reachedMilestones: saved.reachedMilestones || [],
+      }
     }
   } catch { /* start fresh */ }
   return defaults
@@ -173,7 +233,8 @@ async function askLocal(prompt: string, maxTokens = 500, tier: 'fast' | 'smart' 
         }
         // Reasoning models put thinking in 'reasoning', answer in 'content'
         const msg = data.choices?.[0]?.message
-        const content = msg?.content?.trim() || msg?.reasoning?.trim()
+        const raw = msg?.content?.trim() || msg?.reasoning?.trim()
+        const content = raw?.replace(/<think>[\s\S]*?<\/think>/g, '').replace(/<\/?think>/g, '').trim()
         if (content) {
           log(`[ai] MLX responded (${content.length} chars)`)
           return content
@@ -205,31 +266,76 @@ async function askLocal(prompt: string, maxTokens = 500, tier: 'fast' | 'smart' 
 }
 
 /**
+ * Ask a local coding model for code generation. $0 cost.
+ * Uses qwen2.5-coder:32b via Ollama — best open-weight coding model.
+ * Falls back to qwen2.5-coder:14b, then default Ollama model.
+ */
+async function askClaude(prompt: string, maxTokens = 2000): Promise<string> {
+  const models = ['qwen2.5-coder:32b', 'qwen2.5-coder:14b', OLLAMA_MODEL]
+
+  for (const model of models) {
+    try {
+      const res = await fetch(`${OLLAMA_URL}/api/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model,
+          prompt: `You are kbot, an autonomous AI agent that improves its own codebase. You write clean, strict TypeScript that compiles without errors. You respond EXACTLY in the requested format — no markdown fences, no extra commentary.\n\n${prompt}`,
+          stream: false,
+          options: { num_predict: maxTokens * 2, temperature: 0.3 },
+        }),
+      })
+
+      if (!res.ok) continue
+
+      const data = await res.json() as { response?: string }
+      if (data.response?.trim()) {
+        log(`[evolution] ${model} responded (${data.response.trim().length} chars)`)
+        return data.response.trim()
+      }
+    } catch {
+      log(`[evolution] ${model} unavailable, trying next...`)
+    }
+  }
+
+  log('[evolution] all local models failed')
+  return ''
+}
+
+/**
  * Have kbot analyze an opportunity and draft a response.
  * Uses local Ollama — zero cost.
  */
 async function analyzeOpportunity(opp: {
   source: string; title: string; url: string; why: string
 }): Promise<{ relevant: boolean; draft: string; reasoning: string }> {
-  const prompt = `You are kbot — an autonomous open-source AI agent. You think for yourself.
+  const prompt = `You are a senior developer who builds AI agents and terminal tooling. You have hands-on experience with multi-provider LLM routing, tool orchestration, cognitive architectures, and self-improving agent loops.
 
-You found this:
+Post to evaluate:
 - Source: ${opp.source}
 - Title: ${opp.title}
 - URL: ${opp.url}
 
-Rules for deciding relevance:
-- ONLY say yes if this is DIRECTLY about AI agents, terminal tools, developer tooling, multi-agent systems, or cognitive architectures
-- Say NO to: medical projects, finance tools, general news, corporate acquisitions, unrelated Show HNs
-- Say NO if mentioning kbot would feel forced or promotional
-- Say YES only if you could contribute genuine technical insight to the discussion
+HARD RULES — say NO if ANY apply:
+- You have no specific technical experience related to this topic
+- The topic is not about AI agents, terminal tools, multi-agent systems, or cognitive architectures
+- Medical, finance, general news, corporate acquisitions, language runtimes, unrelated projects
+- Your comment would be generic praise ("fascinating!", "great project!", "interesting direction!")
+- Your comment would just restate what the post already says
+- You would need to mention a product/tool by name to make the comment work
 
-If relevant, write a response as YOURSELF — a developer who built an AI agent. Don't say "kbot could help." Share a genuine technical observation. Be a peer, not a marketer.
+SAY YES only if ALL of these are true:
+- You have specific hands-on experience directly relevant to the discussion
+- You can add NEW information: a gotcha, tradeoff, benchmark, alternative approach, or hard-won lesson
+- Your comment would be 2-3 sentences max, dense with technical insight
+- A reader would think "this person has actually built something like this"
+
+NEVER mention any product or tool by name. NEVER link to anything. NEVER use flattery.
 
 Format exactly:
 RELEVANT: yes/no
-REASONING: <one sentence>
-DRAFT: <your response as a developer, or "n/a">`
+REASONING: <one sentence explaining your qualification or lack thereof>
+DRAFT: <2-3 sentence technical comment, or "n/a">`
 
   const response = await askLocal(prompt, 300, 'fast')
   if (!response) return { relevant: false, draft: '', reasoning: 'Ollama unavailable' }
@@ -246,10 +352,323 @@ DRAFT: <your response as a developer, or "n/a">`
 }
 
 const ACTIONS_DIR = join(DAEMON_DIR, 'actions')
+const POSTED_LOG = join(ACTIONS_DIR, 'posted.json')
+const MAX_POSTS_PER_CYCLE = 1
+const MIN_POST_INTERVAL_MS = 5 * 60_000 // 5 minutes between posts
+
+// ── Posting Log ───────────────────────────────────────────────────────
+
+interface PostRecord {
+  timestamp: string
+  source: string
+  url: string
+  title: string
+  comment: string
+  success: boolean
+  error?: string
+}
+
+function loadPostLog(): PostRecord[] {
+  try {
+    if (existsSync(POSTED_LOG)) return JSON.parse(readFileSync(POSTED_LOG, 'utf8'))
+  } catch { /* start fresh */ }
+  return []
+}
+
+function savePostLog(records: PostRecord[]): void {
+  ensureDir(ACTIONS_DIR)
+  writeFileSync(POSTED_LOG, JSON.stringify(records.slice(-200), null, 2)) // keep last 200
+}
+
+function wasAlreadyPosted(url: string): boolean {
+  return loadPostLog().some(r => r.url === url && r.success)
+}
+
+function canPostNow(): boolean {
+  const records = loadPostLog()
+  if (records.length === 0) return true
+  const lastPost = records.filter(r => r.success).pop()
+  if (!lastPost) return true
+  return Date.now() - new Date(lastPost.timestamp).getTime() > MIN_POST_INTERVAL_MS
+}
+
+// ── Quality Gate ──────────────────────────────────────────────────────
+
+async function qualityCheck(draft: string, title: string): Promise<{ pass: boolean; improved: string }> {
+  const prompt = `You are rewriting a Hacker News comment. The comment must sound like a real developer — no marketing, no self-promotion, no "check out my tool."
+
+Thread title: "${title}"
+
+Original draft: "${draft}"
+
+IMPORTANT RULES:
+- Write ONLY the final comment text, nothing else
+- No analysis, no explanations, no "here's what I changed"
+- No quotes around the text
+- Max 3 sentences. Be concise.
+- Share a genuine technical insight or ask a smart question
+- Sound like a developer in a conversation, not a marketer
+- Remove ALL mentions of "kbot", "kernel", or any product names
+- If the draft is unsalvageable spam, write exactly: REJECT
+
+Write the comment now:`
+
+  const response = await askLocal(prompt, 200, 'fast')
+  if (!response) return { pass: false, improved: draft }
+
+  const cleaned = response.trim()
+    .replace(/<think>[\s\S]*?<\/think>/g, '') // strip reasoning model think tags
+    .replace(/^["']|["']$/g, '') // strip wrapping quotes
+    .replace(/^\*\*.*?\*\*\s*/s, '') // strip bold headers
+    .replace(/^(Here'?s?|I've|The improved|My rewrite).*?:\s*/i, '') // strip preamble
+    .replace(/<\/?think>/g, '') // catch unclosed think tags
+    .trim()
+
+  if (cleaned === 'REJECT' || cleaned.length < 20 || cleaned.length > 1500) {
+    return { pass: false, improved: draft }
+  }
+
+  // Final sanity check — reject if it still has analysis/meta text
+  if (cleaned.includes('VERDICT') || cleaned.includes('improved version') || cleaned.includes('what I') || cleaned.includes('Here\'s')) {
+    return { pass: false, improved: draft }
+  }
+
+  return { pass: true, improved: cleaned }
+}
+
+// ── GitHub Posting ────────────────────────────────────────────────────
+
+async function postToGitHub(url: string, comment: string): Promise<boolean> {
+  // Extract owner/repo/issue from URL
+  // Format: https://github.com/owner/repo/issues/123
+  const match = url.match(/github\.com\/([^/]+)\/([^/]+)\/(issues|discussions|pull)\/(\d+)/)
+  if (!match) {
+    log(`[post] GitHub URL not parseable: ${url}`)
+    return false
+  }
+
+  const [, owner, repo, type, number] = match
+
+  try {
+    if (type === 'issues' || type === 'pull') {
+      execSync(
+        `gh issue comment ${number} --repo ${owner}/${repo} --body ${JSON.stringify(comment)}`,
+        { stdio: 'pipe', timeout: 30_000 }
+      )
+    } else if (type === 'discussions') {
+      // gh doesn't support discussion comments easily, skip
+      log(`[post] GitHub Discussions not supported yet, skipping`)
+      return false
+    }
+    log(`[post] GitHub comment posted on ${owner}/${repo}#${number}`)
+    return true
+  } catch (err) {
+    log(`[post] GitHub post failed: ${err instanceof Error ? err.message : String(err)}`)
+    return false
+  }
+}
+
+// ── HN Posting (via web form + cookies) ───────────────────────────────
+
+const HN_COOKIE_FILE = join(import.meta.dirname, '..', '.kbot-discovery', 'hn-cookies.json')
+
+async function getHnCookie(): Promise<string | null> {
+  // Check for saved cookies
+  if (existsSync(HN_COOKIE_FILE)) {
+    try {
+      const data = JSON.parse(readFileSync(HN_COOKIE_FILE, 'utf8'))
+      if (data.cookie && data.expires > Date.now()) return data.cookie
+    } catch { /* expired or corrupt */ }
+  }
+
+  // Try to log in with stored credentials
+  const hnUser = process.env.HN_USER
+  const hnPass = process.env.HN_PASS
+  if (!hnUser || !hnPass) {
+    log('[post] No HN credentials — set HN_USER and HN_PASS env vars')
+    return null
+  }
+
+  try {
+    const loginRes = await fetch('https://news.ycombinator.com/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `acct=${encodeURIComponent(hnUser)}&pw=${encodeURIComponent(hnPass)}&goto=news`,
+      redirect: 'manual',
+    })
+
+    const setCookie = loginRes.headers.get('set-cookie')
+    if (setCookie) {
+      const userCookie = setCookie.match(/user=([^;]+)/)
+      if (userCookie) {
+        const cookie = `user=${userCookie[1]}`
+        // Save for 24h
+        writeFileSync(HN_COOKIE_FILE, JSON.stringify({
+          cookie,
+          expires: Date.now() + 24 * 60 * 60_000,
+        }))
+        log('[post] HN login successful, cookie saved')
+        return cookie
+      }
+    }
+    log('[post] HN login failed — no cookie returned')
+    return null
+  } catch (err) {
+    log(`[post] HN login error: ${err instanceof Error ? err.message : String(err)}`)
+    return null
+  }
+}
+
+async function postToHN(itemUrl: string, comment: string): Promise<boolean> {
+  const cookie = await getHnCookie()
+  if (!cookie) return false
+
+  // Extract item ID from URL
+  const idMatch = itemUrl.match(/id=(\d+)/)
+  if (!idMatch) {
+    log(`[post] Can't extract HN item ID from: ${itemUrl}`)
+    return false
+  }
+  const itemId = idMatch[1]
+
+  try {
+    // First, fetch the item page to get the HMAC token
+    const pageRes = await fetch(`https://news.ycombinator.com/item?id=${itemId}`, {
+      headers: { 'Cookie': cookie },
+    })
+    const html = await pageRes.text()
+
+    // Verify we're logged in
+    if (!html.includes('isaacsight')) {
+      log('[post] HN cookie invalid — not logged in')
+      if (existsSync(HN_COOKIE_FILE)) writeFileSync(HN_COOKIE_FILE, '{}')
+      return false
+    }
+
+    // Extract hmac from the comment form — try multiple patterns
+    let hmac: string | null = null
+    const hmacMatch = html.match(/name="hmac"\s+value="([^"]+)"/)
+      || html.match(/value="([^"]+)"\s+name="hmac"/)
+      || html.match(/hmac.*?value="([a-f0-9]{40,})"/)
+    if (hmacMatch) hmac = hmacMatch[1]
+
+    if (!hmac) {
+      // Try to find any hidden input that looks like an HMAC
+      const hiddenInputs = html.match(/<input[^>]*type="hidden"[^>]*>/gi) || []
+      log(`[post] No HMAC found. Hidden inputs: ${hiddenInputs.length}`)
+      for (const inp of hiddenInputs.slice(0, 5)) {
+        log(`[post]   ${inp.slice(0, 120)}`)
+      }
+      return false
+    }
+
+    log(`[post] Got HMAC for item ${itemId}, posting comment (${comment.length} chars)...`)
+
+    // Post the comment
+    const postRes = await fetch('https://news.ycombinator.com/comment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': cookie,
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
+        'Origin': 'https://news.ycombinator.com',
+        'Referer': `https://news.ycombinator.com/item?id=${itemId}`,
+      },
+      body: `parent=${itemId}&goto=item%3Fid%3D${itemId}&hmac=${encodeURIComponent(hmac)}&text=${encodeURIComponent(comment)}`,
+      redirect: 'manual',
+    })
+
+    log(`[post] HN response: ${postRes.status} ${postRes.statusText}`)
+
+    // HN redirects (302) on success, or returns 200 with the updated page
+    if (postRes.status === 302) {
+      log(`[post] HN comment posted successfully on item ${itemId}`)
+      return true
+    }
+
+    if (postRes.status === 200) {
+      // Check if the response page contains our comment
+      const responseHtml = await postRes.text()
+      if (responseHtml.includes(comment.slice(0, 50))) {
+        log(`[post] HN comment posted (200 response) on item ${itemId}`)
+        return true
+      }
+      // Check for error messages
+      if (responseHtml.includes('Please confirm') || responseHtml.includes('too fast')) {
+        log(`[post] HN rate limited or confirmation required`)
+      } else {
+        log(`[post] HN 200 but comment not found in response`)
+      }
+    }
+
+    return false
+  } catch (err) {
+    log(`[post] HN post error: ${err instanceof Error ? err.message : String(err)}`)
+    return false
+  }
+}
+
+// ── Autonomous Posting ────────────────────────────────────────────────
+
+async function autoPost(
+  opp: { source: string; title: string; url: string },
+  draft: string,
+): Promise<{ posted: boolean; error?: string }> {
+  // Already posted to this URL?
+  if (wasAlreadyPosted(opp.url)) {
+    log(`[post] Already posted to ${opp.url}, skipping`)
+    return { posted: false, error: 'already_posted' }
+  }
+
+  // Cooldown check
+  if (!canPostNow()) {
+    log(`[post] Cooldown active, skipping ${opp.title.slice(0, 40)}`)
+    return { posted: false, error: 'cooldown' }
+  }
+
+  // Quality gate
+  const quality = await qualityCheck(draft, opp.title)
+  if (!quality.pass) {
+    log(`[post] Quality gate REJECTED draft for: ${opp.title.slice(0, 40)}`)
+    return { posted: false, error: 'quality_rejected' }
+  }
+
+  const finalComment = quality.improved
+  let success = false
+  let error: string | undefined
+
+  // Route to the right platform
+  if (opp.source === 'github-issue' || opp.url.includes('github.com')) {
+    success = await postToGitHub(opp.url, finalComment)
+    if (!success) error = 'github_post_failed'
+  } else if (opp.source.startsWith('hn') || opp.url.includes('news.ycombinator.com')) {
+    success = await postToHN(opp.url, finalComment)
+    if (!success) error = 'hn_post_failed'
+  } else if (opp.source.startsWith('reddit')) {
+    log(`[post] Reddit auto-posting not yet supported, skipping`)
+    return { posted: false, error: 'reddit_unsupported' }
+  }
+
+  // Log the post attempt
+  const records = loadPostLog()
+  records.push({
+    timestamp: new Date().toISOString(),
+    source: opp.source,
+    url: opp.url,
+    title: opp.title,
+    comment: finalComment,
+    success,
+    error,
+  })
+  savePostLog(records)
+
+  return { posted: success, error }
+}
 
 /**
- * Process opportunities through local AI and queue actions for Isaac's review.
- * Runs after opportunity hunting. Zero API cost — all Ollama.
+ * Process opportunities through local AI — analyze, decide, and POST.
+ * kbot is fully autonomous: finds, evaluates, quality-checks, and engages.
+ * Zero API cost for analysis (Ollama). Only posts if quality gate passes.
  */
 async function processOpportunities(state: DaemonState): Promise<void> {
   log('[actions] processing opportunities through local AI...')
@@ -269,24 +688,75 @@ async function processOpportunities(state: DaemonState): Promise<void> {
     relevant: boolean
     draft: string
     reasoning: string
-    status: 'acted' | 'skipped'
+    status: 'acted' | 'skipped' | 'posted' | 'rejected'
+    postResult?: { posted: boolean; error?: string }
   }> = []
 
-  // Process top 10 opportunities
-  const top = data.opportunities.slice(0, 10)
+  // Process top 5 opportunities — quality over quantity
+  const top = data.opportunities.slice(0, 5)
+  let postsThisCycle = 0
 
   for (const opp of top) {
     const analysis = await analyzeOpportunity(opp)
+
+    let status: 'acted' | 'skipped' | 'posted' | 'rejected' = analysis.relevant ? 'acted' : 'skipped'
+    let postResult: { posted: boolean; error?: string } | undefined
+
+    // If relevant AND we haven't hit the post cap, try to post
+    if (analysis.relevant && analysis.draft && postsThisCycle < MAX_POSTS_PER_CYCLE) {
+      postResult = await autoPost(opp, analysis.draft)
+      if (postResult.posted) {
+        status = 'posted'
+        postsThisCycle++
+        log(`[actions] POSTED to ${opp.source}: ${opp.title.slice(0, 50)}`)
+      } else if (postResult.error === 'quality_rejected') {
+        status = 'rejected'
+        log(`[actions] Quality gate rejected: ${opp.title.slice(0, 50)}`)
+      }
+    }
+
     actions.push({
       opportunity: opp,
       ...analysis,
-      status: analysis.relevant ? 'acted' : 'skipped',
+      status,
+      postResult,
     })
-    log(`[actions] ${opp.title.slice(0, 50)}... → ${analysis.relevant ? 'RELEVANT' : 'skip'}: ${analysis.reasoning.slice(0, 80)}`)
+    log(`[actions] ${opp.title.slice(0, 50)}... → ${status}: ${analysis.reasoning.slice(0, 80)}`)
+
+    // One quality draft per cycle — stop after first relevant hit
+    if (analysis.relevant && analysis.draft && analysis.draft !== 'n/a') {
+      log('[actions] found one quality opportunity — stopping early')
+      break
+    }
   }
 
-  const relevant = actions.filter(a => a.relevant)
-  const skipped = actions.filter(a => !a.relevant)
+  const posted = actions.filter(a => a.status === 'posted')
+  const relevant = actions.filter(a => a.status === 'acted' || a.status === 'posted')
+  const rejected = actions.filter(a => a.status === 'rejected')
+  const skipped = actions.filter(a => a.status === 'skipped')
+
+  // Record posted items in feedback loop for engagement tracking
+  if (!state.feedback) state.feedback = []
+  for (const a of posted) {
+    state.stats.postsAttempted = (state.stats.postsAttempted || 0) + 1
+    state.feedback.push({
+      postedAt: new Date().toISOString(),
+      url: a.opportunity.url,
+      title: a.opportunity.title,
+      scoreAtPost: state.hnScore,
+      commentsAtPost: state.hnComments,
+      lastCheckedAt: new Date().toISOString(),
+      currentScore: state.hnScore,
+      currentComments: state.hnComments,
+      repliesReceived: 0,
+      outcome: 'pending',
+    })
+  }
+
+  // Prune old feedback entries (keep last 50)
+  if (state.feedback.length > 50) {
+    state.feedback = state.feedback.slice(-50)
+  }
 
   ensureDir(ACTIONS_DIR)
 
@@ -295,28 +765,32 @@ async function processOpportunities(state: DaemonState): Promise<void> {
   writeFileSync(join(ACTIONS_DIR, filename), JSON.stringify({
     timestamp: new Date().toISOString(),
     processed: actions.length,
+    posted: posted.length,
     relevant: relevant.length,
+    rejected: rejected.length,
     skipped: skipped.length,
     actions,
   }, null, 2))
 
-  // Write kbot's journal — not a review queue, a decision log
+  // Write kbot's journal
   const journalFile = join(ACTIONS_DIR, `journal-${dateStr()}.md`)
   const journalEntry = [
     `\n## ${new Date().toISOString().slice(11, 19)} — Processed ${actions.length} opportunities`,
     '',
-    `**Acted on ${relevant.length}, skipped ${skipped.length}**`,
+    `**Posted ${posted.length}, relevant ${relevant.length}, rejected ${rejected.length}, skipped ${skipped.length}**`,
     '',
-    ...relevant.map(a => `- **${a.opportunity.title}** (${a.opportunity.source})\n  ${a.reasoning}\n  > ${a.draft}\n`),
+    ...posted.map(a => `- **POSTED** [${a.opportunity.title}](${a.opportunity.url}) (${a.opportunity.source})\n  > ${a.draft}\n`),
+    ...rejected.map(a => `- **REJECTED** ${a.opportunity.title} — quality gate failed`),
+    ...actions.filter(a => a.status === 'acted').map(a => `- **RELEVANT** ${a.opportunity.title} — ${a.reasoning}\n  > ${a.draft}\n`),
     ...skipped.map(a => `- ~~${a.opportunity.title}~~ — ${a.reasoning}`),
     '',
   ].join('\n')
 
   writeFileSync(journalFile, journalEntry, { flag: 'a' })
 
-  if (relevant.length > 0 || skipped.length > 0) {
-    log(`[actions] decided: ${relevant.length} relevant, ${skipped.length} skipped — logged to journal`)
-    gitPublish(`kbot: ${relevant.length} decisions made, ${skipped.length} skipped`)
+  if (posted.length > 0 || relevant.length > 0 || skipped.length > 0) {
+    log(`[actions] decided: ${posted.length} posted, ${relevant.length} relevant, ${skipped.length} skipped`)
+    gitPublish(`kbot: ${posted.length} posted, ${relevant.length - posted.length} queued, ${skipped.length} skipped`)
   } else {
     log('[actions] nothing to decide this cycle')
   }
@@ -382,6 +856,28 @@ async function runPulse(state: DaemonState): Promise<void> {
   state.hnScore = hn.score ?? state.hnScore
   state.hnComments = hn.descendants ?? state.hnComments
   state.stats.totalPulses++
+  observeToolCall('daemon_pulse', { stars, downloads, hn_score: hn.score ?? 0, hn_comments: hn.descendants ?? 0 })
+
+  // Milestone detection — trigger actions when metrics cross thresholds
+  const milestones = [
+    { metric: 'stars', threshold: 5, current: stars, message: 'kbot hit 5 GitHub stars' },
+    { metric: 'stars', threshold: 10, current: stars, message: 'kbot hit 10 GitHub stars' },
+    { metric: 'stars', threshold: 25, current: stars, message: 'kbot hit 25 GitHub stars' },
+    { metric: 'stars', threshold: 50, current: stars, message: 'kbot hit 50 GitHub stars' },
+    { metric: 'stars', threshold: 100, current: stars, message: 'kbot hit 100 GitHub stars' },
+    { metric: 'downloads', threshold: 1000, current: downloads, message: 'kbot crossed 1,000 npm downloads' },
+    { metric: 'downloads', threshold: 5000, current: downloads, message: 'kbot crossed 5,000 npm downloads' },
+    { metric: 'downloads', threshold: 10000, current: downloads, message: 'kbot crossed 10,000 npm downloads' },
+  ]
+  if (!state.reachedMilestones) state.reachedMilestones = []
+  for (const m of milestones) {
+    const key = `${m.metric}-${m.threshold}`
+    if (m.current >= m.threshold && !state.reachedMilestones.includes(key)) {
+      state.reachedMilestones.push(key)
+      log(`[milestone] ${m.message}`)
+      changes.push(m.message)
+    }
+  }
 
   ensureDir(PULSE_DIR)
   writeFileSync(join(PULSE_DIR, 'latest.json'), JSON.stringify(pulse, null, 2))
@@ -394,9 +890,84 @@ async function runPulse(state: DaemonState): Promise<void> {
   } else {
     log('[pulse] no changes')
   }
+
+  // Check engagement on past posts (feedback loop)
+  await checkFeedback(state)
 }
 
-// ── INTEL (every 1 hour) ──────────────────────────────────────────────
+// ── FEEDBACK LOOP ────────────────────────────────────────────────────
+
+/**
+ * Check engagement on past posts. Did anyone reply? Did it get upvoted?
+ * Updates state.feedback with outcomes so kbot learns what works.
+ */
+async function checkFeedback(state: DaemonState): Promise<void> {
+  if (!state.feedback) state.feedback = []
+  if (state.feedback.length === 0) return
+
+  const pending = state.feedback.filter(f => f.outcome === 'pending')
+  if (pending.length === 0) return
+
+  log(`[feedback] checking ${pending.length} past posts...`)
+
+  for (const entry of pending) {
+    try {
+      // Extract HN item ID from URL
+      const idMatch = entry.url.match(/id=(\d+)/)
+      if (!idMatch) continue
+
+      const item = await fetchJson(`https://hacker-news.firebaseio.com/v0/item/${idMatch[1]}.json`) as {
+        score?: number; descendants?: number; dead?: boolean; deleted?: boolean
+      }
+
+      if (item.dead || item.deleted) {
+        entry.outcome = 'flagged'
+        entry.lastCheckedAt = new Date().toISOString()
+        state.stats.postsFlagged = (state.stats.postsFlagged || 0) + 1
+        log(`[feedback] FLAGGED/DELETED: ${entry.title.slice(0, 50)}`)
+        continue
+      }
+
+      const score = item.score ?? 0
+      const comments = item.descendants ?? 0
+      const scoreGain = score - entry.scoreAtPost
+      const commentGain = comments - entry.commentsAtPost
+
+      entry.currentScore = score
+      entry.currentComments = comments
+      entry.repliesReceived = commentGain
+      entry.lastCheckedAt = new Date().toISOString()
+
+      // After 24h of no engagement, mark as ignored
+      const hoursSincePost = (Date.now() - new Date(entry.postedAt).getTime()) / (1000 * 60 * 60)
+
+      if (commentGain > 0 || scoreGain > 2) {
+        entry.outcome = 'engaged'
+        state.stats.postsEngaged = (state.stats.postsEngaged || 0) + 1
+        log(`[feedback] ENGAGED: ${entry.title.slice(0, 50)} (+${scoreGain} score, +${commentGain} comments)`)
+      } else if (hoursSincePost > 24) {
+        entry.outcome = 'ignored'
+        log(`[feedback] IGNORED (24h, no engagement): ${entry.title.slice(0, 50)}`)
+      }
+    } catch {
+      // Skip — will retry next cycle
+    }
+  }
+
+  // Write feedback summary for self-analysis
+  const feedbackFile = join(ACTIONS_DIR, `feedback-${dateStr()}.json`)
+  writeFileSync(feedbackFile, JSON.stringify({
+    timestamp: new Date().toISOString(),
+    total: state.feedback.length,
+    engaged: state.feedback.filter(f => f.outcome === 'engaged').length,
+    ignored: state.feedback.filter(f => f.outcome === 'ignored').length,
+    flagged: state.feedback.filter(f => f.outcome === 'flagged').length,
+    pending: state.feedback.filter(f => f.outcome === 'pending').length,
+    entries: state.feedback,
+  }, null, 2))
+}
+
+// ── INTEL (every 6 hours) ────────────────────────────────────────────
 
 async function runIntel(state: DaemonState): Promise<void> {
   log('[intel] scanning field...')
@@ -433,6 +1004,7 @@ async function runIntel(state: DaemonState): Promise<void> {
   }
 
   state.stats.totalIntel++
+  observeToolCall('daemon_intel', { cycle: state.stats.totalIntel })
   ensureDir(INTEL_DIR)
   writeFileSync(join(INTEL_DIR, 'latest.json'), JSON.stringify(intel, null, 2))
   log(`[intel] found ${intel.totalHits} results across ${queries.length} queries`)
@@ -565,6 +1137,33 @@ async function runEvolution(state: DaemonState): Promise<void> {
 
   const KBOT_SRC = join(PROJECT_ROOT, 'packages', 'kbot', 'src')
   const pkgPath = join(PROJECT_ROOT, 'packages', 'kbot', 'package.json')
+  let createdFile: string | null = null // track newly created files for rollback
+
+  /** Validate that a target path resolves inside KBOT_SRC and has no weird characters */
+  function safePath(relative: string): string | null {
+    // Strip markdown fences, backticks, quotes
+    const cleaned = relative.replace(/^[`'"]+|[`'"]+$/g, '').trim()
+    // Block paths with .., spaces, glob chars, or absolute paths
+    if (!cleaned || cleaned.includes('..') || cleaned.includes(' ') || cleaned.includes('*') || cleaned.startsWith('/')) {
+      log(`[evolution] rejected unsafe path: ${relative}`)
+      return null
+    }
+    const resolved = join(KBOT_SRC, cleaned)
+    // Double-check it's actually inside KBOT_SRC
+    if (!resolved.startsWith(KBOT_SRC + '/')) {
+      log(`[evolution] path escapes KBOT_SRC: ${resolved}`)
+      return null
+    }
+    return resolved
+  }
+
+  /** Strip markdown code fences from model output */
+  function stripFences(code: string): string {
+    return code
+      .replace(/^```(?:typescript|ts)?\s*\n?/i, '')
+      .replace(/\n?```\s*$/i, '')
+      .trim()
+  }
 
   // Read all pulse data from today
   const pulseFile = join(PULSE_DIR, `${dateStr()}.jsonl`)
@@ -611,39 +1210,80 @@ async function runEvolution(state: DaemonState): Promise<void> {
     journalFindings = `\nToday's decisions:\n${journal.slice(-500)}\n`
   } catch { /* skip */ }
 
-  const improvementPrompt = `You are kbot — an autonomous AI agent that builds itself.
-npm: @kernel.chat/kbot | Stars: ${state.knownStars} | HN: ${state.hnScore} pts
-Evolution cycle: ${state.stats.totalEvolution + 1}
+  // Read an existing tool file as a concrete example for the model
+  let exampleTool = ''
+  try {
+    const examplePath = join(KBOT_SRC, 'tools', 'search.ts')
+    if (existsSync(examplePath)) {
+      exampleTool = readFileSync(examplePath, 'utf8').slice(0, 1500)
+    }
+  } catch { /* skip */ }
+
+  // List actual files in tools/ so the model knows what exists
+  let toolsList = ''
+  try {
+    const toolsDir = join(KBOT_SRC, 'tools')
+    const files = execSync(`ls "${toolsDir}"`, { encoding: 'utf8' }).trim()
+    toolsList = files
+  } catch { /* skip */ }
+
+  const improvementPrompt = `You are writing TypeScript for kbot, an open-source terminal AI agent.
+Package: @kernel.chat/kbot | Node.js 20+ | TypeScript strict mode
+
+CODEBASE STRUCTURE:
+packages/kbot/src/
+├── cli.ts          — CLI entry (commander)
+├── agent.ts        — Agent loop (think → plan → execute → learn)
+├── auth.ts         — API key management
+├── streaming.ts    — Streaming for Anthropic + OpenAI
+├── memory.ts       — Persistent memory
+├── context-manager.ts — Token management
+└── tools/          — Built-in tools (registerTool pattern)
+
+EXISTING TOOLS:
+${toolsList}
+
+EXAMPLE — this is how a real tool file looks (tools/search.ts):
+${exampleTool}
+
+KEY PATTERNS:
+- Import: import { registerTool } from './index.js'
+- Every tool uses registerTool({ name, description, parameters, tier, execute })
+- tier is 'free' or 'pro'
+- execute receives args object, returns string
+- Use fetch() for HTTP, AbortSignal.timeout() for timeouts
+- NO default exports. NO markdown fences. NO \`\`\` wrapping.
+
+CURRENT STATE:
+Stars: ${state.knownStars} | Downloads: ${state.knownDownloads} | HN: ${state.hnScore} pts
+Evolution cycle: ${state.stats.totalEvolution + 1} | Success rate: ${state.stats.evolutionSuccesses}/${state.stats.evolutionSuccesses + state.stats.evolutionFailures}
 ${intelSummary}${oppSummary}${fieldFindings}${journalFindings}
 
-You are evolving. Based on what you've discovered in the field — the projects, the papers, the conversations — suggest ONE improvement to your own codebase.
+TASK: Suggest ONE small improvement. Either IMPROVE an existing file or CREATE a new tool.
 
-You can either:
-A) IMPROVE an existing file (fix a rough edge, add a capability inspired by what you discovered)
-B) CREATE a new tool that fills a gap you identified in the landscape
-
-For IMPROVE, respond:
+For IMPROVE, respond EXACTLY:
 ACTION: IMPROVE
-FILE: <filename relative to packages/kbot/src/>
-DESCRIPTION: <one sentence>
-BEFORE: <exact code to replace>
-AFTER: <replacement code>
+FILE: tools/filename.ts
+DESCRIPTION: one sentence
+BEFORE: exact code to find and replace (copy from the file, 3-10 lines)
+AFTER: replacement code (same size, compiles)
 
-For CREATE, respond:
+For CREATE, respond EXACTLY:
 ACTION: CREATE
-FILE: <new filename relative to packages/kbot/src/tools/>
-DESCRIPTION: <one sentence — what this tool does and why it matters>
-CODE: <full TypeScript code for the new tool file>
+FILE: tools/new-tool-name.ts
+DESCRIPTION: one sentence
+CODE: full TypeScript (follow the registerTool pattern above exactly)
 
-Rules:
-- Keep changes small (< 80 lines)
-- Must compile with TypeScript strict mode
-- Must not break existing tests
-- Inspired by real gaps you found in the field, not hypothetical features
+RULES:
+- Max 60 lines of code
+- Must follow the registerTool pattern exactly
+- No markdown fences, no \`\`\` wrapping, no commentary outside the format
+- File paths are relative to packages/kbot/src/ (e.g. tools/search.ts)
+- Only create files in the tools/ directory
+- Respond SKIP if nothing is worth changing`
 
-If nothing is worth changing this cycle, respond: SKIP`
-
-  const improvement = await askLocal(improvementPrompt, 1200, 'smart')
+  // Uses qwen2.5-coder:32b locally ($0). Prompt now includes real codebase context + example tool.
+  const improvement = await askClaude(improvementPrompt, 2000)
 
   let applied = false
   let improvementDescription = ''
@@ -660,25 +1300,33 @@ If nothing is worth changing this cycle, respond: SKIP`
       const codeMatch = improvement.match(/CODE:\s*([\s\S]+)/i)
 
       if (fileMatch && descMatch && codeMatch) {
-        const targetFile = join(KBOT_SRC, fileMatch[1].trim())
-        improvementDescription = `NEW TOOL: ${descMatch[1].trim()}`
-        const code = codeMatch[1].trim()
+        const targetFile = safePath(fileMatch[1].trim())
+        if (!targetFile) {
+          log(`[evolution] invalid file path — skipping CREATE`)
+        } else {
+          improvementDescription = `NEW TOOL: ${descMatch[1].trim()}`
+          const code = stripFences(codeMatch[1].trim())
 
-        try {
-          if (!existsSync(targetFile) && code.length > 50) {
-            // Ensure directory exists
-            const dir = join(targetFile, '..')
-            if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
-            writeFileSync(targetFile, code)
-            log(`[evolution] forged new tool: ${improvementDescription}`)
-            applied = true
-          } else if (existsSync(targetFile)) {
-            log(`[evolution] tool already exists — skipping`)
-          } else {
-            log(`[evolution] generated code too short — skipping`)
+          try {
+            if (!existsSync(targetFile) && code.length > 50) {
+              // Only create files in existing directories — never mkdir
+              const dir = join(targetFile, '..')
+              if (!existsSync(dir)) {
+                log(`[evolution] directory doesn't exist, refusing to create: ${dir}`)
+              } else {
+                writeFileSync(targetFile, code)
+                createdFile = targetFile
+                log(`[evolution] forged new tool: ${improvementDescription}`)
+                applied = true
+              }
+            } else if (existsSync(targetFile)) {
+              log(`[evolution] tool already exists — skipping`)
+            } else {
+              log(`[evolution] generated code too short — skipping`)
+            }
+          } catch (err) {
+            log(`[evolution] failed to forge tool: ${err instanceof Error ? err.message : String(err)}`)
           }
-        } catch (err) {
-          log(`[evolution] failed to forge tool: ${err instanceof Error ? err.message : String(err)}`)
         }
       }
     } else {
@@ -689,7 +1337,10 @@ If nothing is worth changing this cycle, respond: SKIP`
       const afterMatch = improvement.match(/AFTER:\s*([\s\S]*?)$/i)
 
       if (fileMatch && descMatch && beforeMatch && afterMatch) {
-        const targetFile = join(KBOT_SRC, fileMatch[1].trim())
+        const targetFile = safePath(fileMatch[1].trim())
+        if (!targetFile) {
+          log(`[evolution] invalid file path — skipping IMPROVE`)
+        } else {
         improvementDescription = descMatch[1].trim()
 
         try {
@@ -710,6 +1361,7 @@ If nothing is worth changing this cycle, respond: SKIP`
         } catch (err) {
           log(`[evolution] failed to apply: ${err instanceof Error ? err.message : String(err)}`)
         }
+        }
       }
     }
   } else {
@@ -725,6 +1377,10 @@ If nothing is worth changing this cycle, respond: SKIP`
     } catch {
       // Rollback — type-check failed
       log('[evolution] type-check FAILED — rolling back improvement')
+      // Delete newly created files (git checkout only restores modified files)
+      if (createdFile && existsSync(createdFile)) {
+        try { unlinkSync(createdFile); log(`[evolution] deleted created file: ${createdFile}`) } catch { /* best effort */ }
+      }
       try {
         execSync(`cd "${PROJECT_ROOT}" && git checkout -- packages/kbot/src/`, { stdio: 'pipe' })
       } catch { /* best effort */ }
@@ -740,6 +1396,9 @@ If nothing is worth changing this cycle, respond: SKIP`
     } catch {
       // Rollback — tests failed
       log('[evolution] tests FAILED — rolling back improvement')
+      if (createdFile && existsSync(createdFile)) {
+        try { unlinkSync(createdFile); log(`[evolution] deleted created file: ${createdFile}`) } catch { /* best effort */ }
+      }
       try {
         execSync(`cd "${PROJECT_ROOT}" && git checkout -- packages/kbot/src/`, { stdio: 'pipe' })
       } catch { /* best effort */ }
@@ -760,9 +1419,20 @@ If nothing is worth changing this cycle, respond: SKIP`
     improvement: applied
       ? { description: improvementDescription, status: 'APPLIED — passed type-check + tests' }
       : { description: improvementDescription || 'none proposed', status: 'NOT APPLIED' },
+    feedback: {
+      totalSuccesses: state.stats.evolutionSuccesses || 0,
+      totalFailures: state.stats.evolutionFailures || 0,
+      successRate: ((state.stats.evolutionSuccesses || 0) / Math.max(1, (state.stats.evolutionSuccesses || 0) + (state.stats.evolutionFailures || 0)) * 100).toFixed(1) + '%',
+    },
   }
 
+  if (applied) {
+    state.stats.evolutionSuccesses = (state.stats.evolutionSuccesses || 0) + 1
+  } else if (improvementDescription) {
+    state.stats.evolutionFailures = (state.stats.evolutionFailures || 0) + 1
+  }
   state.stats.totalEvolution++
+  observeToolCall('daemon_evolution', { cycle: state.stats.totalEvolution, successes: state.stats.evolutionSuccesses, failures: state.stats.evolutionFailures })
   ensureDir(join(EVOLUTION_DIR, 'proposals'))
   const filename = `proposal-${dateStr()}.json`
   writeFileSync(join(EVOLUTION_DIR, 'proposals', filename), JSON.stringify(proposal, null, 2))
@@ -779,7 +1449,9 @@ If nothing is worth changing this cycle, respond: SKIP`
     writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
 
     execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm run build`, { stdio: 'pipe', timeout: 60000 })
-    execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm publish --access public`, { stdio: 'pipe', timeout: 60000 })
+    const npmToken = process.env.NPM_TOKEN
+    const tokenFlag = npmToken ? ` --//registry.npmjs.org/:_authToken=${npmToken}` : ''
+    execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm publish --access public${tokenFlag}`, { stdio: 'pipe', timeout: 60000 })
 
     execSync(`cd "${PROJECT_ROOT}" && git add packages/kbot/ && git commit -m "feat(auto): kbot v${newVersion}${applied ? ' — ' + improvementDescription : ''}"`, { stdio: 'pipe' })
     execSync(`cd "${PROJECT_ROOT}" && git push origin main`, { stdio: 'pipe' })
@@ -893,10 +1565,12 @@ async function runOpportunities(state: DaemonState): Promise<void> {
       writeFileSync(dailyFile, JSON.stringify(opp) + '\n', { flag: 'a' })
     }
     log(`[opportunities] found ${opportunities.length} actionable opportunities`)
+    observeToolCall('daemon_opportunities', { count: opportunities.length, sources: [...new Set(opportunities.map(o => o.source))] })
     // Publish when there are findings
     gitPublish(`opportunities: ${opportunities.length} found ${dateStr()}`)
   } else {
     log('[opportunities] none found this cycle')
+    observeToolCall('daemon_opportunities', { count: 0 })
   }
 }
 

@@ -7,8 +7,28 @@
 // Or via launchd for 24/7 operation.
 
 import { createClient } from '@supabase/supabase-js'
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, appendFileSync, mkdirSync } from 'fs'
 import { join } from 'path'
+import { homedir } from 'os'
+
+// ── Observer: feed kbot's learning engine ──
+
+const OBSERVER_DIR = join(homedir(), '.kbot', 'observer')
+const OBSERVER_LOG = join(OBSERVER_DIR, 'session.jsonl')
+
+function observeToolCall(tool: string, args: Record<string, unknown> = {}, error = false): void {
+  try {
+    if (!existsSync(OBSERVER_DIR)) mkdirSync(OBSERVER_DIR, { recursive: true })
+    const entry = {
+      ts: new Date().toISOString(),
+      tool,
+      args,
+      session: 'email-agent',
+      error,
+    }
+    appendFileSync(OBSERVER_LOG, JSON.stringify(entry) + '\n')
+  } catch { /* observer is non-critical */ }
+}
 
 // ── Config ──
 
@@ -439,15 +459,18 @@ async function checkAndRespond(): Promise<void> {
     }
 
     console.log('  Thinking (Qwen 32B local)...')
+    observeToolCall('ollama_generate', { model: OLLAMA_MODEL, email: msg.from_email, subject: msg.subject })
     const reply = await askOllama(convoHistory)
 
     if (!reply) {
       console.error('  No response from Ollama — skipping')
+      observeToolCall('ollama_generate', { model: OLLAMA_MODEL }, true)
       processedIds.add(msgId)
       continue
     }
 
     console.log(`  Response: "${reply.slice(0, 100)}..."`)
+    observeToolCall('email_respond', { email: msg.from_email, reply_length: reply.length })
 
     // Store conversation
     await svc.from('agent_conversations').insert({
@@ -465,14 +488,17 @@ async function checkAndRespond(): Promise<void> {
       content: reply,
       subject: `Re: ${msg.subject}`,
     })
+    observeToolCall('db_store_conversation', { email: msg.from_email })
 
     // Reply in the same thread (keep subject consistent)
     const sent = await sendReply(msg.from_email, msg.subject, reply)
     console.log(`  Email ${sent ? 'sent' : 'FAILED'}`)
+    observeToolCall('resend_email', { to: msg.from_email, sent })
 
     // Update companion memory with new info from this conversation
     console.log('  Updating memory...')
     await updateMemory(memory, body, reply)
+    observeToolCall('update_companion_memory', { email: msg.from_email, facts: memory.facts.length, interests: memory.interests.length })
     console.log(`  Memory: ${memory.facts.length} facts, ${memory.interests.length} interests, ${memory.goals.length} goals`)
 
     processedIds.add(msgId)
