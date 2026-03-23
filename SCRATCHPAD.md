@@ -4,9 +4,112 @@
 > Before ending a session, ask Claude to update this file with what was accomplished and what's pending.
 > The SessionStart hook automatically loads this into Claude's context.
 
-## Current Session (2026-03-20 → 2026-03-21)
+## Current Session (2026-03-22)
 
-### Accomplished — kbot becomes autonomous
+### Accomplished — kbot v3.16.0 → v3.17.2, multi-channel agent, open email, kbot init, Docker update
+
+#### kbot v3.16.0 (published to npm)
+- **Email agent** — `kbot email-agent start --open` — autonomous email companion via local Ollama ($0)
+- **iMessage agent** — `kbot imessage-agent start` — free SMS/iMessage on macOS via Messages.app
+- **Consultation engine** — `kbot consultation` — domain guardrails (legal/medical/financial/tax), intake, Stripe
+- **Gamedev agent** — `kbot --agent gamedev` — game feel, combat design, Phaser 3, procedural gen
+- **Playtester agent** — `kbot --agent playtester` — brutally honest game tester, benchmarks vs Hades/Dead Cells
+- 25 agents total (was 23), all wired in BUILTIN_AGENTS in matrix.ts
+
+#### kbot v3.17.0 (published to npm)
+- **`kbot init`** — 60-second project onboarding: detects stack, forges project-specific tools, writes .kbot.json
+- **Audit growth engine** — `kbot audit --share` creates Gist, `kbot audit --badge` prints shields.io badge
+- **Open email agent** — `--open` flag, no whitelist, accepts all inbound
+- **Tests** — consultation.test.ts, memory-synthesis.test.ts, init.test.ts (previously 0 tests for these modules)
+
+#### kbot v3.17.1 (published to npm)
+- README updated: 25 agents, 290+ tools, v3.17 features, honest numbers
+- Agent count fixed everywhere (cli.ts, share.ts, audit.ts)
+
+#### kbot v3.17.2 (published to npm)
+- `kbot init` now exits cleanly (was falling through to REPL)
+- Subcommand routing fix: init, email-agent, imessage-agent, consultation added to exit list
+
+#### Edge Function Deployed
+- `receive-email` whitelist removed — ALL inbound emails to support@kernel.chat route to local agent
+- No more hardcoded 5 emails — anyone who emails gets a response
+- Cost: $0 — all AI runs locally via Ollama Qwen 32B
+
+#### Docker Hub Updated
+- `isaacsight/kbot:3.17.2` and `isaacsight/kbot:latest` pushed (was stale at v2.x)
+
+#### Discovery Daemon Status
+- 333 total runs, 30 opportunities found today (12 HN, 9 GitHub, 6 Reddit)
+- Best opportunity: "Jeriko — AI agent inside your OS" (flagged 3x, strong technical match)
+- 0 posts made — daemon can't post without HN/Reddit credentials
+- 3 stars, 633 downloads/week (SCRATCHPAD was claiming 4,027 — corrected)
+
+#### Research Completed
+- Hardware for local AI: Mac Studio M4 Max 128GB ($3,699) recommended
+- Mac vs PC vs Cloud comparison — Mac wins for 24/7 agent use case
+- Open-source models: Qwen3-Coder-Next (80B MoE), GLM-5 (95.8% SWE-Bench), closing gap to Opus
+- Timeline: 12-18 months until local models match Opus quality
+
+### Pending
+- Post on best HN opportunities from daemon (Jeriko, OpenCode threads)
+- Improve first-run experience — error correction loop fires too aggressively on hallucinations
+- Get 10 real users emailing support@kernel.chat
+- Mac Studio M4 Max 128GB purchase decision
+- Wait for M5 Ultra (mid-2026) vs buy M4 Max now
+- SYNTH game sprites still pending (Midjourney downloads incomplete)
+
+## Previous Session (2026-03-21)
+
+### Accomplished — daemon fixes, kbot v3.15.0, SYNTH game, Midjourney pipeline
+
+#### Daemon Fixes
+- Fixed broken build: removed garbled MLX-generated files from wrong paths
+- Path validation (`safePath`): daemon can't write files outside `packages/kbot/src/`
+- Markdown fence stripping: model output cleaned before writing to disk
+- Proper rollback: `unlinkSync` deletes created files on type-check failure
+- Slowed cycles: intel 6h (was 30m), evolution 24h (was 2h)
+- Evolution uses `qwen2.5-coder:32b` locally ($0/day) — 19GB model downloaded
+- Evolution prompt rewritten with real codebase context + example tool
+- Feedback loop: tracks HN post engagement (engaged/ignored/flagged)
+- Milestone alerts: fires when stars/downloads cross thresholds
+- Draft quality rewritten: writes as peer developer, 1 draft/cycle max
+- Think-tag stripping: `</think>` blocks from MLX model cleaned
+- npm auto-publish: automation token in launchd plist
+
+#### kbot v3.15.0 Published
+- `kbot synthesis` command — shows what kbot knows
+- Think-tag stripping in streaming.ts + agent.ts
+- Response quality gate (`--self-eval`) — retries garbage responses
+- `kbot doctor` — now lists Ollama models, detects MLX server
+- Web search discoverability — "free, no API key needed" in startup banner
+- Gamedev specialist agent created (packages/kbot/src/agents/gamedev.ts)
+
+#### SYNTH Game (packages/synth/)
+- Full Phaser 3 game scaffolded: TypeScript + Vite
+- Playable prototype: room, player (WASD + mouse), partner AI, 5 enemies, combat
+- VFX system: screen shake, hitstop, kill slow-mo, hit sparks, death explosions, dash trails, muzzle flash, damage numbers, vignette
+- Atmosphere system: AI partner mood changes world colors/lighting (calm/aggressive/afraid/confident/desperate)
+- AI systems: enemy FSM (idle/chase/attack/flee), partner behavior (follow/attack/defend/retreat/flank)
+
+#### Midjourney Art Pipeline
+- Automated Playwright-based Midjourney Discord bot integration
+- Generated & downloaded: player sprite, partner sprite, enemy melee, floor tile, boss (upscaled)
+- Boss idle animation generating via V1 video model
+- Wall tile prompt sent
+- Sprite pipeline tool: `npx tsx tools/sprite-pipeline.ts` (Sharp-based downscaler)
+- Prompt library: `packages/synth/assets/MIDJOURNEY_PROMPTS.md`
+
+### Pending
+- Download remaining Midjourney sprites (wall tile, ranged enemy, fast enemy, tank enemy, pickups)
+- Download boss animation video + extract frames
+- Run sprite pipeline on all downloaded images
+- Integrate real sprites into SYNTH game (replace procedural textures)
+- Game feel improvements (animation, sound, better combat)
+- Procedural room generation (Phase 2)
+- kbot brain integration (Phase 3) — partner makes strategic decisions via kbot SDK
+- Update SCRATCHPAD with session end state
+
+## Previous Session (2026-03-20 → 2026-03-21)
 
 #### v3.12.0 → v3.13.0 + 4 standalone npm packages + OpenClaw plugin
 
