@@ -1,6 +1,12 @@
 {
-  "timestamp": "2026-03-23T03:05:29.745Z",
+  "timestamp": "2026-03-23T15:18:25.908Z",
   "projects": [
+    {
+      "name": "jackwener/opencli",
+      "url": "https://github.com/jackwener/opencli",
+      "stars": 5066,
+      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
+    },
     {
       "name": "vm0-ai/vm0",
       "url": "https://github.com/vm0-ai/vm0",
@@ -8,34 +14,28 @@
       "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "TONresistor/teleton-agent",
-      "url": "https://github.com/TONresistor/teleton-agent",
-      "stars": 64,
-      "description": "Teleton: Autonomous AI Agent for Telegram & TON Blockchain"
+      "name": "nexu-io/nexu",
+      "url": "https://github.com/nexu-io/nexu",
+      "stars": 753,
+      "description": "The simplest desktop client for OpenClaw 🦞 — bridge your Agent to WeChat, Feishu, Slack & Discord in one click. Works with Claude Code, Codex & any LLM. BYOK, local-first, chat from your phone 24/7."
     },
     {
-      "name": "iOfficeAI/AionUi",
-      "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 19725,
-      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 340,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+    },
+    {
+      "name": "Panniantong/Agent-Reach",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "stars": 10494,
+      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
       "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
       "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 105,
+      "stars": 111,
       "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
-    },
-    {
-      "name": "Mirascope/mirascope",
-      "url": "https://github.com/Mirascope/mirascope",
-      "stars": 1435,
-      "description": "The LLM Anti-Framework"
-    },
-    {
-      "name": "Ruya-AI/cozempic",
-      "url": "https://github.com/Ruya-AI/cozempic",
-      "stars": 169,
-      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
     },
     {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
@@ -44,16 +44,16 @@
       "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     },
     {
-      "name": "rubayatkhan/openclaw-ops",
-      "url": "https://github.com/rubayatkhan/openclaw-ops",
-      "stars": 0,
-      "description": "Claude Code plugin for managing OpenClaw instances via SSH — container ops, log analysis, skill deployment, config management, channel management, cron jobs, diagnostics, and troubleshooting"
-    },
-    {
       "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
       "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    },
+    {
+      "name": "samber/cc-skills-golang",
+      "url": "https://github.com/samber/cc-skills-golang",
+      "stars": 64,
+      "description": "🧑‍🎨 A collection of Golang agentic skills that works"
     }
   ],
   "latestPaper": {
