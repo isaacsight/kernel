@@ -2853,6 +2853,17 @@ async function startRepl(
 
   const sessionCount = incrementSessions()
 
+  // Seed knowledge on first run — give new users a head start
+  if (sessionCount <= 2) {
+    try {
+      const { loadSeedKnowledge } = await import('./seed-knowledge.js')
+      const seed = await loadSeedKnowledge()
+      if (seed.seeded) {
+        printInfo(`Loaded ${seed.patterns} patterns + ${seed.facts} knowledge entries from seed data`)
+      }
+    } catch { /* seed loading is non-critical */ }
+  }
+
   // Three-tier memory: run synthesis on every 10th session (or first time with enough data)
   if (sessionCount % 10 === 0 || sessionCount === 1) {
     try {
