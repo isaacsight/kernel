@@ -422,6 +422,7 @@ async function main(): Promise<void> {
         process.stderr.write(`    ${chalk.cyan('kbot')} "run the tests and fix any failures"\n`)
       }
       process.stderr.write('\n')
+      process.exit(0)
     })
 
   program
@@ -2083,7 +2084,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
