@@ -385,6 +385,166 @@ async function main(): Promise<void> {
       printInfo('Or use any HuggingFace GGUF: kbot models pull hf:user/repo:file.gguf')
     })
 
+  // ── Discovery Agent ──
+  const discoveryCmd = program
+    .command('discovery')
+    .description('Autonomous outreach agent — finds conversations, drafts responses, posts for you')
+
+  discoveryCmd
+    .command('start')
+    .description('Start the discovery loop — scans HN, GitHub, Reddit and posts autonomously')
+    .option('--dry-run', 'Find and draft but don\'t post')
+    .option('--interval <minutes>', 'Poll interval in minutes', '60')
+    .option('--model <model>', 'Ollama model for analysis', 'qwen2.5-coder:32b')
+    .action(async (opts: { dryRun?: boolean; interval?: string; model?: string }) => {
+      const { loadConfig, saveConfig, runDiscoveryCycle } = await import('./discovery.js')
+      const chalk = (await import('chalk')).default
+      const readline = await import('node:readline')
+
+      let config = loadConfig()
+
+      // First run — interactive setup
+      if (!config) {
+        const rl = readline.createInterface({ input: process.stdin, output: process.stderr })
+        const ask = (q: string): Promise<string> => new Promise(r => rl.question(q, r))
+
+        console.log()
+        console.log(chalk.hex('#6B5B95')('  ◉ kbot Discovery — First Time Setup'))
+        console.log()
+
+        const name = await ask('  Project name: ')
+        const desc = await ask('  One-line description: ')
+        const topicsRaw = await ask('  Topics to search (comma-separated): ')
+        const hnUser = await ask('  HN username (leave blank to skip): ')
+        let hnCookie = ''
+        if (hnUser) {
+          hnCookie = await ask('  HN cookie string (from browser dev tools): ')
+        }
+
+        rl.close()
+
+        config = {
+          projectName: name || 'my-project',
+          projectDescription: desc || '',
+          topics: topicsRaw.split(',').map(t => t.trim()).filter(Boolean),
+          hnUsername: hnUser || undefined,
+          hnCookie: hnCookie || undefined,
+          githubToken: undefined,
+          maxPostsPerCycle: 2,
+          pollIntervalMinutes: Number(opts.interval || 60),
+          dryRun: opts.dryRun || false,
+          ollamaModel: opts.model || 'qwen2.5-coder:32b',
+          ollamaUrl: 'http://localhost:11434',
+        }
+
+        saveConfig(config)
+        printSuccess('Config saved to ~/.kbot/discovery/config.json')
+      }
+
+      // Override with flags
+      config.dryRun = opts.dryRun || false
+      config.pollIntervalMinutes = Number(opts.interval || config.pollIntervalMinutes)
+      config.ollamaModel = opts.model || config.ollamaModel
+
+      console.log()
+      console.log(chalk.hex('#6B5B95')('  ◉ kbot Discovery Agent'))
+      console.log(chalk.dim(`  Project: ${config.projectName}`))
+      console.log(chalk.dim(`  Topics: ${config.topics.join(', ')}`))
+      console.log(chalk.dim(`  Model: ${config.ollamaModel}`))
+      console.log(chalk.dim(`  Mode: ${config.dryRun ? 'DRY RUN (no posting)' : 'LIVE (will post)'}`))
+      console.log(chalk.dim(`  Interval: ${config.pollIntervalMinutes}m`))
+      console.log()
+
+      // Initial cycle
+      await runDiscoveryCycle(config)
+
+      // Poll
+      setInterval(() => runDiscoveryCycle(config!), config.pollIntervalMinutes * 60 * 1000)
+      console.log(`Polling every ${config.pollIntervalMinutes}m. Ctrl+C to stop.`)
+      await new Promise(() => {}) // keep alive
+    })
+
+  discoveryCmd
+    .command('status')
+    .description('Show discovery agent status and stats')
+    .action(async () => {
+      const { getDiscoveryState, loadConfig } = await import('./discovery.js')
+      const chalk = (await import('chalk')).default
+      const config = loadConfig()
+      const state = getDiscoveryState()
+
+      console.log()
+      console.log(chalk.hex('#6B5B95')('  ◉ kbot Discovery Status'))
+      if (config) {
+        console.log(chalk.dim(`  Project: ${config.projectName}`))
+        console.log(chalk.dim(`  Topics: ${config.topics.join(', ')}`))
+      } else {
+        printWarn('  Not configured. Run: kbot discovery start')
+      }
+      console.log()
+      console.log(`  Scans:   ${state.totalScans}`)
+      console.log(`  Found:   ${state.totalFound}`)
+      console.log(`  Posted:  ${state.totalPosted}`)
+      console.log(`  Skipped: ${state.totalSkipped}`)
+      console.log(`  Last:    ${state.lastScan || 'never'}`)
+
+      if (state.posts.length > 0) {
+        console.log()
+        console.log(chalk.bold('  Recent posts:'))
+        for (const p of state.posts.slice(-5).reverse()) {
+          const icon = p.success ? chalk.green('✓') : chalk.red('✗')
+          console.log(`    ${icon} [${p.platform}] ${p.title.slice(0, 50)}`)
+          if (p.error) console.log(chalk.dim(`      ${p.error}`))
+        }
+      }
+      console.log()
+      process.exit(0)
+    })
+
+  discoveryCmd
+    .command('log')
+    .description('Show recent discovery activity')
+    .option('-n, --lines <n>', 'Number of lines to show', '20')
+    .action(async (opts: { lines?: string }) => {
+      const { getRecentLog } = await import('./discovery.js')
+      console.log(getRecentLog(Number(opts.lines || 20)))
+      process.exit(0)
+    })
+
+  discoveryCmd
+    .command('auth')
+    .description('Configure platform credentials for posting')
+    .action(async () => {
+      const { loadConfig, saveConfig } = await import('./discovery.js')
+      const readline = await import('node:readline')
+
+      let config = loadConfig()
+      if (!config) {
+        printError('Run `kbot discovery start` first to create config.')
+        process.exit(1)
+      }
+
+      const rl = readline.createInterface({ input: process.stdin, output: process.stderr })
+      const ask = (q: string): Promise<string> => new Promise(r => rl.question(q, r))
+
+      console.log()
+      printInfo('Configure platform credentials')
+      console.log()
+
+      const hnUser = await ask(`  HN username [${config.hnUsername || 'none'}]: `)
+      if (hnUser) config.hnUsername = hnUser
+
+      if (config.hnUsername) {
+        const hnCookie = await ask('  HN cookie (from browser): ')
+        if (hnCookie) config.hnCookie = hnCookie
+      }
+
+      rl.close()
+      saveConfig(config)
+      printSuccess('Credentials updated.')
+      process.exit(0)
+    })
+
   program
     .command('init')
     .description('Set up kbot for this project — detects stack, creates tools, writes config (60 seconds)')
@@ -2145,7 +2305,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()

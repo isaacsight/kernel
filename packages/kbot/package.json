@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "3.20.1",
+  "version": "3.21.0",
   "description": "The only AI agent that builds its own tools. Multi-channel cognitive engine: email agent, iMessage agent, consultation pipeline, 25 specialist agents, 290+ tools, 20 providers. Runtime tool forging, Forge Registry, autopoietic health, immune self-audit. Cost-aware model routing, fallback chains, Bayesian skill routing. Embedded llama.cpp, MCP server, SDK. MIT.",
   "type": "module",
   "repository": {
