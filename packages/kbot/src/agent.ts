@@ -1695,6 +1695,23 @@ Always quote file paths that contain spaces. Never reference internal system nam
         results.push(result)
         ui.onToolCallEnd(call.name, result.result, result.error ? result.result : undefined, result.duration_ms)
 
+        // ── Observer: record tool call for cross-session learning ──
+        try {
+          const { recordObservation } = await import('./observer.js')
+          recordObservation({
+            ts: new Date().toISOString(),
+            tool: call.name,
+            args: {
+              file_path: (call.arguments as Record<string, unknown>)?.file_path as string || (call.arguments as Record<string, unknown>)?.path as string || undefined,
+              command: typeof (call.arguments as Record<string, unknown>)?.command === 'string' ? ((call.arguments as Record<string, unknown>).command as string).slice(0, 200) : undefined,
+              pattern: (call.arguments as Record<string, unknown>)?.pattern as string || undefined,
+            },
+            result_length: result.result?.length || 0,
+            session: `kbot-${sessionId}`,
+            error: result.error || false,
+          })
+        } catch { /* observer is non-critical */ }
+
         // ── Autopoiesis: observe tool result for system health ──
         autopoietic.observeToolResult(call.name, !result.error, result.error ? result.result : undefined)
 
