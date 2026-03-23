@@ -426,6 +426,67 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('observe')
+    .description('Ingest observations from Claude Code sessions — kbot learns from what Claude does')
+    .option('--stats', 'Show observer statistics')
+    .option('--reset', 'Reset the observer log and cursor')
+    .action(async (opts: { stats?: boolean; reset?: boolean }) => {
+      const { ingestObservations, getObserverStats, getLogPath } = await import('./observer.js')
+      const chalk = (await import('chalk')).default
+
+      if (opts.reset) {
+        const { existsSync, unlinkSync } = await import('node:fs')
+        const { join } = await import('node:path')
+        const { homedir } = await import('node:os')
+        const dir = join(homedir(), '.kbot', 'observer')
+        for (const f of ['session.jsonl', 'cursor.json', 'stats.json']) {
+          const p = join(dir, f)
+          if (existsSync(p)) unlinkSync(p)
+        }
+        printSuccess('Observer log reset.')
+        process.exit(0)
+      }
+
+      if (opts.stats) {
+        const stats = getObserverStats()
+        console.log()
+        console.log(chalk.hex('#6B5B95')('  ◉ kbot Observer'))
+        console.log(chalk.dim(`  Log: ${getLogPath()}`))
+        console.log()
+        console.log(`  Total observed:     ${stats.totalObserved}`)
+        console.log(`  Sessions observed:  ${stats.sessionsObserved}`)
+        console.log(`  Sequences learned:  ${stats.sequencesLearned}`)
+        console.log(`  Facts learned:      ${stats.factsLearned}`)
+        console.log(`  Last ingested:      ${stats.lastIngested || 'never'}`)
+        if (Object.keys(stats.toolFrequency).length > 0) {
+          console.log()
+          console.log(chalk.bold('  Tool frequency:'))
+          const sorted = Object.entries(stats.toolFrequency).sort((a, b) => b[1] - a[1]).slice(0, 10)
+          for (const [tool, count] of sorted) {
+            console.log(`    ${String(count).padStart(4)}x  ${tool}`)
+          }
+        }
+        console.log()
+        process.exit(0)
+      }
+
+      // Default: ingest new observations
+      printInfo('Ingesting observations from Claude Code sessions...')
+      const result = await ingestObservations()
+
+      if (result.processed === 0) {
+        printInfo('No new observations to ingest.')
+        printInfo(`Log file: ${getLogPath()}`)
+        printInfo('The Claude Code PostToolUse hook writes here after every tool call.')
+      } else {
+        printSuccess(`Ingested ${result.processed} tool calls from ${result.sessions.length} session(s)`)
+        if (result.patterns > 0) printInfo(`  Sequences learned: ${result.patterns}`)
+        if (result.facts > 0) printInfo(`  Facts learned: ${result.facts}`)
+      }
+      process.exit(0)
+    })
+
+  program
     .command('doctor')
     .description('Diagnose your kbot setup — check everything is working')
     .action(async () => {
@@ -2084,7 +2145,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
