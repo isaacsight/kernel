@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-22T21:35:31.266Z",
+  "timestamp": "2026-03-23T03:50:30.652Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -276,11 +276,11 @@
           "created_at_i": 1774203467,
           "num_comments": 0,
           "objectID": "47480445",
-          "points": 3,
+          "points": 4,
           "story_id": 47480445,
           "story_text": "# I&#x27;m 11 years old and I trained my own LLM from scratch. 50 people downloaded it in 24 hours.<p>Hey r&#x2F;LocalLLaMA,<p>I&#x27;m Arthur, I&#x27;m 11 years old, and I just released *Wind Arc 1.6* — a custom architecture LLM I built and trained myself.<p>## What it is<p>Wind Arc 1.6 is a 3.6B parameter model with a custom architecture I designed:<p>- *Mixture of Experts FFN* — 4 routed experts + 1 shared expert per layer (replaces standard MLP)\n- *YaRN RoPE* — extends context from 8k → 32k tokens\n- *Hybrid Attention* — full attention every 4th layer, sliding window otherwise\n- *QK-Norm* for training stability<p>Base: Qwen3-1.7B with the FFN layers completely replaced by my custom MoE. (Fully custom)<p>## How I trained it<p>- Hardware: 1× RTX 5090 rented from Nova Cloud\n- Cost: literally $1\n- Time: 55 minutes\n- Final loss: 2.66<p>Data mix: smoltalk + python-codes-25k + FineWeb-Edu + custom identity and Christian Q&amp;A data I wrote myself.<p>## What it&#x27;s good at<p>- Python and general coding with explanations\n- Christian questions (Bible, theology, Christian living)\n- General chat and learning<p>## The honest truth<p>It&#x27;s not GPT-4. Loss of 2.66 on a 1.7B base with 55 minutes of training isn&#x27;t going to beat frontier models. But it runs locally, it&#x27;s open source, and it&#x27;s mine.<p>I still need to do SFT (the identity responses aren&#x27;t perfect yet) and GGUF conversion is blocked by the custom MoE architecture. Working on both.<p>## Why I built it<p>I&#x27;m building *North.ai* — an AI startup focused on powerful models that run on small hardware. Wind Arc is our flagship model. Our platform Neurotype will let anyone train, deploy, and use AI without needing expensive cloud budgets.<p>I&#x27;ve trained 10+ models. This is the first one I&#x27;m actually proud enough to release.<p>## Links<p>HuggingFace: https:&#x2F;&#x2F;huggingface.co&#x2F;arthu1&#x2F;wind-arc-1-6<p>Would love feedback from people who actually know what they&#x27;re doing. Be honest — I can take it.<p>— Arthur, age 11",
           "title": "I'm 11 and trained a custom MoE LLM for $1",
-          "updated_at": "2026-03-22T19:07:06Z"
+          "updated_at": "2026-03-22T22:35:49Z"
         },
         {
           "_highlightResult": {
@@ -390,11 +390,11 @@
           "created_at_i": 1774096989,
           "num_comments": 11,
           "objectID": "47466513",
-          "points": 25,
+          "points": 26,
           "story_id": 47466513,
           "story_text": "I built an open-source repo template that brings structure to AI-assisted software development, starting from the pre-coding phases: objectives, user stories, requirements, architecture decisions.<p>It&#x27;s designed around Claude Code but the ideas are tool-agnostic. I&#x27;ve been a computer science researcher and full-stack software engineer for 25 years, working mainly in startups. I&#x27;ve been using this approach on my personal projects for a while, then, when I decided to package it up as scaffold for more easy reuse, I figured it might be useful to others too. I published it under Apache 2.0, fork it and make it yours.<p>You can easily try it out: follow the instructions in the README to start using it.<p>The problem it solves:<p>AI coding agents are great at writing code, but they work much better when they have clear context about what to build and why. Most projects jump straight to implementation. This scaffold provides a structured workflow for the pre-coding phases, and organizes the output so that agents can navigate it efficiently across sessions.<p>How it works:<p>Everything lives in the repo alongside source code. The AI guidance is split into three layers, each optimized for context-window usage:<p>1. Instruction files (CLAUDE.md, CLAUDE.&lt;phase&gt;.md): always loaded, kept small. They are organized hierarchically, describe repo structure, maintain artifact indexes, and define cross-phase rules like traceability invariants.<p>2. Skills (.claude&#x2F;skills&#x2F;SDLC-*): loaded on demand. Step-by-step procedures for each SDLC activity: eliciting requirements, gap analysis, drafting architecture, decomposing into components, planning tasks, implementation.<p>3. Project artifacts: structured markdown files that accumulate as work progresses: stakeholders, goals, user stories, requirements, assumptions, constraints, decisions, architecture, data model, API design, task tracking. Accessed selectively through indexes.<p>This separation matters because instruction files stay in the context window permanently and must be lean, skills can be detailed since they&#x27;re loaded only when invoked, and artifacts scale with the project but are navigated via indexed tables rather than read in full.<p>Key design choices:<p>Context-window efficiency: artifact collections use markdown index tables (one-line description and trigger conditions) so the agent can locate what it needs without reading everything.<p>Decision capture: decisions made during AI reasoning and human feedback are persisted as a structured artifact, to make them reviewable, traceable, and consistently applied across sessions.<p>Waterfall-ish flow: sequential phases with defined outputs. Tedious for human teams, but AI agents don&#x27;t mind the overhead, and the explicit structure prevents the unconstrained &quot;just start vibecoding&quot; failure mode.<p>How I use it:<p>Short, focused sessions. Each session invokes one skill, produces its output, and ends. The knowledge organization means the next session picks up without losing context. I&#x27;ve found that free-form prompting between skills is usually a sign the workflow is missing a piece.<p>Current limitations:<p>I haven&#x27;t found a good way to integrate Figma MCP for importing existing UI&#x2F;UX designs into the workflow. Suggestions welcome.<p>Feedback, criticism, and contributions are very welcome!",
           "title": "Show HN: AI SDLC Scaffold, repo template for AI-assisted software development",
-          "updated_at": "2026-03-22T15:22:47Z",
+          "updated_at": "2026-03-23T03:10:04Z",
           "url": "https://github.com/pangon/ai-sdlc-scaffold/"
         },
         {
@@ -498,34 +498,36 @@
             47463249,
             47461326,
             47465756,
-            47466591,
             47461008,
+            47466591,
             47462016,
-            47465527,
             47461613,
-            47475654,
+            47465527,
             47470866,
+            47475654,
+            47463497,
             47465661,
             47463916,
-            47465717,
             47462299,
-            47468933,
+            47465717,
             47464579,
+            47468933,
             47467413,
             47466111,
             47465643,
             47465692,
-            47469135,
-            47470145,
             47461348,
-            47467434,
+            47469135,
             47461500,
+            47470145,
+            47467434,
             47467709,
             47463768,
-            47473786,
+            47461499,
             47460886,
-            47473886,
             47461597,
+            47473786,
+            47473886,
             47466572,
             47463007,
             47463524,
@@ -535,30 +537,28 @@
             47462400,
             47461781,
             47467602,
-            47463470,
             47461846,
             47466389,
-            47471254,
             47461314,
             47461707,
-            47472715,
+            47471254,
             47463753,
             47465066,
             47461422,
+            47472715,
             47461262,
             47468464,
             47462465,
             47461679,
             47462066,
-            47473531,
             47461475,
             47461996,
             47461340,
             47460967,
-            47467769,
+            47473531,
             47461944,
             47463743,
-            47461499,
+            47467769,
             47463483,
             47464077,
             47466620,
@@ -567,35 +567,34 @@
             47467961,
             47464053,
             47463814,
-            47463497,
+            47462900,
             47461213,
             47463835,
             47468579,
-            47462900,
             47462424,
             47465518,
             47471942,
             47474404,
             47469511,
             47467291,
-            47466428,
             47462908,
+            47466428,
             47465098,
             47463897,
-            47470142,
-            47469181,
-            47466635,
             47461888,
+            47469181,
+            47470142,
+            47466635,
             47463399,
             47466504,
+            47473085,
             47461947,
             47463979,
             47462442,
             47462583,
-            47464604,
             47462289,
-            47473085,
             47461217,
+            47464604,
             47464486,
             47465404,
             47468599,
@@ -607,21 +606,22 @@
             47463913,
             47461418,
             47461851,
+            47463470,
             47464715,
             47470230,
-            47461554,
             47462117,
             47462890,
+            47461554,
             47461212
           ],
           "created_at": "2026-03-20T21:03:52Z",
           "created_at_i": 1774040632,
-          "num_comments": 612,
+          "num_comments": 614,
           "objectID": "47460525",
-          "points": 1237,
+          "points": 1241,
           "story_id": 47460525,
           "title": "OpenCode – Open source AI coding agent",
-          "updated_at": "2026-03-22T21:35:03Z",
+          "updated_at": "2026-03-23T03:27:34Z",
           "url": "https://opencode.ai/"
         }
       ]
@@ -738,54 +738,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "vassilbek"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "collective",
-                "learning"
-              ],
-              "value": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if/then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data <em>collection</em> plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation / Monitoring, Evaluation, Accountability, and -<em>Learning</em> specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics/templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development / United Nations / European Union formats)"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "https://clawhub.<em>ai</em>/vassiliylakhonin/nonprofit-rbm-logic-model"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_vassilbek",
-            "story_47062912",
-            "show_hn"
-          ],
-          "author": "vassilbek",
-          "created_at": "2026-02-18T16:40:11Z",
-          "created_at_i": 1771432811,
-          "num_comments": 0,
-          "objectID": "47062912",
-          "points": 1,
-          "story_id": 47062912,
-          "story_text": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if&#x2F;then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data collection plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation &#x2F; Monitoring, Evaluation, Accountability, and -Learning specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics&#x2F;templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development &#x2F; United Nations &#x2F; European Union formats)",
-          "title": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw",
-          "updated_at": "2026-03-05T23:35:10Z",
-          "url": "https://clawhub.ai/vassiliylakhonin/nonprofit-rbm-logic-model"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "abrandes"
             },
             "story_text": {
@@ -873,12 +825,215 @@
           "title": "Show HN: Urban Pipeline for Citywide Insights",
           "updated_at": "2025-07-13T22:27:35Z",
           "url": "https://github.com/Wingscape/urban-pipeline"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "cyberneticc"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Deepseek shows cognitive augmentation will be open source"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_cyberneticc",
+            "story_43019170",
+            "ask_hn"
+          ],
+          "author": "cyberneticc",
+          "children": [
+            43019203
+          ],
+          "created_at": "2025-02-11T22:26:27Z",
+          "created_at_i": 1739312787,
+          "num_comments": 2,
+          "objectID": "43019170",
+          "points": 4,
+          "story_id": 43019170,
+          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
+          "title": "Deepseek shows cognitive augmentation will be open source",
+          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "pierreneter"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "The Entropy of the Soul: Why AI Quotas Are the Ultimate <em>Bot</em>-Detection Filter"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://medium.com/@pierreneter/the-quota-paradox-why-ai-limits-are-making-us-smarter-fa7f8ff909bd"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_pierreneter",
+            "story_47485059"
+          ],
+          "author": "pierreneter",
+          "created_at": "2026-03-23T03:02:12Z",
+          "created_at_i": 1774234932,
+          "num_comments": 0,
+          "objectID": "47485059",
+          "points": 1,
+          "story_id": 47485059,
+          "title": "The Entropy of the Soul: Why AI Quotas Are the Ultimate Bot-Detection Filter",
+          "updated_at": "2026-03-23T03:04:04Z",
+          "url": "https://medium.com/@pierreneter/the-quota-paradox-why-ai-limits-are-making-us-smarter-fa7f8ff909bd"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "jdhtoggi"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "1. True &quot;Free Aim&quot; Has Never Existed\nProgrammers have never provided a truly &quot;free&quot; aiming system. It is technically and physically impossible to implement at the hardware level. Even engine developers cannot create such logic.<p>Can hacking solve this? No.\nHacking cannot bypass this because the limitation lies in the fundamental constraints of graphics and system architecture. Is &quot;perfect tracking&quot; even natural?<p>If you doubt this, try this simple experiment:\nShake your head left and right while looking at the world. You might feel dizzy, but does the world itself warp or distort? No.\nNow, shake your mouse the same way in an FPS game. Is it the same? Does the screen warp? Is it identical to what you see in reality?<p>Even with the highest-end PC, the best GPU, and the fastest internet, you cannot overcome this. The best we can do is create a &quot;close approximation.&quot; Anyone who has touched coding or computer graphics knows this: &quot;Close enough&quot; is the absolute ceiling. No GPU can replicate reality. The computer came first, then the GPU. The computer must wait for the GPU to process frames. Is that freedom?<p>2. Continuous Fixed Aim is Impossible\nThere is a fundamental discrepancy between the client and the server. To hide the gap caused by tick rates and network latency, systems use 'Interpolation' and 'Prediction.' This means the visual position on your screen is never 100% identical to the actual data. Aiming shifts and fluctuates by design. Even a world-class player cannot override the inherent &quot;aim-drift&quot; created by the system.<p>3. Human Skill Cannot Bypass the System <em>Bot</em>tleneck\nPlayers practice to improve, but that improvement happens only within the boundaries of &quot;natural&quot; human movement. We are reacting to a &quot;forced naturalism.&quot; Even a pro player in a cheat-free environment must constantly react to the randomness caused by system <em>bot</em>tlenecks. If I miss, is it because I lack skill? No, I am reacting to a <em>bot</em>tleneck that the system itself created.<p>4. The Wall of Hidden Logic and Exception Handling\nWe can never fully know the hidden reaction logic within a program. We play while constantly reacting to these invisible rules. It is an unavoidable process. Even the best players cannot escape this; we can only practice and adapt within its confines. If a certain movement is hard-coded to be prevented, no human effort can overcome that wall.<p>Conclusion: All Actions are Subordinate to the Program\nThe Program is God. I act only within the rules defined by this God. If a hack exists, that too is just another &quot;God&quot; within the system. We can never possess an aim that was never created in the first place.<p>The Program has never granted us &quot;natural&quot; aim.<p>The Program has never provided a way to overcome these physical limitations.<p>Even hacks cannot achieve &quot;natural&quot; aim—because the Program never gave them the foundation to do so."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "The Illusion of Free Aim: Why Systems Are Gods and We Are Just Subjects"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jdhtoggi",
+            "story_47484252",
+            "ask_hn"
+          ],
+          "author": "jdhtoggi",
+          "created_at": "2026-03-23T01:10:38Z",
+          "created_at_i": 1774228238,
+          "num_comments": 0,
+          "objectID": "47484252",
+          "points": 1,
+          "story_id": 47484252,
+          "story_text": "1. True &quot;Free Aim&quot; Has Never Existed\nProgrammers have never provided a truly &quot;free&quot; aiming system. It is technically and physically impossible to implement at the hardware level. Even engine developers cannot create such logic.<p>Can hacking solve this? No.\nHacking cannot bypass this because the limitation lies in the fundamental constraints of graphics and system architecture. Is &quot;perfect tracking&quot; even natural?<p>If you doubt this, try this simple experiment:\nShake your head left and right while looking at the world. You might feel dizzy, but does the world itself warp or distort? No.\nNow, shake your mouse the same way in an FPS game. Is it the same? Does the screen warp? Is it identical to what you see in reality?<p>Even with the highest-end PC, the best GPU, and the fastest internet, you cannot overcome this. The best we can do is create a &quot;close approximation.&quot; Anyone who has touched coding or computer graphics knows this: &quot;Close enough&quot; is the absolute ceiling. No GPU can replicate reality. The computer came first, then the GPU. The computer must wait for the GPU to process frames. Is that freedom?<p>2. Continuous Fixed Aim is Impossible\nThere is a fundamental discrepancy between the client and the server. To hide the gap caused by tick rates and network latency, systems use &#x27;Interpolation&#x27; and &#x27;Prediction.&#x27; This means the visual position on your screen is never 100% identical to the actual data. Aiming shifts and fluctuates by design. Even a world-class player cannot override the inherent &quot;aim-drift&quot; created by the system.<p>3. Human Skill Cannot Bypass the System Bottleneck\nPlayers practice to improve, but that improvement happens only within the boundaries of &quot;natural&quot; human movement. We are reacting to a &quot;forced naturalism.&quot; Even a pro player in a cheat-free environment must constantly react to the randomness caused by system bottlenecks. If I miss, is it because I lack skill? No, I am reacting to a bottleneck that the system itself created.<p>4. The Wall of Hidden Logic and Exception Handling\nWe can never fully know the hidden reaction logic within a program. We play while constantly reacting to these invisible rules. It is an unavoidable process. Even the best players cannot escape this; we can only practice and adapt within its confines. If a certain movement is hard-coded to be prevented, no human effort can overcome that wall.<p>Conclusion: All Actions are Subordinate to the Program\nThe Program is God. I act only within the rules defined by this God. If a hack exists, that too is just another &quot;God&quot; within the system. We can never possess an aim that was never created in the first place.<p>The Program has never granted us &quot;natural&quot; aim.<p>The Program has never provided a way to overcome these physical limitations.<p>Even hacks cannot achieve &quot;natural&quot; aim—because the Program never gave them the foundation to do so.",
+          "title": "The Illusion of Free Aim: Why Systems Are Gods and We Are Just Subjects",
+          "updated_at": "2026-03-23T01:14:04Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "geox"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "The first modern rocket launched 100 years ago"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://theconversation.com/the-first-modern-rocket-launched-100-years-ago-beginning-a-century-of-<em>bot</em>h-innovations-and-challenges-for-spaceflight-269061"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_geox",
+            "story_47483917"
+          ],
+          "author": "geox",
+          "created_at": "2026-03-23T00:25:11Z",
+          "created_at_i": 1774225511,
+          "num_comments": 0,
+          "objectID": "47483917",
+          "points": 3,
+          "story_id": 47483917,
+          "title": "The first modern rocket launched 100 years ago",
+          "updated_at": "2026-03-23T03:35:34Z",
+          "url": "https://theconversation.com/the-first-modern-rocket-launched-100-years-ago-beginning-a-century-of-both-innovations-and-challenges-for-spaceflight-269061"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "kageroumado"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Open the same tab in two browser windows. In Chrome or Safari, you get two unconnected pages. In Arc, one window shows a placeholder. In Zen, it silently creates a duplicate.<p>In Refrax, the browser I built, <em>bot</em>h windows show the same page updating live. The same web page, in as many windows as you want.<p>This shouldn't be possible. WebKit's WKWebView can exist in exactly one view hierarchy at a time. With macOS 26, Apple added a SwiftUI API separating WebView from WebPage, so you can end up with multiple views referencing the same page. But if you try it, your app crashes. WebKit source code has a precondition with this comment: &quot;We can't have multiple owning pages regardless, but we'll want to decide if it's an error, if we can handle it gracefully, and how deterministic it might even be...&quot;<p>So here's how I did it.<p>CAPortalLayer is an undocumented private class that's been in macOS since 10.12. It mirrors a layer's composited output by referencing the same GPU memory, not copying it. Every scroll, animation, or repaint reflects instantly. This is what powers Liquid Glass effects, the iOS text selection magnifier, and ghost images during drag and drop. Apple uses portals for effects. I use them to put the same web page in two windows.<p>Refrax keeps one real WKWebView per tab and displays a CAPortalLayer mirror everywhere else. When you click a different window, the coordinator moves the real view there and the old window gets a portal. You can't tell which is which.<p>This sounds simple in theory, but making this actually work seamlessly took quite a lot of effort. Each macOS window has its own rendering context, and the context ID updates asynchronously, so creating a portal immediately captures a stale ID and renders nothing. The portal creation needs to be delayed, but delaying creates a visual gap. I capture a GPU snapshot using a private CoreGraphics function and place it behind the portal as a fallback. Another hard part is that none of it is documented. Portals are very capricious and would crash the app if you use them incorrectly. I had to inspect the headers and then disassemble the binaries to explore exactly how it works in order to build something robust.<p>I never worked on a browser before this, I've only been a user. I started using Arc in 2022. I remember asking for an invite, learning the shortcuts, slowly getting used to it. I didn't like it at first as it had too much Google Chrome in it for my taste, and I'd been using Safari at the time. But it grew on me, and by the time it was essentially abandoned and sold to Atlassian, I couldn't go back to Safari anymore. \nI tried everything: Zen, SigmaOS, Helium. None felt right, and I didn't want another Chromium fork. WebKit ships with the OS, but all you get is the rendering engine. Tabs, history, bookmarks, passwords, extensions, everything else has to be made separately. And so, being a very reasonable person, I decided to make my own Arc replacement from scratch.<p>And I did. Refrax is built in Swift and Objective-C with no external dependencies. The app itself is less than 30 MB. I have 393 tabs open right now using 442 MB of RAM; 150 tabs in Safari was already over 1 GB. I've been using it daily for over a month, and so have some of my friends.<p>The portal mirror is just one feature. The same approach, finding what Apple built for themselves and using it to create something they didn't think about, runs through the entire browser. You can tint your glass windows with adjustable blend modes and transparency. The sidebar in compact mode samples the page and matches the colors. And it has support for Firefox and Chrome extensions.<p>The alpha is public. Download from the linked website, enter REFRAX-ALPHA-HACKERNEWS to activate. No account needed. Telemetry is crash reports and a daily active-user ping, nothing else. And if you find a bug – I built this alone, so I'll actually read your report."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Refrax – my Arc Browser replacement I made from scratch"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://refrax.website/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_kageroumado",
+            "story_47483155",
+            "show_hn"
+          ],
+          "author": "kageroumado",
+          "children": [
+            47483764,
+            47483367
+          ],
+          "created_at": "2026-03-22T22:52:29Z",
+          "created_at_i": 1774219949,
+          "num_comments": 2,
+          "objectID": "47483155",
+          "points": 4,
+          "story_id": 47483155,
+          "story_text": "Open the same tab in two browser windows. In Chrome or Safari, you get two unconnected pages. In Arc, one window shows a placeholder. In Zen, it silently creates a duplicate.<p>In Refrax, the browser I built, both windows show the same page updating live. The same web page, in as many windows as you want.<p>This shouldn&#x27;t be possible. WebKit&#x27;s WKWebView can exist in exactly one view hierarchy at a time. With macOS 26, Apple added a SwiftUI API separating WebView from WebPage, so you can end up with multiple views referencing the same page. But if you try it, your app crashes. WebKit source code has a precondition with this comment: &quot;We can&#x27;t have multiple owning pages regardless, but we&#x27;ll want to decide if it&#x27;s an error, if we can handle it gracefully, and how deterministic it might even be...&quot;<p>So here&#x27;s how I did it.<p>CAPortalLayer is an undocumented private class that&#x27;s been in macOS since 10.12. It mirrors a layer&#x27;s composited output by referencing the same GPU memory, not copying it. Every scroll, animation, or repaint reflects instantly. This is what powers Liquid Glass effects, the iOS text selection magnifier, and ghost images during drag and drop. Apple uses portals for effects. I use them to put the same web page in two windows.<p>Refrax keeps one real WKWebView per tab and displays a CAPortalLayer mirror everywhere else. When you click a different window, the coordinator moves the real view there and the old window gets a portal. You can&#x27;t tell which is which.<p>This sounds simple in theory, but making this actually work seamlessly took quite a lot of effort. Each macOS window has its own rendering context, and the context ID updates asynchronously, so creating a portal immediately captures a stale ID and renders nothing. The portal creation needs to be delayed, but delaying creates a visual gap. I capture a GPU snapshot using a private CoreGraphics function and place it behind the portal as a fallback. Another hard part is that none of it is documented. Portals are very capricious and would crash the app if you use them incorrectly. I had to inspect the headers and then disassemble the binaries to explore exactly how it works in order to build something robust.<p>I never worked on a browser before this, I&#x27;ve only been a user. I started using Arc in 2022. I remember asking for an invite, learning the shortcuts, slowly getting used to it. I didn&#x27;t like it at first as it had too much Google Chrome in it for my taste, and I&#x27;d been using Safari at the time. But it grew on me, and by the time it was essentially abandoned and sold to Atlassian, I couldn&#x27;t go back to Safari anymore. \nI tried everything: Zen, SigmaOS, Helium. None felt right, and I didn&#x27;t want another Chromium fork. WebKit ships with the OS, but all you get is the rendering engine. Tabs, history, bookmarks, passwords, extensions, everything else has to be made separately. And so, being a very reasonable person, I decided to make my own Arc replacement from scratch.<p>And I did. Refrax is built in Swift and Objective-C with no external dependencies. The app itself is less than 30 MB. I have 393 tabs open right now using 442 MB of RAM; 150 tabs in Safari was already over 1 GB. I&#x27;ve been using it daily for over a month, and so have some of my friends.<p>The portal mirror is just one feature. The same approach, finding what Apple built for themselves and using it to create something they didn&#x27;t think about, runs through the entire browser. You can tint your glass windows with adjustable blend modes and transparency. The sidebar in compact mode samples the page and matches the colors. And it has support for Firefox and Chrome extensions.<p>The alpha is public. Download from the linked website, enter REFRAX-ALPHA-HACKERNEWS to activate. No account needed. Telemetry is crash reports and a daily active-user ping, nothing else. And if you find a bug – I built this alone, so I&#x27;ll actually read your report.",
+          "title": "Show HN: Refrax – my Arc Browser replacement I made from scratch",
+          "updated_at": "2026-03-23T01:45:05Z",
+          "url": "https://refrax.website/"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -911,165 +1066,11 @@
           "created_at_i": 1774203467,
           "num_comments": 0,
           "objectID": "47480445",
-          "points": 3,
+          "points": 4,
           "story_id": 47480445,
           "story_text": "# I&#x27;m 11 years old and I trained my own LLM from scratch. 50 people downloaded it in 24 hours.<p>Hey r&#x2F;LocalLLaMA,<p>I&#x27;m Arthur, I&#x27;m 11 years old, and I just released *Wind Arc 1.6* — a custom architecture LLM I built and trained myself.<p>## What it is<p>Wind Arc 1.6 is a 3.6B parameter model with a custom architecture I designed:<p>- *Mixture of Experts FFN* — 4 routed experts + 1 shared expert per layer (replaces standard MLP)\n- *YaRN RoPE* — extends context from 8k → 32k tokens\n- *Hybrid Attention* — full attention every 4th layer, sliding window otherwise\n- *QK-Norm* for training stability<p>Base: Qwen3-1.7B with the FFN layers completely replaced by my custom MoE. (Fully custom)<p>## How I trained it<p>- Hardware: 1× RTX 5090 rented from Nova Cloud\n- Cost: literally $1\n- Time: 55 minutes\n- Final loss: 2.66<p>Data mix: smoltalk + python-codes-25k + FineWeb-Edu + custom identity and Christian Q&amp;A data I wrote myself.<p>## What it&#x27;s good at<p>- Python and general coding with explanations\n- Christian questions (Bible, theology, Christian living)\n- General chat and learning<p>## The honest truth<p>It&#x27;s not GPT-4. Loss of 2.66 on a 1.7B base with 55 minutes of training isn&#x27;t going to beat frontier models. But it runs locally, it&#x27;s open source, and it&#x27;s mine.<p>I still need to do SFT (the identity responses aren&#x27;t perfect yet) and GGUF conversion is blocked by the custom MoE architecture. Working on both.<p>## Why I built it<p>I&#x27;m building *North.ai* — an AI startup focused on powerful models that run on small hardware. Wind Arc is our flagship model. Our platform Neurotype will let anyone train, deploy, and use AI without needing expensive cloud budgets.<p>I&#x27;ve trained 10+ models. This is the first one I&#x27;m actually proud enough to release.<p>## Links<p>HuggingFace: https:&#x2F;&#x2F;huggingface.co&#x2F;arthu1&#x2F;wind-arc-1-6<p>Would love feedback from people who actually know what they&#x27;re doing. Be honest — I can take it.<p>— Arthur, age 11",
           "title": "I'm 11 and trained a custom MoE LLM for $1",
-          "updated_at": "2026-03-22T19:07:06Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "campuscodi"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "CECbot: A TV box <em>bot</em>net that grabs the remote and maps the house"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/deepfield/public-research/blob/main/cecbot/report.md"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_campuscodi",
-            "story_47479493"
-          ],
-          "author": "campuscodi",
-          "created_at": "2026-03-22T16:54:48Z",
-          "created_at_i": 1774198488,
-          "num_comments": 0,
-          "objectID": "47479493",
-          "points": 2,
-          "story_id": 47479493,
-          "title": "CECbot: A TV box botnet that grabs the remote and maps the house",
-          "updated_at": "2026-03-22T18:43:03Z",
-          "url": "https://github.com/deepfield/public-research/blob/main/cecbot/report.md"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "johnecheck"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "<em>Bot</em>s Among Us"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://7hird.dev/3mgzlboei5k2i?auth_completed=true"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_johnecheck",
-            "story_47479096"
-          ],
-          "author": "johnecheck",
-          "children": [
-            47479167
-          ],
-          "created_at": "2026-03-22T16:22:10Z",
-          "created_at_i": 1774196530,
-          "num_comments": 2,
-          "objectID": "47479096",
-          "points": 3,
-          "story_id": 47479096,
-          "title": "Bots Among Us",
-          "updated_at": "2026-03-22T20:26:52Z",
-          "url": "https://7hird.dev/3mgzlboei5k2i?auth_completed=true"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "miguelvalenciav"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Coinnect – Free open-source GPS for remittances (25 providers)"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://coinnect.<em>bot</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_miguelvalenciav",
-            "story_47478824"
-          ],
-          "author": "miguelvalenciav",
-          "created_at": "2026-03-22T15:56:02Z",
-          "created_at_i": 1774194962,
-          "num_comments": 0,
-          "objectID": "47478824",
-          "points": 1,
-          "story_id": 47478824,
-          "title": "Coinnect – Free open-source GPS for remittances (25 providers)",
-          "updated_at": "2026-03-22T15:57:48Z",
-          "url": "https://coinnect.bot"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pseudalopex"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Reddit is weighing identity verification methods to combat its <em>bot</em> problem"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.engadget.com/social-media/reddit-is-weighing-identity-verification-methods-to-combat-its-<em>bot</em>-problem-195814671.html"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pseudalopex",
-            "story_47478433"
-          ],
-          "author": "pseudalopex",
-          "created_at": "2026-03-22T15:19:27Z",
-          "created_at_i": 1774192767,
-          "num_comments": 0,
-          "objectID": "47478433",
-          "points": 3,
-          "story_id": 47478433,
-          "title": "Reddit is weighing identity verification methods to combat its bot problem",
-          "updated_at": "2026-03-22T18:30:02Z",
-          "url": "https://www.engadget.com/social-media/reddit-is-weighing-identity-verification-methods-to-combat-its-bot-problem-195814671.html"
+          "updated_at": "2026-03-22T22:35:49Z"
         }
       ]
     },
@@ -1314,6 +1315,52 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "adinhitlore"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Assuming your software meets some of these:<p>* Better than  potential successors of SOTA transformers: Mamba, Hyenna, RWKV, xLSTM;\n* Gemini/<em>claude</em> estimate potential ip values in the millions;\n* All implemented in C (ok this may be a minus) but also ported to C# and F#  - so no python nor rust;\n* humble <em>code</em> size: 10-15k lines of <em>code</em> but i mean come on gpt-1 was under 1000 lines...in python.<p>In short:<p>the problem: transformers are slow and could be smarter;\nsolution: you have fast and smart <em>alternative</em>. \n10x!"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "alternative"
+              ],
+              "value": "What would you do if you have AI software that may be transformers <em>alternative</em>?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_adinhitlore",
+            "story_47484267",
+            "ask_hn"
+          ],
+          "author": "adinhitlore",
+          "children": [
+            47485017
+          ],
+          "created_at": "2026-03-23T01:11:53Z",
+          "created_at_i": 1774228313,
+          "num_comments": 0,
+          "objectID": "47484267",
+          "points": 2,
+          "story_id": 47484267,
+          "story_text": "Assuming your software meets some of these:<p>* Better than  potential successors of SOTA transformers: Mamba, Hyenna, RWKV, xLSTM;\n* Gemini&#x2F;claude estimate potential ip values in the millions;\n* All implemented in C (ok this may be a minus) but also ported to C# and F#  - so no python nor rust;\n* humble code size: 10-15k lines of code but i mean come on gpt-1 was under 1000 lines...in python.<p>In short:<p>the problem: transformers are slow and could be smarter;\nsolution: you have fast and smart alternative. \n10x!",
+          "title": "What would you do if you have AI software that may be transformers alternative?",
+          "updated_at": "2026-03-23T02:57:49Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "jaredezz"
             },
             "title": {
@@ -1489,55 +1536,6 @@
           "title": "Show HN: Dumped Wix, my AEC consultancy's storefront is now an AI Edge",
           "updated_at": "2026-03-15T14:55:17Z",
           "url": "https://axoworks.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "hhossain"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "claude",
-                "code",
-                "alternative"
-              ],
-              "value": "I built LLM OneStop <em>Code</em>—an AI coding agent for VS <em>Code</em> that works like <em>Claude</em> <em>Code</em> or Cursor, but with one key difference: pure pay-as-you-go pricing. No monthly subscription required.<p>The problem with existing tools:\n- Cursor: $20/month for Pro (even if you barely use it)\n- GitHub Copilot: $10/month minimum\n- <em>Claude</em> <em>Code</em>: Rate-limited by API usage tier + monthly caps<p>LLM OneStop <em>Code</em> charges only for what you use—billed in credits at cost + 5%. If you <em>code</em> 2 hours this month and 40 the next, you pay proportionally. No quota walls, no &quot;upgrade to continue&quot; prompts.<p>What it does:\n- Multi-model AI agent (<em>Claude</em>, GPT-5, Gemini, etc.)\n- Chat-based coding assistance in VS <em>Code</em>\n- *Import and continue your existing <em>Claude</em> <em>Code</em> or Cursor sessions*—when you hit your hourly rate limit or quota, just import the conversation and keep working without losing context\n- Stateless by design (no <em>code</em> stored on servers)\n- Free plan available to try everything (100 credits/month)<p>Also running LLM OneStop as a unified API gateway—<em>alternative</em> to OpenRouter with accurate multi-modal cost tracking. If you prefer BYO API keys, we have a Connect plan available.<p>The thesis: developers want AI coding tools that scale with usage, not fixed subscriptions. You shouldn't pay $240/year if you only <em>code</em> on weekends. And when you hit a quota wall mid-debugging session, you shouldn't have to start over or wait until tomorrow.<p>Would love to hear from folks who've felt locked into coding tool subscriptions or hit quota limits mid-session.<p>Marketplace: <a href=\"https://marketplace.visualstudio.com/items?itemName=LLMOneStop.llmonestop\" rel=\"nofollow\">https://marketplace.visualstudio.com/items?itemName=LLMOneSt...</a>\nDocs: <a href=\"https://www.llmonestop.com/blog/guides/llm-onestop-vscode-extension-ai-coding-assistant\" rel=\"nofollow\">https://www.llmonestop.com/blog/guides/llm-onestop-vscode-ex...</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "code"
-              ],
-              "value": "Show HN: AI coding agent for VS <em>Code</em> with pay-as-you-go pricing- no subscription"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.llmonestop.com/#pricing"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_hhossain",
-            "story_47381413",
-            "show_hn"
-          ],
-          "author": "hhossain",
-          "created_at": "2026-03-14T21:30:09Z",
-          "created_at_i": 1773523809,
-          "num_comments": 0,
-          "objectID": "47381413",
-          "points": 2,
-          "story_id": 47381413,
-          "story_text": "I built LLM OneStop Code—an AI coding agent for VS Code that works like Claude Code or Cursor, but with one key difference: pure pay-as-you-go pricing. No monthly subscription required.<p>The problem with existing tools:\n- Cursor: $20&#x2F;month for Pro (even if you barely use it)\n- GitHub Copilot: $10&#x2F;month minimum\n- Claude Code: Rate-limited by API usage tier + monthly caps<p>LLM OneStop Code charges only for what you use—billed in credits at cost + 5%. If you code 2 hours this month and 40 the next, you pay proportionally. No quota walls, no &quot;upgrade to continue&quot; prompts.<p>What it does:\n- Multi-model AI agent (Claude, GPT-5, Gemini, etc.)\n- Chat-based coding assistance in VS Code\n- *Import and continue your existing Claude Code or Cursor sessions*—when you hit your hourly rate limit or quota, just import the conversation and keep working without losing context\n- Stateless by design (no code stored on servers)\n- Free plan available to try everything (100 credits&#x2F;month)<p>Also running LLM OneStop as a unified API gateway—alternative to OpenRouter with accurate multi-modal cost tracking. If you prefer BYO API keys, we have a Connect plan available.<p>The thesis: developers want AI coding tools that scale with usage, not fixed subscriptions. You shouldn&#x27;t pay $240&#x2F;year if you only code on weekends. And when you hit a quota wall mid-debugging session, you shouldn&#x27;t have to start over or wait until tomorrow.<p>Would love to hear from folks who&#x27;ve felt locked into coding tool subscriptions or hit quota limits mid-session.<p>Marketplace: <a href=\"https:&#x2F;&#x2F;marketplace.visualstudio.com&#x2F;items?itemName=LLMOneStop.llmonestop\" rel=\"nofollow\">https:&#x2F;&#x2F;marketplace.visualstudio.com&#x2F;items?itemName=LLMOneSt...</a>\nDocs: <a href=\"https:&#x2F;&#x2F;www.llmonestop.com&#x2F;blog&#x2F;guides&#x2F;llm-onestop-vscode-extension-ai-coding-assistant\" rel=\"nofollow\">https:&#x2F;&#x2F;www.llmonestop.com&#x2F;blog&#x2F;guides&#x2F;llm-onestop-vscode-ex...</a>",
-          "title": "Show HN: AI coding agent for VS Code with pay-as-you-go pricing- no subscription",
-          "updated_at": "2026-03-14T22:05:31Z",
-          "url": "https://www.llmonestop.com/#pricing"
         }
       ]
     },
@@ -2097,17 +2095,17 @@
           ],
           "author": "oneprofile",
           "children": [
-            47481609,
-            47481586
+            47481586,
+            47481609
           ],
           "created_at": "2026-03-22T20:08:48Z",
           "created_at_i": 1774210128,
           "num_comments": 0,
           "objectID": "47481585",
-          "points": 1,
+          "points": 2,
           "story_id": 47481585,
           "title": "MCP Marketplace – an App Store for AI agent tools (17 servers, free to list)",
-          "updated_at": "2026-03-22T20:11:03Z",
+          "updated_at": "2026-03-22T23:19:18Z",
           "url": "https://mcp-marketplace-zeta.vercel.app"
         },
         {
@@ -2321,46 +2319,6 @@
                 "improving",
                 "ai"
               ],
-              "value": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.<p>With that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results.<p>The Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and <em>self</em>-<em>improving</em> platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.<p>VulcanAMI — Transformer / Neuro-Symbolic Hybrid <em>AI</em> Platform\nVulcan is an <em>AI</em> system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.<p>FEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.<p>Current Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete<p>What This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far<p>This is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution<p>If you find parts that are useful, interesting, or worth <em>improving</em>, you are free to build on them under the terms of the license.<p>I know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: <a href=\"https://github.com/musicmonk42/The_Code_Factory_Working_V2.git\" rel=\"nofollow\">https://github.com/musicmonk42/The_Code_Factory_Working_V2.g...</a>\nVulcanAMI: <a href=\"https://github.com/musicmonk42/VulcanAMI_LLM.git\" rel=\"nofollow\">https://github.com/musicmonk42/VulcanAMI_LLM.git</a>\nFEMS: <a href=\"https://github.com/musicmonk42/FEMS.git\" rel=\"nofollow\">https://github.com/musicmonk42/FEMS.git</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Three deployable open source platforms from a solo builder"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_BrainDAnderson",
-            "story_47482378",
-            "show_hn"
-          ],
-          "author": "BrainDAnderson",
-          "created_at": "2026-03-22T21:31:03Z",
-          "created_at_i": 1774215063,
-          "num_comments": 0,
-          "objectID": "47482378",
-          "points": 1,
-          "story_id": 47482378,
-          "story_text": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.<p>With that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results.<p>The Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and self-improving platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.<p>VulcanAMI — Transformer &#x2F; Neuro-Symbolic Hybrid AI Platform\nVulcan is an AI system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.<p>FEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.<p>Current Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete<p>What This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far<p>This is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution<p>If you find parts that are useful, interesting, or worth improving, you are free to build on them under the terms of the license.<p>I know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;The_Code_Factory_Working_V2.git\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;The_Code_Factory_Working_V2.g...</a>\nVulcanAMI: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;VulcanAMI_LLM.git\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;VulcanAMI_LLM.git</a>\nFEMS: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;FEMS.git\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;FEMS.git</a>",
-          "title": "Show HN: Three deployable open source platforms from a solo builder",
-          "updated_at": "2026-03-22T21:34:35Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "BrainDAnderson"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
               "value": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.\nWith that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results. \nThe Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and <em>self</em>-<em>improving</em> platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.\nVulcanAMI — Transformer / Neuro-Symbolic Hybrid <em>AI</em> Platform\nVulcan is an <em>AI</em> system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.\nFEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.\nCurrent Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete\nWhat This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far\nThis is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution\nIf you find parts that are useful, interesting, or worth <em>improving</em>, you are free to build on them under the terms of the license.\nI know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: https://github.com/musicmonk42/The_Code_Factory_Working_V2.git\nVulcanAMI: https://github.com/musicmonk42/VulcanAMI_LLM.git\nFEMS: https://github.com/musicmonk42/FEMS.git"
             },
             "title": {
@@ -2377,17 +2335,18 @@
           ],
           "author": "BrainDAnderson",
           "children": [
+            47484545,
             47478135
           ],
           "created_at": "2026-03-22T13:01:16Z",
           "created_at_i": 1774184476,
-          "num_comments": 2,
+          "num_comments": 5,
           "objectID": "47477073",
           "points": 2,
           "story_id": 47477073,
           "story_text": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.\nWith that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results. \nThe Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and self-improving platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.\nVulcanAMI — Transformer &#x2F; Neuro-Symbolic Hybrid AI Platform\nVulcan is an AI system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.\nFEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.\nCurrent Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete\nWhat This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far\nThis is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution\nIf you find parts that are useful, interesting, or worth improving, you are free to build on them under the terms of the license.\nI know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;The_Code_Factory_Working_V2.git\nVulcanAMI: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;VulcanAMI_LLM.git\nFEMS: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;FEMS.git",
           "title": "New Open Source from Non-Traditional Builder",
-          "updated_at": "2026-03-22T15:11:02Z"
+          "updated_at": "2026-03-23T02:42:05Z"
         },
         {
           "_highlightResult": {
@@ -2514,6 +2473,48 @@
           "title": "Atlas – Self-improving AI trading agents using Karpathy-style autoresearch",
           "updated_at": "2026-03-12T21:36:08Z",
           "url": "https://github.com/chrisworsey55/atlas-gic"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "danebalia"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Hermes Agent: The <em>self</em>-<em>improving</em> <em>AI</em> agent"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/NousResearch/hermes-agent"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_danebalia",
+            "story_47341909"
+          ],
+          "author": "danebalia",
+          "children": [
+            47341910
+          ],
+          "created_at": "2026-03-11T21:09:43Z",
+          "created_at_i": 1773263383,
+          "num_comments": 1,
+          "objectID": "47341909",
+          "points": 3,
+          "story_id": 47341909,
+          "title": "Hermes Agent: The self-improving AI agent",
+          "updated_at": "2026-03-12T01:37:34Z",
+          "url": "https://github.com/NousResearch/hermes-agent"
         }
       ]
     }

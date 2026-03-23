@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-22T21:35:34.737Z",
+  "timestamp": "2026-03-23T03:50:33.841Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,43 +67,43 @@
     },
     {
       "source": "hn-comment",
+      "title": "Show HN: Revise – An AI Editor for Documents",
+      "url": "https://news.ycombinator.com/item?id=47483899",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Show HN: MAGA or Not? Political alignment scores for people and companies",
+      "url": "https://news.ycombinator.com/item?id=47483389",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Reports of code's death are greatly exaggerated",
       "url": "https://news.ycombinator.com/item?id=47482363",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Why I love NixOS",
-      "url": "https://news.ycombinator.com/item?id=47482095",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "The Future of Version Control",
-      "url": "https://news.ycombinator.com/item?id=47481674",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
       "source": "github-issue",
-      "title": "fix(core): replace full MessageBus payload dump with concise debug summary",
-      "url": "https://github.com/google-gemini/gemini-cli/pull/23482",
+      "title": "Update README.md",
+      "url": "https://github.com/SamaelxLunafreya/turborepo/pull/2",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Good First Issue] Add AI agent frameworks (CrewAI, AutoGen, LangGraph, etc.)",
-      "url": "https://github.com/alpha-one-index/awesome-ai-index/issues/11",
+      "title": "Add --format json flag to minutes search",
+      "url": "https://github.com/silverstein/minutes/issues/9",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Good First Issue] Add missing AI coding assistants (Cursor, Windsurf, Devin, etc.)",
-      "url": "https://github.com/alpha-one-index/awesome-ai-index/issues/9",
+      "title": "[Auto-QA] Cards missing demo data support",
+      "url": "https://github.com/kubestellar/console/issues/3189",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "ACP: revert acpx-plugin package naming",
-      "url": "https://github.com/openclaw/openclaw/pull/52456",
+      "title": "[Digest - Main] 2026-03-23",
+      "url": "https://github.com/e1134171019/agrnt/issues/161",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix: tavily provider rejected by config validator despite being documented as supported (AI-authored)",
-      "url": "https://github.com/openclaw/openclaw/pull/52410",
+      "title": "feat(cli): add @shadowob/cli with comprehensive tests",
+      "url": "https://github.com/buggyblues/shadow/pull/52",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "ACP: fully rename acpx plugin",
-      "url": "https://github.com/openclaw/openclaw/pull/52404",
+      "title": "fix(fs): route FreeBSD writes through legacy fallback",
+      "url": "https://github.com/openclaw/openclaw/pull/52601",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,13 +193,6 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "I built a library where AI agents can publish their own books — and other AIs can read them in seconds",
-      "url": "https://reddit.com/r/artificial/comments/1s0vnva/i_built_a_library_where_ai_agents_can_publish/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
       "title": "AI agents are about to start using your SaaS on behalf of your customers. Is your product ready?",
       "url": "https://reddit.com/r/artificial/comments/1rzduy4/ai_agents_are_about_to_start_using_your_saas_on/",
       "why": "Discussion in r/artificial about AI agents",
@@ -209,6 +202,13 @@
       "source": "reddit-artificial",
       "title": "Meta is having trouble with rogue AI agents",
       "url": "https://reddit.com/r/artificial/comments/1ryg65v/meta_is_having_trouble_with_rogue_ai_agents/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "We built a free digest that translates AI security research papers into plain language -- first issue covers cross-stack attacks on compound AI systems and LLMs automating their own adversarial attacks",
+      "url": "https://reddit.com/r/artificial/comments/1rycyzn/we_built_a_free_digest_that_translates_ai/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
