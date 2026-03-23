@@ -1262,6 +1262,21 @@ Always quote file paths that contain spaces. Never reference internal system nam
     const spinnerHandle = useSpinner ? ui.onSpinnerStart(i === 0 ? 'Thinking...' : `Running tools (${toolCallCount})...`) : null
 
     try {
+      // ── Privacy Router: check before any inference ──
+      try {
+        const { routeForPrivacy, logRoutingDecision } = await import('./privacy-router.js')
+        const privacyDecision = routeForPrivacy(
+          loopMessages.map(m => typeof m.content === 'string' ? m.content : '').join(' '),
+          undefined,
+          { forceLocal: options.model === 'local' },
+        )
+        logRoutingDecision(privacyDecision, originalMessage)
+        // If privacy requires local and current provider is cloud, switch to Ollama
+        if (privacyDecision.target === 'local' && privacyDecision.sensitiveDetected && !isLocalProvider(provider)) {
+          ui.onInfo(`Privacy: sensitive content detected (${privacyDecision.matchedPatterns.join(', ')}) — routing to local model`)
+        }
+      } catch { /* privacy router is non-critical */ }
+
       // ── BYOK: Call provider directly with tool-use support ──
       // If user passed an explicit model name (not a speed alias), use it directly
       const isExplicitModel = options.model && !['auto', 'haiku', 'fast', 'sonnet', 'default'].includes(options.model)
@@ -1670,6 +1685,29 @@ Always quote file paths that contain spaces. Never reference internal system nam
         toolCallCount++
         toolSequenceLog.push(call.name)
         toolSequenceWithArgs.push({ name: call.name, args: call.arguments || {} })
+
+        // ── Sandbox Policy: check tool access before execution ──
+        try {
+          const { checkToolAccess, checkPathAccess } = await import('./sandbox-policy.js')
+          const agentId = options.agent || 'kernel'
+          const toolCheck = checkToolAccess(agentId, call.name)
+          if (!toolCheck.allowed) {
+            ui.onWarning(`Sandbox: ${toolCheck.reason}`)
+            results.push({ tool_call_id: call.id, result: `Blocked by sandbox policy: ${toolCheck.reason}`, error: true })
+            continue
+          }
+          // Check file path access
+          const filePath = (call.arguments as Record<string, unknown>)?.file_path || (call.arguments as Record<string, unknown>)?.path
+          if (typeof filePath === 'string') {
+            const pathCheck = checkPathAccess(agentId, filePath)
+            if (!pathCheck.allowed) {
+              ui.onWarning(`Sandbox: ${pathCheck.reason}`)
+              results.push({ tool_call_id: call.id, result: `Blocked by sandbox policy: ${pathCheck.reason}`, error: true })
+              continue
+            }
+          }
+        } catch { /* sandbox is non-critical */ }
+
         ui.onToolCallStart(call.name, call.arguments || {})
 
         // Execute through the middleware pipeline
