@@ -1,0 +1,305 @@
+// kbot Learned Router — MasRouter-style Cascaded Routing
+//
+// Based on MasRouter (ACL 2025): instead of calling an LLM to classify
+// intent every time, learn from actual routing outcomes and cascade
+// through increasingly expensive classifiers:
+//
+//   1.   Exact intent match (free, instant)
+//   1.5  Bayesian skill rating — OpenSkill mu/sigma per agent per category
+//   2.   Keyword voting (free, instant)
+//   3.   Category fallback (free, instant)
+//   4.   LLM classifier (expensive, last resort)
+//
+// Over time, steps 1-2 handle 90%+ of messages without any API call.
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { CREATIVE_KEYWORDS, CREATIVE_PATTERNS } from './agents/creative.js';
+import { DEVELOPER_KEYWORDS, DEVELOPER_PATTERNS } from './agents/developer.js';
+import { getSkillRatingSystem } from './skill-rating.js';
+const ROUTER_DIR = join(homedir(), '.kbot', 'memory');
+const HISTORY_FILE = join(ROUTER_DIR, 'routing-history.json');
+const MAX_HISTORY = 500;
+function ensureDir() {
+    if (!existsSync(ROUTER_DIR))
+        mkdirSync(ROUTER_DIR, { recursive: true });
+}
+let history = [];
+let loaded = false;
+function loadHistory() {
+    if (loaded)
+        return;
+    loaded = true;
+    try {
+        if (existsSync(HISTORY_FILE)) {
+            history = JSON.parse(readFileSync(HISTORY_FILE, 'utf-8'));
+        }
+    }
+    catch {
+        history = [];
+    }
+}
+function saveHistory() {
+    ensureDir();
+    try {
+        writeFileSync(HISTORY_FILE, JSON.stringify(history.slice(0, MAX_HISTORY), null, 2));
+    }
+    catch { /* non-critical */ }
+}
+// ── Stop words for normalization ──
+const STOP_WORDS = new Set([
+    'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+    'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
+    'should', 'may', 'might', 'shall', 'can', 'to', 'of', 'in', 'for',
+    'on', 'with', 'at', 'by', 'from', 'it', 'this', 'that', 'these',
+    'those', 'i', 'me', 'my', 'we', 'you', 'your', 'he', 'she', 'they',
+    'them', 'and', 'or', 'but', 'not', 'so', 'if', 'then', 'please',
+]);
+function normalizeIntent(message) {
+    return message.toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .split(/\s+/)
+        .filter(w => w.length > 2 && !STOP_WORDS.has(w))
+        .join(' ');
+}
+// ── Agent keyword maps ──
+// These are the learned keyword→agent associations. They start with
+// reasonable defaults and improve as routing history accumulates.
+const AGENT_KEYWORDS = {
+    coder: [
+        'code', 'function', 'class', 'bug', 'error', 'fix', 'implement', 'build',
+        'create', 'write', 'typescript', 'javascript', 'python', 'rust', 'react',
+        'component', 'test', 'refactor', 'api', 'endpoint', 'database', 'sql',
+        'npm', 'install', 'package', 'import', 'export', 'async', 'type',
+        'interface', 'module', 'compile', 'lint', 'debug', 'crash', 'exception',
+    ],
+    researcher: [
+        'research', 'find', 'search', 'compare', 'alternatives', 'benchmark',
+        'documentation', 'docs', 'article', 'paper', 'study', 'analyze',
+        'investigate', 'explore', 'discover', 'learn', 'understand', 'explain',
+        'difference', 'versus', 'pros', 'cons', 'tradeoff', 'best practice',
+    ],
+    writer: [
+        'write', 'draft', 'blog', 'post', 'article', 'email', 'message',
+        'readme', 'documentation', 'changelog', 'announcement', 'copy',
+        'content', 'marketing', 'social', 'tweet', 'thread', 'newsletter',
+        'story', 'essay', 'summary', 'summarize', 'edit', 'proofread',
+    ],
+    analyst: [
+        'analyze', 'strategy', 'plan', 'architecture', 'design', 'review',
+        'audit', 'evaluate', 'assess', 'optimize', 'performance', 'cost',
+        'pricing', 'business', 'metric', 'dashboard', 'report', 'insight',
+        'decision', 'tradeoff', 'priority', 'roadmap',
+    ],
+    kernel: [
+        'hey', 'hello', 'hi', 'thanks', 'help', 'what', 'how', 'why',
+        'general', 'chat', 'talk', 'opinion', 'think', 'feel', 'advice',
+    ],
+    creative: CREATIVE_KEYWORDS,
+    developer: DEVELOPER_KEYWORDS,
+};
+// ── Category patterns (broader than keywords) ──
+const CATEGORY_PATTERNS = [
+    { pattern: /\b(fix|bug|error|crash|broken|fail|debug|issue)\b/i, agent: 'coder', confidence: 0.7 },
+    { pattern: /\b(create|build|implement|scaffold|generate|add|new)\b.*\b(function|component|file|module|api|page|route)\b/i, agent: 'coder', confidence: 0.75 },
+    { pattern: /\b(refactor|clean|reorganize|restructure|simplify|extract)\b/i, agent: 'coder', confidence: 0.7 },
+    { pattern: /\b(test|spec|coverage|assert|mock|stub)\b/i, agent: 'coder', confidence: 0.65 },
+    { pattern: /\b(deploy|ship|release|publish|ci|cd|pipeline)\b/i, agent: 'coder', confidence: 0.6 },
+    { pattern: /\b(research|find|compare|benchmark|alternative|best)\b/i, agent: 'researcher', confidence: 0.6 },
+    { pattern: /\b(write|draft|blog|post|article|email|newsletter|readme)\b/i, agent: 'writer', confidence: 0.65 },
+    { pattern: /\b(analyze|strategy|plan|architecture|review|audit|evaluate)\b/i, agent: 'analyst', confidence: 0.6 },
+    ...CREATIVE_PATTERNS,
+    ...DEVELOPER_PATTERNS,
+];
+/**
+ * Cascaded route — try each level in order, return first confident match.
+ *
+ * Level 1:   Exact intent lookup (from history)
+ * Level 1.5: Bayesian skill rating (OpenSkill mu/sigma)
+ * Level 2:   Keyword voting (weighted by history frequency)
+ * Level 3:   Category pattern matching
+ * Level 4:   Returns null — caller should use LLM
+ */
+export function learnedRoute(message) {
+    loadHistory();
+    const intent = normalizeIntent(message);
+    if (!intent)
+        return null;
+    // ── Level 1: Exact intent match ──
+    const exactMatch = history.find(h => h.intent === intent && h.success && h.count >= 2);
+    if (exactMatch) {
+        return {
+            agent: exactMatch.agent,
+            confidence: Math.min(0.95, 0.7 + (exactMatch.count * 0.05)),
+            method: 'learned',
+            cached: true,
+        };
+    }
+    // ── Level 1.5: Bayesian skill rating ──
+    // Uses OpenSkill-style probabilistic ratings learned from routing outcomes.
+    // Only activates once enough data has been collected (confidence > 0.4).
+    const skillRating = getSkillRatingSystem();
+    const skillResult = skillRating.getAgentForTask(message);
+    if (skillResult && skillResult.confidence > 0.4) {
+        return {
+            agent: skillResult.agent,
+            confidence: Math.min(0.9, skillResult.confidence),
+            method: 'bayesian',
+            cached: true,
+        };
+    }
+    // ── Level 2: Keyword voting ──
+    const intentWords = intent.split(' ');
+    const votes = {};
+    // Vote from built-in keyword maps
+    for (const [agent, keywords] of Object.entries(AGENT_KEYWORDS)) {
+        const matchCount = intentWords.filter(w => keywords.includes(w)).length;
+        if (matchCount > 0) {
+            votes[agent] = (votes[agent] || 0) + matchCount;
+        }
+    }
+    // Boost votes from successful history
+    for (const record of history) {
+        if (!record.success)
+            continue;
+        const recordWords = new Set(record.intent.split(' '));
+        const overlap = intentWords.filter(w => recordWords.has(w)).length;
+        if (overlap >= 2) {
+            votes[record.agent] = (votes[record.agent] || 0) + overlap * 0.5;
+        }
+    }
+    const topVote = Object.entries(votes).sort((a, b) => b[1] - a[1])[0];
+    if (topVote && topVote[1] >= 3) {
+        const totalVotes = Object.values(votes).reduce((a, b) => a + b, 0);
+        const confidence = topVote[1] / totalVotes;
+        if (confidence >= 0.5) {
+            return {
+                agent: topVote[0],
+                confidence: Math.min(0.85, confidence),
+                method: 'keyword',
+                cached: true,
+            };
+        }
+    }
+    // ── Level 3: Category pattern matching ──
+    for (const { pattern, agent, confidence } of CATEGORY_PATTERNS) {
+        if (pattern.test(message)) {
+            return { agent, confidence, method: 'category', cached: true };
+        }
+    }
+    // ── Level 4: No match — caller should use LLM ──
+    return null;
+}
+/**
+ * Record a routing decision for future learning.
+ * Call this after the agent responds (or when user overrides).
+ */
+export function recordRoute(message, agent, method, success = true) {
+    loadHistory();
+    const intent = normalizeIntent(message);
+    if (!intent)
+        return;
+    const keywords = intent.split(' ');
+    const existing = history.find(h => h.intent === intent);
+    if (existing) {
+        if (success) {
+            existing.agent = agent;
+            existing.success = true;
+            existing.count++;
+        }
+        else {
+            // Failed route — decrease count but don't delete
+            existing.count = Math.max(0, existing.count - 1);
+            if (existing.count === 0)
+                existing.success = false;
+        }
+        existing.method = method;
+        existing.lastUsed = new Date().toISOString();
+    }
+    else {
+        history.push({
+            intent,
+            keywords,
+            agent,
+            method,
+            success,
+            count: 1,
+            lastUsed: new Date().toISOString(),
+        });
+    }
+    // Keep top records by count
+    history.sort((a, b) => b.count - a.count);
+    history = history.slice(0, MAX_HISTORY);
+    saveHistory();
+    // Update keyword maps from successful routes
+    if (success) {
+        updateKeywordMaps(keywords, agent);
+    }
+}
+/** Dynamically grow keyword maps from observed routing */
+function updateKeywordMaps(keywords, agent) {
+    if (!AGENT_KEYWORDS[agent])
+        return;
+    const existing = new Set(AGENT_KEYWORDS[agent]);
+    for (const kw of keywords) {
+        // Only add keywords that appear in multiple successful routes for this agent
+        if (kw.length > 3 && !existing.has(kw)) {
+            const kwRoutes = history.filter(h => h.success && h.agent === agent && h.keywords.includes(kw));
+            if (kwRoutes.length >= 3) {
+                AGENT_KEYWORDS[agent].push(kw);
+                existing.add(kw);
+            }
+        }
+    }
+    // Cap keyword lists
+    for (const agent of Object.keys(AGENT_KEYWORDS)) {
+        if (AGENT_KEYWORDS[agent].length > 100) {
+            AGENT_KEYWORDS[agent] = AGENT_KEYWORDS[agent].slice(0, 100);
+        }
+    }
+}
+/** Get routing stats */
+export function getRoutingStats() {
+    loadHistory();
+    const learned = history.filter(h => h.method === 'learned').length;
+    const bayesian = history.filter(h => h.method === 'bayesian').length;
+    const keyword = history.filter(h => h.method === 'keyword').length;
+    const category = history.filter(h => h.method === 'category').length;
+    const llm = history.filter(h => h.method === 'llm').length;
+    const total = history.length;
+    const cached = learned + bayesian + keyword + category;
+    const rate = total > 0 ? Math.round((cached / total) * 100) : 0;
+    return {
+        totalRoutes: total,
+        learnedHits: learned,
+        bayesianHits: bayesian,
+        keywordHits: keyword,
+        categoryHits: category,
+        llmFallbacks: llm,
+        cacheHitRate: `${rate}%`,
+    };
+}
+/** Override a route (user correction) */
+export function overrideRoute(message, correctAgent) {
+    const intent = normalizeIntent(message);
+    const existing = history.find(h => h.intent === intent);
+    // Update Bayesian skill ratings: previous agent loses, correct agent wins
+    const skillRating = getSkillRatingSystem();
+    const category = skillRating.categorizeMessage(message);
+    if (existing && existing.agent !== correctAgent) {
+        skillRating.recordOutcome(existing.agent, category, 'loss');
+    }
+    skillRating.recordOutcome(correctAgent, category, 'win');
+    skillRating.save().catch(() => { });
+    if (existing) {
+        existing.agent = correctAgent;
+        existing.success = true;
+        existing.count = Math.max(existing.count, 3); // Boost corrected routes
+        existing.lastUsed = new Date().toISOString();
+    }
+    else {
+        recordRoute(message, correctAgent, 'learned', true);
+    }
+    saveHistory();
+}
+//# sourceMappingURL=learned-router.js.map
