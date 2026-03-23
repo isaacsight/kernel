@@ -51,6 +51,23 @@ Object.keys(entry.args).forEach(k => {
 // Append to log
 try {
   fs.appendFileSync(LOG_FILE, JSON.stringify(entry) + '\n');
+
+  // Auto-ingest every 50 tool calls — kbot learns mid-session
+  const lineCount = fs.readFileSync(LOG_FILE, 'utf8').split('\n').filter(Boolean).length;
+  const cursorFile = path.join(OBSERVER_DIR, 'cursor.json');
+  let lastIngested = 0;
+  try {
+    if (fs.existsSync(cursorFile)) {
+      lastIngested = JSON.parse(fs.readFileSync(cursorFile, 'utf8')).offset || 0;
+    }
+  } catch {}
+
+  if (lineCount - lastIngested >= 50) {
+    const { execSync } = require('child_process');
+    try {
+      execSync('kbot observe 2>/dev/null', { timeout: 10000, stdio: 'pipe' });
+    } catch {}
+  }
 } catch (err) {
   // Silent fail — observing should never break the main workflow
 }
