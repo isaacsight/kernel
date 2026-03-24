@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T17:05:43.392Z",
+  "timestamp": "2026-03-24T23:20:42.596Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "Is anybody else bored of talking about AI?",
+      "url": "https://news.ycombinator.com/item?id=47510042",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "So where are all the AI apps?",
       "url": "https://news.ycombinator.com/item?id=47505810",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -76,13 +83,6 @@
       "source": "hn-comment",
       "title": "Microsoft's \"Fix\" for Windows 11: Flowers After the Beating",
       "url": "https://news.ycombinator.com/item?id=47504697",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "So where are all the AI apps?",
-      "url": "https://news.ycombinator.com/item?id=47503733",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -102,8 +102,8 @@
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] Dashboard components missing health indicators",
-      "url": "https://github.com/kubestellar/console/issues/3357",
+      "title": "service redmine broken",
+      "url": "https://github.com/archi-physics/archi/issues/533",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(skills): use slug as fallback when skill name fails validation",
-      "url": "https://github.com/moltis-org/moltis/pull/484",
+      "title": "feat: team plugin integration (pluginPrivate merge + session sidecar)",
+      "url": "https://github.com/david021903/traderClaw_plugin/pull/2",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Channels: resolve installed channel plugins in add",
-      "url": "https://github.com/openclaw/openclaw/pull/53806",
+      "title": "fix: close sandbox media root bypass for mediaUrl/fileUrl aliases",
+      "url": "https://github.com/openclaw/openclaw/pull/54034",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Feature]: Support DeepInfra as an LLM provider ",
-      "url": "https://github.com/openclaw/openclaw/pull/53805",
+      "title": "feat: Enterprise security hardening, Microsoft Teams support, and deployment tooling",
+      "url": "https://github.com/DevSavant-AE/openclaw-blueprint/pull/24",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },

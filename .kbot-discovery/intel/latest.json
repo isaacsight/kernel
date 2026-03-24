@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T17:05:38.148Z",
+  "timestamp": "2026-03-24T23:05:43.359Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -59,11 +59,11 @@
           "created_at_i": 1774353421,
           "num_comments": 5,
           "objectID": "47501357",
-          "points": 7,
+          "points": 8,
           "story_id": 47501357,
           "story_text": "Hi HN folks,<p>I have been building AI agents for quite some time now. The shift has gone from LLM + Tools → LLM Workflows → Agent + Tools + Memory, and now we are finally seeing true agency emerge: agents as systems composed of tools, command-line access, fine-grained system capabilities, and memory.<p>This way of building agents is powerful, and I believe it is here to stay. But the real question is: are the systems powering these agents ready for that future?<p>I do not think so.<p>Using Docker for a single agent is not going to scale well, because agents need to be lightweight and fast. LLMs already add significant latency, so adding heavy runtime overhead on top only makes things worse. Existing solutions start to fall apart here.<p>Agents built in Python also tend to have a large memory footprint, which becomes a serious problem when you want to scale to thousands of agents.<p>And open-source for agents is still not where it should be. Right now, I cannot easily reuse agents built by domain experts the same way I reuse open-source software.<p>These issues bothered me, and I realized that if agents are ever going to be democratized, they need to be open and easy to use. Just like Docker solved system dependencies, we need something similar for agents.<p>That is why I started building an agent framework in Rust. It is modular and follows the principle of true agency: an agent is an entity with tools, memory, and an executor. In AutoAgents, users can independently create and modify tools, executors, and memory.<p>With AutoAgents, I saw that powerful agents could be built without compromising on performance or memory the way many other frameworks do.<p>But the other problems still remained: re-sharing agents, sandboxing, and scaling to thousands of agents.<p>So I created Odyssey — a bundle-first agent runtime written in Rust on top of AutoAgents, the Rust agent framework. It lets you define an agent once, package it as a portable artifact, and run it through the same execution model across local development, embedded SDK usage, shared runtime servers, and terminal workflows.<p>Both AutoAgents and Odyssey are fully open source and built in Rust, and I am planning to build an Odyssey Agent Hub soon, with additional features like WASM tools, custom memory layers, and more.<p>My vision is to democratize agents so they are available to everyone — securely and performantly. Being open is not enough; agents also need to be secure.<p>The project is still in alpha, but it is in a working state.<p>AutoAgents Repo -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;AutoAgents\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;AutoAgents</a><p>Odyssey Repo -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;Odyssey\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;Odyssey</a><p>I would really appreciate feedback — especially from anyone who has dealt with similar problems. Your feedback help me shape the product.<p>Thanks for your time in advance!",
           "title": "Show HN: Running AI agents across environments needs a proper solution",
-          "updated_at": "2026-03-24T16:43:13Z",
+          "updated_at": "2026-03-24T19:48:57Z",
           "url": "https://github.com/liquidos-ai/Odyssey"
         },
         {
@@ -98,10 +98,12 @@
           "author": "noemit",
           "children": [
             47496895,
+            47508348,
             47499371,
             47499342,
             47499000,
             47498409,
+            47508063,
             47498203,
             47500805,
             47497365,
@@ -109,13 +111,13 @@
           ],
           "created_at": "2026-03-23T20:31:48Z",
           "created_at_i": 1774297908,
-          "num_comments": 12,
+          "num_comments": 13,
           "objectID": "47494696",
-          "points": 32,
+          "points": 37,
           "story_id": 47494696,
           "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
           "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-24T15:59:41Z"
+          "updated_at": "2026-03-24T23:04:57Z"
         },
         {
           "_highlightResult": {
@@ -315,7 +317,7 @@
                 "coding",
                 "agent"
               ],
-              "value": "I use AI <em>agents</em> to build UI features daily. The thing that kept annoying me: the <em>agent</em> writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the <em>agent</em> <em>open</em> a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p>proofshot start --run &quot;npm run dev&quot; --port 3000\n# <em>agent</em> navigates, clicks, takes screenshots\nproofshot stop<p>It works with whatever <em>agent</em> you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It's packaged as a skill so your AI <em>coding</em> <em>agent</em> knows exactly how it works. It's built on <em>agent</em>-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The <em>agent</em> doesn’t decide pass/fail. It just gives me the evidence so I don’t have to <em>open</em> the browser myself every time.<p><em>Open</em> <em>source</em> and completely free.<p><a href=\"https://github.com/AmElmo/proofshot\" rel=\"nofollow\">https://github.com/AmElmo/proofshot</a>"
+              "value": "I use AI <em>agents</em> to build UI features daily. The thing that kept annoying me: the <em>agent</em> writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the <em>agent</em> <em>open</em> a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p><pre><code>  proofshot start --run &quot;npm run dev&quot; --port 3000\n  # <em>agent</em> navigates, clicks, takes screenshots\n  proofshot stop\n</code></pre>\nIt works with whatever <em>agent</em> you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It's packaged as a skill so your AI <em>coding</em> <em>agent</em> knows exactly how it works. It's built on <em>agent</em>-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The <em>agent</em> doesn’t decide pass/fail. It just gives me the evidence so I don’t have to <em>open</em> the browser myself every time.<p><em>Open</em> <em>source</em> and completely free.<p>Website: <a href=\"https://proofshot.argil.io/\" rel=\"nofollow\">https://proofshot.argil.io/</a>"
             },
             "title": {
               "fullyHighlighted": false,
@@ -329,7 +331,7 @@
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://proofshot.argil.io/"
+              "value": "https://github.com/AmElmo/proofshot"
             }
           },
           "_tags": [
@@ -340,46 +342,57 @@
           ],
           "author": "jberthom",
           "children": [
-            47504657,
-            47500259,
-            47499984,
+            47508231,
+            47500594,
             47500311,
+            47499984,
+            47504657,
+            47500072,
+            47501289,
+            47509170,
             47500124,
             47500306,
             47500795,
-            47500594,
-            47501289,
-            47500072,
+            47500259,
             47500065,
+            47507203,
             47501072,
-            47501515,
             47500553,
+            47507003,
+            47501515,
+            47507229,
+            47508601,
             47501986,
-            47502729,
             47500018,
+            47507728,
             47500879,
+            47502729,
             47499968,
             47501177,
+            47510460,
             47499959,
             47501069,
-            47500786,
             47500426,
             47500293,
             47499937,
+            47500786,
+            47510731,
+            47507562,
+            47507327,
             47501768,
             47500788,
             47499977
           ],
           "created_at": "2026-03-24T07:46:46Z",
           "created_at_i": 1774338406,
-          "num_comments": 52,
+          "num_comments": 71,
           "objectID": "47499672",
-          "points": 67,
+          "points": 105,
           "story_id": 47499672,
-          "story_text": "I use AI agents to build UI features daily. The thing that kept annoying me: the agent writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the agent open a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p>proofshot start --run &quot;npm run dev&quot; --port 3000\n# agent navigates, clicks, takes screenshots\nproofshot stop<p>It works with whatever agent you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It&#x27;s packaged as a skill so your AI coding agent knows exactly how it works. It&#x27;s built on agent-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The agent doesn’t decide pass&#x2F;fail. It just gives me the evidence so I don’t have to open the browser myself every time.<p>Open source and completely free.<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;AmElmo&#x2F;proofshot\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;AmElmo&#x2F;proofshot</a>",
+          "story_text": "I use AI agents to build UI features daily. The thing that kept annoying me: the agent writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the agent open a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p><pre><code>  proofshot start --run &quot;npm run dev&quot; --port 3000\n  # agent navigates, clicks, takes screenshots\n  proofshot stop\n</code></pre>\nIt works with whatever agent you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It&#x27;s packaged as a skill so your AI coding agent knows exactly how it works. It&#x27;s built on agent-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The agent doesn’t decide pass&#x2F;fail. It just gives me the evidence so I don’t have to open the browser myself every time.<p>Open source and completely free.<p>Website: <a href=\"https:&#x2F;&#x2F;proofshot.argil.io&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;proofshot.argil.io&#x2F;</a>",
           "title": "Show HN: ProofShot – Give AI coding agents eyes to verify the UI they build",
-          "updated_at": "2026-03-24T16:55:28Z",
-          "url": "https://proofshot.argil.io/"
+          "updated_at": "2026-03-24T23:03:58Z",
+          "url": "https://github.com/AmElmo/proofshot"
         },
         {
           "_highlightResult": {
@@ -464,15 +477,18 @@
             "ask_hn"
           ],
           "author": "ofermend",
+          "children": [
+            47509524
+          ],
           "created_at": "2026-03-23T16:56:22Z",
           "created_at_i": 1774284982,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47492078",
           "points": 3,
           "story_id": 47492078,
           "story_text": "Given that coding agents like Claude Code or Codex are now quite good, there&#x27;s of course a massive increase in PRs submitted to open source projects. Not all of them are great, some are true AI slop.<p>See for example Daniel Stenberg on the topic as it relates to cURL:\nhttps:&#x2F;&#x2F;daniel.haxx.se&#x2F;blog&#x2F;2026&#x2F;01&#x2F;26&#x2F;the-end-of-the-curl-bug-bounty&#x2F; and https:&#x2F;&#x2F;daniel.haxx.se&#x2F;blog&#x2F;2025&#x2F;07&#x2F;14&#x2F;death-by-a-thousand-slops&#x2F;<p>I&#x27;m curious how much of a problem this is to other open source projects<p>Committers, how much of this pain are you seeing, and are you using any AI tools to mitigate or address this issue?",
           "title": "Ask HN: How do you handle PR density (and slop) in open source",
-          "updated_at": "2026-03-24T01:01:09Z"
+          "updated_at": "2026-03-24T21:22:14Z"
         },
         {
           "_highlightResult": {
@@ -781,46 +797,46 @@
         {
           "_highlightResult": {
             "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "PaulHoule"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Meta's Virtual Reality App Ditching VR to Make a Roblox Clone"
-            },
-            "url": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://<em>kot</em>aku.com/metas-virtual-reality-app-ditching-vr-to-make-a-roblox-clone-2000671434"
+              "value": "<em>kot</em>aKat"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Newly purchased Vizio TVs now require Walmart accounts to use smart features"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://arstechnica.com/gadgets/2026/03/newly-purchased-vizio-tvs-now-require-walmart-accounts-to-use-smart-features/"
             }
           },
           "_tags": [
             "story",
-            "author_PaulHoule",
-            "story_47505628"
+            "author_kotaKat",
+            "story_47510800"
           ],
-          "author": "PaulHoule",
-          "created_at": "2026-03-24T16:51:39Z",
-          "created_at_i": 1774371099,
+          "author": "kotaKat",
+          "created_at": "2026-03-24T23:03:12Z",
+          "created_at_i": 1774393392,
           "num_comments": 0,
-          "objectID": "47505628",
-          "points": 2,
-          "story_id": 47505628,
-          "title": "Meta's Virtual Reality App Ditching VR to Make a Roblox Clone",
-          "updated_at": "2026-03-24T16:59:12Z",
-          "url": "https://kotaku.com/metas-virtual-reality-app-ditching-vr-to-make-a-roblox-clone-2000671434"
+          "objectID": "47510800",
+          "points": 3,
+          "story_id": 47510800,
+          "title": "Newly purchased Vizio TVs now require Walmart accounts to use smart features",
+          "updated_at": "2026-03-24T23:05:28Z",
+          "url": "https://arstechnica.com/gadgets/2026/03/newly-purchased-vizio-tvs-now-require-walmart-accounts-to-use-smart-features/"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "masterofmyself"
+              "value": "_justinfunk"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -828,160 +844,166 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Hey HN,<p>I'm Oskar, a long time lurker on here. I've finally decided to build and launch my first product publicly. I've built side projects in the past but never followed through on releasing them.<p>I built HiredToday because I was frustrated with how tedious it was to tailor my CV and cover letter for every company I wanted to apply to. This led to me not <em>bot</em>hering to tailor it and just submit a generic one. Of course that lowers your chances substantially because you're not lifting the specific qualities that matter for the position you're applying for.<p>HiredToday helps you do that efficiently, using AI to tailor your resume, cover letter, etc based on the job description. It even creates pre-written emails for follow-ups and salary negotiation. Of course, the basics such as ATS Score analysis and optimization is built right in.<p>I sincerely hope that this tool will be helpful in your or someone else's job search journey. I'm super open to early feedback from you guys on what you think and if you have any things you would like to see added, I'm more than happy to add them.<p>There's currently a promo going for the launch:<p>Everyone gets one free analysis and after that it's $10 for 30 application packages or $29 per year depending on how much usage you want. The $29 per year gets you 500 application packages.<p>Check it out here: <a href=\"https://www.hiredtoday.app\" rel=\"nofollow\">https://www.hiredtoday.app</a><p>Let me know what you think!"
+              "value": "Are &quot;our enemies&quot; launchings space assets that eat/wound/hijack/destroy our space assets? Do &quot;we&quot; launch space assets that eat/wound/hijack/destroy &quot;our enemies&quot; space assets?<p>Since all these assets are top-secret on <em>bot</em>h sides, it seems like it could be a whole dimension of war that I've never considered could be actively underway."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: HiredToday.app – AI resume tailoring, cover letters and interview prep"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.hiredtoday.app"
+              "value": "Ask HN: Is there a secret satellite war?"
             }
           },
           "_tags": [
             "story",
-            "author_masterofmyself",
-            "story_47505624",
-            "show_hn"
-          ],
-          "author": "masterofmyself",
-          "created_at": "2026-03-24T16:51:33Z",
-          "created_at_i": 1774371093,
-          "num_comments": 0,
-          "objectID": "47505624",
-          "points": 1,
-          "story_id": 47505624,
-          "story_text": "Hey HN,<p>I&#x27;m Oskar, a long time lurker on here. I&#x27;ve finally decided to build and launch my first product publicly. I&#x27;ve built side projects in the past but never followed through on releasing them.<p>I built HiredToday because I was frustrated with how tedious it was to tailor my CV and cover letter for every company I wanted to apply to. This led to me not bothering to tailor it and just submit a generic one. Of course that lowers your chances substantially because you&#x27;re not lifting the specific qualities that matter for the position you&#x27;re applying for.<p>HiredToday helps you do that efficiently, using AI to tailor your resume, cover letter, etc based on the job description. It even creates pre-written emails for follow-ups and salary negotiation. Of course, the basics such as ATS Score analysis and optimization is built right in.<p>I sincerely hope that this tool will be helpful in your or someone else&#x27;s job search journey. I&#x27;m super open to early feedback from you guys on what you think and if you have any things you would like to see added, I&#x27;m more than happy to add them.<p>There&#x27;s currently a promo going for the launch:<p>Everyone gets one free analysis and after that it&#x27;s $10 for 30 application packages or $29 per year depending on how much usage you want. The $29 per year gets you 500 application packages.<p>Check it out here: <a href=\"https:&#x2F;&#x2F;www.hiredtoday.app\" rel=\"nofollow\">https:&#x2F;&#x2F;www.hiredtoday.app</a><p>Let me know what you think!",
-          "title": "Show HN: HiredToday.app – AI resume tailoring, cover letters and interview prep",
-          "updated_at": "2026-03-24T16:56:30Z",
-          "url": "https://www.hiredtoday.app"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kajolshah_bt"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Many guides suggest building mobile apps by combining outside services. From our audits, this approach can quickly eat into a small app’s budget.<p>We often see apps where hosting on AWS or GCP costs around $200 per month, but outside services like Twilio, Google Maps, or other data providers run more than $3,000 per month.<p>Free tiers make it easy to ignore efficiency. Common issues we see:\n- Location checks: The app asks for location updates constantly instead of only when the user moves a set distance.\n- External data requests: Paid financial or weather data is requested every time a screen loads instead of saving it locally for 15 minutes.\n- SMS login messages: No limits on messages, so <em>bot</em> attacks generate real bills.<p>We spend more time fixing these inefficiencies, caching data and limiting outside calls, than we do adding new features. In many cases, using outside services ends up costing more than building a simple in-house solution.<p>Are developers paying too little attention to ongoing service costs in the push to launch apps quickly?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Tell HN: Warning: Third-Party Services Can Cost Mobile Apps Too Much"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kajolshah_bt",
-            "story_47502997",
+            "author__justinfunk",
+            "story_47510406",
             "ask_hn"
           ],
-          "author": "kajolshah_bt",
-          "created_at": "2026-03-24T14:19:00Z",
-          "created_at_i": 1774361940,
-          "num_comments": 0,
-          "objectID": "47502997",
-          "points": 1,
-          "story_id": 47502997,
-          "story_text": "Many guides suggest building mobile apps by combining outside services. From our audits, this approach can quickly eat into a small app’s budget.<p>We often see apps where hosting on AWS or GCP costs around $200 per month, but outside services like Twilio, Google Maps, or other data providers run more than $3,000 per month.<p>Free tiers make it easy to ignore efficiency. Common issues we see:\n- Location checks: The app asks for location updates constantly instead of only when the user moves a set distance.\n- External data requests: Paid financial or weather data is requested every time a screen loads instead of saving it locally for 15 minutes.\n- SMS login messages: No limits on messages, so bot attacks generate real bills.<p>We spend more time fixing these inefficiencies, caching data and limiting outside calls, than we do adding new features. In many cases, using outside services ends up costing more than building a simple in-house solution.<p>Are developers paying too little attention to ongoing service costs in the push to launch apps quickly?",
-          "title": "Tell HN: Warning: Third-Party Services Can Cost Mobile Apps Too Much",
-          "updated_at": "2026-03-24T14:32:41Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "valve1"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "A free tool for <em>bot</em> and AI agent developers to validate their Web <em>Bot</em> Auth setup"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://fingerprint.com/blog/web-<em>bot</em>-auth-guide/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_valve1",
-            "story_47502603"
-          ],
-          "author": "valve1",
+          "author": "_justinfunk",
           "children": [
-            47503500,
-            47503311,
-            47504115,
-            47503981,
-            47503334,
-            47503418,
-            47504517
+            47510500,
+            47510634
           ],
-          "created_at": "2026-03-24T13:51:24Z",
-          "created_at_i": 1774360284,
-          "num_comments": 5,
-          "objectID": "47502603",
-          "points": 11,
-          "story_id": 47502603,
-          "title": "A free tool for bot and AI agent developers to validate their Web Bot Auth setup",
-          "updated_at": "2026-03-24T16:45:30Z",
-          "url": "https://fingerprint.com/blog/web-bot-auth-guide/"
+          "created_at": "2026-03-24T22:27:47Z",
+          "created_at_i": 1774391267,
+          "num_comments": 2,
+          "objectID": "47510406",
+          "points": 2,
+          "story_id": 47510406,
+          "story_text": "Are &quot;our enemies&quot; launchings space assets that eat&#x2F;wound&#x2F;hijack&#x2F;destroy our space assets? Do &quot;we&quot; launch space assets that eat&#x2F;wound&#x2F;hijack&#x2F;destroy &quot;our enemies&quot; space assets?<p>Since all these assets are top-secret on both sides, it seems like it could be a whole dimension of war that I&#x27;ve never considered could be actively underway.",
+          "title": "Ask HN: Is there a secret satellite war?",
+          "updated_at": "2026-03-24T22:52:44Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "rbanffy"
+              "value": "hoag"
             },
-            "title": {
+            "story_text": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Blender Optimization Leads to 2x Performance on CPU <em>Bot</em>tlenecked Scenes"
+              "value": "Saccade uses ARKit face tracking to measure which image you actually look at longer in a side-by-side (well, top-and-<em>bot</em>tom as it runs in portrait mode) comparison.<p>Import a set of images, and it runs every possible pair, tracking your gaze for a dynamically-timed duration each (typically just a fraction of a second). It then ranks the images in descending order of how long your gaze lingered on each. You can then rerun the same batch of images to compound data over multiple tests, or start new. And of course you can easily share your results with friends and colleagues.<p>Bonus: The Emoji Duel game is pretty fun for onboarding; our 4yo can't get enough of it. :)<p>100% free, no backend, no user auth, no data leaves your phone. Requires iPhone with Face ID."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: A/B test images with your eyes using ARKit face tracking"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://www.phoronix.com/news/Blender-EEVEE-2x-Perf"
+              "value": "https://saccadeapp.com/"
             }
           },
           "_tags": [
             "story",
-            "author_rbanffy",
-            "story_47502307"
+            "author_hoag",
+            "story_47509972",
+            "show_hn"
           ],
-          "author": "rbanffy",
-          "created_at": "2026-03-24T13:30:02Z",
-          "created_at_i": 1774359002,
+          "author": "hoag",
+          "created_at": "2026-03-24T21:52:57Z",
+          "created_at_i": 1774389177,
           "num_comments": 0,
-          "objectID": "47502307",
+          "objectID": "47509972",
           "points": 2,
-          "story_id": 47502307,
-          "title": "Blender Optimization Leads to 2x Performance on CPU Bottlenecked Scenes",
-          "updated_at": "2026-03-24T15:08:26Z",
-          "url": "https://www.phoronix.com/news/Blender-EEVEE-2x-Perf"
+          "story_id": 47509972,
+          "story_text": "Saccade uses ARKit face tracking to measure which image you actually look at longer in a side-by-side (well, top-and-bottom as it runs in portrait mode) comparison.<p>Import a set of images, and it runs every possible pair, tracking your gaze for a dynamically-timed duration each (typically just a fraction of a second). It then ranks the images in descending order of how long your gaze lingered on each. You can then rerun the same batch of images to compound data over multiple tests, or start new. And of course you can easily share your results with friends and colleagues.<p>Bonus: The Emoji Duel game is pretty fun for onboarding; our 4yo can&#x27;t get enough of it. :)<p>100% free, no backend, no user auth, no data leaves your phone. Requires iPhone with Face ID.",
+          "title": "Show HN: A/B test images with your eyes using ARKit face tracking",
+          "updated_at": "2026-03-24T22:34:28Z",
+          "url": "https://saccadeapp.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "orionth"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "AI Isn't Bad. Your Prompts Are"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.indiehackers.com/post/the-real-<em>bot</em>tleneck-in-ai-workflows-isn-t-the-model-it-s-the-way-we-use-prompts-ca201326da"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_orionth",
+            "story_47508263"
+          ],
+          "author": "orionth",
+          "children": [
+            47508529
+          ],
+          "created_at": "2026-03-24T20:02:11Z",
+          "created_at_i": 1774382531,
+          "num_comments": 1,
+          "objectID": "47508263",
+          "points": 1,
+          "story_id": 47508263,
+          "title": "AI Isn't Bad. Your Prompts Are",
+          "updated_at": "2026-03-24T20:18:42Z",
+          "url": "https://www.indiehackers.com/post/the-real-bottleneck-in-ai-workflows-isn-t-the-model-it-s-the-way-we-use-prompts-ca201326da"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "<em>kot</em>ysoft"
+            },
+            "story_text": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Hey there,<p>Around 2 months ago I presented my first version of &quot;Giant JSON Viewer&quot; here: <a href=\"https://news.ycombinator.com/item?id=46609592\">https://news.ycombinator.com/item?id=46609592</a><p>Now, after a lot of ups and downs, around a hundred bugs squeezed, and deeper testing, I'm proudly presenting a newer version after a complete rework of the Rust core, pumped with some related, privacy-first tools.<p>First of all, I added a few more common formats:\n- JSON, NDJSON/JSONL\n- CBOR (first time convert to JSON)\n- MsgPack (first time convert to JSON)\n- HAR (dedicated features for this)\n- Markdown (straight, open only for view)<p>Then, I went further with my stress testing... Managed to open a ~100GB JSON file on an S23 Ultra.\nPrevious version crashed. With the reworked indexer, backend, and aux files, it worked! It took 40 mins to index, but worked.<p>After realizing my compiler optimization mistake, the SIMD finally got its real native power and the first indexing went down to 4-5 mins for 100GB. On a phone! Handling of the file, scrolling, viewing, and jumping to elements are instant after the first indexing.<p>Search and filter are still (relatively) blazing fast with memchr<p>Then, to make the app more useful as a daily tool, I started building additional features:<p>- A rich REST API CLIENT (not fully featured yet, but supports GraphQL, OAuth2, and AWS SigV4).<p>- HAR analyzer. Since HAR is just JSON, why not utilize my existing backend to take advantage of it? (The first opening takes a bit longer, because apart from the initial JSON indexing, it requires request metadata processing for the filter/search and statistical features).<p>- Simple MOCK API: Nothing fancy, just host any files on the local network (Wifi, USB-tethering, USB-ethernet) statically.<p>- Privacy-first handy features: Why would you use online tools and risk sensitive data if you can do it locally? You might have your tools already (js, python, whatever), but if not, I can host a webUI for you from the app on the local network for all these. JWT, small JSON tools like prettify, minify, stringify, unescape, unix timestamp, hash generator... all on your own private webUI, hosted by the app. (Same features available in the app too).<p>Yes, this is my very first published app ever, and it's only available on Android, sorry. There are still some minor bugs, and 1 major (edge case) issue, but those will be handled too.<p>If you could take a look and let me know what your first impression is, I'd love to hear HONEST feedback! (I just realized recently how difficult it is to get useful info from users, even bug reports).<p>This is a freemium app: the JSON viewer section is completely free with no size limits, the export/transform features, api client and tools are paid."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Updated GiantJSON Viewer – Opening 100GB JSONs on Android (Rust+SIMD)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://giantjson.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_kotysoft",
+            "story_47508089",
+            "show_hn"
+          ],
+          "author": "kotysoft",
+          "children": [
+            47508096,
+            47509929
+          ],
+          "created_at": "2026-03-24T19:50:10Z",
+          "created_at_i": 1774381810,
+          "num_comments": 4,
+          "objectID": "47508089",
+          "points": 3,
+          "story_id": 47508089,
+          "story_text": "Hey there,<p>Around 2 months ago I presented my first version of &quot;Giant JSON Viewer&quot; here: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=46609592\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=46609592</a><p>Now, after a lot of ups and downs, around a hundred bugs squeezed, and deeper testing, I&#x27;m proudly presenting a newer version after a complete rework of the Rust core, pumped with some related, privacy-first tools.<p>First of all, I added a few more common formats:\n- JSON, NDJSON&#x2F;JSONL\n- CBOR (first time convert to JSON)\n- MsgPack (first time convert to JSON)\n- HAR (dedicated features for this)\n- Markdown (straight, open only for view)<p>Then, I went further with my stress testing... Managed to open a ~100GB JSON file on an S23 Ultra.\nPrevious version crashed. With the reworked indexer, backend, and aux files, it worked! It took 40 mins to index, but worked.<p>After realizing my compiler optimization mistake, the SIMD finally got its real native power and the first indexing went down to 4-5 mins for 100GB. On a phone! Handling of the file, scrolling, viewing, and jumping to elements are instant after the first indexing.<p>Search and filter are still (relatively) blazing fast with memchr<p>Then, to make the app more useful as a daily tool, I started building additional features:<p>- A rich REST API CLIENT (not fully featured yet, but supports GraphQL, OAuth2, and AWS SigV4).<p>- HAR analyzer. Since HAR is just JSON, why not utilize my existing backend to take advantage of it? (The first opening takes a bit longer, because apart from the initial JSON indexing, it requires request metadata processing for the filter&#x2F;search and statistical features).<p>- Simple MOCK API: Nothing fancy, just host any files on the local network (Wifi, USB-tethering, USB-ethernet) statically.<p>- Privacy-first handy features: Why would you use online tools and risk sensitive data if you can do it locally? You might have your tools already (js, python, whatever), but if not, I can host a webUI for you from the app on the local network for all these. JWT, small JSON tools like prettify, minify, stringify, unescape, unix timestamp, hash generator... all on your own private webUI, hosted by the app. (Same features available in the app too).<p>Yes, this is my very first published app ever, and it&#x27;s only available on Android, sorry. There are still some minor bugs, and 1 major (edge case) issue, but those will be handled too.<p>If you could take a look and let me know what your first impression is, I&#x27;d love to hear HONEST feedback! (I just realized recently how difficult it is to get useful info from users, even bug reports).<p>This is a freemium app: the JSON viewer section is completely free with no size limits, the export&#x2F;transform features, api client and tools are paid.",
+          "title": "Show HN: Updated GiantJSON Viewer – Opening 100GB JSONs on Android (Rust+SIMD)",
+          "updated_at": "2026-03-24T23:00:42Z",
+          "url": "https://giantjson.com/"
         }
       ]
     },
@@ -1068,6 +1090,7 @@
           ],
           "author": "yoloshii",
           "children": [
+            47507561,
             47473295,
             47476062
           ],
@@ -1079,7 +1102,7 @@
           "story_id": 47472965,
           "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
           "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
-          "updated_at": "2026-03-22T18:01:18Z",
+          "updated_at": "2026-03-24T19:05:43Z",
           "url": "https://github.com/yoloshii/ClawMem"
         },
         {
@@ -1245,8 +1268,8 @@
           ],
           "author": "adinhitlore",
           "children": [
-            47496902,
             47494163,
+            47496902,
             47485392,
             47485017
           ],
@@ -1258,7 +1281,7 @@
           "story_id": 47484267,
           "story_text": "Assuming your software meets some of these:<p>* Better than  potential successors of SOTA transformers: Mamba, Hyenna, RWKV, xLSTM;\n* Gemini&#x2F;claude estimate potential ip values in the millions;\n* All implemented in C (ok this may be a minus) but also ported to C# and F#  - so no python nor rust;\n* humble code size: 10-15k lines of code but i mean come on gpt-1 was under 1000 lines...in python.<p>In short:<p>the problem: transformers are slow and could be smarter;\nsolution: you have fast and smart alternative. \n10x!",
           "title": "What would you do if you have AI software that may be transformers alternative?",
-          "updated_at": "2026-03-24T12:30:10Z"
+          "updated_at": "2026-03-24T19:52:42Z"
         },
         {
           "_highlightResult": {
