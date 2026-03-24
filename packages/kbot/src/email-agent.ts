@@ -259,6 +259,343 @@ function needsWebSearch(message: string): boolean {
   return /\b(what is|how much|latest|current|price of|news about|who is|when did|where is|look up|search for|find out|research|market size|competitors|trending)\b/i.test(message)
 }
 
+// ── Email Commands ──
+// Users can email commands by putting them as the first line of the email body.
+// Commands start with "/" and are processed before the AI generates a response.
+
+export interface EmailCommand {
+  name: string
+  aliases: string[]
+  description: string
+  usage: string
+  handler: (args: string, ctx: EmailCommandContext) => Promise<string>
+}
+
+export interface EmailCommandContext {
+  fromEmail: string
+  fromName: string
+  subject: string
+  memory: CompanionMemory
+  ollamaUrl: string
+  ollamaModel: string
+}
+
+const EMAIL_COMMANDS: EmailCommand[] = [
+  {
+    name: 'help',
+    aliases: ['h', 'commands', '?'],
+    description: 'List all available email commands',
+    usage: '/help',
+    handler: async () => {
+      const lines = [
+        '**Available Email Commands**',
+        '',
+        'Send any of these as the first line of your email to kbot:',
+        '',
+      ]
+      for (const cmd of EMAIL_COMMANDS) {
+        const aliases = cmd.aliases.length > 0 ? ` (aliases: ${cmd.aliases.map(a => '/' + a).join(', ')})` : ''
+        lines.push(`**${cmd.usage}**${aliases}`)
+        lines.push(`  ${cmd.description}`)
+        lines.push('')
+      }
+      lines.push('Any email without a command is treated as a normal conversation.')
+      return lines.join('\n')
+    },
+  },
+  {
+    name: 'status',
+    aliases: ['ping', 'alive'],
+    description: 'Check if kbot is running and get basic stats',
+    usage: '/status',
+    handler: async (_args, ctx) => {
+      const memory = ctx.memory
+      const convoCount = memory.history.length
+      const factCount = memory.facts.length
+      return [
+        `**kbot Status: Online**`,
+        '',
+        `Hey ${memory.name}! I'm up and running.`,
+        '',
+        `- Conversations with you: ${convoCount}`,
+        `- Things I remember about you: ${factCount}`,
+        `- Your interests I've tracked: ${memory.interests.length}`,
+        `- Your goals I'm following: ${memory.goals.length}`,
+        `- First contact: ${memory.firstContact.slice(0, 10)}`,
+        `- Last topic: ${memory.lastTopic || 'none yet'}`,
+      ].join('\n')
+    },
+  },
+  {
+    name: 'memory',
+    aliases: ['remember', 'about-me', 'profile'],
+    description: 'See everything kbot remembers about you',
+    usage: '/memory',
+    handler: async (_args, ctx) => {
+      const m = ctx.memory
+      const sections: string[] = [`**What I Know About You, ${m.name}**`, '']
+
+      if (m.facts.length > 0) {
+        sections.push('**Facts:**')
+        for (const f of m.facts) sections.push(`- ${f}`)
+        sections.push('')
+      }
+
+      if (m.interests.length > 0) {
+        sections.push('**Interests:**')
+        for (const i of m.interests) sections.push(`- ${i}`)
+        sections.push('')
+      }
+
+      if (m.goals.length > 0) {
+        sections.push('**Goals:**')
+        for (const g of m.goals) sections.push(`- ${g}`)
+        sections.push('')
+      }
+
+      if (m.preferences.length > 0) {
+        sections.push('**Preferences:**')
+        for (const p of m.preferences) sections.push(`- ${p}`)
+        sections.push('')
+      }
+
+      if (m.history.length > 0) {
+        sections.push('**Recent History:**')
+        for (const h of m.history.slice(-5)) sections.push(`- ${h}`)
+        sections.push('')
+      }
+
+      if (m.facts.length === 0 && m.interests.length === 0 && m.goals.length === 0) {
+        sections.push("I don't know much about you yet — keep chatting and I'll learn!")
+      }
+
+      return sections.join('\n')
+    },
+  },
+  {
+    name: 'forget',
+    aliases: ['reset', 'clear-memory'],
+    description: 'Clear all memory kbot has about you (fresh start)',
+    usage: '/forget',
+    handler: async (_args, ctx) => {
+      const fresh: CompanionMemory = {
+        name: ctx.fromName || ctx.fromEmail.split('@')[0],
+        email: ctx.fromEmail,
+        firstContact: new Date().toISOString(),
+        interests: [],
+        goals: [],
+        facts: [],
+        preferences: [],
+        history: [],
+        lastTopic: '',
+      }
+      saveCompanionMemory(fresh)
+      // Update the context memory reference
+      Object.assign(ctx.memory, fresh)
+      return [
+        `**Memory Cleared**`,
+        '',
+        `Done! I've forgotten everything about you, ${fresh.name}. We're starting fresh.`,
+        '',
+        `Feel free to re-introduce yourself — I'll learn as we go.`,
+      ].join('\n')
+    },
+  },
+  {
+    name: 'search',
+    aliases: ['lookup', 'find', 'google'],
+    description: 'Search the web for something and get results',
+    usage: '/search <query>',
+    handler: async (args, ctx) => {
+      const query = args.trim()
+      if (!query) {
+        return 'Please provide a search query. Example: /search latest TypeScript features'
+      }
+      const results = await webSearch(query)
+      if (!results) {
+        return `I couldn't find results for "${query}". Try rephrasing your search.`
+      }
+      return [
+        `**Search Results for "${query}"**`,
+        '',
+        results,
+        '',
+        `Want me to dig deeper into any of these? Just reply with what you'd like to know more about.`,
+      ].join('\n')
+    },
+  },
+  {
+    name: 'summarize',
+    aliases: ['summary', 'recap', 'tldr'],
+    description: 'Get a summary of your conversation history with kbot',
+    usage: '/summarize',
+    handler: async (_args, ctx) => {
+      const m = ctx.memory
+      if (m.history.length === 0 && m.facts.length === 0) {
+        return `We haven't had enough conversations yet for a summary, ${m.name}. Email me about anything and I'll start tracking!`
+      }
+
+      const sections: string[] = [`**Conversation Summary for ${m.name}**`, '']
+
+      if (m.lastTopic) {
+        sections.push(`**Last topic:** ${m.lastTopic}`)
+        sections.push('')
+      }
+
+      if (m.history.length > 0) {
+        sections.push('**Timeline:**')
+        for (const h of m.history) sections.push(`- ${h}`)
+        sections.push('')
+      }
+
+      if (m.goals.length > 0) {
+        sections.push('**Goals we\'ve discussed:**')
+        for (const g of m.goals) sections.push(`- ${g}`)
+        sections.push('')
+      }
+
+      if (m.interests.length > 0) {
+        sections.push('**Topics you\'re into:**')
+        sections.push(m.interests.join(', '))
+        sections.push('')
+      }
+
+      sections.push('Reply to pick up where we left off!')
+      return sections.join('\n')
+    },
+  },
+  {
+    name: 'teach',
+    aliases: ['learn', 'remember-this'],
+    description: 'Tell kbot to remember a specific fact about you',
+    usage: '/teach <fact>',
+    handler: async (args, ctx) => {
+      const fact = args.trim()
+      if (!fact) {
+        return 'Tell me what to remember! Example: /teach I prefer Python over JavaScript'
+      }
+      ctx.memory.facts.push(fact)
+      if (ctx.memory.facts.length > 20) ctx.memory.facts = ctx.memory.facts.slice(-20)
+      saveCompanionMemory(ctx.memory)
+      return [
+        `**Got it!**`,
+        '',
+        `I'll remember: "${fact}"`,
+        '',
+        `You can check everything I know with /memory, or clear it all with /forget.`,
+      ].join('\n')
+    },
+  },
+  {
+    name: 'goal',
+    aliases: ['track', 'add-goal'],
+    description: 'Add a goal for kbot to track and follow up on',
+    usage: '/goal <description>',
+    handler: async (args, ctx) => {
+      const goal = args.trim()
+      if (!goal) {
+        return 'Describe your goal! Example: /goal Launch my SaaS by Q2'
+      }
+      if (!ctx.memory.goals.includes(goal)) {
+        ctx.memory.goals.push(goal)
+        saveCompanionMemory(ctx.memory)
+      }
+      return [
+        `**Goal Tracked!**`,
+        '',
+        `I'm now tracking: "${goal}"`,
+        '',
+        `I'll check in on this in future conversations. Your active goals:`,
+        ...ctx.memory.goals.map((g, i) => `${i + 1}. ${g}`),
+        '',
+        `Update or remove goals anytime by emailing me.`,
+      ].join('\n')
+    },
+  },
+  {
+    name: 'done',
+    aliases: ['complete', 'achieved'],
+    description: 'Mark a goal as completed',
+    usage: '/done <goal number or text>',
+    handler: async (args, ctx) => {
+      const input = args.trim()
+      if (!input) {
+        if (ctx.memory.goals.length === 0) {
+          return "You don't have any active goals. Add one with /goal <description>"
+        }
+        return [
+          'Which goal did you complete? Reply with the number:',
+          '',
+          ...ctx.memory.goals.map((g, i) => `${i + 1}. ${g}`),
+          '',
+          'Example: /done 1',
+        ].join('\n')
+      }
+
+      const num = parseInt(input, 10)
+      let removed: string | undefined
+      if (!isNaN(num) && num >= 1 && num <= ctx.memory.goals.length) {
+        removed = ctx.memory.goals.splice(num - 1, 1)[0]
+      } else {
+        // Try matching by text
+        const idx = ctx.memory.goals.findIndex(g =>
+          g.toLowerCase().includes(input.toLowerCase()),
+        )
+        if (idx !== -1) removed = ctx.memory.goals.splice(idx, 1)[0]
+      }
+
+      if (removed) {
+        ctx.memory.history.push(`${new Date().toISOString().slice(0, 10)}: completed goal — ${removed}`)
+        if (ctx.memory.history.length > 10) ctx.memory.history = ctx.memory.history.slice(-10)
+        saveCompanionMemory(ctx.memory)
+        return [
+          `**Goal Completed! 🎉**`,
+          '',
+          `Marked as done: "${removed}"`,
+          '',
+          ctx.memory.goals.length > 0
+            ? `Remaining goals:\n${ctx.memory.goals.map((g, i) => `${i + 1}. ${g}`).join('\n')}`
+            : `No more active goals — time to set a new one with /goal!`,
+        ].join('\n')
+      }
+
+      return `Couldn't find that goal. Your current goals:\n${ctx.memory.goals.map((g, i) => `${i + 1}. ${g}`).join('\n')}\n\nUse /done <number> to mark one complete.`
+    },
+  },
+]
+
+/** Parse an email body for a command. Returns null if no command found. */
+export function parseEmailCommand(body: string): { command: string; args: string } | null {
+  const trimmed = body.trim()
+  // Command must be the first line and start with /
+  const firstLine = trimmed.split('\n')[0].trim()
+  const match = firstLine.match(/^\/(\S+)(?:\s+(.*))?$/)
+  if (!match) return null
+  return { command: match[1].toLowerCase(), args: (match[2] || '').trim() }
+}
+
+/** Find and execute an email command. Returns the response string, or null if not a command. */
+export async function handleEmailCommand(
+  body: string,
+  ctx: EmailCommandContext,
+): Promise<string | null> {
+  const parsed = parseEmailCommand(body)
+  if (!parsed) return null
+
+  for (const cmd of EMAIL_COMMANDS) {
+    if (cmd.name === parsed.command || cmd.aliases.includes(parsed.command)) {
+      return cmd.handler(parsed.args, ctx)
+    }
+  }
+
+  // Unknown command — return help hint
+  return [
+    `Unknown command: /${parsed.command}`,
+    '',
+    `Type /help to see available commands, or just send a normal email to chat.`,
+  ].join('\n')
+}
+
 // ── Email Sending (Resend) ──
 
 async function sendReply(to: string, subject: string, body: string, resendKey: string): Promise<boolean> {
@@ -385,6 +722,42 @@ export async function startEmailAgent(config: EmailAgentConfig): Promise<void> {
         const userName = msg.from_name || msg.from_email.split('@')[0]
         console.log(`[${new Date().toISOString().slice(11, 19)}] New email from ${userName}: "${msg.subject}"`)
 
+        // Load companion memory (needed for both commands and conversation)
+        const memory = loadCompanionMemory(msg.from_email)
+        if (msg.from_name && msg.from_name !== msg.from_email) memory.name = msg.from_name
+
+        // ── Check for email commands (e.g. /help, /status, /memory) ──
+        const commandResult = await handleEmailCommand(body, {
+          fromEmail: msg.from_email,
+          fromName: userName,
+          subject: msg.subject,
+          memory,
+          ollamaUrl: config.ollamaUrl,
+          ollamaModel: config.ollamaModel,
+        })
+
+        if (commandResult) {
+          console.log(`  Command detected — handling /${parseEmailCommand(body)?.command}`)
+
+          // Store command + response in conversation history
+          await svc.from('agent_conversations').insert({
+            email: msg.from_email, name: userName, role: 'user', content: body, subject: msg.subject,
+          })
+          await svc.from('agent_conversations').insert({
+            email: msg.from_email, name: 'Kernel Agent', role: 'assistant', content: commandResult, subject: `Re: ${msg.subject}`,
+          })
+
+          const sent = await sendReply(msg.from_email, msg.subject, commandResult, config.resendKey)
+          console.log(`  Command reply ${sent ? 'sent' : 'FAILED'} to ${msg.from_email}`)
+
+          processedIds.add(msgId)
+          saveProcessed()
+          agentState.processedCount++
+          continue
+        }
+
+        // ── Normal conversation flow (no command) ──
+
         // Load conversation history
         const { data: history } = await svc
           .from('agent_conversations')
@@ -393,11 +766,9 @@ export async function startEmailAgent(config: EmailAgentConfig): Promise<void> {
           .order('created_at', { ascending: true })
           .limit(20)
 
-        const convoHistory = (history || []).map(m => ({ role: m.role, content: m.content }))
+        const convoHistory = (history || []).map((m: { role: string; content: string }) => ({ role: m.role, content: m.content }))
 
         // Inject companion memory
-        const memory = loadCompanionMemory(msg.from_email)
-        if (msg.from_name && msg.from_name !== msg.from_email) memory.name = msg.from_name
         convoHistory.unshift({ role: 'user', content: memoryToPrompt(memory) })
 
         if (convoHistory.length <= 1) {
