@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  <img src="../../tools/video-assets/demo.gif" alt="kbot demo" width="700">
+  <img src="../../tools/video-assets/demo-hero.gif" alt="kbot demo — The Kernel Stack" width="700">
 </p>
 
 <p align="center">
@@ -165,7 +165,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 345+ tools
+// List all 350+ tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -506,9 +506,32 @@ Inside the REPL, type `/help` for the full command list.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, adding tools, and creating specialist agents.
 
+## Demos
+
+<details>
+<summary><strong>Learning Engine</strong> — pattern extraction + skill routing</summary>
+<img src="../../tools/video-assets/demo-learning.gif" alt="kbot learning engine" width="700">
+</details>
+
+<details>
+<summary><strong>Agent Routing</strong> — 26 specialists, auto-routed by intent</summary>
+<img src="../../tools/video-assets/demo-agents.gif" alt="kbot agent routing" width="700">
+</details>
+
+<details>
+<summary><strong>Self-Defense</strong> — HMAC integrity, injection detection, audit</summary>
+<img src="../../tools/video-assets/demo-defense.gif" alt="kbot self-defense" width="700">
+</details>
+
+<details>
+<summary><strong>Local AI</strong> — $0 inference, fully offline</summary>
+<img src="../../tools/video-assets/demo-local-ai.gif" alt="kbot local AI" width="700">
+</details>
+
 ## Links
 
 - [kernel.chat](https://kernel.chat) — Web companion
+- [The Kernel Stack](./KERNEL_STACK.md) — Architecture manifesto
 - [npm](https://www.npmjs.com/package/@kernel.chat/kbot)
 - [Docker Hub](https://hub.docker.com/r/isaacsight/kbot)
 - [Discord](https://discord.gg/kdMauM9abG)
