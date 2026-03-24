@@ -1,9 +1,239 @@
 {
-  "timestamp": "2026-03-24T04:37:16.878Z",
+  "timestamp": "2026-03-24T04:59:40.080Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
-      "hits": []
+      "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "noemit"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus <em>AI</em> Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how <em>terminals</em> look, not what you actually type (you don't type the &quot;:&quot;)<p>I have since updated my code in my <em>agent</em> tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation/artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don't have to fight it with your system prompt.<p>This is Kimi K2.5 Btw."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "LLMs learn what programmers create, not how programmers work"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_noemit",
+            "story_47494696",
+            "ask_hn"
+          ],
+          "author": "noemit",
+          "children": [
+            47496895,
+            47498409,
+            47498203,
+            47497365,
+            47498274
+          ],
+          "created_at": "2026-03-23T20:31:48Z",
+          "created_at_i": 1774297908,
+          "num_comments": 3,
+          "objectID": "47494696",
+          "points": 25,
+          "story_id": 47494696,
+          "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
+          "title": "LLMs learn what programmers create, not how programmers work",
+          "updated_at": "2026-03-24T04:59:23Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "tosh"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "A <em>terminal</em>-style <em>AI</em> coding <em>agent</em> running on Cloudflare Workers"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "https://github.com/qaml-<em>ai</em>/pi-worker/tree/main/examples/<em>terminal</em>-<em>agent</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_tosh",
+            "story_47487140"
+          ],
+          "author": "tosh",
+          "created_at": "2026-03-23T09:36:13Z",
+          "created_at_i": 1774258573,
+          "num_comments": 0,
+          "objectID": "47487140",
+          "points": 2,
+          "story_id": 47487140,
+          "title": "A terminal-style AI coding agent running on Cloudflare Workers",
+          "updated_at": "2026-03-23T09:53:20Z",
+          "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "steveharing1"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Found this and it actually solves something that's been bugging me. Running multiple <em>AI</em> coding <em>agents</em> is great until you're juggling five <em>terminal</em> windows.<p>Emdash is basically a dashboard for that. Each <em>agent</em> gets its own Git worktree so nothing bleeds into each other, you can see diffs before committing, and you can throw GitHub, Jira or Linear issues directly at an <em>agent</em>.<p>It Supports Claude Code, Codex, Cursor and 20+ others.<p>YC backed &amp; 60k downloads already. Worth a look if you're running more than one <em>agent</em> at a time.\nHas anyone used this in a real workflow yet?<p>https://github.com/generalaction/emdash"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "Emdash: Open-Source Agentic IDE for Orchestrating Multiple Coding <em>Agents</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_steveharing1",
+            "story_47486518",
+            "ask_hn"
+          ],
+          "author": "steveharing1",
+          "created_at": "2026-03-23T07:55:30Z",
+          "created_at_i": 1774252530,
+          "num_comments": 0,
+          "objectID": "47486518",
+          "points": 2,
+          "story_id": 47486518,
+          "story_text": "Found this and it actually solves something that&#x27;s been bugging me. Running multiple AI coding agents is great until you&#x27;re juggling five terminal windows.<p>Emdash is basically a dashboard for that. Each agent gets its own Git worktree so nothing bleeds into each other, you can see diffs before committing, and you can throw GitHub, Jira or Linear issues directly at an agent.<p>It Supports Claude Code, Codex, Cursor and 20+ others.<p>YC backed &amp; 60k downloads already. Worth a look if you&#x27;re running more than one agent at a time.\nHas anyone used this in a real workflow yet?<p>https:&#x2F;&#x2F;github.com&#x2F;generalaction&#x2F;emdash",
+          "title": "Emdash: Open-Source Agentic IDE for Orchestrating Multiple Coding Agents",
+          "updated_at": "2026-03-23T08:52:20Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "vercantez"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Pi and Ghostty Running on Cloudflare Workers"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "https://github.com/qaml-<em>ai</em>/pi-worker/tree/main/examples/<em>terminal</em>-<em>agent</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vercantez",
+            "story_47472261",
+            "show_hn"
+          ],
+          "author": "vercantez",
+          "children": [
+            47476183
+          ],
+          "created_at": "2026-03-21T22:39:15Z",
+          "created_at_i": 1774132755,
+          "num_comments": 2,
+          "objectID": "47472261",
+          "points": 4,
+          "story_id": 47472261,
+          "title": "Show HN: Pi and Ghostty Running on Cloudflare Workers",
+          "updated_at": "2026-03-23T19:01:39Z",
+          "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "dongjiewu"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Hi HN,\nI've been experimenting a lot with autonomous coding <em>agents</em> (like OpenClaw and various CLI tools), but I kept running into two major roadblocks when trying to use them for actual production work:\nSecurity &amp; State: Most <em>agents</em> require running a persistent state on a local machine or VPS, often needing broad file system access. It's a security nightmare for enterprise code.\nChaos: Generalist <em>agents</em> try to do everything at once (planning, coding, testing) in a single context window, which inevitably leads to hallucinations and broken dependencies.\nI wanted a system that mirrored how actual engineering teams work, so I built an open-source framework that runs entirely inside GitHub.\nHow it works: I mapped out a multi-<em>agent</em> system (Scrum Master, Planner, Dev, QA Tester) using Anthropic's Claude, orchestrated entirely through GitHub Actions.\nYou open an Issue with a feature request. The &quot;Scrum Master&quot; <em>agent</em> breaks it into a Kanban board. The &quot;Planner&quot; writes a feature issue with the implementation spec. Once you approve it, the &quot;Dev&quot; spins up an ephemeral, serverless container, writes the code, and opens a PR. The &quot;QA&quot; <em>agent</em> reviews the PR, runs tests, and leaves comments. The good thing for this architecture is that every task runs in a sterile, single-use runner. No corrupted environments or lingering state. It relies completely on GitHub's permission model. The <em>agents</em> only see what they are explicitly granted access to. Everything happens in standard PR diffs and Issue comments, not a <em>terminal</em> window or chat app.\nThe open-source template (using GitHub Actions) is here: <a href=\"https://github.com/plusai-solutions/ai-scrum-master-template\" rel=\"nofollow\">https://github.com/plusai-solutions/<em>ai</em>-scrum-master-template</a>\nI’m also building a fully managed, serverless GitHub App version with instant dependency hydration (so you don't have to wait 2 minutes for node_modules to install on every run or burn the tokens to set up the environment using <em>AI</em>). The initial version is going to support python and typescript/nodejs env. In the future, I am going to add more environments like the android dev env. If you want to skip the Actions setup and run your <em>agent</em> on a preset environment, you can check out the waitlist here: <a href=\"https://collo.dev\" rel=\"nofollow\">https://collo.dev</a>.\nI would love to hear HN's thoughts on the architecture, specifically regarding the multi-<em>agent</em> handoffs via GitHub webhook events."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "Show HN: An open-source <em>AI</em> Scrum Team that lives natively in GitHub Issues"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "https://github.com/plusai-solutions/<em>ai</em>-scrum-master-template"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_dongjiewu",
+            "story_47463717",
+            "show_hn"
+          ],
+          "author": "dongjiewu",
+          "created_at": "2026-03-21T03:30:56Z",
+          "created_at_i": 1774063856,
+          "num_comments": 0,
+          "objectID": "47463717",
+          "points": 1,
+          "story_id": 47463717,
+          "story_text": "Hi HN,\nI&#x27;ve been experimenting a lot with autonomous coding agents (like OpenClaw and various CLI tools), but I kept running into two major roadblocks when trying to use them for actual production work:\nSecurity &amp; State: Most agents require running a persistent state on a local machine or VPS, often needing broad file system access. It&#x27;s a security nightmare for enterprise code.\nChaos: Generalist agents try to do everything at once (planning, coding, testing) in a single context window, which inevitably leads to hallucinations and broken dependencies.\nI wanted a system that mirrored how actual engineering teams work, so I built an open-source framework that runs entirely inside GitHub.\nHow it works: I mapped out a multi-agent system (Scrum Master, Planner, Dev, QA Tester) using Anthropic&#x27;s Claude, orchestrated entirely through GitHub Actions.\nYou open an Issue with a feature request. The &quot;Scrum Master&quot; agent breaks it into a Kanban board. The &quot;Planner&quot; writes a feature issue with the implementation spec. Once you approve it, the &quot;Dev&quot; spins up an ephemeral, serverless container, writes the code, and opens a PR. The &quot;QA&quot; agent reviews the PR, runs tests, and leaves comments. The good thing for this architecture is that every task runs in a sterile, single-use runner. No corrupted environments or lingering state. It relies completely on GitHub&#x27;s permission model. The agents only see what they are explicitly granted access to. Everything happens in standard PR diffs and Issue comments, not a terminal window or chat app.\nThe open-source template (using GitHub Actions) is here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;plusai-solutions&#x2F;ai-scrum-master-template\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;plusai-solutions&#x2F;ai-scrum-master-template</a>\nI’m also building a fully managed, serverless GitHub App version with instant dependency hydration (so you don&#x27;t have to wait 2 minutes for node_modules to install on every run or burn the tokens to set up the environment using AI). The initial version is going to support python and typescript&#x2F;nodejs env. In the future, I am going to add more environments like the android dev env. If you want to skip the Actions setup and run your agent on a preset environment, you can check out the waitlist here: <a href=\"https:&#x2F;&#x2F;collo.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;collo.dev</a>.\nI would love to hear HN&#x27;s thoughts on the architecture, specifically regarding the multi-agent handoffs via GitHub webhook events.",
+          "title": "Show HN: An open-source AI Scrum Team that lives natively in GitHub Issues",
+          "updated_at": "2026-03-21T03:34:41Z",
+          "url": "https://github.com/plusai-solutions/ai-scrum-master-template"
+        }
+      ]
     },
     {
       "query": "open+source+coding+agent",
@@ -495,6 +725,47 @@
         {
           "_highlightResult": {
             "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "aabbcc1241"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Do you reject them or put them in lower priority?<p>So far the AI <em>bot</em>s are honest on the user agent. But my low budget server is significantly slower than it should be when I'm using it as a human."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Ask HN: AI companies' <em>bot</em>s are making my server slow, what do you do?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_aabbcc1241",
+            "story_47498749",
+            "ask_hn"
+          ],
+          "author": "aabbcc1241",
+          "created_at": "2026-03-24T04:58:07Z",
+          "created_at_i": 1774328287,
+          "num_comments": 0,
+          "objectID": "47498749",
+          "points": 1,
+          "story_id": 47498749,
+          "story_text": "Do you reject them or put them in lower priority?<p>So far the AI bots are honest on the user agent. But my low budget server is significantly slower than it should be when I&#x27;m using it as a human.",
+          "title": "Ask HN: AI companies' bots are making my server slow, what do you do?",
+          "updated_at": "2026-03-24T04:59:23Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
@@ -521,16 +792,17 @@
           "author": "kothariji",
           "children": [
             47498447,
-            47498438
+            47498438,
+            47498706
           ],
           "created_at": "2026-03-24T03:54:59Z",
           "created_at_i": 1774324499,
           "num_comments": 2,
           "objectID": "47498437",
-          "points": 2,
+          "points": 4,
           "story_id": 47498437,
           "title": "ArrowJS – The first UI framework for the agentic era",
-          "updated_at": "2026-03-24T04:10:08Z",
+          "updated_at": "2026-03-24T04:57:23Z",
           "url": "https://arrow-js.com/"
         },
         {
@@ -654,44 +926,6 @@
           "title": "Little Ax Tool",
           "updated_at": "2026-03-24T03:06:53Z",
           "url": "https://www.npmjs.com/package/botversion"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "alex7o"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "This sounds <em>bot</em>h like a good way to get some internet karma but also an interesting thing what can it optimize for how good it will be etc."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: Karpathy auto research on a miata ecu?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_alex7o",
-            "story_47496054",
-            "ask_hn"
-          ],
-          "author": "alex7o",
-          "created_at": "2026-03-23T22:33:14Z",
-          "created_at_i": 1774305194,
-          "num_comments": 0,
-          "objectID": "47496054",
-          "points": 3,
-          "story_id": 47496054,
-          "story_text": "This sounds both like a good way to get some internet karma but also an interesting thing what can it optimize for how good it will be etc.",
-          "title": "Ask HN: Karpathy auto research on a miata ecu?",
-          "updated_at": "2026-03-24T01:05:54Z"
         }
       ]
     },
@@ -2134,5 +2368,5 @@
       ]
     }
   ],
-  "totalHits": 45
+  "totalHits": 50
 }

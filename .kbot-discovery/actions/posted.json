@@ -129,5 +129,13 @@
     "title": "Fdbck – programmable feedback for your apps",
     "comment": "The hardest part isn't routing feedback at all—it's deciding when to trust the agent versus deferring to human review. I've seen feedback loops amplify noise faster than signal without rate limits per source. Anyone else dealing with this when building agent systems?",
     "success": true
+  },
+  {
+    "timestamp": "2026-03-24T04:59:42.327Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47415106",
+    "title": "Fdbck – programmable feedback for your apps",
+    "comment": "Have you seen how much the hallucination rate drops when you normalize feedback into a consistent schema before feeding it to the learning module? The contradictory signals in raw user input are surprisingly hard to reconcile.",
+    "success": true
   }
 ]

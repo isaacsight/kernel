@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-03-23T15:18:25.908Z",
+  "timestamp": "2026-03-24T04:59:39.366Z",
   "projects": [
     {
-      "name": "jackwener/opencli",
-      "url": "https://github.com/jackwener/opencli",
-      "stars": 5066,
-      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
+      "name": "oil-oil/wolfcha",
+      "url": "https://github.com/oil-oil/wolfcha",
+      "stars": 548,
+      "description": "AI-powered Werewolf (Mafia) social deduction game where every player is controlled by top LLMs like DeepSeek, Qwen, Gemini, and more"
     },
     {
       "name": "vm0-ai/vm0",
@@ -16,26 +16,32 @@
     {
       "name": "nexu-io/nexu",
       "url": "https://github.com/nexu-io/nexu",
-      "stars": 753,
+      "stars": 822,
       "description": "The simplest desktop client for OpenClaw 🦞 — bridge your Agent to WeChat, Feishu, Slack & Discord in one click. Works with Claude Code, Codex & any LLM. BYOK, local-first, chat from your phone 24/7."
-    },
-    {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 340,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
-    },
-    {
-      "name": "Panniantong/Agent-Reach",
-      "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 10494,
-      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
       "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
       "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 111,
+      "stars": 117,
       "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+    },
+    {
+      "name": "ArcadeAI/arcade-mcp",
+      "url": "https://github.com/ArcadeAI/arcade-mcp",
+      "stars": 830,
+      "description": "The best way to create, deploy, and share MCP Servers"
+    },
+    {
+      "name": "Mirascope/mirascope",
+      "url": "https://github.com/Mirascope/mirascope",
+      "stars": 1437,
+      "description": "The LLM Anti-Framework"
+    },
+    {
+      "name": "Approaching-AI/aima-openclaw",
+      "url": "https://github.com/Approaching-AI/aima-openclaw",
+      "stars": 0,
+      "description": "Standalone OpenClaw /aima doctor plugin, runtime, and ClawHub skill."
     },
     {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
@@ -48,16 +54,10 @@
       "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
       "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
-    },
-    {
-      "name": "samber/cc-skills-golang",
-      "url": "https://github.com/samber/cc-skills-golang",
-      "stars": 64,
-      "description": "🧑‍🎨 A collection of Golang agentic skills that works"
     }
   ],
   "latestPaper": {
-    "title": "VideoSeek: Long-Horizon Video Agent with Tool-Guided Seeking",
-    "summary": "Video agentic models have advanced challenging video-language tasks. However, most agentic approaches still heavily rely on greedy parsing over densely sampled video frames, resulting in high computational cost. We present VideoSeek, a long-horizon video agent that leverages video logic flow to actively seek answer-critical evidence instead of exhaustively parsing the full video. This insight allows the model to use far fewer frames while maintaining, or even improving, its video understanding c"
+    "title": "TiCo: Time-Controllable Training for Spoken Dialogue Models",
+    "summary": "We propose TiCo, a simple post-training method for enabling spoken dialogue models (SDMs) to follow time-constrained instructions and generate responses with controllable duration. This capability is valuable for real-world spoken language systems such as voice assistants and interactive agents, where controlling response duration can improve interaction quality. However, despite their strong ability to generate natural spoken responses, existing models lack time awareness and struggle to follow"
   }
 }
