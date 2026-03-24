@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "3.30.0",
+  "version": "3.30.1",
   "description": "The only AI agent that builds its own tools — and defends itself. Self-Defense System: HMAC memory integrity, prompt injection detection, knowledge sanitization, forge verification, anomaly detection, incident logging. Cybersecurity tools: dep_audit, secret_scan, ssl_check, headers_check, cve_lookup, port_scan, owasp_check. Machine-aware situated intelligence: full hardware profiling (CPU, GPU, RAM, display, battery, dev tools), resource-adaptive tool pipeline, memory-pressure throttling, GPU-accelerated model routing. Multi-channel cognitive engine: email agent, iMessage agent, consultation pipeline, Trader agent with paper trading & DeFi, 26 specialist agents, 345+ tools, 20 providers. Finance stack: 31 tools across market data, wallet & swaps, stocks, and sentiment. Synthesis Engine: closed-loop intelligence compounding. Runtime tool forging, Forge Registry, autopoietic health, immune self-audit. Cost-aware model routing, fallback chains, Bayesian skill routing. 11 local models (Llama 3.3, Qwen 3, DeepSeek R1, Codestral 22B). Embedded llama.cpp, MCP server, SDK. MIT.",
   "type": "module",
   "repository": {

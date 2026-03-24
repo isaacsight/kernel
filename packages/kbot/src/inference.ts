@@ -92,12 +92,32 @@ export const DEFAULT_MODELS: Record<string, { hf: string; description: string; s
     tags: ['reasoning', 'large', 'recommended'],
   },
 
+  // ── NVIDIA (Nemotron family — hybrid Mamba-Transformer, optimized for agents) ──
+  'nemotron-nano-4b': {
+    hf: 'hf:nvidia/NVIDIA-Nemotron-3-Nano-4B-GGUF:Nemotron-3-Nano-4B-Q4_K_M.gguf',
+    description: 'NVIDIA Nemotron 3 Nano 4B — hybrid Mamba-Transformer, built for agentic tasks, 1M context',
+    size: '~2.8 GB',
+    tags: ['fast', 'lightweight', 'agentic', 'nvidia', '1m-context'],
+  },
+  'nemotron-nano-30b': {
+    hf: 'hf:unsloth/Nemotron-3-Nano-30B-A3B-GGUF:Q4_K_M',
+    description: 'NVIDIA Nemotron 3 Nano 30B (MoE, 3B active) — huge knowledge, tiny compute. Best efficiency.',
+    size: '~18 GB',
+    tags: ['reasoning', 'large', 'nvidia', 'moe', 'agentic'],
+  },
+
   // ── Frontier (32-64 GB, 64GB+ RAM, M4/M5 Ultra or multi-GPU) ──
   'llama3.3-70b': {
     hf: 'hf:mradermacher/Meta-Llama-3.3-70B-Instruct-GGUF:Q4_K_M',
     description: 'Meta Llama 3.3 70B — near-Sonnet quality, the gold standard open-weight model',
     size: '~40 GB',
     tags: ['general', 'frontier', 'recommended'],
+  },
+  'nemotron-70b': {
+    hf: 'hf:bartowski/Llama-3.1-Nemotron-70B-Instruct-HF-GGUF:Llama-3.1-Nemotron-70B-Instruct-HF-Q4_K_M.gguf',
+    description: 'NVIDIA Nemotron 70B — NVIDIA-tuned Llama 3.1, Arena Hard 85.0, best helpfulness scores',
+    size: '~40 GB',
+    tags: ['general', 'frontier', 'nvidia', 'recommended'],
   },
   'qwen3-72b': {
     hf: 'hf:Qwen/Qwen3-72B-GGUF:qwen3-72b-q4_k_m.gguf',
