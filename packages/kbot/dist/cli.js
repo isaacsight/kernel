@@ -741,6 +741,31 @@ async function main() {
         const { generateComparison } = await import('./introspection.js');
         process.stderr.write(generateComparison());
     });
+    program
+        .command('growth')
+        .description('See how you\'ve evolved as a builder — milestones, efficiency gains, knowledge arc')
+        .action(async () => {
+        const { generateGrowthReport } = await import('./introspection.js');
+        process.stderr.write(generateGrowthReport());
+    });
+    program
+        .command('decisions')
+        .description('See WHY kbot made each decision today — agent routing, model selection, fallbacks')
+        .option('--date <date>', 'Show decisions for a specific date (YYYY-MM-DD)')
+        .action(async (opts) => {
+        const { getTodaysDecisions, getDecisions, formatDecisions } = await import('./decision-journal.js');
+        const decisions = opts.date ? getDecisions(opts.date) : getTodaysDecisions();
+        console.log(formatDecisions(decisions));
+    });
+    program
+        .command('episodes')
+        .description('Session history as stories — what happened, what was learned, emotional valence')
+        .option('--tag <tag>', 'Filter by tag (coding, finance, security, etc.)')
+        .action(async (opts) => {
+        const { listEpisodes, searchEpisodes, formatEpisodeList } = await import('./episodic-memory.js');
+        const episodes = opts.tag ? searchEpisodes(opts.tag) : listEpisodes(15);
+        console.log(formatEpisodeList(episodes));
+    });
     // ── Self-Defense ──
     const defenseCmd = program
         .command('defense')
@@ -3525,6 +3550,24 @@ async function handleSlashCommand(input, opts, rl) {
         case 'compare': {
             const { generateComparison } = await import('./introspection.js');
             process.stderr.write(generateComparison());
+            break;
+        }
+        case 'growth': {
+            const { generateGrowthReport } = await import('./introspection.js');
+            process.stderr.write(generateGrowthReport());
+            break;
+        }
+        case 'decisions': {
+            const { getTodaysDecisions, formatDecisions } = await import('./decision-journal.js');
+            const decisions = getTodaysDecisions();
+            console.log(formatDecisions(decisions));
+            break;
+        }
+        case 'episodes':
+        case 'history': {
+            const { listEpisodes, formatEpisodeList } = await import('./episodic-memory.js');
+            const episodes = listEpisodes(15);
+            console.log(formatEpisodeList(episodes));
             break;
         }
         case 'tutorial': {

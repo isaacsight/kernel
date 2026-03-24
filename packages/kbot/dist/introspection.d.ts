@@ -14,4 +14,5 @@ export interface ExtendedInsights {
     topPattern: string | null;
 }
 export declare function getExtendedInsights(): ExtendedInsights;
+export declare function generateGrowthReport(): string;
 //# sourceMappingURL=introspection.d.ts.map

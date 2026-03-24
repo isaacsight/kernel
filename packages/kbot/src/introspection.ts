@@ -557,3 +557,138 @@ export function getExtendedInsights(): ExtendedInsights {
     topPattern: topPattern ? topPattern.toolSequence.join(' → ') : null,
   }
 }
+
+// ── Growth Tracker ──
+// Show users how they've evolved over time using episodic memory.
+
+export function generateGrowthReport(): string {
+  const profile = getProfile()
+  const lines: string[] = []
+
+  lines.push('')
+  lines.push(`  ${BOLD('kbot growth')} — how you've evolved`)
+  lines.push('')
+
+  if (profile.sessions < 5) {
+    lines.push(`  ${DIM('Need at least 5 sessions to track growth. You have ' + profile.sessions + '.')}`)
+    lines.push('')
+    return lines.join('\n')
+  }
+
+  // ── Session milestones ──
+  lines.push(`  ${BOLD('Milestones')}`)
+  lines.push(`  ${DIM('─'.repeat(50))}`)
+  lines.push(`  Sessions: ${profile.sessions}`)
+
+  const milestones: Array<{ at: number; label: string }> = [
+    { at: 5, label: 'Getting started' },
+    { at: 10, label: 'Building habits' },
+    { at: 25, label: 'Power user' },
+    { at: 50, label: 'kbot native' },
+    { at: 100, label: 'The tool is part of you now' },
+    { at: 250, label: 'You\'ve shaped kbot as much as it shaped you' },
+    { at: 500, label: 'Veteran' },
+  ]
+
+  const currentMilestone = milestones.filter(m => profile.sessions >= m.at).pop()
+  const nextMilestone = milestones.find(m => profile.sessions < m.at)
+  if (currentMilestone) lines.push(`  Level: ${GREEN(currentMilestone.label)}`)
+  if (nextMilestone) lines.push(`  Next: ${DIM(`${nextMilestone.label} (${nextMilestone.at - profile.sessions} sessions away)`)}`)
+  lines.push('')
+
+  // ── Efficiency over time ──
+  lines.push(`  ${BOLD('Efficiency')}`)
+  lines.push(`  ${DIM('─'.repeat(50))}`)
+
+  const stats = getStats()
+  if (stats.totalTokensSaved > 0) {
+    const savingsPerSession = Math.round(stats.totalTokensSaved / profile.sessions)
+    lines.push(`  Tokens saved per session: ~${savingsPerSession.toLocaleString()}`)
+    lines.push(`  Total saved: ${stats.totalTokensSaved.toLocaleString()} tokens`)
+    lines.push(`  ${DIM('(Each saved token = faster response + lower cost)')}`)
+  }
+
+  const patterns = loadPatterns()
+  if (patterns.length > 0) {
+    const avgSuccess = patterns.reduce((s, p) => s + p.successRate, 0) / patterns.length
+    lines.push(`  Pattern success rate: ${GREEN(`${Math.round(avgSuccess * 100)}%`)} across ${patterns.length} cached patterns`)
+  }
+  lines.push('')
+
+  // ── Knowledge accumulation ──
+  const knowledge = loadKnowledge()
+  const corrections = loadCorrections()
+
+  lines.push(`  ${BOLD('Knowledge')}`)
+  lines.push(`  ${DIM('─'.repeat(50))}`)
+  lines.push(`  Facts learned: ${knowledge.length}`)
+  lines.push(`  Corrections recorded: ${corrections.length}`)
+  lines.push(`  Patterns cached: ${patterns.length}`)
+
+  if (knowledge.length > 0 && corrections.length > 0) {
+    const teachToCorrectRatio = knowledge.length / corrections.length
+    if (teachToCorrectRatio > 5) {
+      lines.push(`  ${DIM('You teach more than you correct — kbot is learning from your expertise.')}`)
+    } else if (teachToCorrectRatio < 1) {
+      lines.push(`  ${DIM('You correct more than you teach — kbot is adapting to your standards.')}`)
+    }
+  }
+  lines.push('')
+
+  // ── Agent evolution ──
+  const agentEntries = Object.entries(profile.preferredAgents).sort((a, b) => b[1] - a[1])
+  if (agentEntries.length >= 2) {
+    lines.push(`  ${BOLD('How Your Work Has Shifted')}`)
+    lines.push(`  ${DIM('─'.repeat(50))}`)
+
+    const totalUses = agentEntries.reduce((s, [, v]) => s + v, 0)
+    for (const [agent, count] of agentEntries.slice(0, 5)) {
+      const pct = Math.round((count / totalUses) * 100)
+      const bar = GREEN('█'.repeat(Math.round(pct / 5))) + DIM('░'.repeat(20 - Math.round(pct / 5)))
+      lines.push(`  ${agent.padEnd(14)} ${bar} ${pct}%`)
+    }
+    lines.push('')
+  }
+
+  // ── Task evolution ──
+  const taskEntries = Object.entries(profile.taskPatterns).sort((a, b) => b[1] - a[1])
+  if (taskEntries.length >= 2) {
+    lines.push(`  ${BOLD('What You Spend Time On')}`)
+    lines.push(`  ${DIM('─'.repeat(50))}`)
+
+    const totalTasks = taskEntries.reduce((s, [, v]) => s + v, 0)
+    const buildPct = Math.round(((profile.taskPatterns['build'] || 0) / totalTasks) * 100)
+    const debugPct = Math.round(((profile.taskPatterns['debug'] || 0) / totalTasks) * 100)
+
+    for (const [task, count] of taskEntries.slice(0, 5)) {
+      const pct = Math.round((count / totalTasks) * 100)
+      lines.push(`  ${task.padEnd(12)} ${pct}% ${DIM(`(${count}x)`)}`)
+    }
+
+    if (buildPct > debugPct) {
+      lines.push(`  ${DIM('You build more than you debug. That\'s growth.')}`)
+    } else if (debugPct > buildPct * 2) {
+      lines.push(`  ${DIM('Heavy debugging phase. This usually precedes a building phase.')}`)
+    }
+    lines.push('')
+  }
+
+  // ── The arc ──
+  lines.push(`  ${BOLD('The Arc')}`)
+  lines.push(`  ${DIM('─'.repeat(50))}`)
+  lines.push(`  ${profile.totalMessages.toLocaleString()} messages across ${profile.sessions} sessions.`)
+
+  if (profile.sessions >= 50) {
+    lines.push(`  You're past the point where most people stop using a tool.`)
+    lines.push(`  kbot isn't a tool for you anymore. It's infrastructure.`)
+  } else if (profile.sessions >= 20) {
+    lines.push(`  You're in the habit phase. kbot is becoming part of your workflow.`)
+  } else if (profile.sessions >= 10) {
+    lines.push(`  You're invested. The patterns are forming.`)
+  } else {
+    lines.push(`  Still early. The best is ahead.`)
+  }
+
+  lines.push('')
+  return lines.join('\n')
+}
