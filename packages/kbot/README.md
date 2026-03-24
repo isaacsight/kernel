@@ -1,6 +1,6 @@
 <p align="center">
   <strong>kbot</strong><br>
-  <em>The only AI agent that builds its own tools.</em>
+  <em>The only AI agent that builds its own tools — and defends itself.</em>
 </p>
 
 <p align="center">
@@ -19,33 +19,62 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**Multi-channel AI agent. 300+ tools. 26 agents. 20 providers. Forges new tools at runtime. $0 local AI. MIT licensed.**
+**Self-defending AI agent. 345+ tools. 26 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
 
 ---
 
-## What's New in v3.26
+## What's New
+
+### v3.28 — Self-Defense System
+
+kbot now protects its own integrity — and yours.
+
+| Feature | What it means |
+|---------|---------------|
+| **Memory Integrity** | HMAC signatures on all memory files. Tampered memories are detected and quarantined. |
+| **Prompt Injection Detection** | Real-time scanning of inputs for injection attacks, jailbreaks, and adversarial prompts. |
+| **Knowledge Sanitization** | Learned patterns and forged tools are sanitized before storage to prevent poisoning. |
+| **Forge Verification** | Cryptographic verification of forged tools — unsigned or modified tools are blocked. |
+| **Anomaly Detection** | Behavioral baselines with statistical anomaly scoring. Alerts on drift. |
+| **Incident Logging** | Tamper-proof audit log of all security events. |
+| **`kbot defense`** | `audit` · `sign` · `verify` · `incidents` — full CLI for the defense system. |
+
+### v3.27 — Cybersecurity Tools
+
+Seven new security tools, available to every agent:
+
+`dep_audit` · `secret_scan` · `ssl_check` · `headers_check` · `cve_lookup` · `port_scan` · `owasp_check`
+
+Plus P0 fixes: all Supabase edge functions now enforce auth headers. No more unauthenticated access.
+
+### v3.26 — Trader Agent & Finance Stack
 
 | Feature | What it means |
 |---------|---------------|
 | **Trader Agent** | `kbot --agent trader` — crypto market analysis, paper trading, DeFi yield scanning. |
-| **Finance Tools** | 7 new tools: `market_data`, `market_overview`, `price_history`, `technical_analysis`, `paper_trade`, `market_sentiment`, `defi_yields`. |
-| **Solana Wallet** | Create or import wallets, encrypted at rest (AES-256-CBC). Jupiter DEX swaps from the terminal. |
+| **Finance Tools (11)** | `market_data`, `market_overview`, `price_history`, `technical_analysis`, `paper_trade`, `market_sentiment`, `defi_yields` + 4 more. |
+| **Wallet & Swaps (9)** | Create/import Solana wallets (AES-256-CBC encrypted). Jupiter DEX swaps. Token balances, transaction history, airdrop tracking. |
+| **Stock Tools (6)** | Stock screener, earnings calendar, sector rotation, company fundamentals, insider trades, options flow. |
+| **Sentiment (5)** | Social sentiment, whale tracking, fear & greed index, news aggregation, trend detection. |
+| **Introspection Engine** | `kbot insights` · `kbot reflect` · `kbot compare` — ask kbot what it knows about itself. |
 | **`kbot help`** | New CLI subcommand — quick reference for commands, agents, and support channels. |
 
 ---
 
 ## Why kbot?
 
-Other AI agents are static — fixed tools, single providers, no memory, no learning. kbot is the first AI agent that **evolves itself**:
+Other AI agents are static — fixed tools, single providers, no memory, no learning. kbot is the first AI agent that **evolves itself** and **defends itself**:
 
 - **Forges its own tools** — When kbot encounters a task it can't handle, it creates a new tool on the spot via `forge_tool`. The tool persists, gets tested, and can be shared via the Forge Registry.
+- **Self-defending** — HMAC memory integrity, prompt injection detection, forge verification, anomaly detection, and tamper-proof incident logging. Run `kbot defense audit` anytime.
+- **Cybersecurity built in** — Dependency audits, secret scanning, SSL/TLS checks, header analysis, CVE lookup, port scanning, OWASP checks. Every project gets security tooling for free.
 - **Self-evolving** — Autopoietic health monitoring (`kbot vitals`) tracks tool success rates, token budgets, and memory pressure. The immune agent self-audits for drift and regressions.
 - **Cost-aware routing** — Automatically selects the cheapest model capable of handling each task. Claude for complex reasoning, DeepSeek for simple queries. Saves 60-90% on API costs.
 - **Fallback chains** — If Anthropic is down, kbot cascades to OpenAI, then Groq, then local. Zero manual intervention.
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, and 13 more. Switch anytime.
 - **Runs fully offline** — Embedded llama.cpp runs GGUF models directly. No Ollama needed. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster and smarter over time.
-- **26 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Auto-routed with probabilistic confidence.
+- **26 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Say "analyze BTC" and it routes to `trader`. Auto-routed with probabilistic confidence.
 - **Crash-proof** — Checkpoints after every tool call. Resume interrupted sessions automatically.
 - **Use as a library** — Clean SDK with typed exports. Build your own tools on top of kbot.
 - **Works in your IDE** — Built-in MCP server for VS Code, Cursor, Zed, Neovim. ACP for JetBrains.
@@ -84,6 +113,12 @@ kbot "I need a tool that converts CSV to JSON with column filtering"
 # Check system health
 kbot vitals
 
+# Audit your own defenses
+kbot defense audit
+
+# Scan a project for vulnerabilities
+kbot --agent guardian "run a full security scan on this repo"
+
 # Pipe mode — compose with Unix tools
 kbot -p "generate a user roles migration" > migration.sql
 ```
@@ -105,7 +140,7 @@ kbot forge install k8s-pod-monitor
 kbot forge publish sentiment_analyze
 ```
 
-Forged tools are first-class citizens — they get the same middleware pipeline, permission checks, and telemetry as built-in tools.
+Forged tools are first-class citizens — they get the same middleware pipeline, permission checks, forge verification, and telemetry as built-in tools.
 
 ## SDK — Use kbot as a Library
 
@@ -128,7 +163,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 300+ tools
+// List all 345+ tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -142,27 +177,28 @@ import { ResponseStream } from '@kernel.chat/kbot'                     // Stream
 
 ## Specialists
 
-Auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
+26 agents, auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
 
 | | Agents |
 |---|---|
 | **Core** | kernel, researcher, coder, writer, analyst |
 | **Extended** | aesthete, guardian, curator, strategist |
-| **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter |
+| **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter, trader |
 | **System** | immune, forge |
-| **Presets** | hacker, operator, dreamer, creative, developer, gamedev, playtester, trader |
+| **Presets** | hacker, operator, dreamer, creative, developer, gamedev, playtester |
 
 ```bash
 kbot --agent researcher "what papers cite Friston's Free Energy Principle?"
 kbot --agent guardian "review src/auth.ts for security issues"
 kbot --agent coder "refactor this into smaller functions"
+kbot --agent trader "analyze BTC momentum and run a paper trade"
 ```
 
-## 300+ Tools
+## 345+ Tools
 
 | Category | Examples |
 |----------|---------|
-| **Forge** | forge_tool, forge_search, forge_install, forge_publish |
+| **Forge** | forge_tool, forge_search, forge_install, forge_publish, forge_verify |
 | **Files & Code** | read, write, glob, grep, multi-file write |
 | **Quality** | lint (ESLint/Biome/Clippy), test (Vitest/Jest/pytest), deps audit, format, type-check |
 | **Shell** | bash, parallel execute, background tasks |
@@ -184,9 +220,34 @@ kbot --agent coder "refactor this into smaller functions"
 | **LSP** | goto definition, find references, hover, rename, diagnostics, symbols |
 | **Memory** | persistent save, search, update, forget — survives across sessions |
 | **IDE** | MCP server, ACP server, LSP bridge |
-| **Finance** | market data, price history, technical analysis, paper trade, market sentiment, DeFi yields, Solana wallet |
-| **System** | vitals, immune audit, cost tracking, fallback status |
+| **Finance** | market data, technical analysis, paper trading, DeFi yields, Solana wallet & swaps, stock screener, sentiment, whale tracking |
+| **Cybersecurity** | dep_audit, secret_scan, ssl_check, headers_check, cve_lookup, port_scan, owasp_check |
+| **Self-Defense** | memory HMAC, injection detection, knowledge sanitization, forge verification, anomaly detection, incident log |
+| **System** | vitals, immune audit, defense audit, cost tracking, fallback status |
 | **Meta** | subagents, worktrees, planner, sessions, checkpoints, self-eval |
+
+## Finance & Trading
+
+The **trader agent** (`kbot --agent trader`) is a full-stack financial analysis and paper trading system:
+
+```bash
+# Market analysis
+kbot --agent trader "what's the momentum on ETH right now?"
+kbot --agent trader "screen for undervalued large-cap stocks"
+
+# Paper trading (no real money at risk)
+kbot --agent trader "open a paper long on SOL with 2x leverage"
+kbot --agent trader "show my paper portfolio P&L"
+
+# DeFi
+kbot --agent trader "find the best stablecoin yields on Solana"
+kbot --agent trader "swap 0.1 SOL for USDC on Jupiter"
+
+# Sentiment
+kbot --agent trader "what's crypto twitter saying about the next FOMC?"
+```
+
+**31 finance tools** across 5 categories: market data (11), wallet & swaps (9), stocks (6), and sentiment (5). All paper trading is simulated — no real funds are moved unless you explicitly configure and confirm a live wallet transaction.
 
 ## Middleware Pipeline
 
@@ -210,7 +271,7 @@ pipeline.use(executionMiddleware(myExecutor))
 await pipeline.execute({ toolName: 'bash', toolArgs: { command: 'ls' }, toolCallId: '1', metadata: {}, aborted: false })
 ```
 
-Built-in middleware: `permissionMiddleware`, `hookMiddleware`, `timeoutMiddleware`, `metricsMiddleware`, `truncationMiddleware`, `telemetryMiddleware`.
+Built-in middleware: `permissionMiddleware`, `hookMiddleware`, `timeoutMiddleware`, `metricsMiddleware`, `truncationMiddleware`, `telemetryMiddleware`, `defenseMiddleware`.
 
 ## 20 Providers
 
@@ -241,18 +302,28 @@ Cost-aware routing automatically picks the cheapest provider that can handle eac
 
 ## Local Mode
 
-No API key needed. No data leaves your machine.
+No API key needed. No data leaves your machine. 11 models across 3 tiers:
 
 ```bash
 # Use Ollama (if installed)
 kbot local
 
 # Or run models directly — embedded llama.cpp, no external service
-kbot models pull llama3.1-8b
+kbot models pull llama3.3-8b
 kbot local --embedded
 
 # GPU-accelerated: Metal (Mac), CUDA (Linux/Windows), Vulkan
 ```
+
+### Model Catalog
+
+| Tier | Models | Use case |
+|------|--------|----------|
+| **Light** | Llama 3.3 3B, Qwen 3 4B, Phi-4 Mini | Fast completions, simple tasks, low-RAM machines |
+| **Standard** | Llama 3.3 8B, Qwen 3 8B, Mistral 7B, Codestral 22B | General-purpose coding, chat, analysis |
+| **Heavy** | DeepSeek R1 14B, Llama 3.3 70B (Q4), Qwen 3 32B, Codestral 22B (Q8) | Complex reasoning, large codebase analysis |
+
+All models auto-download on first use. GPU acceleration detected automatically (Metal on Apple Silicon, CUDA on NVIDIA, Vulkan fallback).
 
 ## Structured Streaming
 
@@ -308,8 +379,14 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes file ops
 | `kbot imessage-agent start` | **iMessage agent** — free SMS/iMessage on macOS |
 | `kbot audit <repo>` | Security + quality audit with shareable badge |
 | `kbot consultation` | Consultation engine — guardrails, intake, client management |
+| `kbot defense audit` | **Self-defense audit** — verify memory integrity, check for anomalies |
+| `kbot defense sign` | Sign all memory and forge artifacts with HMAC |
+| `kbot defense verify` | Verify signatures on memory and forged tools |
+| `kbot defense incidents` | Review tamper-proof security incident log |
 | `kbot vitals` | Autopoietic health check — memory, tools, token budgets |
 | `kbot synthesis` | What kbot knows — memory, patterns, insights |
+| `kbot insights` | Introspection — what kbot has learned about itself |
+| `kbot reflect` | Self-reflection on recent sessions and decisions |
 | `kbot serve` | Start HTTP REST + SSE streaming server |
 | `kbot contribute <repo>` | Find good-first-issues and quick wins |
 | `kbot voice` | Text-to-speech output mode |
@@ -357,6 +434,47 @@ kbot's agent loop runs 11 always-on cognition modules based on peer-reviewed res
 
 These aren't metaphors. They're TypeScript modules with paper citations in the headers. The interference between modules — not the modules themselves — is where intelligent behavior emerges. See the [research paper](../../docs/cognitive-module-interference.md).
 
+## Security
+
+kbot has two layers of security: protecting **your projects** and protecting **itself**.
+
+### Project Security (Cybersecurity Tools)
+
+```bash
+kbot --agent guardian "full security audit on this repo"
+```
+
+| Tool | What it does |
+|------|-------------|
+| `dep_audit` | Scans dependencies for known vulnerabilities (npm, pip, cargo, go) |
+| `secret_scan` | Detects leaked API keys, tokens, and credentials in source code |
+| `ssl_check` | Validates SSL/TLS certificates, cipher suites, and protocol versions |
+| `headers_check` | Audits HTTP security headers (CSP, HSTS, X-Frame-Options, etc.) |
+| `cve_lookup` | Searches the NVD database for CVEs by package, version, or keyword |
+| `port_scan` | Scans open ports and identifies running services |
+| `owasp_check` | Tests for OWASP Top 10 vulnerabilities |
+
+### Self-Defense System
+
+kbot protects the integrity of its own memory, tools, and behavior:
+
+- **HMAC Memory Integrity** — Every memory file is signed. Tampered memories are detected and quarantined on read.
+- **Prompt Injection Detection** — Inputs are scanned for known injection patterns, jailbreak attempts, and adversarial prompts before processing.
+- **Knowledge Sanitization** — Learned patterns and forged tool definitions are sanitized before storage to prevent knowledge poisoning.
+- **Forge Verification** — Forged tools are cryptographically signed. Unsigned or modified tools are blocked from execution.
+- **Anomaly Detection** — Behavioral baselines are maintained. Statistical anomaly scoring flags unexpected tool usage, token spikes, or routing drift.
+- **Incident Logging** — All security events are recorded in a tamper-proof audit log. Review with `kbot defense incidents`.
+
+### Infrastructure Security
+
+- **AES-256-CBC encrypted keys at rest** — API keys and wallet private keys never stored in plaintext
+- **Permission system** — destructive operations (file delete, git push, wallet sends) require explicit confirmation
+- **Tool execution timeouts** — 5-minute cap with middleware pipeline; no runaway processes
+- **Wallet transaction limits** — configurable spend caps and confirmation gates for on-chain operations
+- **Shell sandboxing** — blocklist prevents dangerous commands; config files restricted to owner (chmod 600)
+- **Local-only telemetry** — session checkpoints and metrics never leave your machine
+- **Open source (MIT)** — audit the code yourself at [github.com/isaacsight/kernel](https://github.com/isaacsight/kernel)
+
 ## Standalone Packages
 
 Use kbot's brain without the full agent:
@@ -368,17 +486,6 @@ Use kbot's brain without the full agent:
 | [`@kernel.chat/tool-forge`](https://www.npmjs.com/package/@kernel.chat/tool-forge) | Runtime tool creation from structured definitions |
 | [`@kernel.chat/prompt-evolver`](https://www.npmjs.com/package/@kernel.chat/prompt-evolver) | GEPA-style prompt self-optimization from execution traces |
 | [`@kernel.chat/kbot-openclaw`](https://www.npmjs.com/package/@kernel.chat/kbot-openclaw) | OpenClaw plugin — kbot as brain for 50+ messaging channels |
-
-## Security
-
-- **AES-256-CBC encrypted keys at rest** — API keys and wallet private keys never stored in plaintext
-- **Permission system** — destructive operations (file delete, git push, wallet sends) require explicit confirmation
-- **Tool execution timeouts** — 5-minute cap with middleware pipeline; no runaway processes
-- **Immune agent self-audit** — continuous drift detection, anomaly scoring, regression checks
-- **Wallet transaction limits** — configurable spend caps and confirmation gates for on-chain operations
-- **Shell sandboxing** — blocklist prevents dangerous commands; config files restricted to owner (chmod 600)
-- **Local-only telemetry** — session checkpoints and metrics never leave your machine
-- **Open source (MIT)** — audit the code yourself at [github.com/isaacsight/kernel](https://github.com/isaacsight/kernel)
 
 ## Need Help?
 
