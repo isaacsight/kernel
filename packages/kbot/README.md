@@ -19,7 +19,9 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**Self-defending AI agent. 345+ tools. 26 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
+**Self-defending AI agent. 350+ tools. 26 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
+
+> **New: [The Kernel Stack](./KERNEL_STACK.md)** — the architecture behind kbot + Claude Code. Agentic, self-improving, compound AI. Read the manifesto.
 
 ---
 

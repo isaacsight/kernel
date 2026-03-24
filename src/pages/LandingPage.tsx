@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import './LandingPage.css'
 
 const FEATURES = [
@@ -18,9 +18,163 @@ const AGENTS = [
 
 const STATS_URL = 'https://api.npmjs.org/downloads/point/last-week/@kernel.chat/kbot'
 
+/* ── Scroll Reveal Hook ── */
+function useScrollReveal() {
+  const ref = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('ka-revealed')
+          observer.unobserve(el)
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+  return ref
+}
+
+/* ── Particle Canvas ── */
+interface Particle {
+  x: number; y: number; vx: number; vy: number
+  r: number; color: string; alpha: number
+}
+
+function ParticleField() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const particles = useRef<Particle[]>([])
+  const raf = useRef(0)
+  const mouse = useRef({ x: -1000, y: -1000 })
+
+  const init = useCallback((canvas: HTMLCanvasElement) => {
+    const count = Math.min(80, Math.floor(canvas.width * canvas.height / 12000))
+    const colors = ['#6B5B95', '#28c840', '#7d6da8', '#3ad65a', '#5B8BA0']
+    particles.current = Array.from({ length: count }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.8 + 0.6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: Math.random() * 0.5 + 0.15,
+    }))
+  }, [])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1
+      const rect = canvas.parentElement!.getBoundingClientRect()
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      canvas.style.width = rect.width + 'px'
+      canvas.style.height = rect.height + 'px'
+      ctx.scale(dpr, dpr)
+      init(canvas)
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const onMouse = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mouse.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+    }
+    canvas.addEventListener('mousemove', onMouse)
+
+    const LINE_DIST = 120
+    const MOUSE_DIST = 150
+
+    const draw = () => {
+      const w = canvas.style.width ? parseFloat(canvas.style.width) : canvas.width
+      const h = canvas.style.height ? parseFloat(canvas.style.height) : canvas.height
+      ctx.clearRect(0, 0, w, h)
+
+      const pts = particles.current
+      for (const p of pts) {
+        // Mouse repulsion
+        const dx = p.x - mouse.current.x
+        const dy = p.y - mouse.current.y
+        const md = Math.sqrt(dx * dx + dy * dy)
+        if (md < MOUSE_DIST && md > 0) {
+          const force = (MOUSE_DIST - md) / MOUSE_DIST * 0.015
+          p.vx += (dx / md) * force
+          p.vy += (dy / md) * force
+        }
+
+        p.x += p.vx
+        p.y += p.vy
+
+        // Damping
+        p.vx *= 0.999
+        p.vy *= 0.999
+
+        // Wrap
+        if (p.x < 0) p.x = w
+        if (p.x > w) p.x = 0
+        if (p.y < 0) p.y = h
+        if (p.y > h) p.y = 0
+
+        // Draw particle
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fillStyle = p.color
+        ctx.globalAlpha = p.alpha
+        ctx.fill()
+      }
+
+      // Draw connections
+      ctx.globalAlpha = 1
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x
+          const dy = pts[i].y - pts[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < LINE_DIST) {
+            ctx.beginPath()
+            ctx.moveTo(pts[i].x, pts[i].y)
+            ctx.lineTo(pts[j].x, pts[j].y)
+            ctx.strokeStyle = pts[i].color
+            ctx.globalAlpha = (1 - dist / LINE_DIST) * 0.08
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+          }
+        }
+      }
+      ctx.globalAlpha = 1
+      raf.current = requestAnimationFrame(draw)
+    }
+    raf.current = requestAnimationFrame(draw)
+
+    return () => {
+      cancelAnimationFrame(raf.current)
+      window.removeEventListener('resize', resize)
+      canvas.removeEventListener('mousemove', onMouse)
+    }
+  }, [init])
+
+  return <canvas ref={canvasRef} className="ka-landing-particles" />
+}
+
 export function LandingPage() {
   const [downloads, setDownloads] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
+
+  // Scroll reveal refs for each section
+  const s1 = useScrollReveal()
+  const s2 = useScrollReveal()
+  const s3 = useScrollReveal()
+  const s4 = useScrollReveal()
+  const s5 = useScrollReveal()
+  const s6 = useScrollReveal()
 
   useEffect(() => {
     fetch(STATS_URL).then(r => r.json()).then(d => setDownloads(d.downloads)).catch(() => {})
@@ -34,24 +188,29 @@ export function LandingPage() {
 
   return (
     <div className="ka-landing">
+      {/* Particle background */}
+      <div className="ka-landing-particle-wrap">
+        <ParticleField />
+      </div>
+
       {/* Hero */}
-      <section className="ka-landing-hero">
-        <div className="ka-landing-badge">Open Source &middot; MIT Licensed</div>
-        <h1 className="ka-landing-title">kbot</h1>
-        <p className="ka-landing-subtitle">
+      <section className="ka-landing-hero ka-landing-hero--animated">
+        <div className="ka-landing-badge ka-hero-anim" style={{ animationDelay: '0.1s' }}>Open Source &middot; MIT Licensed</div>
+        <h1 className="ka-landing-title ka-hero-anim" style={{ animationDelay: '0.25s' }}>kbot</h1>
+        <p className="ka-landing-subtitle ka-hero-anim" style={{ animationDelay: '0.4s' }}>
           The AI that gets smarter every time anyone uses it.
         </p>
-        <p className="ka-landing-tagline">
+        <p className="ka-landing-tagline ka-hero-anim" style={{ animationDelay: '0.55s' }}>
           Terminal AI agent. 290 tools. 23 specialists. Runs offline.
           {downloads && <><br />{downloads.toLocaleString()} downloads this week.</>}
         </p>
 
-        <div className="ka-landing-install" onClick={copyInstall}>
+        <div className="ka-landing-install ka-hero-anim" style={{ animationDelay: '0.7s' }} onClick={copyInstall}>
           <code>$ npm install -g @kernel.chat/kbot</code>
           <span className="ka-landing-copy">{copied ? 'Copied!' : 'Copy'}</span>
         </div>
 
-        <div className="ka-landing-cta-row">
+        <div className="ka-landing-cta-row ka-hero-anim" style={{ animationDelay: '0.85s' }}>
           <a href="https://github.com/isaacsight/kernel" className="ka-landing-cta" target="_blank" rel="noopener">
             GitHub
           </a>
@@ -65,7 +224,7 @@ export function LandingPage() {
       </section>
 
       {/* Demo */}
-      <section className="ka-landing-section">
+      <section ref={s1} className="ka-landing-section ka-reveal">
         <div className="ka-landing-terminal">
           <div className="ka-landing-terminal-bar">
             <span className="ka-landing-dot" style={{ background: '#ff5f57' }} />
@@ -94,11 +253,11 @@ export function LandingPage() {
       </section>
 
       {/* What makes kbot different */}
-      <section className="ka-landing-section">
+      <section ref={s2} className="ka-landing-section ka-reveal">
         <h2 className="ka-landing-h2">What makes kbot different</h2>
         <div className="ka-landing-grid">
-          {FEATURES.map(f => (
-            <div key={f.title} className="ka-landing-card">
+          {FEATURES.map((f, i) => (
+            <div key={f.title} className="ka-landing-card ka-stagger" style={{ transitionDelay: `${i * 0.08}s` }}>
               <h3 className="ka-landing-card-title">{f.title}</h3>
               <p className="ka-landing-card-desc">{f.desc}</p>
             </div>
@@ -107,7 +266,7 @@ export function LandingPage() {
       </section>
 
       {/* Collective Intelligence */}
-      <section className="ka-landing-section">
+      <section ref={s3} className="ka-landing-section ka-reveal">
         <h2 className="ka-landing-h2">Collective Intelligence</h2>
         <p className="ka-landing-body">
           Every kbot user who opts in contributes anonymized signals — what task type,
@@ -125,21 +284,22 @@ export function LandingPage() {
       </section>
 
       {/* Agents */}
-      <section className="ka-landing-section">
+      <section ref={s4} className="ka-landing-section ka-reveal">
         <h2 className="ka-landing-h2">23 Specialist Agents</h2>
         <p className="ka-landing-body">
           kbot auto-routes your request to the right expert. Or pick one yourself.
         </p>
         <div className="ka-landing-agents">
-          {AGENTS.map(a => (
-            <span key={a} className="ka-landing-agent-tag">{a}</span>
+          {AGENTS.map((a, i) => (
+            <span key={a} className="ka-landing-agent-tag ka-stagger" style={{ transitionDelay: `${i * 0.05}s` }}>{a}</span>
           ))}
-          <span className="ka-landing-agent-tag ka-landing-dim">+11 more</span>
+          <span className="ka-landing-agent-tag ka-landing-dim ka-stagger" style={{ transitionDelay: `${AGENTS.length * 0.05}s` }}>+11 more</span>
         </div>
       </section>
 
+
       {/* Comparison */}
-      <section className="ka-landing-section">
+      <section ref={s5} className="ka-landing-section ka-reveal">
         <h2 className="ka-landing-h2">How it compares</h2>
         <div className="ka-landing-table-wrap">
           <table className="ka-landing-table">
@@ -168,7 +328,7 @@ export function LandingPage() {
       </section>
 
       {/* Quick start */}
-      <section className="ka-landing-section">
+      <section ref={s6} className="ka-landing-section ka-reveal">
         <h2 className="ka-landing-h2">Quick start</h2>
         <div className="ka-landing-terminal" style={{ maxWidth: 500 }}>
           <div className="ka-landing-terminal-bar">

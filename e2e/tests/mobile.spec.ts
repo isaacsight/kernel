@@ -4,7 +4,7 @@ test.use(devices['iPhone 14'])
 
 test('bottom tab bar renders on mobile', async ({ page }) => {
   await page.goto('/')
-  await page.waitForSelector('.ka-gate, .engine-body, .landing', { timeout: 15000 })
+  await page.waitForSelector('.ka-gate, .engine-body, .ka-landing', { timeout: 15000 })
 
   // On mobile viewport, bottom tab bar should be visible (when authenticated)
   if (await page.$('.engine-body')) {

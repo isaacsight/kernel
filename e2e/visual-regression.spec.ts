@@ -3,10 +3,10 @@ import { test, expect } from '@playwright/test'
 /** Wait for the app to finish loading (splash → landing/gate or main UI) */
 async function waitForApp(page: import('@playwright/test').Page) {
   // Wait for any app state: landing page, auth gate, main chat, or loading splash
-  await page.waitForSelector('.landing, .ka-gate, .engine-body, .ka-loading-splash', { timeout: 15000 })
+  await page.waitForSelector('.ka-landing, .ka-gate, .engine-body, .ka-loading-splash', { timeout: 15000 })
   // If loading splash is showing, wait for it to resolve
   try {
-    await page.waitForSelector('.landing, .ka-gate, .engine-body', { timeout: 10000 })
+    await page.waitForSelector('.ka-landing, .ka-gate, .engine-body', { timeout: 10000 })
   } catch {
     // App may still be on splash — that's OK for some tests
   }

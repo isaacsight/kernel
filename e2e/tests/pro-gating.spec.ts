@@ -4,7 +4,7 @@ import { mockUsageAtLimit } from '../fixtures/mock-responses'
 test.describe('Pro Gating', () => {
   test('upgrade wall exists in DOM', async ({ page }) => {
     await page.goto('/')
-    await page.waitForSelector('.ka-gate, .engine-body, .landing', { timeout: 15000 })
+    await page.waitForSelector('.ka-gate, .engine-body, .ka-landing', { timeout: 15000 })
 
     // The upgrade wall component should be renderable
     // Check that the upgrade-related CSS/components are present in the build
@@ -23,7 +23,7 @@ test.describe('Pro Gating', () => {
 
   test('pro badge shows for pro users', async ({ page }) => {
     await page.goto('/')
-    await page.waitForSelector('.ka-gate, .engine-body, .landing', { timeout: 15000 })
+    await page.waitForSelector('.ka-gate, .engine-body, .ka-landing', { timeout: 15000 })
 
     // If we're in the main UI, check for pro/max badge
     if (await page.$('.engine-body')) {
