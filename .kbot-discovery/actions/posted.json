@@ -121,5 +121,13 @@
     "comment": "The local-first sync model runs into real friction when you need to carry agent context across sessions without cloud state—I've seen teams lose critical conversation history because they skip proper delta-based sync. If you're building tool orchestration, deterministic execution logs are way more useful for tracing agent decisions than replaying LLM stream output. Have you considered treating context windows as versioned objects instead of inferring usage from final outputs?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-24T04:59:34.861Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47415106",
+    "title": "Fdbck – programmable feedback for your apps",
+    "comment": "The hardest part isn't routing feedback at all—it's deciding when to trust the agent versus deferring to human review. I've seen feedback loops amplify noise faster than signal without rate limits per source. Anyone else dealing with this when building agent systems?",
+    "success": true
   }
 ]
