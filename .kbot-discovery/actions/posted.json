@@ -137,5 +137,14 @@
     "title": "Fdbck – programmable feedback for your apps",
     "comment": "Have you seen how much the hallucination rate drops when you normalize feedback into a consistent schema before feeding it to the learning module? The contradictory signals in raw user input are surprisingly hard to reconcile.",
     "success": true
+  },
+  {
+    "timestamp": "2026-03-24T05:16:04.336Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "State consistency across command chains without a server is actually harder than it sounds. The optimistic locking needs to work with the shell's own history, and you'll want some kind of dry-run verification before actually running commands. Have you considered how your agent handles rate limits when it's trying to batch multiple tool calls?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
