@@ -111,10 +111,9 @@ function detectLanguage(root: string): string {
 }
 
 function detectFramework(root: string): string | undefined {
+  // Check Node.js frameworks via package.json
   const pkgPath = join(root, 'package.json')
-  if (!existsSync(pkgPath)) return undefined
-
-  try {
+  if (existsSync(pkgPath)) try {
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
     const deps = { ...pkg.dependencies, ...pkg.devDependencies }
 

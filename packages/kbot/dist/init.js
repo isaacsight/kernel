@@ -90,48 +90,48 @@ function detectLanguage(root) {
     return sorted.length > 0 ? langMap[sorted[0][0]] : 'Unknown';
 }
 function detectFramework(root) {
+    // Check Node.js frameworks via package.json
     const pkgPath = join(root, 'package.json');
-    if (!existsSync(pkgPath))
-        return undefined;
-    try {
-        const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
-        const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-        if (deps.next)
-            return 'Next.js';
-        if (deps.nuxt)
-            return 'Nuxt';
-        if (deps['react-dom'])
-            return 'React';
-        if (deps.vue)
-            return 'Vue';
-        if (deps.svelte || deps['@sveltejs/kit'])
-            return 'Svelte';
-        if (deps.express)
-            return 'Express';
-        if (deps.fastify)
-            return 'Fastify';
-        if (deps.hono)
-            return 'Hono';
-        if (deps.remix || deps['@remix-run/react'])
-            return 'Remix';
-        if (deps.astro)
-            return 'Astro';
-        if (deps.nest || deps['@nestjs/core'])
-            return 'NestJS';
-        if (deps.angular || deps['@angular/core'])
-            return 'Angular';
-        if (deps.gatsby)
-            return 'Gatsby';
-        if (deps.electron)
-            return 'Electron';
-        if (deps.expo)
-            return 'Expo (React Native)';
-        if (deps['react-native'])
-            return 'React Native';
-        if (deps.vite)
-            return 'Vite';
-    }
-    catch { /* ignore */ }
+    if (existsSync(pkgPath))
+        try {
+            const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+            const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+            if (deps.next)
+                return 'Next.js';
+            if (deps.nuxt)
+                return 'Nuxt';
+            if (deps['react-dom'])
+                return 'React';
+            if (deps.vue)
+                return 'Vue';
+            if (deps.svelte || deps['@sveltejs/kit'])
+                return 'Svelte';
+            if (deps.express)
+                return 'Express';
+            if (deps.fastify)
+                return 'Fastify';
+            if (deps.hono)
+                return 'Hono';
+            if (deps.remix || deps['@remix-run/react'])
+                return 'Remix';
+            if (deps.astro)
+                return 'Astro';
+            if (deps.nest || deps['@nestjs/core'])
+                return 'NestJS';
+            if (deps.angular || deps['@angular/core'])
+                return 'Angular';
+            if (deps.gatsby)
+                return 'Gatsby';
+            if (deps.electron)
+                return 'Electron';
+            if (deps.expo)
+                return 'Expo (React Native)';
+            if (deps['react-native'])
+                return 'React Native';
+            if (deps.vite)
+                return 'Vite';
+        }
+        catch { /* ignore */ }
     // Python frameworks
     if (existsSync(join(root, 'manage.py')))
         return 'Django';
