@@ -2,6 +2,7 @@ export declare const DEFAULT_MODELS: Record<string, {
     hf: string;
     description: string;
     size: string;
+    tags: string[];
 }>;
 /**
  * Recommend models that fit this machine's hardware.

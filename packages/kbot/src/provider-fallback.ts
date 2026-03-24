@@ -9,6 +9,7 @@
 // high-reliability providers. The /dashboard command reads this data.
 
 import type { ByokProvider } from './auth.js'
+import { getMachineProfile } from './machine.js'
 
 // ── Tier definitions ──
 
@@ -129,6 +130,36 @@ export function getBestProvider(tier?: string): ByokProvider {
   })
 
   return candidates[0]
+}
+
+/**
+ * Machine-aware tier preference.
+ * If GPU acceleration is available and memory is sufficient, prefer local tier
+ * for simple tasks (saves cost). Returns the recommended starting tier.
+ */
+export function getMachineAwareTier(taskComplexity: 'simple' | 'moderate' | 'complex'): Tier {
+  const profile = getMachineProfile()
+  if (!profile) return 'premium'
+
+  const hasGpu = profile.gpuAcceleration !== 'cpu-only'
+  const totalGB = profile.memory.totalBytes / (1024 ** 3)
+  const lowPressure = profile.memory.pressure !== 'high'
+
+  // Simple tasks: prefer local if hardware supports it
+  if (taskComplexity === 'simple' && hasGpu && totalGB >= 8 && lowPressure) {
+    // Check if any local provider is healthy
+    const localHealthy = TIERS.local.some(p => isHealthy(getRecord(p)))
+    if (localHealthy) return 'local'
+  }
+
+  // Moderate tasks: fast tier is good enough if available
+  if (taskComplexity === 'moderate') {
+    const fastHealthy = TIERS.fast.some(p => isHealthy(getRecord(p)))
+    if (fastHealthy) return 'fast'
+  }
+
+  // Complex tasks: always premium
+  return 'premium'
 }
 
 // ── Fallback options ──

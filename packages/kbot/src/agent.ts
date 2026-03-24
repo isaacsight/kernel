@@ -72,6 +72,7 @@ import { StrangeLoopDetector } from './strange-loops.js'
 import { IntegrationMeter } from './integrated-information.js'
 import { generateReflections, getRelevantReflections, formatReflectionsForPrompt, isUserRejection } from './reflection.js'
 import { getSynthesisContext } from './memory-synthesis.js'
+import { getActiveCorrectionsPrompt } from './synthesis-engine.js'
 import { recordTrace, shouldEvolve, evolvePrompt, getPromptAmendment, updateMutationScore } from './prompt-evolution.js'
 import chalk from 'chalk'
 
@@ -996,6 +997,7 @@ export async function runAgent(
   const memorySnippet = getMemoryPrompt()
   const learningContext = buildFullLearningContext(message, process.cwd())
   const synthesisSnippet = getSynthesisContext(8) // Three-tier memory: reflection layer insights
+  const correctionsSnippet = getActiveCorrectionsPrompt() // Closed-loop: corrections from reflections + failures
 
   // Skill library: retrieve proven tool-chain skills for similar tasks
   let skillLibrarySnippet = ''
@@ -1115,7 +1117,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
     matrixPrompt: matrixPrompt || undefined,
     contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet || undefined,
     memorySnippet: (memorySnippet || '') + reflectionSnippet || undefined,
-    learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '')) || undefined,
+    learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '') + (correctionsSnippet ? '\n\n' + correctionsSnippet : '')) || undefined,
   })
   const provider = byokProvider || 'anthropic'
   let { text: systemContext } = buildCacheablePrompt(promptSections, provider)

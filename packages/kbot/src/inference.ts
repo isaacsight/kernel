@@ -5,9 +5,10 @@
 // node-llama-cpp is an OPTIONAL dependency — kbot works fine without it.
 // All imports are dynamic to avoid compile errors when it's not installed.
 
-import { homedir } from 'node:os'
+import { homedir, totalmem } from 'node:os'
 import { join, basename } from 'node:path'
 import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'node:fs'
+import { getMachineProfile } from './machine.js'
 
 const MODELS_DIR = join(homedir(), '.kbot', 'models')
 
@@ -30,32 +31,103 @@ async function importLlama(): Promise<any> {
 
 // ── Default models for auto-download ──
 
-export const DEFAULT_MODELS: Record<string, { hf: string; description: string; size: string }> = {
-  'llama3.1-8b': {
-    hf: 'hf:mradermacher/Meta-Llama-3.1-8B-Instruct-GGUF:Q4_K_M',
-    description: 'General-purpose, great balance of speed and quality',
+export const DEFAULT_MODELS: Record<string, { hf: string; description: string; size: string; tags: string[] }> = {
+  // ── Lightweight (2-4 GB, runs on anything) ──
+  'gemma3-4b': {
+    hf: 'hf:google/gemma-3-4b-it-qat-q4_0-gguf:gemma-3-4b-it-q4_0.gguf',
+    description: 'Google Gemma 3 4B — fast and light, good for quick tasks and low-RAM machines',
+    size: '~2.5 GB',
+    tags: ['fast', 'lightweight', 'general'],
+  },
+
+  // ── Standard (4-6 GB, 8GB+ RAM) ──
+  'llama3.3-8b': {
+    hf: 'hf:mradermacher/Meta-Llama-3.3-8B-Instruct-GGUF:Q4_K_M',
+    description: 'Meta Llama 3.3 8B — best overall starter model, largest open-weight ecosystem',
     size: '~4.9 GB',
+    tags: ['general', 'recommended', 'community'],
+  },
+  'qwen3-7b': {
+    hf: 'hf:Qwen/Qwen3-8B-GGUF:qwen3-8b-q4_k_m.gguf',
+    description: 'Alibaba Qwen 3 7B — highest HumanEval score under 8B params, strong reasoning',
+    size: '~4.9 GB',
+    tags: ['coding', 'reasoning', 'recommended'],
   },
   'qwen2.5-coder-7b': {
     hf: 'hf:Qwen/Qwen2.5-Coder-7B-Instruct-GGUF:qwen2.5-coder-7b-instruct-q4_k_m.gguf',
-    description: 'Code-specialized, excellent for programming tasks',
+    description: 'Alibaba Qwen 2.5 Coder — purpose-built for code generation and editing',
     size: '~4.7 GB',
+    tags: ['coding', 'specialized'],
   },
   'deepseek-r1-8b': {
     hf: 'hf:mradermacher/DeepSeek-R1-Distill-Qwen-7B-GGUF:Q4_K_M',
-    description: 'Reasoning-specialized, chain-of-thought capable',
+    description: 'DeepSeek R1 8B — chain-of-thought reasoning, thinks before it answers',
     size: '~4.7 GB',
+    tags: ['reasoning', 'chain-of-thought'],
   },
-  'gemma3-4b': {
-    hf: 'hf:google/gemma-3-4b-it-qat-q4_0-gguf:gemma-3-4b-it-q4_0.gguf',
-    description: 'Lightweight and fast, good for quick tasks',
-    size: '~2.5 GB',
+  'mistral-7b': {
+    hf: 'hf:TheBloke/Mistral-7B-Instruct-v0.3-GGUF:mistral-7b-instruct-v0.3.Q4_K_M.gguf',
+    description: 'Mistral 7B — fast inference, good instruction following, Apache 2.0 license',
+    size: '~4.4 GB',
+    tags: ['general', 'fast', 'permissive-license'],
   },
+
+  // ── Heavy (8-16 GB, 16GB+ RAM, GPU recommended) ──
   'phi4-14b': {
     hf: 'hf:mradermacher/phi-4-GGUF:Q4_K_M',
-    description: 'Microsoft Phi-4, strong reasoning for its size',
+    description: 'Microsoft Phi-4 14B — punches above its weight on reasoning benchmarks',
     size: '~8.4 GB',
+    tags: ['reasoning', 'large'],
   },
+  'codestral-22b': {
+    hf: 'hf:mradermacher/Codestral-22B-v0.1-GGUF:Q4_K_M',
+    description: 'Mistral Codestral 22B — dedicated code model, 32K context, FIM support',
+    size: '~13 GB',
+    tags: ['coding', 'large', 'fill-in-middle'],
+  },
+  'qwen3-14b': {
+    hf: 'hf:Qwen/Qwen3-14B-GGUF:qwen3-14b-q4_k_m.gguf',
+    description: 'Alibaba Qwen 3 14B — frontier-class reasoning in a local model',
+    size: '~8.5 GB',
+    tags: ['reasoning', 'large', 'recommended'],
+  },
+
+  // ── Legacy (kept for existing users) ──
+  'llama3.1-8b': {
+    hf: 'hf:mradermacher/Meta-Llama-3.1-8B-Instruct-GGUF:Q4_K_M',
+    description: 'Meta Llama 3.1 8B — previous generation, still solid for general use',
+    size: '~4.9 GB',
+    tags: ['general', 'legacy'],
+  },
+}
+
+// ── Machine-aware model recommendations ──
+
+/**
+ * Recommend models that fit this machine's hardware.
+ * Uses MachineProfile if available, falls back to os.totalmem().
+ */
+export function getRecommendedModels(): Array<{ name: string; fits: boolean; reason: string }> {
+  const profile = getMachineProfile()
+  const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3)
+  const maxModelGB = totalGB * 0.6
+  const gpuAccel = profile?.gpuAcceleration || 'cpu-only'
+
+  return Object.entries(DEFAULT_MODELS).map(([name, info]) => {
+    const sizeGB = parseFloat(info.size.replace(/[^0-9.]/g, ''))
+    const fits = sizeGB <= maxModelGB
+
+    let reason: string
+    if (!fits) {
+      reason = `Too large: needs ~${sizeGB}GB, you have ~${maxModelGB.toFixed(0)}GB available for models`
+    } else if (gpuAccel === 'cpu-only') {
+      reason = `Fits in RAM but will run on CPU only (${sizeGB}GB model, ${gpuAccel})`
+    } else {
+      reason = `Good fit: ${sizeGB}GB model, ${gpuAccel} acceleration, ${totalGB.toFixed(0)}GB total RAM`
+    }
+
+    return { name, fits, reason }
+  })
 }
 
 // ── Lazy-loaded engine state ──
@@ -138,17 +210,26 @@ export async function loadModel(modelPath?: string): Promise<void> {
   // Unload previous model if any
   await unloadModel()
 
-  // Find model to load
+  // Find model to load — machine-aware selection
   let pathToLoad = modelPath
   if (!pathToLoad) {
-    // Auto-select: prefer largest available model
     const models = listLocalModels()
     if (models.length === 0) {
       throw new Error('No models found. Run `kbot models pull llama3.1-8b` to download one.')
     }
-    // Sort by file size descending, pick largest
+
+    // Use machine profile to pick the best model that fits in memory
+    const profile = getMachineProfile()
+    const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3)
+    // Reserve 40% for OS + apps; the rest is available for the model
+    const maxModelGB = totalGB * 0.6
+
+    // Sort by file size descending
     const sorted = models.sort((a, b) => parseFloat(b.size) - parseFloat(a.size))
-    pathToLoad = sorted[0].path
+
+    // Pick largest model that fits within memory budget
+    const fits = sorted.find(m => parseFloat(m.size) <= maxModelGB)
+    pathToLoad = fits ? fits.path : sorted[sorted.length - 1].path // fallback to smallest if nothing fits
   }
 
   _llama = await llama.getLlama()
