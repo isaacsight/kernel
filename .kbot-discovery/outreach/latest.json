@@ -1,6 +1,12 @@
 {
-  "timestamp": "2026-03-24T04:59:44.556Z",
+  "timestamp": "2026-03-24T05:14:59.032Z",
   "projects": [
+    {
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 42168,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+    },
     {
       "name": "oil-oil/wolfcha",
       "url": "https://github.com/oil-oil/wolfcha",
@@ -8,15 +14,9 @@
       "description": "AI-powered Werewolf (Mafia) social deduction game where every player is controlled by top LLMs like DeepSeek, Qwen, Gemini, and more"
     },
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1055,
-      "description": "the easiest way to run natural language-described workflows automatically"
-    },
-    {
       "name": "nexu-io/nexu",
       "url": "https://github.com/nexu-io/nexu",
-      "stars": 822,
+      "stars": 823,
       "description": "The simplest desktop client for OpenClaw 🦞 — bridge your Agent to WeChat, Feishu, Slack & Discord in one click. Works with Claude Code, Codex & any LLM. BYOK, local-first, chat from your phone 24/7."
     },
     {
@@ -38,22 +38,22 @@
       "description": "The LLM Anti-Framework"
     },
     {
-      "name": "Approaching-AI/aima-openclaw",
-      "url": "https://github.com/Approaching-AI/aima-openclaw",
-      "stars": 0,
-      "description": "Standalone OpenClaw /aima doctor plugin, runtime, and ClawHub skill."
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
-    },
-    {
       "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
       "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    },
+    {
+      "name": "Chargekar/obsidian-skill-viewer",
+      "url": "https://github.com/Chargekar/obsidian-skill-viewer",
+      "stars": 1,
+      "description": "Obsidian plugin to view .skill files (Claude/OpenClaw skill packages) as native notes"
+    },
+    {
+      "name": "Approaching-AI/aima-openclaw",
+      "url": "https://github.com/Approaching-AI/aima-openclaw",
+      "stars": 0,
+      "description": "Standalone OpenClaw /aima doctor plugin, runtime, and ClawHub skill."
     }
   ],
   "latestPaper": {
