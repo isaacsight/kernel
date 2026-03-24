@@ -56,4 +56,38 @@ export declare function getModelInfo(): {
     modelsDir: string;
     availableModels: number;
 };
+export type TaskComplexity = 'simple' | 'moderate' | 'complex' | 'frontier';
+/** Estimate task complexity from user message */
+export declare function estimateTaskComplexity(message: string): TaskComplexity;
+/** Get the best local model for a task */
+export declare function selectModelForTask(complexity: TaskComplexity): {
+    name: string;
+    reason: string;
+} | null;
+/** Configure multi-model setup based on available RAM */
+export declare function getMultiModelConfig(): {
+    canMultiModel: boolean;
+    recommended: Array<{
+        slot: string;
+        model: string;
+        size: string;
+    }>;
+    totalRAM: number;
+};
+export interface QuantOption {
+    name: string;
+    suffix: string;
+    description: string;
+    sizeMultiplier: number;
+}
+export declare const QUANT_OPTIONS: QuantOption[];
+/** Recommend quantization based on available RAM and model size */
+export declare function recommendQuantization(modelBaseGB: number): QuantOption;
+export type HardwareTier = 'basic' | 'standard' | 'pro' | 'ultra' | 'datacenter';
+export declare function detectHardwareTier(): {
+    tier: HardwareTier;
+    description: string;
+    maxModelParams: string;
+    recommendations: string[];
+};
 //# sourceMappingURL=inference.d.ts.map

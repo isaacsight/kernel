@@ -81,6 +81,38 @@ export const DEFAULT_MODELS = {
         size: '~8.5 GB',
         tags: ['reasoning', 'large', 'recommended'],
     },
+    // ── Frontier (32-64 GB, 64GB+ RAM, M4/M5 Ultra or multi-GPU) ──
+    'llama3.3-70b': {
+        hf: 'hf:mradermacher/Meta-Llama-3.3-70B-Instruct-GGUF:Q4_K_M',
+        description: 'Meta Llama 3.3 70B — near-Sonnet quality, the gold standard open-weight model',
+        size: '~40 GB',
+        tags: ['general', 'frontier', 'recommended'],
+    },
+    'qwen3-72b': {
+        hf: 'hf:Qwen/Qwen3-72B-GGUF:qwen3-72b-q4_k_m.gguf',
+        description: 'Alibaba Qwen 3 72B — frontier reasoning, matches GPT-4 on many benchmarks',
+        size: '~42 GB',
+        tags: ['reasoning', 'frontier'],
+    },
+    'deepseek-v3-70b': {
+        hf: 'hf:mradermacher/DeepSeek-V3-0324-GGUF:Q4_K_M',
+        description: 'DeepSeek V3 70B — surpasses GPT-5 on reasoning benchmarks, open-weight king',
+        size: '~40 GB',
+        tags: ['reasoning', 'frontier', 'recommended'],
+    },
+    'codestral-mamba-7b': {
+        hf: 'hf:mradermacher/codestral-mamba-7B-v0.1-GGUF:Q4_K_M',
+        description: 'Mistral Codestral Mamba 7B — linear attention, infinite context, low memory',
+        size: '~4.2 GB',
+        tags: ['coding', 'fast', 'infinite-context'],
+    },
+    // ── Ultra (100+ GB, 192-512GB RAM, M4/M5 Ultra Mac Studio) ──
+    'llama3.1-405b': {
+        hf: 'hf:mradermacher/Meta-Llama-3.1-405B-Instruct-GGUF:Q2_K',
+        description: 'Meta Llama 3.1 405B (Q2) — largest open model, needs 192GB+ RAM. Near-Claude quality.',
+        size: '~150 GB',
+        tags: ['frontier', 'ultra', 'near-claude'],
+    },
     // ── Legacy (kept for existing users) ──
     'llama3.1-8b': {
         hf: 'hf:mradermacher/Meta-Llama-3.1-8B-Instruct-GGUF:Q4_K_M',
@@ -375,6 +407,185 @@ export function getModelInfo() {
         path: _loadedModelPath,
         modelsDir: MODELS_DIR,
         availableModels: listLocalModels().length,
+    };
+}
+/** Estimate task complexity from user message */
+export function estimateTaskComplexity(message) {
+    const lower = message.toLowerCase();
+    const wordCount = message.split(/\s+/).length;
+    // Frontier — needs the biggest model
+    if (wordCount > 200)
+        return 'frontier';
+    if (/\b(refactor|architect|design|migrate|rewrite)\b.*\b(entire|whole|complete|all)\b/i.test(lower))
+        return 'frontier';
+    if (/\b(security audit|threat model|pentest|vulnerability assessment)\b/i.test(lower))
+        return 'frontier';
+    if (/\b(analyze.*codebase|review.*architecture|plan.*migration)\b/i.test(lower))
+        return 'frontier';
+    // Complex — needs 14B+
+    if (/\b(explain|why|how does|architecture|design pattern|trade-?off)\b/i.test(lower))
+        return 'complex';
+    if (/\b(debug|fix.*bug|error.*trace|stack.*trace)\b/i.test(lower) && wordCount > 50)
+        return 'complex';
+    if (/\b(write.*test|generate.*test|test.*coverage)\b/i.test(lower))
+        return 'complex';
+    if (/\b(multi.*file|across.*files|project.*wide)\b/i.test(lower))
+        return 'complex';
+    // Moderate — 7-8B handles well
+    if (/\b(fix|update|change|modify|add|remove|rename)\b/i.test(lower))
+        return 'moderate';
+    if (/\b(write|create|generate|implement)\b/i.test(lower))
+        return 'moderate';
+    // Simple — smallest model is fine
+    if (/\b(what|where|list|show|help|status|version)\b/i.test(lower))
+        return 'simple';
+    if (wordCount < 15)
+        return 'simple';
+    return 'moderate';
+}
+/** Get the best local model for a task */
+export function selectModelForTask(complexity) {
+    const models = listLocalModels();
+    if (models.length === 0)
+        return null;
+    const profile = getMachineProfile();
+    const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3);
+    const maxModelGB = totalGB * 0.6;
+    // Sort by size
+    const sorted = models.sort((a, b) => parseFloat(a.size) - parseFloat(b.size));
+    const fits = sorted.filter(m => parseFloat(m.size) <= maxModelGB);
+    if (fits.length === 0) {
+        return { name: sorted[0].name, reason: `Only model that could load (${sorted[0].size})` };
+    }
+    // Map complexity to preferred size range
+    const sizeTargets = {
+        simple: { min: 0, max: 5 }, // 4B-7B
+        moderate: { min: 3, max: 10 }, // 7B-14B
+        complex: { min: 7, max: 50 }, // 14B-70B
+        frontier: { min: 30, max: 999 }, // 70B+
+    };
+    const target = sizeTargets[complexity];
+    const bestFit = fits
+        .filter(m => {
+        const size = parseFloat(m.size);
+        return size >= target.min && size <= target.max;
+    })
+        .sort((a, b) => parseFloat(b.size) - parseFloat(a.size)); // prefer largest in range
+    if (bestFit.length > 0) {
+        return {
+            name: bestFit[0].name,
+            reason: `Best fit for ${complexity} task: ${bestFit[0].name} (${bestFit[0].size})`,
+        };
+    }
+    // Fallback: largest model that fits
+    const largest = fits[fits.length - 1];
+    return {
+        name: largest.name,
+        reason: `Largest available: ${largest.name} (${largest.size}). Ideal size for ${complexity} not downloaded.`,
+    };
+}
+const modelSlots = [
+    { purpose: 'fast', modelName: null, loaded: false },
+    { purpose: 'smart', modelName: null, loaded: false },
+];
+/** Configure multi-model setup based on available RAM */
+export function getMultiModelConfig() {
+    const profile = getMachineProfile();
+    const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3);
+    // Need at least 32GB to run two models
+    const canMultiModel = totalGB >= 32;
+    const recommended = [];
+    if (totalGB >= 192) {
+        // Ultra tier: 70B + 7B
+        recommended.push({ slot: 'smart', model: 'llama3.3-70b', size: '~40 GB' });
+        recommended.push({ slot: 'fast', model: 'gemma3-4b', size: '~2.5 GB' });
+    }
+    else if (totalGB >= 64) {
+        // Pro tier: 14B + 4B
+        recommended.push({ slot: 'smart', model: 'qwen3-14b', size: '~8.5 GB' });
+        recommended.push({ slot: 'fast', model: 'gemma3-4b', size: '~2.5 GB' });
+    }
+    else if (totalGB >= 32) {
+        // Standard tier: 8B + 4B
+        recommended.push({ slot: 'smart', model: 'qwen3-7b', size: '~4.9 GB' });
+        recommended.push({ slot: 'fast', model: 'gemma3-4b', size: '~2.5 GB' });
+    }
+    return { canMultiModel, recommended, totalRAM: Math.round(totalGB) };
+}
+export const QUANT_OPTIONS = [
+    { name: 'Q2_K', suffix: 'Q2_K', description: 'Smallest — fastest, lowest quality. For 405B on 192GB.', sizeMultiplier: 0.5 },
+    { name: 'Q3_K_M', suffix: 'Q3_K_M', description: 'Small — good balance for very large models.', sizeMultiplier: 0.75 },
+    { name: 'Q4_K_M', suffix: 'Q4_K_M', description: 'Standard — best balance of size and quality. Default.', sizeMultiplier: 1.0 },
+    { name: 'Q5_K_M', suffix: 'Q5_K_M', description: 'High — noticeably better quality, ~25% larger.', sizeMultiplier: 1.25 },
+    { name: 'Q6_K', suffix: 'Q6_K', description: 'Very high — near-original quality, ~50% larger.', sizeMultiplier: 1.5 },
+    { name: 'Q8_0', suffix: 'Q8_0', description: 'Maximum — negligible quality loss, 2x size of Q4.', sizeMultiplier: 2.0 },
+    { name: 'F16', suffix: 'f16', description: 'Full precision — original model weights. 4x size of Q4.', sizeMultiplier: 4.0 },
+];
+/** Recommend quantization based on available RAM and model size */
+export function recommendQuantization(modelBaseGB) {
+    const profile = getMachineProfile();
+    const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3);
+    const availableGB = totalGB * 0.6;
+    // Try highest quality that fits
+    for (const quant of [...QUANT_OPTIONS].reverse()) {
+        const actualSize = modelBaseGB * quant.sizeMultiplier;
+        if (actualSize <= availableGB)
+            return quant;
+    }
+    // Default to smallest
+    return QUANT_OPTIONS[0];
+}
+export function detectHardwareTier() {
+    const profile = getMachineProfile();
+    const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3);
+    const gpuAccel = profile?.gpuAcceleration || 'cpu-only';
+    const gpuCores = profile?.gpu?.[0]?.cores || 0;
+    if (totalGB >= 192) {
+        return {
+            tier: 'ultra',
+            description: `${Math.round(totalGB)}GB RAM, ${gpuAccel}, ${gpuCores} GPU cores — frontier-class`,
+            maxModelParams: '405B (Q2) / 120B (Q4) / 70B (Q8)',
+            recommendations: [
+                'kbot models pull llama3.3-70b',
+                'kbot models pull deepseek-v3-70b',
+                'kbot models pull llama3.1-405b  # needs 150GB+',
+                'Enable multi-model: fast (4B) + smart (70B) running simultaneously',
+            ],
+        };
+    }
+    if (totalGB >= 64) {
+        return {
+            tier: 'pro',
+            description: `${Math.round(totalGB)}GB RAM, ${gpuAccel}, ${gpuCores} GPU cores — pro-class`,
+            maxModelParams: '70B (Q3) / 30B (Q4) / 14B (Q8)',
+            recommendations: [
+                'kbot models pull qwen3-14b',
+                'kbot models pull codestral-22b',
+                'kbot models pull llama3.3-70b  # tight fit, Q3 quantization',
+                'Enable multi-model: fast (4B) + smart (14B)',
+            ],
+        };
+    }
+    if (totalGB >= 16) {
+        return {
+            tier: 'standard',
+            description: `${Math.round(totalGB)}GB RAM, ${gpuAccel} — standard`,
+            maxModelParams: '14B (Q4) / 8B (Q8)',
+            recommendations: [
+                'kbot models pull qwen3-7b  # recommended',
+                'kbot models pull deepseek-r1-8b  # reasoning',
+                totalGB >= 32 ? 'kbot models pull qwen3-14b  # if you close other apps' : '',
+            ].filter(Boolean),
+        };
+    }
+    return {
+        tier: 'basic',
+        description: `${Math.round(totalGB)}GB RAM, ${gpuAccel} — basic`,
+        maxModelParams: '7B (Q4) / 4B (Q8)',
+        recommendations: [
+            'kbot models pull gemma3-4b  # lightweight, fits anywhere',
+            'kbot models pull qwen3-7b  # if you have 8GB+ free',
+        ],
     };
 }
 //# sourceMappingURL=inference.js.map

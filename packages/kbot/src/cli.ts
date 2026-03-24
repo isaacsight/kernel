@@ -950,6 +950,79 @@ async function main(): Promise<void> {
       }
     })
 
+  program
+    .command('hardware')
+    .description('Detect your hardware tier and get personalized model recommendations for local AI')
+    .action(async () => {
+      const chalk = (await import('chalk')).default
+      const { detectHardwareTier, getMultiModelConfig, QUANT_OPTIONS, DEFAULT_MODELS } = await import('./inference.js')
+
+      const hw = detectHardwareTier()
+      const mm = getMultiModelConfig()
+
+      console.log()
+      console.log(`  ${chalk.bold('kbot hardware')} — your local AI capability`)
+      console.log()
+
+      const tierColors: Record<string, (s: string) => string> = {
+        basic: chalk.dim, standard: chalk.white, pro: chalk.cyan, ultra: chalk.hex('#A78BFA'), datacenter: chalk.hex('#FFD700'),
+      }
+      const colorFn = tierColors[hw.tier] || chalk.white
+
+      console.log(`  ${chalk.bold('Tier')}: ${colorFn(hw.tier.toUpperCase())}`)
+      console.log(`  ${chalk.dim(hw.description)}`)
+      console.log(`  ${chalk.bold('Max model')}: ${hw.maxModelParams}`)
+      console.log()
+
+      // Model catalog by tier
+      console.log(`  ${chalk.bold('Model Catalog')} ${chalk.dim(`(${Object.keys(DEFAULT_MODELS).length} models)`)}`)
+      console.log(`  ${chalk.dim('─'.repeat(50))}`)
+
+      const tiers: Array<{ label: string; filter: (tags: string[]) => boolean }> = [
+        { label: 'Light (2-4 GB)', filter: tags => tags.includes('lightweight') || tags.includes('fast') },
+        { label: 'Standard (4-6 GB)', filter: tags => !tags.includes('lightweight') && !tags.includes('fast') && !tags.includes('large') && !tags.includes('frontier') && !tags.includes('ultra') && !tags.includes('legacy') },
+        { label: 'Heavy (8-16 GB)', filter: tags => tags.includes('large') },
+        { label: 'Frontier (32-64 GB)', filter: tags => tags.includes('frontier') },
+        { label: 'Ultra (100+ GB)', filter: tags => tags.includes('ultra') },
+      ]
+
+      for (const tier of tiers) {
+        const models = Object.entries(DEFAULT_MODELS).filter(([, m]) => tier.filter(m.tags))
+        if (models.length === 0) continue
+        console.log(`  ${chalk.bold(tier.label)}`)
+        for (const [name, model] of models) {
+          const fits = parseFloat(model.size.replace(/[^0-9.]/g, '')) <= mm.totalRAM * 0.6
+          const icon = fits ? chalk.green('✓') : chalk.red('✗')
+          const rec = model.tags.includes('recommended') ? chalk.yellow(' ★') : ''
+          console.log(`  ${icon} ${name.padEnd(22)} ${chalk.dim(model.size.padEnd(10))} ${model.description.slice(0, 55)}${rec}`)
+        }
+        console.log()
+      }
+
+      // Multi-model config
+      if (mm.canMultiModel) {
+        console.log(`  ${chalk.bold('Multi-Model Setup')} ${chalk.dim('(run two models simultaneously)')}`)
+        console.log(`  ${chalk.dim('─'.repeat(50))}`)
+        for (const slot of mm.recommended) {
+          console.log(`  ${chalk.cyan(slot.slot.padEnd(8))} → ${slot.model} (${slot.size})`)
+        }
+        console.log()
+      }
+
+      // Recommendations
+      console.log(`  ${chalk.bold('Quick Start')}`)
+      console.log(`  ${chalk.dim('─'.repeat(50))}`)
+      for (const rec of hw.recommendations) {
+        console.log(`  ${chalk.white(rec)}`)
+      }
+      console.log()
+
+      // Quantization info
+      console.log(`  ${chalk.dim('Quantization options: Q2 (smallest) → Q4 (default) → Q8 (best) → F16 (original)')}`)
+      console.log(`  ${chalk.dim('Higher quant = better quality, more RAM. Use: kbot models pull hf:user/repo:file-Q6_K.gguf')}`)
+      console.log()
+    })
+
   const synthCmd = program
     .command('synthesis')
     .description('Closed-loop intelligence compounding — bridge self-discovery and universe discovery')
