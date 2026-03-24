@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-03-24T04:37:19.331Z",
-  "count": 27,
+  "timestamp": "2026-03-24T04:37:19.436Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -125,6 +125,27 @@
       "source": "github-issue",
       "title": "deps(deps): bump the security-updates group with 10 updates",
       "url": "https://github.com/koushik369mondal/WanderLust/pull/455",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "feat(apfree-wifidog): add bridge extension and device management tools",
+      "url": "https://github.com/openclaw/openclaw/pull/53342",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "🦞 OpenClaw 生态日报 2026-03-24",
+      "url": "https://github.com/rollysys/agents-radar/issues/136",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Plugins: add bundled HPC-AI OpenAI-compatible provider",
+      "url": "https://github.com/openclaw/openclaw/pull/53312",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
