@@ -11,6 +11,7 @@ import { execSync } from 'node:child_process';
 import chalk from 'chalk';
 import { loadConfig, isByokEnabled, getByokProvider, isLocalProvider, PROVIDERS, isOllamaRunning, KBOT_DIR, } from './auth.js';
 import { getExtendedStats } from './learning.js';
+import { getMachineProfile, probeMachine } from './machine.js';
 import { createRequire } from 'node:module';
 // ── Version (read dynamically from package.json) ──
 const __require = createRequire(import.meta.url);
@@ -318,6 +319,70 @@ function checkShell() {
     const completionStatus = completionsInstalled ? ', completions installed' : '';
     return { name: 'Shell', status: 'pass', message: `${shellName}${completionStatus}` };
 }
+// ── Hardware checks (uses machine.ts) ──
+async function checkHardware() {
+    const results = [];
+    try {
+        const profile = getMachineProfile() || await probeMachine();
+        // CPU
+        const cpuDesc = profile.cpu.chip || profile.cpu.model;
+        const coresDesc = profile.cpu.performanceCores
+            ? `${profile.cpu.cores} cores (${profile.cpu.performanceCores}P + ${profile.cpu.efficiencyCores}E)`
+            : `${profile.cpu.cores} cores`;
+        results.push({ name: 'CPU', status: 'pass', message: `${cpuDesc}, ${coresDesc}, ${profile.cpu.arch}` });
+        // GPU
+        for (const gpu of profile.gpu) {
+            const parts = [gpu.model];
+            if (gpu.cores)
+                parts.push(`${gpu.cores} cores`);
+            if (gpu.metal)
+                parts.push(`Metal ${gpu.metal}`);
+            if (gpu.cuda)
+                parts.push('CUDA');
+            if (gpu.vram)
+                parts.push(gpu.vram);
+            results.push({ name: 'GPU', status: 'pass', message: parts.join(', ') });
+        }
+        // Memory
+        const memStatus = profile.memory.pressure === 'high' ? 'warn' : 'pass';
+        results.push({
+            name: 'Memory',
+            status: memStatus,
+            message: `${profile.memory.total} total, ${profile.memory.free} free (${profile.memory.pressure} pressure)`,
+        });
+        // Disk
+        const diskStatus = profile.disk.usedPercent > 90 ? 'warn' : 'pass';
+        results.push({
+            name: 'Disk',
+            status: diskStatus,
+            message: `${profile.disk.available} available of ${profile.disk.total} (${profile.disk.usedPercent}% used)`,
+        });
+        // Display
+        if (profile.displays.length > 0) {
+            const displayMsg = profile.displays.map(d => `${d.resolution}${d.type ? ` ${d.type}` : ''}`).join(', ');
+            results.push({ name: 'Display', status: 'pass', message: displayMsg });
+        }
+        // GPU acceleration (important for local models)
+        const accelStatus = profile.gpuAcceleration === 'cpu-only' ? 'warn' : 'pass';
+        results.push({
+            name: 'GPU acceleration',
+            status: accelStatus,
+            message: `${profile.gpuAcceleration} — local models up to ${profile.recommendedModelSize}`,
+        });
+        // Battery warning if low
+        if (profile.battery.present && profile.battery.percent !== undefined && profile.battery.percent < 15 && !profile.battery.charging) {
+            results.push({
+                name: 'Battery',
+                status: 'warn',
+                message: `${profile.battery.percent}% — plug in to avoid interruption during long tasks`,
+            });
+        }
+    }
+    catch {
+        results.push({ name: 'Hardware', status: 'warn', message: 'could not probe hardware' });
+    }
+    return results;
+}
 // ── Main runner ──
 export async function runDoctor() {
     const checks = [];
@@ -327,16 +392,21 @@ export async function runDoctor() {
     checks.push(checkKbotVersion());
     checks.push(checkApiKey());
     // Async checks — run in parallel for speed
-    const [providerResult, runtimesResult] = await Promise.all([
+    const [providerResult, runtimesResult, hardwareResults] = await Promise.all([
         checkProviderReachable().catch(() => ({
             name: 'Provider reachable', status: 'warn', message: 'check failed unexpectedly',
         })),
         checkLocalRuntimes().catch(() => ({
             name: 'Local runtimes', status: 'warn', message: 'check failed unexpectedly',
         })),
+        checkHardware().catch(() => [
+            { name: 'Hardware', status: 'warn', message: 'check failed unexpectedly' },
+        ]),
     ]);
     checks.push(providerResult);
     checks.push(runtimesResult);
+    // Hardware checks
+    checks.push(...hardwareResults);
     // More synchronous checks
     checks.push(checkGit());
     checks.push(checkDiskUsage());

@@ -275,8 +275,45 @@ export function fallbackMiddleware(rules, execute) {
     };
 }
 /**
+ * Resource-aware middleware.
+ * When memory pressure is high, adds warnings and throttles heavy tools.
+ * Uses MachineProfile for live-ish awareness (cached from startup, refreshable).
+ */
+export function resourceAwareMiddleware() {
+    // Heavy tools that allocate significant memory
+    const heavyTools = new Set([
+        'browser_navigate', 'browser_screenshot', 'sandbox_execute',
+        'subagent', 'parallel_execute', 'training_run',
+        'comfyui_generate', 'browser_agent_run',
+    ]);
+    return async (ctx, next) => {
+        // Dynamic import to avoid circular deps at module load time
+        const { getMachineProfile } = await import('./machine.js');
+        const profile = getMachineProfile();
+        if (profile && profile.memory.pressure === 'high' && heavyTools.has(ctx.toolName)) {
+            // Don't block — but annotate so the agent knows the system is stressed
+            ctx.metadata.memoryWarning = `System memory pressure is HIGH (${profile.memory.free} free of ${profile.memory.total}). This tool may be slow or fail.`;
+        }
+        // Battery warning for long-running tools
+        if (profile?.battery.present && profile.battery.percent !== undefined &&
+            profile.battery.percent < 10 && !profile.battery.charging) {
+            ctx.metadata.batteryWarning = `Battery at ${profile.battery.percent}% — consider plugging in`;
+        }
+        await next();
+        // Append warnings to result if present
+        const warnings = [];
+        if (ctx.metadata.memoryWarning)
+            warnings.push(`⚠ ${ctx.metadata.memoryWarning}`);
+        if (ctx.metadata.batteryWarning)
+            warnings.push(`⚠ ${ctx.metadata.batteryWarning}`);
+        if (warnings.length > 0 && ctx.result) {
+            ctx.result = `${ctx.result}\n\n${warnings.join('\n')}`;
+        }
+    };
+}
+/**
  * Create the default pipeline with the standard middleware stack.
- * Order: telemetry? → permission → hooks → metrics → timeout → truncation → fallback? → execution
+ * Order: telemetry? → permission → hooks → resource → metrics → timeout → truncation → fallback? → execution
  */
 export function createDefaultPipeline(deps) {
     const pipeline = new ToolPipeline();
@@ -285,6 +322,7 @@ export function createDefaultPipeline(deps) {
     }
     pipeline.use(permissionMiddleware(deps.checkPermission));
     pipeline.use(hookMiddleware(deps.runPreHook, deps.runPostHook));
+    pipeline.use(resourceAwareMiddleware());
     pipeline.use(metricsMiddleware(deps.recordMetrics));
     pipeline.use(timeoutMiddleware());
     pipeline.use(truncationMiddleware());

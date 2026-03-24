@@ -3,6 +3,15 @@ export declare const DEFAULT_MODELS: Record<string, {
     description: string;
     size: string;
 }>;
+/**
+ * Recommend models that fit this machine's hardware.
+ * Uses MachineProfile if available, falls back to os.totalmem().
+ */
+export declare function getRecommendedModels(): Array<{
+    name: string;
+    fits: boolean;
+    reason: string;
+}>;
 export declare function ensureModelsDir(): string;
 export declare function listLocalModels(): Array<{
     name: string;

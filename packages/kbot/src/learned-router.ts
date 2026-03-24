@@ -17,6 +17,7 @@ import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { CREATIVE_KEYWORDS, CREATIVE_PATTERNS } from './agents/creative.js'
 import { DEVELOPER_KEYWORDS, DEVELOPER_PATTERNS } from './agents/developer.js'
+import { TRADER_KEYWORDS, TRADER_PATTERNS } from './agents/trader.js'
 import { getSkillRatingSystem } from './skill-rating.js'
 
 const ROUTER_DIR = join(homedir(), '.kbot', 'memory')
@@ -131,6 +132,7 @@ const AGENT_KEYWORDS: Record<string, string[]> = {
   ],
   creative: CREATIVE_KEYWORDS,
   developer: DEVELOPER_KEYWORDS,
+  trader: TRADER_KEYWORDS,
 }
 
 // ── Category patterns (broader than keywords) ──
@@ -145,6 +147,7 @@ const CATEGORY_PATTERNS: Array<{ pattern: RegExp; agent: string; confidence: num
   { pattern: /\b(analyze|strategy|plan|architecture|review|audit|evaluate)\b/i, agent: 'analyst', confidence: 0.6 },
   ...CREATIVE_PATTERNS,
   ...DEVELOPER_PATTERNS,
+  ...TRADER_PATTERNS.map(pattern => ({ pattern, agent: 'trader' as const, confidence: 0.75 })),
 ]
 
 /**

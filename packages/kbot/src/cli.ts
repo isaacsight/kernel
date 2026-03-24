@@ -16,6 +16,7 @@ import { Command } from 'commander'
 import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupKbotLocal, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
 import { runAndPrint, runAgent, runAgentFromCheckpoint, type AgentOptions } from './agent.js'
 import { gatherContext, type ProjectContext } from './context.js'
+import { probeMachine, formatMachineProfile, type MachineProfile } from './machine.js'
 import { registerCoreTools, startLazyToolRegistration, ensureLazyToolsLoaded, setLiteMode } from './tools/index.js'
 import { clearHistory, clearMemory, compactHistory, restoreHistory } from './memory.js'
 import {
@@ -86,6 +87,51 @@ async function main(): Promise<void> {
     .action(() => { /* default action — handled below */ })
 
   // Sub-commands
+  program
+    .command('help')
+    .description('Show help — commands, agents, support channels')
+    .action(() => {
+      console.log()
+      console.log(`  ${chalk.bold('kbot')} v${VERSION} — Open-source terminal AI agent`)
+      console.log()
+      console.log(`  ${chalk.bold('Quick Start')}`)
+      console.log(`  ${chalk.dim('─'.repeat(50))}`)
+      console.log(`  ${chalk.white('kbot')}                          Interactive REPL`)
+      console.log(`  ${chalk.white('kbot "fix the bug"')}            One-shot prompt`)
+      console.log(`  ${chalk.white('kbot --agent researcher')}       Force a specialist`)
+      console.log(`  ${chalk.white('kbot --model sonnet')}           Override model`)
+      console.log(`  ${chalk.white('kbot local')}                    $0 local AI (no API key)`)
+      console.log()
+      console.log(`  ${chalk.bold('Common Commands')}`)
+      console.log(`  ${chalk.dim('─'.repeat(50))}`)
+      console.log(`  ${chalk.white('kbot auth')}         Configure your API key (20 providers)`)
+      console.log(`  ${chalk.white('kbot doctor')}       Diagnose setup issues`)
+      console.log(`  ${chalk.white('kbot agents')}       List all 25 specialist agents`)
+      console.log(`  ${chalk.white('kbot status')}       Full dashboard — tools, agents, stats`)
+      console.log(`  ${chalk.white('kbot init')}         Set up kbot for this project (60s)`)
+      console.log(`  ${chalk.white('kbot update')}       Update to the latest version`)
+      console.log(`  ${chalk.white('kbot tutorial')}     Guided walkthrough`)
+      console.log()
+      console.log(`  ${chalk.bold('Inside the REPL')}`)
+      console.log(`  ${chalk.dim('─'.repeat(50))}`)
+      console.log(`  ${chalk.white('/help')}             Full command list`)
+      console.log(`  ${chalk.white('/agent <name>')}     Switch specialist`)
+      console.log(`  ${chalk.white('/plan <task>')}      Plan + execute complex tasks`)
+      console.log(`  ${chalk.white('/save')}             Save conversation`)
+      console.log(`  ${chalk.white('/remember <…>')}     Teach kbot something permanent`)
+      console.log()
+      console.log(`  ${chalk.bold('Need Help?')}`)
+      console.log(`  ${chalk.dim('─'.repeat(50))}`)
+      console.log(`  ${chalk.white('kbot doctor')}       ${chalk.dim('— diagnose any setup issue')}`)
+      console.log(`  ${chalk.cyan('https://discord.gg/kdMauM9abG')}  ${chalk.dim('Discord community')}`)
+      console.log(`  ${chalk.cyan('https://github.com/isaacsight/kernel/issues')}  ${chalk.dim('Bug reports')}`)
+      console.log(`  ${chalk.cyan('support@kernel.chat')}  ${chalk.dim('Email (AI-assisted replies)')}`)
+      console.log()
+      console.log(`  ${chalk.dim('25 specialist agents · 290+ tools · 20 providers · MIT licensed')}`)
+      console.log()
+      process.exit(0)
+    })
+
   program
     .command('version')
     .description('Show kbot version')
@@ -728,24 +774,87 @@ async function main(): Promise<void> {
     })
 
   program
-    .command('synthesis')
-    .description('Show what kbot knows — memory, learning data, patterns, and insights')
+    .command('insights')
+    .description('See yourself from kbot\'s perspective — task patterns, agent usage, efficiency, knowledge')
     .action(async () => {
+      const { generateInsights } = await import('./introspection.js')
+      process.stderr.write(generateInsights())
+    })
+
+  program
+    .command('reflect')
+    .description('A narrative portrait of who you are as a builder, drawn from kbot\'s learning data')
+    .action(async () => {
+      const { generateReflection } = await import('./introspection.js')
+      process.stderr.write(generateReflection())
+    })
+
+  program
+    .command('compare')
+    .description('Compare your patterns to the anonymous kbot collective — see what\'s unique about you')
+    .action(async () => {
+      const { generateComparison } = await import('./introspection.js')
+      process.stderr.write(generateComparison())
+    })
+
+  program
+    .command('machine')
+    .description('Show full system profile — hardware, GPU, OS, dev tools, AI capabilities')
+    .option('--json', 'Output as JSON')
+    .option('--refresh', 'Force fresh probe (ignore cache)')
+    .action(async (opts: { json?: boolean; refresh?: boolean }) => {
+      const { probeMachine, reprobeMachine, formatMachineProfile } = await import('./machine.js')
+      const profile = opts.refresh ? await reprobeMachine() : await probeMachine()
+
+      if (opts.json) {
+        console.log(JSON.stringify(profile, null, 2))
+      } else {
+        const chalk = (await import('chalk')).default
+        const ACCENT = process.stdout.isTTY !== false ? chalk.hex('#A78BFA') : chalk
+        process.stderr.write('\n  ' + ACCENT('kbot Machine') + '\n')
+        process.stderr.write(formatMachineProfile(profile))
+      }
+    })
+
+  const synthCmd = program
+    .command('synthesis')
+    .description('Closed-loop intelligence compounding — bridge self-discovery and universe discovery')
+
+  synthCmd
+    .command('run')
+    .description('Run full synthesis cycle (all 8 operations)')
+    .action(async () => {
+      const { synthesize, formatSynthesisResult } = await import('./synthesis-engine.js')
+      const chalk = (await import('chalk')).default
+
+      process.stderr.write('\n' + chalk.dim('Running synthesis cycle...') + '\n\n')
+      const result = synthesize()
+      console.log(formatSynthesisResult(result))
+    })
+
+  synthCmd
+    .command('status')
+    .description('Show synthesis engine state and stats')
+    .action(async () => {
+      const { getSynthesisEngineStats, buildSkillMap, formatSkillMap } = await import('./synthesis-engine.js')
       const { synthesizeMemory, getInsights, getSynthesisStats } = await import('./memory-synthesis.js')
       const { getExtendedStats } = await import('./learning.js')
       const chalk = (await import('chalk')).default
 
       process.stderr.write('\n')
 
-      // Run synthesis
-      const synthesis = synthesizeMemory()
-      const stats = getSynthesisStats()
+      // Memory synthesis (existing)
+      synthesizeMemory()
+      const memStats = getSynthesisStats()
       const learning = getExtendedStats()
       const insights = getInsights(undefined, 10)
 
-      console.log(chalk.bold('═══════════════════════════════════════════════════'))
-      console.log(chalk.bold(' KBOT SYNTHESIS'))
-      console.log(chalk.bold('═══════════════════════════════════════════════════'))
+      // Engine stats (new)
+      const engineStats = getSynthesisEngineStats()
+
+      console.log(chalk.bold('═══════════════════════════════════════════════════════'))
+      console.log(chalk.bold(' KBOT SYNTHESIS ENGINE'))
+      console.log(chalk.bold('═══════════════════════════════════════════════════════'))
 
       console.log('\n' + chalk.bold('## Learning Data'))
       console.log(`  Patterns:    ${learning.patternsCount}`)
@@ -753,10 +862,9 @@ async function main(): Promise<void> {
       console.log(`  Knowledge:   ${learning.knowledgeCount}`)
       console.log(`  Projects:    ${learning.projectsCount}`)
 
-      console.log('\n' + chalk.bold('## Synthesis'))
-      console.log(`  Last run:    ${stats.lastSynthesized ?? 'never'}`)
-      console.log(`  Insights:    ${stats.insightCount}`)
-      console.log(`  Observations: ${synthesis.observationCount ?? 0}`)
+      console.log('\n' + chalk.bold('## Memory Synthesis'))
+      console.log(`  Insights:     ${memStats.insightCount}`)
+      console.log(`  Observations: ${memStats.observationCount}`)
 
       if (insights.length > 0) {
         console.log('\n' + chalk.bold('## Top Insights'))
@@ -765,6 +873,17 @@ async function main(): Promise<void> {
           console.log(`  [${conf}%] ${insight.category ?? 'general'}: ${insight.text}`)
         }
       }
+
+      console.log('\n' + chalk.bold('## Closed-Loop Engine'))
+      console.log(`  Cycles:             ${engineStats.totalCycles}`)
+      console.log(`  Last cycle:         ${engineStats.lastCycleAt || 'never'}`)
+      console.log(`  Tools evaluated:    ${engineStats.toolsEvaluated} (${engineStats.toolsAdopted} adopted, ${engineStats.toolsRejected} rejected)`)
+      console.log(`  Agents trialed:     ${engineStats.agentsTrialed} (${engineStats.agentsKept} kept, ${engineStats.agentsDissolved} dissolved)`)
+      console.log(`  Papers analyzed:    ${engineStats.papersAnalyzed} (${engineStats.patternsImplemented} patterns)`)
+      console.log(`  Corrections active: ${engineStats.correctionsActive}`)
+      console.log(`  Reflections closed: ${engineStats.reflectionsClosed}`)
+      console.log(`  Patterns xferred:   ${engineStats.patternsTransferred}`)
+      console.log(`  Engagements fed:    ${engineStats.engagementsFedBack}`)
 
       // Discovery data if available
       const { existsSync, readFileSync } = await import('fs')
@@ -781,8 +900,97 @@ async function main(): Promise<void> {
         } catch {}
       }
 
-      console.log('\n' + chalk.bold('═══════════════════════════════════════════════════'))
+      console.log('\n' + chalk.bold('═══════════════════════════════════════════════════════'))
     })
+
+  synthCmd
+    .command('ratings')
+    .description('Display Bayesian skill map for all agents')
+    .action(async () => {
+      const { buildSkillMap, formatSkillMap } = await import('./synthesis-engine.js')
+      const map = buildSkillMap()
+      console.log('\n' + formatSkillMap(map) + '\n')
+    })
+
+  synthCmd
+    .command('corrections')
+    .description('Build and display active corrections for prompt injection')
+    .action(async () => {
+      const { buildActiveCorrections } = await import('./synthesis-engine.js')
+      const chalk = (await import('chalk')).default
+
+      const corrections = buildActiveCorrections()
+      if (corrections.length === 0) {
+        console.log(chalk.dim('\nNo corrections extracted yet. Need more reflections or explicit corrections.\n'))
+        return
+      }
+
+      console.log('\n' + chalk.bold('Active Corrections (injected into prompts):'))
+      for (const c of corrections) {
+        const icon = c.severity === 'high' ? chalk.red('!!') : c.severity === 'medium' ? chalk.yellow(' !') : chalk.dim(' -')
+        console.log(`  ${icon} ${c.rule}`)
+        console.log(chalk.dim(`     [${c.source}, ${c.occurrences}x]`))
+      }
+      console.log('')
+    })
+
+  synthCmd
+    .command('tools')
+    .description('Evaluate discovered tools against failure patterns')
+    .action(async () => {
+      const { consumeDiscoveredTools } = await import('./synthesis-engine.js')
+      const { join } = await import('path')
+      const chalk = (await import('chalk')).default
+
+      const discDir = join(process.cwd(), '.kbot-discovery')
+      const adoptions = consumeDiscoveredTools(discDir)
+      if (adoptions.length === 0) {
+        console.log(chalk.dim('\nNo new tools to evaluate.\n'))
+        return
+      }
+
+      console.log('\n' + chalk.bold(`Tool Evaluation (${adoptions.length} tools):`))
+      for (const t of adoptions) {
+        const icon = t.status === 'adopted' ? chalk.green('+') : chalk.red('×')
+        console.log(`  ${icon} ${t.name} (${t.stars}★) — ${t.reason}`)
+      }
+      console.log('')
+    })
+
+  synthCmd
+    .command('papers')
+    .description('Extract insights from discovered academic papers')
+    .action(async () => {
+      const { extractPaperInsights } = await import('./synthesis-engine.js')
+      const { join } = await import('path')
+      const chalk = (await import('chalk')).default
+
+      const discDir = join(process.cwd(), '.kbot-discovery')
+      const insights = extractPaperInsights(discDir)
+      if (insights.length === 0) {
+        console.log(chalk.dim('\nNo new papers to analyze.\n'))
+        return
+      }
+
+      console.log('\n' + chalk.bold(`Paper Insights (${insights.length} extracted):`))
+      for (const p of insights) {
+        const icon = p.status === 'proposed' ? chalk.green('→') : chalk.dim('×')
+        console.log(`  ${icon} "${p.technique}"`)
+        console.log(chalk.dim(`     From: ${p.title.slice(0, 60)}...`))
+        console.log(chalk.dim(`     Applies to: ${p.applicableTo}`))
+      }
+      console.log('')
+    })
+
+  // Default action (no subcommand) — run full cycle
+  synthCmd.action(async () => {
+    const { synthesize, formatSynthesisResult } = await import('./synthesis-engine.js')
+    const chalk = (await import('chalk')).default
+
+    process.stderr.write('\n' + chalk.dim('Running synthesis cycle...') + '\n\n')
+    const result = synthesize()
+    console.log(formatSynthesisResult(result))
+  })
 
   // ── Forge subcommands ──
   const forgeCmd = program
@@ -2535,11 +2743,11 @@ async function main(): Promise<void> {
     }
   }
 
-  // Parallel startup: register core tools (fast), gather context, check updates, cloud sync
+  // Parallel startup: register core tools (fast), gather context, probe machine, check updates, cloud sync
   const toolOpts = { computerUse: opts.computerUse }
-  const [, context, , syncMsg] = await Promise.all([
+  const [, machineProfile, , , syncMsg] = await Promise.all([
     registerCoreTools(toolOpts),
-    Promise.resolve(gatherContext()),
+    probeMachine().catch((): MachineProfile | null => null),
     // Non-blocking update check — fire and forget
     Promise.resolve().then(() => {
       try {
@@ -2549,7 +2757,10 @@ async function main(): Promise<void> {
     }),
     // Cloud sync — pull latest learning data if available
     syncOnStartup().catch(() => null),
+    // Placeholder for alignment (5-element destructure)
+    Promise.resolve(null),
   ])
+  const context = gatherContext(machineProfile ?? undefined)
   if (syncMsg) printInfo(syncMsg)
 
   // Determine if we're in one-shot or REPL mode
@@ -3387,6 +3598,24 @@ async function handleSlashCommand(
     case 'help':
       printHelp()
       break
+
+    case 'insights': {
+      const { generateInsights } = await import('./introspection.js')
+      process.stderr.write(generateInsights())
+      break
+    }
+
+    case 'reflect': {
+      const { generateReflection } = await import('./introspection.js')
+      process.stderr.write(generateReflection())
+      break
+    }
+
+    case 'compare': {
+      const { generateComparison } = await import('./introspection.js')
+      process.stderr.write(generateComparison())
+      break
+    }
 
     case 'tutorial': {
       await runTutorial(rl)

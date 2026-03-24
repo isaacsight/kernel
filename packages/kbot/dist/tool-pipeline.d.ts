@@ -93,8 +93,14 @@ export declare function fallbackMiddleware(rules: FallbackRule[], execute: (name
     error?: string;
 }>): ToolMiddleware;
 /**
+ * Resource-aware middleware.
+ * When memory pressure is high, adds warnings and throttles heavy tools.
+ * Uses MachineProfile for live-ish awareness (cached from startup, refreshable).
+ */
+export declare function resourceAwareMiddleware(): ToolMiddleware;
+/**
  * Create the default pipeline with the standard middleware stack.
- * Order: telemetry? → permission → hooks → metrics → timeout → truncation → fallback? → execution
+ * Order: telemetry? → permission → hooks → resource → metrics → timeout → truncation → fallback? → execution
  */
 export declare function createDefaultPipeline(deps: {
     checkPermission: (name: string, args: any) => Promise<boolean>;

@@ -130,7 +130,7 @@ function getRecentChanges() {
     return quickExec('git diff --stat HEAD~3 2>/dev/null', 1500);
 }
 /** Gather full project context. Called once at startup and cached. */
-export function gatherContext() {
+export function gatherContext(machine) {
     const git = getGitInfo();
     const root = git.root || process.cwd();
     const stack = detectStack(root);
@@ -145,6 +145,7 @@ export function gatherContext() {
         fileTree,
         recentChanges: git.isGitRepo ? getRecentChanges() : undefined,
         projectInstructions: loadProjectInstructions(root),
+        machine,
     };
 }
 /** Format context as a system prompt snippet */
@@ -173,6 +174,32 @@ export function formatContextForPrompt(ctx) {
     if (ctx.projectInstructions) {
         parts.push(`\n[Project Instructions (.kbot.md)]\n${ctx.projectInstructions}`);
     }
+    // Machine context — gives the agent hardware awareness
+    if (ctx.machine) {
+        parts.push(`\n${formatMachineContext(ctx.machine)}`);
+    }
     return parts.join('\n');
+}
+/** Compact machine context for system prompt injection */
+function formatMachineContext(m) {
+    const lines = ['[Machine Context]'];
+    lines.push(`Machine: ${m.model || 'Unknown'}${m.cpu.chip ? ` — ${m.cpu.chip}` : ` — ${m.cpu.model}`}`);
+    lines.push(`CPU: ${m.cpu.cores} cores${m.cpu.performanceCores ? ` (${m.cpu.performanceCores}P + ${m.cpu.efficiencyCores}E)` : ''}, ${m.cpu.arch}`);
+    const gpuSummary = m.gpu.map(g => `${g.model}${g.cores ? ` (${g.cores} cores)` : ''}`).join(', ');
+    lines.push(`GPU: ${gpuSummary}`);
+    lines.push(`Memory: ${m.memory.total} (${m.memory.free} free, ${m.memory.pressure} pressure)`);
+    lines.push(`Disk: ${m.disk.available} available of ${m.disk.total}`);
+    lines.push(`OS: ${m.os} (${m.kernel})`);
+    if (m.displays.length > 0) {
+        lines.push(`Display: ${m.displays.map(d => `${d.resolution}${d.type ? ` ${d.type}` : ''}`).join(', ')}`);
+    }
+    if (m.battery.present) {
+        lines.push(`Battery: ${m.battery.percent}% ${m.battery.charging ? 'charging' : 'discharging'}`);
+    }
+    lines.push(`GPU accel: ${m.gpuAcceleration} — local models up to ${m.recommendedModelSize}`);
+    const toolNames = m.devTools.map(t => `${t.name} ${t.version}`).join(', ');
+    if (toolNames)
+        lines.push(`Tools: ${toolNames}`);
+    return lines.join('\n');
 }
 //# sourceMappingURL=context.js.map

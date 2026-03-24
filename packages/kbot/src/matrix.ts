@@ -7,6 +7,7 @@ import chalk from 'chalk'
 import { registerAgentVisuals } from './ui.js'
 import { CREATIVE_PRESET, CREATIVE_BUILTIN } from './agents/creative.js'
 import { DEVELOPER_PRESET, DEVELOPER_BUILTIN } from './agents/developer.js'
+import { TRADER_PRESET, TRADER_BUILTIN } from './agents/trader.js'
 import { SPECIALISTS, type SpecialistDef } from './agents/specialists.js'
 import { REPLIT_AGENT } from './agents/replit.js'
 import { GAMEDEV_SYSTEM_PROMPT, GAMEDEV_PERSONALITY } from './agents/gamedev.js'
@@ -153,6 +154,10 @@ export const PRESETS: Record<string, { name: string; prompt: string }> = {
   'developer': {
     name: DEVELOPER_PRESET.name,
     prompt: DEVELOPER_PRESET.prompt,
+  },
+  'trader': {
+    name: TRADER_PRESET.name,
+    prompt: TRADER_PRESET.prompt,
   },
 }
 
@@ -421,6 +426,12 @@ const BUILTIN_AGENTS: Record<string, { name: string; icon: string; color: string
     icon: '🎯',
     color: '#FF4500',
     prompt: PLAYTESTER_SYSTEM_PROMPT,
+  },
+  trader: {
+    name: TRADER_BUILTIN.name,
+    icon: TRADER_BUILTIN.icon,
+    color: TRADER_BUILTIN.color,
+    prompt: TRADER_BUILTIN.prompt,
   },
 }
 

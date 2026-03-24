@@ -19,22 +19,18 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**Multi-channel AI agent. 290+ tools. 25 agents. 20 providers. Forges new tools at runtime. $0 local AI. MIT licensed.**
+**Multi-channel AI agent. 300+ tools. 26 agents. 20 providers. Forges new tools at runtime. $0 local AI. MIT licensed.**
 
 ---
 
-## What's New in v3.17
+## What's New in v3.26
 
 | Feature | What it means |
 |---------|---------------|
-| **`kbot init`** | 60-second project onboarding — detects stack, forges project-specific tools, writes config. First impression is now magic. |
-| **Email Agent** | `kbot email-agent start --open` — autonomous email companion via local Ollama. $0 cost. Anyone emails, gets a response. |
-| **iMessage Agent** | `kbot imessage-agent start` — free SMS/iMessage agent on macOS via Messages.app. Unlimited, $0. |
-| **Audit Badges** | `kbot audit owner/repo --share` — generates shields.io badge + shareable Gist. Badge links back to kbot. |
-| **Consultation Engine** | Domain guardrails (legal/medical/financial/tax), client intake, Stripe integration, thread management. |
-| **Gamedev Agent** | `kbot --agent gamedev` — game feel, combat design, Phaser 3, procedural generation specialist. |
-| **Playtester Agent** | `kbot --agent playtester` — brutally honest game tester. Benchmarks against Hades/Dead Cells. |
-| **Open Email** | No whitelist. All inbound emails to support@kernel.chat get a free AI companion response. |
+| **Trader Agent** | `kbot --agent trader` — crypto market analysis, paper trading, DeFi yield scanning. |
+| **Finance Tools** | 7 new tools: `market_data`, `market_overview`, `price_history`, `technical_analysis`, `paper_trade`, `market_sentiment`, `defi_yields`. |
+| **Solana Wallet** | Create or import wallets, encrypted at rest (AES-256-CBC). Jupiter DEX swaps from the terminal. |
+| **`kbot help`** | New CLI subcommand — quick reference for commands, agents, and support channels. |
 
 ---
 
@@ -49,7 +45,7 @@ Other AI agents are static — fixed tools, single providers, no memory, no lear
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, and 13 more. Switch anytime.
 - **Runs fully offline** — Embedded llama.cpp runs GGUF models directly. No Ollama needed. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster and smarter over time.
-- **25 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Auto-routed with probabilistic confidence.
+- **26 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Auto-routed with probabilistic confidence.
 - **Crash-proof** — Checkpoints after every tool call. Resume interrupted sessions automatically.
 - **Use as a library** — Clean SDK with typed exports. Build your own tools on top of kbot.
 - **Works in your IDE** — Built-in MCP server for VS Code, Cursor, Zed, Neovim. ACP for JetBrains.
@@ -132,7 +128,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 290+ tools
+// List all 300+ tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -154,7 +150,7 @@ Auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
 | **Extended** | aesthete, guardian, curator, strategist |
 | **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter |
 | **System** | immune, forge |
-| **Presets** | hacker, operator, dreamer, creative, developer, gamedev, playtester |
+| **Presets** | hacker, operator, dreamer, creative, developer, gamedev, playtester, trader |
 
 ```bash
 kbot --agent researcher "what papers cite Friston's Free Energy Principle?"
@@ -162,7 +158,7 @@ kbot --agent guardian "review src/auth.ts for security issues"
 kbot --agent coder "refactor this into smaller functions"
 ```
 
-## 290+ Tools
+## 300+ Tools
 
 | Category | Examples |
 |----------|---------|
@@ -188,6 +184,7 @@ kbot --agent coder "refactor this into smaller functions"
 | **LSP** | goto definition, find references, hover, rename, diagnostics, symbols |
 | **Memory** | persistent save, search, update, forget — survives across sessions |
 | **IDE** | MCP server, ACP server, LSP bridge |
+| **Finance** | market data, price history, technical analysis, paper trade, market sentiment, DeFi yields, Solana wallet |
 | **System** | vitals, immune audit, cost tracking, fallback status |
 | **Meta** | subagents, worktrees, planner, sessions, checkpoints, self-eval |
 
@@ -322,6 +319,7 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim. Exposes file ops
 | `kbot models` | List, pull, remove, catalog local models |
 | `kbot forge search <q>` | Search the Forge Registry for community tools |
 | `kbot ide mcp` | Start MCP server for IDEs |
+| `kbot help` | Quick reference — commands, agents, support channels |
 | `kbot doctor` | 10-point health check |
 | `/agent <name>` | Switch specialist |
 | `/plan <task>` | Autonomous multi-step execution |
@@ -373,14 +371,27 @@ Use kbot's brain without the full agent:
 
 ## Security
 
-- API keys encrypted at rest (AES-256-CBC)
-- Destructive operations require confirmation
-- Shell commands sandboxed with blocklist
-- Tool execution timeout (5 min) with middleware pipeline
-- Config files restricted to owner (chmod 600)
-- Session checkpoints stored locally (~/.kbot/checkpoints/)
-- Immune agent self-audits for drift and anomalies
-- Telemetry is local-only — never sent externally
+- **AES-256-CBC encrypted keys at rest** — API keys and wallet private keys never stored in plaintext
+- **Permission system** — destructive operations (file delete, git push, wallet sends) require explicit confirmation
+- **Tool execution timeouts** — 5-minute cap with middleware pipeline; no runaway processes
+- **Immune agent self-audit** — continuous drift detection, anomaly scoring, regression checks
+- **Wallet transaction limits** — configurable spend caps and confirmation gates for on-chain operations
+- **Shell sandboxing** — blocklist prevents dangerous commands; config files restricted to owner (chmod 600)
+- **Local-only telemetry** — session checkpoints and metrics never leave your machine
+- **Open source (MIT)** — audit the code yourself at [github.com/isaacsight/kernel](https://github.com/isaacsight/kernel)
+
+## Need Help?
+
+| Channel | What it's for |
+|---------|---------------|
+| `kbot help` | Quick reference — commands, agents, support links |
+| `kbot doctor` | Diagnose setup issues (Node version, API keys, models) |
+| `kbot tutorial` | Guided walkthrough — build something step by step |
+| [Discord](https://discord.gg/kdMauM9abG) | Community chat, questions, show & tell |
+| [GitHub Issues](https://github.com/isaacsight/kernel/issues) | Bug reports & feature requests |
+| [support@kernel.chat](mailto:support@kernel.chat) | Email support (AI-assisted replies) |
+
+Inside the REPL, type `/help` for the full command list.
 
 ## Contributing
 

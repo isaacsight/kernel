@@ -1,7 +1,7 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "3.23.0",
-  "description": "The only AI agent that builds its own tools. Multi-channel cognitive engine: email agent, iMessage agent, consultation pipeline, 25 specialist agents, 290+ tools, 20 providers. Runtime tool forging, Forge Registry, autopoietic health, immune self-audit. Cost-aware model routing, fallback chains, Bayesian skill routing. Embedded llama.cpp, MCP server, SDK. MIT.",
+  "version": "3.26.0",
+  "description": "The only AI agent that builds its own tools. Machine-aware situated intelligence: full hardware profiling (CPU, GPU, RAM, display, battery, dev tools), resource-adaptive tool pipeline, memory-pressure throttling, GPU-accelerated model routing. Multi-channel cognitive engine: email agent, iMessage agent, consultation pipeline, Trader agent with paper trading, 26 specialist agents, 300+ tools, 20 providers. Synthesis Engine: closed-loop intelligence compounding. Runtime tool forging, Forge Registry, autopoietic health, immune self-audit. Cost-aware model routing, fallback chains, Bayesian skill routing. Embedded llama.cpp, MCP server, SDK. MIT.",
   "type": "module",
   "repository": {
     "type": "git",
@@ -125,7 +125,15 @@
     "vfx",
     "shader",
     "open-source",
-    "pair-programming"
+    "pair-programming",
+    "hardware-aware",
+    "machine-profiler",
+    "system-profiler",
+    "situated-agent",
+    "resource-aware",
+    "gpu-detection",
+    "metal",
+    "apple-silicon"
   ],
   "author": "kernel.chat group",
   "license": "MIT",

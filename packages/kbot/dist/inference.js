@@ -4,9 +4,10 @@
 //
 // node-llama-cpp is an OPTIONAL dependency — kbot works fine without it.
 // All imports are dynamic to avoid compile errors when it's not installed.
-import { homedir } from 'node:os';
+import { homedir, totalmem } from 'node:os';
 import { join, basename } from 'node:path';
 import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'node:fs';
+import { getMachineProfile } from './machine.js';
 const MODELS_DIR = join(homedir(), '.kbot', 'models');
 // ── Dynamic import helper (avoids TS errors for optional dep) ──
 // Use a variable to prevent TypeScript from resolving the optional module at compile time
@@ -49,6 +50,32 @@ export const DEFAULT_MODELS = {
         size: '~8.4 GB',
     },
 };
+// ── Machine-aware model recommendations ──
+/**
+ * Recommend models that fit this machine's hardware.
+ * Uses MachineProfile if available, falls back to os.totalmem().
+ */
+export function getRecommendedModels() {
+    const profile = getMachineProfile();
+    const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3);
+    const maxModelGB = totalGB * 0.6;
+    const gpuAccel = profile?.gpuAcceleration || 'cpu-only';
+    return Object.entries(DEFAULT_MODELS).map(([name, info]) => {
+        const sizeGB = parseFloat(info.size.replace(/[^0-9.]/g, ''));
+        const fits = sizeGB <= maxModelGB;
+        let reason;
+        if (!fits) {
+            reason = `Too large: needs ~${sizeGB}GB, you have ~${maxModelGB.toFixed(0)}GB available for models`;
+        }
+        else if (gpuAccel === 'cpu-only') {
+            reason = `Fits in RAM but will run on CPU only (${sizeGB}GB model, ${gpuAccel})`;
+        }
+        else {
+            reason = `Good fit: ${sizeGB}GB model, ${gpuAccel} acceleration, ${totalGB.toFixed(0)}GB total RAM`;
+        }
+        return { name, fits, reason };
+    });
+}
 // ── Lazy-loaded engine state ──
 let _llama = null;
 let _model = null;
@@ -113,17 +140,23 @@ export async function loadModel(modelPath) {
         return;
     // Unload previous model if any
     await unloadModel();
-    // Find model to load
+    // Find model to load — machine-aware selection
     let pathToLoad = modelPath;
     if (!pathToLoad) {
-        // Auto-select: prefer largest available model
         const models = listLocalModels();
         if (models.length === 0) {
             throw new Error('No models found. Run `kbot models pull llama3.1-8b` to download one.');
         }
-        // Sort by file size descending, pick largest
+        // Use machine profile to pick the best model that fits in memory
+        const profile = getMachineProfile();
+        const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3);
+        // Reserve 40% for OS + apps; the rest is available for the model
+        const maxModelGB = totalGB * 0.6;
+        // Sort by file size descending
         const sorted = models.sort((a, b) => parseFloat(b.size) - parseFloat(a.size));
-        pathToLoad = sorted[0].path;
+        // Pick largest model that fits within memory budget
+        const fits = sorted.find(m => parseFloat(m.size) <= maxModelGB);
+        pathToLoad = fits ? fits.path : sorted[sorted.length - 1].path; // fallback to smallest if nothing fits
     }
     _llama = await llama.getLlama();
     _model = await _llama.loadModel({ modelPath: pathToLoad });

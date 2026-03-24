@@ -22,6 +22,12 @@ export declare function recordFailure(provider: ByokProvider, _error?: Error): v
 export declare function getProviderHealth(): ProviderHealth[];
 /** Get the healthiest provider in a tier, preferring lowest latency */
 export declare function getBestProvider(tier?: string): ByokProvider;
+/**
+ * Machine-aware tier preference.
+ * If GPU acceleration is available and memory is sufficient, prefer local tier
+ * for simple tasks (saves cost). Returns the recommended starting tier.
+ */
+export declare function getMachineAwareTier(taskComplexity: 'simple' | 'moderate' | 'complex'): Tier;
 export interface FallbackOptions {
     /** Max retries on same provider (default: 3) */
     maxRetries?: number;

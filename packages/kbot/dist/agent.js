@@ -47,6 +47,7 @@ import { StrangeLoopDetector } from './strange-loops.js';
 import { IntegrationMeter } from './integrated-information.js';
 import { generateReflections, getRelevantReflections, formatReflectionsForPrompt, isUserRejection } from './reflection.js';
 import { getSynthesisContext } from './memory-synthesis.js';
+import { getActiveCorrectionsPrompt } from './synthesis-engine.js';
 import { recordTrace, shouldEvolve, evolvePrompt, getPromptAmendment, updateMutationScore } from './prompt-evolution.js';
 const MAX_TOOL_LOOPS = 75;
 /** Maximum cumulative cost (USD) before auto-stopping tool loops */
@@ -814,6 +815,7 @@ export async function runAgent(message, options = {}) {
     const memorySnippet = getMemoryPrompt();
     const learningContext = buildFullLearningContext(message, process.cwd());
     const synthesisSnippet = getSynthesisContext(8); // Three-tier memory: reflection layer insights
+    const correctionsSnippet = getActiveCorrectionsPrompt(); // Closed-loop: corrections from reflections + failures
     // Skill library: retrieve proven tool-chain skills for similar tasks
     let skillLibrarySnippet = '';
     if (!casual) {
@@ -931,7 +933,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
         matrixPrompt: matrixPrompt || undefined,
         contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet || undefined,
         memorySnippet: (memorySnippet || '') + reflectionSnippet || undefined,
-        learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '')) || undefined,
+        learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '') + (correctionsSnippet ? '\n\n' + correctionsSnippet : '')) || undefined,
     });
     const provider = byokProvider || 'anthropic';
     let { text: systemContext } = buildCacheablePrompt(promptSections, provider);
@@ -1060,6 +1062,17 @@ Always quote file paths that contain spaces. Never reference internal system nam
         const useSpinner = !options.stream;
         const spinnerHandle = useSpinner ? ui.onSpinnerStart(i === 0 ? 'Thinking...' : `Running tools (${toolCallCount})...`) : null;
         try {
+            // ── Privacy Router: check before any inference ──
+            try {
+                const { routeForPrivacy, logRoutingDecision } = await import('./privacy-router.js');
+                const privacyDecision = routeForPrivacy(loopMessages.map(m => typeof m.content === 'string' ? m.content : '').join(' '), undefined, { forceLocal: options.model === 'local' });
+                logRoutingDecision(privacyDecision, originalMessage);
+                // If privacy requires local and current provider is cloud, switch to Ollama
+                if (privacyDecision.target === 'local' && privacyDecision.sensitiveDetected && !isLocalProvider(provider)) {
+                    ui.onInfo(`Privacy: sensitive content detected (${privacyDecision.matchedPatterns.join(', ')}) — routing to local model`);
+                }
+            }
+            catch { /* privacy router is non-critical */ }
             // ── BYOK: Call provider directly with tool-use support ──
             // If user passed an explicit model name (not a speed alias), use it directly
             const isExplicitModel = options.model && !['auto', 'haiku', 'fast', 'sonnet', 'default'].includes(options.model);
@@ -1435,6 +1448,28 @@ Always quote file paths that contain spaces. Never reference internal system nam
                 toolCallCount++;
                 toolSequenceLog.push(call.name);
                 toolSequenceWithArgs.push({ name: call.name, args: call.arguments || {} });
+                // ── Sandbox Policy: check tool access before execution ──
+                try {
+                    const { checkToolAccess, checkPathAccess } = await import('./sandbox-policy.js');
+                    const agentId = options.agent || 'kernel';
+                    const toolCheck = checkToolAccess(agentId, call.name);
+                    if (!toolCheck.allowed) {
+                        ui.onWarning(`Sandbox: ${toolCheck.reason}`);
+                        results.push({ tool_call_id: call.id, result: `Blocked by sandbox policy: ${toolCheck.reason}`, error: true });
+                        continue;
+                    }
+                    // Check file path access
+                    const filePath = call.arguments?.file_path || call.arguments?.path;
+                    if (typeof filePath === 'string') {
+                        const pathCheck = checkPathAccess(agentId, filePath);
+                        if (!pathCheck.allowed) {
+                            ui.onWarning(`Sandbox: ${pathCheck.reason}`);
+                            results.push({ tool_call_id: call.id, result: `Blocked by sandbox policy: ${pathCheck.reason}`, error: true });
+                            continue;
+                        }
+                    }
+                }
+                catch { /* sandbox is non-critical */ }
                 ui.onToolCallStart(call.name, call.arguments || {});
                 // Execute through the middleware pipeline
                 const ctx = {

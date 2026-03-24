@@ -335,6 +335,11 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './social.js',          registerFn: 'registerSocialTools' },
   { path: './forge.js',           registerFn: 'registerForgeTools' },
   { path: '../mcp-apps.js',       registerFn: 'registerMcpAppTools' },
+  { path: './machine-tools.js',  registerFn: 'registerMachineTools' },
+  { path: './finance.js',        registerFn: 'registerFinanceTools' },
+  { path: './wallet.js',         registerFn: 'registerWalletTools' },
+  { path: './stocks.js',         registerFn: 'registerStockTools' },
+  { path: './sentiment.js',      registerFn: 'registerSentimentTools' },
 ]
 
 /** Track whether lazy tools have been registered */
