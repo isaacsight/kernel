@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T04:37:21.063Z",
+  "timestamp": "2026-03-24T04:59:43.446Z",
   "count": 30,
   "opportunities": [
     {
@@ -81,29 +81,29 @@
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN: AI productivity gains – do you fire devs or build better products?",
-      "url": "https://news.ycombinator.com/item?id=47477877",
+      "title": "Thinking Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning",
+      "url": "https://news.ycombinator.com/item?id=47474654",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "github-issue",
+      "title": "[Auto-QA] Dashboard components missing health indicators",
+      "url": "https://github.com/kubestellar/console/issues/3357",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "[Auto-QA] Code may assume single-cluster deployment",
+      "url": "https://github.com/kubestellar/console/issues/3355",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Bring coding agent guardrails to OpenCode",
       "url": "https://github.com/neuradex/llm-rail/issues/3",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[GA4-Error] 5 runtime errors on /insights (last 2h)",
-      "url": "https://github.com/kubestellar/console/issues/3320",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "MCP server: use Specter as a tool from Claude Code",
-      "url": "https://github.com/ghostwright/specter/issues/4",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "feat(apfree-wifidog): add bridge extension and device management tools",
-      "url": "https://github.com/openclaw/openclaw/pull/53342",
+      "title": "fix(slack): improve interactive reply parity",
+      "url": "https://github.com/openclaw/openclaw/pull/53389",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw 生态日报 2026-03-24",
-      "url": "https://github.com/rollysys/agents-radar/issues/136",
+      "title": "Qc fixes 20260322",
+      "url": "https://github.com/caumangratani/Bizclaw/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Plugins: add bundled HPC-AI OpenAI-compatible provider",
-      "url": "https://github.com/openclaw/openclaw/pull/53312",
+      "title": "fix(docker): avoid setup CLI namespace loop before gateway startup",
+      "url": "https://github.com/openclaw/openclaw/pull/53385",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
