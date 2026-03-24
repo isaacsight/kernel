@@ -797,6 +797,112 @@ async function main(): Promise<void> {
       process.stderr.write(generateComparison())
     })
 
+  // ── Self-Defense ──
+  const defenseCmd = program
+    .command('defense')
+    .description('Self-defense systems — memory integrity, injection detection, anomaly scanning')
+
+  defenseCmd
+    .command('audit')
+    .description('Full defense audit — memory integrity, anomalies, incidents, recommendations')
+    .action(async () => {
+      const { runDefenseAudit } = await import('./self-defense.js')
+      const chalk = (await import('chalk')).default
+      const audit = runDefenseAudit()
+
+      console.log()
+      console.log(`  ${chalk.bold('kbot defense audit')}`)
+      console.log()
+
+      // Overall status
+      const statusColor = audit.overallStatus === 'secure' ? chalk.green : audit.overallStatus === 'warning' ? chalk.yellow : chalk.red
+      console.log(`  ${chalk.bold('Status')}: ${statusColor(audit.overallStatus.toUpperCase())}`)
+      console.log()
+
+      // Memory integrity
+      const mi = audit.memoryIntegrity
+      console.log(`  ${chalk.bold('Memory Integrity')}`)
+      console.log(`  ${chalk.dim('─'.repeat(40))}`)
+      console.log(`  Files: ${mi.total}  OK: ${chalk.green(String(mi.ok))}  Tampered: ${mi.tampered ? chalk.red(String(mi.tampered)) : '0'}  New: ${mi.new}  Missing: ${mi.missing}`)
+      console.log()
+
+      // Anomalies
+      if (audit.anomalies.anomalies.length > 0) {
+        console.log(`  ${chalk.bold('Anomalies')} (${audit.anomalies.anomalies.length})`)
+        console.log(`  ${chalk.dim('─'.repeat(40))}`)
+        for (const a of audit.anomalies.anomalies) {
+          const c = a.severity === 'critical' ? chalk.red : a.severity === 'high' ? chalk.yellow : chalk.dim
+          console.log(`  ${c(`[${a.severity.toUpperCase()}]`)} ${a.description}`)
+        }
+        console.log()
+      }
+
+      // Incidents
+      if (audit.recentIncidents.length > 0) {
+        console.log(`  ${chalk.bold('Recent Incidents')} (${audit.recentIncidents.length})`)
+        console.log(`  ${chalk.dim('─'.repeat(40))}`)
+        for (const i of audit.recentIncidents.slice(-5)) {
+          console.log(`  ${i.timestamp.split('T')[0]} ${chalk.dim(i.type)} — ${i.description.slice(0, 60)}`)
+        }
+        console.log()
+      }
+
+      // Recommendations
+      if (audit.recommendations.length > 0) {
+        console.log(`  ${chalk.bold('Recommendations')}`)
+        console.log(`  ${chalk.dim('─'.repeat(40))}`)
+        for (const r of audit.recommendations) {
+          console.log(`  → ${r}`)
+        }
+        console.log()
+      }
+    })
+
+  defenseCmd
+    .command('sign')
+    .description('Sign all memory files — establishes integrity baseline')
+    .action(async () => {
+      const { signMemoryFiles } = await import('./self-defense.js')
+      signMemoryFiles()
+      printSuccess('Memory files signed. Integrity baseline established.')
+    })
+
+  defenseCmd
+    .command('verify')
+    .description('Verify memory file integrity — detect tampering')
+    .action(async () => {
+      const { verifyMemoryIntegrity } = await import('./self-defense.js')
+      const chalk = (await import('chalk')).default
+      const results = verifyMemoryIntegrity()
+      if (results.length === 0) {
+        printInfo('No memory files to verify. Run `kbot defense sign` first.')
+        return
+      }
+      for (const r of results) {
+        const icon = r.status === 'ok' ? chalk.green('✓') : r.status === 'tampered' ? chalk.red('✗ TAMPERED') : r.status === 'new' ? chalk.yellow('? new') : chalk.red('! missing')
+        console.log(`  ${icon}  ${r.file}`)
+      }
+      const tampered = results.filter(r => r.status === 'tampered')
+      if (tampered.length > 0) {
+        printError(`${tampered.length} file(s) tampered with outside of kbot!`)
+      } else {
+        printSuccess('All memory files intact.')
+      }
+    })
+
+  defenseCmd
+    .command('incidents')
+    .description('Show recent security incidents')
+    .action(async () => {
+      const { getIncidents } = await import('./self-defense.js')
+      const incidents = getIncidents(20)
+      if (incidents.length === 0) { printInfo('No security incidents recorded.'); return }
+      printInfo(`${incidents.length} incident(s):`)
+      for (const i of incidents) {
+        printInfo(`  ${i.timestamp.split('T')[0]} [${i.severity}] ${i.type} — ${i.description.slice(0, 70)} (${i.action})`)
+      }
+    })
+
   program
     .command('machine')
     .description('Show full system profile — hardware, GPU, OS, dev tools, AI capabilities')
