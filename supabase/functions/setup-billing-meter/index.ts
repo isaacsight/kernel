@@ -11,6 +11,13 @@ serve(async (req: Request) => {
     return new Response('ok', { headers: { 'Access-Control-Allow-Origin': '*' } })
   }
 
+  // Auth: service role key required — this is an admin-only endpoint
+  const authHeader = req.headers.get('Authorization')
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  if (!authHeader || !serviceKey || authHeader !== `Bearer ${serviceKey}`) {
+    return new Response(JSON.stringify({ error: 'Unauthorized — service role key required' }), { status: 401 })
+  }
+
   const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
   if (!stripeKey) {
     return new Response(JSON.stringify({ error: 'No STRIPE_SECRET_KEY' }), { status: 500 })

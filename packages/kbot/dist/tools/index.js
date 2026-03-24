@@ -255,6 +255,7 @@ const LAZY_MODULE_IMPORTS = [
     { path: './wallet.js', registerFn: 'registerWalletTools' },
     { path: './stocks.js', registerFn: 'registerStockTools' },
     { path: './sentiment.js', registerFn: 'registerSentimentTools' },
+    { path: './security.js', registerFn: 'registerSecurityTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;

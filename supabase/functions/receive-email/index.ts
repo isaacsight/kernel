@@ -28,16 +28,38 @@ serve(async (req: Request) => {
       const svixSignature = req.headers.get('svix-signature')
 
       if (!svixId || !svixTimestamp || !svixSignature) {
-        console.warn('Missing svix headers — proceeding without verification')
-        // Don't block — Resend webhooks may not always include svix headers
+        console.error('BLOCKED: Missing svix headers — webhook signature required')
+        return new Response(JSON.stringify({ error: 'Missing webhook signature' }), { status: 401, headers: HEADERS })
       }
 
       // Verify timestamp is within 5 minutes to prevent replay attacks
       const now = Math.floor(Date.now() / 1000)
-      const ts = parseInt(svixTimestamp, 10)
-      if (svixTimestamp && Math.abs(now - ts) > 300) {
-        console.warn('Webhook timestamp old — proceeding anyway')
+      const ts = parseInt(svixTimestamp!, 10)
+      if (Math.abs(now - ts) > 300) {
+        console.error('BLOCKED: Webhook timestamp stale — possible replay attack')
+        return new Response(JSON.stringify({ error: 'Webhook timestamp expired' }), { status: 401, headers: HEADERS })
       }
+
+      // Verify HMAC-SHA256 signature
+      const signedContent = `${svixId}.${svixTimestamp}.${await req.clone().text()}`
+      // Svix secret is base64-encoded with "whsec_" prefix
+      const secretBytes = Uint8Array.from(atob(webhookSecret.replace('whsec_', '')), c => c.charCodeAt(0))
+      const key = await crypto.subtle.importKey('raw', secretBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+      const signatureBytes = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedContent))
+      const expectedSig = btoa(String.fromCharCode(...new Uint8Array(signatureBytes)))
+
+      // Svix sends multiple signatures separated by space: "v1,<base64> v1,<base64>"
+      const signatures = svixSignature!.split(' ').map(s => s.replace('v1,', ''))
+      const isValid = signatures.some(sig => sig === expectedSig)
+
+      if (!isValid) {
+        console.error('BLOCKED: Invalid webhook signature — request is forged')
+        return new Response(JSON.stringify({ error: 'Invalid webhook signature' }), { status: 401, headers: HEADERS })
+      }
+
+      console.log('Webhook signature verified ✓')
+    } else {
+      console.warn('RESEND_WEBHOOK_SECRET not set — webhook signature verification disabled')
     }
 
     // --- Parse inbound email payload ---
@@ -52,7 +74,7 @@ serve(async (req: Request) => {
     }
 
     const data = payload.data || {}
-    console.log('Inbound payload data keys:', JSON.stringify(Object.keys(data)))
+    console.log('Inbound payload FULL:', JSON.stringify(data).slice(0, 2000))
 
     const fromEmail = (data.from?.replace(/.*<([^>]+)>.*/, '$1') || data.from || 'unknown').toLowerCase().trim()
     const fromName = data.from?.replace(/<[^>]+>/, '').trim() || null
@@ -62,27 +84,31 @@ serve(async (req: Request) => {
 
     console.log('Inbound email from:', fromEmail, 'subject:', subject, 'emailId:', emailId, 'attachments:', attachments.length)
 
-    // Resend webhooks may not include body — fetch full email via API if body is empty
+    // Resend webhooks do NOT include the email body — only metadata.
+    // Must call the Received Emails API to get body content.
     let bodyText = data.text || data.body || data.plain_text || ''
     let bodyHtml = data.html || data.html_body || ''
     let attachmentInfo = ''
 
     if ((!bodyText && !bodyHtml) && emailId) {
-      console.log('Body empty — fetching full email via Resend API...')
+      console.log('Body empty — fetching full email via Resend Received Emails API...')
       const resendKey = Deno.env.get('RESEND_API_KEY')
       if (resendKey) {
         try {
-          const emailRes = await fetch(`https://api.resend.com/emails/${emailId}`, {
+          // Use the Received Emails API (not the sent emails endpoint)
+          const emailRes = await fetch(`https://api.resend.com/emails/receiving/${emailId}`, {
             headers: { 'Authorization': `Bearer ${resendKey}` },
           })
           if (emailRes.ok) {
             const fullEmail = await emailRes.json()
             bodyText = fullEmail.text || ''
             bodyHtml = fullEmail.html || ''
-            console.log('Fetched full email — text:', bodyText.length, 'html:', bodyHtml.length)
+            console.log('Fetched received email — text:', bodyText.length, 'html:', bodyHtml.length)
+          } else {
+            console.error('Received email API error:', emailRes.status, await emailRes.text())
           }
         } catch (fetchErr) {
-          console.error('Failed to fetch full email:', fetchErr)
+          console.error('Failed to fetch received email:', fetchErr)
         }
       }
     }
@@ -224,11 +250,10 @@ serve(async (req: Request) => {
       }
     }
 
-    // --- 3. Route ALL emails to local agent ---
-    // No whitelist. Every inbound email gets stored in contact_messages (done above).
-    // The local email agent (kbot email-agent start --open) polls contact_messages,
-    // generates responses via Ollama (Qwen 32B, $0 cost), and sends replies via Resend.
-    // Cost: $0 — all AI runs locally on Apple Silicon.
+    // --- 3. Route to local agent ---
+    // Emails are stored in contact_messages (done above).
+    // The local email agent (tools/email-agent-local.ts) polls contact_messages,
+    // generates responses via Ollama (Qwen, $0 cost), and sends replies via Resend.
     if (fromEmail !== 'unknown') {
       console.log(`Email from ${fromEmail} stored — local agent will respond via Ollama ($0)`)
     }
