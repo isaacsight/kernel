@@ -2523,6 +2523,24 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('sessions')
+    .description('List all saved sessions from the command line')
+    .option('--json', 'Output as JSON for scripting')
+    .action(async (opts: { json?: boolean }) => {
+      const sessions = listSessions()
+      if (sessions.length === 0) {
+        printInfo('No saved sessions. Use /save in the REPL to save a conversation.')
+        return
+      }
+      if (opts.json) {
+        console.log(JSON.stringify(sessions, null, 2))
+      } else {
+        printInfo(`${sessions.length} saved session(s)`)
+        console.log(formatSessionList(sessions))
+      }
+    })
+
+  program
     .command('export <session>')
     .description('Export a saved session to markdown, JSON, or HTML')
     .option('-f, --format <format>', 'Output format: md, json, html', 'md')
