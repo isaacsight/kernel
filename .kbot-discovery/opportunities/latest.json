@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T04:59:44.738Z",
+  "timestamp": "2026-03-24T10:59:59.336Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,7 +67,14 @@
     },
     {
       "source": "hn-comment",
-      "title": "I Created My First AI-Assisted Pull Request and I Feel Like a Fraud",
+      "title": "I created my first AI-assisted pull request",
+      "url": "https://news.ycombinator.com/item?id=47499304",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "I created my first AI-assisted pull request",
       "url": "https://news.ycombinator.com/item?id=47498032",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
@@ -80,30 +87,23 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Thinking Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning",
-      "url": "https://news.ycombinator.com/item?id=47474654",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "Add Vercel AI SDK integration guide",
+      "url": "https://github.com/hidai25/eval-view/issues/127",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Add Pydantic AI example — customer support agent",
+      "url": "https://github.com/hidai25/eval-view/issues/107",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
       "title": "[Auto-QA] Dashboard components missing health indicators",
       "url": "https://github.com/kubestellar/console/issues/3357",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] Code may assume single-cluster deployment",
-      "url": "https://github.com/kubestellar/console/issues/3355",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Bring coding agent guardrails to OpenCode",
-      "url": "https://github.com/neuradex/llm-rail/issues/3",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,24 +130,31 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(slack): improve interactive reply parity",
-      "url": "https://github.com/openclaw/openclaw/pull/53389",
+      "title": "Feat/v1.6.5 openclaw 3.23 compat",
+      "url": "https://github.com/tencent-connect/openclaw-qqbot/pull/217",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Qc fixes 20260322",
-      "url": "https://github.com/caumangratani/Bizclaw/pull/1",
+      "title": "chore: keep small follow-up fixes from gepa spike",
+      "url": "https://github.com/getlarge/themoltnet/pull/486",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(docker): avoid setup CLI namespace loop before gateway startup",
-      "url": "https://github.com/openclaw/openclaw/pull/53385",
+      "title": "feat: Add Bocha Web Search provider",
+      "url": "https://github.com/openclaw/openclaw/pull/53595",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "jj-benchmark – Evaluating AI agents on Jujutsu version control",
+      "url": "https://reddit.com/r/programming/comments/1s28zms/jjbenchmark_evaluating_ai_agents_on_jujutsu/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-programming",
@@ -160,13 +167,6 @@
       "source": "reddit-programming",
       "title": "Beyond the Vibes: A Rigorous Guide to AI Coding Assistants and Agents",
       "url": "https://reddit.com/r/programming/comments/1ritjkj/beyond_the_vibes_a_rigorous_guide_to_ai_coding/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "OSS Maintainers Can Inject Their Standards Into Contributors' AI Tools",
-      "url": "https://reddit.com/r/programming/comments/1rf6w7s/oss_maintainers_can_inject_their_standards_into/",
       "why": "Discussion in r/programming about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Open Source Alternative to NotebookLM",
+      "url": "https://reddit.com/r/artificial/comments/1s2761n/open_source_alternative_to_notebooklm/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "ELI5 wtf is an AI agent?",
       "url": "https://reddit.com/r/artificial/comments/1s1sobt/eli5_wtf_is_an_ai_agent/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "How to build CLI tool + skill to work longer without compacting",
       "url": "https://reddit.com/r/artificial/comments/1s1jpxt/how_to_build_cli_tool_skill_to_work_longer/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Where are the actual paying clients for AI chatbots and voice agents? (Not theory — real businesses that need this NOW",
-      "url": "https://reddit.com/r/artificial/comments/1s1fwod/where_are_the_actual_paying_clients_for_ai/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
