@@ -405,6 +405,91 @@ async function main() {
         printInfo('Download: kbot models pull <name>');
         printInfo('Or use any HuggingFace GGUF: kbot models pull hf:user/repo:file.gguf');
     });
+    // ── Daemon ──
+    const daemonCmd = program
+        .command('daemon')
+        .description('Background intelligence — market watch, security patrol, synthesis, health checks');
+    daemonCmd
+        .command('start')
+        .description('Start the kbot daemon — runs all background subsystems')
+        .action(async () => {
+        const { startDaemon } = await import('./daemon.js');
+        printInfo('Starting kbot daemon...');
+        await startDaemon();
+    });
+    daemonCmd
+        .command('stop')
+        .description('Stop the running daemon')
+        .action(async () => {
+        const { stopDaemon } = await import('./daemon.js');
+        if (stopDaemon()) {
+            printSuccess('Daemon stopped.');
+        }
+        else {
+            printInfo('No daemon running.');
+        }
+    });
+    daemonCmd
+        .command('status')
+        .description('Show daemon status — uptime, subsystems, alerts')
+        .action(async () => {
+        const chalk = (await import('chalk')).default;
+        const { getDaemonStatus, getDaemonLog } = await import('./daemon.js');
+        const status = getDaemonStatus();
+        console.log();
+        if (status.running) {
+            const uptime = Date.now() - new Date(status.startedAt).getTime();
+            const hrs = Math.floor(uptime / 3_600_000);
+            const min = Math.floor((uptime % 3_600_000) / 60_000);
+            console.log(`  ${chalk.green('●')} Daemon running (PID ${status.pid}, ${hrs}h ${min}m, ${status.cycles} cycles)`);
+        }
+        else {
+            console.log(`  ${chalk.red('●')} Daemon not running`);
+        }
+        if (Object.keys(status.subsystems).length > 0) {
+            console.log();
+            console.log(`  ${chalk.bold('Subsystems')}`);
+            for (const [name, sub] of Object.entries(status.subsystems)) {
+                const icon = sub.status === 'ok' ? chalk.green('✓') : sub.status === 'error' ? chalk.red('✗') : sub.status === 'running' ? chalk.yellow('⟳') : chalk.dim('○');
+                console.log(`  ${icon} ${name.padEnd(18)} runs: ${sub.runCount}  last: ${sub.lastRun ? sub.lastRun.split('T')[1]?.slice(0, 5) : '—'}`);
+            }
+        }
+        if (status.alerts.length > 0) {
+            console.log();
+            console.log(`  ${chalk.bold('Recent Alerts')} (${status.alerts.length})`);
+            for (const a of status.alerts.slice(-5)) {
+                console.log(`  ${chalk.yellow('!')} ${a}`);
+            }
+        }
+        // Recent log
+        const log = getDaemonLog(10);
+        if (log.length > 0) {
+            console.log();
+            console.log(`  ${chalk.bold('Recent Log')}`);
+            for (const line of log) {
+                console.log(`  ${chalk.dim(line)}`);
+            }
+        }
+        console.log();
+    });
+    daemonCmd
+        .command('log')
+        .description('Show full daemon log')
+        .option('--lines <n>', 'Number of lines', '50')
+        .action(async (opts) => {
+        const { getDaemonLog } = await import('./daemon.js');
+        const log = getDaemonLog(Number(opts.lines) || 50);
+        for (const line of log)
+            console.log(line);
+    });
+    // ── Briefing ──
+    program
+        .command('briefing')
+        .description('Your daily intelligence report — market, security, stats, daemon health, suggested actions')
+        .action(async () => {
+        const { generateBriefing } = await import('./briefing.js');
+        process.stderr.write(await generateBriefing());
+    });
     // ── Discovery Agent ──
     const discoveryCmd = program
         .command('discovery')
