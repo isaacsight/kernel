@@ -47,7 +47,17 @@ declare let sessionStats: {
     suggestionsShown: number;
     fixesApplied: number;
     errorsFound: number;
+    testsRun: number;
+    testsFailed: number;
 };
+/**
+ * Get files that frequently change together with the given file.
+ * Returns top co-changing files sorted by frequency.
+ */
+export declare function getCoChangePatterns(targetFile?: string): Array<{
+    pair: [string, string];
+    count: number;
+}>;
 export declare function startPairMode(options?: PairOptions): Promise<void>;
 export declare function stopPairMode(): void;
 /**
@@ -69,6 +79,18 @@ export declare function analyzeWithAgent(filePath: string, agentOptions?: {
     model?: string;
     tier?: string;
 }): Promise<string>;
+/**
+ * runPair() — Start AI pair programming watch mode.
+ *
+ * 1. Watches cwd (or specified path) for file changes using fs.watch
+ * 2. When .ts/.js/.py/.rs/.go files change:
+ *    - Runs the relevant test if one exists (detects vitest/jest/pytest/cargo/go)
+ *    - If test fails, shows the failure with fix suggestions
+ *    - Tracks which files change together (co-change pattern extraction)
+ * 3. Simple terminal output: file changed, action taken, result
+ * 4. Runs until Ctrl+C
+ */
+export declare function runPair(path?: string, options?: Omit<PairOptions, 'path'>): Promise<void>;
 /**
  * Register the `kbot pair` command with the CLI program.
  *

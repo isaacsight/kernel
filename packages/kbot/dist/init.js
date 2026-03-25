@@ -7,8 +7,8 @@
 //
 // This is the first thing a new user runs. It must be fast,
 // useful, and make kbot feel like it belongs in the project.
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
-import { join, basename } from 'node:path';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { join, basename, extname } from 'node:path';
 import { execSync } from 'node:child_process';
 import { homedir } from 'node:os';
 // ── Detection ──
@@ -248,6 +248,69 @@ function suggestAgent(language, framework) {
     }
     return 'kernel';
 }
+// ── File Counting ──
+function countFilesByExtension(root) {
+    const counts = {};
+    let total = 0;
+    const SKIP_DIRS = new Set([
+        'node_modules', '.git', 'dist', 'build', '.next', '.nuxt', '__pycache__',
+        '.cache', '.turbo', '.vite', 'target', 'vendor', 'coverage', '.parcel-cache',
+    ]);
+    function walk(dir, depth) {
+        if (depth > 8)
+            return; // avoid deep recursion
+        let entries;
+        try {
+            entries = readdirSync(dir);
+        }
+        catch {
+            return;
+        }
+        for (const entry of entries) {
+            if (entry.startsWith('.') && entry !== '.env.example')
+                continue;
+            if (SKIP_DIRS.has(entry))
+                continue;
+            const fullPath = join(dir, entry);
+            let stat;
+            try {
+                stat = statSync(fullPath);
+            }
+            catch {
+                continue;
+            }
+            if (stat.isDirectory()) {
+                walk(fullPath, depth + 1);
+            }
+            else if (stat.isFile()) {
+                total++;
+                const ext = extname(entry).toLowerCase();
+                if (ext) {
+                    counts[ext] = (counts[ext] || 0) + 1;
+                }
+            }
+        }
+    }
+    walk(root, 0);
+    return { counts, total };
+}
+// ── README Reading ──
+function readReadmeExcerpt(root) {
+    const candidates = ['README.md', 'readme.md', 'Readme.md', 'README.rst', 'README.txt', 'README'];
+    for (const name of candidates) {
+        const readmePath = join(root, name);
+        if (existsSync(readmePath)) {
+            try {
+                const content = readFileSync(readmePath, 'utf8');
+                return content.slice(0, 500);
+            }
+            catch {
+                return undefined;
+            }
+        }
+    }
+    return undefined;
+}
 function generateProjectTools(config) {
     const tools = [];
     // Test runner
@@ -295,6 +358,8 @@ export async function initProject(root) {
     const keyFiles = detectKeyFiles(root);
     const commands = detectCommands(root);
     const defaultAgent = suggestAgent(language, framework);
+    const { counts: fileCounts, total: totalFiles } = countFilesByExtension(root);
+    const readmeExcerpt = readReadmeExcerpt(root);
     const config = {
         name,
         language,
@@ -304,6 +369,9 @@ export async function initProject(root) {
         keyFiles,
         commands,
         forgedTools: [],
+        fileCounts,
+        totalFiles,
+        readmeExcerpt,
         createdAt: new Date().toISOString(),
     };
     // Generate and save forged tools
@@ -323,15 +391,28 @@ module.exports.description = ${JSON.stringify(tool.description)};
         writeFileSync(toolPath, wrapper);
         config.forgedTools.push(tool.name);
     }
-    // Write .kbot.json
+    // Write .kbot/config.json (project-local config directory)
+    const kbotDir = join(root, '.kbot');
+    if (!existsSync(kbotDir))
+        mkdirSync(kbotDir, { recursive: true });
+    const kbotConfigPath = join(kbotDir, 'config.json');
+    writeFileSync(kbotConfigPath, JSON.stringify(config, null, 2));
+    // Also write .kbot.json at root for backward compatibility
     const configPath = join(root, '.kbot.json');
     writeFileSync(configPath, JSON.stringify(config, null, 2));
     // Add to .gitignore if not already there
     const gitignorePath = join(root, '.gitignore');
     if (existsSync(gitignorePath)) {
         const gitignore = readFileSync(gitignorePath, 'utf8');
+        let updated = gitignore;
         if (!gitignore.includes('.kbot.json')) {
-            writeFileSync(gitignorePath, gitignore.trimEnd() + '\n.kbot.json\n');
+            updated = updated.trimEnd() + '\n.kbot.json\n';
+        }
+        if (!gitignore.includes('.kbot/')) {
+            updated = updated.trimEnd() + '\n.kbot/\n';
+        }
+        if (updated !== gitignore) {
+            writeFileSync(gitignorePath, updated);
         }
     }
     return config;
@@ -344,6 +425,15 @@ export function formatInitReport(config) {
         lines.push(`  Package Mgr: ${config.packageManager}`);
     lines.push(`  Agent:      ${config.defaultAgent}`);
     lines.push(`  Key files:  ${config.keyFiles.length} detected`);
+    lines.push(`  Total files: ${config.totalFiles}`);
+    // Show top file extensions
+    const topExts = Object.entries(config.fileCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6)
+        .map(([ext, count]) => `${ext} (${count})`);
+    if (topExts.length > 0) {
+        lines.push(`  File types: ${topExts.join(', ')}`);
+    }
     if (Object.keys(config.commands).length > 0) {
         lines.push(`  Commands:   ${Object.keys(config.commands).join(', ')}`);
     }
@@ -351,5 +441,54 @@ export function formatInitReport(config) {
         lines.push(`  Tools:      ${config.forgedTools.join(', ')} (auto-forged)`);
     }
     return lines.join('\n');
+}
+/**
+ * Print the user-friendly init summary.
+ * Format: "I detected a [framework] project with [N] files. I've configured [M] tools for your stack."
+ */
+export function formatInitSummary(config) {
+    const stackLabel = config.framework
+        ? `${config.framework} (${config.language})`
+        : config.language;
+    const toolCount = config.forgedTools.length + Object.keys(config.commands).length;
+    return `I detected a ${stackLabel} project with ${config.totalFiles} files. I've configured ${toolCount} tools for your stack.`;
+}
+/**
+ * runInit() — 60-second onboarding entry point.
+ *
+ * 1. Detects project type (package.json, Cargo.toml, pyproject.toml, go.mod, etc.)
+ * 2. Detects framework (React, Next.js, Vue, Express, FastAPI, Django, Flask, Rails, etc.)
+ * 3. Counts files by extension
+ * 4. Reads README.md (first 500 chars)
+ * 5. Creates .kbot/config.json with detected info
+ * 6. Prints summary
+ * 7. Suggests a first query
+ */
+export async function runInit(root) {
+    const projectRoot = root || process.cwd();
+    const startTime = Date.now();
+    const config = await initProject(projectRoot);
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    // Print detailed report
+    process.stderr.write('\n');
+    process.stderr.write(formatInitReport(config) + '\n');
+    process.stderr.write('\n');
+    // Print user-friendly summary
+    process.stderr.write(`  ${formatInitSummary(config)}\n`);
+    process.stderr.write('\n');
+    // Show README excerpt if available
+    if (config.readmeExcerpt) {
+        const excerpt = config.readmeExcerpt.split('\n').slice(0, 5).join('\n');
+        process.stderr.write(`  README preview:\n`);
+        for (const line of excerpt.split('\n')) {
+            process.stderr.write(`    ${line}\n`);
+        }
+        process.stderr.write('\n');
+    }
+    process.stderr.write(`  Completed in ${elapsed}s\n`);
+    process.stderr.write('\n');
+    process.stderr.write(`  Try: kbot "explain this project in 2 sentences"\n`);
+    process.stderr.write('\n');
+    return config;
 }
 //# sourceMappingURL=init.js.map
