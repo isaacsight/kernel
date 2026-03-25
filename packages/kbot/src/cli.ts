@@ -855,6 +855,44 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('pair [path]')
+    .description('Pair programming mode — watch files, run tests, get real-time suggestions')
+    .option('-q, --quiet', 'Only show errors, suppress suggestions')
+    .option('--auto-fix', 'Automatically apply safe fixes (trailing whitespace, unused imports)')
+    .option('--bell', 'Sound terminal bell on errors')
+    .option('--no-types', 'Disable TypeScript type checking')
+    .option('--no-lint', 'Disable ESLint checks')
+    .option('--no-tests', 'Disable missing test detection')
+    .option('--no-security', 'Disable security scanning')
+    .option('--no-style', 'Disable style checks')
+    .option('--ignore <patterns>', 'Additional ignore patterns (comma-separated)')
+    .action(async (pairPath?: string, opts?: {
+      quiet?: boolean; autoFix?: boolean; bell?: boolean
+      types?: boolean; lint?: boolean; tests?: boolean
+      security?: boolean; style?: boolean; ignore?: string
+    }) => {
+      const { runPair } = await import('./pair.js')
+      const checks: Record<string, boolean> = {}
+      if (opts?.types === false) checks.typeErrors = false
+      if (opts?.lint === false) checks.lint = false
+      if (opts?.tests === false) checks.missingTests = false
+      if (opts?.security === false) checks.security = false
+      if (opts?.style === false) checks.style = false
+
+      const ignorePatterns = opts?.ignore
+        ? opts.ignore.split(',').map((p: string) => p.trim())
+        : undefined
+
+      await runPair(pairPath, {
+        quiet: opts?.quiet,
+        autoFix: opts?.autoFix,
+        bell: opts?.bell,
+        checks: Object.keys(checks).length > 0 ? checks : undefined,
+        ignorePatterns,
+      })
+    })
+
+  program
     .command('doctor')
     .description('Diagnose your kbot setup — check everything is working')
     .action(async () => {

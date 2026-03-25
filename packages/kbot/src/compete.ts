@@ -1,114 +1,276 @@
-// kbot Compete — Head-to-Head Performance Benchmarking
+// kbot Compete — Head-to-Head Performance Benchmark
 //
-// Run a task through kbot and measure everything: time, tokens, tools, cost.
-// "Let users prove to themselves that kbot is better for their use case."
+// Usage: kbot compete "explain this codebase"
+//
+// Runs a task through kbot's agent loop and measures:
+//   - Response time
+//   - Tokens used (input/output)
+//   - Tools called (names + count)
+//   - Cost estimate
+//   - Agent selected + confidence
+//
+// Saves results to ~/.kbot/benchmarks/ and compares against previous runs.
 
+import { homedir } from 'os'
+import { join } from 'path'
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs'
 import { performance } from 'perf_hooks'
+import { createRequire } from 'module'
+
+const __require = createRequire(import.meta.url)
+const PKG_VERSION = (__require('../package.json') as { version: string }).version
+
+// ── ANSI escape codes ──
 
 const BOLD = '\x1b[1m'
-const DIM = '\x1b[2m'
+const DIM_START = '\x1b[2m'
 const RESET = '\x1b[0m'
 const GREEN = '\x1b[32m'
+const RED = '\x1b[31m'
 const PURPLE = '\x1b[35m'
 const CYAN = '\x1b[36m'
 const YELLOW = '\x1b[33m'
 
+function dim(s: string): string { return `${DIM_START}${s}${RESET}` }
+function bold(s: string): string { return `${BOLD}${s}${RESET}` }
+function purple(s: string): string { return `${PURPLE}${s}${RESET}` }
+function green(s: string): string { return `${GREEN}${s}${RESET}` }
+function cyan(s: string): string { return `${CYAN}${s}${RESET}` }
+function yellow(s: string): string { return `${YELLOW}${s}${RESET}` }
+
+// ── Benchmark persistence ──
+
+const BENCH_DIR = join(homedir(), '.kbot', 'benchmarks')
+const BENCH_FILE = join(BENCH_DIR, 'history.json')
+const MAX_HISTORY = 100
+
 interface BenchmarkResult {
   task: string
+  timestamp: string
+  version: string
   timeMs: number
   toolsCalled: string[]
-  tokensIn: number
-  tokensOut: number
+  toolCallCount: number
+  inputTokens: number
+  outputTokens: number
+  costUsd: number
   agent: string
+  confidence: number
   model: string
-  costEstimate: number
+  isLocal: boolean
   responseLength: number
-  success: boolean
 }
 
-function estimateCost(tokensIn: number, tokensOut: number, model: string): number {
-  const rates: Record<string, { inRate: number; outRate: number }> = {
-    'local': { inRate: 0, outRate: 0 },
-    'ollama': { inRate: 0, outRate: 0 },
-    'deepseek': { inRate: 0.00027, outRate: 0.0011 },
-    'groq': { inRate: 0.00059, outRate: 0.00079 },
-    'claude': { inRate: 0.003, outRate: 0.015 },
-    'gpt': { inRate: 0.002, outRate: 0.008 },
-    'gemini': { inRate: 0.00125, outRate: 0.005 },
+function ensureDir(): void {
+  if (!existsSync(BENCH_DIR)) mkdirSync(BENCH_DIR, { recursive: true })
+}
+
+function loadHistory(): BenchmarkResult[] {
+  ensureDir()
+  if (!existsSync(BENCH_FILE)) return []
+  try { return JSON.parse(readFileSync(BENCH_FILE, 'utf-8')) as BenchmarkResult[] } catch { return [] }
+}
+
+function saveResult(result: BenchmarkResult): void {
+  ensureDir()
+  const history = loadHistory()
+  history.unshift(result)
+  writeFileSync(BENCH_FILE, JSON.stringify(history.slice(0, MAX_HISTORY), null, 2))
+}
+
+function findBaseline(task: string, currentTimestamp: string): BenchmarkResult | null {
+  const history = loadHistory()
+  const normalized = task.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim()
+  for (const h of history) {
+    if (h.timestamp === currentTimestamp) continue
+    const hNorm = h.task.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim()
+    if (hNorm === normalized) return h
   }
-  const rate = rates[model.toLowerCase()] || rates['claude']
-  return (tokensIn / 1_000_000) * rate.inRate + (tokensOut / 1_000_000) * rate.outRate
+  return null
 }
 
-function formatReport(result: BenchmarkResult): string {
-  const costStr = result.costEstimate === 0
-    ? `${GREEN}$0.00 (local)${RESET}`
-    : `$${result.costEstimate.toFixed(4)}`
+// ── Formatting helpers ──
 
-  return `
-${PURPLE}${BOLD}╔══════════════════════════════════════════════════╗${RESET}
-${PURPLE}${BOLD}║          kbot Performance Report                  ║${RESET}
-${PURPLE}${BOLD}╚══════════════════════════════════════════════════╝${RESET}
-
-${CYAN}${BOLD}Task:${RESET} "${result.task}"
-
-${YELLOW}${BOLD}⏱  Timing${RESET}
-   Response time:      ${BOLD}${(result.timeMs / 1000).toFixed(2)}s${RESET}
-   ${result.timeMs < 3000 ? GREEN + '✓ Fast' : result.timeMs < 10000 ? YELLOW + '○ Moderate' : '✗ Slow'}${RESET}
-
-${CYAN}${BOLD}🔧 Tools${RESET}
-   Tools called:       ${BOLD}${result.toolsCalled.length}${RESET}
-   ${result.toolsCalled.length > 0 ? result.toolsCalled.map(t => `   · ${t}`).join('\n') : '   · (none — pure reasoning)'}
-
-${GREEN}${BOLD}🧠 Intelligence${RESET}
-   Agent:              ${BOLD}${result.agent}${RESET}
-   Model:              ${result.model}
-   Tokens in:          ${result.tokensIn.toLocaleString()}
-   Tokens out:         ${result.tokensOut.toLocaleString()}
-   Response length:    ${result.responseLength.toLocaleString()} chars
-
-${PURPLE}${BOLD}💰 Cost${RESET}
-   Estimated cost:     ${costStr}
-
-${DIM}─────────────────────────────────────────────────${RESET}
-${result.success ? GREEN + '✓ Task completed successfully' : '✗ Task failed'}${RESET}
-${DIM}kbot · kernel.chat · Compare with: kbot compete "your task"${RESET}
-`
+function formatTime(ms: number): string {
+  if (ms < 1000) return `${Math.round(ms)}ms`
+  return `${(ms / 1000).toFixed(1)}s`
 }
+
+function formatCost(usd: number, isLocal: boolean): string {
+  if (isLocal) return '$0.00 (local)'
+  if (usd === 0) return '$0.00'
+  if (usd < 0.001) return `$${usd.toFixed(6)}`
+  if (usd < 0.01) return `$${usd.toFixed(4)}`
+  return `$${usd.toFixed(3)}`
+}
+
+function formatTokens(input: number, output: number): string {
+  const fmt = (n: number): string => n > 1000 ? `${(n / 1000).toFixed(1)}k` : String(n)
+  return `${fmt(input)} in / ${fmt(output)} out`
+}
+
+function deltaStr(current: number, baseline: number, lowerIsBetter: boolean = true): string {
+  if (baseline === 0) return ''
+  const diff = current - baseline
+  const pct = Math.round((diff / baseline) * 100)
+  const sign = diff > 0 ? '+' : ''
+  const color = (lowerIsBetter ? diff <= 0 : diff >= 0) ? GREEN : RED
+  return ` ${color}${sign}${pct}% vs last${RESET}`
+}
+
+// ── Report ──
+
+function printReport(result: BenchmarkResult, baseline: BenchmarkResult | null): void {
+  const w = Math.min(process.stdout.columns || 80, 60)
+  const line = dim('\u2500'.repeat(w))
+
+  console.log()
+  console.log(`  ${purple('\u25cf')} ${bold('kbot Performance Report')}`)
+  console.log(`  ${line}`)
+  console.log()
+
+  // Task
+  const taskDisplay = result.task.length > w - 12
+    ? result.task.slice(0, w - 15) + '...'
+    : result.task
+  console.log(`  Task:      ${dim('"')}${taskDisplay}${dim('"')}`)
+
+  // Time
+  const timeStr = formatTime(result.timeMs)
+  const timeDelta = baseline ? deltaStr(result.timeMs, baseline.timeMs) : ''
+  console.log(`  Time:      ${purple(timeStr)}${timeDelta}`)
+
+  // Tools
+  const uniqueTools = [...new Set(result.toolsCalled)]
+  const toolNames = uniqueTools.length > 0 ? uniqueTools.join(', ') : 'none'
+  const toolCount = result.toolCallCount
+  const toolSuffix = toolCount > 0 ? ` (${toolCount} call${toolCount !== 1 ? 's' : ''})` : ''
+  console.log(`  Tools:     ${cyan(`${toolNames}${toolSuffix}`)}`)
+
+  // Tokens
+  const tokensStr = formatTokens(result.inputTokens, result.outputTokens)
+  const tokenTotal = result.inputTokens + result.outputTokens
+  const baselineTotal = baseline ? baseline.inputTokens + baseline.outputTokens : 0
+  const tokenDelta = baseline ? deltaStr(tokenTotal, baselineTotal) : ''
+  console.log(`  Tokens:    ${dim(tokensStr)}${tokenDelta}`)
+
+  // Cost
+  const costStr = formatCost(result.costUsd, result.isLocal)
+  const costDelta = baseline && !result.isLocal ? deltaStr(result.costUsd, baseline.costUsd) : ''
+  console.log(`  Cost:      ${green(costStr)}${costDelta}`)
+
+  // Agent
+  const confStr = result.confidence > 0 ? ` (confidence: ${result.confidence.toFixed(2)})` : ''
+  console.log(`  Agent:     ${yellow(result.agent)}${dim(confStr)}`)
+
+  // Model
+  console.log(`  Model:     ${dim(result.model)}`)
+
+  // Response
+  const respLen = result.responseLength
+  const respStr = respLen > 1000 ? `${(respLen / 1000).toFixed(1)}k chars` : `${respLen} chars`
+  console.log(`  Response:  ${dim(respStr)}`)
+
+  console.log()
+  console.log(`  ${line}`)
+
+  if (baseline) {
+    const d = new Date(baseline.timestamp)
+    console.log(`  ${dim(`Baseline: ${d.toLocaleDateString()} ${d.toLocaleTimeString()} (v${baseline.version})`)}`)
+  } else {
+    console.log(`  ${dim('No baseline \u2014 this run becomes the baseline for future comparisons.')}`)
+  }
+  console.log()
+}
+
+// ── Main entry ──
 
 export async function runCompete(task: string): Promise<void> {
-  if (!task) {
-    console.log('Usage: kbot compete "your task here"')
-    console.log('Example: kbot compete "explain this codebase"')
-    return
+  if (!task || task.trim().length === 0) {
+    console.error(`${RED}Error:${RESET} Provide a task to benchmark.`)
+    console.error('  Usage: kbot compete "explain this codebase"')
+    process.exit(1)
   }
 
-  console.log(`\n${DIM}Running benchmark: "${task}"...${RESET}\n`)
+  console.log()
+  console.log(`  ${purple('\u25cf')} ${bold('kbot compete')} \u2014 benchmarking...`)
+  console.log(`  ${dim(`"${task}"`)}`)
+  console.log()
 
-  const start = performance.now()
+  // Dynamic imports to avoid side effects at module level
+  const { runAgent } = await import('./agent.js')
+  const { learnedRoute } = await import('./learned-router.js')
+  const { isLocalProvider, getByokProvider } = await import('./auth.js')
 
-  // Simulate a benchmark run — in production this calls the real agent loop
+  // Check routing confidence before running
+  const routeResult = learnedRoute(task)
+  const routedAgent = routeResult?.agent || 'kernel'
+  const routeConfidence = routeResult?.confidence || 0
+
+  // Determine provider locality
+  const provider = getByokProvider()
+  const isLocal = provider ? isLocalProvider(provider) : false
+
+  // Run the task through the real agent loop
+  const startTime = performance.now()
+
+  let response: Awaited<ReturnType<typeof runAgent>>
+  try {
+    response = await runAgent(task, {
+      agent: routeResult?.agent,
+      stream: false,
+    })
+  } catch (err) {
+    const errMsg = err instanceof Error ? err.message : String(err)
+    console.error(`  ${RED}Benchmark failed:${RESET} ${errMsg}`)
+    process.exit(1)
+  }
+
+  const endTime = performance.now()
+  const timeMs = Math.round(endTime - startTime)
+
+  // Extract metrics
+  const inputTokens = response.usage?.input_tokens || 0
+  const outputTokens = response.usage?.output_tokens || 0
+  const costUsd = response.usage?.cost_usd || 0
+  const toolCallCount = response.toolCalls || 0
+
+  // Build result
+  const now = new Date().toISOString()
   const result: BenchmarkResult = {
-    task,
-    timeMs: performance.now() - start,
+    task: task.slice(0, 200),
+    timestamp: now,
+    version: PKG_VERSION,
+    timeMs,
     toolsCalled: [],
-    tokensIn: 0,
-    tokensOut: 0,
-    agent: 'auto',
-    model: 'local',
-    costEstimate: 0,
-    responseLength: 0,
-    success: true,
+    toolCallCount,
+    inputTokens,
+    outputTokens,
+    costUsd,
+    agent: response.agent || routedAgent,
+    confidence: routeConfidence,
+    model: response.model || 'unknown',
+    isLocal,
+    responseLength: response.content.length,
   }
 
-  // In a real implementation, this would:
-  // 1. Run the task through the agent loop
-  // 2. Capture all tool calls, token counts, timing
-  // 3. Record the result for comparison with future runs
-  // For now, print the report template
+  // Best-effort tool name extraction from response content
+  const knownTools = [
+    'read_file', 'write_file', 'edit_file', 'glob', 'grep', 'bash',
+    'git_status', 'git_diff', 'git_log', 'git_commit', 'list_directory',
+    'web_search', 'url_fetch', 'github_api', 'create_file', 'delete_file',
+    'notebook_run', 'browser_navigate', 'browser_snapshot',
+  ]
+  if (toolCallCount > 0) {
+    const contentLower = response.content.toLowerCase()
+    const mentioned = knownTools.filter(t =>
+      contentLower.includes(t) || contentLower.includes(t.replace(/_/g, ' '))
+    )
+    result.toolsCalled = mentioned.length > 0 ? mentioned : ['(tool names not captured)']
+  }
 
-  result.timeMs = performance.now() - start
-  result.costEstimate = estimateCost(result.tokensIn, result.tokensOut, result.model)
-
-  console.log(formatReport(result))
+  // Save and compare
+  saveResult(result)
+  const baseline = findBaseline(task, now)
+  printReport(result, baseline)
 }
