@@ -19,6 +19,8 @@ const ExplorePage = lazyRetry(() => import('./pages/ExplorePage').then(m => ({ d
 const AuthorProfilePage = lazyRetry(() => import('./pages/AuthorProfilePage').then(m => ({ default: m.AuthorProfilePage })))
 const LiveSharePage = lazyRetry(() => import('./pages/LiveSharePage').then(m => ({ default: m.LiveSharePage })))
 const WorkspaceAdminPage = lazyRetry(() => import('./pages/WorkspaceAdminPage').then(m => ({ default: m.WorkspaceAdminPage })))
+const PlayPage = lazyRetry(() => import('./pages/PlayPage').then(m => ({ default: m.PlayPage })))
+const SecurityPage = lazyRetry(() => import('./pages/SecurityPage').then(m => ({ default: m.SecurityPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -111,6 +113,16 @@ export const router = createHashRouter([
       { path: 'live/:code', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Joining...</div>}>
           <LiveSharePage />
+        </Suspense>
+      ) },
+      { path: 'play', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4, color: '#fff', background: '#0a0a0a' }}>Loading synthesis...</div>}>
+          <PlayPage />
+        </Suspense>
+      ) },
+      { path: 'security', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+          <SecurityPage />
         </Suspense>
       ) },
       { path: '*', element: <Navigate to="/" replace /> },

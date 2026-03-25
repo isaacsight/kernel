@@ -23,6 +23,19 @@ import { join } from 'path'
 import { execSync } from 'child_process'
 import { homedir } from 'os'
 
+// ── Load .env (inline, no dependency) ──
+try {
+  const envPath = join(import.meta.dirname, '..', '.env')
+  if (existsSync(envPath)) {
+    for (const line of readFileSync(envPath, 'utf8').split('\n')) {
+      const match = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/)
+      if (match && !process.env[match[1]]) {
+        process.env[match[1]] = match[2].replace(/^["']|["']$/g, '')
+      }
+    }
+  }
+} catch {}
+
 // ── Observer: feed kbot's learning engine ──
 
 const OBSERVER_DIR = join(homedir(), '.kbot', 'observer')
@@ -101,6 +114,7 @@ interface DaemonState {
     totalOutreach: number
     totalWriting: number
     totalEvolution: number
+    totalSynthesis: number
     errorsToday: number
     lastErrorDate: string
     postsAttempted: number
@@ -1574,6 +1588,142 @@ async function runOpportunities(state: DaemonState): Promise<void> {
   }
 }
 
+// ── Synthesis Cycle — Closed-Loop Intelligence Compounding ────────────
+
+async function runSynthesis(state: DaemonState): Promise<void> {
+  log('[synthesis] running closed-loop cycle...')
+  observeToolCall('daemon_synthesis')
+
+  try {
+    // Dynamic import from kbot source (synthesis-engine lives in packages/kbot/src/)
+    const enginePath = join(PROJECT_ROOT, 'packages', 'kbot', 'src', 'synthesis-engine.ts')
+    if (!existsSync(enginePath)) {
+      log('[synthesis] synthesis-engine.ts not found, skipping')
+      return
+    }
+
+    const { synthesize } = await import(enginePath)
+    const result = synthesize(DAEMON_DIR)
+
+    state.stats.totalSynthesis = (state.stats.totalSynthesis || 0) + 1
+
+    const summary = [
+      result.toolAdoptions.length > 0 ? `${result.toolAdoptions.length} tools evaluated` : null,
+      result.agentTrials.length > 0 ? `${result.agentTrials.length} agents trialed` : null,
+      result.paperInsights.length > 0 ? `${result.paperInsights.length} papers analyzed` : null,
+      result.activeCorrections.length > 0 ? `${result.activeCorrections.length} corrections active` : null,
+      result.reflectionsClosed > 0 ? `${result.reflectionsClosed} reflections→routing` : null,
+      result.patternsTransferred > 0 ? `${result.patternsTransferred} patterns transferred` : null,
+    ].filter(Boolean).join(', ')
+
+    log(`[synthesis] cycle #${result.cycleNumber}: ${summary || 'calibrating (building baseline)'}`)
+    log(`[synthesis] skill map: ${result.skillMap.filter((e: { status: string }) => e.status === 'proven').length} proven, ${result.skillMap.filter((e: { status: string }) => e.status === 'developing').length} developing, ${result.skillMap.filter((e: { status: string }) => e.status === 'untested').length} untested`)
+
+    // Push snapshot to Supabase for the live dashboard at kernel.chat/#/play
+    await pushSynthesisToSupabase(result, state)
+  } catch (err) {
+    log(`[synthesis] ERROR: ${err instanceof Error ? err.message : String(err)}`)
+  }
+}
+
+// ── Supabase Push — Live Dashboard at kernel.chat/#/play ──────────────
+
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://eoxxpyixdieprsxlpwcs.supabase.co'
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || ''
+
+async function pushSynthesisToSupabase(result: any, daemonState: DaemonState): Promise<void> {
+  if (!SUPABASE_SERVICE_KEY) {
+    log('[synthesis] no SUPABASE_SERVICE_KEY — skipping dashboard push')
+    return
+  }
+
+  try {
+    // Read learning store counts (not full arrays — just metrics)
+    const patternsFile = join(homedir(), '.kbot', 'memory', 'patterns.json')
+    const solutionsFile = join(homedir(), '.kbot', 'memory', 'solutions.json')
+    const reflectionsFile = join(homedir(), '.kbot', 'memory', 'reflections.json')
+    const routingFile = join(homedir(), '.kbot', 'memory', 'routing-history.json')
+    const profileFile = join(homedir(), '.kbot', 'memory', 'profile.json')
+    const observerStatsFile = join(homedir(), '.kbot', 'observer', 'stats.json')
+
+    const patterns = existsSync(patternsFile) ? JSON.parse(readFileSync(patternsFile, 'utf8')) : []
+    const solutions = existsSync(solutionsFile) ? JSON.parse(readFileSync(solutionsFile, 'utf8')) : []
+    const reflections = existsSync(reflectionsFile) ? JSON.parse(readFileSync(reflectionsFile, 'utf8')) : []
+    const routing = existsSync(routingFile) ? JSON.parse(readFileSync(routingFile, 'utf8')) : []
+    const profile = existsSync(profileFile) ? JSON.parse(readFileSync(profileFile, 'utf8')) : {}
+    const observerStats = existsSync(observerStatsFile) ? JSON.parse(readFileSync(observerStatsFile, 'utf8')) : {}
+
+    const pulseFile = join(DAEMON_DIR, 'pulse', 'latest.json')
+    const pulse = existsSync(pulseFile) ? JSON.parse(readFileSync(pulseFile, 'utf8')) : {}
+
+    const learningSummary = {
+      patterns_count: patterns.length,
+      solutions_count: solutions.length,
+      reflections_count: reflections.length,
+      routing_entries: routing.length,
+      total_messages: profile.totalMessages || 0,
+      total_tokens: profile.totalTokens || 0,
+      sessions: profile.sessions || 0,
+      observer_total: observerStats.totalObserved || 0,
+      observer_sessions: observerStats.sessionsObserved || 0,
+      task_patterns: profile.taskPatterns || {},
+      preferred_agents: profile.preferredAgents || {},
+    }
+
+    // Push via fetch (no @supabase/supabase-js dependency needed)
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/kbot_synthesis_state?on_conflict=instance_id`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_SERVICE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        'Prefer': 'resolution=merge-duplicates',
+      },
+      body: JSON.stringify({
+        instance_id: 'primary',
+        total_cycles: result.cycleNumber,
+        last_cycle_at: new Date().toISOString(),
+        stats: {
+          toolsEvaluated: result.toolAdoptions.length,
+          toolsAdopted: result.toolAdoptions.filter((t: any) => t.status === 'adopted').length,
+          toolsRejected: result.toolAdoptions.filter((t: any) => t.status === 'rejected').length,
+          papersAnalyzed: result.paperInsights.length,
+          correctionsActive: result.activeCorrections.length,
+          reflectionsClosed: result.reflectionsClosed,
+          patternsTransferred: result.patternsTransferred,
+          agentsTrialed: result.agentTrials.length,
+        },
+        skill_map: result.skillMap,
+        active_corrections: result.activeCorrections,
+        tool_adoptions: result.toolAdoptions,
+        paper_insights: result.paperInsights,
+        agent_trials: result.agentTrials,
+        topic_weights: result.topicWeights,
+        discovery_state: {
+          stats: daemonState.stats,
+          knownStars: daemonState.knownStars,
+          knownDownloads: daemonState.knownDownloads,
+          hnScore: daemonState.hnScore,
+          hnComments: daemonState.hnComments,
+        },
+        pulse_data: pulse,
+        learning_summary: learningSummary,
+        cross_pollinated_count: result.patternsTransferred,
+        updated_at: new Date().toISOString(),
+      }),
+    })
+
+    if (res.ok) {
+      log('[synthesis] pushed to Supabase → kernel.chat/#/play')
+    } else {
+      const body = await res.text()
+      log(`[synthesis] Supabase push failed: ${res.status} ${body.slice(0, 200)}`)
+    }
+  } catch (err) {
+    log(`[synthesis] Supabase push error: ${err instanceof Error ? err.message : String(err)}`)
+  }
+}
+
 // ── Main Loop ─────────────────────────────────────────────────────────
 
 async function runCycle(): Promise<void> {
@@ -1589,6 +1739,7 @@ async function runCycle(): Promise<void> {
 
   const tasks: Array<{ name: string; interval: number; fn: (s: DaemonState) => Promise<void> }> = [
     { name: 'pulse', interval: INTERVALS.pulse, fn: runPulse },
+    { name: 'synthesis', interval: INTERVALS.pulse, fn: runSynthesis }, // Every heartbeat — zero cost, pure filesystem
     { name: 'intel', interval: INTERVALS.intel, fn: runIntel },
     { name: 'opportunities', interval: INTERVALS.intel, fn: runOpportunities },
     { name: 'actions', interval: INTERVALS.intel, fn: processOpportunities },
@@ -1639,3 +1790,26 @@ main().catch(err => {
   log(`FATAL: ${err instanceof Error ? err.message : String(err)}`)
   process.exit(1)
 })
+
+// === NOTIFICATION HOOK (added by Claude session 2026-03-25) ===
+// When synthesis finds actionable insights, notify Isaac via Discord webhook
+async function notifyFinding(finding: string): Promise<void> {
+  const webhook = process.env.DISCORD_WEBHOOK_URL || 'https://discord.com/api/webhooks/1482971938333655090/J6wozdd9BP19iWve3lak3kI8xxWhO073-WG48McaT1yq541tl9awSL4xvyykvY1eGV9m'
+  try {
+    await fetch(webhook, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        embeds: [{
+          title: '🧠 kbot Discovery',
+          description: finding,
+          color: 7035797,
+          footer: { text: `kbot daemon · ${new Date().toISOString().split('T')[0]}` }
+        }]
+      })
+    })
+  } catch { /* silent fail — don't crash daemon */ }
+}
+
+// Export for use in synthesis cycles
+;(globalThis as any).__kbot_notify = notifyFinding

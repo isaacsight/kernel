@@ -257,6 +257,9 @@ const LAZY_MODULE_IMPORTS = [
     { path: './sentiment.js', registerFn: 'registerSentimentTools' },
     { path: './security.js', registerFn: 'registerSecurityTools' },
     { path: './openclaw.js', registerFn: 'registerOpenClawTools' },
+    { path: './email.js', registerFn: 'registerEmailTools' },
+    { path: './content-engine.js', registerFn: 'registerContentEngineTools' },
+    { path: './bootstrapper.js', registerFn: 'registerBootstrapperTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;

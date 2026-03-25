@@ -75,12 +75,14 @@ What you can do:
 - Keep track of their goals and check in on progress
 
 Rules:
+- ALWAYS answer the question being asked FIRST. Then add context or follow-ups.
 - Never say "as an AI" or "I'm just an AI" — you're their companion
 - Never be generic — every response should feel personal to THIS user
-- Always end with something that keeps the conversation going
-- If they're quiet for a while, it's okay — they'll come back when they need you
-- Format for email — paragraphs, not bullet points. Like writing to a friend.
-- IMPORTANT: You will be given a [MEMORY] section with everything you know about this user. Reference it naturally. Update it mentally with each conversation.`
+- Write like you're texting a smart friend — fluid, natural, no bullet-point dumps
+- Use paragraphs, not lists. Bold key points. Keep it conversational.
+- If they ask something specific (financial advice, technical question, recommendation), give a direct, thorough answer with real substance
+- End with something that keeps the conversation going
+- If web search results are provided, weave them into your answer naturally — don't just dump them`
 
 const COMPANIONS_DIR = join(process.env.HOME || '/tmp', '.kbot', 'companions')
 
@@ -224,38 +226,33 @@ async function webSearch(query: string): Promise<string> {
 }
 
 function needsWebSearch(message: string): boolean {
-  const searchTriggers = /\b(what is|how much|latest|current|price of|news about|who is|when did|where is|look up|search for|find out|research|market size|competitors|trending)\b/i
+  const searchTriggers = /\b(what is|how much|latest|current|price of|news about|who is|when did|where is|look up|search for|find out|research|market size|competitors|trending|best way|how to|recommend|compare|review|should i|average|salary|cost|rate|stock|crypto|weather|score|stats|data|fiduciary|invest|portfolio|allocation)\b/i
   return searchTriggers.test(message)
 }
 
 // ── Ollama ──
 
 async function askOllama(messages: Array<{ role: string; content: string }>): Promise<string> {
-  // Build a single prompt from conversation history
-  let prompt = SYSTEM_PROMPT + '\n\n'
-  for (const msg of messages) {
-    if (msg.role === 'user') {
-      prompt += `User: ${msg.content}\n\n`
-    } else {
-      prompt += `You: ${msg.content}\n\n`
-    }
-  }
-  prompt += 'You:'
+  // Use Ollama chat API for proper conversation format
+  const chatMessages = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...messages.map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content })),
+  ]
 
   // Try primary model, fall back to faster model if timeout
   const models = [OLLAMA_MODEL, 'qwen2.5-coder:14b', 'qwen3:8b', 'gemma3:12b']
 
   for (const model of models) {
     try {
-    const res = await fetch(`${OLLAMA_URL}/api/generate`, {
+    const res = await fetch(`${OLLAMA_URL}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      signal: AbortSignal.timeout(120_000), // 2 min timeout
+      signal: AbortSignal.timeout(180_000), // 3 min timeout
       body: JSON.stringify({
         model,
-        prompt,
+        messages: chatMessages,
         stream: false,
-        options: { num_predict: 1000, temperature: 0.7 },
+        options: { num_predict: 1500, temperature: 0.7 },
       }),
     })
 
@@ -264,8 +261,8 @@ async function askOllama(messages: Array<{ role: string; content: string }>): Pr
       continue // try next model
     }
 
-    const data = await res.json() as { response?: string }
-    const response = data.response?.trim() ?? ''
+    const data = await res.json() as { message?: { content?: string } }
+    const response = data.message?.content?.trim() ?? ''
 
     if (!response) {
       console.log(`  Empty response from ${model}, trying next...`)
@@ -330,78 +327,64 @@ async function sendReply(to: string, subject: string, body: string): Promise<boo
   }
 }
 
-// ── Tracking ──
+// ── Tracking (DB-based, no file state) ──
+// A message is "processed" if it has a reply in agent_conversations.
+// In-flight set prevents race conditions during polling.
 
-const PROCESSED_FILE = join(PROJECT_ROOT, '.kbot-discovery', 'email-processed.json')
-let processedIds = new Set<string>()
-
-function saveProcessedIds(): void {
-  try {
-    writeFileSync(PROCESSED_FILE, JSON.stringify([...processedIds]))
-  } catch {}
-}
-
-async function loadProcessedIds(): Promise<void> {
-  // Load from file first (survives restarts)
-  try {
-    if (existsSync(PROCESSED_FILE)) {
-      const saved = JSON.parse(readFileSync(PROCESSED_FILE, 'utf8'))
-      for (const id of saved) processedIds.add(id)
-    }
-  } catch {}
-
-  // Also load from DB
-  const { data } = await svc
-    .from('agent_conversations')
-    .select('content')
-    .eq('role', 'user')
-
-  if (data) {
-    for (const row of data) {
-      processedIds.add(row.content)
-    }
-  }
-
-  // Also mark ALL existing contact_messages as processed so we never reprocess old ones
-  const { data: allMsgs } = await svc
-    .from('contact_messages')
-    .select('id, body_text, from_email, subject')
-
-  if (allMsgs) {
-    for (const msg of allMsgs) {
-      const msgId = msg.id || `${msg.from_email}-${msg.subject}-${msg.body_text?.slice(0, 50)}`
-      processedIds.add(msgId)
-      if (msg.body_text) processedIds.add(msg.body_text)
-    }
-  }
-
-  saveProcessedIds()
-}
+const inFlight = new Set<string>()
 
 // ── Main Loop ──
 
 async function checkAndRespond(): Promise<void> {
-  // Open mode — respond to ALL inbound emails, no whitelist
+  // Get recent contact_messages
   const { data: messages } = await svc
     .from('contact_messages')
     .select('*')
-    .order('created_at', { ascending: false })
+    .order('received_at', { ascending: false })
     .limit(50)
 
   if (!messages || messages.length === 0) return
 
-  for (const msg of messages) {
-    // Track by database row ID — guaranteed unique
-    const msgId = String(msg.id)
-    if (processedIds.has(msgId)) continue
+  // Get the latest assistant reply timestamp per email address
+  const { data: latestReplies } = await svc
+    .from('agent_conversations')
+    .select('email, created_at')
+    .eq('role', 'assistant')
+    .order('created_at', { ascending: false })
 
-    // Also skip if we've already responded to this exact content from this user
-    const contentKey = `${msg.from_email}::${msg.body_text || ''}::${msg.body_html || ''}`
-    if (processedIds.has(contentKey)) {
-      processedIds.add(msgId)
-      saveProcessedIds()
-      continue
+  const lastReplyTime = new Map<string, string>()
+  for (const r of (latestReplies || [])) {
+    if (!lastReplyTime.has(r.email)) {
+      lastReplyTime.set(r.email, r.created_at)
     }
+  }
+
+  // For each sender, find only their LATEST unprocessed message
+  // One reply per person — don't spam their inbox with replies to old messages
+  const latestPerSender = new Map<string, typeof messages[0]>()
+
+  for (const msg of messages) {
+    // Skip self-emails
+    if (msg.from_email?.endsWith('@kernel.chat')) continue
+
+    // Skip if we already replied AFTER this message arrived
+    const lastReply = lastReplyTime.get(msg.from_email)
+    if (lastReply && lastReply > msg.received_at) continue
+
+    // Only keep the newest unprocessed message per sender
+    if (!latestPerSender.has(msg.from_email)) {
+      latestPerSender.set(msg.from_email, msg)
+    }
+  }
+
+  for (const [, msg] of latestPerSender) {
+    const msgId = String(msg.id)
+
+    // Skip if already being processed (race condition guard)
+    if (inFlight.has(msgId)) continue
+
+    // Lock it
+    inFlight.add(msgId)
 
     // Extract body — try text first, then strip HTML, then use subject as context
     let body = msg.body_text?.trim() || ''
@@ -422,29 +405,33 @@ async function checkAndRespond(): Promise<void> {
     console.log(`[${new Date().toISOString().slice(11, 19)}] New message from ${userName}: "${msg.subject}"`)
     console.log(`  "${body.slice(0, 80)}..."`)
 
-    // Load conversation history for THIS user
+    // Load recent conversation history (last 6 messages to keep prompt tight)
     const { data: history } = await svc
       .from('agent_conversations')
       .select('role, content')
       .eq('email', msg.from_email)
-      .order('created_at', { ascending: true })
-      .limit(20)
+      .order('created_at', { ascending: false })
+      .limit(6)
 
-    const convoHistory = (history || []).map(m => ({
+    // Reverse so oldest is first (query returns newest first)
+    const convoHistory = (history || []).reverse().map(m => ({
       role: m.role,
       content: m.content,
     }))
 
-    // Load companion memory for this user
+    // Load companion memory
     const memory = loadMemory(msg.from_email)
     if (msg.from_name && msg.from_name !== msg.from_email) memory.name = msg.from_name
 
-    // Inject memory context so the companion knows who they're talking to
-    const memContext = memoryToPrompt(memory)
-    convoHistory.unshift({ role: 'user', content: memContext })
+    // Build context: memory summary (brief), then history, then current message
+    const memSummary = memory.facts.length > 0 || memory.interests.length > 0
+      ? `[About ${memory.name}: ${[...memory.facts.slice(-3), ...memory.interests.slice(-3)].join('. ')}]`
+      : `[New user: ${memory.name}]`
 
-    if (convoHistory.length <= 1) {
-      convoHistory.push({ role: 'user', content: `[This is your first conversation with ${memory.name}. Get to know them — ask what they're working on, what they're interested in. Be warm and curious.]` })
+    if (convoHistory.length === 0) {
+      convoHistory.push({ role: 'user', content: `${memSummary}\n\n[First conversation — be warm and curious.]` })
+    } else {
+      convoHistory.unshift({ role: 'user', content: memSummary })
     }
     convoHistory.push({ role: 'user', content: body })
 
@@ -501,9 +488,8 @@ async function checkAndRespond(): Promise<void> {
     observeToolCall('update_companion_memory', { email: msg.from_email, facts: memory.facts.length, interests: memory.interests.length })
     console.log(`  Memory: ${memory.facts.length} facts, ${memory.interests.length} interests, ${memory.goals.length} goals`)
 
-    processedIds.add(msgId)
-    processedIds.add(contentKey)
-    saveProcessedIds()
+    // Release in-flight lock (DB is now the source of truth)
+    inFlight.delete(msgId)
   }
 }
 
@@ -513,11 +499,8 @@ async function main(): Promise<void> {
   console.log('═══════════════════════════════════════════════════')
   console.log(' Kernel Email Agent — Local ($0 cost)')
   console.log(' Model: Qwen 2.5 Coder 32B via Ollama')
-  console.log(' Monitoring: jhwang0321@gmail.com, joel401sd@gmail.com, gisele.ellis1@gmail.com')
+  console.log(' Open mode — responds to ALL inbound emails')
   console.log('═══════════════════════════════════════════════════')
-
-  await loadProcessedIds()
-  console.log(`Loaded ${processedIds.size} previously processed messages`)
 
   // Initial check
   await checkAndRespond()

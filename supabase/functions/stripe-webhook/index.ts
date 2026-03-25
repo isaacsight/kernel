@@ -100,6 +100,70 @@ serve(async (req: Request) => {
           break
         }
 
+        // Handle consultation payments
+        if (session.mode === 'payment' && session.metadata?.type === 'consultation') {
+          const threadId = session.metadata?.thread_id
+          if (threadId) {
+            const { error: consultErr } = await supabase
+              .from('consultation_threads')
+              .update({
+                paid: true,
+                paid_at: new Date().toISOString(),
+                status: 'active',
+              })
+              .eq('id', threadId)
+
+            if (consultErr) console.error('Failed to activate consultation thread:', consultErr)
+            else console.log(`Consultation thread ${threadId} activated after payment`)
+
+            // Send confirmation email to client
+            const { data: threadData } = await supabase
+              .from('consultation_threads')
+              .select('client_id')
+              .eq('id', threadId)
+              .single()
+
+            if (threadData?.client_id) {
+              const { data: clientData } = await supabase
+                .from('consultation_clients')
+                .select('email, name')
+                .eq('id', threadData.client_id)
+                .single()
+
+              if (clientData?.email) {
+                const resendKey = Deno.env.get('RESEND_API_KEY')
+                if (resendKey) {
+                  await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${resendKey}`,
+                    },
+                    body: JSON.stringify({
+                      from: 'Kernel Consultation <consult@kernel.chat>',
+                      to: clientData.email,
+                      subject: 'Payment confirmed — your consultation is active',
+                      html: `
+                        <div style="font-family: 'EB Garamond', Georgia, serif; max-width: 600px; margin: 0 auto; padding: 32px; color: #1F1E1D; background: #FAF9F6;">
+                          <div style="text-align: center; margin-bottom: 24px;">
+                            <div style="display: inline-block; width: 40px; height: 40px; background: #6B5B95; border-radius: 50%; line-height: 40px; color: white; font-family: 'Courier Prime', monospace; font-size: 18px; font-weight: bold;">K</div>
+                          </div>
+                          <p>Hi ${clientData.name?.split(' ')[0] || 'there'},</p>
+                          <p>Payment confirmed! Your consultation is now active.</p>
+                          <p>Simply reply to this email with your first question and I'll get started on your strategy right away. You have up to 15 exchanges in this session.</p>
+                          <hr style="border: none; border-top: 1px solid #E8E5E0; margin: 24px 0;" />
+                          <p style="font-family: 'Courier Prime', monospace; font-size: 11px; color: #8A8580;">Kernel Consultation &middot; Powered by kbot</p>
+                        </div>
+                      `,
+                    }),
+                  }).catch(e => console.error('Confirmation email failed:', e))
+                }
+              }
+            }
+          }
+          break
+        }
+
         // Handle one-time image credit purchases
         if (session.mode === 'payment') {
           const credits = parseInt(session.metadata?.credits || '0', 10)
