@@ -1,63 +1,8 @@
 {
-  "timestamp": "2026-03-25T05:20:51.688Z",
-  "projects": [
-    {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1056,
-      "description": "the easiest way to run natural language-described workflows automatically"
-    },
-    {
-      "name": "jackwener/opencli",
-      "url": "https://github.com/jackwener/opencli",
-      "stars": 6276,
-      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
-    },
-    {
-      "name": "peterfei/ifai",
-      "url": "https://github.com/peterfei/ifai",
-      "stars": 74,
-      "description": "若爱 (IfAI) - 基于 Tauri 2.0 构建的跨平台 AI 代码编辑器 | A Cross-Platform AI Code Editor Built with Tauri 2.0"
-    },
-    {
-      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 124,
-      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
-    },
-    {
-      "name": "Mirascope/mirascope",
-      "url": "https://github.com/Mirascope/mirascope",
-      "stars": 1438,
-      "description": "The LLM Anti-Framework"
-    },
-    {
-      "name": "taylorwilsdon/google_workspace_mcp",
-      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
-      "stars": 1918,
-      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
-    },
-    {
-      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "stars": 0,
-      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
-    },
-    {
-      "name": "zhangzeyu99-web/openclaw-cursor-agent-skill",
-      "url": "https://github.com/zhangzeyu99-web/openclaw-cursor-agent-skill",
-      "stars": 0,
-      "description": "OpenClaw plugin, skill, and tmux-backed Cursor CLI toolkit for persistent coding tasks"
-    }
-  ],
+  "timestamp": "2026-03-25T23:31:11.234Z",
+  "projects": [],
   "latestPaper": {
-    "title": "Code Review Agent Benchmark",
-    "summary": "Software engineering agents have shown significant promise in writing code. As AI agents permeate code writing, and generate huge volumes of code automatically -- the matter of code quality comes front and centre. As the automatically generated code gets integrated into huge code-bases -- the issue of code review and broadly quality assurance becomes important. In this paper, we take a fresh look at the problem and curate a code review dataset for AI agents to work with. Our dataset called c-CRA"
+    "title": "unknown",
+    "summary": "unknown"
   }
 }

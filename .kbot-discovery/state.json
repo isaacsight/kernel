@@ -1,20 +1,20 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-03-25T11:17:45.558Z",
-    "intel": "2026-03-25T05:20:44.042Z",
+    "pulse": "2026-03-25T15:42:58.941Z",
+    "intel": "2026-03-25T12:49:48.396Z",
     "outreach": "2026-03-25T05:20:51.690Z",
-    "writing": "2026-03-24T12:44:53.799Z",
+    "writing": "2026-03-25T12:57:36.069Z",
     "evolution": "2026-03-24T16:34:07.680Z",
-    "opportunities": "2026-03-25T05:20:50.495Z",
-    "actions": "2026-03-25T06:06:35.865Z",
-    "synthesis": "2026-03-25T11:17:45.831Z"
+    "opportunities": "2026-03-25T12:49:53.232Z",
+    "actions": "2026-03-25T12:57:35.986Z",
+    "synthesis": "2026-03-25T15:42:58.968Z"
   },
   "stats": {
-    "totalRuns": 551,
-    "totalPulses": 272,
-    "totalIntel": 41,
+    "totalRuns": 553,
+    "totalPulses": 274,
+    "totalIntel": 42,
     "totalOutreach": 15,
-    "totalWriting": 7,
+    "totalWriting": 8,
     "totalEvolution": 10,
     "errorsToday": 0,
     "lastErrorDate": "2026-03-25",
@@ -23,11 +23,11 @@
     "postsFlagged": 0,
     "evolutionSuccesses": 1,
     "evolutionFailures": 2,
-    "totalSynthesis": 66
+    "totalSynthesis": 68
   },
   "knownStars": 3,
-  "knownDownloads": 1420,
-  "hnScore": 1,
+  "knownDownloads": 0,
+  "hnScore": 0,
   "hnComments": 0,
   "feedback": [],
   "reachedMilestones": [
