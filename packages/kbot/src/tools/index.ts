@@ -343,6 +343,8 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './security.js',       registerFn: 'registerSecurityTools' },
   { path: './openclaw.js',       registerFn: 'registerOpenClawTools' },
   { path: './email.js',          registerFn: 'registerEmailTools' },
+  { path: './content-engine.js', registerFn: 'registerContentEngineTools' },
+  { path: './bootstrapper.js',   registerFn: 'registerBootstrapperTools' },
 ]
 
 /** Track whether lazy tools have been registered */
