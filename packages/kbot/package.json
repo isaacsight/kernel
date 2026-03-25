@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "3.35.0",
+  "version": "3.35.1",
   "description": "The only AI agent that builds its own tools — and defends itself. Self-Defense System: HMAC memory integrity, prompt injection detection, knowledge sanitization, forge verification, anomaly detection, incident logging. Cybersecurity tools: dep_audit, secret_scan, ssl_check, headers_check, cve_lookup, port_scan, owasp_check. Machine-aware situated intelligence: full hardware profiling (CPU, GPU, RAM, display, battery, dev tools), resource-adaptive tool pipeline, memory-pressure throttling, GPU-accelerated model routing. Multi-channel cognitive engine: email agent, iMessage agent, consultation pipeline, Trader agent with paper trading & DeFi, 26 specialist agents, 345+ tools, 20 providers. Finance stack: 31 tools across market data, wallet & swaps, stocks, and sentiment. Synthesis Engine: closed-loop intelligence compounding. Runtime tool forging, Forge Registry, autopoietic health, immune self-audit. Cost-aware model routing, fallback chains, Bayesian skill routing. 11 local models (Llama 3.3, Qwen 3, DeepSeek R1, Codestral 22B). Embedded llama.cpp, MCP server, SDK. MIT.",
   "type": "module",
   "repository": {
@@ -58,7 +58,6 @@
     "code-review",
     "pair-programming",
     "vibe-coding",
-
     "claude-code-alternative",
     "cursor-alternative",
     "copilot-alternative",
@@ -68,7 +67,6 @@
     "opencode-alternative",
     "langchain-alternative",
     "crewai-alternative",
-
     "free-ai-coding",
     "free-ai-agent",
     "no-subscription",
@@ -81,7 +79,6 @@
     "local-llm",
     "open-source",
     "open-source-ai",
-
     "multi-provider",
     "multi-model",
     "cost-aware",
@@ -98,7 +95,6 @@
     "ollama",
     "gguf",
     "llama-cpp",
-
     "crypto-trading-bot",
     "solana-trading-bot",
     "trading-bot",
@@ -115,7 +111,6 @@
     "financial-analysis",
     "sentiment-analysis",
     "whale-tracker",
-
     "mcp",
     "model-context-protocol",
     "mcp-server",
@@ -128,7 +123,6 @@
     "self-evolving",
     "self-improving",
     "autopoiesis",
-
     "cli",
     "terminal",
     "shell-assistant",
@@ -137,7 +131,6 @@
     "workflow-engine",
     "typescript",
     "llm",
-
     "docker",
     "terraform",
     "devops",
@@ -151,7 +144,6 @@
     "prisma",
     "sql",
     "postgres",
-
     "browser-automation",
     "playwright",
     "web-agent",
@@ -160,7 +152,6 @@
     "agent-protocol",
     "agent-marketplace",
     "plugin-sdk",
-
     "game-development",
     "game-engine",
     "godot",
@@ -168,7 +159,6 @@
     "unreal-engine",
     "vfx",
     "shader",
-
     "hardware-aware",
     "machine-profiler",
     "system-profiler",
@@ -178,7 +168,6 @@
     "metal",
     "apple-silicon",
     "copilot",
-
     "cybersecurity",
     "security-audit",
     "vulnerability-scanner",
@@ -197,10 +186,12 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
+    "@types/nodemailer": "^7.0.11",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
     "marked": "^14.0.0",
     "marked-terminal": "^7.2.0",
+    "nodemailer": "^8.0.3",
     "ora": "^8.1.0",
     "readline": "^1.3.0",
     "zod": "^3.23.0"
