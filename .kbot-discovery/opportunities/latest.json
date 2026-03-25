@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T23:20:42.596Z",
+  "timestamp": "2026-03-25T05:20:49.305Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "Goodbye to Sora",
+      "url": "https://news.ycombinator.com/item?id=47511399",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Is anybody else bored of talking about AI?",
       "url": "https://news.ycombinator.com/item?id=47510042",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -80,30 +87,23 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Microsoft's \"Fix\" for Windows 11: Flowers After the Beating",
-      "url": "https://news.ycombinator.com/item?id=47504697",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "Update README.md",
+      "url": "https://github.com/SamaelxLunafreya/google.aip.dev/pull/1",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "[Auto-QA] High-complexity components could be split",
+      "url": "https://github.com/kubestellar/console/issues/3465",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
       "title": "Add Vercel AI SDK integration guide",
       "url": "https://github.com/hidai25/eval-view/issues/127",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add Pydantic AI example — customer support agent",
-      "url": "https://github.com/hidai25/eval-view/issues/107",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "service redmine broken",
-      "url": "https://github.com/archi-physics/archi/issues/533",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "feat: team plugin integration (pluginPrivate merge + session sidecar)",
-      "url": "https://github.com/david021903/traderClaw_plugin/pull/2",
+      "title": "Plugins: enforce terminal hook decision semantics for tool/message guards",
+      "url": "https://github.com/openclaw/openclaw/pull/54241",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix: close sandbox media root bypass for mediaUrl/fileUrl aliases",
-      "url": "https://github.com/openclaw/openclaw/pull/54034",
+      "title": "fix(whatsapp): restore direct active-listener singleton",
+      "url": "https://github.com/openclaw/openclaw/pull/54232",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat: Enterprise security hardening, Microsoft Teams support, and deployment tooling",
-      "url": "https://github.com/DevSavant-AE/openclaw-blueprint/pull/24",
+      "title": "chore(main): release 0.7.0",
+      "url": "https://github.com/clawvisor/clawvisor/pull/45",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "How I made a cross-platform terminal app with Electron, xterm.js, and Claude Code",
+      "url": "https://reddit.com/r/commandline/comments/1s2usif/how_i_made_a_crossplatform_terminal_app_with/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "dar: du with TUI &amp; treemap visual",
       "url": "https://reddit.com/r/commandline/comments/1s0hcir/dar_du_with_tui_treemap_visual/",
       "why": "Discussion in r/commandline about AI agents",
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "dynq, a (hand-written) jq query tool for DynamoDB",
       "url": "https://reddit.com/r/commandline/comments/1rzn1ma/dynq_a_handwritten_jq_query_tool_for_dynamodb/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "Vote America Only U.S. Political Candidate data via curl and SSH",
-      "url": "https://reddit.com/r/commandline/comments/1rz7gci/vote_america_only_us_political_candidate_data_via/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },

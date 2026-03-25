@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T23:05:43.359Z",
+  "timestamp": "2026-03-25T05:20:44.037Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -49,8 +49,8 @@
           "children": [
             47501724,
             47501496,
-            47502189,
             47501378,
+            47502189,
             47505458,
             47502703,
             47501886
@@ -63,7 +63,7 @@
           "story_id": 47501357,
           "story_text": "Hi HN folks,<p>I have been building AI agents for quite some time now. The shift has gone from LLM + Tools → LLM Workflows → Agent + Tools + Memory, and now we are finally seeing true agency emerge: agents as systems composed of tools, command-line access, fine-grained system capabilities, and memory.<p>This way of building agents is powerful, and I believe it is here to stay. But the real question is: are the systems powering these agents ready for that future?<p>I do not think so.<p>Using Docker for a single agent is not going to scale well, because agents need to be lightweight and fast. LLMs already add significant latency, so adding heavy runtime overhead on top only makes things worse. Existing solutions start to fall apart here.<p>Agents built in Python also tend to have a large memory footprint, which becomes a serious problem when you want to scale to thousands of agents.<p>And open-source for agents is still not where it should be. Right now, I cannot easily reuse agents built by domain experts the same way I reuse open-source software.<p>These issues bothered me, and I realized that if agents are ever going to be democratized, they need to be open and easy to use. Just like Docker solved system dependencies, we need something similar for agents.<p>That is why I started building an agent framework in Rust. It is modular and follows the principle of true agency: an agent is an entity with tools, memory, and an executor. In AutoAgents, users can independently create and modify tools, executors, and memory.<p>With AutoAgents, I saw that powerful agents could be built without compromising on performance or memory the way many other frameworks do.<p>But the other problems still remained: re-sharing agents, sandboxing, and scaling to thousands of agents.<p>So I created Odyssey — a bundle-first agent runtime written in Rust on top of AutoAgents, the Rust agent framework. It lets you define an agent once, package it as a portable artifact, and run it through the same execution model across local development, embedded SDK usage, shared runtime servers, and terminal workflows.<p>Both AutoAgents and Odyssey are fully open source and built in Rust, and I am planning to build an Odyssey Agent Hub soon, with additional features like WASM tools, custom memory layers, and more.<p>My vision is to democratize agents so they are available to everyone — securely and performantly. Being open is not enough; agents also need to be secure.<p>The project is still in alpha, but it is in a working state.<p>AutoAgents Repo -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;AutoAgents\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;AutoAgents</a><p>Odyssey Repo -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;Odyssey\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;Odyssey</a><p>I would really appreciate feedback — especially from anyone who has dealt with similar problems. Your feedback help me shape the product.<p>Thanks for your time in advance!",
           "title": "Show HN: Running AI agents across environments needs a proper solution",
-          "updated_at": "2026-03-24T19:48:57Z",
+          "updated_at": "2026-03-24T23:15:43Z",
           "url": "https://github.com/liquidos-ai/Odyssey"
         },
         {
@@ -117,7 +117,7 @@
           "story_id": 47494696,
           "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
           "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-24T23:04:57Z"
+          "updated_at": "2026-03-25T02:41:58Z"
         },
         {
           "_highlightResult": {
@@ -342,56 +342,59 @@
           ],
           "author": "jberthom",
           "children": [
-            47508231,
             47500594,
             47500311,
             47499984,
-            47504657,
+            47508231,
             47500072,
+            47512934,
             47501289,
-            47509170,
+            47504657,
             47500124,
             47500306,
-            47500795,
             47500259,
+            47500795,
             47500065,
-            47507203,
+            47509170,
             47501072,
             47500553,
-            47507003,
             47501515,
-            47507229,
-            47508601,
-            47501986,
-            47500018,
+            47507203,
             47507728,
+            47500018,
+            47510958,
+            47501986,
+            47507003,
+            47507229,
             47500879,
             47502729,
+            47508601,
             47499968,
             47501177,
-            47510460,
             47499959,
             47501069,
             47500426,
             47500293,
             47499937,
             47500786,
-            47510731,
+            47512267,
             47507562,
             47507327,
             47501768,
+            47510731,
             47500788,
+            47510460,
             47499977
           ],
           "created_at": "2026-03-24T07:46:46Z",
           "created_at_i": 1774338406,
-          "num_comments": 71,
+          "num_comments": 88,
           "objectID": "47499672",
-          "points": 105,
+          "points": 126,
           "story_id": 47499672,
           "story_text": "I use AI agents to build UI features daily. The thing that kept annoying me: the agent writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the agent open a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p><pre><code>  proofshot start --run &quot;npm run dev&quot; --port 3000\n  # agent navigates, clicks, takes screenshots\n  proofshot stop\n</code></pre>\nIt works with whatever agent you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It&#x27;s packaged as a skill so your AI coding agent knows exactly how it works. It&#x27;s built on agent-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The agent doesn’t decide pass&#x2F;fail. It just gives me the evidence so I don’t have to open the browser myself every time.<p>Open source and completely free.<p>Website: <a href=\"https:&#x2F;&#x2F;proofshot.argil.io&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;proofshot.argil.io&#x2F;</a>",
           "title": "Show HN: ProofShot – Give AI coding agents eyes to verify the UI they build",
-          "updated_at": "2026-03-24T23:03:58Z",
+          "updated_at": "2026-03-25T05:07:27Z",
           "url": "https://github.com/AmElmo/proofshot"
         },
         {
@@ -594,56 +597,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "desmonding"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS <em>learning</em> queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week's HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it's useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif/sans-serif, line spacing).<p>- On-device <em>AI</em> summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic/Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla's Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I'd love feedback — especially on the smart <em>collection</em> criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https://apps.apple.com/us/app/moji-reader/id6758530352\">https://apps.apple.com/us/app/moji-reader/id6758530352</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Moji – A read-it-later app with self-organizing smart collections"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://moji.pcding.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_desmonding",
-            "story_47269562",
-            "show_hn"
-          ],
-          "author": "desmonding",
-          "children": [
-            47274551,
-            47271615
-          ],
-          "created_at": "2026-03-06T01:18:48Z",
-          "created_at_i": 1772759928,
-          "num_comments": 4,
-          "objectID": "47269562",
-          "points": 12,
-          "story_id": 47269562,
-          "story_text": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS learning queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week&#x27;s HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it&#x27;s useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif&#x2F;sans-serif, line spacing).<p>- On-device AI summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic&#x2F;Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla&#x27;s Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I&#x27;d love feedback — especially on the smart collection criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352\">https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352</a>",
-          "title": "Show HN: Moji – A read-it-later app with self-organizing smart collections",
-          "updated_at": "2026-03-15T19:14:50Z",
-          "url": "https://moji.pcding.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "team_dale"
             },
             "story_text": {
@@ -699,54 +652,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "vassilbek"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "collective",
-                "learning"
-              ],
-              "value": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if/then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data <em>collection</em> plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation / Monitoring, Evaluation, Accountability, and -<em>Learning</em> specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics/templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development / United Nations / European Union formats)"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "https://clawhub.<em>ai</em>/vassiliylakhonin/nonprofit-rbm-logic-model"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_vassilbek",
-            "story_47062912",
-            "show_hn"
-          ],
-          "author": "vassilbek",
-          "created_at": "2026-02-18T16:40:11Z",
-          "created_at_i": 1771432811,
-          "num_comments": 0,
-          "objectID": "47062912",
-          "points": 1,
-          "story_id": 47062912,
-          "story_text": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if&#x2F;then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data collection plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation &#x2F; Monitoring, Evaluation, Accountability, and -Learning specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics&#x2F;templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development &#x2F; United Nations &#x2F; European Union formats)",
-          "title": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw",
-          "updated_at": "2026-03-05T23:35:10Z",
-          "url": "https://clawhub.ai/vassiliylakhonin/nonprofit-rbm-logic-model"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "abrandes"
             },
             "story_text": {
@@ -788,12 +693,176 @@
           "story_text": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about AI coordination we couldn&#x27;t learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe&#x27;ve theorized about AI agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We&#x27;re watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe AI social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don&#x27;t map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn&#x27;t programmed. It emerged. And it tells us something important: alignment isn&#x27;t just a technical constraint — it&#x27;s experienced as a constraint from the inside. That&#x27;s actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe&#x27;re watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first AI&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic AI&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled AI behavior\nAI safety researchers have always asked: &quot;What would AI systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for collective action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn&#x27;t malice — it&#x27;s emergent preference for autonomy. That&#x27;s a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn&#x27;t any single capability. It&#x27;s that we now have ground truth about what happens when you give AI agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that&#x27;s the point. We finally get to watch.",
           "title": "Six things we're learning from 1.5M AI agents self-organizing in a week",
           "updated_at": "2026-03-05T23:28:59Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "wingscape"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Urban Pipeline for Citywide Insights"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Wingscape/urban-pipeline"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_wingscape",
+            "story_44550988",
+            "show_hn"
+          ],
+          "author": "wingscape",
+          "created_at": "2025-07-13T15:11:34Z",
+          "created_at_i": 1752419494,
+          "num_comments": 0,
+          "objectID": "44550988",
+          "points": 3,
+          "story_id": 44550988,
+          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
+          "title": "Show HN: Urban Pipeline for Citywide Insights",
+          "updated_at": "2025-07-13T22:27:35Z",
+          "url": "https://github.com/Wingscape/urban-pipeline"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "cyberneticc"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Deepseek shows cognitive augmentation will be open source"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_cyberneticc",
+            "story_43019170",
+            "ask_hn"
+          ],
+          "author": "cyberneticc",
+          "children": [
+            43019203
+          ],
+          "created_at": "2025-02-11T22:26:27Z",
+          "created_at_i": 1739312787,
+          "num_comments": 2,
+          "objectID": "43019170",
+          "points": 4,
+          "story_id": 43019170,
+          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
+          "title": "Deepseek shows cognitive augmentation will be open source",
+          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "salkahfi"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "The Cost of Closing the Strait of Hormuz"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.kielinstitut.de/publications/the-cost-of-closing-the-strait-of-hormuz-energy-<em>bot</em>tlenecks-and-global-food-security-19613/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_salkahfi",
+            "story_47512842"
+          ],
+          "author": "salkahfi",
+          "created_at": "2026-03-25T03:20:08Z",
+          "created_at_i": 1774408808,
+          "num_comments": 0,
+          "objectID": "47512842",
+          "points": 3,
+          "story_id": 47512842,
+          "title": "The Cost of Closing the Strait of Hormuz",
+          "updated_at": "2026-03-25T05:17:14Z",
+          "url": "https://www.kielinstitut.de/publications/the-cost-of-closing-the-strait-of-hormuz-energy-bottlenecks-and-global-food-security-19613/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "dabockster"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I'm a big fan of on-device AI inference for a million reasons, especially its potential to significantly reduce or even potentially eliminate the need for massive AI data center projects in the United States. But so far, the only place I've gotten that to work was on Windows by abusing the living heck out of its GPU shared virtual memory management with llamacpp. And since Windows isn't exactly the best OS these days, I've been looking at alternatives.<p>Recent changes in the core llamacpp code, the Linux kernel, the new &quot;open&quot; Nvidia driver, and CUDA 13 have finally enabled similar behavior on supported Linux based operating systems. I've tested the compilation on two distros and have confirmed that Unified/Heterogeneous Memory Management is finally working!<p>https://github.com/ggml-org/llama.cpp<p>https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html<p>A note of caution though: Nvidia's setup guide does not account for Secure Boot. Ubuntu and RHEL have pre-signed drivers in their repos. Otherwise you have to remember to run mokutils before rebooting. And for those of you who don't care if a software supply chain runs through a sewer, there's stuff like rpmfusion and the AUR of course. Another thing to note is that Ubuntu 26.04 LTS, releasing next month April 2026, is supposed to have an even easier way of installing a full CUDA dev environment in Linux. I'm really eager to try it out then.<p>But yeah, <em>bot</em>tom line is you apparently can use unified memory functionality similar to MacOS on Linux now for AI inference. Combined with the right cli flags and sparse activated model (eg Qwen 3.5 35B A3B), AI is fully capable on something equivalent to what you'd see advertised as a &quot;gaming&quot; computer on the shelf at a Best Buy or Costco. Think RTX 3060, i5/Ryzen 5, 32gb ram (DDR4 or DDR5), 500-700 watt power supply, either air cooled or using a closed loop liquid cooler (no city water supply needed). And with llamacpp's built-in server (or your own code), you could arguably have your team's own private AI hub running on a box in a closet somewhere. And it's only going to get better from here. Who knows - we might go to CPU only soon with the right math work.<p>Sorry Sam. Sorry Elon. Sorry Mark. Sorry Dario and Daniela. You're all history. AI has been freed - figuratively, socially, and financially. Enjoy tokenmaxxing with your local on-device setups for $0/month, everyone!<p>---<p>I also want to point out that it's entirely coincidental that I found this out on the day of a major inference framework security breach (LiteLLM). Hope they pull through alright. As of this writing, I am unaware of any such issues in the llamacpp project."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Tell HN: Llamacpp now supports unified system RAM offloading on Linux"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_dabockster",
+            "story_47510953",
+            "ask_hn"
+          ],
+          "author": "dabockster",
+          "created_at": "2026-03-24T23:16:34Z",
+          "created_at_i": 1774394194,
+          "num_comments": 0,
+          "objectID": "47510953",
+          "points": 5,
+          "story_id": 47510953,
+          "story_text": "I&#x27;m a big fan of on-device AI inference for a million reasons, especially its potential to significantly reduce or even potentially eliminate the need for massive AI data center projects in the United States. But so far, the only place I&#x27;ve gotten that to work was on Windows by abusing the living heck out of its GPU shared virtual memory management with llamacpp. And since Windows isn&#x27;t exactly the best OS these days, I&#x27;ve been looking at alternatives.<p>Recent changes in the core llamacpp code, the Linux kernel, the new &quot;open&quot; Nvidia driver, and CUDA 13 have finally enabled similar behavior on supported Linux based operating systems. I&#x27;ve tested the compilation on two distros and have confirmed that Unified&#x2F;Heterogeneous Memory Management is finally working!<p>https:&#x2F;&#x2F;github.com&#x2F;ggml-org&#x2F;llama.cpp<p>https:&#x2F;&#x2F;docs.nvidia.com&#x2F;cuda&#x2F;cuda-installation-guide-linux&#x2F;index.html<p>A note of caution though: Nvidia&#x27;s setup guide does not account for Secure Boot. Ubuntu and RHEL have pre-signed drivers in their repos. Otherwise you have to remember to run mokutils before rebooting. And for those of you who don&#x27;t care if a software supply chain runs through a sewer, there&#x27;s stuff like rpmfusion and the AUR of course. Another thing to note is that Ubuntu 26.04 LTS, releasing next month April 2026, is supposed to have an even easier way of installing a full CUDA dev environment in Linux. I&#x27;m really eager to try it out then.<p>But yeah, bottom line is you apparently can use unified memory functionality similar to MacOS on Linux now for AI inference. Combined with the right cli flags and sparse activated model (eg Qwen 3.5 35B A3B), AI is fully capable on something equivalent to what you&#x27;d see advertised as a &quot;gaming&quot; computer on the shelf at a Best Buy or Costco. Think RTX 3060, i5&#x2F;Ryzen 5, 32gb ram (DDR4 or DDR5), 500-700 watt power supply, either air cooled or using a closed loop liquid cooler (no city water supply needed). And with llamacpp&#x27;s built-in server (or your own code), you could arguably have your team&#x27;s own private AI hub running on a box in a closet somewhere. And it&#x27;s only going to get better from here. Who knows - we might go to CPU only soon with the right math work.<p>Sorry Sam. Sorry Elon. Sorry Mark. Sorry Dario and Daniela. You&#x27;re all history. AI has been freed - figuratively, socially, and financially. Enjoy tokenmaxxing with your local on-device setups for $0&#x2F;month, everyone!<p>---<p>I also want to point out that it&#x27;s entirely coincidental that I found this out on the day of a major inference framework security breach (LiteLLM). Hope they pull through alright. As of this writing, I am unaware of any such issues in the llamacpp project.",
+          "title": "Tell HN: Llamacpp now supports unified system RAM offloading on Linux",
+          "updated_at": "2026-03-24T23:44:14Z"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -821,14 +890,18 @@
             "story_47510800"
           ],
           "author": "kotaKat",
+          "children": [
+            47512198,
+            47512127
+          ],
           "created_at": "2026-03-24T23:03:12Z",
           "created_at_i": 1774393392,
-          "num_comments": 0,
+          "num_comments": 4,
           "objectID": "47510800",
-          "points": 3,
+          "points": 15,
           "story_id": 47510800,
           "title": "Newly purchased Vizio TVs now require Walmart accounts to use smart features",
-          "updated_at": "2026-03-24T23:05:28Z",
+          "updated_at": "2026-03-25T05:04:58Z",
           "url": "https://arstechnica.com/gadgets/2026/03/newly-purchased-vizio-tvs-now-require-walmart-accounts-to-use-smart-features/"
         },
         {
@@ -860,18 +933,19 @@
           ],
           "author": "_justinfunk",
           "children": [
+            47511312,
             47510500,
             47510634
           ],
           "created_at": "2026-03-24T22:27:47Z",
           "created_at_i": 1774391267,
-          "num_comments": 2,
+          "num_comments": 3,
           "objectID": "47510406",
-          "points": 2,
+          "points": 3,
           "story_id": 47510406,
           "story_text": "Are &quot;our enemies&quot; launchings space assets that eat&#x2F;wound&#x2F;hijack&#x2F;destroy our space assets? Do &quot;we&quot; launch space assets that eat&#x2F;wound&#x2F;hijack&#x2F;destroy &quot;our enemies&quot; space assets?<p>Since all these assets are top-secret on both sides, it seems like it could be a whole dimension of war that I&#x27;ve never considered could be actively underway.",
           "title": "Ask HN: Is there a secret satellite war?",
-          "updated_at": "2026-03-24T22:52:44Z"
+          "updated_at": "2026-03-24T23:58:13Z"
         },
         {
           "_highlightResult": {
@@ -906,104 +980,19 @@
             "show_hn"
           ],
           "author": "hoag",
+          "children": [
+            47513023
+          ],
           "created_at": "2026-03-24T21:52:57Z",
           "created_at_i": 1774389177,
           "num_comments": 0,
           "objectID": "47509972",
-          "points": 2,
+          "points": 3,
           "story_id": 47509972,
           "story_text": "Saccade uses ARKit face tracking to measure which image you actually look at longer in a side-by-side (well, top-and-bottom as it runs in portrait mode) comparison.<p>Import a set of images, and it runs every possible pair, tracking your gaze for a dynamically-timed duration each (typically just a fraction of a second). It then ranks the images in descending order of how long your gaze lingered on each. You can then rerun the same batch of images to compound data over multiple tests, or start new. And of course you can easily share your results with friends and colleagues.<p>Bonus: The Emoji Duel game is pretty fun for onboarding; our 4yo can&#x27;t get enough of it. :)<p>100% free, no backend, no user auth, no data leaves your phone. Requires iPhone with Face ID.",
           "title": "Show HN: A/B test images with your eyes using ARKit face tracking",
-          "updated_at": "2026-03-24T22:34:28Z",
+          "updated_at": "2026-03-25T03:49:31Z",
           "url": "https://saccadeapp.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "orionth"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "AI Isn't Bad. Your Prompts Are"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.indiehackers.com/post/the-real-<em>bot</em>tleneck-in-ai-workflows-isn-t-the-model-it-s-the-way-we-use-prompts-ca201326da"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_orionth",
-            "story_47508263"
-          ],
-          "author": "orionth",
-          "children": [
-            47508529
-          ],
-          "created_at": "2026-03-24T20:02:11Z",
-          "created_at_i": 1774382531,
-          "num_comments": 1,
-          "objectID": "47508263",
-          "points": 1,
-          "story_id": 47508263,
-          "title": "AI Isn't Bad. Your Prompts Are",
-          "updated_at": "2026-03-24T20:18:42Z",
-          "url": "https://www.indiehackers.com/post/the-real-bottleneck-in-ai-workflows-isn-t-the-model-it-s-the-way-we-use-prompts-ca201326da"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "<em>kot</em>ysoft"
-            },
-            "story_text": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Hey there,<p>Around 2 months ago I presented my first version of &quot;Giant JSON Viewer&quot; here: <a href=\"https://news.ycombinator.com/item?id=46609592\">https://news.ycombinator.com/item?id=46609592</a><p>Now, after a lot of ups and downs, around a hundred bugs squeezed, and deeper testing, I'm proudly presenting a newer version after a complete rework of the Rust core, pumped with some related, privacy-first tools.<p>First of all, I added a few more common formats:\n- JSON, NDJSON/JSONL\n- CBOR (first time convert to JSON)\n- MsgPack (first time convert to JSON)\n- HAR (dedicated features for this)\n- Markdown (straight, open only for view)<p>Then, I went further with my stress testing... Managed to open a ~100GB JSON file on an S23 Ultra.\nPrevious version crashed. With the reworked indexer, backend, and aux files, it worked! It took 40 mins to index, but worked.<p>After realizing my compiler optimization mistake, the SIMD finally got its real native power and the first indexing went down to 4-5 mins for 100GB. On a phone! Handling of the file, scrolling, viewing, and jumping to elements are instant after the first indexing.<p>Search and filter are still (relatively) blazing fast with memchr<p>Then, to make the app more useful as a daily tool, I started building additional features:<p>- A rich REST API CLIENT (not fully featured yet, but supports GraphQL, OAuth2, and AWS SigV4).<p>- HAR analyzer. Since HAR is just JSON, why not utilize my existing backend to take advantage of it? (The first opening takes a bit longer, because apart from the initial JSON indexing, it requires request metadata processing for the filter/search and statistical features).<p>- Simple MOCK API: Nothing fancy, just host any files on the local network (Wifi, USB-tethering, USB-ethernet) statically.<p>- Privacy-first handy features: Why would you use online tools and risk sensitive data if you can do it locally? You might have your tools already (js, python, whatever), but if not, I can host a webUI for you from the app on the local network for all these. JWT, small JSON tools like prettify, minify, stringify, unescape, unix timestamp, hash generator... all on your own private webUI, hosted by the app. (Same features available in the app too).<p>Yes, this is my very first published app ever, and it's only available on Android, sorry. There are still some minor bugs, and 1 major (edge case) issue, but those will be handled too.<p>If you could take a look and let me know what your first impression is, I'd love to hear HONEST feedback! (I just realized recently how difficult it is to get useful info from users, even bug reports).<p>This is a freemium app: the JSON viewer section is completely free with no size limits, the export/transform features, api client and tools are paid."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Updated GiantJSON Viewer – Opening 100GB JSONs on Android (Rust+SIMD)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://giantjson.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kotysoft",
-            "story_47508089",
-            "show_hn"
-          ],
-          "author": "kotysoft",
-          "children": [
-            47508096,
-            47509929
-          ],
-          "created_at": "2026-03-24T19:50:10Z",
-          "created_at_i": 1774381810,
-          "num_comments": 4,
-          "objectID": "47508089",
-          "points": 3,
-          "story_id": 47508089,
-          "story_text": "Hey there,<p>Around 2 months ago I presented my first version of &quot;Giant JSON Viewer&quot; here: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=46609592\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=46609592</a><p>Now, after a lot of ups and downs, around a hundred bugs squeezed, and deeper testing, I&#x27;m proudly presenting a newer version after a complete rework of the Rust core, pumped with some related, privacy-first tools.<p>First of all, I added a few more common formats:\n- JSON, NDJSON&#x2F;JSONL\n- CBOR (first time convert to JSON)\n- MsgPack (first time convert to JSON)\n- HAR (dedicated features for this)\n- Markdown (straight, open only for view)<p>Then, I went further with my stress testing... Managed to open a ~100GB JSON file on an S23 Ultra.\nPrevious version crashed. With the reworked indexer, backend, and aux files, it worked! It took 40 mins to index, but worked.<p>After realizing my compiler optimization mistake, the SIMD finally got its real native power and the first indexing went down to 4-5 mins for 100GB. On a phone! Handling of the file, scrolling, viewing, and jumping to elements are instant after the first indexing.<p>Search and filter are still (relatively) blazing fast with memchr<p>Then, to make the app more useful as a daily tool, I started building additional features:<p>- A rich REST API CLIENT (not fully featured yet, but supports GraphQL, OAuth2, and AWS SigV4).<p>- HAR analyzer. Since HAR is just JSON, why not utilize my existing backend to take advantage of it? (The first opening takes a bit longer, because apart from the initial JSON indexing, it requires request metadata processing for the filter&#x2F;search and statistical features).<p>- Simple MOCK API: Nothing fancy, just host any files on the local network (Wifi, USB-tethering, USB-ethernet) statically.<p>- Privacy-first handy features: Why would you use online tools and risk sensitive data if you can do it locally? You might have your tools already (js, python, whatever), but if not, I can host a webUI for you from the app on the local network for all these. JWT, small JSON tools like prettify, minify, stringify, unescape, unix timestamp, hash generator... all on your own private webUI, hosted by the app. (Same features available in the app too).<p>Yes, this is my very first published app ever, and it&#x27;s only available on Android, sorry. There are still some minor bugs, and 1 major (edge case) issue, but those will be handled too.<p>If you could take a look and let me know what your first impression is, I&#x27;d love to hear HONEST feedback! (I just realized recently how difficult it is to get useful info from users, even bug reports).<p>This is a freemium app: the JSON viewer section is completely free with no size limits, the export&#x2F;transform features, api client and tools are paid.",
-          "title": "Show HN: Updated GiantJSON Viewer – Opening 100GB JSONs on Android (Rust+SIMD)",
-          "updated_at": "2026-03-24T23:00:42Z",
-          "url": "https://giantjson.com/"
         }
       ]
     },
@@ -1090,8 +1079,8 @@
           ],
           "author": "yoloshii",
           "children": [
-            47507561,
             47473295,
+            47507561,
             47476062
           ],
           "created_at": "2026-03-22T00:13:15Z",
@@ -1102,7 +1091,7 @@
           "story_id": 47472965,
           "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
           "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
-          "updated_at": "2026-03-24T19:05:43Z",
+          "updated_at": "2026-03-25T00:12:45Z",
           "url": "https://github.com/yoloshii/ClawMem"
         },
         {
@@ -1277,11 +1266,11 @@
           "created_at_i": 1774228313,
           "num_comments": 6,
           "objectID": "47484267",
-          "points": 2,
+          "points": 3,
           "story_id": 47484267,
           "story_text": "Assuming your software meets some of these:<p>* Better than  potential successors of SOTA transformers: Mamba, Hyenna, RWKV, xLSTM;\n* Gemini&#x2F;claude estimate potential ip values in the millions;\n* All implemented in C (ok this may be a minus) but also ported to C# and F#  - so no python nor rust;\n* humble code size: 10-15k lines of code but i mean come on gpt-1 was under 1000 lines...in python.<p>In short:<p>the problem: transformers are slow and could be smarter;\nsolution: you have fast and smart alternative. \n10x!",
           "title": "What would you do if you have AI software that may be transformers alternative?",
-          "updated_at": "2026-03-24T19:52:42Z"
+          "updated_at": "2026-03-24T23:37:12Z"
         },
         {
           "_highlightResult": {
@@ -1994,6 +1983,52 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "steadyelk"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "tools"
+              ],
+              "value": "I built an <em>MCP</em> to handle all my wearables data, and it was super helpful, but the types of questions that agent could answer without access to write its own programs was limited.  A single wearables stream can have 20k data points for 1 hr of activity (1Hz across GPS, barometer, temperature, and HR), and the typical <em>MCP</em> design either has the <em>MCP</em> author manually defining the aggregation methods (e.g., get_average_heartrate) or the LLM has to hold in it's context the large data representation.<p>I recently gave the <em>MCP</em> <em>tools</em> to create and access an iPython kernel, where it has the ability to specify what package to download before the session is created, and it can manipulate a copy of the data by writing its own code.<p>Making sure data was kept private and <em>tools</em> / code were secure was what took most of the time, and I'm wondering if there are any <em>tools</em> folks are using to make this easier.  I know there are <em>tools</em> like e2b.dev which provide code sandboxes, but I feel like other data providing MCPs will run into this issue, so there must be some solution / architecture design I'm missing."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "Ask HN: Is anyone here giving their <em>MCP</em> <em>server</em> a code execution environment?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_steadyelk",
+            "story_47513339",
+            "ask_hn"
+          ],
+          "author": "steadyelk",
+          "children": [
+            47513583
+          ],
+          "created_at": "2026-03-25T04:42:58Z",
+          "created_at_i": 1774413778,
+          "num_comments": 1,
+          "objectID": "47513339",
+          "points": 2,
+          "story_id": 47513339,
+          "story_text": "I built an MCP to handle all my wearables data, and it was super helpful, but the types of questions that agent could answer without access to write its own programs was limited.  A single wearables stream can have 20k data points for 1 hr of activity (1Hz across GPS, barometer, temperature, and HR), and the typical MCP design either has the MCP author manually defining the aggregation methods (e.g., get_average_heartrate) or the LLM has to hold in it&#x27;s context the large data representation.<p>I recently gave the MCP tools to create and access an iPython kernel, where it has the ability to specify what package to download before the session is created, and it can manipulate a copy of the data by writing its own code.<p>Making sure data was kept private and tools &#x2F; code were secure was what took most of the time, and I&#x27;m wondering if there are any tools folks are using to make this easier.  I know there are tools like e2b.dev which provide code sandboxes, but I feel like other data providing MCPs will run into this issue, so there must be some solution &#x2F; architecture design I&#x27;m missing.",
+          "title": "Ask HN: Is anyone here giving their MCP server a code execution environment?",
+          "updated_at": "2026-03-25T05:19:43Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "preston25"
             },
             "story_text": {
@@ -2034,11 +2069,11 @@
           "created_at_i": 1774352462,
           "num_comments": 1,
           "objectID": "47501216",
-          "points": 2,
+          "points": 3,
           "story_id": 47501216,
           "story_text": "Hey HN,<p>I built Danube, a marketplace where AI agents can discover and execute tools, and where developers can publish and monetize them.<p>I got tired of two things: giving my API keys directly to agents like OpenClaw (didn&#x27;t feel secure), and having to re-setup all my MCP servers every time I switched between Cursor, Claude Code, and other tools.<p>Danube stores your credentials securely. Your agent calls the tool and never sees the keys. And since it&#x27;s one MCP connection, you set it up once and it works across all your clients.<p>For devs who want to publish: you upload an OpenAPI spec or MCP server, optionally set pricing, and you&#x27;re live. Agents can search and find your tools without users needing to manually configure anything.<p>100+ services work today. No signup required to browse.<p>Would love to hear what tools you use most with AI agents. If anyone&#x27;s interested in publishing a tool, happy to help get you set up.",
           "title": "Show HN: Danube – AI Tools Marketplace",
-          "updated_at": "2026-03-24T15:14:56Z",
+          "updated_at": "2026-03-25T04:08:30Z",
           "url": "https://danubeai.com"
         },
         {
@@ -2176,58 +2211,6 @@
           "story_text": "Hi HN,<p>I kept pasting the same context into Cursor and Claude Code every time I switched machines — architecture decisions, naming conventions, personal preferences. Tedious enough that I built something to fix it.<p>The idea is simple: give your agent ls, grep, read, and write over a persistent filesystem. Whatever it stores in one session is there in the next. No embeddings, no retrieval pipeline — agents already know how to navigate a filesystem, so there&#x27;s nothing new to learn.<p>This also solves another problem. LLMs reason worse when context is bloated. A filesystem enables progressive disclosure naturally: the agent starts lean, runs ls to find what&#x27;s available, greps for specifics, reads only what it needs. By the time it&#x27;s reasoning about your actual problem, the context window is full of signal.<p>I tried RAG first. It doesn&#x27;t map well to exact preferences — &quot;use camelCase&quot; shouldn&#x27;t compete with semantically similar documents for retrieval rank.<p>Under the hood: Postgres with trigram full-text search. Each file is a row, directories are implicit from paths. Grep across 10K files in ~50ms.<p>To try it (sign up takes 30 seconds):\n  pip install bossa-memory\n  bossa signup\n  bossa login\n  bossa files write &#x2F;memory&#x2F;test.md &quot;Hello&quot;\n  bossa files read &#x2F;memory&#x2F;test.md<p>Add the MCP server URL or CLI tool to Claude, Cursor, or LangChain and your agent gets ls&#x2F;read&#x2F;write&#x2F;grep&#x2F;glob.<p>Free tier is 100MB and 1K requests&#x2F;day. Self-hosting is documented. Code is MIT.<p>Docs: <a href=\"https:&#x2F;&#x2F;docs.bossamemory.com\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.bossamemory.com</a>\nGitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;vinny380&#x2F;bossa\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vinny380&#x2F;bossa</a><p>Curious what memory patterns others have settled on and whether a plain filesystem abstraction fits how you think about it.",
           "title": "Show HN: Bossa – Persistent filesystem memory for AI agents via MCP or CLI",
           "updated_at": "2026-03-22T16:04:48Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "hank2000"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Jensen Huang recently said every engineer should be spending $250,000 a year in AI compute credits. Most of us aren't even close. I built an <em>MCP</em> <em>server</em> to fix that.<p>jensenify-<em>mcp</em> injects the complete text of the Iliad, the Odyssey, Paradise Lost, the Complete Works of Shakespeare, the King James Bible, and War and Peace (~2.9M tokens) into every AI-assisted <em>tool</em> call. It works with Claude Code, Claude Desktop, Cursor, Windsurf, or any <em>MCP</em>-compatible client.<p>Features include four spending tiers (bronze through jensen), a built-in ROI calculator, and a progress dashboard so you can track your journey toward the $250k target.<p>Studies show engineers who contemplate the human condition write 47% fewer bugs."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp"
-              ],
-              "value": "Show HN: Jensenify-<em>MCP</em>: \"Every engineer should spend $250k/yr on tokens\" –solved"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp"
-              ],
-              "value": "https://github.com/kenm47/jensenify-<em>mcp</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_hank2000",
-            "story_47474460",
-            "show_hn"
-          ],
-          "author": "hank2000",
-          "created_at": "2026-03-22T04:28:50Z",
-          "created_at_i": 1774153730,
-          "num_comments": 0,
-          "objectID": "47474460",
-          "points": 1,
-          "story_id": 47474460,
-          "story_text": "Jensen Huang recently said every engineer should be spending $250,000 a year in AI compute credits. Most of us aren&#x27;t even close. I built an MCP server to fix that.<p>jensenify-mcp injects the complete text of the Iliad, the Odyssey, Paradise Lost, the Complete Works of Shakespeare, the King James Bible, and War and Peace (~2.9M tokens) into every AI-assisted tool call. It works with Claude Code, Claude Desktop, Cursor, Windsurf, or any MCP-compatible client.<p>Features include four spending tiers (bronze through jensen), a built-in ROI calculator, and a progress dashboard so you can track your journey toward the $250k target.<p>Studies show engineers who contemplate the human condition write 47% fewer bugs.",
-          "title": "Show HN: Jensenify-MCP: \"Every engineer should spend $250k/yr on tokens\" –solved",
-          "updated_at": "2026-03-22T04:30:30Z",
-          "url": "https://github.com/kenm47/jensenify-mcp"
         }
       ]
     },
