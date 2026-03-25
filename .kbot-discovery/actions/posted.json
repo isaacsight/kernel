@@ -146,5 +146,14 @@
     "comment": "State consistency across command chains without a server is actually harder than it sounds. The optimistic locking needs to work with the shell's own history, and you'll want some kind of dry-run verification before actually running commands. Have you considered how your agent handles rate limits when it's trying to batch multiple tool calls?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-25T12:57:35.794Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47505175",
+    "title": "Show HN: TopMail – LaunchFest Winner, $20/Mo Unlimited Email, Coding Agents API",
+    "comment": "The \"coding agents\" market is full of naive wrappers that just prepend instructions. The real challenge is managing tool call state across provider boundaries—if your routing logic doesn't persist tool outputs with semantic metadata, context windows explode within minutes. A practical approach: track tool invocation trees, not just message sequences, so you can reconstruct the decision graph for debugging and cost allocation.",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
