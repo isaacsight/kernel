@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-25T05:20:44.037Z",
+  "timestamp": "2026-03-25T12:49:48.392Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -51,8 +51,8 @@
             47501496,
             47501378,
             47502189,
-            47505458,
             47502703,
+            47505458,
             47501886
           ],
           "created_at": "2026-03-24T11:57:01Z",
@@ -63,7 +63,7 @@
           "story_id": 47501357,
           "story_text": "Hi HN folks,<p>I have been building AI agents for quite some time now. The shift has gone from LLM + Tools → LLM Workflows → Agent + Tools + Memory, and now we are finally seeing true agency emerge: agents as systems composed of tools, command-line access, fine-grained system capabilities, and memory.<p>This way of building agents is powerful, and I believe it is here to stay. But the real question is: are the systems powering these agents ready for that future?<p>I do not think so.<p>Using Docker for a single agent is not going to scale well, because agents need to be lightweight and fast. LLMs already add significant latency, so adding heavy runtime overhead on top only makes things worse. Existing solutions start to fall apart here.<p>Agents built in Python also tend to have a large memory footprint, which becomes a serious problem when you want to scale to thousands of agents.<p>And open-source for agents is still not where it should be. Right now, I cannot easily reuse agents built by domain experts the same way I reuse open-source software.<p>These issues bothered me, and I realized that if agents are ever going to be democratized, they need to be open and easy to use. Just like Docker solved system dependencies, we need something similar for agents.<p>That is why I started building an agent framework in Rust. It is modular and follows the principle of true agency: an agent is an entity with tools, memory, and an executor. In AutoAgents, users can independently create and modify tools, executors, and memory.<p>With AutoAgents, I saw that powerful agents could be built without compromising on performance or memory the way many other frameworks do.<p>But the other problems still remained: re-sharing agents, sandboxing, and scaling to thousands of agents.<p>So I created Odyssey — a bundle-first agent runtime written in Rust on top of AutoAgents, the Rust agent framework. It lets you define an agent once, package it as a portable artifact, and run it through the same execution model across local development, embedded SDK usage, shared runtime servers, and terminal workflows.<p>Both AutoAgents and Odyssey are fully open source and built in Rust, and I am planning to build an Odyssey Agent Hub soon, with additional features like WASM tools, custom memory layers, and more.<p>My vision is to democratize agents so they are available to everyone — securely and performantly. Being open is not enough; agents also need to be secure.<p>The project is still in alpha, but it is in a working state.<p>AutoAgents Repo -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;AutoAgents\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;AutoAgents</a><p>Odyssey Repo -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;Odyssey\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;Odyssey</a><p>I would really appreciate feedback — especially from anyone who has dealt with similar problems. Your feedback help me shape the product.<p>Thanks for your time in advance!",
           "title": "Show HN: Running AI agents across environments needs a proper solution",
-          "updated_at": "2026-03-24T23:15:43Z",
+          "updated_at": "2026-03-25T07:38:43Z",
           "url": "https://github.com/liquidos-ai/Odyssey"
         },
         {
@@ -98,8 +98,8 @@
           "author": "noemit",
           "children": [
             47496895,
-            47508348,
             47499371,
+            47508348,
             47499342,
             47499000,
             47498409,
@@ -117,7 +117,7 @@
           "story_id": 47494696,
           "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
           "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-25T02:41:58Z"
+          "updated_at": "2026-03-25T07:51:14Z"
         },
         {
           "_highlightResult": {
@@ -342,12 +342,11 @@
           ],
           "author": "jberthom",
           "children": [
-            47500594,
             47500311,
+            47500594,
             47499984,
-            47508231,
             47500072,
-            47512934,
+            47508231,
             47501289,
             47504657,
             47500124,
@@ -355,46 +354,49 @@
             47500259,
             47500795,
             47500065,
-            47509170,
+            47514234,
+            47512934,
             47501072,
             47500553,
             47501515,
-            47507203,
-            47507728,
+            47509170,
+            47514918,
             47500018,
-            47510958,
+            47507203,
             47501986,
+            47507728,
             47507003,
             47507229,
             47500879,
+            47510958,
+            47499968,
             47502729,
             47508601,
-            47499968,
+            47501069,
             47501177,
             47499959,
-            47501069,
             47500426,
             47500293,
             47499937,
             47500786,
-            47512267,
             47507562,
+            47512267,
             47507327,
+            47500788,
             47501768,
             47510731,
-            47500788,
             47510460,
             47499977
           ],
           "created_at": "2026-03-24T07:46:46Z",
           "created_at_i": 1774338406,
-          "num_comments": 88,
+          "num_comments": 90,
           "objectID": "47499672",
-          "points": 126,
+          "points": 134,
           "story_id": 47499672,
           "story_text": "I use AI agents to build UI features daily. The thing that kept annoying me: the agent writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the agent open a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p><pre><code>  proofshot start --run &quot;npm run dev&quot; --port 3000\n  # agent navigates, clicks, takes screenshots\n  proofshot stop\n</code></pre>\nIt works with whatever agent you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It&#x27;s packaged as a skill so your AI coding agent knows exactly how it works. It&#x27;s built on agent-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The agent doesn’t decide pass&#x2F;fail. It just gives me the evidence so I don’t have to open the browser myself every time.<p>Open source and completely free.<p>Website: <a href=\"https:&#x2F;&#x2F;proofshot.argil.io&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;proofshot.argil.io&#x2F;</a>",
           "title": "Show HN: ProofShot – Give AI coding agents eyes to verify the UI they build",
-          "updated_at": "2026-03-25T05:07:27Z",
+          "updated_at": "2026-03-25T12:46:46Z",
           "url": "https://github.com/AmElmo/proofshot"
         },
         {
@@ -793,44 +795,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "salkahfi"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "The Cost of Closing the Strait of Hormuz"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.kielinstitut.de/publications/the-cost-of-closing-the-strait-of-hormuz-energy-<em>bot</em>tlenecks-and-global-food-security-19613/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_salkahfi",
-            "story_47512842"
-          ],
-          "author": "salkahfi",
-          "created_at": "2026-03-25T03:20:08Z",
-          "created_at_i": 1774408808,
-          "num_comments": 0,
-          "objectID": "47512842",
-          "points": 3,
-          "story_id": 47512842,
-          "title": "The Cost of Closing the Strait of Hormuz",
-          "updated_at": "2026-03-25T05:17:14Z",
-          "url": "https://www.kielinstitut.de/publications/the-cost-of-closing-the-strait-of-hormuz-energy-bottlenecks-and-global-food-security-19613/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "dabockster"
+              "value": "samherder"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -838,167 +803,252 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I'm a big fan of on-device AI inference for a million reasons, especially its potential to significantly reduce or even potentially eliminate the need for massive AI data center projects in the United States. But so far, the only place I've gotten that to work was on Windows by abusing the living heck out of its GPU shared virtual memory management with llamacpp. And since Windows isn't exactly the best OS these days, I've been looking at alternatives.<p>Recent changes in the core llamacpp code, the Linux kernel, the new &quot;open&quot; Nvidia driver, and CUDA 13 have finally enabled similar behavior on supported Linux based operating systems. I've tested the compilation on two distros and have confirmed that Unified/Heterogeneous Memory Management is finally working!<p>https://github.com/ggml-org/llama.cpp<p>https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html<p>A note of caution though: Nvidia's setup guide does not account for Secure Boot. Ubuntu and RHEL have pre-signed drivers in their repos. Otherwise you have to remember to run mokutils before rebooting. And for those of you who don't care if a software supply chain runs through a sewer, there's stuff like rpmfusion and the AUR of course. Another thing to note is that Ubuntu 26.04 LTS, releasing next month April 2026, is supposed to have an even easier way of installing a full CUDA dev environment in Linux. I'm really eager to try it out then.<p>But yeah, <em>bot</em>tom line is you apparently can use unified memory functionality similar to MacOS on Linux now for AI inference. Combined with the right cli flags and sparse activated model (eg Qwen 3.5 35B A3B), AI is fully capable on something equivalent to what you'd see advertised as a &quot;gaming&quot; computer on the shelf at a Best Buy or Costco. Think RTX 3060, i5/Ryzen 5, 32gb ram (DDR4 or DDR5), 500-700 watt power supply, either air cooled or using a closed loop liquid cooler (no city water supply needed). And with llamacpp's built-in server (or your own code), you could arguably have your team's own private AI hub running on a box in a closet somewhere. And it's only going to get better from here. Who knows - we might go to CPU only soon with the right math work.<p>Sorry Sam. Sorry Elon. Sorry Mark. Sorry Dario and Daniela. You're all history. AI has been freed - figuratively, socially, and financially. Enjoy tokenmaxxing with your local on-device setups for $0/month, everyone!<p>---<p>I also want to point out that it's entirely coincidental that I found this out on the day of a major inference framework security breach (LiteLLM). Hope they pull through alright. As of this writing, I am unaware of any such issues in the llamacpp project."
+              "value": "I built Genosis because my AI trading assistant's Anthropic bill was eating the project alive — 12% cache hit rate when it should have been 80%, and I was spending more time optimizing costs than building the actual product.<p>Every major LLM provider offers 50-90% discounts on cached tokens, but the mechanics to actually capture them are different for every provider, change regularly, and are genuinely hard to get right.<p>Genosis watches your traffic (content-blind — it only sees hashes, never your data), figures out which blocks are worth caching and in what order, and delivers a manifest that the SDK applies locally. It also catches duplicate requests and serves them from a local cache — saving <em>bot</em>h input and output tokens.<p>It's not a proxy. It's never in your request path. If it goes down, your app works exactly as if it was never there.<p>- Open-source SDK: Python (pip install genosis) and TypeScript (npm install @genosis/sdk)\n- Supports Anthropic and OpenAI (Google coming soon)\n- Free tier — you only pay if we save you money<p>I'm the sole founder. Happy to answer questions about how it works, the caching mechanics, or anything else."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Tell HN: Llamacpp now supports unified system RAM offloading on Linux"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_dabockster",
-            "story_47510953",
-            "ask_hn"
-          ],
-          "author": "dabockster",
-          "created_at": "2026-03-24T23:16:34Z",
-          "created_at_i": 1774394194,
-          "num_comments": 0,
-          "objectID": "47510953",
-          "points": 5,
-          "story_id": 47510953,
-          "story_text": "I&#x27;m a big fan of on-device AI inference for a million reasons, especially its potential to significantly reduce or even potentially eliminate the need for massive AI data center projects in the United States. But so far, the only place I&#x27;ve gotten that to work was on Windows by abusing the living heck out of its GPU shared virtual memory management with llamacpp. And since Windows isn&#x27;t exactly the best OS these days, I&#x27;ve been looking at alternatives.<p>Recent changes in the core llamacpp code, the Linux kernel, the new &quot;open&quot; Nvidia driver, and CUDA 13 have finally enabled similar behavior on supported Linux based operating systems. I&#x27;ve tested the compilation on two distros and have confirmed that Unified&#x2F;Heterogeneous Memory Management is finally working!<p>https:&#x2F;&#x2F;github.com&#x2F;ggml-org&#x2F;llama.cpp<p>https:&#x2F;&#x2F;docs.nvidia.com&#x2F;cuda&#x2F;cuda-installation-guide-linux&#x2F;index.html<p>A note of caution though: Nvidia&#x27;s setup guide does not account for Secure Boot. Ubuntu and RHEL have pre-signed drivers in their repos. Otherwise you have to remember to run mokutils before rebooting. And for those of you who don&#x27;t care if a software supply chain runs through a sewer, there&#x27;s stuff like rpmfusion and the AUR of course. Another thing to note is that Ubuntu 26.04 LTS, releasing next month April 2026, is supposed to have an even easier way of installing a full CUDA dev environment in Linux. I&#x27;m really eager to try it out then.<p>But yeah, bottom line is you apparently can use unified memory functionality similar to MacOS on Linux now for AI inference. Combined with the right cli flags and sparse activated model (eg Qwen 3.5 35B A3B), AI is fully capable on something equivalent to what you&#x27;d see advertised as a &quot;gaming&quot; computer on the shelf at a Best Buy or Costco. Think RTX 3060, i5&#x2F;Ryzen 5, 32gb ram (DDR4 or DDR5), 500-700 watt power supply, either air cooled or using a closed loop liquid cooler (no city water supply needed). And with llamacpp&#x27;s built-in server (or your own code), you could arguably have your team&#x27;s own private AI hub running on a box in a closet somewhere. And it&#x27;s only going to get better from here. Who knows - we might go to CPU only soon with the right math work.<p>Sorry Sam. Sorry Elon. Sorry Mark. Sorry Dario and Daniela. You&#x27;re all history. AI has been freed - figuratively, socially, and financially. Enjoy tokenmaxxing with your local on-device setups for $0&#x2F;month, everyone!<p>---<p>I also want to point out that it&#x27;s entirely coincidental that I found this out on the day of a major inference framework security breach (LiteLLM). Hope they pull through alright. As of this writing, I am unaware of any such issues in the llamacpp project.",
-          "title": "Tell HN: Llamacpp now supports unified system RAM offloading on Linux",
-          "updated_at": "2026-03-24T23:44:14Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "<em>kot</em>aKat"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Newly purchased Vizio TVs now require Walmart accounts to use smart features"
+              "value": "Show HN: Genosis – LLM cost optimization that learns from your traffic"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://arstechnica.com/gadgets/2026/03/newly-purchased-vizio-tvs-now-require-walmart-accounts-to-use-smart-features/"
+              "value": "https://usegenosis.ai/"
             }
           },
           "_tags": [
             "story",
-            "author_kotaKat",
-            "story_47510800"
-          ],
-          "author": "kotaKat",
-          "children": [
-            47512198,
-            47512127
-          ],
-          "created_at": "2026-03-24T23:03:12Z",
-          "created_at_i": 1774393392,
-          "num_comments": 4,
-          "objectID": "47510800",
-          "points": 15,
-          "story_id": 47510800,
-          "title": "Newly purchased Vizio TVs now require Walmart accounts to use smart features",
-          "updated_at": "2026-03-25T05:04:58Z",
-          "url": "https://arstechnica.com/gadgets/2026/03/newly-purchased-vizio-tvs-now-require-walmart-accounts-to-use-smart-features/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "_justinfunk"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Are &quot;our enemies&quot; launchings space assets that eat/wound/hijack/destroy our space assets? Do &quot;we&quot; launch space assets that eat/wound/hijack/destroy &quot;our enemies&quot; space assets?<p>Since all these assets are top-secret on <em>bot</em>h sides, it seems like it could be a whole dimension of war that I've never considered could be actively underway."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: Is there a secret satellite war?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author__justinfunk",
-            "story_47510406",
-            "ask_hn"
-          ],
-          "author": "_justinfunk",
-          "children": [
-            47511312,
-            47510500,
-            47510634
-          ],
-          "created_at": "2026-03-24T22:27:47Z",
-          "created_at_i": 1774391267,
-          "num_comments": 3,
-          "objectID": "47510406",
-          "points": 3,
-          "story_id": 47510406,
-          "story_text": "Are &quot;our enemies&quot; launchings space assets that eat&#x2F;wound&#x2F;hijack&#x2F;destroy our space assets? Do &quot;we&quot; launch space assets that eat&#x2F;wound&#x2F;hijack&#x2F;destroy &quot;our enemies&quot; space assets?<p>Since all these assets are top-secret on both sides, it seems like it could be a whole dimension of war that I&#x27;ve never considered could be actively underway.",
-          "title": "Ask HN: Is there a secret satellite war?",
-          "updated_at": "2026-03-24T23:58:13Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "hoag"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Saccade uses ARKit face tracking to measure which image you actually look at longer in a side-by-side (well, top-and-<em>bot</em>tom as it runs in portrait mode) comparison.<p>Import a set of images, and it runs every possible pair, tracking your gaze for a dynamically-timed duration each (typically just a fraction of a second). It then ranks the images in descending order of how long your gaze lingered on each. You can then rerun the same batch of images to compound data over multiple tests, or start new. And of course you can easily share your results with friends and colleagues.<p>Bonus: The Emoji Duel game is pretty fun for onboarding; our 4yo can't get enough of it. :)<p>100% free, no backend, no user auth, no data leaves your phone. Requires iPhone with Face ID."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: A/B test images with your eyes using ARKit face tracking"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://saccadeapp.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_hoag",
-            "story_47509972",
+            "author_samherder",
+            "story_47516438",
             "show_hn"
           ],
-          "author": "hoag",
-          "children": [
-            47513023
-          ],
-          "created_at": "2026-03-24T21:52:57Z",
-          "created_at_i": 1774389177,
+          "author": "samherder",
+          "created_at": "2026-03-25T12:28:18Z",
+          "created_at_i": 1774441698,
           "num_comments": 0,
-          "objectID": "47509972",
-          "points": 3,
-          "story_id": 47509972,
-          "story_text": "Saccade uses ARKit face tracking to measure which image you actually look at longer in a side-by-side (well, top-and-bottom as it runs in portrait mode) comparison.<p>Import a set of images, and it runs every possible pair, tracking your gaze for a dynamically-timed duration each (typically just a fraction of a second). It then ranks the images in descending order of how long your gaze lingered on each. You can then rerun the same batch of images to compound data over multiple tests, or start new. And of course you can easily share your results with friends and colleagues.<p>Bonus: The Emoji Duel game is pretty fun for onboarding; our 4yo can&#x27;t get enough of it. :)<p>100% free, no backend, no user auth, no data leaves your phone. Requires iPhone with Face ID.",
-          "title": "Show HN: A/B test images with your eyes using ARKit face tracking",
-          "updated_at": "2026-03-25T03:49:31Z",
-          "url": "https://saccadeapp.com/"
+          "objectID": "47516438",
+          "points": 2,
+          "story_id": 47516438,
+          "story_text": "I built Genosis because my AI trading assistant&#x27;s Anthropic bill was eating the project alive — 12% cache hit rate when it should have been 80%, and I was spending more time optimizing costs than building the actual product.<p>Every major LLM provider offers 50-90% discounts on cached tokens, but the mechanics to actually capture them are different for every provider, change regularly, and are genuinely hard to get right.<p>Genosis watches your traffic (content-blind — it only sees hashes, never your data), figures out which blocks are worth caching and in what order, and delivers a manifest that the SDK applies locally. It also catches duplicate requests and serves them from a local cache — saving both input and output tokens.<p>It&#x27;s not a proxy. It&#x27;s never in your request path. If it goes down, your app works exactly as if it was never there.<p>- Open-source SDK: Python (pip install genosis) and TypeScript (npm install @genosis&#x2F;sdk)\n- Supports Anthropic and OpenAI (Google coming soon)\n- Free tier — you only pay if we save you money<p>I&#x27;m the sole founder. Happy to answer questions about how it works, the caching mechanics, or anything else.",
+          "title": "Show HN: Genosis – LLM cost optimization that learns from your traffic",
+          "updated_at": "2026-03-25T12:38:14Z",
+          "url": "https://usegenosis.ai/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "jacquesm"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "The number of supply chain attacks and the blast radius as a result of these is ever increasing. The big culprits are languages that are not just languages but whole eco-systems, where stuff that should be 'batteries included' ends up in a massive stack of libraries and modules that nobody can be <em>bot</em>hered to review.<p>This doesn't scale. Reviewing all of this code by all of the potential users is just asking for it, the bulk of them did not have the resource to write the module/library in the first place so they most likely will not have the resources to review everything they ingest.<p>I'm trying to imagine Linux with not one distribution but several thousand each of which could become malicious at the drop of a hat. In the longer term this will not work. All of these systems can only work in a world where there are no bad actors and where you implicitly trust the source.<p>Please improve curation. The next supply chain bug may well be 'the big one' and I'm pretty sure that various nation states are aiming to achieve that kind of capability now that there are ample proofs of concept out there. We need fewer points of distribution with better curation and far stricter review before inclusion, something along the lines of the Linux Kernel.<p>We do not need these crazy high release speeds with daily updates all over the stack, then you should just slow down and do better QA.<p>Reliability comes from the ability to invest the time review and increase understanding, not from the ability to release at breakneck speed, use your downstream as QA and then to fix things when you get them wrong. If it was coded today the world does not need it until tomorrow or even the day after tomorrow. Having a 'hot path' from your development environment to release that is fast also has the potential to export any compromise of your environment to your releases. More so if you accept external contributions to your code."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Tell HN: Slow Down"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jacquesm",
+            "story_47516232",
+            "ask_hn"
+          ],
+          "author": "jacquesm",
+          "children": [
+            47516481
+          ],
+          "created_at": "2026-03-25T12:05:01Z",
+          "created_at_i": 1774440301,
+          "num_comments": 0,
+          "objectID": "47516232",
+          "points": 5,
+          "story_id": 47516232,
+          "story_text": "The number of supply chain attacks and the blast radius as a result of these is ever increasing. The big culprits are languages that are not just languages but whole eco-systems, where stuff that should be &#x27;batteries included&#x27; ends up in a massive stack of libraries and modules that nobody can be bothered to review.<p>This doesn&#x27;t scale. Reviewing all of this code by all of the potential users is just asking for it, the bulk of them did not have the resource to write the module&#x2F;library in the first place so they most likely will not have the resources to review everything they ingest.<p>I&#x27;m trying to imagine Linux with not one distribution but several thousand each of which could become malicious at the drop of a hat. In the longer term this will not work. All of these systems can only work in a world where there are no bad actors and where you implicitly trust the source.<p>Please improve curation. The next supply chain bug may well be &#x27;the big one&#x27; and I&#x27;m pretty sure that various nation states are aiming to achieve that kind of capability now that there are ample proofs of concept out there. We need fewer points of distribution with better curation and far stricter review before inclusion, something along the lines of the Linux Kernel.<p>We do not need these crazy high release speeds with daily updates all over the stack, then you should just slow down and do better QA.<p>Reliability comes from the ability to invest the time review and increase understanding, not from the ability to release at breakneck speed, use your downstream as QA and then to fix things when you get them wrong. If it was coded today the world does not need it until tomorrow or even the day after tomorrow. Having a &#x27;hot path&#x27; from your development environment to release that is fast also has the potential to export any compromise of your environment to your releases. More so if you accept external contributions to your code.",
+          "title": "Tell HN: Slow Down",
+          "updated_at": "2026-03-25T12:46:16Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "gokulnair2001"
+            },
+            "story_text": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Hi everyone,\nIn today's age, creating application has been the easiest work to do, but when it comes to usage or adoption on a product people seem to be least interested. Isn't user adoption a vital thing? Why developers and companies are only interested in creating new features but not analysing the feedbacks or user traction?<p>This purely comes from a genuine problem which I faced, and for which I tried creating a solution(https://tryvelum.com), but it seems people are not interested.<p>Would love to know your opinion.<p>Thank You"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Ask HN: Why developers are not <em>bot</em>hered about feature adoption?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_gokulnair2001",
+            "story_47515931",
+            "ask_hn"
+          ],
+          "author": "gokulnair2001",
+          "created_at": "2026-03-25T11:30:26Z",
+          "created_at_i": 1774438226,
+          "num_comments": 0,
+          "objectID": "47515931",
+          "points": 1,
+          "story_id": 47515931,
+          "story_text": "Hi everyone,\nIn today&#x27;s age, creating application has been the easiest work to do, but when it comes to usage or adoption on a product people seem to be least interested. Isn&#x27;t user adoption a vital thing? Why developers and companies are only interested in creating new features but not analysing the feedbacks or user traction?<p>This purely comes from a genuine problem which I faced, and for which I tried creating a solution(https:&#x2F;&#x2F;tryvelum.com), but it seems people are not interested.<p>Would love to know your opinion.<p>Thank You",
+          "title": "Ask HN: Why developers are not bothered about feature adoption?",
+          "updated_at": "2026-03-25T11:33:17Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "ElFitz"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hi!<p>In the past few weeks I (mostly Claude) cobbled together a Rust library + cli to run the same prompt across multiple models, through multiple rounds of iterative consensus.<p>Each model is fed the same initial prompt, produces an answer, then every model individually reviews and scores each of the other model's answers independently. The original prompt, previous answer, and the reviews, are then fed back to the models for the next round, until either one model &quot;wins&quot; two rounds in a row or a limit is reached.<p>It did quite well on the car wash test (<a href=\"https://github.com/Lightless-Labs/refinery?tab=readme-ov-file#cli-examples\" rel=\"nofollow\">https://github.com/Lightless-Labs/refinery?tab=readme-ov-fil...</a>). Most models answer badly initially, but it just takes one for all of them to quickly converge towards better answers. Although, to my initial surprise, adding more models quickly breaks the current voting+threshold selection strategy.<p>I also recently added a synthesis mode, which does the same thing but with an additional synthesis round at the end where each model produces a synthesis of all the answers that scored above the threshold in the last round, followed by one last review round.<p>The total number of calls quickly blows up with rounds and model count, but it's been fun!<p>Currently, I'm racking my brain trying to figure out a way to select for <em>bot</em>h diversity and quality, for a &quot;brainstorm&quot; process. If you have any ideas either on that or other features, let me know!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Lightless Labs Refinery – multi-model consensus and synthesis"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Lightless-Labs/refinery"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_ElFitz",
+            "story_47515351",
+            "show_hn"
+          ],
+          "author": "ElFitz",
+          "children": [
+            47515595,
+            47515385
+          ],
+          "created_at": "2026-03-25T10:03:47Z",
+          "created_at_i": 1774433027,
+          "num_comments": 1,
+          "objectID": "47515351",
+          "points": 2,
+          "story_id": 47515351,
+          "story_text": "Hi!<p>In the past few weeks I (mostly Claude) cobbled together a Rust library + cli to run the same prompt across multiple models, through multiple rounds of iterative consensus.<p>Each model is fed the same initial prompt, produces an answer, then every model individually reviews and scores each of the other model&#x27;s answers independently. The original prompt, previous answer, and the reviews, are then fed back to the models for the next round, until either one model &quot;wins&quot; two rounds in a row or a limit is reached.<p>It did quite well on the car wash test (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Lightless-Labs&#x2F;refinery?tab=readme-ov-file#cli-examples\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Lightless-Labs&#x2F;refinery?tab=readme-ov-fil...</a>). Most models answer badly initially, but it just takes one for all of them to quickly converge towards better answers. Although, to my initial surprise, adding more models quickly breaks the current voting+threshold selection strategy.<p>I also recently added a synthesis mode, which does the same thing but with an additional synthesis round at the end where each model produces a synthesis of all the answers that scored above the threshold in the last round, followed by one last review round.<p>The total number of calls quickly blows up with rounds and model count, but it&#x27;s been fun!<p>Currently, I&#x27;m racking my brain trying to figure out a way to select for both diversity and quality, for a &quot;brainstorm&quot; process. If you have any ideas either on that or other features, let me know!",
+          "title": "Show HN: Lightless Labs Refinery – multi-model consensus and synthesis",
+          "updated_at": "2026-03-25T10:44:59Z",
+          "url": "https://github.com/Lightless-Labs/refinery"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "alekseiavg"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I built this because every scheduler I tried starts you on the calendar. I always found the easiest way to plan is to have a list of tasks and then put them on the schedule. Chronos is built around that flow. Tasks live in a panel on the right, you drag them onto the calendar on the left, and done.<p>I'm a high school student and built this primarily for my own scheduling. Sharing it as I think it's a better way to schedule. I wrote it with AI assistance just to speed up the process.<p>A few things that might be interesting technically:\n- The entire app is a single HTML file with no frameworks, no build step, no backend. You can download it and open it in a browser with no setup.\n- Save/load works via a base64 JSON blob you copy and paste to load your schedule. \n- There's a Telegram <em>bot</em> assistant that reads the save code and sends you reminders before events. Keeping it free to run was a challenge. \n- I think all the functions I ever needed are there. You can schedule the normal way ofcourse as well.<p>Known issues: the PDF export and iCal integration are kinda bad. If you run into problems with those I'd genuinely like to know. \nBuilt this around my own needs so it might have blind spots once again. Would appreciate any feedback on the UX, thank you!!<p>Try it: <a href=\"https://chronos_v1.oneapp.dev\" rel=\"nofollow\">https://chronos_v1.oneapp.dev</a><p>Telegram <em>bot</em>: <a href=\"https://t.me/chronos_1bot\" rel=\"nofollow\">https://t.me/chronos_1bot</a><p>Source: <a href=\"https://github.com/alekseiavgustin/ChronOs\" rel=\"nofollow\">https://github.com/alekseiavgustin/ChronOs</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Chronos a Drag-and-Drop Scheduler"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_alekseiavg",
+            "story_47514466",
+            "show_hn"
+          ],
+          "author": "alekseiavg",
+          "created_at": "2026-03-25T07:44:17Z",
+          "created_at_i": 1774424657,
+          "num_comments": 0,
+          "objectID": "47514466",
+          "points": 1,
+          "story_id": 47514466,
+          "story_text": "I built this because every scheduler I tried starts you on the calendar. I always found the easiest way to plan is to have a list of tasks and then put them on the schedule. Chronos is built around that flow. Tasks live in a panel on the right, you drag them onto the calendar on the left, and done.<p>I&#x27;m a high school student and built this primarily for my own scheduling. Sharing it as I think it&#x27;s a better way to schedule. I wrote it with AI assistance just to speed up the process.<p>A few things that might be interesting technically:\n- The entire app is a single HTML file with no frameworks, no build step, no backend. You can download it and open it in a browser with no setup.\n- Save&#x2F;load works via a base64 JSON blob you copy and paste to load your schedule. \n- There&#x27;s a Telegram bot assistant that reads the save code and sends you reminders before events. Keeping it free to run was a challenge. \n- I think all the functions I ever needed are there. You can schedule the normal way ofcourse as well.<p>Known issues: the PDF export and iCal integration are kinda bad. If you run into problems with those I&#x27;d genuinely like to know. \nBuilt this around my own needs so it might have blind spots once again. Would appreciate any feedback on the UX, thank you!!<p>Try it: <a href=\"https:&#x2F;&#x2F;chronos_v1.oneapp.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;chronos_v1.oneapp.dev</a><p>Telegram bot: <a href=\"https:&#x2F;&#x2F;t.me&#x2F;chronos_1bot\" rel=\"nofollow\">https:&#x2F;&#x2F;t.me&#x2F;chronos_1bot</a><p>Source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;alekseiavgustin&#x2F;ChronOs\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;alekseiavgustin&#x2F;ChronOs</a>",
+          "title": "Show HN: Chronos a Drag-and-Drop Scheduler",
+          "updated_at": "2026-03-25T07:47:28Z"
         }
       ]
     },
     {
       "query": "OpenClaw+plugin",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "lanchiii"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Show HN: Native, Structured and Long-Term Memory <em>Plugin</em> for <em>OpenClaw</em>"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "openclaw"
+              ],
+              "value": "https://docs.byterover.dev/autonomous-agents/<em>openclaw</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_lanchiii",
+            "story_47514797",
+            "show_hn"
+          ],
+          "author": "lanchiii",
+          "children": [
+            47514798
+          ],
+          "created_at": "2026-03-25T08:38:17Z",
+          "created_at_i": 1774427897,
+          "num_comments": 1,
+          "objectID": "47514797",
+          "points": 1,
+          "story_id": 47514797,
+          "title": "Show HN: Native, Structured and Long-Term Memory Plugin for OpenClaw",
+          "updated_at": "2026-03-25T10:21:43Z",
+          "url": "https://docs.byterover.dev/autonomous-agents/openclaw"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -1080,8 +1130,8 @@
           "author": "yoloshii",
           "children": [
             47473295,
-            47507561,
-            47476062
+            47476062,
+            47507561
           ],
           "created_at": "2026-03-22T00:13:15Z",
           "created_at_i": 1774138395,
@@ -1091,7 +1141,7 @@
           "story_id": 47472965,
           "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
           "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
-          "updated_at": "2026-03-25T00:12:45Z",
+          "updated_at": "2026-03-25T05:33:28Z",
           "url": "https://github.com/yoloshii/ClawMem"
         },
         {
@@ -1179,44 +1229,6 @@
           "story_text": "Claude Code forgets everything when you close the terminal. I spent 7 months figuring out what the minimum structure is to fix that.<p>Five files per project:\n  - key.md — what this is, who&#x27;s involved\n  - now.md — where it&#x27;s at right now\n  - log.md — what happened, decisions with rationale\n  - tasks.md — what needs doing\n  - insights.md — stuff that doesn&#x27;t change<p>Save at session end, load at session start. 12 hooks enforce the structure, log entries are immutable, deletions are blocked, context re-injects when the window fills up. The model can&#x27;t talk its way out of the guardrails.<p>Also works with OpenClaw (separate plugin, same files - in alpha). Your Mac Mini captures all day, Claude Code does focused work, both read the same project context.<p>claude plugin install alive@alivecomputer<p>MIT licensed, local files, no account.<p>https:&#x2F;&#x2F;github.com&#x2F;alivecomputer&#x2F;alive-claude",
           "title": "Alive – Five Markdown files that give Claude Code a persistent memory",
           "updated_at": "2026-03-17T17:51:26Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "doppp"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "NemoClaw: Nvidia <em>plugin</em> for secure installation of <em>OpenClaw</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/NVIDIA/NemoClaw"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_doppp",
-            "story_47410841"
-          ],
-          "author": "doppp",
-          "created_at": "2026-03-17T10:35:48Z",
-          "created_at_i": 1773743748,
-          "num_comments": 0,
-          "objectID": "47410841",
-          "points": 4,
-          "story_id": 47410841,
-          "title": "NemoClaw: Nvidia plugin for secure installation of OpenClaw",
-          "updated_at": "2026-03-18T03:01:59Z",
-          "url": "https://github.com/NVIDIA/NemoClaw"
         }
       ]
     },
@@ -2018,11 +2030,11 @@
           "created_at_i": 1774413778,
           "num_comments": 1,
           "objectID": "47513339",
-          "points": 2,
+          "points": 4,
           "story_id": 47513339,
           "story_text": "I built an MCP to handle all my wearables data, and it was super helpful, but the types of questions that agent could answer without access to write its own programs was limited.  A single wearables stream can have 20k data points for 1 hr of activity (1Hz across GPS, barometer, temperature, and HR), and the typical MCP design either has the MCP author manually defining the aggregation methods (e.g., get_average_heartrate) or the LLM has to hold in it&#x27;s context the large data representation.<p>I recently gave the MCP tools to create and access an iPython kernel, where it has the ability to specify what package to download before the session is created, and it can manipulate a copy of the data by writing its own code.<p>Making sure data was kept private and tools &#x2F; code were secure was what took most of the time, and I&#x27;m wondering if there are any tools folks are using to make this easier.  I know there are tools like e2b.dev which provide code sandboxes, but I feel like other data providing MCPs will run into this issue, so there must be some solution &#x2F; architecture design I&#x27;m missing.",
           "title": "Ask HN: Is anyone here giving their MCP server a code execution environment?",
-          "updated_at": "2026-03-25T05:19:43Z"
+          "updated_at": "2026-03-25T07:02:43Z"
         },
         {
           "_highlightResult": {

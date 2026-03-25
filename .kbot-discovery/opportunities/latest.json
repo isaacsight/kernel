@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-25T05:20:49.305Z",
+  "timestamp": "2026-03-25T12:49:51.795Z",
   "count": 30,
   "opportunities": [
     {
@@ -102,8 +102,8 @@
     },
     {
       "source": "github-issue",
-      "title": "Add Vercel AI SDK integration guide",
-      "url": "https://github.com/hidai25/eval-view/issues/127",
+      "title": "Howto connect AVA with Issabel 5.0",
+      "url": "https://github.com/hkjarral/AVA-AI-Voice-Agent-for-Asterisk/issues/276",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,24 +130,31 @@
     },
     {
       "source": "github-issue",
-      "title": "Plugins: enforce terminal hook decision semantics for tool/message guards",
-      "url": "https://github.com/openclaw/openclaw/pull/54241",
+      "title": "feat: add Requesty as a bundled provider plugin",
+      "url": "https://github.com/openclaw/openclaw/pull/54443",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(whatsapp): restore direct active-listener singleton",
-      "url": "https://github.com/openclaw/openclaw/pull/54232",
+      "title": "[Tracking]: OpenClaw 插件使用问题汇总 / OpenClaw Plugin Usage Issues Tracker",
+      "url": "https://github.com/volcengine/OpenViking/issues/969",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "chore(main): release 0.7.0",
-      "url": "https://github.com/clawvisor/clawvisor/pull/45",
+      "title": "Feat/Windows Search Index file search",
+      "url": "https://github.com/openclaw/openclaw/pull/54431",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "Engram — an open-source persistent memory system for AI models (local-first, TypeScript)",
+      "url": "https://reddit.com/r/programming/comments/1s39aqm/engram_an_opensource_persistent_memory_system_for/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-programming",
@@ -164,10 +171,10 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-programming",
-      "title": "OSS Maintainers Can Inject Their Standards Into Contributors' AI Tools",
-      "url": "https://reddit.com/r/programming/comments/1rf6w7s/oss_maintainers_can_inject_their_standards_into/",
-      "why": "Discussion in r/programming about AI agents",
+      "source": "reddit-commandline",
+      "title": "CCGram v2.3. Control shell sessions and coding agents from Telegram via tmux (now with NL-to-command generation)",
+      "url": "https://reddit.com/r/commandline/comments/1s350bl/ccgram_v23_control_shell_sessions_and_coding/",
+      "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -185,10 +192,10 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "dynq, a (hand-written) jq query tool for DynamoDB",
-      "url": "https://reddit.com/r/commandline/comments/1rzn1ma/dynq_a_handwritten_jq_query_tool_for_dynamodb/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "“AI” is a description, not the thing itself. Are we missing a word?",
+      "url": "https://reddit.com/r/artificial/comments/1s362g2/ai_is_a_description_not_the_thing_itself_are_we/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Three companies shipped \"AI agent on your desktop\" in the same two weeks. That's not a coincidence.",
       "url": "https://reddit.com/r/artificial/comments/1s2ddgb/three_companies_shipped_ai_agent_on_your_desktop/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Samsung is going all in on AI",
-      "url": "https://reddit.com/r/artificial/comments/1s2cwhf/samsung_is_going_all_in_on_ai/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
