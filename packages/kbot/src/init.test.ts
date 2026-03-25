@@ -91,6 +91,8 @@ describe('formatInitReport', () => {
       keyFiles: ['package.json', 'tsconfig.json'],
       commands: { dev: 'npm run dev', test: 'npm test' },
       forgedTools: ['run_tests', 'build_project'],
+      fileCounts: { '.ts': 10, '.tsx': 5, '.css': 3 },
+      totalFiles: 18,
       createdAt: new Date().toISOString(),
     })
 

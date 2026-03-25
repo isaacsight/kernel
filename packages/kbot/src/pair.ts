@@ -173,7 +173,276 @@ const SECURITY_PATTERNS: Array<{ pattern: RegExp; message: string; severity: 'er
 let activeWatcher: FSWatcher | null = null
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 const pendingChanges = new Set<string>()
-let sessionStats = { filesAnalyzed: 0, suggestionsShown: 0, fixesApplied: 0, errorsFound: 0 }
+let sessionStats = { filesAnalyzed: 0, suggestionsShown: 0, fixesApplied: 0, errorsFound: 0, testsRun: 0, testsFailed: 0 }
+
+// ---------------------------------------------------------------------------
+// Co-change pattern tracking
+// ---------------------------------------------------------------------------
+
+/** Tracks which files change together within a short time window. */
+const coChangeHistory: Array<{ files: string[]; timestamp: number }> = []
+const CO_CHANGE_WINDOW_MS = 5000 // files changing within 5s are "together"
+const MAX_CO_CHANGE_HISTORY = 200
+
+function recordCoChange(files: string[]): void {
+  if (files.length < 2) return
+  coChangeHistory.push({ files: files.sort(), timestamp: Date.now() })
+  if (coChangeHistory.length > MAX_CO_CHANGE_HISTORY) {
+    coChangeHistory.splice(0, coChangeHistory.length - MAX_CO_CHANGE_HISTORY)
+  }
+}
+
+/**
+ * Get files that frequently change together with the given file.
+ * Returns top co-changing files sorted by frequency.
+ */
+export function getCoChangePatterns(targetFile?: string): Array<{ pair: [string, string]; count: number }> {
+  const pairCounts = new Map<string, number>()
+
+  for (const entry of coChangeHistory) {
+    for (let i = 0; i < entry.files.length; i++) {
+      for (let j = i + 1; j < entry.files.length; j++) {
+        if (targetFile && entry.files[i] !== targetFile && entry.files[j] !== targetFile) continue
+        const key = `${entry.files[i]}||${entry.files[j]}`
+        pairCounts.set(key, (pairCounts.get(key) || 0) + 1)
+      }
+    }
+  }
+
+  return Array.from(pairCounts.entries())
+    .map(([key, count]) => {
+      const [a, b] = key.split('||') as [string, string]
+      return { pair: [a, b] as [string, string], count }
+    })
+    .filter(e => e.count >= 2)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10)
+}
+
+// ---------------------------------------------------------------------------
+// Test runner detection and execution
+// ---------------------------------------------------------------------------
+
+interface TestRunner {
+  name: string
+  command: string
+  /** Pattern to run a single test file */
+  singleFileCommand: (testFile: string) => string
+}
+
+function detectTestRunner(projectRoot: string): TestRunner | null {
+  const pkgPath = join(projectRoot, 'package.json')
+  if (existsSync(pkgPath)) {
+    try {
+      const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))
+      const deps = { ...pkg.dependencies, ...pkg.devDependencies }
+      const scripts = pkg.scripts || {}
+
+      // Vitest
+      if (deps.vitest || (scripts.test && scripts.test.includes('vitest'))) {
+        return {
+          name: 'vitest',
+          command: 'npx vitest run',
+          singleFileCommand: (f: string) => `npx vitest run "${f}" --reporter=verbose`,
+        }
+      }
+
+      // Jest
+      if (deps.jest || deps['@jest/core'] || (scripts.test && scripts.test.includes('jest'))) {
+        return {
+          name: 'jest',
+          command: 'npx jest',
+          singleFileCommand: (f: string) => `npx jest "${f}" --verbose`,
+        }
+      }
+
+      // Mocha
+      if (deps.mocha) {
+        return {
+          name: 'mocha',
+          command: 'npx mocha',
+          singleFileCommand: (f: string) => `npx mocha "${f}"`,
+        }
+      }
+    } catch { /* ignore */ }
+  }
+
+  // Python: pytest
+  if (existsSync(join(projectRoot, 'pytest.ini')) ||
+      existsSync(join(projectRoot, 'pyproject.toml')) ||
+      existsSync(join(projectRoot, 'setup.cfg'))) {
+    try {
+      const content = existsSync(join(projectRoot, 'pyproject.toml'))
+        ? readFileSync(join(projectRoot, 'pyproject.toml'), 'utf-8')
+        : ''
+      if (content.includes('pytest') || existsSync(join(projectRoot, 'pytest.ini'))) {
+        return {
+          name: 'pytest',
+          command: 'python -m pytest',
+          singleFileCommand: (f: string) => `python -m pytest "${f}" -v`,
+        }
+      }
+    } catch { /* ignore */ }
+  }
+
+  // Rust: cargo test
+  if (existsSync(join(projectRoot, 'Cargo.toml'))) {
+    return {
+      name: 'cargo test',
+      command: 'cargo test',
+      singleFileCommand: (_f: string) => 'cargo test',
+    }
+  }
+
+  // Go: go test
+  if (existsSync(join(projectRoot, 'go.mod'))) {
+    return {
+      name: 'go test',
+      command: 'go test ./...',
+      singleFileCommand: (f: string) => `go test -v -run . "${dirname(f)}"`,
+    }
+  }
+
+  return null
+}
+
+/**
+ * Find the test file corresponding to a source file, if it exists.
+ */
+function findTestFile(sourcePath: string): string | null {
+  const ext = extname(sourcePath)
+  const dir = dirname(sourcePath)
+  const nameWithoutExt = basename(sourcePath, ext)
+
+  // Skip test/spec files themselves
+  if (nameWithoutExt.endsWith('.test') || nameWithoutExt.endsWith('.spec')) return null
+  if (nameWithoutExt.endsWith('_test')) return null
+
+  // JS/TS patterns
+  const jsTsPatterns = [
+    join(dir, `${nameWithoutExt}.test${ext}`),
+    join(dir, `${nameWithoutExt}.spec${ext}`),
+    join(dir, `${nameWithoutExt}.test.ts`),
+    join(dir, `${nameWithoutExt}.spec.ts`),
+    join(dir, '__tests__', `${nameWithoutExt}.test${ext}`),
+    join(dir, '__tests__', `${nameWithoutExt}.spec${ext}`),
+  ]
+
+  // Python patterns
+  const pyPatterns = [
+    join(dir, `test_${nameWithoutExt}.py`),
+    join(dir, `${nameWithoutExt}_test.py`),
+    join(dir, 'tests', `test_${nameWithoutExt}.py`),
+  ]
+
+  // Go patterns
+  const goPatterns = [
+    join(dir, `${nameWithoutExt}_test.go`),
+  ]
+
+  // Rust tests are inline (in the same file), so just return the source
+  if (ext === '.rs') {
+    try {
+      const content = readFileSync(sourcePath, 'utf-8')
+      if (content.includes('#[cfg(test)]') || content.includes('#[test]')) {
+        return sourcePath
+      }
+    } catch { /* ignore */ }
+    return null
+  }
+
+  const allPatterns = [...jsTsPatterns, ...pyPatterns, ...goPatterns]
+  for (const p of allPatterns) {
+    if (existsSync(p)) return p
+  }
+
+  return null
+}
+
+/**
+ * Run the test file for a changed source file.
+ * Returns suggestions about the test result.
+ */
+function runTestForFile(change: ChangeEntry): PairSuggestion[] {
+  const projectRoot = findProjectRoot(change.fullPath)
+  if (!projectRoot) return []
+
+  const testRunner = detectTestRunner(projectRoot)
+  if (!testRunner) return []
+
+  const testFile = findTestFile(change.fullPath)
+  if (!testFile) return []
+
+  const suggestions: PairSuggestion[] = []
+  const relativeTestFile = testFile.replace(projectRoot + '/', '')
+
+  try {
+    execSync(testRunner.singleFileCommand(relativeTestFile), {
+      encoding: 'utf-8',
+      timeout: 30000,
+      cwd: projectRoot,
+      stdio: ['pipe', 'pipe', 'pipe'],
+    })
+
+    sessionStats.testsRun++
+    suggestions.push({
+      type: 'info',
+      category: 'test' as PairSuggestion['category'],
+      file: change.file,
+      message: `Tests passed (${testRunner.name}: ${relativeTestFile})`,
+    })
+  } catch (err: unknown) {
+    sessionStats.testsRun++
+    sessionStats.testsFailed++
+
+    const stdout = err instanceof Error && 'stdout' in err
+      ? String((err as { stdout: unknown }).stdout)
+      : ''
+    const stderr = err instanceof Error && 'stderr' in err
+      ? String((err as { stderr: unknown }).stderr)
+      : ''
+    const output = (stdout + '\n' + stderr).trim()
+
+    // Extract the most relevant failure line
+    const failureLines = output.split('\n')
+      .filter(l => /fail|error|assert|expect/i.test(l) && !l.includes('node_modules'))
+      .slice(0, 3)
+
+    suggestions.push({
+      type: 'error',
+      category: 'test' as PairSuggestion['category'],
+      file: change.file,
+      message: `Test failed (${testRunner.name}: ${relativeTestFile})`,
+    })
+
+    for (const line of failureLines) {
+      const trimmed = line.trim().slice(0, 120)
+      if (trimmed) {
+        suggestions.push({
+          type: 'error',
+          category: 'test' as PairSuggestion['category'],
+          file: change.file,
+          message: `  ${trimmed}`,
+        })
+      }
+    }
+
+    if (failureLines.length === 0 && output.length > 0) {
+      // Show last few lines as fallback
+      const lastLines = output.split('\n').filter(l => l.trim()).slice(-3)
+      for (const line of lastLines) {
+        suggestions.push({
+          type: 'error',
+          category: 'test' as PairSuggestion['category'],
+          file: change.file,
+          message: `  ${line.trim().slice(0, 120)}`,
+        })
+      }
+    }
+  }
+
+  return suggestions
+}
 
 // ---------------------------------------------------------------------------
 // Config management
@@ -855,6 +1124,11 @@ async function analyzeChanges(
       suggestions.push(...checkStyle(change))
     }
 
+    // Run tests for changed source files
+    if (isSource && config.checks.missingTests) {
+      suggestions.push(...runTestForFile(change))
+    }
+
     // Apply auto-fixes if enabled
     let autoFixed: PairSuggestion[] = []
     if (config.autoFix || options.autoFix) {
@@ -940,7 +1214,7 @@ export async function startPairMode(options: PairOptions = {}): Promise<void> {
   }
 
   // Reset session stats
-  sessionStats = { filesAnalyzed: 0, suggestionsShown: 0, fixesApplied: 0, errorsFound: 0 }
+  sessionStats = { filesAnalyzed: 0, suggestionsShown: 0, fixesApplied: 0, errorsFound: 0, testsRun: 0, testsFailed: 0 }
 
   // Print banner
   process.stderr.write('\n')
@@ -996,6 +1270,9 @@ export async function startPairMode(options: PairOptions = {}): Promise<void> {
           return classifyChange(full, file)
         })
 
+        // Track co-change patterns
+        recordCoChange(batch)
+
         // Run analysis pipeline
         await analyzeChanges(changes, config, options)
       }, DEBOUNCE_MS)
@@ -1038,9 +1315,22 @@ export function stopPairMode(): void {
     process.stderr.write(`    ${DIM('Files analyzed:')}  ${sessionStats.filesAnalyzed}\n`)
     process.stderr.write(`    ${DIM('Suggestions:')}     ${sessionStats.suggestionsShown}\n`)
     process.stderr.write(`    ${DIM('Errors found:')}    ${sessionStats.errorsFound}\n`)
+    if (sessionStats.testsRun > 0) {
+      process.stderr.write(`    ${DIM('Tests run:')}       ${sessionStats.testsRun}${sessionStats.testsFailed > 0 ? ` (${RED(String(sessionStats.testsFailed) + ' failed')})` : ` (${GREEN('all passed')})`}\n`)
+    }
     if (sessionStats.fixesApplied > 0) {
       process.stderr.write(`    ${DIM('Auto-fixed:')}      ${GREEN(String(sessionStats.fixesApplied))}\n`)
     }
+
+    // Print co-change patterns if any were detected
+    const patterns = getCoChangePatterns()
+    if (patterns.length > 0) {
+      process.stderr.write(`\n    ${DIM('Co-change patterns detected:')}\n`)
+      for (const p of patterns.slice(0, 5)) {
+        process.stderr.write(`      ${CYAN(p.pair[0])} ${DIM('<->')} ${CYAN(p.pair[1])} ${DIM(`(${p.count}x)`)}\n`)
+      }
+    }
+
     process.stderr.write('\n')
   }
 }
@@ -1110,6 +1400,28 @@ export async function analyzeWithAgent(
     const message = err instanceof Error ? err.message : String(err)
     return `AI analysis failed: ${message}`
   }
+}
+
+// ---------------------------------------------------------------------------
+// runPair() — convenience entry point
+// ---------------------------------------------------------------------------
+
+/**
+ * runPair() — Start AI pair programming watch mode.
+ *
+ * 1. Watches cwd (or specified path) for file changes using fs.watch
+ * 2. When .ts/.js/.py/.rs/.go files change:
+ *    - Runs the relevant test if one exists (detects vitest/jest/pytest/cargo/go)
+ *    - If test fails, shows the failure with fix suggestions
+ *    - Tracks which files change together (co-change pattern extraction)
+ * 3. Simple terminal output: file changed, action taken, result
+ * 4. Runs until Ctrl+C
+ */
+export async function runPair(path?: string, options?: Omit<PairOptions, 'path'>): Promise<void> {
+  return startPairMode({
+    path: path || process.cwd(),
+    ...options,
+  })
 }
 
 // ---------------------------------------------------------------------------
