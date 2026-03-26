@@ -43,7 +43,7 @@ const SUPABASE_URL = getEnv('VITE_SUPABASE_URL')
 const SUPABASE_KEY = getEnv('SUPABASE_SERVICE_KEY')
 const RESEND_KEY = getEnv('RESEND_API_KEY')
 const OLLAMA_URL = 'http://localhost:11434'
-const OLLAMA_MODEL = 'qwen2.5-coder:32b'
+const OLLAMA_MODEL = 'qwen3:8b'
 const POLL_INTERVAL = 15_000 // 15 seconds
 
 const SYSTEM_PROMPT = `You are a personal AI agent communicating via email through Kernel (kernel.chat).
