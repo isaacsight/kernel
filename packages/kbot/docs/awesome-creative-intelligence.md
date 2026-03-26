@@ -243,6 +243,8 @@ Creative intelligence sits at the intersection of computation, art, and artifici
 
 - **[the-gan-zoo](https://github.com/hindupuravinash/the-gan-zoo)** — A comprehensive catalog of every named GAN (Generative Adversarial Network) variant published in research. An essential taxonomy of the GAN family tree, from the original 2014 paper through hundreds of variants. `~15k stars`
 
+- **[awesome-autoresearch](https://github.com/alvinunreal/awesome-autoresearch)** — A curated index of autonomous research agents, self-improving loops, and systems inspired by Karpathy's autoresearch project. Catalogs descendants, forks, platform ports, domain-specific adaptations, and evaluation benchmarks for autonomous AI research pipelines.
+
 ---
 
 ## Contributing
