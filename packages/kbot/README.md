@@ -19,13 +19,25 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**Self-defending AI agent. 350+ tools. 26 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
+**Self-defending AI agent. 384+ tools. 41 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
 
 > **New: [The Kernel Stack](./KERNEL_STACK.md)** — the architecture behind kbot + Claude Code. Agentic, self-improving, compound AI. Read the manifesto.
 
 ---
 
 ## What's New
+
+### v3.37 — Dream Mode, Meta-Agent, Claude Code Plugin, Voice Mode
+
+| Feature | What it means |
+|---------|---------------|
+| **Dream Mode** | `kbot dream` — offline consolidation. kbot reviews recent sessions, extracts patterns, strengthens memory connections, and prunes stale knowledge. Like sleep for an AI agent. |
+| **Meta-Agent** | Self-referential self-improvement inspired by HyperAgents ([arXiv 2603.19461](https://arxiv.org/abs/2603.19461)). A two-agent loop: task agents solve problems, the Meta-Agent watches performance and rewrites task agents to be better. Unlike HyperAgents (CC BY-NC-SA), kbot is MIT — the only self-improving agent framework companies can actually use. Run `kbot meta` to trigger a cycle. |
+| **Claude Code Plugin** | kbot registers its 9 core specialists as Claude Code teammates via the Agent Teams integration. Delegate tasks to `coder`, `researcher`, `guardian`, etc. directly from Claude Code sessions. |
+| **Voice Mode** | `kbot voice` — full voice loop with speech-to-text input and text-to-speech output. Hands-free agentic coding. Works with system TTS and Whisper STT. |
+| **OpenClaw Integration** | [`@kernel.chat/kbot-openclaw`](https://www.npmjs.com/package/@kernel.chat/kbot-openclaw) — kbot as the brain for 50+ messaging channels. Discord, Slack, Telegram, WhatsApp, iMessage, email, and more. One agent, every platform. |
+| **41 agents** | 15 new specialist and domain agents since v3.28, including meta-agent, dream agent, and expanded presets. |
+| **384+ tools** | 34 new tools across finance, creative, build matrix, and meta-cognition categories. |
 
 ### v3.28 — Self-Defense System
 
@@ -76,7 +88,7 @@ Other AI agents are static — fixed tools, single providers, no memory, no lear
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, and 13 more. Switch anytime.
 - **Runs fully offline** — Embedded llama.cpp runs GGUF models directly. No Ollama needed. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster and smarter over time.
-- **26 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Say "analyze BTC" and it routes to `trader`. Auto-routed with probabilistic confidence.
+- **41 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Say "analyze BTC" and it routes to `trader`. Auto-routed with probabilistic confidence.
 - **Crash-proof** — Checkpoints after every tool call. Resume interrupted sessions automatically.
 - **Use as a library** — Clean SDK with typed exports. Build your own tools on top of kbot.
 - **Works in your IDE** — Built-in MCP server for VS Code, Cursor, Zed, Neovim. ACP for JetBrains.
@@ -165,7 +177,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 350+ tools
+// List all 384+ tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -179,15 +191,16 @@ import { ResponseStream } from '@kernel.chat/kbot'                     // Stream
 
 ## Specialists
 
-26 agents, auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
+41 agents, auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
 
 | | Agents |
 |---|---|
 | **Core** | kernel, researcher, coder, writer, analyst |
 | **Extended** | aesthete, guardian, curator, strategist |
 | **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter, trader |
-| **System** | immune, forge |
+| **System** | immune, forge, meta-agent, dream, codebase-guardian |
 | **Presets** | hacker, operator, dreamer, creative, developer, gamedev, playtester |
+| **Claude Code** | kernel, coder, researcher, writer, analyst, guardian, aesthete, curator, strategist (teammate integration) |
 
 ```bash
 kbot --agent researcher "what papers cite Friston's Free Energy Principle?"
@@ -196,7 +209,7 @@ kbot --agent coder "refactor this into smaller functions"
 kbot --agent trader "analyze BTC momentum and run a paper trade"
 ```
 
-## 345+ Tools
+## 384+ Tools
 
 | Category | Examples |
 |----------|---------|
@@ -436,6 +449,97 @@ kbot's agent loop runs 11 always-on cognition modules based on peer-reviewed res
 
 These aren't metaphors. They're TypeScript modules with paper citations in the headers. The interference between modules — not the modules themselves — is where intelligent behavior emerges. See the [research paper](../../docs/cognitive-module-interference.md).
 
+## Dream Mode
+
+```bash
+kbot dream
+```
+
+Offline memory consolidation. When you run `kbot dream`, kbot reviews recent sessions, extracts recurring patterns, strengthens high-value memory connections, and prunes stale or contradictory knowledge. Think of it as sleep for an AI agent — the work that makes tomorrow's sessions faster and more accurate.
+
+- **Pattern extraction** — identifies recurring tool sequences, user preferences, and project conventions
+- **Memory pruning** — removes outdated facts and conflicting entries
+- **Skill strengthening** — reinforces Bayesian skill ratings based on real outcomes
+- **Knowledge synthesis** — connects isolated learnings into higher-level insights
+- **Runs fully local** — no API calls, no data leaves your machine
+
+## Meta-Agent
+
+```bash
+kbot meta
+```
+
+Self-referential self-improvement. Inspired by Meta's HyperAgents paper ([arXiv 2603.19461](https://arxiv.org/abs/2603.19461)), the Meta-Agent implements a two-agent architecture:
+
+1. **Task agents** solve problems (the 41 specialists you already use)
+2. **The Meta-Agent** observes their performance, identifies weaknesses, and improves them
+
+The improvement loop runs automatically:
+- **Observe** — records success/failure, duration, cost, and tool usage for every task
+- **Analyze** — builds performance profiles per agent, identifies failure patterns
+- **Propose** — generates targeted improvements (prompt rewrites, tool pre-selection, routing changes)
+- **Apply** — auto-applies low-risk improvements (routing, tool selection); flags high-risk ones for review
+- **Measure** — compares before/after performance and reverts regressions
+
+Unlike HyperAgents (CC BY-NC-SA, non-commercial license), kbot is MIT — the only self-improving agent framework that companies can actually deploy in production.
+
+```bash
+kbot meta              # Run one improvement cycle
+kbot meta stats        # View cycle count, observations, active improvements
+kbot meta history      # Review all past improvements
+```
+
+## Claude Code Plugin
+
+kbot integrates directly with Claude Code as a teammate provider. Register kbot's specialists so Claude Code can delegate tasks to the right expert:
+
+```typescript
+import { registerTeammates, delegateToTeammate } from '@kernel.chat/kbot'
+
+// Get teammate definitions for all 9 core specialists
+const teammates = registerTeammates()
+// → [{ name: 'kernel', model: 'sonnet', ... }, { name: 'coder', ... }, ...]
+
+// Delegate a task to a specific specialist
+const result = await delegateToTeammate('guardian', 'audit src/auth.ts for security issues')
+console.log(result.content)   // security analysis
+console.log(result.toolCalls) // tools used (dep_audit, secret_scan, etc.)
+```
+
+Each teammate definition includes:
+- **name** — agent identifier (`kernel`, `coder`, `researcher`, `writer`, `analyst`, `guardian`, `aesthete`, `curator`, `strategist`)
+- **model** — `opus` for complex reasoning agents (analyst, strategist, guardian, researcher), `sonnet` for fast agents
+- **initialPrompt** — the specialist's full system prompt
+- **tools** — preferred tool list for the specialist's domain
+
+## Voice Mode
+
+```bash
+kbot voice
+```
+
+Full voice loop — speak your tasks, hear the results. Voice mode chains speech-to-text input with text-to-speech output for hands-free agentic coding:
+
+- **STT** — Whisper-based transcription (local or API)
+- **TTS** — System speech synthesis (macOS `say`, Linux `espeak`, or cloud TTS)
+- **Continuous** — voice loop stays open between turns, no re-activation needed
+- **Tool narration** — kbot announces tool calls and results as it works
+
+## OpenClaw Integration
+
+```bash
+npm install @kernel.chat/kbot-openclaw
+```
+
+kbot as the brain for 50+ messaging channels. OpenClaw bridges kbot's agent loop to Discord, Slack, Telegram, WhatsApp, iMessage, email, Matrix, and more — one agent, every platform.
+
+- **Channel-agnostic** — same agent logic regardless of input source
+- **Per-channel memory** — separate conversation contexts per channel/user
+- **Rate limiting** — configurable per-platform rate limits
+- **Media handling** — images, files, and voice messages routed through kbot's multimodal pipeline
+
+See [`@kernel.chat/kbot-openclaw`](https://www.npmjs.com/package/@kernel.chat/kbot-openclaw) on npm.
+
 ## Security
 
 kbot has two layers of security: protecting **your projects** and protecting **itself**.
@@ -514,7 +618,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, adding tools, and 
 </details>
 
 <details>
-<summary><strong>Agent Routing</strong> — 26 specialists, auto-routed by intent</summary>
+<summary><strong>Agent Routing</strong> — 41 specialists, auto-routed by intent</summary>
 <img src="../../tools/video-assets/demo-agents.gif" alt="kbot agent routing" width="700">
 </details>
 

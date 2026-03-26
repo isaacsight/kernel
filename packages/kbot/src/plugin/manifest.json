@@ -1,0 +1,48 @@
+{
+  "name": "kbot",
+  "version": "3.37.0",
+  "description": "384+ tools, 41 agents, self-improving AI — the open source intelligence",
+  "homepage": "https://kernel.chat",
+  "repository": "https://github.com/isaacsight/kernel",
+  "license": "MIT",
+  "mcpServers": {
+    "kbot": {
+      "command": "kbot",
+      "args": ["ide", "mcp"],
+      "env": {}
+    }
+  },
+  "channels": {
+    "kbot-channel": {
+      "command": "node",
+      "args": ["./dist/channels/kbot-channel.js"]
+    }
+  },
+  "skills": [
+    {
+      "name": "dream",
+      "description": "Run kbot dream mode — memory consolidation, meta-agent cycle, forge speculation, and self-benchmarking",
+      "file": "skills/dream.md"
+    },
+    {
+      "name": "dashboard",
+      "description": "Show kbot's live learning dashboard — tool usage, agent routing, growth metrics",
+      "file": "skills/dashboard.md"
+    },
+    {
+      "name": "pair",
+      "description": "Start pair programming mode — file watcher with real-time AI suggestions and auto-fix",
+      "file": "skills/pair.md"
+    },
+    {
+      "name": "guardian",
+      "description": "Run codebase guardian — detect duplicates, co-change patterns, and complexity hotspots",
+      "file": "skills/guardian.md"
+    },
+    {
+      "name": "meta",
+      "description": "Run meta-agent cycle — analyze task agent performance, propose and apply improvements",
+      "file": "skills/meta.md"
+    }
+  ]
+}
