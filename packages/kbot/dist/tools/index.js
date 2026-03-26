@@ -266,6 +266,10 @@ const LAZY_MODULE_IMPORTS = [
     { path: './lab-physics.js', registerFn: 'registerLabPhysicsTools' },
     { path: './lab-earth.js', registerFn: 'registerLabEarthTools' },
     { path: './lab-math.js', registerFn: 'registerLabMathTools' },
+    { path: './science-graph.js', registerFn: 'registerScienceGraphTools' },
+    { path: './research-pipeline.js', registerFn: 'registerResearchPipelineTools' },
+    { path: './research-notebook.js', registerFn: 'registerResearchNotebookTools' },
+    { path: './hypothesis-engine.js', registerFn: 'registerHypothesisEngineTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;

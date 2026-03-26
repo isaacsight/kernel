@@ -27,6 +27,10 @@ export declare function getDefaultModel(): string;
 export declare function getDefaultAgent(): string;
 /** Detect provider from API key prefix. Returns null if ambiguous. */
 export declare function detectProvider(key: string): ByokProvider | null;
+declare const ENV_KEYS: Array<{
+    env: string;
+    provider: ByokProvider;
+}>;
 /** Check if a provider is local (runs on this machine, may still need a token) */
 export declare function isLocalProvider(provider: ByokProvider): boolean;
 /** Check if a provider needs no API key at all */
@@ -82,5 +86,5 @@ export declare function routeModelForTask(provider: ByokProvider, message: strin
     model: string;
     reason: string;
 };
-export { KBOT_DIR, CONFIG_PATH };
+export { KBOT_DIR, CONFIG_PATH, ENV_KEYS };
 //# sourceMappingURL=auth.d.ts.map

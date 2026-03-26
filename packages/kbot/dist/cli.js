@@ -130,10 +130,16 @@ async function main() {
     ideCmd
         .command('status')
         .description('Show IDE bridge status')
-        .action(async () => {
+        .option('--json', 'Output as JSON')
+        .action(async (opts) => {
+        const jsonMode = opts.json || program.opts().json;
         const { initBridge, getStatus } = await import('./ide/bridge.js');
         await initBridge();
         const status = getStatus();
+        if (jsonMode) {
+            console.log(JSON.stringify(status, null, 2));
+            return;
+        }
         printInfo('kbot IDE Bridge Status');
         printInfo(`  Version:      ${status.version}`);
         printInfo(`  Agent:        ${status.agent}`);
@@ -2865,14 +2871,41 @@ async function main() {
                 }
             }
         }
-        // Still no provider — launch guided setup for new users
+        // Still no provider — launch guided setup (interactive) or show setup guide (non-interactive)
         if (!byokActive) {
-            const result = await guidedSetup();
-            if (!result)
+            if (!process.stdin.isTTY || opts.pipe || opts.json) {
+                // Non-interactive: can't run guided setup, show actionable guide and exit
+                printNoProviderGuide();
                 return;
+            }
+            const result = await guidedSetup();
+            if (!result) {
+                // User quit guided setup — show the guide so they know how to proceed
+                printNoProviderGuide();
+                return;
+            }
             byokActive = true;
             localActive = result.local;
         }
+    }
+    /** Print a friendly multi-line guide when no AI provider is configured */
+    function printNoProviderGuide() {
+        console.log();
+        printWarn('No API key configured yet. Let\'s fix that!');
+        console.log();
+        console.log(`  ${chalk.bold('Quick start')} ${chalk.dim('(pick one):')}`);
+        console.log();
+        console.log(`  ${chalk.dim('Cloud (needs API key):')}`);
+        console.log(`    ${chalk.green('kbot auth')}              ${chalk.dim('Interactive setup — walks you through it')}`);
+        console.log(`    ${chalk.green('kbot byok')}              ${chalk.dim('Bring Your Own Key for 15+ providers')}`);
+        console.log();
+        console.log(`  ${chalk.dim('Local (free, no key needed):')}`);
+        console.log(`    ${chalk.green('kbot local')}             ${chalk.dim('Use Ollama, LM Studio, or Jan')}`);
+        console.log(`    ${chalk.green('kbot doctor')}            ${chalk.dim('Check what\'s already installed')}`);
+        console.log();
+        console.log(`  ${chalk.dim('Get started fast:')} ${chalk.green('kbot auth')}`);
+        console.log(`  ${chalk.dim('Docs:')} ${chalk.underline('https://github.com/isaacsight/kernel')}`);
+        console.log();
     }
     /** Auto-detect provider from environment variables */
     function autoDetectFromEnv() {

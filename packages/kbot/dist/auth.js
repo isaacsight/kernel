@@ -833,5 +833,5 @@ export function routeModelForTask(provider, message) {
             return { model: p.defaultModel, reason: `${complexity} task → default model` };
     }
 }
-export { KBOT_DIR, CONFIG_PATH };
+export { KBOT_DIR, CONFIG_PATH, ENV_KEYS };
 //# sourceMappingURL=auth.js.map

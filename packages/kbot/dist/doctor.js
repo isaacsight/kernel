@@ -9,7 +9,7 @@ import { join } from 'node:path';
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import chalk from 'chalk';
-import { loadConfig, isByokEnabled, getByokProvider, isLocalProvider, PROVIDERS, isOllamaRunning, KBOT_DIR, } from './auth.js';
+import { loadConfig, isByokEnabled, getByokProvider, isLocalProvider, PROVIDERS, KBOT_DIR, ENV_KEYS, } from './auth.js';
 import { getExtendedStats } from './learning.js';
 import { getMachineProfile, probeMachine } from './machine.js';
 import { createRequire } from 'node:module';
@@ -134,40 +134,10 @@ function checkApiKey() {
     }
     return { name: 'API key', status: 'fail', message: `provider set to ${providerName} but no key found — run: kbot auth` };
 }
-async function checkProviderReachable() {
-    const config = loadConfig();
-    const byokActive = isByokEnabled();
-    if (!byokActive && !config?.byok_enabled) {
-        return { name: 'Provider reachable', status: 'warn', message: 'no provider configured — skipped' };
-    }
-    const provider = config?.byok_provider || getByokProvider();
-    const providerConfig = PROVIDERS[provider];
-    if (!providerConfig) {
-        return { name: 'Provider reachable', status: 'fail', message: `unknown provider: ${provider}` };
-    }
-    // For local providers, check their health endpoints
-    if (isLocalProvider(provider)) {
-        try {
-            const url = provider === 'kbot-local'
-                ? providerConfig.apiUrl.replace('/v1/chat/completions', '/health')
-                : providerConfig.apiUrl.replace('/v1/chat/completions', '/v1/models');
-            // Ollama uses a different base path
-            const checkUrl = provider === 'ollama'
-                ? providerConfig.apiUrl.replace('/v1/chat/completions', '/api/tags')
-                : url;
-            const res = await fetch(checkUrl, { signal: AbortSignal.timeout(3000) });
-            if (res.ok) {
-                return { name: 'Provider reachable', status: 'pass', message: `${providerConfig.name} is responding` };
-            }
-            return { name: 'Provider reachable', status: 'fail', message: `${providerConfig.name} returned ${res.status}` };
-        }
-        catch {
-            return { name: 'Provider reachable', status: 'fail', message: `${providerConfig.name} not responding` };
-        }
-    }
-    // For cloud providers, do a lightweight HEAD/GET to the API base
+/** Check a single cloud provider's reachability via lightweight HEAD request */
+async function checkCloudProviderReachable(providerId, providerConfig, isActive) {
+    const label = isActive ? `${providerConfig.name} (active)` : providerConfig.name;
     try {
-        // Strip the specific endpoint to get the base domain
         const url = new URL(providerConfig.apiUrl);
         const baseUrl = `${url.protocol}//${url.host}`;
         const res = await fetch(baseUrl, {
@@ -175,66 +145,139 @@ async function checkProviderReachable() {
             signal: AbortSignal.timeout(5000),
         });
         // Any response (even 401/404) means the host is reachable
-        return { name: 'Provider reachable', status: 'pass', message: `${providerConfig.name} host is reachable` };
+        return { name: label, status: 'pass', message: 'reachable' };
     }
     catch {
-        return { name: 'Provider reachable', status: 'warn', message: `${providerConfig.name} host unreachable — check your network` };
+        return { name: label, status: 'warn', message: 'unreachable — check your network or API key' };
     }
 }
-async function checkLocalRuntimes() {
-    const runtimes = [];
-    // Ollama (default port 11434)
-    const ollamaUp = await isOllamaRunning();
-    if (ollamaUp) {
-        let modelInfo = '';
-        try {
-            const res = await fetch('http://localhost:11434/api/tags', { signal: AbortSignal.timeout(3000) });
-            if (res.ok) {
+/** Check a single local provider's health endpoint */
+async function checkLocalProviderReachable(providerId, providerConfig) {
+    try {
+        let checkUrl;
+        if (providerId === 'ollama') {
+            checkUrl = providerConfig.apiUrl.replace('/v1/chat/completions', '/api/tags');
+        }
+        else if (providerId === 'kbot-local') {
+            checkUrl = providerConfig.apiUrl.replace('/v1/chat/completions', '/health');
+        }
+        else {
+            checkUrl = providerConfig.apiUrl.replace('/v1/chat/completions', '/v1/models');
+        }
+        const res = await fetch(checkUrl, { signal: AbortSignal.timeout(3000) });
+        if (!res.ok) {
+            return { name: providerConfig.name, status: 'fail', message: `returned ${res.status}` };
+        }
+        // For Ollama, report model count
+        if (providerId === 'ollama') {
+            try {
                 const data = await res.json();
                 const models = data.models ?? [];
-                modelInfo = models.length > 0
-                    ? ` (${models.length} models: ${models.slice(0, 5).map(m => m.name.split(':')[0]).join(', ')}${models.length > 5 ? '...' : ''})`
-                    : ' (no models pulled)';
+                const modelInfo = models.length > 0
+                    ? `running (${models.length} model${models.length !== 1 ? 's' : ''})`
+                    : 'running (no models pulled)';
+                return { name: providerConfig.name, status: 'pass', message: modelInfo };
+            }
+            catch {
+                return { name: providerConfig.name, status: 'pass', message: 'running' };
             }
         }
-        catch { }
-        runtimes.push(`Ollama${modelInfo}`);
+        return { name: providerConfig.name, status: 'pass', message: 'running' };
     }
-    // MLX server (Apple Silicon, port 8899)
-    try {
-        const res = await fetch('http://localhost:8899/v1/models', { signal: AbortSignal.timeout(2000) });
-        if (res.ok)
-            runtimes.push('MLX');
+    catch {
+        return { name: providerConfig.name, status: 'fail', message: 'not responding' };
     }
-    catch { /* not running */ }
-    // LM Studio (default port 1234)
-    try {
-        const lmHost = process.env.LMSTUDIO_HOST || 'http://localhost:1234';
-        const res = await fetch(`${lmHost}/v1/models`, { signal: AbortSignal.timeout(2000) });
-        if (res.ok)
-            runtimes.push('LM Studio');
+}
+/**
+ * Check all configured providers — active provider (from config), all providers
+ * with environment variable keys, and all detected local runtimes.
+ * Returns one CheckResult per provider, run in parallel for speed.
+ */
+async function checkAllProviders() {
+    const config = loadConfig();
+    const activeProvider = config?.byok_provider || (isByokEnabled() ? getByokProvider() : null);
+    // Collect all providers that have a key (config or env var)
+    const providersToCheck = new Map();
+    // 1. Active provider from config
+    if (activeProvider && config?.byok_enabled) {
+        providersToCheck.set(activeProvider, { isActive: true });
     }
-    catch { /* not running */ }
-    // Jan (default port 1337)
-    try {
-        const janHost = process.env.JAN_HOST || 'http://localhost:1337';
-        const res = await fetch(`${janHost}/v1/models`, { signal: AbortSignal.timeout(2000) });
-        if (res.ok)
-            runtimes.push('Jan');
+    // 2. Providers with environment variable keys
+    for (const { env, provider } of ENV_KEYS) {
+        if (process.env[env] && !isLocalProvider(provider)) {
+            const existing = providersToCheck.get(provider);
+            providersToCheck.set(provider, { isActive: existing?.isActive || false });
+        }
     }
-    catch { /* not running */ }
-    // kbot local (default port 18789)
-    try {
-        const kbotLocalHost = process.env.KBOT_LOCAL_HOST || 'http://127.0.0.1:18789';
-        const res = await fetch(`${kbotLocalHost}/health`, { signal: AbortSignal.timeout(2000) });
-        if (res.ok)
-            runtimes.push('kbot local');
+    // 3. Local runtimes — always probe these (they don't need keys)
+    const localProviders = ['ollama', 'lmstudio', 'jan', 'kbot-local'];
+    // 4. MLX server (Apple Silicon, port 8899) — not a formal provider but worth probing
+    const mlxCheck = (async () => {
+        try {
+            const res = await fetch('http://localhost:8899/v1/models', { signal: AbortSignal.timeout(2000) });
+            if (res.ok)
+                return { name: 'MLX', status: 'pass', message: 'running' };
+        }
+        catch { /* not running */ }
+        return null;
+    })();
+    // If nothing configured at all, return a single warning
+    if (providersToCheck.size === 0 && !activeProvider) {
+        return [{ name: 'Providers', status: 'warn', message: 'no provider configured — run: kbot auth' }];
     }
-    catch { /* not running */ }
-    if (runtimes.length > 0) {
-        return { name: 'Local runtimes', status: 'pass', message: runtimes.join(', ') };
+    // Build parallel checks
+    const checks = [];
+    // Cloud providers
+    for (const [providerId, { isActive }] of providersToCheck) {
+        const providerConfig = PROVIDERS[providerId];
+        if (!providerConfig)
+            continue;
+        if (isLocalProvider(providerId)) {
+            checks.push(checkLocalProviderReachable(providerId, providerConfig));
+        }
+        else {
+            checks.push(checkCloudProviderReachable(providerId, providerConfig, isActive));
+        }
     }
-    return { name: 'Local runtimes', status: 'warn', message: 'none detected (Ollama, LM Studio, Jan, kbot local)' };
+    // Local runtimes (always probed, even without explicit config)
+    for (const localId of localProviders) {
+        // Skip if already checked as the active provider
+        if (providersToCheck.has(localId))
+            continue;
+        const providerConfig = PROVIDERS[localId];
+        if (!providerConfig)
+            continue;
+        checks.push(checkLocalProviderReachable(localId, providerConfig));
+    }
+    // Run all checks in parallel (including MLX)
+    const [settled, mlxResult] = await Promise.all([
+        Promise.allSettled(checks),
+        mlxCheck,
+    ]);
+    const results = [];
+    for (const result of settled) {
+        if (result.status === 'fulfilled') {
+            results.push(result.value);
+        }
+        else {
+            results.push({ name: 'Provider check', status: 'warn', message: 'check failed unexpectedly' });
+        }
+    }
+    // Add MLX if detected
+    if (mlxResult)
+        results.push(mlxResult);
+    // Filter out local runtimes that are simply not running (don't clutter output)
+    // Keep them only if they're running OR if they're the active provider
+    const filtered = results.filter(r => {
+        // Always keep cloud providers and running local providers
+        if (r.status === 'pass' || r.status === 'warn')
+            return true;
+        // Keep failed local providers only if they're the active provider
+        const isActiveLocal = activeProvider && isLocalProvider(activeProvider) &&
+            r.name === PROVIDERS[activeProvider]?.name;
+        return !!isActiveLocal;
+    });
+    return filtered.length > 0 ? filtered : results;
 }
 function checkGit() {
     const version = execQuiet('git --version');
@@ -392,19 +435,16 @@ export async function runDoctor() {
     checks.push(checkKbotVersion());
     checks.push(checkApiKey());
     // Async checks — run in parallel for speed
-    const [providerResult, runtimesResult, hardwareResults] = await Promise.all([
-        checkProviderReachable().catch(() => ({
-            name: 'Provider reachable', status: 'warn', message: 'check failed unexpectedly',
-        })),
-        checkLocalRuntimes().catch(() => ({
-            name: 'Local runtimes', status: 'warn', message: 'check failed unexpectedly',
-        })),
+    const [providerResults, hardwareResults] = await Promise.all([
+        checkAllProviders().catch(() => [
+            { name: 'Providers', status: 'warn', message: 'check failed unexpectedly' },
+        ]),
         checkHardware().catch(() => [
             { name: 'Hardware', status: 'warn', message: 'check failed unexpectedly' },
         ]),
     ]);
-    checks.push(providerResult);
-    checks.push(runtimesResult);
+    // Provider checks (one line per provider)
+    checks.push(...providerResults);
     // Hardware checks
     checks.push(...hardwareResults);
     // More synchronous checks
@@ -446,15 +486,15 @@ export function formatDoctorReport(report) {
     const lines = [];
     lines.push('');
     lines.push(`  ${ACCENT('kbot Doctor')}`);
-    lines.push(`  ${DIM('─'.repeat(50))}`);
+    lines.push(`  ${DIM('─'.repeat(58))}`);
     lines.push('');
     for (const check of report.checks) {
         const icon = STATUS_ICON[check.status];
-        const nameCol = check.name.padEnd(20);
+        const nameCol = check.name.padEnd(28);
         lines.push(`  ${icon} ${nameCol}${check.message}`);
     }
     lines.push('');
-    lines.push(`  ${DIM('─'.repeat(50))}`);
+    lines.push(`  ${DIM('─'.repeat(58))}`);
     // Summary
     if (report.overall === 'pass') {
         lines.push(`  ${GREEN('All checks passed.')} Ready to go!`);
