@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-26T11:48:19.500Z",
+  "timestamp": "2026-03-26T13:25:58.882Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "feat: add cli-tool-builder skill",
+      "url": "https://github.com/organvm-iv-taxis/a-i--skills/issues/7",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "[Auto-QA] Components missing dark mode support",
       "url": "https://github.com/kubestellar/console/issues/3634",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "[Auto-QA] Hardcoded colors instead of design tokens",
       "url": "https://github.com/kubestellar/console/issues/3632",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Bug: AI Missions Slow Response & Returns Commands Instead of Executing Actions",
-      "url": "https://github.com/kubestellar/console/issues/3609",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "chore(master): release 1.0.0",
-      "url": "https://github.com/MaTriXy/rtk-token-compressor/pull/1",
+      "title": "feat: add DInference provider",
+      "url": "https://github.com/openclaw/openclaw/pull/55169",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[2603.24414v1] ClawKeeper: Comprehensive Safety Protection for OpenClaw Agents Through Skills, Plugins, and Watchers",
-      "url": "https://github.com/Mont9165/arxiv-issue-bot/issues/1716",
+      "title": "bug(discord): Bot does not respond to incoming Discord messages",
+      "url": "https://github.com/nextain/naia-os/issues/144",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(guardrails): pluggable GuardrailProvider interface for tool authorization",
-      "url": "https://github.com/openclaw/openclaw/pull/55053",
+      "title": "fix(extensions): align MIMO_API_KEY for Xiaomi extensions across plug…",
+      "url": "https://github.com/openclaw/openclaw/pull/55144",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "Clinic – Connect your Claude Code / OpenClaw to your Gmail, GitHub, Notion, and 39 more services in one command (open source)",
+      "url": "https://reddit.com/r/commandline/comments/1s467gf/clinic_connect_your_claude_code_openclaw_to_your/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "wardn - cli tool that encrypts your API keys and gives agents fake placeholder tokens",
       "url": "https://reddit.com/r/commandline/comments/1s3n8kb/wardn_cli_tool_that_encrypts_your_api_keys_and/",
       "why": "Discussion in r/commandline about AI agents",
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "CCGram v2.3. Control shell sessions and coding agents from Telegram via tmux (now with NL-to-command generation)",
       "url": "https://reddit.com/r/commandline/comments/1s350bl/ccgram_v23_control_shell_sessions_and_coding/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "dar: du with TUI &amp; treemap visual",
-      "url": "https://reddit.com/r/commandline/comments/1s0hcir/dar_du_with_tui_treemap_visual/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },

