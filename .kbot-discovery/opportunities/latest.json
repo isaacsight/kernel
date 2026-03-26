@@ -1,7 +1,14 @@
 {
-  "timestamp": "2026-03-26T05:33:20.727Z",
+  "timestamp": "2026-03-26T11:48:19.500Z",
   "count": 30,
   "opportunities": [
+    {
+      "source": "hn-comment",
+      "title": "Goodbye to Sora",
+      "url": "https://news.ycombinator.com/item?id=47517795",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
     {
       "source": "hn-comment",
       "title": "Show HN: An open-source safety net for home hemodialysis",
@@ -13,13 +20,6 @@
       "source": "hn-comment",
       "title": "Show HN: Soros – AI for geopolitical macro investing",
       "url": "https://news.ycombinator.com/item?id=47418557",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Fdbck – programmable feedback for your apps",
-      "url": "https://news.ycombinator.com/item?id=47415106",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "90% of Claude-linked output going to GitHub repos w <2 stars",
+      "url": "https://news.ycombinator.com/item?id=47523238",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "So where are all the AI apps?",
       "url": "https://news.ycombinator.com/item?id=47505810",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -74,36 +81,29 @@
     },
     {
       "source": "hn-comment",
-      "title": "Thinking Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning",
-      "url": "https://news.ycombinator.com/item?id=47474654",
+      "title": "So where are all the AI apps?",
+      "url": "https://news.ycombinator.com/item?id=47503733",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Ask HN: Is vibe coding a new mandatory job requirement?",
-      "url": "https://news.ycombinator.com/item?id=47464333",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "[Auto-QA] Components missing dark mode support",
+      "url": "https://github.com/kubestellar/console/issues/3634",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "[Auto-QA] Hardcoded colors instead of design tokens",
+      "url": "https://github.com/kubestellar/console/issues/3632",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
       "title": "Bug: AI Missions Slow Response & Returns Commands Instead of Executing Actions",
       "url": "https://github.com/kubestellar/console/issues/3609",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] Card types in INVENTORY.md not registered in source",
-      "url": "https://github.com/kubestellar/console/issues/3605",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] npm audit: 0 critical, 1 high vulnerabilities",
-      "url": "https://github.com/kubestellar/console/issues/3603",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix: Telegram and core channels not loading when plugin allowlist is enabled",
-      "url": "https://github.com/openclaw/openclaw/pull/54921",
+      "title": "chore(master): release 1.0.0",
+      "url": "https://github.com/MaTriXy/rtk-token-compressor/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Aituber pivot",
-      "url": "https://github.com/koatora20/guard-scanner/pull/20",
+      "title": "[2603.24414v1] ClawKeeper: Comprehensive Safety Protection for OpenClaw Agents Through Skills, Plugins, and Watchers",
+      "url": "https://github.com/Mont9165/arxiv-issue-bot/issues/1716",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(ext): DevScribe browser extension — Phase 1",
-      "url": "https://github.com/aegntic/clawreform/pull/27",
+      "title": "feat(guardrails): pluggable GuardrailProvider interface for tool authorization",
+      "url": "https://github.com/openclaw/openclaw/pull/55053",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "Meta just acqui-hired its 4th AI startup in 4 months. Dreamer, Manus, Moltbook, and Scale AI's founder. Is anyone else watching this pattern?",
-      "url": "https://reddit.com/r/artificial/comments/1s3xr4l/meta_just_acquihired_its_4th_ai_startup_in_4/",
+      "title": "we built an open source library of AI agent prompts and configs, just hit 100 stars",
+      "url": "https://reddit.com/r/artificial/comments/1s4549n/we_built_an_open_source_library_of_ai_agent/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "How do you tell users your AI agent is down?",
-      "url": "https://reddit.com/r/artificial/comments/1s3tadz/how_do_you_tell_users_your_ai_agent_is_down/",
+      "title": "we made a community repo of AI agent setups and configs, just hit 100 stars with 90 PRs",
+      "url": "https://reddit.com/r/artificial/comments/1s44czb/we_made_a_community_repo_of_ai_agent_setups_and/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "What happens when you give an AI editorial discipline instead of just writing ability?",
-      "url": "https://reddit.com/r/artificial/comments/1s3rpi6/what_happens_when_you_give_an_ai_editorial/",
+      "title": "I open-sourced an always-on direct bridge between your LLM and your Mac. \"Hey Q, read my screen and reply to this Slack message\" please meet CODEC",
+      "url": "https://reddit.com/r/artificial/comments/1s432by/i_opensourced_an_alwayson_direct_bridge_between/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

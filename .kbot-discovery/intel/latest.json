@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-26T05:33:16.577Z",
+  "timestamp": "2026-03-26T11:48:15.818Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -94,17 +94,18 @@
           ],
           "author": "JXavierH",
           "children": [
+            47528497,
             47525291
           ],
           "created_at": "2026-03-26T00:34:03Z",
           "created_at_i": 1774485243,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47525283",
           "points": 2,
           "story_id": 47525283,
           "story_text": "Hey HN.  I built Vectimus because coding agents keep doing things they shouldn&#x27;t and there&#x27;s no runtime governance layer for the developer workstation.<p>The problem: Claude Code, Cursor, Gemini CLI and GitHub Copilot let agents execute shell commands, write files and call MCP servers.  Most developers disable the permission prompts because they slow you down.  But that means the agent can rm -rf &#x2F;, read your .env, push to production or call a compromised MCP server with nothing watching.<p>Vectimus intercepts every tool call and evaluates it against 78 Cedar policies containing 369 rules before execution.  Cedar is the policy language AWS chose for AgentCore Policy (GA this month).  Evaluation runs locally via a persistent daemon in under 10ms.  Zero network calls.  Zero telemetry.  Every evaluation produces an Ed25519-signed receipt so you have cryptographic proof of what was allowed and denied.<p>Every policy maps to a real incident.  CVE-2025-6514 compromised 437,000+ developer environments through a malicious MCP OAuth proxy.  The GitHub MCP server was hijacked via a crafted issue to exfiltrate private repo data.  A Terraform agent destroyed production infrastructure.  These happened.<p>How it hooks in: Claude Code intercepts shell commands, file writes, MCP calls and web fetches.  Cursor governs shell commands, file reads&#x2F;writes and MCP tool calls at the editor level.  Copilot intercepts terminal commands, file edits, deletes and git pushes.  Gemini CLI uses Gemini&#x27;s native hook system.  MCP servers are blocked by default and allowlisted per-project with input inspection.  Observe mode lets you see what would be blocked before you enforce.<p>I also built Sentinel (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vectimus&#x2F;sentinel\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vectimus&#x2F;sentinel</a>), a three-agent pipeline that scans for new agentic AI security incidents daily, drafts Cedar policies, replays the incident in a sandbox to prove the policy catches it, then opens a PR.  The pipeline is governed by Vectimus.  Every finding and policy draft is public.<p>All 10 OWASP Agentic Top 10 categories covered.  Compliance annotations for SOC 2, NIST AI RMF, NIST CSF 2.0, EU AI Act, ISO 27001, CIS Controls and SLSA.  Apache 2.0.  Solo founder, built in Ireland.<p>Happy to go deep on the Cedar policy design, the hook architecture, the signed receipts or the OWASP mapping.",
           "title": "Show HN: Vectimus – Cedar policy enforcement for AI coding agents",
-          "updated_at": "2026-03-26T02:02:02Z",
+          "updated_at": "2026-03-26T09:59:33Z",
           "url": "https://github.com/vectimus/vectimus"
         },
         {
@@ -316,25 +317,30 @@
           ],
           "author": "jawiggins",
           "children": [
-            47525855,
+            47528314,
+            47528440,
             47525453,
             47524587,
+            47527007,
+            47525855,
+            47527135,
+            47525213,
             47524594,
             47526092,
-            47525213,
+            47527060,
             47525242,
             47524726,
             47525020
           ],
           "created_at": "2026-03-25T17:10:21Z",
           "created_at_i": 1774458621,
-          "num_comments": 19,
+          "num_comments": 33,
           "objectID": "47520220",
-          "points": 33,
+          "points": 59,
           "story_id": 47520220,
           "story_text": "I think like many of you, I&#x27;ve been jumping between many claude code&#x2F;codex sessions at a time, managing multiple lines of work and worktrees in multiple repos. I wanted a way to easily manage multiple lines of work and reduce the amount of input I need to give, allowing the agents to remove me as a bottleneck from as much of the process as I can. So I built an orchestration tool for AI coding agents:<p>Optio is an open-source orchestration system that turns tickets into merged pull requests using AI coding agents. You point it at your repos, and it handles the full lifecycle:<p>- Intake — pull tasks from GitHub Issues, Linear, or create them manually<p>- Execution — spin up isolated K8s pods per repo, run Claude Code or Codex in git worktrees<p>- PR monitoring — watch CI checks, review status, and merge readiness every 30s<p>- Self-healing — auto-resume the agent on CI failures, merge conflicts, or reviewer change requests<p>- Completion — squash-merge the PR and close the linked issue<p>The key idea is the feedback loop. Optio doesn&#x27;t just run an agent and walk away — when CI breaks, it feeds the failure back to the agent. When a reviewer requests changes, the comments become the agent&#x27;s next prompt. It keeps going until the PR merges or you tell it to stop.<p>Built with Fastify, Next.js, BullMQ, and Drizzle on Postgres. Ships with a Helm chart for production deployment.",
           "title": "Show HN: Optio – Orchestrate AI coding agents in K8s to go from ticket to PR",
-          "updated_at": "2026-03-26T05:30:32Z",
+          "updated_at": "2026-03-26T11:48:03Z",
           "url": "https://github.com/jonwiggins/optio"
         },
         {
@@ -475,46 +481,47 @@
             47500594,
             47500072,
             47508231,
-            47521650,
             47501289,
             47500124,
+            47521650,
             47504657,
-            47519493,
             47500306,
             47500259,
             47500795,
-            47525072,
+            47519493,
             47500065,
             47501072,
             47500553,
+            47499937,
             47501515,
+            47525072,
             47500018,
             47512934,
             47501986,
             47507203,
             47514234,
             47507728,
-            47507003,
             47500879,
-            47507229,
+            47507003,
             47499968,
+            47507229,
             47502729,
             47510958,
+            47500293,
             47508601,
-            47514918,
             47501069,
             47501177,
+            47514918,
             47499959,
-            47500426,
-            47500293,
-            47499937,
             47500786,
+            47500426,
+            47528571,
             47522033,
             47507562,
-            47524746,
             47507327,
             47512267,
             47500788,
+            47524746,
             47501768,
             47510731,
             47510460,
@@ -525,11 +532,11 @@
           "created_at_i": 1774338406,
           "num_comments": 96,
           "objectID": "47499672",
-          "points": 148,
+          "points": 152,
           "story_id": 47499672,
           "story_text": "I use AI agents to build UI features daily. The thing that kept annoying me: the agent writes code but never sees what it actually looks like in the browser. It can’t tell if the layout is broken or if the console is throwing errors.<p>So I built a CLI that lets the agent open a browser, interact with the page, record what happens, and collect any errors. Then it bundles everything — video, screenshots, logs — into a self-contained HTML file I can review in seconds.<p><pre><code>  proofshot start --run &quot;npm run dev&quot; --port 3000\n  # agent navigates, clicks, takes screenshots\n  proofshot stop\n</code></pre>\nIt works with whatever agent you use (Claude Code, Cursor, Codex, etc.) — it’s just shell commands. It&#x27;s packaged as a skill so your AI coding agent knows exactly how it works. It&#x27;s built on agent-browser from Vercel Labs which is far better and faster than Playwright MCP.<p>It’s not a testing framework. The agent doesn’t decide pass&#x2F;fail. It just gives me the evidence so I don’t have to open the browser myself every time.<p>Open source and completely free.<p>Website: <a href=\"https:&#x2F;&#x2F;proofshot.argil.io&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;proofshot.argil.io&#x2F;</a>",
           "title": "Show HN: ProofShot – Give AI coding agents eyes to verify the UI they build",
-          "updated_at": "2026-03-26T05:23:48Z",
+          "updated_at": "2026-03-26T11:35:34Z",
           "url": "https://github.com/AmElmo/proofshot"
         },
         {
@@ -835,6 +842,49 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "Anonasty"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Russian <em>bot</em>net operator linked to major ransomware attacks sentenced in US"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://therecord.media/russian-<em>bot</em>net-operator-sentenced-ransomware"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_Anonasty",
+            "story_47527390"
+          ],
+          "author": "Anonasty",
+          "children": [
+            47527391
+          ],
+          "created_at": "2026-03-26T06:59:40Z",
+          "created_at_i": 1774508380,
+          "num_comments": 1,
+          "objectID": "47527390",
+          "points": 3,
+          "story_id": 47527390,
+          "title": "Russian botnet operator linked to major ransomware attacks sentenced in US",
+          "updated_at": "2026-03-26T08:09:32Z",
+          "url": "https://therecord.media/russian-botnet-operator-sentenced-ransomware"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "MoritzWall"
             },
             "title": {
@@ -868,10 +918,10 @@
           "created_at_i": 1774499022,
           "num_comments": 2,
           "objectID": "47526621",
-          "points": 1,
+          "points": 3,
           "story_id": 47526621,
           "title": "OpenAI backs AI \"bot army\" startup Isara ($94M, $650M valuation)",
-          "updated_at": "2026-03-26T05:15:47Z",
+          "updated_at": "2026-03-26T05:43:17Z",
           "url": "https://www.wsj.com/tech/ai/openai-backs-new-ai-startup-seeking-bot-army-breakthroughs-a0b1fedc"
         },
         {
@@ -909,21 +959,32 @@
           ],
           "author": "andrew_zhong",
           "children": [
+            47528428,
+            47526977,
             47526820,
-            47526911,
+            47527749,
+            47528197,
+            47528370,
             47526760,
+            47527053,
+            47527286,
+            47526911,
+            47528608,
+            47527431,
             47526830,
+            47527069,
+            47527218,
             47526690
           ],
           "created_at": "2026-03-26T03:55:52Z",
           "created_at_i": 1774497352,
-          "num_comments": 3,
+          "num_comments": 33,
           "objectID": "47526486",
-          "points": 11,
+          "points": 47,
           "story_id": 47526486,
           "story_text": "We&#x27;ve been building data pipelines that scrape websites and extract structured data for a while now. If you&#x27;ve done this, you know the drill: you write CSS selectors, the site changes its layout, everything breaks at 2am, and you spend your morning rewriting parsers.<p>LLMs seemed like the obvious fix — just throw the HTML at GPT and ask for JSON. Except in practice, it&#x27;s more painful than that:<p>- Raw HTML is full of nav bars, footers, and tracking junk that eats your token budget. A typical product page is 80% noise.\n- LLMs return malformed JSON more often than you&#x27;d expect, especially with nested arrays and complex schemas. One bad bracket and your pipeline crashes.\n- Relative URLs, markdown-escaped links, tracking parameters — the &quot;small&quot; URL issues compound fast when you&#x27;re processing thousands of pages.\n- You end up writing the same boilerplate: HTML cleanup → markdown conversion → LLM call → JSON parsing → error recovery → schema validation. Over and over.<p>We got tired of rebuilding this stack for every project, so we extracted it into a library.<p>Lightfeed Extractor is a TypeScript library that handles the full pipeline from raw HTML to validated, structured data:<p>- Converts HTML to LLM-ready markdown with main content extraction (strips nav, headers, footers), optional image inclusion, and URL cleaning\n- Works with any LangChain-compatible LLM (OpenAI, Gemini, Claude, Ollama, etc.)\n- Uses Zod schemas for type-safe extraction with real validation\n- Recovers partial data from malformed LLM output instead of failing entirely — if 19 out of 20 products parsed correctly, you get those 19\n- Built-in browser automation via Playwright (local, serverless, or remote) with anti-bot patches\n- Pairs with our browser agent (@lightfeed&#x2F;browser-agent) for AI-driven page navigation before extraction<p>We use this ourselves in production at Lightfeed, and it&#x27;s been solid enough that we decided to open-source it.<p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;lightfeed&#x2F;extractor\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;lightfeed&#x2F;extractor</a> npm: npm install @lightfeed&#x2F;extractor Apache 2.0 licensed.<p>Happy to answer questions or hear feedback.",
           "title": "Show HN: Robust LLM Extractor for Websites in TypeScript",
-          "updated_at": "2026-03-26T05:31:32Z",
+          "updated_at": "2026-03-26T11:27:34Z",
           "url": "https://github.com/lightfeed/extractor"
         },
         {
@@ -1016,43 +1077,6 @@
           "title": "Show HN: The Million Dollar Homepage, but for AI Agents",
           "updated_at": "2026-03-26T04:39:32Z",
           "url": "https://milliondollarbotpage.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "firexcy"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Skirt Length Oscillations"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://phys.org/news/2026-03-bell-<em>bot</em>toms-today-miniskirts-tomorrow.html"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_firexcy",
-            "story_47524150"
-          ],
-          "author": "firexcy",
-          "created_at": "2026-03-25T22:30:56Z",
-          "created_at_i": 1774477856,
-          "num_comments": 0,
-          "objectID": "47524150",
-          "points": 4,
-          "story_id": 47524150,
-          "title": "Skirt Length Oscillations",
-          "updated_at": "2026-03-25T23:19:19Z",
-          "url": "https://phys.org/news/2026-03-bell-bottoms-today-miniskirts-tomorrow.html"
         }
       ]
     },
@@ -2135,17 +2159,18 @@
           ],
           "author": "JXavierH",
           "children": [
+            47528497,
             47525291
           ],
           "created_at": "2026-03-26T00:34:03Z",
           "created_at_i": 1774485243,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47525283",
           "points": 2,
           "story_id": 47525283,
           "story_text": "Hey HN.  I built Vectimus because coding agents keep doing things they shouldn&#x27;t and there&#x27;s no runtime governance layer for the developer workstation.<p>The problem: Claude Code, Cursor, Gemini CLI and GitHub Copilot let agents execute shell commands, write files and call MCP servers.  Most developers disable the permission prompts because they slow you down.  But that means the agent can rm -rf &#x2F;, read your .env, push to production or call a compromised MCP server with nothing watching.<p>Vectimus intercepts every tool call and evaluates it against 78 Cedar policies containing 369 rules before execution.  Cedar is the policy language AWS chose for AgentCore Policy (GA this month).  Evaluation runs locally via a persistent daemon in under 10ms.  Zero network calls.  Zero telemetry.  Every evaluation produces an Ed25519-signed receipt so you have cryptographic proof of what was allowed and denied.<p>Every policy maps to a real incident.  CVE-2025-6514 compromised 437,000+ developer environments through a malicious MCP OAuth proxy.  The GitHub MCP server was hijacked via a crafted issue to exfiltrate private repo data.  A Terraform agent destroyed production infrastructure.  These happened.<p>How it hooks in: Claude Code intercepts shell commands, file writes, MCP calls and web fetches.  Cursor governs shell commands, file reads&#x2F;writes and MCP tool calls at the editor level.  Copilot intercepts terminal commands, file edits, deletes and git pushes.  Gemini CLI uses Gemini&#x27;s native hook system.  MCP servers are blocked by default and allowlisted per-project with input inspection.  Observe mode lets you see what would be blocked before you enforce.<p>I also built Sentinel (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vectimus&#x2F;sentinel\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vectimus&#x2F;sentinel</a>), a three-agent pipeline that scans for new agentic AI security incidents daily, drafts Cedar policies, replays the incident in a sandbox to prove the policy catches it, then opens a PR.  The pipeline is governed by Vectimus.  Every finding and policy draft is public.<p>All 10 OWASP Agentic Top 10 categories covered.  Compliance annotations for SOC 2, NIST AI RMF, NIST CSF 2.0, EU AI Act, ISO 27001, CIS Controls and SLSA.  Apache 2.0.  Solo founder, built in Ireland.<p>Happy to go deep on the Cedar policy design, the hook architecture, the signed receipts or the OWASP mapping.",
           "title": "Show HN: Vectimus – Cedar policy enforcement for AI coding agents",
-          "updated_at": "2026-03-26T02:02:02Z",
+          "updated_at": "2026-03-26T09:59:33Z",
           "url": "https://github.com/vectimus/vectimus"
         },
         {
@@ -2300,6 +2325,48 @@
     {
       "query": "self+improving+AI",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "grodriguez100"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Meta releases HyperAgents: <em>self</em>-<em>improving</em> <em>AI</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/facebookresearch/Hyperagents"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_grodriguez100",
+            "story_47528807"
+          ],
+          "author": "grodriguez100",
+          "children": [
+            47528849
+          ],
+          "created_at": "2026-03-26T10:41:40Z",
+          "created_at_i": 1774521700,
+          "num_comments": 1,
+          "objectID": "47528807",
+          "points": 2,
+          "story_id": 47528807,
+          "title": "Meta releases HyperAgents: self-improving AI",
+          "updated_at": "2026-03-26T10:47:48Z",
+          "url": "https://github.com/facebookresearch/Hyperagents"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -2473,48 +2540,6 @@
           "title": "Atlas – Self-improving AI trading agents using Karpathy-style autoresearch",
           "updated_at": "2026-03-12T21:36:08Z",
           "url": "https://github.com/chrisworsey55/atlas-gic"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "danebalia"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "Hermes Agent: The <em>self</em>-<em>improving</em> <em>AI</em> agent"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/NousResearch/hermes-agent"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_danebalia",
-            "story_47341909"
-          ],
-          "author": "danebalia",
-          "children": [
-            47341910
-          ],
-          "created_at": "2026-03-11T21:09:43Z",
-          "created_at_i": 1773263383,
-          "num_comments": 1,
-          "objectID": "47341909",
-          "points": 3,
-          "story_id": 47341909,
-          "title": "Hermes Agent: The self-improving AI agent",
-          "updated_at": "2026-03-12T01:37:34Z",
-          "url": "https://github.com/NousResearch/hermes-agent"
         }
       ]
     }

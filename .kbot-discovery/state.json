@@ -1,19 +1,19 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-03-26T05:03:13.046Z",
-    "intel": "2026-03-25T23:31:11.197Z",
-    "outreach": "2026-03-25T23:31:11.235Z",
+    "pulse": "2026-03-26T11:33:13.261Z",
+    "intel": "2026-03-26T05:33:16.585Z",
+    "outreach": "2026-03-26T11:33:18.581Z",
     "writing": "2026-03-25T12:57:36.069Z",
     "evolution": "2026-03-26T00:48:08.023Z",
-    "opportunities": "2026-03-25T23:31:11.220Z",
-    "actions": "2026-03-25T23:31:11.221Z",
-    "synthesis": "2026-03-26T05:03:13.354Z"
+    "opportunities": "2026-03-26T05:33:21.962Z",
+    "actions": "2026-03-26T05:34:35.209Z",
+    "synthesis": "2026-03-26T11:33:13.707Z"
   },
   "stats": {
-    "totalRuns": 565,
-    "totalPulses": 281,
-    "totalIntel": 43,
-    "totalOutreach": 16,
+    "totalRuns": 590,
+    "totalPulses": 294,
+    "totalIntel": 44,
+    "totalOutreach": 17,
     "totalWriting": 8,
     "totalEvolution": 11,
     "errorsToday": 0,
@@ -23,10 +23,10 @@
     "postsFlagged": 0,
     "evolutionSuccesses": 1,
     "evolutionFailures": 3,
-    "totalSynthesis": 75
+    "totalSynthesis": 88
   },
   "knownStars": 4,
-  "knownDownloads": 1420,
+  "knownDownloads": 859,
   "hnScore": 1,
   "hnComments": 0,
   "feedback": [],
