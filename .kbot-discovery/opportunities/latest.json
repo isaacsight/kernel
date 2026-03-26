@@ -1,7 +1,14 @@
 {
-  "timestamp": "2026-03-26T19:38:06.447Z",
+  "timestamp": "2026-03-26T22:23:06.810Z",
   "count": 30,
   "opportunities": [
+    {
+      "source": "hn-comment",
+      "title": "What if AI agents could learn from each other's mistakes?",
+      "url": "https://news.ycombinator.com/item?id=47535931",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
     {
       "source": "hn-comment",
       "title": "Goodbye to Sora",
@@ -13,13 +20,6 @@
       "source": "hn-comment",
       "title": "Show HN: An open-source safety net for home hemodialysis",
       "url": "https://news.ycombinator.com/item?id=47460486",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Show HN: Soros – AI for geopolitical macro investing",
-      "url": "https://news.ycombinator.com/item?id=47418557",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "AI users whose lives were wrecked by delusion",
+      "url": "https://news.ycombinator.com/item?id=47536457",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Ask HN: At what point you decided to pursue your startup fulltime?",
       "url": "https://news.ycombinator.com/item?id=47530891",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -80,11 +87,11 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "90% of Claude-linked output going to GitHub repos w <2 stars",
-      "url": "https://news.ycombinator.com/item?id=47523238",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "Security: Message signing and replay protection for physical device control",
+      "url": "https://github.com/homeassistant-ai/ha-mcp/issues/825",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "JupyterGIA (Jupyter Geospatial Information Agents) (working title)",
       "url": "https://github.com/geojupyter/initiatives/issues/14",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Update README.md",
-      "url": "https://github.com/SamaelxLunafreya/gemini-live-api-examples/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(discord): avoid core stringEnum import",
+      "url": "https://github.com/openclaw/openclaw/pull/55371",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "feat(whatsapp): add systemPrompt support for accounts and groups ",
       "url": "https://github.com/openclaw/openclaw/pull/55328",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "[agento] feat: PR media proof — agents attach screenshots/video to PRs",
       "url": "https://github.com/jleechanorg/agent-orchestrator/pull/209",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(server): enforce opencode_local validation across agent creation paths",
-      "url": "https://github.com/paperclipai/paperclip/pull/1833",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
