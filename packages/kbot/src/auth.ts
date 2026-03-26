@@ -927,4 +927,4 @@ export function routeModelForTask(
   }
 }
 
-export { KBOT_DIR, CONFIG_PATH }
+export { KBOT_DIR, CONFIG_PATH, ENV_KEYS }

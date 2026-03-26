@@ -215,6 +215,10 @@ _kbot_completions() {
       COMPREPLY=( $(compgen -W "\${ide_subcommands}" -- "\${cur}") )
       return
       ;;
+    status)
+      COMPREPLY=( $(compgen -W "--json" -- "\${cur}") )
+      return
+      ;;
     agents)
       COMPREPLY=( $(compgen -W "\${agents}" -- "\${cur}") )
       return
@@ -484,6 +488,10 @@ function generateFish(): string {
   for (const [cmd, desc] of Object.entries(ideDescs)) {
     lines.push(`complete -c kbot -n '__fish_seen_subcommand_from ide' -a '${cmd}' -d '${desc}'`)
   }
+
+  lines.push('')
+  lines.push('# ide status options')
+  lines.push(`complete -c kbot -n '__fish_seen_subcommand_from status; and __fish_seen_subcommand_from ide' -l 'json' -d 'Output as JSON'`)
 
   lines.push('')
   lines.push('# agents subcommand — complete with agent names')
