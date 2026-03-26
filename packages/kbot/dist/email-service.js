@@ -1,7 +1,7 @@
 // kbot Email Service — kernel.chat@gmail.com
 //
 // Sends and reads email programmatically via Gmail API.
-// Used by: digest, forge notifications, onboarding, security alerts, OpenClaw email channel.
+// Used by: digest, forge notifications, onboarding, security alerts.
 //
 // Setup: requires Gmail App Password (not OAuth — simpler for service accounts)
 // Store in ~/.kbot/config.json as { "email": { "user": "kernel.chat@gmail.com", "pass": "app-password" } }
@@ -110,7 +110,6 @@ export async function sendWelcomeEmail(to) {
     <li>Forges new tools at runtime when it encounters gaps</li>
     <li>Self-defense: HMAC integrity, prompt injection detection</li>
     <li>19 local models, runs fully offline</li>
-    <li>OpenClaw integration — reach 20+ messaging platforms</li>
     <li>MIT licensed, open source, free forever</li>
   </ul>
 

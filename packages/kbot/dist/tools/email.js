@@ -16,14 +16,14 @@ const NODEMAILER_AVAILABLE = (() => {
 })();
 async function sendViaGmail(to, subject, body, html) {
     if (!NODEMAILER_AVAILABLE) {
-        // Fallback: use the system mail command or OpenClaw
+        // Fallback: use the system mail command
         const { execSync } = await import('node:child_process');
         try {
             execSync(`echo ${JSON.stringify(body)} | mail -s ${JSON.stringify(subject)} ${to}`, { timeout: 10000 });
             return `Sent via system mail to ${to}`;
         }
         catch {
-            return `Email requires nodemailer: npm install nodemailer. Or use openclaw_send with email platform.`;
+            return `Email requires nodemailer: npm install nodemailer.`;
         }
     }
     const nodemailer = await import('nodemailer');
@@ -107,7 +107,6 @@ What makes it different:
   - Forges new tools at runtime when it hits a gap
   - Self-defense system (HMAC integrity, injection detection)
   - 19 local models, $0, fully offline
-  - OpenClaw integration — works across WhatsApp, Slack, Discord, and more
 
 MIT licensed. Free forever. kernel.chat
 

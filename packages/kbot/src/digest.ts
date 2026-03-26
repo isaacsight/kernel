@@ -1,7 +1,7 @@
 // kbot Weekly Digest — "Your kbot is X% smarter than when you installed it"
 //
 // Sends a weekly summary of learning progress via email (kernel.chat@gmail.com)
-// or OpenClaw. Shows patterns learned, tools used, agent routing stats.
+// Shows patterns learned, tools used, agent routing stats.
 
 import { readFileSync, existsSync } from 'fs'
 import { homedir } from 'os'

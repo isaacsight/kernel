@@ -63,7 +63,7 @@ async function main(): Promise<void> {
     .name('kbot')
     .description('kbot — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
     .version(VERSION)
-    .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 25)')
+    .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 26)')
     .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
     .option('-s, --stream', 'Stream the response')
     .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
@@ -106,7 +106,7 @@ async function main(): Promise<void> {
       console.log(`  ${chalk.dim('─'.repeat(50))}`)
       console.log(`  ${chalk.white('kbot auth')}         Configure your API key (20 providers)`)
       console.log(`  ${chalk.white('kbot doctor')}       Diagnose setup issues`)
-      console.log(`  ${chalk.white('kbot agents')}       List all 25 specialist agents`)
+      console.log(`  ${chalk.white('kbot agents')}       List all 26 specialist agents`)
       console.log(`  ${chalk.white('kbot status')}       Full dashboard — tools, agents, stats`)
       console.log(`  ${chalk.white('kbot init')}         Set up kbot for this project (60s)`)
       console.log(`  ${chalk.white('kbot update')}       Update to the latest version`)
@@ -127,7 +127,7 @@ async function main(): Promise<void> {
       console.log(`  ${chalk.cyan('https://github.com/isaacsight/kernel/issues')}  ${chalk.dim('Bug reports')}`)
       console.log(`  ${chalk.cyan('support@kernel.chat')}  ${chalk.dim('Email (AI-assisted replies)')}`)
       console.log()
-      console.log(`  ${chalk.dim('25 specialist agents · 290+ tools · 20 providers · MIT licensed')}`)
+      console.log(`  ${chalk.dim('26 specialist agents · 360+ tools · 20 providers · MIT licensed')}`)
       console.log()
       process.exit(0)
     })
@@ -1557,7 +1557,7 @@ async function main(): Promise<void> {
 
       // ── 4. Tools count ──
       const { getAllTools } = await import('./tools/index.js')
-      const toolCount = getAllTools().length || 290 // fallback to known count if tools not yet registered
+      const toolCount = getAllTools().length || 362 // fallback to known count if tools not yet registered
 
       // ── 5. Bootstrap (autotelic score) ──
       let bootstrapScore = 0
@@ -1593,7 +1593,7 @@ async function main(): Promise<void> {
           latestVersion: latestVersion || null,
           isLatest,
           tools: toolCount,
-          agents: 25,
+          agents: 26,
           cognitiveModules: cognitiveCount,
           learning: {
             patterns: stats.patternsCount,
@@ -1628,7 +1628,7 @@ async function main(): Promise<void> {
       process.stderr.write(`  ${AMETHYST('◉')} ${chalk.bold('Kernel Status')}\n`)
       process.stderr.write(line + '\n')
       process.stderr.write(`  ${chalk.bold('Version')}     ${VERSION}${versionTag}\n`)
-      process.stderr.write(`  ${chalk.bold('Tools')}       ${fmtNum(toolCount)} ${DIM('|')} ${chalk.bold('Agents')} 25\n`)
+      process.stderr.write(`  ${chalk.bold('Tools')}       ${fmtNum(toolCount)} ${DIM('|')} ${chalk.bold('Agents')} 26\n`)
       process.stderr.write(`  ${chalk.bold('Cognitive')}   ${cognitiveCount}/${cognitiveCount} modules active\n`)
       process.stderr.write(line + '\n')
 
@@ -3397,7 +3397,7 @@ async function byokFlow(): Promise<void> {
   console.log()
   printSuccess(`BYOK mode enabled — ${providerConfig.name}`)
   printInfo('You pay the provider directly. No message limits. No restrictions.')
-  printInfo('All 290 tools + 23 agents + learning system = yours.')
+  printInfo('All 362 tools + 26 agents + learning system = yours.')
   console.log()
   printSuccess('Ready. Run `kbot` to start.')
 }
@@ -3696,7 +3696,7 @@ async function startRepl(
     const suggestions = await detectProjectSuggestions()
     console.log()
     console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'))
-    console.log(chalk.dim('  │') + chalk.bold('  23 agents. 290 tools. Just say what you need.  ') + chalk.dim(' │'))
+    console.log(chalk.dim('  │') + chalk.bold('  26 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'))
     console.log(chalk.dim('  │                                                 │'))
     if (suggestions.length > 0) {
       for (const s of suggestions.slice(0, 4)) {

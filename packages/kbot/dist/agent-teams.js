@@ -51,9 +51,41 @@ const TOOL_PREFERENCES = {
         'read_file', 'glob', 'grep', 'web_search', 'url_fetch',
         'bash', 'csv_read', 'csv_query',
     ],
+    scientist: [
+        // lab-bio
+        'pubmed_search', 'gene_lookup', 'protein_search', 'protein_structure',
+        'blast_search', 'drug_lookup', 'pathway_search', 'taxonomy_lookup',
+        'clinical_trials', 'disease_info', 'sequence_tools', 'ecology_data',
+        // lab-chem
+        'compound_search', 'compound_properties', 'reaction_lookup', 'element_info',
+        'material_properties', 'spectroscopy_lookup', 'chemical_safety',
+        'stoichiometry_calc', 'crystal_structure', 'thermodynamics_data',
+        // lab-physics
+        'orbit_calculator', 'circuit_analyze', 'signal_process', 'particle_physics_data',
+        'relativity_calc', 'quantum_state', 'beam_analysis', 'fluid_dynamics',
+        'electromagnetic_calc', 'astronomy_query',
+        // lab-earth
+        'earthquake_query', 'climate_data', 'satellite_imagery', 'geological_query',
+        'ocean_data', 'air_quality', 'soil_data', 'volcano_monitor',
+        'water_resources', 'biodiversity_index',
+        // lab-math
+        'symbolic_compute', 'matrix_operations', 'optimization_solve', 'number_theory',
+        'graph_theory', 'combinatorics', 'differential_eq', 'probability_calc',
+        'fourier_analysis', 'oeis_lookup',
+        // lab-data
+        'regression_analysis', 'bayesian_inference', 'time_series_analyze',
+        'dimensionality_reduce', 'distribution_fit', 'correlation_matrix',
+        'power_analysis', 'anova_test', 'survival_analysis', 'viz_codegen',
+        // lab-core
+        'experiment_design', 'hypothesis_test', 'literature_search', 'citation_graph',
+        'unit_convert', 'physical_constants', 'formula_solve', 'research_methodology',
+        'preprint_tracker', 'open_access_find',
+        // general
+        'read_file', 'write_file', 'glob', 'grep', 'bash', 'web_search', 'url_fetch',
+    ],
 };
 // Agents that benefit from complex reasoning get opus; others use sonnet for speed
-const OPUS_AGENTS = new Set(['analyst', 'strategist', 'guardian', 'researcher']);
+const OPUS_AGENTS = new Set(['analyst', 'strategist', 'guardian', 'researcher', 'scientist']);
 // ── Teammate descriptions ───────────────────────────────────────────────────
 const DESCRIPTIONS = {
     kernel: 'General-purpose assistant — handles conversation, coordination, and tasks that span multiple domains.',
@@ -65,13 +97,14 @@ const DESCRIPTIONS = {
     aesthete: 'Design specialist — evaluates and creates UI/UX, enforces design systems, and ensures accessibility.',
     curator: 'Knowledge management specialist — organizes documentation, maintains knowledge bases, and fills information gaps.',
     strategist: 'Business strategy specialist — connects technical decisions to business outcomes, builds roadmaps, and analyzes competitors.',
+    scientist: 'Science specialist — cross-disciplinary scientist covering biology, chemistry, physics, earth science, mathematics, and data analysis with 72 lab tools.',
 };
 // ── Core API ────────────────────────────────────────────────────────────────
 /**
  * Register kbot specialists as Claude Code teammates.
  *
  * Returns an array of teammate definitions — one for each of kbot's
- * core and extended specialist agents (9 total).
+ * core and extended specialist agents (10 total).
  *
  * @example
  * const teammates = registerTeammates()
@@ -80,7 +113,7 @@ const DESCRIPTIONS = {
 export function registerTeammates() {
     const teammateIds = [
         'kernel', 'coder', 'researcher', 'writer', 'analyst',
-        'guardian', 'aesthete', 'curator', 'strategist',
+        'guardian', 'aesthete', 'curator', 'strategist', 'scientist',
     ];
     return teammateIds.map((id) => {
         const specialist = SPECIALISTS[id];

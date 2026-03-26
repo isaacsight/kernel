@@ -140,6 +140,20 @@ function generateTags() {
         tags.push('security');
     if (sessionTools['paper_trade'] || sessionTools['swap_execute'])
         tags.push('trading');
+    if (sessionTools['pubmed_search'] || sessionTools['gene_lookup'] || sessionTools['protein_search'] || sessionTools['protein_structure'] || sessionTools['blast_search'] || sessionTools['drug_lookup'] || sessionTools['pathway_search'] || sessionTools['taxonomy_lookup'] || sessionTools['clinical_trials'] || sessionTools['disease_info'] || sessionTools['sequence_tools'] || sessionTools['ecology_data'])
+        tags.push('biology');
+    if (sessionTools['compound_search'] || sessionTools['compound_properties'] || sessionTools['reaction_lookup'] || sessionTools['element_info'] || sessionTools['material_properties'] || sessionTools['spectroscopy_lookup'] || sessionTools['chemical_safety'] || sessionTools['stoichiometry_calc'] || sessionTools['crystal_structure'] || sessionTools['thermodynamics_data'])
+        tags.push('chemistry');
+    if (sessionTools['orbit_calculator'] || sessionTools['circuit_analyze'] || sessionTools['signal_process'] || sessionTools['particle_physics_data'] || sessionTools['relativity_calc'] || sessionTools['quantum_state'] || sessionTools['beam_analysis'] || sessionTools['fluid_dynamics'] || sessionTools['electromagnetic_calc'] || sessionTools['astronomy_query'])
+        tags.push('physics');
+    if (sessionTools['earthquake_query'] || sessionTools['climate_data'] || sessionTools['satellite_imagery'] || sessionTools['geological_query'] || sessionTools['ocean_data'] || sessionTools['air_quality'] || sessionTools['soil_data'] || sessionTools['volcano_monitor'] || sessionTools['water_resources'] || sessionTools['biodiversity_index'])
+        tags.push('earth-science');
+    if (sessionTools['symbolic_compute'] || sessionTools['matrix_operations'] || sessionTools['optimization_solve'] || sessionTools['number_theory'] || sessionTools['graph_theory'] || sessionTools['combinatorics'] || sessionTools['differential_eq'] || sessionTools['probability_calc'] || sessionTools['fourier_analysis'] || sessionTools['oeis_lookup'])
+        tags.push('mathematics');
+    if (sessionTools['regression_analysis'] || sessionTools['bayesian_inference'] || sessionTools['time_series_analyze'] || sessionTools['dimensionality_reduce'] || sessionTools['distribution_fit'] || sessionTools['correlation_matrix'] || sessionTools['power_analysis'] || sessionTools['anova_test'] || sessionTools['survival_analysis'] || sessionTools['viz_codegen'])
+        tags.push('data-science');
+    if (sessionTools['experiment_design'] || sessionTools['hypothesis_test'] || sessionTools['literature_search'] || sessionTools['citation_graph'] || sessionTools['unit_convert'] || sessionTools['physical_constants'] || sessionTools['formula_solve'] || sessionTools['research_methodology'] || sessionTools['preprint_tracker'] || sessionTools['open_access_find'])
+        tags.push('research');
     // Agent-based tags
     for (const agent of Object.keys(sessionAgents)) {
         tags.push(agent);

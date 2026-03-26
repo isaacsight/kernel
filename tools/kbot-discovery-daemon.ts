@@ -122,7 +122,9 @@ interface DaemonState {
     postsFlagged: number
     evolutionSuccesses: number
     evolutionFailures: number
+    totalObsidianSyncs?: number
   }
+  startedAt?: string
   knownStars: number
   knownDownloads: number
   hnScore: number
@@ -1144,6 +1146,158 @@ ${JSON.stringify((outreach as { latestPaper?: unknown }).latestPaper ?? {}, null
   gitPublish(`discovery: kbot self-report ${dateStr()}`)
 }
 
+// ── OBSIDIAN SYNC (every 12 hours) ──────────────────────────────────
+// Keep the Obsidian vault up to date with kbot's current state.
+// Writes: Current Status, Daemon Stats, Roadmap, Discovery highlights.
+
+const OBSIDIAN_VAULT = join(homedir(), 'Desktop', 'kernel.chat', 'kernelchat')
+
+async function runObsidianSync(state: DaemonState): Promise<void> {
+  if (!existsSync(OBSIDIAN_VAULT)) {
+    log('[obsidian] vault not found — skipping')
+    return
+  }
+
+  log('[obsidian] syncing to vault...')
+
+  const kernelDir = join(OBSIDIAN_VAULT, 'Kernel')
+  for (const sub of ['', 'Briefings', 'Conversations', 'Insights', 'Memory']) {
+    const d = join(kernelDir, sub)
+    if (!existsSync(d)) mkdirSync(d, { recursive: true })
+  }
+
+  // Read latest pulse data
+  let pulse = {} as Record<string, unknown>
+  try { pulse = JSON.parse(readFileSync(join(PULSE_DIR, 'latest.json'), 'utf8')) } catch {}
+
+  const hn = (pulse as { hn?: { score?: number; comments?: number } }).hn ?? {}
+  const gh = (pulse as { github?: { stars?: number; forks?: number } }).github ?? {}
+  const npm = (pulse as { npm?: { downloads?: number; weeklyDownloads?: number; version?: string } }).npm ?? {}
+
+  // 1. Current Status note
+  const statusNote = `---
+tags: [kernel, status, auto-sync]
+synced_at: "${new Date().toISOString()}"
+---
+
+# K:BOT Current Status
+
+*Auto-synced by discovery daemon — ${dateStr()}*
+
+## Vitals
+| Metric | Value |
+|--------|-------|
+| Version | ${npm.version ?? 'unknown'} |
+| npm Downloads (weekly) | ${npm.weeklyDownloads ?? npm.downloads ?? 'unknown'} |
+| GitHub Stars | ${gh.stars ?? state.knownStars ?? 'unknown'} |
+| GitHub Forks | ${gh.forks ?? 'unknown'} |
+| HN Score | ${hn.score ?? 'unknown'} |
+| HN Comments | ${hn.comments ?? 'unknown'} |
+
+## Daemon Stats
+| Metric | Value |
+|--------|-------|
+| Pulses | ${state.stats.totalPulses} |
+| Intel Scans | ${state.stats.totalIntel} |
+| Outreach Cycles | ${state.stats.totalOutreach} |
+| Reports Written | ${state.stats.totalWriting} |
+| Evolution Proposals | ${state.stats.totalEvolution} |
+| Evolution Successes | ${state.stats.evolutionSuccesses ?? 0} |
+| Errors Today | ${state.stats.errorsToday} |
+| Uptime Since | ${state.startedAt ?? 'unknown'} |
+
+## Recent Activity
+${(() => {
+  try {
+    const log = readFileSync(join(DAEMON_DIR, 'daemon.log'), 'utf8')
+    const lines = log.trim().split('\n').slice(-20)
+    return lines.map(l => '- ' + l).join('\n')
+  } catch { return '- No log available' }
+})()}
+`
+
+  writeFileSync(join(OBSIDIAN_VAULT, 'Current Status.md'), statusNote)
+  log('[obsidian] wrote Current Status.md')
+
+  // 2. Daemon learning note (from kbot memory)
+  const kbotMemoryDir = join(homedir(), '.kbot', 'memory')
+  try {
+    const synthesis = JSON.parse(readFileSync(join(kbotMemoryDir, 'synthesis.json'), 'utf8'))
+    const profile = JSON.parse(readFileSync(join(kbotMemoryDir, 'profile.json'), 'utf8'))
+    const identity = JSON.parse(readFileSync(join(homedir(), '.kbot', 'identity.json'), 'utf8'))
+
+    const insightLines = (synthesis.insights ?? []).map((i: { text: string; confidence: number }) =>
+      `- ${i.text} (confidence: ${(i.confidence * 100).toFixed(0)}%)`
+    ).join('\n')
+
+    const learningNote = `---
+tags: [kernel, learning, auto-sync]
+synced_at: "${new Date().toISOString()}"
+---
+
+# K:BOT Learning State
+
+*Auto-synced by discovery daemon — ${dateStr()}*
+
+## Identity
+- **Mission:** ${identity.mission ?? 'unknown'}
+- **Sessions:** ${identity.totalSessions ?? 0}
+- **Personality:** verbosity ${identity.personality?.verbosity ?? '?'}, caution ${identity.personality?.caution ?? '?'}, creativity ${identity.personality?.creativity ?? '?'}, autonomy ${identity.personality?.autonomy ?? '?'}
+
+## User Profile
+- **Total Messages:** ${profile.totalMessages ?? 0}
+- **Sessions:** ${profile.sessions ?? 0}
+- **Tokens Used:** ${(profile.totalTokens ?? 0).toLocaleString()}
+- **Top Tasks:** ${Object.entries(profile.taskPatterns ?? {}).sort((a, b) => (b[1] as number) - (a[1] as number)).slice(0, 5).map(([k, v]) => k + ' (' + v + ')').join(', ')}
+
+## Synthesized Insights
+${insightLines || '- None yet'}
+
+## Milestones
+${(identity.milestones ?? []).map((m: { date: string; event: string }) => '- **' + m.date + ':** ' + m.event).join('\n') || '- None yet'}
+`
+
+    writeFileSync(join(kernelDir, 'Memory', 'Learning.md'), learningNote)
+    log('[obsidian] wrote Kernel/Memory/Learning.md')
+  } catch (err) {
+    log(`[obsidian] learning note failed: ${err instanceof Error ? err.message : String(err)}`)
+  }
+
+  // 3. Discovery highlights note (from latest intel/outreach)
+  try {
+    const outreach = JSON.parse(readFileSync(join(OUTREACH_DIR, 'latest.json'), 'utf8'))
+    const projects = outreach.projects ?? []
+    const paper = outreach.latestPaper
+
+    if (projects.length || paper) {
+      const discoveryNote = `---
+tags: [kernel, discovery, auto-sync]
+synced_at: "${new Date().toISOString()}"
+---
+
+# Discovery Highlights
+
+*Auto-synced by discovery daemon — ${dateStr()}*
+
+## Projects Found
+${projects.length ? projects.map((p: { name: string; url?: string; why?: string }) =>
+  '- **' + p.name + '**' + (p.url ? ' — ' + p.url : '') + (p.why ? '\n  ' + p.why : '')
+).join('\n') : '- None this cycle'}
+
+## Latest Paper
+${paper ? '**' + (paper.title ?? 'Untitled') + '**\n' + (paper.url ?? '') + '\n' + (paper.summary ?? '') : '- None this cycle'}
+`
+
+      writeFileSync(join(kernelDir, 'Insights', 'Discovery ' + dateStr() + '.md'), discoveryNote)
+      log('[obsidian] wrote discovery highlights')
+    }
+  } catch {}
+
+  state.stats.totalObsidianSyncs = (state.stats.totalObsidianSyncs ?? 0) + 1
+  observeToolCall('daemon_obsidian_sync', { cycle: state.stats.totalObsidianSyncs })
+  log('[obsidian] sync complete (cycle #' + state.stats.totalObsidianSyncs + ')')
+}
+
 // ── EVOLUTION (every 24 hours) ────────────────────────────────────────
 
 async function runEvolution(state: DaemonState): Promise<void> {
@@ -1454,25 +1608,29 @@ RULES:
 
   gitPublish(`evolution: kbot proposal ${dateStr()} (cycle ${proposal.cycle})${applied ? ' — improvement applied' : ''}`)
 
-  // ── Step 4: Bump version, build, publish to npm ──
-  try {
-    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
-    const [major, minor, patch] = pkg.version.split('.').map(Number)
-    const newVersion = `${major}.${minor}.${patch + 1}`
-    pkg.version = newVersion
-    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
+  // ── Step 4: Bump version, build, publish to npm (only if improvement applied) ──
+  if (applied) {
+    try {
+      const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
+      const [major, minor, patch] = pkg.version.split('.').map(Number)
+      const newVersion = `${major}.${minor}.${patch + 1}`
+      pkg.version = newVersion
+      writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
 
-    execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm run build`, { stdio: 'pipe', timeout: 60000 })
-    const npmToken = process.env.NPM_TOKEN
-    const tokenFlag = npmToken ? ` --//registry.npmjs.org/:_authToken=${npmToken}` : ''
-    execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm publish --access public${tokenFlag}`, { stdio: 'pipe', timeout: 60000 })
+      execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm run build`, { stdio: 'pipe', timeout: 60000 })
+      const npmToken = process.env.NPM_TOKEN
+      const tokenFlag = npmToken ? ` --//registry.npmjs.org/:_authToken=${npmToken}` : ''
+      execSync(`cd "${join(PROJECT_ROOT, 'packages', 'kbot')}" && npm publish --access public${tokenFlag}`, { stdio: 'pipe', timeout: 60000 })
 
-    execSync(`cd "${PROJECT_ROOT}" && git add packages/kbot/ && git commit -m "feat(auto): kbot v${newVersion}${applied ? ' — ' + improvementDescription : ''}"`, { stdio: 'pipe' })
-    execSync(`cd "${PROJECT_ROOT}" && git push origin main`, { stdio: 'pipe' })
+      execSync(`cd "${PROJECT_ROOT}" && git add packages/kbot/ && git commit -m "feat(auto): kbot v${newVersion} — ${improvementDescription}"`, { stdio: 'pipe' })
+      execSync(`cd "${PROJECT_ROOT}" && git push origin main`, { stdio: 'pipe' })
 
-    log(`[evolution] published @kernel.chat/kbot@${newVersion} to npm`)
-  } catch (err) {
-    log(`[evolution] npm publish failed: ${err instanceof Error ? err.message : String(err)}`)
+      log(`[evolution] published @kernel.chat/kbot@${newVersion} to npm`)
+    } catch (err) {
+      log(`[evolution] npm publish failed: ${err instanceof Error ? err.message : String(err)}`)
+    }
+  } else {
+    log('[evolution] no improvement applied — skipping npm publish')
   }
 }
 
@@ -1744,6 +1902,7 @@ async function runCycle(): Promise<void> {
     { name: 'opportunities', interval: INTERVALS.intel, fn: runOpportunities },
     { name: 'actions', interval: INTERVALS.intel, fn: processOpportunities },
     { name: 'outreach', interval: INTERVALS.outreach, fn: runOutreach },
+    { name: 'obsidian', interval: INTERVALS.outreach, fn: runObsidianSync }, // Every 12 hours — keep vault current
     { name: 'writing', interval: INTERVALS.writing, fn: runWriting },
     { name: 'evolution', interval: INTERVALS.evolution, fn: runEvolution },
   ]
@@ -1775,6 +1934,13 @@ async function main(): Promise<void> {
   log('kbot discovery daemon — designed by kbot, run by Isaac')
   log('Not maintenance. Discovery.')
   log('═══════════════════════════════════════════════════════════════')
+
+  // Record start time
+  const state = loadState()
+  if (!state.startedAt) {
+    state.startedAt = new Date().toISOString()
+    saveState(state)
+  }
 
   // Run first cycle immediately
   await runCycle()

@@ -5,13 +5,13 @@
 // into Claude Code sessions via the Channel protocol.
 //
 // Architecture:
-//   External world (WhatsApp, Telegram, Slack via OpenClaw)
+//       External world (webhooks, HTTP)
 //       ↕ kbot Channel (this file)
 //       ↕ Claude Code session
 //
 // One-way events: kbot pushes learning updates, agent routing, forge notifications
-// Two-way: Claude Code can reply through kbot to any OpenClaw platform
-// Permission relay: approve/deny tool use from your phone via OpenClaw
+// Two-way: Claude Code can reply through kbot to any connected platform
+// Permission relay: approve/deny tool use via SSE or connected platforms
 //
 // Usage:
 //   Add to .mcp.json: { "kbot-channel": { "command": "node", "args": ["path/to/kbot-channel.js"] } }
@@ -28,7 +28,6 @@ import { join } from 'node:path';
 import { z } from 'zod';
 // ── Config ──────────────────────────────────────────────────────────────────
 const KBOT_PORT = parseInt(process.env.KBOT_CHANNEL_PORT || '7438', 10);
-const OPENCLAW_URL = process.env.OPENCLAW_GATEWAY_URL || 'http://127.0.0.1:18789';
 const KBOT_DIR = join(homedir(), '.kbot');
 // ── Outbound: SSE listeners for testing / monitoring ────────────────────────
 const listeners = new Set();
@@ -48,7 +47,7 @@ function loadAllowlist() {
     }
     catch { /* ignore */ }
     // Default: allow local requests
-    return new Set(['local', 'kbot', 'openclaw']);
+    return new Set(['local', 'kbot']);
 }
 const allowed = loadAllowlist();
 // ── MCP Server with Channel capability ──────────────────────────────────────
@@ -63,7 +62,7 @@ const mcp = new Server({ name: 'kbot', version: '3.34.2' }, {
     instructions: `You are connected to kbot — a self-improving AI agent with 374+ tools and 41 specialist agents.
 
 Events arrive as <channel source="kbot" ...>. They include:
-- Messages from external platforms via OpenClaw (WhatsApp, Telegram, Slack, Discord, iMessage)
+- Messages from external platforms (webhooks, HTTP)
 - Learning engine updates (new patterns, routing changes)
 - Forge notifications (new tools created or installed)
 - Agent status reports
@@ -87,7 +86,7 @@ mcp.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: [
         {
             name: 'kbot_reply',
-            description: 'Reply to a message through kbot. Routes through OpenClaw to WhatsApp, Telegram, Slack, Discord, iMessage, or any connected platform.',
+            description: 'Reply to a message through kbot. Routes to the originating platform via the channel protocol.',
             inputSchema: {
                 type: 'object',
                 properties: {
@@ -146,13 +145,6 @@ async function kbotApiFetch(path, options) {
         throw new Error(`kbot API: ${res.status}`);
     return res.json();
 }
-async function openclawSend(sessionId, message) {
-    await fetch(`${OPENCLAW_URL}/api/sessions/${sessionId}/send`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message }),
-    });
-}
 mcp.setRequestHandler(CallToolRequestSchema, async (req) => {
     const { name, arguments: args } = req.params;
     const a = (args || {});
@@ -162,13 +154,7 @@ mcp.setRequestHandler(CallToolRequestSchema, async (req) => {
                 const text = String(a.text || '');
                 const chatId = String(a.chat_id || '');
                 const platform = String(a.platform || '');
-                // Try OpenClaw first, fall back to broadcast
-                try {
-                    await openclawSend(chatId, text);
-                }
-                catch {
-                    broadcast(`[${platform || 'reply'}] → ${chatId}: ${text}`);
-                }
+                broadcast(`[${platform || 'reply'}] → ${chatId}: ${text}`);
                 return { content: [{ type: 'text', text: `Sent to ${chatId}${platform ? ` on ${platform}` : ''}` }] };
             }
             case 'kbot_agent': {
@@ -222,15 +208,6 @@ mcp.setNotificationHandler(PermissionRequestSchema, async ({ params }) => {
     const prompt = `🔐 Claude wants to run ${params.tool_name}: ${params.description}\n\nReply "yes ${params.request_id}" or "no ${params.request_id}"`;
     // Broadcast to SSE listeners
     broadcast(prompt);
-    // Also try to send via OpenClaw to all active sessions
-    try {
-        await fetch(`${OPENCLAW_URL}/api/broadcast`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: prompt, platforms: [] }),
-        });
-    }
-    catch { /* OpenClaw might not be running — SSE is the fallback */ }
 });
 // ── Connect to Claude Code ──────────────────────────────────────────────────
 await mcp.connect(new StdioServerTransport());
@@ -314,6 +291,6 @@ const httpServer = createServer(async (req, res) => {
 });
 httpServer.listen(KBOT_PORT, '127.0.0.1', () => {
     // Channel is live — Claude Code has already connected via stdio
-    // HTTP server accepts webhook POSTs and OpenClaw forwarded messages
+    // HTTP server accepts webhook POSTs and forwarded messages
 });
 //# sourceMappingURL=kbot-channel.js.map

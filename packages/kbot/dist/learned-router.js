@@ -96,6 +96,28 @@ const AGENT_KEYWORDS = {
         'hey', 'hello', 'hi', 'thanks', 'help', 'what', 'how', 'why',
         'general', 'chat', 'talk', 'opinion', 'think', 'feel', 'advice',
     ],
+    scientist: [
+        // Biology
+        'gene', 'protein', 'genome', 'dna', 'rna', 'cell', 'enzyme', 'mutation',
+        'pathway', 'blast', 'pubmed', 'clinical', 'trial', 'drug', 'pharmacology',
+        'ecology', 'species', 'taxonomy', 'biodiversity',
+        // Chemistry
+        'molecule', 'compound', 'reaction', 'element', 'periodic', 'stoichiometry',
+        'thermodynamics', 'spectroscopy', 'crystal', 'material', 'polymer',
+        // Physics
+        'orbit', 'quantum', 'relativity', 'circuit', 'electromagnetic', 'beam',
+        'fluid', 'particle', 'photon', 'quark', 'signal',
+        // Earth science
+        'earthquake', 'climate', 'volcano', 'ocean', 'soil', 'satellite',
+        'geological', 'seismic', 'atmosphere',
+        // Math & statistics
+        'matrix', 'eigenvalue', 'differential', 'fourier', 'optimization',
+        'regression', 'bayesian', 'statistics', 'probability', 'hypothesis',
+        'anova', 'survival',
+        // General science
+        'experiment', 'laboratory', 'methodology', 'preprint', 'citation',
+        'sample', 'p-value', 'confidence',
+    ],
     creative: CREATIVE_KEYWORDS,
     developer: DEVELOPER_KEYWORDS,
     trader: TRADER_KEYWORDS,
@@ -110,6 +132,13 @@ const CATEGORY_PATTERNS = [
     { pattern: /\b(research|find|compare|benchmark|alternative|best)\b/i, agent: 'researcher', confidence: 0.6 },
     { pattern: /\b(write|draft|blog|post|article|email|newsletter|readme)\b/i, agent: 'writer', confidence: 0.65 },
     { pattern: /\b(analyze|strategy|plan|architecture|review|audit|evaluate)\b/i, agent: 'analyst', confidence: 0.6 },
+    { pattern: /\b(gene|protein|genome|dna|rna|enzyme|mutation|blast|pubmed|clinical trial|pharmacology|ecology|taxonomy|biodiversity)\b/i, agent: 'scientist', confidence: 0.85 },
+    { pattern: /\b(molecule|compound|reaction|element|stoichiometry|spectroscopy|crystal|thermodynamics|polymer)\b/i, agent: 'scientist', confidence: 0.8 },
+    { pattern: /\b(quantum|relativity|electromagnetic|photon|quark|particle physics|orbit|fluid dynamics)\b/i, agent: 'scientist', confidence: 0.8 },
+    { pattern: /\b(earthquake|volcano|seismic|geological|climate data|satellite imagery|ocean data|atmosphere)\b/i, agent: 'scientist', confidence: 0.75 },
+    { pattern: /\b(eigenvalue|differential equation|fourier|matrix operations|number theory|graph theory|combinatorics)\b/i, agent: 'scientist', confidence: 0.75 },
+    { pattern: /\b(regression analysis|bayesian inference|anova|survival analysis|time series|dimensionality reduction|p-value|confidence interval)\b/i, agent: 'scientist', confidence: 0.7 },
+    { pattern: /\b(experiment design|hypothesis test|sample size|research methodology|preprint|citation graph)\b/i, agent: 'scientist', confidence: 0.7 },
     ...CREATIVE_PATTERNS,
     ...DEVELOPER_PATTERNS,
     ...TRADER_PATTERNS.map(pattern => ({ pattern, agent: 'trader', confidence: 0.75 })),

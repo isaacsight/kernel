@@ -256,10 +256,16 @@ const LAZY_MODULE_IMPORTS = [
     { path: './stocks.js', registerFn: 'registerStockTools' },
     { path: './sentiment.js', registerFn: 'registerSentimentTools' },
     { path: './security.js', registerFn: 'registerSecurityTools' },
-    { path: './openclaw.js', registerFn: 'registerOpenClawTools' },
     { path: './email.js', registerFn: 'registerEmailTools' },
     { path: './content-engine.js', registerFn: 'registerContentEngineTools' },
     { path: './bootstrapper.js', registerFn: 'registerBootstrapperTools' },
+    { path: './lab-core.js', registerFn: 'registerLabCoreTools' },
+    { path: './lab-data.js', registerFn: 'registerLabDataTools' },
+    { path: './lab-bio.js', registerFn: 'registerLabBioTools' },
+    { path: './lab-chem.js', registerFn: 'registerLabChemTools' },
+    { path: './lab-physics.js', registerFn: 'registerLabPhysicsTools' },
+    { path: './lab-earth.js', registerFn: 'registerLabEarthTools' },
+    { path: './lab-math.js', registerFn: 'registerLabMathTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;
