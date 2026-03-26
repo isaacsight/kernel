@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-26T13:25:58.882Z",
+  "timestamp": "2026-03-26T19:38:06.447Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,43 +67,43 @@
     },
     {
       "source": "hn-comment",
+      "title": "Ask HN: At what point you decided to pursue your startup fulltime?",
+      "url": "https://news.ycombinator.com/item?id=47530891",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "ARC-AGI-3",
+      "url": "https://news.ycombinator.com/item?id=47524661",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "90% of Claude-linked output going to GitHub repos w <2 stars",
       "url": "https://news.ycombinator.com/item?id=47523238",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "So where are all the AI apps?",
-      "url": "https://news.ycombinator.com/item?id=47505810",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "So where are all the AI apps?",
-      "url": "https://news.ycombinator.com/item?id=47503733",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
       "source": "github-issue",
-      "title": "feat: add cli-tool-builder skill",
-      "url": "https://github.com/organvm-iv-taxis/a-i--skills/issues/7",
+      "title": "Triple-duplicated utility functions between Dashboard.tsx and dashboardUtils.ts cause inconsistent behavior",
+      "url": "https://github.com/kubestellar/console/issues/3669",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] Components missing dark mode support",
-      "url": "https://github.com/kubestellar/console/issues/3634",
+      "title": "JupyterGIA (Jupyter Geospatial Information Agents) (working title)",
+      "url": "https://github.com/geojupyter/initiatives/issues/14",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] Hardcoded colors instead of design tokens",
-      "url": "https://github.com/kubestellar/console/issues/3632",
+      "title": "Update README.md",
+      "url": "https://github.com/SamaelxLunafreya/gemini-live-api-examples/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "feat: add DInference provider",
-      "url": "https://github.com/openclaw/openclaw/pull/55169",
+      "title": "feat(whatsapp): add systemPrompt support for accounts and groups ",
+      "url": "https://github.com/openclaw/openclaw/pull/55328",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "bug(discord): Bot does not respond to incoming Discord messages",
-      "url": "https://github.com/nextain/naia-os/issues/144",
+      "title": "[agento] feat: PR media proof — agents attach screenshots/video to PRs",
+      "url": "https://github.com/jleechanorg/agent-orchestrator/pull/209",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(extensions): align MIMO_API_KEY for Xiaomi extensions across plug…",
-      "url": "https://github.com/openclaw/openclaw/pull/55144",
+      "title": "fix(server): enforce opencode_local validation across agent creation paths",
+      "url": "https://github.com/paperclipai/paperclip/pull/1833",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "we built an open source library of AI agent prompts and configs, just hit 100 stars",
-      "url": "https://reddit.com/r/artificial/comments/1s4549n/we_built_an_open_source_library_of_ai_agent/",
+      "title": "Reducing AI agent token consumption by 90% by fixing the retrieval layer",
+      "url": "https://reddit.com/r/artificial/comments/1s4dr8y/reducing_ai_agent_token_consumption_by_90_by/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "we made a community repo of AI agent setups and configs, just hit 100 stars with 90 PRs",
-      "url": "https://reddit.com/r/artificial/comments/1s44czb/we_made_a_community_repo_of_ai_agent_setups_and/",
+      "title": "do you think AI can replace human tutors in language learning?",
+      "url": "https://reddit.com/r/artificial/comments/1s4by8l/do_you_think_ai_can_replace_human_tutors_in/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "I open-sourced an always-on direct bridge between your LLM and your Mac. \"Hey Q, read my screen and reply to this Slack message\" please meet CODEC",
-      "url": "https://reddit.com/r/artificial/comments/1s432by/i_opensourced_an_alwayson_direct_bridge_between/",
+      "title": "Need some AI agents",
+      "url": "https://reddit.com/r/artificial/comments/1s49zeq/need_some_ai_agents/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

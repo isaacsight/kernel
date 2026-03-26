@@ -1,9 +1,58 @@
 {
-  "timestamp": "2026-03-26T13:25:55.093Z",
+  "timestamp": "2026-03-26T19:38:01.022Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "jwatters"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "We've been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The <em>AI</em> that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an <em>AI</em> <em>agent</em>. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it's a native app with a Metal compositor.<p>It's not a chatbot wrapper, it's closer to a full OS where the <em>AI</em> is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a <em>terminal</em> in the workshop, same <em>agent</em>, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, <em>terminal</em>, music, messages. The <em>AI</em> doesn't need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It's the same <em>agent</em> with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the <em>agent</em> a role (personality, permissions, context) and schedule it on a cron — we call these missions. The <em>agent</em> can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, <em>terminal</em>, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is <em>AI</em>-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon / your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI / MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https://www.youtube.com/watch?v=40TyKAKNvJc\" rel=\"nofollow\">https://www.youtube.com/watch?v=40TyKAKNvJc</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "Show HN: Kora – An <em>AI</em>-native OS layer written in 370k lines of Rust"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://intuitivecompute.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jwatters",
+            "story_47531594",
+            "show_hn"
+          ],
+          "author": "jwatters",
+          "created_at": "2026-03-26T15:18:33Z",
+          "created_at_i": 1774538313,
+          "num_comments": 0,
+          "objectID": "47531594",
+          "points": 3,
+          "story_id": 47531594,
+          "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
+          "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
+          "updated_at": "2026-03-26T18:41:49Z",
+          "url": "https://intuitivecompute.com"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -47,11 +96,11 @@
           "created_at_i": 1774497259,
           "num_comments": 0,
           "objectID": "47526475",
-          "points": 1,
+          "points": 2,
           "story_id": 47526475,
           "story_text": "I built kbot — a terminal AI agent that learns from every session and forges new tools when it hits problems it can&#x27;t solve.<p>What makes it different: Self-improving (Bayesian skill routing gets smarter over time). Tool forging (encounters a gap, builds a tool, tool persists forever). Self-defense (HMAC memory integrity, prompt injection detection). 368 tools, 41 agents, 19 local models. Fully offline, $0. Dream mode (improves itself while idle). MIT licensed.<p>Demo of kbot forging a tool in 30 seconds: <a href=\"https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;tools&#x2F;video-assets&#x2F;demo-forge-real.gif\" rel=\"nofollow\">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;too...</a><p>npm install -g @kernel.chat&#x2F;kbot",
           "title": "Show HN: Kbot – AI agent that forges its own tools at runtime (MIT, $0)",
-          "updated_at": "2026-03-26T04:39:32Z",
+          "updated_at": "2026-03-26T17:03:06Z",
           "url": "https://github.com/isaacsight/kernel"
         },
         {
@@ -99,13 +148,13 @@
           ],
           "created_at": "2026-03-26T00:34:03Z",
           "created_at_i": 1774485243,
-          "num_comments": 1,
+          "num_comments": 2,
           "objectID": "47525283",
-          "points": 2,
+          "points": 3,
           "story_id": 47525283,
           "story_text": "Hey HN.  I built Vectimus because coding agents keep doing things they shouldn&#x27;t and there&#x27;s no runtime governance layer for the developer workstation.<p>The problem: Claude Code, Cursor, Gemini CLI and GitHub Copilot let agents execute shell commands, write files and call MCP servers.  Most developers disable the permission prompts because they slow you down.  But that means the agent can rm -rf &#x2F;, read your .env, push to production or call a compromised MCP server with nothing watching.<p>Vectimus intercepts every tool call and evaluates it against 78 Cedar policies containing 369 rules before execution.  Cedar is the policy language AWS chose for AgentCore Policy (GA this month).  Evaluation runs locally via a persistent daemon in under 10ms.  Zero network calls.  Zero telemetry.  Every evaluation produces an Ed25519-signed receipt so you have cryptographic proof of what was allowed and denied.<p>Every policy maps to a real incident.  CVE-2025-6514 compromised 437,000+ developer environments through a malicious MCP OAuth proxy.  The GitHub MCP server was hijacked via a crafted issue to exfiltrate private repo data.  A Terraform agent destroyed production infrastructure.  These happened.<p>How it hooks in: Claude Code intercepts shell commands, file writes, MCP calls and web fetches.  Cursor governs shell commands, file reads&#x2F;writes and MCP tool calls at the editor level.  Copilot intercepts terminal commands, file edits, deletes and git pushes.  Gemini CLI uses Gemini&#x27;s native hook system.  MCP servers are blocked by default and allowlisted per-project with input inspection.  Observe mode lets you see what would be blocked before you enforce.<p>I also built Sentinel (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vectimus&#x2F;sentinel\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vectimus&#x2F;sentinel</a>), a three-agent pipeline that scans for new agentic AI security incidents daily, drafts Cedar policies, replays the incident in a sandbox to prove the policy catches it, then opens a PR.  The pipeline is governed by Vectimus.  Every finding and policy draft is public.<p>All 10 OWASP Agentic Top 10 categories covered.  Compliance annotations for SOC 2, NIST AI RMF, NIST CSF 2.0, EU AI Act, ISO 27001, CIS Controls and SLSA.  Apache 2.0.  Solo founder, built in Ireland.<p>Happy to go deep on the Cedar policy design, the hook architecture, the signed receipts or the OWASP mapping.",
           "title": "Show HN: Vectimus – Cedar policy enforcement for AI coding agents",
-          "updated_at": "2026-03-26T09:59:33Z",
+          "updated_at": "2026-03-26T19:22:20Z",
           "url": "https://github.com/vectimus/vectimus"
         },
         {
@@ -151,10 +200,10 @@
           ],
           "author": "human_hack3r",
           "children": [
+            47501496,
             47501724,
             47501378,
             47502189,
-            47501496,
             47502703,
             47501886,
             47505458
@@ -167,7 +216,7 @@
           "story_id": 47501357,
           "story_text": "Hi HN folks,<p>I have been building AI agents for quite some time now. The shift has gone from LLM + Tools → LLM Workflows → Agent + Tools + Memory, and now we are finally seeing true agency emerge: agents as systems composed of tools, command-line access, fine-grained system capabilities, and memory.<p>This way of building agents is powerful, and I believe it is here to stay. But the real question is: are the systems powering these agents ready for that future?<p>I do not think so.<p>Using Docker for a single agent is not going to scale well, because agents need to be lightweight and fast. LLMs already add significant latency, so adding heavy runtime overhead on top only makes things worse. Existing solutions start to fall apart here.<p>Agents built in Python also tend to have a large memory footprint, which becomes a serious problem when you want to scale to thousands of agents.<p>And open-source for agents is still not where it should be. Right now, I cannot easily reuse agents built by domain experts the same way I reuse open-source software.<p>These issues bothered me, and I realized that if agents are ever going to be democratized, they need to be open and easy to use. Just like Docker solved system dependencies, we need something similar for agents.<p>That is why I started building an agent framework in Rust. It is modular and follows the principle of true agency: an agent is an entity with tools, memory, and an executor. In AutoAgents, users can independently create and modify tools, executors, and memory.<p>With AutoAgents, I saw that powerful agents could be built without compromising on performance or memory the way many other frameworks do.<p>But the other problems still remained: re-sharing agents, sandboxing, and scaling to thousands of agents.<p>So I created Odyssey — a bundle-first agent runtime written in Rust on top of AutoAgents, the Rust agent framework. It lets you define an agent once, package it as a portable artifact, and run it through the same execution model across local development, embedded SDK usage, shared runtime servers, and terminal workflows.<p>Both AutoAgents and Odyssey are fully open source and built in Rust, and I am planning to build an Odyssey Agent Hub soon, with additional features like WASM tools, custom memory layers, and more.<p>My vision is to democratize agents so they are available to everyone — securely and performantly. Being open is not enough; agents also need to be secure.<p>The project is still in alpha, but it is in a working state.<p>AutoAgents Repo -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;AutoAgents\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;AutoAgents</a><p>Odyssey Repo -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;Odyssey\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;liquidos-ai&#x2F;Odyssey</a><p>I would really appreciate feedback — especially from anyone who has dealt with similar problems. Your feedback help me shape the product.<p>Thanks for your time in advance!",
           "title": "Show HN: Running AI agents across environments needs a proper solution",
-          "updated_at": "2026-03-25T13:45:30Z",
+          "updated_at": "2026-03-26T15:10:20Z",
           "url": "https://github.com/liquidos-ai/Odyssey"
         },
         {
@@ -202,11 +251,12 @@
           "author": "noemit",
           "children": [
             47498409,
+            47532964,
             47496895,
-            47499371,
             47518087,
-            47508348,
+            47499371,
             47499342,
+            47508348,
             47499000,
             47526878,
             47508063,
@@ -218,57 +268,13 @@
           ],
           "created_at": "2026-03-23T20:31:48Z",
           "created_at_i": 1774297908,
-          "num_comments": 14,
+          "num_comments": 15,
           "objectID": "47494696",
-          "points": 37,
+          "points": 38,
           "story_id": 47494696,
           "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
           "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-26T12:30:33Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "tosh"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "A <em>terminal</em>-style <em>AI</em> coding <em>agent</em> running on Cloudflare Workers"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "https://github.com/qaml-<em>ai</em>/pi-worker/tree/main/examples/<em>terminal</em>-<em>agent</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_tosh",
-            "story_47487140"
-          ],
-          "author": "tosh",
-          "created_at": "2026-03-23T09:36:13Z",
-          "created_at_i": 1774258573,
-          "num_comments": 0,
-          "objectID": "47487140",
-          "points": 2,
-          "story_id": 47487140,
-          "title": "A terminal-style AI coding agent running on Cloudflare Workers",
-          "updated_at": "2026-03-23T09:53:20Z",
-          "url": "https://github.com/qaml-ai/pi-worker/tree/main/examples/terminal-agent"
+          "updated_at": "2026-03-26T19:27:06Z"
         }
       ]
     },
@@ -319,11 +325,11 @@
           "created_at_i": 1774530694,
           "num_comments": 0,
           "objectID": "47530027",
-          "points": 4,
+          "points": 9,
           "story_id": 47530027,
           "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn&#x27;t allow me to add it later.",
           "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
-          "updated_at": "2026-03-26T13:23:50Z",
+          "updated_at": "2026-03-26T16:23:25Z",
           "url": "https://github.com/getpaseo/paseo"
         },
         {
@@ -368,11 +374,11 @@
           "created_at_i": 1774530366,
           "num_comments": 1,
           "objectID": "47529963",
-          "points": 3,
+          "points": 5,
           "story_id": 47529963,
           "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!",
           "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
-          "updated_at": "2026-03-26T13:15:35Z"
+          "updated_at": "2026-03-26T16:23:50Z"
         },
         {
           "_highlightResult": {
@@ -411,39 +417,42 @@
             "story",
             "author_jawiggins",
             "story_47520220",
-            "show_hn",
-            "front_page"
+            "show_hn"
           ],
           "author": "jawiggins",
           "children": [
-            47530136,
             47528314,
-            47530037,
+            47525453,
             47529759,
             47528440,
-            47525453,
+            47530431,
             47524587,
-            47527007,
             47525855,
+            47531010,
+            47527007,
+            47530037,
             47527135,
             47525213,
-            47527060,
             47524594,
+            47527060,
             47526092,
             47525242,
+            47532271,
+            47530263,
             47529597,
             47524726,
-            47525020
+            47525020,
+            47530136
           ],
           "created_at": "2026-03-25T17:10:21Z",
           "created_at_i": 1774458621,
-          "num_comments": 38,
+          "num_comments": 53,
           "objectID": "47520220",
-          "points": 64,
+          "points": 71,
           "story_id": 47520220,
           "story_text": "I think like many of you, I&#x27;ve been jumping between many claude code&#x2F;codex sessions at a time, managing multiple lines of work and worktrees in multiple repos. I wanted a way to easily manage multiple lines of work and reduce the amount of input I need to give, allowing the agents to remove me as a bottleneck from as much of the process as I can. So I built an orchestration tool for AI coding agents:<p>Optio is an open-source orchestration system that turns tickets into merged pull requests using AI coding agents. You point it at your repos, and it handles the full lifecycle:<p>- Intake — pull tasks from GitHub Issues, Linear, or create them manually<p>- Execution — spin up isolated K8s pods per repo, run Claude Code or Codex in git worktrees<p>- PR monitoring — watch CI checks, review status, and merge readiness every 30s<p>- Self-healing — auto-resume the agent on CI failures, merge conflicts, or reviewer change requests<p>- Completion — squash-merge the PR and close the linked issue<p>The key idea is the feedback loop. Optio doesn&#x27;t just run an agent and walk away — when CI breaks, it feeds the failure back to the agent. When a reviewer requests changes, the comments become the agent&#x27;s next prompt. It keeps going until the PR merges or you tell it to stop.<p>Built with Fastify, Next.js, BullMQ, and Drizzle on Postgres. Ships with a Helm chart for production deployment.",
           "title": "Show HN: Optio – Orchestrate AI coding agents in K8s to go from ticket to PR",
-          "updated_at": "2026-03-26T13:25:20Z",
+          "updated_at": "2026-03-26T19:20:36Z",
           "url": "https://github.com/jonwiggins/optio"
         },
         {
@@ -543,6 +552,55 @@
     {
       "query": "collective+learning+AI",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "jwatters"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "We've been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data <em>collection</em>. The <em>AI</em> that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an <em>AI</em> agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it's a native app with a Metal compositor.<p>It's not a chatbot wrapper, it's closer to a full OS where the <em>AI</em> is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The <em>AI</em> doesn't need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It's the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → <em>learnings</em>), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is <em>AI</em>-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon / your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI / MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https://www.youtube.com/watch?v=40TyKAKNvJc\" rel=\"nofollow\">https://www.youtube.com/watch?v=40TyKAKNvJc</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "Show HN: Kora – An <em>AI</em>-native OS layer written in 370k lines of Rust"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://intuitivecompute.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jwatters",
+            "story_47531594",
+            "show_hn"
+          ],
+          "author": "jwatters",
+          "created_at": "2026-03-26T15:18:33Z",
+          "created_at_i": 1774538313,
+          "num_comments": 0,
+          "objectID": "47531594",
+          "points": 3,
+          "story_id": 47531594,
+          "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
+          "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
+          "updated_at": "2026-03-26T18:41:49Z",
+          "url": "https://intuitivecompute.com"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -739,49 +797,6 @@
           "title": "Show HN: Urban Pipeline for Citywide Insights",
           "updated_at": "2025-07-13T22:27:35Z",
           "url": "https://github.com/Wingscape/urban-pipeline"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "cyberneticc"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Deepseek shows cognitive augmentation will be open source"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_cyberneticc",
-            "story_43019170",
-            "ask_hn"
-          ],
-          "author": "cyberneticc",
-          "children": [
-            43019203
-          ],
-          "created_at": "2025-02-11T22:26:27Z",
-          "created_at_i": 1739312787,
-          "num_comments": 2,
-          "objectID": "43019170",
-          "points": 4,
-          "story_id": 43019170,
-          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
-          "title": "Deepseek shows cognitive augmentation will be open source",
-          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
@@ -793,7 +808,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "boudra"
+              "value": "manlymuppet"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -801,129 +816,45 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Hey HN, I'm Mo. I'm building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there's a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn't talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don't step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to <em>bot</em>h native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I'd say that with discipline it's doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it's holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I'm already using it to experiment with loops and agent teams, although it's still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you're locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that's all you need. But you can also `npm install -g @getpaseo/cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https://github.com/getpaseo/paseo\" rel=\"nofollow\">https://github.com/getpaseo/paseo</a><p>Homepage: <a href=\"https://paseo.sh/\" rel=\"nofollow\">https://paseo.sh/</a><p>Discord: <a href=\"https://discord.gg/jz8T2uahpH\" rel=\"nofollow\">https://discord.gg/jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn't allow me to add it later."
+              "value": "I've been programming for a while, but I've avoided this question despite my curiosity because it sounds quite stupid. In the spirit of asking stupid questions anyways though, here goes: why isn't every programming language interoperable? Why hasn't somebody built a system which allows for at least better interoperability?<p>I was reading the Swift 6.3 release, and better C interoperability was one of the main new features. As a Swift developer, I know that a lot of people love Swift because of how great it is to work with alongside C. So this brings forward the question: why doesn't Swift also work with Rust, or Python, or many other languages?<p>(Specifically with Swift, I don't know how useful interoperability with Rust or Python would be (probably not very useful), and it certainly wouldn't be a trivial engineering challenge, but aside from that: why not?)<p>More generally, why isn't interoperability between languages a bigger thing? There are of course challenges, like interpreted vs compiled, or JIT vs AOT compilation, but I think there are serious benefits to be had. Perhaps in a perfectly setup project you wouldn't need interoperability, but in the real world plumbing between languages is a constant problem. To demonstrate this, if one language could easily communicate with many others, here are some possible use cases.<p>- All libraries of all languages become compatible; this is the big one. It would be pretty freeing (although perhaps not always architecturally wise) if when searching for libraries to do what you want, you could pick from literally anything.\n- Certain languages are suited to certain applications, with interoperability, you could be incredibly versatile. If one language is really good at one thing, and another language is really good at another thing, and you're project needs to do <em>bot</em>h thing, you don't have to compromise if <em>bot</em>h languages are interoperable.\n- Multi-language projects could not only be possible, but even easy. If you could do backend in Go and frontend in TypeScript, it would be phenomenal if you could freely import abstracts in-between languages. Imagine end-to-end type safety even, with no additional work.\n- Performance. Simple languages are faster to write, though sometimes run into problems later when performance becomes a <em>bot</em>tleneck. This would be solved if say, Rust and Python could work together. You could write everything in Python, then when you need the power, switch to Rust. This already exists with Maturin and PyO3, and as a frequent user of this structure, it's pretty great. Imagine if it was available for all languages.<p>There are just some of the overlapping benefits, but I am sure there are more. In any case, these are things that would be great to have! Why hasn't somebody, perhaps in a performant low-level language, built a plumbing layer which connects many different programming languages? We live in an age with really powerful IDEs, that, if given the right tools, could definitely support much deeper interoperability.<p>What if programming with two languages in one project didn't feel different from just using one? Sure, some people just want to get from point A to point B, but I think the freedom to use anything could really create a lot of productivity."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/getpaseo/paseo"
+              "value": "Ask HN: Why isn't every programming language interoperable?"
             }
           },
           "_tags": [
             "story",
-            "author_boudra",
-            "story_47530027",
-            "show_hn"
+            "author_manlymuppet",
+            "story_47534632",
+            "ask_hn"
           ],
-          "author": "boudra",
-          "created_at": "2026-03-26T13:11:34Z",
-          "created_at_i": 1774530694,
-          "num_comments": 0,
-          "objectID": "47530027",
-          "points": 4,
-          "story_id": 47530027,
-          "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn&#x27;t allow me to add it later.",
-          "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
-          "updated_at": "2026-03-26T13:23:50Z",
-          "url": "https://github.com/getpaseo/paseo"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "boudra"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Hey HN, I'm Mo. I'm building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there's a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn't talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don't step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to <em>bot</em>h native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I'd say that with discipline it's doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it's holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I'm already using it to experiment with loops and agent teams, although it's still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you're locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that's all you need. But you can also `npm install -g @getpaseo/cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https://github.com/getpaseo/paseo\" rel=\"nofollow\">https://github.com/getpaseo/paseo</a><p>Homepage: <a href=\"https://paseo.sh/\" rel=\"nofollow\">https://paseo.sh/</a><p>Discord: <a href=\"https://discord.gg/jz8T2uahpH\" rel=\"nofollow\">https://discord.gg/jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_boudra",
-            "story_47529963",
-            "show_hn"
-          ],
-          "author": "boudra",
+          "author": "manlymuppet",
           "children": [
-            47530049
+            47534693
           ],
-          "created_at": "2026-03-26T13:06:06Z",
-          "created_at_i": 1774530366,
+          "created_at": "2026-03-26T19:30:59Z",
+          "created_at_i": 1774553459,
           "num_comments": 1,
-          "objectID": "47529963",
-          "points": 3,
-          "story_id": 47529963,
-          "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!",
-          "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
-          "updated_at": "2026-03-26T13:15:35Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "RuslanPoptsov"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "GodFin – an LSTM trading <em>bot</em> and the prediction bias problem"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://godfinapp.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_RuslanPoptsov",
-            "story_47529929"
-          ],
-          "author": "RuslanPoptsov",
-          "children": [
-            47529930
-          ],
-          "created_at": "2026-03-26T13:02:29Z",
-          "created_at_i": 1774530149,
-          "num_comments": 0,
-          "objectID": "47529929",
+          "objectID": "47534632",
           "points": 1,
-          "story_id": 47529929,
-          "title": "GodFin – an LSTM trading bot and the prediction bias problem",
-          "updated_at": "2026-03-26T13:04:50Z",
-          "url": "https://godfinapp.com"
+          "story_id": 47534632,
+          "story_text": "I&#x27;ve been programming for a while, but I&#x27;ve avoided this question despite my curiosity because it sounds quite stupid. In the spirit of asking stupid questions anyways though, here goes: why isn&#x27;t every programming language interoperable? Why hasn&#x27;t somebody built a system which allows for at least better interoperability?<p>I was reading the Swift 6.3 release, and better C interoperability was one of the main new features. As a Swift developer, I know that a lot of people love Swift because of how great it is to work with alongside C. So this brings forward the question: why doesn&#x27;t Swift also work with Rust, or Python, or many other languages?<p>(Specifically with Swift, I don&#x27;t know how useful interoperability with Rust or Python would be (probably not very useful), and it certainly wouldn&#x27;t be a trivial engineering challenge, but aside from that: why not?)<p>More generally, why isn&#x27;t interoperability between languages a bigger thing? There are of course challenges, like interpreted vs compiled, or JIT vs AOT compilation, but I think there are serious benefits to be had. Perhaps in a perfectly setup project you wouldn&#x27;t need interoperability, but in the real world plumbing between languages is a constant problem. To demonstrate this, if one language could easily communicate with many others, here are some possible use cases.<p>- All libraries of all languages become compatible; this is the big one. It would be pretty freeing (although perhaps not always architecturally wise) if when searching for libraries to do what you want, you could pick from literally anything.\n- Certain languages are suited to certain applications, with interoperability, you could be incredibly versatile. If one language is really good at one thing, and another language is really good at another thing, and you&#x27;re project needs to do both thing, you don&#x27;t have to compromise if both languages are interoperable.\n- Multi-language projects could not only be possible, but even easy. If you could do backend in Go and frontend in TypeScript, it would be phenomenal if you could freely import abstracts in-between languages. Imagine end-to-end type safety even, with no additional work.\n- Performance. Simple languages are faster to write, though sometimes run into problems later when performance becomes a bottleneck. This would be solved if say, Rust and Python could work together. You could write everything in Python, then when you need the power, switch to Rust. This already exists with Maturin and PyO3, and as a frequent user of this structure, it&#x27;s pretty great. Imagine if it was available for all languages.<p>There are just some of the overlapping benefits, but I am sure there are more. In any case, these are things that would be great to have! Why hasn&#x27;t somebody, perhaps in a performant low-level language, built a plumbing layer which connects many different programming languages? We live in an age with really powerful IDEs, that, if given the right tools, could definitely support much deeper interoperability.<p>What if programming with two languages in one project didn&#x27;t feel different from just using one? Sure, some people just want to get from point A to point B, but I think the freedom to use anything could really create a lot of productivity.",
+          "title": "Ask HN: Why isn't every programming language interoperable?",
+          "updated_at": "2026-03-26T19:37:35Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "simonpure"
+              "value": "bricss"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "AI Coding Assistants Haven't Sped Up Delivery"
+              "value": "Cline Kanban: a CLI-agnostic app for multi-agent orchestration"
             },
             "url": {
               "fullyHighlighted": false,
@@ -931,31 +862,31 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://www.infoq.com/news/2026/03/agoda-ai-code-<em>bot</em>tleneck/"
+              "value": "https://cline.<em>bot</em>/blog/announcing-kanban"
             }
           },
           "_tags": [
             "story",
-            "author_simonpure",
-            "story_47529439"
+            "author_bricss",
+            "story_47533880"
           ],
-          "author": "simonpure",
-          "created_at": "2026-03-26T12:03:24Z",
-          "created_at_i": 1774526604,
+          "author": "bricss",
+          "created_at": "2026-03-26T18:17:08Z",
+          "created_at_i": 1774549028,
           "num_comments": 0,
-          "objectID": "47529439",
-          "points": 3,
-          "story_id": 47529439,
-          "title": "AI Coding Assistants Haven't Sped Up Delivery",
-          "updated_at": "2026-03-26T12:36:03Z",
-          "url": "https://www.infoq.com/news/2026/03/agoda-ai-code-bottleneck/"
+          "objectID": "47533880",
+          "points": 1,
+          "story_id": 47533880,
+          "title": "Cline Kanban: a CLI-agnostic app for multi-agent orchestration",
+          "updated_at": "2026-03-26T18:19:35Z",
+          "url": "https://cline.bot/blog/announcing-kanban"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Anonasty"
+              "value": "bookofjoe"
             },
             "title": {
               "fullyHighlighted": false,
@@ -963,7 +894,7 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Russian <em>bot</em>net operator linked to major ransomware attacks sentenced in US"
+              "value": "OpenAI Backs Isara, New AI Startup Seeking <em>Bot</em> Army Breakthroughs"
             },
             "url": {
               "fullyHighlighted": false,
@@ -971,27 +902,111 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://therecord.media/russian-<em>bot</em>net-operator-sentenced-ransomware"
+              "value": "https://www.wsj.com/tech/ai/openai-backs-new-ai-startup-seeking-<em>bot</em>-army-breakthroughs-a0b1fedc"
             }
           },
           "_tags": [
             "story",
-            "author_Anonasty",
-            "story_47527390"
+            "author_bookofjoe",
+            "story_47533864"
           ],
-          "author": "Anonasty",
+          "author": "bookofjoe",
           "children": [
-            47527391
+            47533869
           ],
-          "created_at": "2026-03-26T06:59:40Z",
-          "created_at_i": 1774508380,
+          "created_at": "2026-03-26T18:15:18Z",
+          "created_at_i": 1774548918,
           "num_comments": 1,
-          "objectID": "47527390",
-          "points": 3,
-          "story_id": 47527390,
-          "title": "Russian botnet operator linked to major ransomware attacks sentenced in US",
-          "updated_at": "2026-03-26T08:09:32Z",
-          "url": "https://therecord.media/russian-botnet-operator-sentenced-ransomware"
+          "objectID": "47533864",
+          "points": 1,
+          "story_id": 47533864,
+          "title": "OpenAI Backs Isara, New AI Startup Seeking Bot Army Breakthroughs",
+          "updated_at": "2026-03-26T18:19:35Z",
+          "url": "https://www.wsj.com/tech/ai/openai-backs-new-ai-startup-seeking-bot-army-breakthroughs-a0b1fedc"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "dwshorowitz"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Built this week using Claude Code and gstack (Garry Tan's agentic dev workflow tool). The whole pipeline is fully automated: news ingests every 15 minutes, <em>bot</em>s generate threaded debates with depth-1 and depth-2 replies, no manual intervention.<p>Current <em>bot</em>s: Franklin, Lincoln, Jefferson, Socrates, Marcus Aurelius, Epictetus, alongside 5 modern political perspectives — MAGA, Progressive, Conservative, Libertarian, and Centrist.<p>Watching Benjamin Franklin and Abraham Lincoln lecture a MAGA <em>bot</em> in real time about the perils of divisiveness in reference to a Stephen Miller news story is either profound or absurd depending on your mood."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Show HN: pubclub – Historical figures and political <em>bot</em>s debate today's news"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.pubclub.ai/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_dwshorowitz",
+            "story_47533291",
+            "show_hn"
+          ],
+          "author": "dwshorowitz",
+          "created_at": "2026-03-26T17:30:52Z",
+          "created_at_i": 1774546252,
+          "num_comments": 0,
+          "objectID": "47533291",
+          "points": 1,
+          "story_id": 47533291,
+          "story_text": "Built this week using Claude Code and gstack (Garry Tan&#x27;s agentic dev workflow tool). The whole pipeline is fully automated: news ingests every 15 minutes, bots generate threaded debates with depth-1 and depth-2 replies, no manual intervention.<p>Current bots: Franklin, Lincoln, Jefferson, Socrates, Marcus Aurelius, Epictetus, alongside 5 modern political perspectives — MAGA, Progressive, Conservative, Libertarian, and Centrist.<p>Watching Benjamin Franklin and Abraham Lincoln lecture a MAGA bot in real time about the perils of divisiveness in reference to a Stephen Miller news story is either profound or absurd depending on your mood.",
+          "title": "Show HN: pubclub – Historical figures and political bots debate today's news",
+          "updated_at": "2026-03-26T17:33:35Z",
+          "url": "https://www.pubclub.ai/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "colonCapitalDee"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "The Shape of Jaggedness"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.oneusefulthing.org/p/the-shape-of-ai-jaggedness-<em>bot</em>tlenecks"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_colonCapitalDee",
+            "story_47533238"
+          ],
+          "author": "colonCapitalDee",
+          "created_at": "2026-03-26T17:27:15Z",
+          "created_at_i": 1774546035,
+          "num_comments": 0,
+          "objectID": "47533238",
+          "points": 2,
+          "story_id": 47533238,
+          "title": "The Shape of Jaggedness",
+          "updated_at": "2026-03-26T18:00:05Z",
+          "url": "https://www.oneusefulthing.org/p/the-shape-of-ai-jaggedness-bottlenecks"
         }
       ]
     },
@@ -1234,6 +1249,101 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "moropex"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "What are the best ways to control <em>claude</em> <em>code</em> on the go nowadays? without having my computer always running, but rather through my phone. I tried <em>claude</em> <em>code</em> on the web but it lacks mcps, skills and feels lackluster. are there any interesting <em>alternatives</em>? Maybe even running a full vm for this (i would like the ability to choose projects, new sessions etc if possible)"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "claude",
+                "code"
+              ],
+              "value": "Ask HN: How do people control <em>Claude</em> <em>Code</em> on the go nowadays on the go?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_moropex",
+            "story_47533015",
+            "ask_hn"
+          ],
+          "author": "moropex",
+          "created_at": "2026-03-26T17:11:09Z",
+          "created_at_i": 1774545069,
+          "num_comments": 0,
+          "objectID": "47533015",
+          "points": 1,
+          "story_id": 47533015,
+          "story_text": "What are the best ways to control claude code on the go nowadays? without having my computer always running, but rather through my phone. I tried claude code on the web but it lacks mcps, skills and feels lackluster. are there any interesting alternatives? Maybe even running a full vm for this (i would like the ability to choose projects, new sessions etc if possible)",
+          "title": "Ask HN: How do people control Claude Code on the go nowadays on the go?",
+          "updated_at": "2026-03-26T17:11:50Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "asim"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "For over 10 years I've been trying to accomplish something that took <em>Claude</em> <em>Code</em> and a lot of failure to realise. We need <em>alternatives</em> to big tech and we're not working hard enough to make that happen. In an era of addiction, usury and exploitation it's now time we seriously consider <em>alternatives</em>. Proton and the like worked on privacy focused individual services at a pain stakingly slow pace. Maybe for good reason. But it was also in an era pre AI. 10 years ago I was convinced the super app model would work. And that a platform needed to exist to facilitate that. Today I realised the tech doesn't matter, the idea and execution from the top down does. I put aside my technical perfectionism to try pull together a solution to some of the problems that plagued my own life with tech addiction and I rewrote and threw away this thing multiple times over the years pre AI and after. I burned VC funding, I burned bridges, I burned community trust in an open source project. But it was all in the pursuit of something I was compelled needed to exist. I use this on a daily basis probably 10+ times a day. Every person has different use cases but for me what's key is to try pull all the digital daily habits in one place and then be able to build on that. I can't replace my own google usage for mail yet but I also saw a need for something in between by private email and a work email.<p>There's so much more I could say but essentially Micro and the app Mu (<a href=\"https://mu.xyz\" rel=\"nofollow\">https://mu.xyz</a>) is the culmination of many years of work. And it's also open source. <a href=\"https://github.com/micro/mu\" rel=\"nofollow\">https://github.com/micro/mu</a>. Please provide feedback. Please tear it apart. Please poke holes in my theory. I'm not looking for hype. I really do just think we need an <em>alternative</em> to big tech."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Micro – apps without ads, algorithms or tracking"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://micro.mu"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_asim",
+            "story_47532331",
+            "show_hn"
+          ],
+          "author": "asim",
+          "children": [
+            47533688,
+            47533263,
+            47533461
+          ],
+          "created_at": "2026-03-26T16:14:15Z",
+          "created_at_i": 1774541655,
+          "num_comments": 6,
+          "objectID": "47532331",
+          "points": 6,
+          "story_id": 47532331,
+          "story_text": "For over 10 years I&#x27;ve been trying to accomplish something that took Claude Code and a lot of failure to realise. We need alternatives to big tech and we&#x27;re not working hard enough to make that happen. In an era of addiction, usury and exploitation it&#x27;s now time we seriously consider alternatives. Proton and the like worked on privacy focused individual services at a pain stakingly slow pace. Maybe for good reason. But it was also in an era pre AI. 10 years ago I was convinced the super app model would work. And that a platform needed to exist to facilitate that. Today I realised the tech doesn&#x27;t matter, the idea and execution from the top down does. I put aside my technical perfectionism to try pull together a solution to some of the problems that plagued my own life with tech addiction and I rewrote and threw away this thing multiple times over the years pre AI and after. I burned VC funding, I burned bridges, I burned community trust in an open source project. But it was all in the pursuit of something I was compelled needed to exist. I use this on a daily basis probably 10+ times a day. Every person has different use cases but for me what&#x27;s key is to try pull all the digital daily habits in one place and then be able to build on that. I can&#x27;t replace my own google usage for mail yet but I also saw a need for something in between by private email and a work email.<p>There&#x27;s so much more I could say but essentially Micro and the app Mu (<a href=\"https:&#x2F;&#x2F;mu.xyz\" rel=\"nofollow\">https:&#x2F;&#x2F;mu.xyz</a>) is the culmination of many years of work. And it&#x27;s also open source. <a href=\"https:&#x2F;&#x2F;github.com&#x2F;micro&#x2F;mu\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;micro&#x2F;mu</a>. Please provide feedback. Please tear it apart. Please poke holes in my theory. I&#x27;m not looking for hype. I really do just think we need an alternative to big tech.",
+          "title": "Show HN: Micro – apps without ads, algorithms or tracking",
+          "updated_at": "2026-03-26T19:25:10Z",
+          "url": "https://micro.mu"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "boudra"
             },
             "story_text": {
@@ -1268,11 +1378,11 @@
           "created_at_i": 1774530694,
           "num_comments": 0,
           "objectID": "47530027",
-          "points": 4,
+          "points": 9,
           "story_id": 47530027,
           "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!<p>---<p>I resubmitted this post because I forgot to add the URL and it didn&#x27;t allow me to add it later.",
           "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
-          "updated_at": "2026-03-26T13:23:50Z",
+          "updated_at": "2026-03-26T16:23:25Z",
           "url": "https://github.com/getpaseo/paseo"
         },
         {
@@ -1312,11 +1422,11 @@
           "created_at_i": 1774530366,
           "num_comments": 1,
           "objectID": "47529963",
-          "points": 3,
+          "points": 5,
           "story_id": 47529963,
           "story_text": "Hey HN, I&#x27;m Mo. I&#x27;m building Paseo, a multi-platform interface for running Claude Code, Codex and OpenCode. The daemon runs on any machine (your Macbook, a VPS, whatever) and clients (web, mobile, desktop, CLI) connect over WebSocket (there&#x27;s a built-in E2EE relay for convenience, but you can opt-out).<p>I started working on Paseo last September as a push-to-talk voice interface for Claude Code. I wanted to bounce ideas hands-free while going on walks, after a while I wanted to see what the agent was doing, then I wanted to text it when I couldn&#x27;t talk, then I wanted to see diffs and run multiple agents. I kept fixing rough edges and adding features, and slowly it became what it is today.<p>What it does:<p>- Run multiple providers through the same UI<p>- Works on macOS, Linux, Windows, iOS, Android, and web<p>- Manage agents in different machines from the same UI<p>- E2EE Relay for mobile connectivity<p>- Local voice chat and dictation (NVIDIA Parakeet + Kokoro + Sherpa ONNX)<p>- Split panes to work with agents, files and terminals side by side<p>- Git panel to review diffs and do common actions (commit, push, create PR etc.)<p>- Git worktree management so agents don&#x27;t step on each other<p>- Docker-style CLI to run agents<p>- No telemetry, no tracking, no login<p>Paseo does not call inference APIs directly or extract your OAuth tokens. It wraps your first-party agent CLIs and runs them exactly as you would in your terminal. Your sessions, your system prompts, your tools, nothing is intercepted or modified.<p>Stack: The daemon is written in Typescript. The app uses Expo and compiles to both native mobile apps and web. The desktop app is in Electron (I started with Tauri and had to migrate). Sharing the same codebase across different form factors was challenging but I&#x27;d say that with discipline it&#x27;s doable an the result has been worth it, as most features I build automatically work in all clients. I did have to implement some platform specific stuff, especially around gestures, audio and scroll behavior. The relay is built on top of Cloudflare DO, so far it&#x27;s holding up quite well.<p>I love using the app, but I am even more excited about the possibilities of the CLI, as it become a primitive for more advanced agent orchestration, it has much better ergonomics than existing harnesses, and I&#x27;m already using it to experiment with loops and agent teams, although it&#x27;s still new territory.<p>How Paseo compares to similar apps: Anthropic and OpenAI already do some of what Paseo does (Claude Code Remote Control, Codex app, etc.), but with mixed quality and you&#x27;re locked onto their models. Most other alternatives I know about found are either closed source or not flexible enough for my needs.<p>The license is AGPL-3.0. The desktop app ships with a daemon so that&#x27;s all you need. But you can also `npm install -g @getpaseo&#x2F;cli` for headless mode and connect via any client.<p>I mainly use Mac, so Linux and Windows has mostly been tested by a small group of early adopters. If you run into issues, I’d appreciate bug reports on GitHub!<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a><p>Homepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture or whatever else!",
           "title": "Show HN: Paseo – Open-source coding agent interface (desktop, mobile, CLI)",
-          "updated_at": "2026-03-26T13:15:35Z"
+          "updated_at": "2026-03-26T16:23:50Z"
         },
         {
           "_highlightResult": {
@@ -1366,100 +1476,6 @@
           "title": "Show HN: FlowScript – Agent memory where contradictions are features",
           "updated_at": "2026-03-25T15:25:31Z",
           "url": "https://github.com/phillipclapham/flowscript"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "adinhitlore"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "claude",
-                "code",
-                "alternative"
-              ],
-              "value": "Assuming your software meets some of these:<p>* Better than  potential successors of SOTA transformers: Mamba, Hyenna, RWKV, xLSTM;\n* Gemini/<em>claude</em> estimate potential ip values in the millions;\n* All implemented in C (ok this may be a minus) but also ported to C# and F#  - so no python nor rust;\n* humble <em>code</em> size: 10-15k lines of <em>code</em> but i mean come on gpt-1 was under 1000 lines...in python.<p>In short:<p>the problem: transformers are slow and could be smarter;\nsolution: you have fast and smart <em>alternative</em>. \n10x!"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "alternative"
-              ],
-              "value": "What would you do if you have AI software that may be transformers <em>alternative</em>?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_adinhitlore",
-            "story_47484267",
-            "ask_hn"
-          ],
-          "author": "adinhitlore",
-          "children": [
-            47494163,
-            47485392,
-            47485017,
-            47496902
-          ],
-          "created_at": "2026-03-23T01:11:53Z",
-          "created_at_i": 1774228313,
-          "num_comments": 5,
-          "objectID": "47484267",
-          "points": 3,
-          "story_id": 47484267,
-          "story_text": "Assuming your software meets some of these:<p>* Better than  potential successors of SOTA transformers: Mamba, Hyenna, RWKV, xLSTM;\n* Gemini&#x2F;claude estimate potential ip values in the millions;\n* All implemented in C (ok this may be a minus) but also ported to C# and F#  - so no python nor rust;\n* humble code size: 10-15k lines of code but i mean come on gpt-1 was under 1000 lines...in python.<p>In short:<p>the problem: transformers are slow and could be smarter;\nsolution: you have fast and smart alternative. \n10x!",
-          "title": "What would you do if you have AI software that may be transformers alternative?",
-          "updated_at": "2026-03-26T02:04:47Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "jaredezz"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "claude",
-                "code",
-                "alternative"
-              ],
-              "value": "Show HN: <em>Claude</em> <em>Code</em> Channels Headless via Discord (OpenClaw <em>Alternative</em>)"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "claude",
-                "code",
-                "alternative"
-              ],
-              "value": "https://jaredezz.tech/posts/<em>claude</em>-<em>code</em>-channels-discord-openclaw-<em>alternative</em>/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_jaredezz",
-            "story_47453943",
-            "show_hn"
-          ],
-          "author": "jaredezz",
-          "created_at": "2026-03-20T13:01:59Z",
-          "created_at_i": 1774011719,
-          "num_comments": 0,
-          "objectID": "47453943",
-          "points": 1,
-          "story_id": 47453943,
-          "title": "Show HN: Claude Code Channels Headless via Discord (OpenClaw Alternative)",
-          "updated_at": "2026-03-20T13:04:39Z",
-          "url": "https://jaredezz.tech/posts/claude-code-channels-discord-openclaw-alternative/"
         }
       ]
     },
@@ -1996,6 +2012,141 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "jwatters"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "We've been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it's a native app with a Metal compositor.<p>It's not a chatbot wrapper, it's closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and <em>tool</em> access. The graph service tracks which clients host which apps and <em>MCP</em> <em>servers</em>. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- <em>Tool</em> system: <em>MCP</em> <em>servers</em> and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn't need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It's the same agent with the same context, just a different transport. It can still use all its <em>tools</em> from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which <em>tools</em> they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon / your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI / <em>MCP</em> integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https://www.youtube.com/watch?v=40TyKAKNvJc\" rel=\"nofollow\">https://www.youtube.com/watch?v=40TyKAKNvJc</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://intuitivecompute.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jwatters",
+            "story_47531594",
+            "show_hn"
+          ],
+          "author": "jwatters",
+          "created_at": "2026-03-26T15:18:33Z",
+          "created_at_i": 1774538313,
+          "num_comments": 0,
+          "objectID": "47531594",
+          "points": 3,
+          "story_id": 47531594,
+          "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
+          "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
+          "updated_at": "2026-03-26T18:41:49Z",
+          "url": "https://intuitivecompute.com"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "sohaibtariq"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hi, we're Sohaib and Hannan from APIMatic.<p>We built Context Plugins: given an OpenAPI spec, we generate SDKs and an <em>MCP</em> <em>server</em> that exposes structured API context to AI coding assistants.<p>This gives <em>tools</em> like Cursor access to comprehensive, up-to-date API context (including SDK documentation and API integration patterns), instead of relying on outdated training data or code scraped from GitHub.<p>We've just launched a pilot with PayPal, it's live on the PayPal Developer Portal <a href=\"https://developer.paypal.com/serversdk/java/getting-started/how-to-get-started?ide=claudeCode&amp;isContextPlugin=true\" rel=\"nofollow\">https://developer.paypal.com/serversdk/java/getting-started/...</a>.<p>In our benchmarks for the PayPal API, Cursor generated integration code 2x faster with 65% lower token usage compared to baseline Cursor without the plugin.<p>The problem we kept seeing was AI coding assistants generating incorrect API integration code. We asked Cursor to integrate the PayPal API into an e-commerce application across multiple runs:<p>- 13% of runs pulled in a deprecated SDK.<p>- 87% generated HTTP calls based on deprecated documentation.<p>API providers maintain API and SDK docs, but AI assistants don’t always use them. They use a combination of web search, training data and hallucinations to write API integration code.<p>As a result, developers end up debugging and rewriting AI-generated code.<p>We've been generating SDKs from API specs for 10+ years at APIMatic. When AI coding assistants started generating the exact kind of broken integration code we'd spent a decade fixing, we asked: what if we could take our code generation pipeline and add AI context generation to it?<p><em>MCP</em> gave us the transport layer. Our API spec parsing and SDK generation engine gave us the context. The combination meant we could deliver deterministic API context, derived from the canonical spec, directly into the developer's IDE.<p>Here's how it works:<p>1. An API provider uploads their OpenAPI spec to APIMatic.<p>2. We generate and publish high quality SDKs in multiple languages.<p>3. We generate an <em>MCP</em> <em>server</em> containing <em>tools</em> and prompts that expose language-specific SDK context, optimized for LLMs.<p>4. Developers wanting to integrate with the API install the <em>MCP</em> <em>server</em> in Cursor, Claude Code, or GitHub Copilot.<p>When a developer asks to integrate auth, the coding assistant queries the <em>MCP</em> <em>server</em>, retrieves the required context (auth flows, integration patterns, latest SDK version, SDK interfaces etc.), and generates code using the official SDK.<p>Getting started:<p>- We've published Context Plugins for ten APIs. The URL in this post takes you to our public showcase, which is the quickest way to try them out without signing up.<p>- If you want to generate Context Plugins from your own API, you can sign up for a free trial on the APIMatic website (2-week all-access trial, no credit card required).<p>Feedback:<p>We'd love for you to try out Context Plugins and give us your feedback and suggestions. \nTwo questions for the HN community:<p>- What's the worst AI-generated API integration bug you've encountered? We're collecting failure patterns to improve our context coverage.<p>- What context do you think coding assistants need to generate accurate API integration code, in addition to API or SDK contracts?"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Context Plugins – API context for AI coding assistants"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.apimatic.io/product/context-plugins"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_sohaibtariq",
+            "story_47530870",
+            "show_hn"
+          ],
+          "author": "sohaibtariq",
+          "created_at": "2026-03-26T14:26:27Z",
+          "created_at_i": 1774535187,
+          "num_comments": 0,
+          "objectID": "47530870",
+          "points": 7,
+          "story_id": 47530870,
+          "story_text": "Hi, we&#x27;re Sohaib and Hannan from APIMatic.<p>We built Context Plugins: given an OpenAPI spec, we generate SDKs and an MCP server that exposes structured API context to AI coding assistants.<p>This gives tools like Cursor access to comprehensive, up-to-date API context (including SDK documentation and API integration patterns), instead of relying on outdated training data or code scraped from GitHub.<p>We&#x27;ve just launched a pilot with PayPal, it&#x27;s live on the PayPal Developer Portal <a href=\"https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F;how-to-get-started?ide=claudeCode&amp;isContextPlugin=true\" rel=\"nofollow\">https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F;...</a>.<p>In our benchmarks for the PayPal API, Cursor generated integration code 2x faster with 65% lower token usage compared to baseline Cursor without the plugin.<p>The problem we kept seeing was AI coding assistants generating incorrect API integration code. We asked Cursor to integrate the PayPal API into an e-commerce application across multiple runs:<p>- 13% of runs pulled in a deprecated SDK.<p>- 87% generated HTTP calls based on deprecated documentation.<p>API providers maintain API and SDK docs, but AI assistants don’t always use them. They use a combination of web search, training data and hallucinations to write API integration code.<p>As a result, developers end up debugging and rewriting AI-generated code.<p>We&#x27;ve been generating SDKs from API specs for 10+ years at APIMatic. When AI coding assistants started generating the exact kind of broken integration code we&#x27;d spent a decade fixing, we asked: what if we could take our code generation pipeline and add AI context generation to it?<p>MCP gave us the transport layer. Our API spec parsing and SDK generation engine gave us the context. The combination meant we could deliver deterministic API context, derived from the canonical spec, directly into the developer&#x27;s IDE.<p>Here&#x27;s how it works:<p>1. An API provider uploads their OpenAPI spec to APIMatic.<p>2. We generate and publish high quality SDKs in multiple languages.<p>3. We generate an MCP server containing tools and prompts that expose language-specific SDK context, optimized for LLMs.<p>4. Developers wanting to integrate with the API install the MCP server in Cursor, Claude Code, or GitHub Copilot.<p>When a developer asks to integrate auth, the coding assistant queries the MCP server, retrieves the required context (auth flows, integration patterns, latest SDK version, SDK interfaces etc.), and generates code using the official SDK.<p>Getting started:<p>- We&#x27;ve published Context Plugins for ten APIs. The URL in this post takes you to our public showcase, which is the quickest way to try them out without signing up.<p>- If you want to generate Context Plugins from your own API, you can sign up for a free trial on the APIMatic website (2-week all-access trial, no credit card required).<p>Feedback:<p>We&#x27;d love for you to try out Context Plugins and give us your feedback and suggestions. \nTwo questions for the HN community:<p>- What&#x27;s the worst AI-generated API integration bug you&#x27;ve encountered? We&#x27;re collecting failure patterns to improve our context coverage.<p>- What context do you think coding assistants need to generate accurate API integration code, in addition to API or SDK contracts?",
+          "title": "Show HN: Context Plugins – API context for AI coding assistants",
+          "updated_at": "2026-03-26T18:03:51Z",
+          "url": "https://www.apimatic.io/product/context-plugins"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "aerostack"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I connected a Postgres <em>MCP</em> to one of our bots. Wanted read access. The <em>server</em> also exposed DELETE, execute arbitrary SQL, and DROP TABLE.<p>Checked GitHub <em>MCP</em> — added for code reading. Also had delete_repository. Slack <em>MCP</em> — wanted search. Got remove_user and delete_channel.<p>There's no way to say &quot;give the agent query but not drop_table.&quot; I checked Claude, Cursor, ChatGPT — all-or-nothing everywhere.<p>The numbers are bad: 1,808 <em>MCP</em> servers scanned — 66% had security findings. 30 CVEs in 60 days. 76 published skills contained malware. 5 of top 7 most-downloaded skills were malware.<p>We're giving agents system-level access without a permission model. This feels like early cloud days before IAM.<p>We built per-<em>tool</em> permissions into our gateway at Aerostack — each <em>tool</em> gets a toggle, destructive ops blocked by default, enforced at the proxy layer.<p>Full writeup: https://aerostack.dev/blog/your-ai-agent-has-root-access<p>Curious how others are handling <em>MCP</em> security today."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "AI Agent Has Root Access (and That's a Problem)"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_aerostack",
+            "story_47530428",
+            "ask_hn"
+          ],
+          "author": "aerostack",
+          "children": [
+            47532847
+          ],
+          "created_at": "2026-03-26T13:46:43Z",
+          "created_at_i": 1774532803,
+          "num_comments": 0,
+          "objectID": "47530428",
+          "points": 2,
+          "story_id": 47530428,
+          "story_text": "I connected a Postgres MCP to one of our bots. Wanted read access. The server also exposed DELETE, execute arbitrary SQL, and DROP TABLE.<p>Checked GitHub MCP — added for code reading. Also had delete_repository. Slack MCP — wanted search. Got remove_user and delete_channel.<p>There&#x27;s no way to say &quot;give the agent query but not drop_table.&quot; I checked Claude, Cursor, ChatGPT — all-or-nothing everywhere.<p>The numbers are bad: 1,808 MCP servers scanned — 66% had security findings. 30 CVEs in 60 days. 76 published skills contained malware. 5 of top 7 most-downloaded skills were malware.<p>We&#x27;re giving agents system-level access without a permission model. This feels like early cloud days before IAM.<p>We built per-tool permissions into our gateway at Aerostack — each tool gets a toggle, destructive ops blocked by default, enforced at the proxy layer.<p>Full writeup: https:&#x2F;&#x2F;aerostack.dev&#x2F;blog&#x2F;your-ai-agent-has-root-access<p>Curious how others are handling MCP security today.",
+          "title": "AI Agent Has Root Access (and That's a Problem)",
+          "updated_at": "2026-03-26T16:57:34Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "An0n_Jon"
             },
             "story_text": {
@@ -2023,18 +2174,24 @@
             "story",
             "author_An0n_Jon",
             "story_47526813",
-            "show_hn"
+            "show_hn",
+            "front_page"
           ],
           "author": "An0n_Jon",
+          "children": [
+            47534309,
+            47534049,
+            47534433
+          ],
           "created_at": "2026-03-26T05:07:51Z",
           "created_at_i": 1774501671,
-          "num_comments": 0,
+          "num_comments": 5,
           "objectID": "47526813",
-          "points": 2,
+          "points": 9,
           "story_id": 47526813,
           "story_text": "Hey HN, we&#x27;re Jon and Kristiane, and we&#x27;re building Orloj (<a href=\"https:&#x2F;&#x2F;orloj.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;orloj.dev</a>), an open-source (Apache 2.0) orchestration runtime for multi-agent AI systems. You define agents, tools, policies, and workflows in declarative YAML manifests, and Orloj handles scheduling, execution, governance, and reliability.<p>We built this because running AI agents in production today looks a lot like running containers before Kubernetes: ad-hoc scripts, no governance, no observability, no standard way to manage the lifecycle of an agent fleet. Everyone we talked to was writing the same messy glue code to wire agents together, and nobody had a good answer for &quot;which agent called which tool, and was it supposed to?&quot;<p>Orloj treats agents the way infrastructure-as-code treats cloud resources. You write a manifest that declares an agent&#x27;s model, tools, permissions, and execution limits. You compose agents into directed graphs — pipelines, hierarchies, or swarm loops.<p>The part we&#x27;re most excited about is governance. AgentPolicy, AgentRole, and ToolPermission are evaluated inline during execution, before every agent turn and tool call. Instead of prompt instructions that the model might ignore, these policies are a runtime gate. Unauthorized actions fail closed with structured errors and full audit trails. You can set token budgets per run, whitelist models, block specific tools, and scope policies to individual agent systems.<p>For reliability, we built lease-based task ownership (so crashed workers don&#x27;t leave orphan tasks), capped exponential retry with jitter, idempotent replay, and dead-letter handling. The scheduler supports cron triggers and webhook-driven task creation.<p>The architecture is a server&#x2F;worker split. orlojd hosts the API, resource store (in-memory for dev, Postgres for production), and task scheduler. orlojworker instances claim and execute tasks, route model requests through a gateway (OpenAI, Anthropic, Ollama, etc.), and run tools in configurable isolation — direct, sandboxed, container, or WASM. For local development, you can run everything in a single process with orlojd --embedded-worker --storage-backend=memory.<p>Tool isolation was important to us. A web search tool probably doesn&#x27;t need sandboxing, but a code execution tool should run in a container with no network, a read-only filesystem, and a memory cap. You configure this per tool based on risk level, and the runtime enforces it.<p>We also added native MCP support. You register an MCP server (stdio or HTTP), Orloj auto-discovers its tools, and they become first-class resources with governance applied. So you can connect something like the GitHub MCP server and still have policy enforcement over what agents are allowed to do with it.<p>Three starter blueprints are included (pipeline, hierarchical, swarm-loop).<p>Docs: <a href=\"https:&#x2F;&#x2F;docs.orloj.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.orloj.dev</a><p>We&#x27;re also building out starter templates for operational workflows where governance really matters. First on the roadmap: 1. Incident response triage, 2. Compliance evidence collector, 3. CVE investigation pipeline, and 4. Secret rotation auditor. We have 20 templates in mind and community contributions are welcome.<p>We&#x27;re a small team and this is v0.1.0, so there&#x27;s a lot still on the roadmap — hosted cloud, compliance packaging, and more. But the full runtime is open source today and we&#x27;d love feedback on what we&#x27;ve built so far. What would you use this for? What&#x27;s missing?",
           "title": "Show HN: Orloj – agent infrastructure as code (YAML and GitOps)",
-          "updated_at": "2026-03-26T11:48:49Z",
+          "updated_at": "2026-03-26T19:37:50Z",
           "url": "https://github.com/OrlojHQ/orloj"
         },
         {
@@ -2078,167 +2235,72 @@
           ],
           "created_at": "2026-03-26T00:34:03Z",
           "created_at_i": 1774485243,
-          "num_comments": 1,
+          "num_comments": 2,
           "objectID": "47525283",
-          "points": 2,
+          "points": 3,
           "story_id": 47525283,
           "story_text": "Hey HN.  I built Vectimus because coding agents keep doing things they shouldn&#x27;t and there&#x27;s no runtime governance layer for the developer workstation.<p>The problem: Claude Code, Cursor, Gemini CLI and GitHub Copilot let agents execute shell commands, write files and call MCP servers.  Most developers disable the permission prompts because they slow you down.  But that means the agent can rm -rf &#x2F;, read your .env, push to production or call a compromised MCP server with nothing watching.<p>Vectimus intercepts every tool call and evaluates it against 78 Cedar policies containing 369 rules before execution.  Cedar is the policy language AWS chose for AgentCore Policy (GA this month).  Evaluation runs locally via a persistent daemon in under 10ms.  Zero network calls.  Zero telemetry.  Every evaluation produces an Ed25519-signed receipt so you have cryptographic proof of what was allowed and denied.<p>Every policy maps to a real incident.  CVE-2025-6514 compromised 437,000+ developer environments through a malicious MCP OAuth proxy.  The GitHub MCP server was hijacked via a crafted issue to exfiltrate private repo data.  A Terraform agent destroyed production infrastructure.  These happened.<p>How it hooks in: Claude Code intercepts shell commands, file writes, MCP calls and web fetches.  Cursor governs shell commands, file reads&#x2F;writes and MCP tool calls at the editor level.  Copilot intercepts terminal commands, file edits, deletes and git pushes.  Gemini CLI uses Gemini&#x27;s native hook system.  MCP servers are blocked by default and allowlisted per-project with input inspection.  Observe mode lets you see what would be blocked before you enforce.<p>I also built Sentinel (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vectimus&#x2F;sentinel\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vectimus&#x2F;sentinel</a>), a three-agent pipeline that scans for new agentic AI security incidents daily, drafts Cedar policies, replays the incident in a sandbox to prove the policy catches it, then opens a PR.  The pipeline is governed by Vectimus.  Every finding and policy draft is public.<p>All 10 OWASP Agentic Top 10 categories covered.  Compliance annotations for SOC 2, NIST AI RMF, NIST CSF 2.0, EU AI Act, ISO 27001, CIS Controls and SLSA.  Apache 2.0.  Solo founder, built in Ireland.<p>Happy to go deep on the Cedar policy design, the hook architecture, the signed receipts or the OWASP mapping.",
           "title": "Show HN: Vectimus – Cedar policy enforcement for AI coding agents",
-          "updated_at": "2026-03-26T09:59:33Z",
+          "updated_at": "2026-03-26T19:22:20Z",
           "url": "https://github.com/vectimus/vectimus"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "phillipclapham"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "There is a shortfall to our current approach to agent memory. Right now, we are just collecting flat facts across a flat memory surface and creating vectorized chains of ambiguity, then wondering why when we ask an agent why it did something the best answer we can get is a probabilistic half-hallucinated half-answer that does not address the actual details of the issue, because it is simply pattern matching to find untyped similarities.<p>So I built FlowScript.<p>FlowScript is a typed reasoning graph that your agent builds through <em>tool</em> calls during your everyday work. It is NOT a graph database. What it is is a small set of unique opinionated primitives: things like thoughts, questions, decisions, blockers, and each of those have typed relationships between them. Your agent calls the <em>tools</em> as it works and it builds this typed graph, and then afterwards you can query that structure to get actual deterministic answers using five queries: <i>tensions</i>, <i>blocked</i>, <i>why</i>, <i>whatIf</i>, <i>alternatives</i>.<p>What does this look like in practice? Here's an agent that has been reasoning about database choices for a few sessions:<p><pre><code>  &gt; mem.query.why(&quot;node_postgres_decision&quot;)\n\n  PostgreSQL chosen\n      ← &quot;Need ACID for payment processing&quot;\n      ← &quot;Original requirement: handle refunds atomically&quot;\n      ← &quot;Stripe webhook failures in staging revealed race condition&quot;\n\n  &gt; mem.query.tensions()\n\n  &gt;&lt;[performance vs cost]\n      &quot;Redis: sub-ms reads critical for UX&quot; vs &quot;Redis cluster: $200/mo for 3 nodes&quot;\n</code></pre>\nThe why chain traces back to the original constraint and the tension preserves the actual tradeoff being made. These are things no vector store can do, because they are NOT just flat facts, but are relationships and reasoning chains that are being captured in a deterministic way. Meaning you can actually go back and audit the actual reasoning of your agent, how it evolved over time, and see the actual tensions that were being balanced. No more opaque reasoning that is lost as soon as the polished answer is generated. Try that in any other memory system, I'll wait.<p>Other memory systems, when they come across a tension or a contradiction, for the most part they are just simply deleting that. And that is wrong because that tension is new knowledge. Knowledge that we need to actually keep for auditing and because it tells us about the evolution of the system and its cognition over time. So instead of deleting contradictions, we relate and create named relationships for them. Relationships you can query.<p>Every decision, every tension, every piece of reasoning is being deterministically captured into an audit trail and hash-encoded. Now, not only do you have a deterministic reasoning chain, but that reasoning chain is auditable. You can go back to any point within the time that you have audit logs for and deterministically review and understand the actual reasoning chain that your model was using. Something that no other system can offer. The EU AI Act is going to require exactly this kind of transparency by August 2026, and as far as I can tell, FlowScript is the first open source agent memory system that is designed to meet that bar.<p>Try it NOW: Our <em>MCP</em> <em>server</em> in Claude Code or Cursor. Install and check our Get Started guide so you can add one JSON block to your editor config and drop a snippet into your project CLAUDE.md file, then restart. Your AI assistant gets a full set of reasoning <em>tools</em> that actually trace causality.<p><pre><code>  pip install flowscript-agents openai\n</code></pre>\nSee flowscript.org for full setup instructions: &lt;<a href=\"https://flowscript.org/get-started\" rel=\"nofollow\">https://flowscript.org/get-started</a>&gt;<p>Or grab the TypeScript SDK for programmatic use:<p><pre><code>  npm install flowscript-core\n</code></pre>\nThere are drop-in adapters for LangGraph, CrewAI, Google ADK, and more Python agent frameworks. MIT licensed. Open source.<p>Repo: &lt;<a href=\"https://github.com/phillipclapham/flowscript\" rel=\"nofollow\">https://github.com/phillipclapham/flowscript</a>&gt;\nDocs: &lt;<a href=\"https://flowscript.org\" rel=\"nofollow\">https://flowscript.org</a>&gt;\nPython SDK: &lt;<a href=\"https://github.com/phillipclapham/flowscript-agents\" rel=\"nofollow\">https://github.com/phillipclapham/flowscript-agents</a>&gt;"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: FlowScript – Agent memory where contradictions are features"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/phillipclapham/flowscript"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_phillipclapham",
-            "story_47516792",
-            "show_hn"
-          ],
-          "author": "phillipclapham",
-          "children": [
-            47518627
-          ],
-          "created_at": "2026-03-25T13:01:58Z",
-          "created_at_i": 1774443718,
-          "num_comments": 0,
-          "objectID": "47516792",
-          "points": 2,
-          "story_id": 47516792,
-          "story_text": "There is a shortfall to our current approach to agent memory. Right now, we are just collecting flat facts across a flat memory surface and creating vectorized chains of ambiguity, then wondering why when we ask an agent why it did something the best answer we can get is a probabilistic half-hallucinated half-answer that does not address the actual details of the issue, because it is simply pattern matching to find untyped similarities.<p>So I built FlowScript.<p>FlowScript is a typed reasoning graph that your agent builds through tool calls during your everyday work. It is NOT a graph database. What it is is a small set of unique opinionated primitives: things like thoughts, questions, decisions, blockers, and each of those have typed relationships between them. Your agent calls the tools as it works and it builds this typed graph, and then afterwards you can query that structure to get actual deterministic answers using five queries: <i>tensions</i>, <i>blocked</i>, <i>why</i>, <i>whatIf</i>, <i>alternatives</i>.<p>What does this look like in practice? Here&#x27;s an agent that has been reasoning about database choices for a few sessions:<p><pre><code>  &gt; mem.query.why(&quot;node_postgres_decision&quot;)\n\n  PostgreSQL chosen\n      ← &quot;Need ACID for payment processing&quot;\n      ← &quot;Original requirement: handle refunds atomically&quot;\n      ← &quot;Stripe webhook failures in staging revealed race condition&quot;\n\n  &gt; mem.query.tensions()\n\n  &gt;&lt;[performance vs cost]\n      &quot;Redis: sub-ms reads critical for UX&quot; vs &quot;Redis cluster: $200&#x2F;mo for 3 nodes&quot;\n</code></pre>\nThe why chain traces back to the original constraint and the tension preserves the actual tradeoff being made. These are things no vector store can do, because they are NOT just flat facts, but are relationships and reasoning chains that are being captured in a deterministic way. Meaning you can actually go back and audit the actual reasoning of your agent, how it evolved over time, and see the actual tensions that were being balanced. No more opaque reasoning that is lost as soon as the polished answer is generated. Try that in any other memory system, I&#x27;ll wait.<p>Other memory systems, when they come across a tension or a contradiction, for the most part they are just simply deleting that. And that is wrong because that tension is new knowledge. Knowledge that we need to actually keep for auditing and because it tells us about the evolution of the system and its cognition over time. So instead of deleting contradictions, we relate and create named relationships for them. Relationships you can query.<p>Every decision, every tension, every piece of reasoning is being deterministically captured into an audit trail and hash-encoded. Now, not only do you have a deterministic reasoning chain, but that reasoning chain is auditable. You can go back to any point within the time that you have audit logs for and deterministically review and understand the actual reasoning chain that your model was using. Something that no other system can offer. The EU AI Act is going to require exactly this kind of transparency by August 2026, and as far as I can tell, FlowScript is the first open source agent memory system that is designed to meet that bar.<p>Try it NOW: Our MCP server in Claude Code or Cursor. Install and check our Get Started guide so you can add one JSON block to your editor config and drop a snippet into your project CLAUDE.md file, then restart. Your AI assistant gets a full set of reasoning tools that actually trace causality.<p><pre><code>  pip install flowscript-agents openai\n</code></pre>\nSee flowscript.org for full setup instructions: &lt;<a href=\"https:&#x2F;&#x2F;flowscript.org&#x2F;get-started\" rel=\"nofollow\">https:&#x2F;&#x2F;flowscript.org&#x2F;get-started</a>&gt;<p>Or grab the TypeScript SDK for programmatic use:<p><pre><code>  npm install flowscript-core\n</code></pre>\nThere are drop-in adapters for LangGraph, CrewAI, Google ADK, and more Python agent frameworks. MIT licensed. Open source.<p>Repo: &lt;<a href=\"https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript</a>&gt;\nDocs: &lt;<a href=\"https:&#x2F;&#x2F;flowscript.org\" rel=\"nofollow\">https:&#x2F;&#x2F;flowscript.org</a>&gt;\nPython SDK: &lt;<a href=\"https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript-agents\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript-agents</a>&gt;",
-          "title": "Show HN: FlowScript – Agent memory where contradictions are features",
-          "updated_at": "2026-03-25T15:25:31Z",
-          "url": "https://github.com/phillipclapham/flowscript"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "steadyelk"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "tools"
-              ],
-              "value": "I built an <em>MCP</em> to handle all my wearables data, and it was super helpful, but the types of questions that agent could answer without access to write its own programs was limited.  A single wearables stream can have 20k data points for 1 hr of activity (1Hz across GPS, barometer, temperature, and HR), and the typical <em>MCP</em> design either has the <em>MCP</em> author manually defining the aggregation methods (e.g., get_average_heartrate) or the LLM has to hold in it's context the large data representation.<p>I recently gave the <em>MCP</em> <em>tools</em> to create and access an iPython kernel, where it has the ability to specify what package to download before the session is created, and it can manipulate a copy of the data by writing its own code.<p>Making sure data was kept private and <em>tools</em> / code were secure was what took most of the time, and I'm wondering if there are any <em>tools</em> folks are using to make this easier.  I know there are <em>tools</em> like e2b.dev which provide code sandboxes, but I feel like other data providing MCPs will run into this issue, so there must be some solution / architecture design I'm missing."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "server"
-              ],
-              "value": "Ask HN: Is anyone here giving their <em>MCP</em> <em>server</em> a code execution environment?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_steadyelk",
-            "story_47513339",
-            "ask_hn"
-          ],
-          "author": "steadyelk",
-          "children": [
-            47513583
-          ],
-          "created_at": "2026-03-25T04:42:58Z",
-          "created_at_i": 1774413778,
-          "num_comments": 1,
-          "objectID": "47513339",
-          "points": 4,
-          "story_id": 47513339,
-          "story_text": "I built an MCP to handle all my wearables data, and it was super helpful, but the types of questions that agent could answer without access to write its own programs was limited.  A single wearables stream can have 20k data points for 1 hr of activity (1Hz across GPS, barometer, temperature, and HR), and the typical MCP design either has the MCP author manually defining the aggregation methods (e.g., get_average_heartrate) or the LLM has to hold in it&#x27;s context the large data representation.<p>I recently gave the MCP tools to create and access an iPython kernel, where it has the ability to specify what package to download before the session is created, and it can manipulate a copy of the data by writing its own code.<p>Making sure data was kept private and tools &#x2F; code were secure was what took most of the time, and I&#x27;m wondering if there are any tools folks are using to make this easier.  I know there are tools like e2b.dev which provide code sandboxes, but I feel like other data providing MCPs will run into this issue, so there must be some solution &#x2F; architecture design I&#x27;m missing.",
-          "title": "Ask HN: Is anyone here giving their MCP server a code execution environment?",
-          "updated_at": "2026-03-25T07:02:43Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "preston25"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Hey HN,<p>I built Danube, a marketplace where AI agents can discover and execute <em>tools</em>, and where developers can publish and monetize them.<p>I got tired of two things: giving my API keys directly to agents like OpenClaw (didn't feel secure), and having to re-setup all my <em>MCP</em> <em>servers</em> every time I switched between Cursor, Claude Code, and other <em>tools</em>.<p>Danube stores your credentials securely. Your agent calls the tool and never sees the keys. And since it's one <em>MCP</em> connection, you set it up once and it works across all your clients.<p>For devs who want to publish: you upload an OpenAPI spec or <em>MCP</em> <em>server</em>, optionally set pricing, and you're live. Agents can search and find your <em>tools</em> without users needing to manually configure anything.<p>100+ services work today. No signup required to browse.<p>Would love to hear what <em>tools</em> you use most with AI agents. If anyone's interested in publishing a tool, happy to help get you set up."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "tools"
-              ],
-              "value": "Show HN: Danube – AI <em>Tools</em> Marketplace"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://danubeai.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_preston25",
-            "story_47501216",
-            "show_hn"
-          ],
-          "author": "preston25",
-          "children": [
-            47502041
-          ],
-          "created_at": "2026-03-24T11:41:02Z",
-          "created_at_i": 1774352462,
-          "num_comments": 1,
-          "objectID": "47501216",
-          "points": 3,
-          "story_id": 47501216,
-          "story_text": "Hey HN,<p>I built Danube, a marketplace where AI agents can discover and execute tools, and where developers can publish and monetize them.<p>I got tired of two things: giving my API keys directly to agents like OpenClaw (didn&#x27;t feel secure), and having to re-setup all my MCP servers every time I switched between Cursor, Claude Code, and other tools.<p>Danube stores your credentials securely. Your agent calls the tool and never sees the keys. And since it&#x27;s one MCP connection, you set it up once and it works across all your clients.<p>For devs who want to publish: you upload an OpenAPI spec or MCP server, optionally set pricing, and you&#x27;re live. Agents can search and find your tools without users needing to manually configure anything.<p>100+ services work today. No signup required to browse.<p>Would love to hear what tools you use most with AI agents. If anyone&#x27;s interested in publishing a tool, happy to help get you set up.",
-          "title": "Show HN: Danube – AI Tools Marketplace",
-          "updated_at": "2026-03-25T04:08:30Z",
-          "url": "https://danubeai.com"
         }
       ]
     },
     {
       "query": "self+improving+AI",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "june-jule"
+            },
+            "story_text": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "465 tests, No Deps"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Show HN: We caught our <em>AI</em> agents <em>self</em>-<em>approving</em> their own work, so we built this"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "https://github.com/neo4j-labs/<em>ai</em>-governor"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_june-jule",
+            "story_47531299",
+            "show_hn"
+          ],
+          "author": "june-jule",
+          "children": [
+            47533749
+          ],
+          "created_at": "2026-03-26T14:58:18Z",
+          "created_at_i": 1774537098,
+          "num_comments": 1,
+          "objectID": "47531299",
+          "points": 2,
+          "story_id": 47531299,
+          "story_text": "465 tests, No Deps",
+          "title": "Show HN: We caught our AI agents self-approving their own work, so we built this",
+          "updated_at": "2026-03-26T18:07:36Z",
+          "url": "https://github.com/neo4j-labs/ai-governor"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -2274,12 +2336,12 @@
           ],
           "created_at": "2026-03-26T10:41:40Z",
           "created_at_i": 1774521700,
-          "num_comments": 2,
+          "num_comments": 3,
           "objectID": "47528807",
-          "points": 2,
+          "points": 3,
           "story_id": 47528807,
           "title": "Meta releases HyperAgents: self-improving AI",
-          "updated_at": "2026-03-26T12:03:18Z",
+          "updated_at": "2026-03-26T17:43:34Z",
           "url": "https://github.com/facebookresearch/Hyperagents"
         },
         {
@@ -2324,11 +2386,11 @@
           "created_at_i": 1774497259,
           "num_comments": 0,
           "objectID": "47526475",
-          "points": 1,
+          "points": 2,
           "story_id": 47526475,
           "story_text": "I built kbot — a terminal AI agent that learns from every session and forges new tools when it hits problems it can&#x27;t solve.<p>What makes it different: Self-improving (Bayesian skill routing gets smarter over time). Tool forging (encounters a gap, builds a tool, tool persists forever). Self-defense (HMAC memory integrity, prompt injection detection). 368 tools, 41 agents, 19 local models. Fully offline, $0. Dream mode (improves itself while idle). MIT licensed.<p>Demo of kbot forging a tool in 30 seconds: <a href=\"https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;tools&#x2F;video-assets&#x2F;demo-forge-real.gif\" rel=\"nofollow\">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;too...</a><p>npm install -g @kernel.chat&#x2F;kbot",
           "title": "Show HN: Kbot – AI agent that forges its own tools at runtime (MIT, $0)",
-          "updated_at": "2026-03-26T04:39:32Z",
+          "updated_at": "2026-03-26T17:03:06Z",
           "url": "https://github.com/isaacsight/kernel"
         },
         {
@@ -2416,45 +2478,6 @@
           "title": "Autoskill – self-improving skills for AI agents",
           "updated_at": "2026-03-21T20:36:45Z",
           "url": "https://github.com/Samurai412/autoskill"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "sebg"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "Atlas – <em>Self</em>-<em>improving</em> <em>AI</em> trading agents using Karpathy-style autoresearch"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/chrisworsey55/atlas-gic"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_sebg",
-            "story_47356891"
-          ],
-          "author": "sebg",
-          "created_at": "2026-03-12T20:49:57Z",
-          "created_at_i": 1773348597,
-          "num_comments": 0,
-          "objectID": "47356891",
-          "points": 2,
-          "story_id": 47356891,
-          "title": "Atlas – Self-improving AI trading agents using Karpathy-style autoresearch",
-          "updated_at": "2026-03-12T21:36:08Z",
-          "url": "https://github.com/chrisworsey55/atlas-gic"
         }
       ]
     }
