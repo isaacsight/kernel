@@ -30,7 +30,7 @@ export interface DelegationResult {
  * Register kbot specialists as Claude Code teammates.
  *
  * Returns an array of teammate definitions — one for each of kbot's
- * core and extended specialist agents (10 total).
+ * core and extended specialist agents (16 total).
  *
  * @example
  * const teammates = registerTeammates()

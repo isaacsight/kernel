@@ -36,7 +36,7 @@ async function main() {
         .name('kbot')
         .description('kbot — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
         .version(VERSION)
-        .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 26)')
+        .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 32)')
         .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
         .option('-s, --stream', 'Stream the response')
         .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
@@ -78,7 +78,7 @@ async function main() {
         console.log(`  ${chalk.dim('─'.repeat(50))}`);
         console.log(`  ${chalk.white('kbot auth')}         Configure your API key (20 providers)`);
         console.log(`  ${chalk.white('kbot doctor')}       Diagnose setup issues`);
-        console.log(`  ${chalk.white('kbot agents')}       List all 26 specialist agents`);
+        console.log(`  ${chalk.white('kbot agents')}       List all 32 specialist agents`);
         console.log(`  ${chalk.white('kbot status')}       Full dashboard — tools, agents, stats`);
         console.log(`  ${chalk.white('kbot init')}         Set up kbot for this project (60s)`);
         console.log(`  ${chalk.white('kbot update')}       Update to the latest version`);
@@ -99,7 +99,7 @@ async function main() {
         console.log(`  ${chalk.cyan('https://github.com/isaacsight/kernel/issues')}  ${chalk.dim('Bug reports')}`);
         console.log(`  ${chalk.cyan('support@kernel.chat')}  ${chalk.dim('Email (AI-assisted replies)')}`);
         console.log();
-        console.log(`  ${chalk.dim('26 specialist agents · 360+ tools · 20 providers · MIT licensed')}`);
+        console.log(`  ${chalk.dim('32 specialist agents · 360+ tools · 20 providers · MIT licensed')}`);
         console.log();
         process.exit(0);
     });
@@ -3258,7 +3258,7 @@ async function byokFlow() {
     console.log();
     printSuccess(`BYOK mode enabled — ${providerConfig.name}`);
     printInfo('You pay the provider directly. No message limits. No restrictions.');
-    printInfo('All 362 tools + 26 agents + learning system = yours.');
+    printInfo('All 362 tools + 32 agents + learning system = yours.');
     console.log();
     printSuccess('Ready. Run `kbot` to start.');
 }
@@ -3536,7 +3536,7 @@ async function startRepl(agentOpts, context, tier, byokActive = false, localActi
         const suggestions = await detectProjectSuggestions();
         console.log();
         console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'));
-        console.log(chalk.dim('  │') + chalk.bold('  26 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'));
+        console.log(chalk.dim('  │') + chalk.bold('  32 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'));
         console.log(chalk.dim('  │                                                 │'));
         if (suggestions.length > 0) {
             for (const s of suggestions.slice(0, 4)) {

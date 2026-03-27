@@ -2459,6 +2459,233 @@ export function registerLabNeuroTools() {
             return parts.join('\n');
         },
     });
+    // ════════════════════════════════════════════════════════════════════════════
+    // 11. Brain Activation Prediction
+    // ════════════════════════════════════════════════════════════════════════════
+    registerTool({
+        name: 'brain_predict',
+        description: 'Predict brain activation patterns from stimulus descriptions. Maps stimulus features to expected brain region activations based on established neuroscience literature. Supports visual, auditory, text/language, motor, emotional, and social stimulus types.',
+        parameters: {
+            stimulus: { type: 'string', description: 'Describe the stimulus (e.g., "a face showing fear moving across a red background")', required: true },
+            stimulus_type: { type: 'string', description: 'Stimulus modality: visual, auditory, text, motor, emotional, social (default: visual)' },
+            detail_level: { type: 'string', description: 'Output detail: overview or detailed (default: overview)' },
+        },
+        tier: 'free',
+        async execute(args) {
+            const stimulus = String(args.stimulus || '').toLowerCase();
+            const stimType = String(args.stimulus_type || 'visual').toLowerCase();
+            const detail = String(args.detail_level || 'overview').toLowerCase();
+            if (!stimulus)
+                return 'Error: stimulus description is required.';
+            const activations = [];
+            function add(region, activation, fn, reasoning) {
+                // Check if already added, keep higher activation
+                const existing = activations.find(a => a.region === region);
+                if (existing) {
+                    if (activation > existing.activation) {
+                        existing.activation = activation;
+                        existing.function = fn;
+                        existing.reasoning = reasoning;
+                    }
+                }
+                else {
+                    activations.push({ region, activation: Math.min(1, Math.max(0, activation)), function: fn, reasoning });
+                }
+            }
+            // ── Visual features ──
+            if (stimType === 'visual' || /\b(see|look|watch|view|image|picture|photo|scene|display|screen)\b/.test(stimulus)) {
+                add('V1/V2 (Primary Visual)', 0.8, 'Edge detection, orientation', 'All visual stimuli activate primary visual cortex');
+                if (/\b(color|red|blue|green|yellow|orange|purple|hue|bright|colorful|chromatic)\b/.test(stimulus)) {
+                    add('V4 (Color Area)', 0.85, 'Color perception', 'Color features detected in stimulus');
+                }
+                if (/\b(move|motion|moving|flow|speed|drift|rotate|spin|flying|running|walking)\b/.test(stimulus)) {
+                    add('V5/MT (Motion Area)', 0.9, 'Motion perception', 'Motion features detected in stimulus');
+                    add('Dorsal Stream (Parietal)', 0.7, 'Where/how processing', 'Motion engages dorsal spatial stream');
+                }
+                if (/\b(face|facial|expression|person|people|portrait|eye|smile|frown)\b/.test(stimulus)) {
+                    add('FFA (Fusiform Face Area)', 0.95, 'Face processing', 'Face/facial features detected');
+                    add('STS (Superior Temporal Sulcus)', 0.6, 'Biological motion, gaze', 'Face stimuli engage social perception');
+                }
+                if (/\b(place|scene|room|building|landscape|house|city|street|indoor|outdoor|environment)\b/.test(stimulus)) {
+                    add('PPA (Parahippocampal Place Area)', 0.9, 'Scene/place processing', 'Place/scene features detected');
+                }
+                if (/\b(object|tool|car|chair|animal|thing|item|shape)\b/.test(stimulus)) {
+                    add('LOC (Lateral Occipital Complex)', 0.85, 'Object recognition', 'Object features detected');
+                    add('Ventral Stream (Temporal)', 0.75, 'What processing', 'Object identity engages ventral stream');
+                }
+                if (/\b(word|text|letter|read|written|sign|label)\b/.test(stimulus)) {
+                    add('VWFA (Visual Word Form Area)', 0.9, 'Visual word recognition', 'Written text features detected');
+                }
+                if (/\b(where|location|spatial|position|distance|depth|reach|grasp)\b/.test(stimulus)) {
+                    add('Dorsal Stream (Parietal)', 0.8, 'Where/how processing', 'Spatial features engage dorsal stream');
+                }
+            }
+            // ── Auditory features ──
+            if (stimType === 'auditory' || /\b(hear|listen|sound|audio|noise|music|tone|voice|speech|song|melody)\b/.test(stimulus)) {
+                add("A1 (Primary Auditory / Heschl's Gyrus)", 0.85, 'Sound processing', 'All auditory stimuli activate primary auditory cortex');
+                if (/\b(tone|pure|frequency|pitch|beep|hz|hertz|sine)\b/.test(stimulus)) {
+                    add("Heschl's Gyrus", 0.9, 'Pure tone processing', 'Simple tonal features detected');
+                }
+                if (/\b(speech|talk|word|sentence|language|conversation|speak|voice|said)\b/.test(stimulus)) {
+                    add("Wernicke's Area (STG)", 0.9, 'Language comprehension', 'Speech/language features detected');
+                    add('Left IFG (Broca\'s)', 0.5, 'Speech processing', 'Speech perception coactivates production areas');
+                }
+                if (/\b(voice|speaker|vocal|human|person)\b/.test(stimulus)) {
+                    add('Superior Temporal (Voice Area)', 0.85, 'Voice identity processing', 'Human voice features detected');
+                }
+                if (/\b(music|melody|harmony|rhythm|song|instrument|chord|beat)\b/.test(stimulus)) {
+                    add('Planum Temporale', 0.8, 'Complex sound analysis', 'Musical/complex sound features detected');
+                    add('Right Hemisphere Auditory', 0.7, 'Melodic processing', 'Music engages right-lateralized processing');
+                }
+            }
+            // ── Text/Language features ──
+            if (stimType === 'text' || /\b(read|write|sentence|grammar|syntax|word|meaning|comprehend|language)\b/.test(stimulus)) {
+                add("Broca's Area (Left IFG)", 0.8, 'Language production/syntax', 'Language processing engages Broca\'s area');
+                add("Wernicke's Area (STG)", 0.8, 'Language comprehension', 'Language comprehension processing');
+                add('Angular Gyrus', 0.7, 'Semantic processing', 'Meaning extraction engages angular gyrus');
+                if (/\b(read|written|text|book|letter|word)\b/.test(stimulus)) {
+                    add('VWFA (Visual Word Form Area)', 0.9, 'Reading/orthography', 'Written text processing detected');
+                }
+                if (/\b(grammar|syntax|structure|parse|sentence)\b/.test(stimulus)) {
+                    add('Left IFG (BA 44/45)', 0.85, 'Syntactic processing', 'Grammatical features detected');
+                }
+                if (/\b(meaning|semantic|concept|definition|understand)\b/.test(stimulus)) {
+                    add('Angular Gyrus', 0.85, 'Semantic integration', 'Semantic processing features detected');
+                    add('Anterior Temporal Lobe', 0.7, 'Conceptual knowledge', 'Meaning extraction engages ATL');
+                }
+            }
+            // ── Motor features ──
+            if (stimType === 'motor' || /\b(move|reach|grasp|press|tap|walk|run|jump|kick|throw|point|gesture)\b/.test(stimulus)) {
+                add('M1 (Primary Motor Cortex)', 0.85, 'Movement execution', 'Motor actions engage primary motor cortex');
+                add('SMA (Supplementary Motor Area)', 0.7, 'Movement planning/sequencing', 'Motor planning for action sequences');
+                if (/\b(plan|prepare|intend|imagine move|rehearse)\b/.test(stimulus)) {
+                    add('Premotor Cortex', 0.85, 'Movement preparation', 'Motor preparation features detected');
+                    add('SMA', 0.8, 'Sequence planning', 'Movement planning detected');
+                }
+                if (/\b(coordinate|balance|precise|fine|skilled|timing)\b/.test(stimulus)) {
+                    add('Cerebellum', 0.85, 'Motor coordination/timing', 'Coordination demands detected');
+                }
+                if (/\b(choose|select|switch|decide|habit)\b/.test(stimulus)) {
+                    add('Basal Ganglia (Striatum)', 0.8, 'Action selection', 'Action selection/switching detected');
+                }
+                if (/\b(hand|finger|grip|grasp|manipulate)\b/.test(stimulus)) {
+                    add('M1 (Hand Area)', 0.9, 'Fine motor control', 'Hand/finger motor features detected');
+                    add('Cerebellum', 0.7, 'Fine coordination', 'Precision grasp demands');
+                }
+            }
+            // ── Emotional features ──
+            if (stimType === 'emotional' || /\b(fear|anger|happy|sad|disgust|surprise|emotion|threat|danger|reward|punish|stress|anxiety|joy|love|hate)\b/.test(stimulus)) {
+                if (/\b(fear|threat|danger|alarm|scary|frightening|startl|avers)\b/.test(stimulus)) {
+                    add('Amygdala', 0.95, 'Threat detection/fear', 'Threat/fear features strongly activate amygdala');
+                    add('PAG (Periaqueductal Gray)', 0.6, 'Defensive behavior', 'Threat triggers defensive circuits');
+                }
+                if (/\b(disgust|revuls|nause|gross|contaminat)\b/.test(stimulus)) {
+                    add('Anterior Insula', 0.9, 'Disgust/interoception', 'Disgust features detected');
+                }
+                if (/\b(reward|pleasant|enjoy|like|want|crave|desire)\b/.test(stimulus)) {
+                    add('vmPFC (Ventromedial PFC)', 0.8, 'Value/reward', 'Reward valuation features detected');
+                    add('OFC (Orbitofrontal Cortex)', 0.8, 'Reward processing', 'Reward features engage OFC');
+                    add('Nucleus Accumbens', 0.75, 'Reward/pleasure', 'Reward anticipation/receipt');
+                }
+                if (/\b(conflict|difficult|error|uncertain|ambiguous)\b/.test(stimulus)) {
+                    add('ACC (Anterior Cingulate)', 0.85, 'Conflict monitoring', 'Conflict/uncertainty features detected');
+                }
+                add('Amygdala', 0.6, 'Emotional salience', 'Emotional stimuli engage amygdala for salience');
+                if (/\b(memory|remember|context|familiar|past)\b/.test(stimulus)) {
+                    add('Hippocampus', 0.7, 'Emotional context/memory', 'Contextual memory for emotional processing');
+                }
+            }
+            // ── Social features ──
+            if (stimType === 'social' || /\b(person|people|social|interact|group|friend|stranger|communicat|cooperat|compet|trust|betray|empathy|moral)\b/.test(stimulus)) {
+                add('TPJ (Temporoparietal Junction)', 0.85, 'Theory of mind', 'Social stimuli engage mentalizing');
+                add('mPFC (Medial Prefrontal Cortex)', 0.8, 'Self/other distinction', 'Social cognition engages mPFC');
+                if (/\b(face|expression|gaze|eye contact|look at)\b/.test(stimulus)) {
+                    add('FFA (Fusiform Face Area)', 0.9, 'Face processing', 'Social face processing detected');
+                }
+                if (/\b(move|gesture|body|action|imitat|mirror)\b/.test(stimulus)) {
+                    add('STS (Superior Temporal Sulcus)', 0.85, 'Biological motion', 'Social motion features detected');
+                    add('Mirror Neuron System (PMC/IFG)', 0.75, 'Action understanding/imitation', 'Imitation/observation of actions');
+                }
+                if (/\b(moral|ethical|fair|unfair|right|wrong|justice)\b/.test(stimulus)) {
+                    add('vmPFC', 0.8, 'Moral judgment', 'Moral reasoning features detected');
+                    add('TPJ', 0.85, 'Perspective taking', 'Moral scenarios require perspective taking');
+                }
+                if (/\b(empathy|sympathy|pain|suffer|feel for)\b/.test(stimulus)) {
+                    add('Anterior Insula', 0.8, 'Empathic processing', 'Empathy features detected');
+                    add('ACC', 0.7, 'Empathic pain', 'Shared pain representation');
+                }
+            }
+            // If no activations were generated, add baseline for the stimulus type
+            if (activations.length === 0) {
+                add('Prefrontal Cortex', 0.5, 'Executive processing', 'Default engagement for cognitive processing');
+                add('Thalamus', 0.4, 'Sensory relay', 'Thalamic gating of sensory input');
+            }
+            // Sort by activation level descending
+            activations.sort((a, b) => b.activation - a.activation);
+            // ── Format output ──
+            const parts = [];
+            parts.push('## Brain Activation Prediction');
+            parts.push('');
+            parts.push(`**Stimulus**: "${args.stimulus}"`);
+            parts.push(`**Type**: ${stimType}`);
+            parts.push(`**Regions activated**: ${activations.length}`);
+            parts.push('');
+            // Activation bar helper
+            function bar(level) {
+                const filled = Math.round(level * 10);
+                return '\u2588'.repeat(filled) + '\u2591'.repeat(10 - filled);
+            }
+            parts.push('### Predicted Activation Map');
+            parts.push('');
+            parts.push('| Region | Activation | Level | Function | Reasoning |');
+            parts.push('|--------|-----------|-------|----------|-----------|');
+            const limit = detail === 'detailed' ? activations.length : Math.min(activations.length, 8);
+            for (let i = 0; i < limit; i++) {
+                const a = activations[i];
+                const level = a.activation >= 0.8 ? 'HIGH' : a.activation >= 0.5 ? 'MED' : 'LOW';
+                parts.push(`| ${a.region} | ${bar(a.activation)} ${fmt(a.activation, 2)} | ${level} | ${a.function} | ${a.reasoning} |`);
+            }
+            if (detail === 'detailed') {
+                parts.push('');
+                parts.push('### Processing Streams');
+                const hasDorsal = activations.some(a => /dorsal|parietal|where|spatial/i.test(a.region));
+                const hasVentral = activations.some(a => /ventral|temporal|what|object|face/i.test(a.region));
+                if (hasDorsal)
+                    parts.push('- **Dorsal ("where/how")**: Active - spatial/action processing engaged');
+                if (hasVentral)
+                    parts.push('- **Ventral ("what")**: Active - object/identity processing engaged');
+                if (!hasDorsal && !hasVentral)
+                    parts.push('- No dominant visual processing stream identified');
+                parts.push('');
+                parts.push('### Network Engagement');
+                const hasDefault = activations.some(a => /mpfc|precuneus|posterior cingulate|angular/i.test(a.region.toLowerCase()));
+                const hasSalience = activations.some(a => /insula|acc|amygdala/i.test(a.region.toLowerCase()));
+                const hasExecutive = activations.some(a => /dlpfc|prefrontal|ips/i.test(a.region.toLowerCase()));
+                if (hasDefault)
+                    parts.push('- **Default Mode Network**: Engaged (self-referential/social processing)');
+                if (hasSalience)
+                    parts.push('- **Salience Network**: Engaged (emotional/interoceptive processing)');
+                if (hasExecutive)
+                    parts.push('- **Executive Network**: Engaged (cognitive control/attention)');
+                if (!hasDefault && !hasSalience && !hasExecutive)
+                    parts.push('- Primarily sensory processing (no major network hubs identified)');
+                parts.push('');
+                parts.push('### Lateralization');
+                const leftLateral = activations.some(a => /broca|wernicke|vwfa|left ifg|angular/i.test(a.region.toLowerCase()));
+                const rightLateral = activations.some(a => /right hemisphere|prosody|spatial/i.test(a.region.toLowerCase()));
+                if (leftLateral && !rightLateral)
+                    parts.push('- **Left-lateralized**: Language/analytical processing dominant');
+                else if (rightLateral && !leftLateral)
+                    parts.push('- **Right-lateralized**: Spatial/prosodic processing dominant');
+                else
+                    parts.push('- **Bilateral**: Both hemispheres engaged');
+            }
+            parts.push('');
+            parts.push('---');
+            parts.push('*Predictions based on established neuroscience literature (fMRI/PET meta-analyses). Actual activation patterns vary by individual, attention state, and task demands.*');
+            return parts.join('\n');
+        },
+    });
 }
 // ─── Gaussian random helper (Box-Muller) ─────────────────────────────────────
 function gaussianRandom() {

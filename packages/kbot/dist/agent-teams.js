@@ -83,9 +83,55 @@ const TOOL_PREFERENCES = {
         // general
         'read_file', 'write_file', 'glob', 'grep', 'bash', 'web_search', 'url_fetch',
     ],
+    neuroscientist: [
+        // lab-neuro
+        'brain_atlas', 'eeg_analyze', 'cognitive_model', 'neural_network_bio',
+        'neurotransmitter_lookup', 'psychophysics_calc', 'connectome_query',
+        'cognitive_task_design', 'neuroimaging_coords', 'learning_model', 'brain_predict',
+        // general
+        'read_file', 'write_file', 'glob', 'grep', 'bash', 'web_search', 'url_fetch',
+    ],
+    social_scientist: [
+        // lab-social
+        'psychometric_scale', 'effect_size_calc', 'social_network_analyze',
+        'game_theory_solve', 'econometrics_regression', 'inequality_metrics',
+        'survey_design', 'demographic_model', 'sentiment_analyze', 'voting_system',
+        'experiment_behavioral', 'discourse_analyze',
+        // general
+        'read_file', 'write_file', 'glob', 'grep', 'bash', 'web_search', 'url_fetch',
+    ],
+    philosopher: [
+        // lab-humanities
+        'formal_logic', 'argument_map', 'ethics_framework', 'philosophical_concept',
+        // general
+        'read_file', 'write_file', 'glob', 'grep', 'bash', 'web_search', 'url_fetch',
+    ],
+    epidemiologist: [
+        // lab-health
+        'sir_model', 'epidemiology_calc', 'health_equity', 'disease_surveillance',
+        'vaccination_model', 'environmental_health', 'global_health_data',
+        'nutrition_analyze', 'crop_model', 'learning_analytics',
+        // general
+        'read_file', 'write_file', 'glob', 'grep', 'bash', 'web_search', 'url_fetch',
+    ],
+    linguist: [
+        // lab-humanities
+        'corpus_analyze', 'phonetics_ipa', 'language_typology', 'text_stylometry',
+        // lab-social
+        'discourse_analyze', 'sentiment_analyze',
+        // general
+        'read_file', 'write_file', 'glob', 'grep', 'bash', 'web_search', 'url_fetch',
+    ],
+    historian: [
+        // lab-humanities
+        'archival_search', 'historical_timeline', 'philosophical_concept',
+        'corpus_analyze', 'text_stylometry', 'argument_map',
+        // general
+        'read_file', 'write_file', 'glob', 'grep', 'bash', 'web_search', 'url_fetch',
+    ],
 };
 // Agents that benefit from complex reasoning get opus; others use sonnet for speed
-const OPUS_AGENTS = new Set(['analyst', 'strategist', 'guardian', 'researcher', 'scientist']);
+const OPUS_AGENTS = new Set(['analyst', 'strategist', 'guardian', 'researcher', 'scientist', 'neuroscientist', 'philosopher', 'epidemiologist']);
 // ── Teammate descriptions ───────────────────────────────────────────────────
 const DESCRIPTIONS = {
     kernel: 'General-purpose assistant — handles conversation, coordination, and tasks that span multiple domains.',
@@ -98,13 +144,19 @@ const DESCRIPTIONS = {
     curator: 'Knowledge management specialist — organizes documentation, maintains knowledge bases, and fills information gaps.',
     strategist: 'Business strategy specialist — connects technical decisions to business outcomes, builds roadmaps, and analyzes competitors.',
     scientist: 'Science specialist — cross-disciplinary scientist covering biology, chemistry, physics, earth science, mathematics, and data analysis with 72 lab tools.',
+    neuroscientist: 'Neuroscience specialist — brain atlas, EEG analysis, cognitive models, neural simulation, connectomics, psychophysics, neuroimaging, and brain activation prediction.',
+    social_scientist: 'Social science specialist — psychometrics, social networks, game theory, econometrics, inequality, surveys, demographics, sentiment, voting systems, and behavioral experiments.',
+    philosopher: 'Philosophy specialist — formal logic, argument analysis, ethical frameworks, philosophical concepts, and critical thinking.',
+    epidemiologist: 'Epidemiology specialist — SIR models, outbreak detection, vaccine modeling, health equity, environmental health, global health data, and nutrition analysis.',
+    linguist: 'Linguistics specialist — corpus analysis, phonetics/IPA, language typology, stylometry, discourse analysis, and sentiment analysis.',
+    historian: 'History specialist — archival search, timeline analysis, historical context, digital humanities, and text analysis.',
 };
 // ── Core API ────────────────────────────────────────────────────────────────
 /**
  * Register kbot specialists as Claude Code teammates.
  *
  * Returns an array of teammate definitions — one for each of kbot's
- * core and extended specialist agents (10 total).
+ * core and extended specialist agents (16 total).
  *
  * @example
  * const teammates = registerTeammates()
@@ -114,6 +166,8 @@ export function registerTeammates() {
     const teammateIds = [
         'kernel', 'coder', 'researcher', 'writer', 'analyst',
         'guardian', 'aesthete', 'curator', 'strategist', 'scientist',
+        'neuroscientist', 'social_scientist', 'philosopher',
+        'epidemiologist', 'linguist', 'historian',
     ];
     return teammateIds.map((id) => {
         const specialist = SPECIALISTS[id];

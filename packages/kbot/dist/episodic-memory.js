@@ -154,6 +154,14 @@ function generateTags() {
         tags.push('data-science');
     if (sessionTools['experiment_design'] || sessionTools['hypothesis_test'] || sessionTools['literature_search'] || sessionTools['citation_graph'] || sessionTools['unit_convert'] || sessionTools['physical_constants'] || sessionTools['formula_solve'] || sessionTools['research_methodology'] || sessionTools['preprint_tracker'] || sessionTools['open_access_find'])
         tags.push('research');
+    if (sessionTools['psychometric_scale'] || sessionTools['effect_size_calc'] || sessionTools['social_network_analyze'] || sessionTools['game_theory_solve'] || sessionTools['econometrics_regression'] || sessionTools['inequality_metrics'] || sessionTools['survey_design'] || sessionTools['demographic_model'] || sessionTools['sentiment_analyze'] || sessionTools['voting_system'] || sessionTools['experiment_behavioral'] || sessionTools['discourse_analyze'])
+        tags.push('social-science');
+    if (sessionTools['brain_atlas'] || sessionTools['eeg_analyze'] || sessionTools['cognitive_model'] || sessionTools['neural_network_bio'] || sessionTools['neurotransmitter_lookup'] || sessionTools['psychophysics_calc'] || sessionTools['connectome_query'] || sessionTools['cognitive_task_design'] || sessionTools['neuroimaging_coords'] || sessionTools['learning_model'] || sessionTools['brain_predict'])
+        tags.push('neuroscience');
+    if (sessionTools['formal_logic'] || sessionTools['argument_map'] || sessionTools['ethics_framework'] || sessionTools['philosophical_concept'] || sessionTools['corpus_analyze'] || sessionTools['phonetics_ipa'] || sessionTools['language_typology'] || sessionTools['text_stylometry'] || sessionTools['archival_search'] || sessionTools['historical_timeline'])
+        tags.push('humanities');
+    if (sessionTools['sir_model'] || sessionTools['epidemiology_calc'] || sessionTools['health_equity'] || sessionTools['disease_surveillance'] || sessionTools['vaccination_model'] || sessionTools['environmental_health'] || sessionTools['global_health_data'] || sessionTools['nutrition_analyze'] || sessionTools['crop_model'] || sessionTools['learning_analytics'])
+        tags.push('public-health');
     // Agent-based tags
     for (const agent of Object.keys(sessionAgents)) {
         tags.push(agent);
