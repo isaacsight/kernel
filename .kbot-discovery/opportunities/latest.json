@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-26T22:23:06.810Z",
+  "timestamp": "2026-03-27T04:31:17.310Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,22 +88,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Security: Message signing and replay protection for physical device control",
-      "url": "https://github.com/homeassistant-ai/ha-mcp/issues/825",
+      "title": "feat: enable `# fmt: off` recognized by snakefmt",
+      "url": "https://github.com/snakemake/snakefmt/pull/280",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Triple-duplicated utility functions between Dashboard.tsx and dashboardUtils.ts cause inconsistent behavior",
-      "url": "https://github.com/kubestellar/console/issues/3669",
+      "title": "Cursor integration guide",
+      "url": "https://github.com/amaar-mc/wit/issues/5",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "JupyterGIA (Jupyter Geospatial Information Agents) (working title)",
-      "url": "https://github.com/geojupyter/initiatives/issues/14",
+      "title": "MCP server wrapper for native tool integration",
+      "url": "https://github.com/amaar-mc/wit/issues/3",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(discord): avoid core stringEnum import",
-      "url": "https://github.com/openclaw/openclaw/pull/55371",
+      "title": "[agento] feat: skeptic Phase 2 - Codex + fail-closed + worker-signals-completion reaction (bd-skp2)",
+      "url": "https://github.com/jleechanorg/agent-orchestrator/pull/223",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(whatsapp): add systemPrompt support for accounts and groups ",
-      "url": "https://github.com/openclaw/openclaw/pull/55328",
+      "title": "fix(agents): ignore mixed subagent tool-call replies",
+      "url": "https://github.com/openclaw/openclaw/pull/55510",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[agento] feat: PR media proof — agents attach screenshots/video to PRs",
-      "url": "https://github.com/jleechanorg/agent-orchestrator/pull/209",
+      "title": "Consolidate plugins & skills into main repo + build Codex plugin",
+      "url": "https://github.com/basicmachines-co/basic-memory/issues/699",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "CodexLib — compressed knowledge packs any AI can ingest instantly (100+ packs, 50 domains, REST API)",
+      "url": "https://reddit.com/r/artificial/comments/1s4phly/codexlib_compressed_knowledge_packs_any_ai_can/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Reducing AI agent token consumption by 90% by fixing the retrieval layer",
       "url": "https://reddit.com/r/artificial/comments/1s4dr8y/reducing_ai_agent_token_consumption_by_90_by/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "do you think AI can replace human tutors in language learning?",
       "url": "https://reddit.com/r/artificial/comments/1s4by8l/do_you_think_ai_can_replace_human_tutors_in/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Need some AI agents",
-      "url": "https://reddit.com/r/artificial/comments/1s49zeq/need_some_ai_agents/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
