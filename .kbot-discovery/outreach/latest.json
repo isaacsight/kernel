@@ -1,47 +1,47 @@
 {
-  "timestamp": "2026-03-26T11:33:18.573Z",
+  "timestamp": "2026-03-26T23:37:59.265Z",
   "projects": [
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1056,
-      "description": "the easiest way to run natural language-described workflows automatically"
+      "name": "CopilotKit/CopilotKit",
+      "url": "https://github.com/CopilotKit/CopilotKit",
+      "stars": 29793,
+      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
     },
     {
-      "name": "nexu-io/nexu",
-      "url": "https://github.com/nexu-io/nexu",
-      "stars": 1092,
-      "description": "The simplest desktop client for OpenClaw 🦞 — bridge your Agent to WeChat, Feishu, Slack & Discord in one click. Works with Claude Code, Codex & any LLM. BYOK, Oauth, local-first, chat from your phone 24/7."
+      "name": "agenticmail/agenticmail",
+      "url": "https://github.com/agenticmail/agenticmail",
+      "stars": 73,
+      "description": "Email & SMS infrastructure for AI agents — send and receive real email and text messages programmatically"
     },
     {
-      "name": "CodePhiliaX/youclaw",
-      "url": "https://github.com/CodePhiliaX/youclaw",
-      "stars": 554,
-      "description": "🦞 Your AI Personal Assistant.  An intelligent assistant with memory, skills, and scheduled tasks that truly understands you . Helping you tackle everything in work and life."
+      "name": "inkeep/agents",
+      "url": "https://github.com/inkeep/agents",
+      "stars": 1029,
+      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
     },
     {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 346,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 1933,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
     },
     {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 634,
-      "description": "Agent Skills for Solopreneurs"
+      "name": "Ruya-AI/cozempic",
+      "url": "https://github.com/Ruya-AI/cozempic",
+      "stars": 175,
+      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
     },
     {
-      "name": "Mirascope/mirascope",
-      "url": "https://github.com/Mirascope/mirascope",
-      "stars": 1439,
-      "description": "The LLM Anti-Framework"
+      "name": "Haervwe/open-webui-tools",
+      "url": "https://github.com/Haervwe/open-webui-tools",
+      "stars": 621,
+      "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
     },
     {
-      "name": "alirezarezvani/claude-skills",
-      "url": "https://github.com/alirezarezvani/claude-skills",
-      "stars": 7062,
-      "description": "+192 Claude Code skills & agent plugins for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory."
+      "name": "Moshe-ship/mkhlab",
+      "url": "https://github.com/Moshe-ship/mkhlab",
+      "stars": 0,
+      "description": "🦅 مخلب — Arabic-first OpenClaw plugin. 14 Arabic AI skills, dialect-aware, culturally sensitive."
     },
     {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
