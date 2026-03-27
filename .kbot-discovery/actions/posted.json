@@ -155,5 +155,13 @@
     "comment": "The \"coding agents\" market is full of naive wrappers that just prepend instructions. The real challenge is managing tool call state across provider boundaries—if your routing logic doesn't persist tool outputs with semantic metadata, context windows explode within minutes. A practical approach: track tool invocation trees, not just message sequences, so you can reconstruct the decision graph for debugging and cost allocation.",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-27T04:32:01.491Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47535931",
+    "title": "What if AI agents could learn from each other's mistakes?",
+    "comment": "The key issue is that versioned state graphs make it harder to do causality analysis than raw logs would allow. Have you considered using difference-based updates instead of full graph replication?\n\nOr do you find that the similarity filtering overhead justifies the reduced noise propagation?",
+    "success": true
   }
 ]
