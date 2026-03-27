@@ -359,6 +359,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './research-pipeline.js', registerFn: 'registerResearchPipelineTools' },
   { path: './research-notebook.js', registerFn: 'registerResearchNotebookTools' },
   { path: './hypothesis-engine.js', registerFn: 'registerHypothesisEngineTools' },
+  { path: './emergent.js',          registerFn: 'registerEmergentTools' },
 ]
 
 /** Track whether lazy tools have been registered */
