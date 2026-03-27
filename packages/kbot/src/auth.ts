@@ -69,7 +69,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,
     outputCost: 15.0,
     authHeader: 'x-api-key',
-    models: ['claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+    models: ['claude-mythos-1', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
   },
   openai: {
     name: 'OpenAI',
@@ -223,7 +223,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,   // varies by model — this is Claude Sonnet pricing
     outputCost: 15.0,
     authHeader: 'bearer',
-    models: ['anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
+    models: ['anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
   },
   lmstudio: {
     name: 'LM Studio (Local)',

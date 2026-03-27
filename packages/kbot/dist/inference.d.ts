@@ -83,7 +83,7 @@ export interface QuantOption {
 export declare const QUANT_OPTIONS: QuantOption[];
 /** Recommend quantization based on available RAM and model size */
 export declare function recommendQuantization(modelBaseGB: number): QuantOption;
-export type HardwareTier = 'basic' | 'standard' | 'pro' | 'ultra' | 'datacenter';
+export type HardwareTier = 'basic' | 'standard' | 'pro' | 'ultra' | 'mythic' | 'datacenter';
 export declare function detectHardwareTier(): {
     tier: HardwareTier;
     description: string;

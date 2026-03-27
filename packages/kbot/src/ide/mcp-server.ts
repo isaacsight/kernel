@@ -66,169 +66,181 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
   // ── Tool Definitions ──
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
-    return {
-      tools: [
-        {
-          name: 'kbot_chat',
-          description: 'Send a message to kbot and get an agent response. Supports 22 specialist agents with automatic routing.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              message: { type: 'string', description: 'The message to send to kbot' },
-              agent: { type: 'string', description: 'Force a specific agent (kernel, researcher, coder, writer, analyst, etc.). Defaults to auto-routing.' },
-            },
-            required: ['message'],
+    // Static tools with custom MCP schemas (kept for backward compatibility)
+    const staticTools = [
+      {
+        name: 'kbot_chat',
+        description: 'Send a message to kbot and get an agent response. Supports 22 specialist agents with automatic routing.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            message: { type: 'string', description: 'The message to send to kbot' },
+            agent: { type: 'string', description: 'Force a specific agent (kernel, researcher, coder, writer, analyst, etc.). Defaults to auto-routing.' },
+          },
+          required: ['message'],
+        },
+      },
+      {
+        name: 'kbot_edit_file',
+        description: 'Edit a file using search/replace. Finds old_string and replaces with new_string.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            path: { type: 'string', description: 'File path to edit' },
+            old_string: { type: 'string', description: 'Text to find' },
+            new_string: { type: 'string', description: 'Replacement text' },
+          },
+          required: ['path', 'old_string', 'new_string'],
+        },
+      },
+      {
+        name: 'kbot_write_file',
+        description: 'Create or overwrite a file with content.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            path: { type: 'string', description: 'File path' },
+            content: { type: 'string', description: 'File content' },
+          },
+          required: ['path', 'content'],
+        },
+      },
+      {
+        name: 'kbot_read_file',
+        description: 'Read the contents of a file.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            path: { type: 'string', description: 'File path to read' },
+          },
+          required: ['path'],
+        },
+      },
+      {
+        name: 'kbot_bash',
+        description: 'Run a shell command and return the output.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            command: { type: 'string', description: 'Shell command to execute' },
+            timeout: { type: 'number', description: 'Timeout in milliseconds (default: 30000)' },
+          },
+          required: ['command'],
+        },
+      },
+      {
+        name: 'kbot_search',
+        description: 'Search the web for information.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            query: { type: 'string', description: 'Search query' },
+          },
+          required: ['query'],
+        },
+      },
+      {
+        name: 'kbot_github',
+        description: 'Search GitHub repositories and code.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            query: { type: 'string', description: 'GitHub search query' },
+            type: { type: 'string', description: 'Search type: repositories, code, issues' },
+          },
+          required: ['query'],
+        },
+      },
+      {
+        name: 'kbot_status',
+        description: 'Get kbot status including agent info, learning stats, and session count.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {},
+        },
+      },
+      {
+        name: 'kbot_agent',
+        description: 'Switch the active kbot agent or list available agents.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            agent: { type: 'string', description: 'Agent ID to switch to. Omit to list available agents.' },
           },
         },
-        {
-          name: 'kbot_edit_file',
-          description: 'Edit a file using search/replace. Finds old_string and replaces with new_string.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              path: { type: 'string', description: 'File path to edit' },
-              old_string: { type: 'string', description: 'Text to find' },
-              new_string: { type: 'string', description: 'Replacement text' },
-            },
-            required: ['path', 'old_string', 'new_string'],
+      },
+      {
+        name: 'kbot_remember',
+        description: 'Teach kbot a fact that persists across sessions.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            fact: { type: 'string', description: 'The fact to remember' },
           },
+          required: ['fact'],
         },
-        {
-          name: 'kbot_write_file',
-          description: 'Create or overwrite a file with content.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              path: { type: 'string', description: 'File path' },
-              content: { type: 'string', description: 'File content' },
-            },
-            required: ['path', 'content'],
+      },
+      {
+        name: 'kbot_diagnostics',
+        description: 'Get LSP diagnostics (type errors, warnings) for a file.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            path: { type: 'string', description: 'File path to check' },
           },
+          required: ['path'],
         },
-        {
-          name: 'kbot_read_file',
-          description: 'Read the contents of a file.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              path: { type: 'string', description: 'File path to read' },
-            },
-            required: ['path'],
+      },
+      {
+        name: 'kbot_plan',
+        description: 'Generate and execute an autonomous plan for a complex task.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            task: { type: 'string', description: 'The complex task to plan and execute' },
+            auto_approve: { type: 'boolean', description: 'Auto-approve (default: false)' },
           },
+          required: ['task'],
         },
-        {
-          name: 'kbot_bash',
-          description: 'Run a shell command and return the output.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              command: { type: 'string', description: 'Shell command to execute' },
-              timeout: { type: 'number', description: 'Timeout in milliseconds (default: 30000)' },
-            },
-            required: ['command'],
+      },
+      {
+        name: 'kbot_glob',
+        description: 'Find files matching a glob pattern.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            pattern: { type: 'string', description: 'Glob pattern (e.g., "**/*.ts")' },
+            path: { type: 'string', description: 'Base directory (default: cwd)' },
           },
+          required: ['pattern'],
         },
-        {
-          name: 'kbot_search',
-          description: 'Search the web for information.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              query: { type: 'string', description: 'Search query' },
-            },
-            required: ['query'],
+      },
+      {
+        name: 'kbot_grep',
+        description: 'Search file contents with regex.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            pattern: { type: 'string', description: 'Regex pattern' },
+            path: { type: 'string', description: 'File or directory to search' },
           },
+          required: ['pattern'],
         },
-        {
-          name: 'kbot_github',
-          description: 'Search GitHub repositories and code.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              query: { type: 'string', description: 'GitHub search query' },
-              type: { type: 'string', description: 'Search type: repositories, code, issues' },
-            },
-            required: ['query'],
-          },
-        },
-        {
-          name: 'kbot_status',
-          description: 'Get kbot status including agent info, learning stats, and session count.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {},
-          },
-        },
-        {
-          name: 'kbot_agent',
-          description: 'Switch the active kbot agent or list available agents.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              agent: { type: 'string', description: 'Agent ID to switch to. Omit to list available agents.' },
-            },
-          },
-        },
-        {
-          name: 'kbot_remember',
-          description: 'Teach kbot a fact that persists across sessions.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              fact: { type: 'string', description: 'The fact to remember' },
-            },
-            required: ['fact'],
-          },
-        },
-        {
-          name: 'kbot_diagnostics',
-          description: 'Get LSP diagnostics (type errors, warnings) for a file.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              path: { type: 'string', description: 'File path to check' },
-            },
-            required: ['path'],
-          },
-        },
-        {
-          name: 'kbot_plan',
-          description: 'Generate and execute an autonomous plan for a complex task.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              task: { type: 'string', description: 'The complex task to plan and execute' },
-              auto_approve: { type: 'boolean', description: 'Auto-approve (default: false)' },
-            },
-            required: ['task'],
-          },
-        },
-        {
-          name: 'kbot_glob',
-          description: 'Find files matching a glob pattern.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              pattern: { type: 'string', description: 'Glob pattern (e.g., "**/*.ts")' },
-              path: { type: 'string', description: 'Base directory (default: cwd)' },
-            },
-            required: ['pattern'],
-          },
-        },
-        {
-          name: 'kbot_grep',
-          description: 'Search file contents with regex.',
-          inputSchema: {
-            type: 'object' as const,
-            properties: {
-              pattern: { type: 'string', description: 'Regex pattern' },
-              path: { type: 'string', description: 'File or directory to search' },
-            },
-            required: ['pattern'],
-          },
-        },
-      ],
-    }
+      },
+    ]
+
+    // Dynamically append ALL registered tools from the tool registry
+    const staticNames = new Set(staticTools.map(t => t.name))
+    const registeredTools = getTools()
+    const dynamicTools = registeredTools
+      .filter(t => !staticNames.has(t.name) && !staticNames.has(`kbot_${t.name}`))
+      .map(t => ({
+        name: t.name,
+        description: t.description,
+        inputSchema: t.input_schema as { type: 'object'; properties: Record<string, unknown>; required?: string[] },
+      }))
+
+    return { tools: [...staticTools, ...dynamicTools] }
   })
 
   // ── Tool Execution ──
@@ -405,11 +417,14 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
           }
         }
 
-        default:
+        default: {
+          // Dynamic dispatch: forward any registered tool to executeCommand
+          const result = await executeCommand(name, (args || {}) as Record<string, unknown>)
           return {
-            content: [{ type: 'text' as const, text: `Unknown tool: ${name}` }],
-            isError: true,
+            content: [{ type: 'text' as const, text: result.result }],
+            isError: result.error,
           }
+        }
       }
     } catch (err) {
       return {

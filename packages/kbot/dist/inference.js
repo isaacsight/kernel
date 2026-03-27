@@ -132,6 +132,16 @@ export const DEFAULT_MODELS = {
         size: '~150 GB',
         tags: ['frontier', 'ultra', 'near-claude'],
     },
+    // ── Mythic (placeholder — beyond ultra, for future frontier-class models) ──
+    // Reserved for models that approach or exceed Claude Opus quality locally.
+    // These require datacenter-class hardware or dedicated inference clusters.
+    // ── Coming Soon (not yet released — tracked for readiness) ──
+    'reflection-70b': {
+        hf: '', // Not yet released — NVIDIA-backed, open weights
+        description: 'Reflection 70B — "DeepSeek of the West", NVIDIA-backed open weights (COMING SOON)',
+        size: '~40 GB',
+        tags: ['frontier', 'coming-soon', 'nvidia', 'reasoning'],
+    },
     // ── Legacy (kept for existing users) ──
     'llama3.1-8b': {
         hf: 'hf:mradermacher/Meta-Llama-3.1-8B-Instruct-GGUF:Q4_K_M',
@@ -201,6 +211,9 @@ export async function downloadModel(nameOrHf, onProgress) {
     const modelsDir = ensureModelsDir();
     // Check if it's a known preset
     const preset = DEFAULT_MODELS[nameOrHf];
+    if (preset && !preset.hf) {
+        throw new Error(`Model "${nameOrHf}" is not yet available for download (coming soon). Check back later.`);
+    }
     const hfUri = preset ? preset.hf : nameOrHf;
     const modelPath = await llama.resolveModelFile(hfUri, modelsDir, {
         onProgress: onProgress
@@ -559,6 +572,19 @@ export function detectHardwareTier() {
     const totalGB = profile ? profile.memory.totalBytes / (1024 ** 3) : totalmem() / (1024 ** 3);
     const gpuAccel = profile?.gpuAcceleration || 'cpu-only';
     const gpuCores = profile?.gpu?.[0]?.cores || 0;
+    if (totalGB >= 512) {
+        return {
+            tier: 'mythic',
+            description: `${Math.round(totalGB)}GB RAM, ${gpuAccel}, ${gpuCores} GPU cores — mythic-class (datacenter/cluster)`,
+            maxModelParams: '405B (Q8) / 405B (F16) / future 1T+ models',
+            recommendations: [
+                'kbot models pull llama3.1-405b  # full Q4 or Q8 quantization',
+                'kbot models pull deepseek-v3-70b  # Q8 for best quality',
+                'When available: claude-mythos-1 via Anthropic API (placeholder — not yet shipped)',
+                'Enable multi-model: smart (405B) + fast (7B) running simultaneously',
+            ],
+        };
+    }
     if (totalGB >= 192) {
         return {
             tier: 'ultra',
