@@ -1,63 +1,63 @@
 {
-  "timestamp": "2026-03-26T23:37:59.265Z",
+  "timestamp": "2026-03-27T12:47:59.914Z",
   "projects": [
     {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 29793,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+      "name": "activepieces/activepieces",
+      "url": "https://github.com/activepieces/activepieces",
+      "stars": 21448,
+      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
     },
     {
-      "name": "agenticmail/agenticmail",
-      "url": "https://github.com/agenticmail/agenticmail",
-      "stars": 73,
-      "description": "Email & SMS infrastructure for AI agents — send and receive real email and text messages programmatically"
+      "name": "truffle-ai/dexto",
+      "url": "https://github.com/truffle-ai/dexto",
+      "stars": 604,
+      "description": "A coding agent and general agent harness for building and orchestrating agentic applications."
     },
     {
-      "name": "inkeep/agents",
-      "url": "https://github.com/inkeep/agents",
-      "stars": 1029,
-      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
+      "name": "clawwork-ai/ClawWork",
+      "url": "https://github.com/clawwork-ai/ClawWork",
+      "stars": 319,
+      "description": "Client for OpenClaw — Connect ClawWork to your own OpenClaw and unlock 10x multi-session productivity."
     },
     {
-      "name": "taylorwilsdon/google_workspace_mcp",
-      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
-      "stars": 1933,
-      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
-    },
-    {
-      "name": "Ruya-AI/cozempic",
-      "url": "https://github.com/Ruya-AI/cozempic",
-      "stars": 175,
-      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
+      "name": "Panniantong/Agent-Reach",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "stars": 10959,
+      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
       "name": "Haervwe/open-webui-tools",
       "url": "https://github.com/Haervwe/open-webui-tools",
-      "stars": 621,
+      "stars": 622,
       "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
     },
     {
-      "name": "Moshe-ship/mkhlab",
-      "url": "https://github.com/Moshe-ship/mkhlab",
-      "stars": 0,
-      "description": "🦅 مخلب — Arabic-first OpenClaw plugin. 14 Arabic AI skills, dialect-aware, culturally sensitive."
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 640,
+      "description": "Agent Skills for Solopreneurs"
     },
     {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+      "name": "alvinunreal/awesome-openclaw",
+      "url": "https://github.com/alvinunreal/awesome-openclaw",
+      "stars": 1,
+      "description": "A curated list of the best OpenClaw resources: official projects, skills, plugins, dashboards, deployment tooling, memory systems, and guides."
     },
     {
-      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "name": "xinlingzhifei/openclaw-smart-agent",
+      "url": "https://github.com/xinlingzhifei/openclaw-smart-agent",
       "stars": 0,
-      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+      "description": "OpenClaw smart agent runtime, plugin, and workspace skill for single-machine multi-agent orchestration."
+    },
+    {
+      "name": "sudokrang/aceforge",
+      "url": "https://github.com/sudokrang/aceforge",
+      "stars": 1,
+      "description": "Self-evolving skill engine for OpenClaw agents. Observes tool usage, crystallizes patterns into auditable SKILL.md files through a dual-model LLM pipeline, and continuously validates with 23 adversarial mutations. Research-grounded. Human-approved. Nothing auto-deploys."
     }
   ],
   "latestPaper": {
-    "title": "The Stochastic Gap: A Markovian Framework for Pre-Deployment Reliability and Oversight-Cost Auditing in Agentic Artificial Intelligence",
-    "summary": "Agentic artificial intelligence (AI) in organizations is a sequential decision problem constrained by reliability and oversight cost. When deterministic workflows are replaced by stochastic policies over actions and tool calls, the key question is not whether a next step appears plausible, but whether the resulting trajectory remains statistically supported, locally unambiguous, and economically governable. We develop a measure-theoretic Markov framework for this setting. The core quantities are"
+    "title": "Vega: Learning to Drive with Natural Language Instructions",
+    "summary": "Vision-language-action models have reshaped autonomous driving to incorporate languages into the decision-making process. However, most existing pipelines only utilize the language modality for scene descriptions or reasoning and lack the flexibility to follow diverse user instructions for personalized driving. To address this, we first construct a large-scale driving dataset (InstructScene) containing around 100,000 scenes annotated with diverse driving instructions with the corresponding traje"
   }
 }
