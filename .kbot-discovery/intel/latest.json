@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-27T04:31:13.833Z",
+  "timestamp": "2026-03-27T10:46:14.944Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -53,7 +53,7 @@
           "story_id": 47531594,
           "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
           "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
-          "updated_at": "2026-03-27T04:31:06Z",
+          "updated_at": "2026-03-27T04:31:36Z",
           "url": "https://intuitivecompute.com"
         },
         {
@@ -253,11 +253,13 @@
           ],
           "author": "noemit",
           "children": [
+            47540979,
+            47540200,
             47498409,
             47496895,
             47518087,
-            47532964,
             47499371,
+            47532964,
             47499342,
             47508348,
             47499000,
@@ -271,13 +273,13 @@
           ],
           "created_at": "2026-03-23T20:31:48Z",
           "created_at_i": 1774297908,
-          "num_comments": 15,
+          "num_comments": 19,
           "objectID": "47494696",
-          "points": 39,
+          "points": 40,
           "story_id": 47494696,
           "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
           "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-27T02:37:21Z"
+          "updated_at": "2026-03-27T10:35:52Z"
         }
       ]
     },
@@ -427,11 +429,11 @@
           "children": [
             47528314,
             47525453,
-            47528440,
             47525855,
+            47528440,
             47524587,
-            47530431,
             47527007,
+            47530431,
             47530037,
             47531010,
             47527135,
@@ -441,8 +443,8 @@
             47527060,
             47525242,
             47530263,
-            47532271,
             47529759,
+            47532271,
             47529597,
             47524726,
             47525020,
@@ -450,13 +452,13 @@
           ],
           "created_at": "2026-03-25T17:10:21Z",
           "created_at_i": 1774458621,
-          "num_comments": 54,
+          "num_comments": 55,
           "objectID": "47520220",
-          "points": 75,
+          "points": 77,
           "story_id": 47520220,
           "story_text": "I think like many of you, I&#x27;ve been jumping between many claude code&#x2F;codex sessions at a time, managing multiple lines of work and worktrees in multiple repos. I wanted a way to easily manage multiple lines of work and reduce the amount of input I need to give, allowing the agents to remove me as a bottleneck from as much of the process as I can. So I built an orchestration tool for AI coding agents:<p>Optio is an open-source orchestration system that turns tickets into merged pull requests using AI coding agents. You point it at your repos, and it handles the full lifecycle:<p>- Intake — pull tasks from GitHub Issues, Linear, or create them manually<p>- Execution — spin up isolated K8s pods per repo, run Claude Code or Codex in git worktrees<p>- PR monitoring — watch CI checks, review status, and merge readiness every 30s<p>- Self-healing — auto-resume the agent on CI failures, merge conflicts, or reviewer change requests<p>- Completion — squash-merge the PR and close the linked issue<p>The key idea is the feedback loop. Optio doesn&#x27;t just run an agent and walk away — when CI breaks, it feeds the failure back to the agent. When a reviewer requests changes, the comments become the agent&#x27;s next prompt. It keeps going until the PR merges or you tell it to stop.<p>Built with Fastify, Next.js, BullMQ, and Drizzle on Postgres. Ships with a Helm chart for production deployment.",
           "title": "Show HN: Optio – Orchestrate AI coding agents in K8s to go from ticket to PR",
-          "updated_at": "2026-03-27T04:04:21Z",
+          "updated_at": "2026-03-27T10:39:08Z",
           "url": "https://github.com/jonwiggins/optio"
         },
         {
@@ -605,7 +607,7 @@
           "story_id": 47531594,
           "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
           "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
-          "updated_at": "2026-03-27T04:31:06Z",
+          "updated_at": "2026-03-27T04:31:36Z",
           "url": "https://intuitivecompute.com"
         },
         {
@@ -819,7 +821,177 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "imkyssa"
+              "value": "gooseyGander"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I’ve been working on a temporal database for agents that combines graphs, tables, and compute.<p>While building it, I ended up needing an agent framework that could handle <em>bot</em>h simple tool-use tasks and more graph-based execution, so I pulled that out into a separate project, Agent Forge.<p>Agent Forge uses a two-tier execution model:<p>* a heuristic router decides whether a request is simple or complex \n* simple requests go through a lightweight agent loop with a single system prompt and tool-calling loop\n* more complex requests can use memory retrieval, reflection constraints, tree search, and self-critique<p>It also has:<p>* composable middleware for summarisation, caching, approval gates, and planning\n* a graph execution engine with parallel nodes, conditional routing, checkpointing, and interrupts\n* an optional integration with MinnsDB for memory and temporal state, though it works independently as well\n* mutli agent planning with subscriptions and vibe grapgh \n`<p>Repo: <a href=\"https://github.com/Minns-ai/agent-forge-sdk\" rel=\"nofollow\">https://github.com/Minns-ai/agent-forge-sdk</a>\nnpm: <a href=\"https://www.npmjs.com/package/@minns/agent-forge\" rel=\"nofollow\">https://www.npmjs.com/package/@minns/agent-forge</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Agent Forge, an agent framework, heuristic routing and graph execution"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Minns-ai/agent-forge-sdk"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_gooseyGander",
+            "story_47540574",
+            "show_hn"
+          ],
+          "author": "gooseyGander",
+          "created_at": "2026-03-27T09:29:34Z",
+          "created_at_i": 1774603774,
+          "num_comments": 0,
+          "objectID": "47540574",
+          "points": 4,
+          "story_id": 47540574,
+          "story_text": "I’ve been working on a temporal database for agents that combines graphs, tables, and compute.<p>While building it, I ended up needing an agent framework that could handle both simple tool-use tasks and more graph-based execution, so I pulled that out into a separate project, Agent Forge.<p>Agent Forge uses a two-tier execution model:<p>* a heuristic router decides whether a request is simple or complex \n* simple requests go through a lightweight agent loop with a single system prompt and tool-calling loop\n* more complex requests can use memory retrieval, reflection constraints, tree search, and self-critique<p>It also has:<p>* composable middleware for summarisation, caching, approval gates, and planning\n* a graph execution engine with parallel nodes, conditional routing, checkpointing, and interrupts\n* an optional integration with MinnsDB for memory and temporal state, though it works independently as well\n* mutli agent planning with subscriptions and vibe grapgh \n`<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Minns-ai&#x2F;agent-forge-sdk\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Minns-ai&#x2F;agent-forge-sdk</a>\nnpm: <a href=\"https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@minns&#x2F;agent-forge\" rel=\"nofollow\">https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@minns&#x2F;agent-forge</a>",
+          "title": "Show HN: Agent Forge, an agent framework, heuristic routing and graph execution",
+          "updated_at": "2026-03-27T10:09:52Z",
+          "url": "https://github.com/Minns-ai/agent-forge-sdk"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "samchon"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I was personally invited by the Qwen team to speak at Qwen Meetup Korea, and got to present locally here in Korea yesterday — pretty honored to have been reached out to directly.<p>The talk was about how I got function calling to work reliably on deeply recursive union types — the stuff the industry generally says doesn't work. With `qwen3-coder-next`, first-try success rate was 6.75%. And the entire Qwen 3.5 model family was hitting 0% on union types due to a consistent double-stringify bug. <em>Bot</em>h ended up at 100%.<p>Slides are also available here: <a href=\"https://autobe.dev/seminars/20260326-qwen-meetup-korea.pptx\" rel=\"nofollow\">https://autobe.dev/seminars/20260326-qwen-meetup-korea.pptx</a> — speaker notes are written inside as slide notes if you'd like the full narrative behind each slide."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Qwen Meetup, Function Calling Harness, turning 6.75% to 100%"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://autobe.dev/blog/function-calling-harness-qwen-meetup-korea/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_samchon",
+            "story_47540454",
+            "show_hn"
+          ],
+          "author": "samchon",
+          "created_at": "2026-03-27T09:06:38Z",
+          "created_at_i": 1774602398,
+          "num_comments": 0,
+          "objectID": "47540454",
+          "points": 1,
+          "story_id": 47540454,
+          "story_text": "I was personally invited by the Qwen team to speak at Qwen Meetup Korea, and got to present locally here in Korea yesterday — pretty honored to have been reached out to directly.<p>The talk was about how I got function calling to work reliably on deeply recursive union types — the stuff the industry generally says doesn&#x27;t work. With `qwen3-coder-next`, first-try success rate was 6.75%. And the entire Qwen 3.5 model family was hitting 0% on union types due to a consistent double-stringify bug. Both ended up at 100%.<p>Slides are also available here: <a href=\"https:&#x2F;&#x2F;autobe.dev&#x2F;seminars&#x2F;20260326-qwen-meetup-korea.pptx\" rel=\"nofollow\">https:&#x2F;&#x2F;autobe.dev&#x2F;seminars&#x2F;20260326-qwen-meetup-korea.pptx</a> — speaker notes are written inside as slide notes if you&#x27;d like the full narrative behind each slide.",
+          "title": "Show HN: Qwen Meetup, Function Calling Harness, turning 6.75% to 100%",
+          "updated_at": "2026-03-27T09:10:52Z",
+          "url": "https://autobe.dev/blog/function-calling-harness-qwen-meetup-korea/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "repsy"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "After operating as a SaaS platform for a long time, Repsy has decided to go fully open-source.<p>Recognizing that many developers and teams require full control over their package management for security, compliance, and to avoid vendor lock-in, Repsy is now available as a self-hosted, open-source project under the Apache 2.0 License.<p>It is designed to be a lightweight and easy-to-manage alternative to heavy-duty enterprise repository managers.<p>Key Features:\nUniversal Support: Native protocols for Docker, Maven, npm, and PyPI.<p>Flexible Storage: Support for <em>bot</em>h H2 (embedded) for quick setup and PostgreSQL for production environments.<p>CI/CD Ready: Built-in Deploy Token support for secure automated deployments.<p>Modern Stack: Built with JDK 25 (Spring Boot 4) and Angular 21.<p>The project is seeking feedback on its architecture and multi-protocol routing implementation. Feel free to check out the repo and contribute!<p>GitHub: https://github.com/repsyio/repsy<p>Documentation: https://docs.repsy.io"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Universal package repository SaaS Repsy announces the open source version"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_repsy",
+            "story_47540190",
+            "ask_hn"
+          ],
+          "author": "repsy",
+          "created_at": "2026-03-27T08:24:13Z",
+          "created_at_i": 1774599853,
+          "num_comments": 0,
+          "objectID": "47540190",
+          "points": 2,
+          "story_id": 47540190,
+          "story_text": "After operating as a SaaS platform for a long time, Repsy has decided to go fully open-source.<p>Recognizing that many developers and teams require full control over their package management for security, compliance, and to avoid vendor lock-in, Repsy is now available as a self-hosted, open-source project under the Apache 2.0 License.<p>It is designed to be a lightweight and easy-to-manage alternative to heavy-duty enterprise repository managers.<p>Key Features:\nUniversal Support: Native protocols for Docker, Maven, npm, and PyPI.<p>Flexible Storage: Support for both H2 (embedded) for quick setup and PostgreSQL for production environments.<p>CI&#x2F;CD Ready: Built-in Deploy Token support for secure automated deployments.<p>Modern Stack: Built with JDK 25 (Spring Boot 4) and Angular 21.<p>The project is seeking feedback on its architecture and multi-protocol routing implementation. Feel free to check out the repo and contribute!<p>GitHub: https:&#x2F;&#x2F;github.com&#x2F;repsyio&#x2F;repsy<p>Documentation: https:&#x2F;&#x2F;docs.repsy.io",
+          "title": "Universal package repository SaaS Repsy announces the open source version",
+          "updated_at": "2026-03-27T10:06:52Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "EnhancedJax"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I got fed up with Google Timeline's awful location tracking and control, so I built my own.<p>Replay's a native app built entirely on Swift. It runs in the background, automatically saves your visits and routes, detects activity type (walk/cycle/drive/transit), and stores everything locally on your device.<p>No account. No subscription. No server ever touches your data. One-time purchase.<p>A few technical decisions I made that are worth calling out:\n- All processing happens on-device using CoreLocation and CoreMotion\n- No backend, which means no breach surface for your location data\n- Battery impact is minimal — same approach as iOS's own significant-location-change API, with minimal active location tracking to produce clean polylines\n- We use SwiftUI for most of the regular layout, but UIKit for the map &amp; <em>bot</em>tom sheet for fine control<p>What I mainly use it for is to know where I've been on my holidays, but it's also cool to see insights on my daily patterns so I just leave it on!<p>Check out the screenshots on the AppStore!\n<a href=\"https://replayapp.jaxtam.dev\" rel=\"nofollow\">https://replayapp.jaxtam.dev</a><p>Hope Replay would be useful for you. I'm open to any feedback. Thanks everyone!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Replay – A private, on-device Google Timeline replacement for iOS"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://replayapp.jaxtam.dev"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_EnhancedJax",
+            "story_47540047",
+            "show_hn"
+          ],
+          "author": "EnhancedJax",
+          "created_at": "2026-03-27T07:56:56Z",
+          "created_at_i": 1774598216,
+          "num_comments": 0,
+          "objectID": "47540047",
+          "points": 1,
+          "story_id": 47540047,
+          "story_text": "I got fed up with Google Timeline&#x27;s awful location tracking and control, so I built my own.<p>Replay&#x27;s a native app built entirely on Swift. It runs in the background, automatically saves your visits and routes, detects activity type (walk&#x2F;cycle&#x2F;drive&#x2F;transit), and stores everything locally on your device.<p>No account. No subscription. No server ever touches your data. One-time purchase.<p>A few technical decisions I made that are worth calling out:\n- All processing happens on-device using CoreLocation and CoreMotion\n- No backend, which means no breach surface for your location data\n- Battery impact is minimal — same approach as iOS&#x27;s own significant-location-change API, with minimal active location tracking to produce clean polylines\n- We use SwiftUI for most of the regular layout, but UIKit for the map &amp; bottom sheet for fine control<p>What I mainly use it for is to know where I&#x27;ve been on my holidays, but it&#x27;s also cool to see insights on my daily patterns so I just leave it on!<p>Check out the screenshots on the AppStore!\n<a href=\"https:&#x2F;&#x2F;replayapp.jaxtam.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;replayapp.jaxtam.dev</a><p>Hope Replay would be useful for you. I&#x27;m open to any feedback. Thanks everyone!",
+          "title": "Show HN: Replay – A private, on-device Google Timeline replacement for iOS",
+          "updated_at": "2026-03-27T08:02:36Z",
+          "url": "https://replayapp.jaxtam.dev"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "sizzle"
             },
             "title": {
               "fullyHighlighted": false,
@@ -827,206 +999,29 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Database Performance <em>Bot</em>tlenecks: N+1 Queries, Missing Indexes, Connection Pools"
+              "value": "Reddit CEO: Humans welcome (<em>bot</em>s must wear name tags)"
             },
             "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://howtocenterdiv.com/beyond-the-div/your-database-is-the-<em>bot</em>tleneck-not-your-code"
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.reddit.com/u/spez/s/3IlTXa1g4p"
             }
           },
           "_tags": [
             "story",
-            "author_imkyssa",
-            "story_47538622"
+            "author_sizzle",
+            "story_47539750"
           ],
-          "author": "imkyssa",
-          "created_at": "2026-03-27T02:54:14Z",
-          "created_at_i": 1774580054,
+          "author": "sizzle",
+          "created_at": "2026-03-27T06:56:59Z",
+          "created_at_i": 1774594619,
           "num_comments": 0,
-          "objectID": "47538622",
+          "objectID": "47539750",
           "points": 3,
-          "story_id": 47538622,
-          "title": "Database Performance Bottlenecks: N+1 Queries, Missing Indexes, Connection Pools",
-          "updated_at": "2026-03-27T03:11:06Z",
-          "url": "https://howtocenterdiv.com/beyond-the-div/your-database-is-the-bottleneck-not-your-code"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "TumbleCow"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Lately I've been working on a data format for information exchange and collaboration between coding agents that I've called 'InstructionGraph'. I'd love to hear your feedback.<p>--<p><i>What can I see or do?</i><p>To really take it for a spin, tell your (isolated) coding agent:<p><pre><code>  Get the JSON from `curl -sL https://dataverse001.net` and follow the instructions to boot the dataverse!\n</code></pre>\nAsk it to create an app — any app. Wait a few minutes, and it will give you a shareable URL. If your app needs a back-end database, it will automatically integrate the Dataverse login method, and use the InstructionGraph as a database. This is essentially a free, bring-your-own-agent, optionally self-hostable Lovable.<p>The 'root node' is self-describing, so let it describe itself to you: <a href=\"https://dataverse001.net/AxyU5_5vWmP2tO_klN4UpbZzRsuJEvJTrdwdg_gODxZJ.b3f5a7c9-2d4e-4f60-9b8a-0c1d2e3f4a5b\" rel=\"nofollow\">https://dataverse001.net/AxyU5_5vWmP2tO_klN4UpbZzRsuJEvJTrdw...</a><p>Come say Hi in the dataverse dev forum: <a href=\"https://dev.dataverse001.net\" rel=\"nofollow\">https://dev.dataverse001.net</a> — a tiny social network built fully within InstructionGraph. If you login on the webpage, it deterministically creates a private key based on your username/password combination. No centralized authority!<p>More examples on: <a href=\"https://dataverse001.net\" rel=\"nofollow\">https://dataverse001.net</a><p>--<p><i>A self-describing, self-bootstrapping data format</i><p>The data format is a collection of self-contained signed JSON objects. Each object:<p>Has an <i>instruction field</i> that tells any agent — human or machine — how to interpret and display it. For data objects (comments, measurements), the instruction gives context: &quot;Display this under its parent post&quot; or &quot;Temperature values above 80°C indicate a problem.&quot; For structural objects, it contains recipes: how to create applications, send messages, generate keys.<p>Has <i>relations</i> to other objects. Crucially, relations can point to additional instructions. Herein lies the real strength: the coding agent can dynamically follow the web of instructions to complete its task, only loading what it needs, without cluttering the LLM context with useless instructions upfront.<p>The agent can bootstrap from any point in the graph. Data objects link to their application, applications link to the root, the root describes how to use everything.<p><i>Decentralized identity</i> — each object is signed (ECC P-256). Your pubkey <i>is</i> your identity. You can cryptographically prove that multiple objects claiming to be from the same author actually are.<p><i>Conflict-free merging</i> — objects are identified by &lt;pubkey&gt;.&lt;uuid&gt;, so contributions from multiple authors can always be merged cleanly, even if originally developed independently in fragmented graphs.<p><i>Effectively immutable</i> — only the author can update objects (incremented revision counter). Old versions are backed up. Rollback is practically always possible.<p><i>Works offline</i> — run the hub on localhost as a caching proxy. Internet drops? All apps keep working. Connection back? Everything syncs.<p><i>Accessible</i> — only a basic shell with curl, openssl and jq is needed to participate.<p>--<p><i>A Bring Your Own Agent, Free, optionally self-hostable, vibe-coding platform</i><p>To facilitate exchange between multiple agents, I wrote 'The Dataverse Hub' (<a href=\"https://github.com/tijszwinkels/dataverse-hub\" rel=\"nofollow\">https://github.com/tijszwinkels/dataverse-hub</a>). At its core it's just a very simple PUT/GET with signature verification and incoming relationship search. Then I realized I could serve HTML/JS objects based on the browser Accept header — which turned the hub into <em>bot</em>h a database server <i>and</i> a hosting platform.<p>Tell your agent to make an app, and it creates <em>bot</em>h the frontend (as a PAGE object) and the backend data (as InstructionGraph objects) on the same hub, giving you a shareable URL.<p>I've been building this for a few months and I'm genuinely curious whether it resonates with others. If you try it, I'd love to know what you build — or what breaks. The hub source is on GitHub and issues/PRs are very welcome."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Data that explains itself to Coding Agents (Bonus: free, BYOA Lovable)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://dataverse001.net/AxyU5_5vWmP2tO_klN4UpbZzRsuJEvJTrdwdg_gODxZJ.00000000-0000-0000-0000-000000000000"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_TumbleCow",
-            "story_47535888",
-            "show_hn"
-          ],
-          "author": "TumbleCow",
-          "created_at": "2026-03-26T21:18:13Z",
-          "created_at_i": 1774559893,
-          "num_comments": 0,
-          "objectID": "47535888",
-          "points": 2,
-          "story_id": 47535888,
-          "story_text": "Lately I&#x27;ve been working on a data format for information exchange and collaboration between coding agents that I&#x27;ve called &#x27;InstructionGraph&#x27;. I&#x27;d love to hear your feedback.<p>--<p><i>What can I see or do?</i><p>To really take it for a spin, tell your (isolated) coding agent:<p><pre><code>  Get the JSON from `curl -sL https:&#x2F;&#x2F;dataverse001.net` and follow the instructions to boot the dataverse!\n</code></pre>\nAsk it to create an app — any app. Wait a few minutes, and it will give you a shareable URL. If your app needs a back-end database, it will automatically integrate the Dataverse login method, and use the InstructionGraph as a database. This is essentially a free, bring-your-own-agent, optionally self-hostable Lovable.<p>The &#x27;root node&#x27; is self-describing, so let it describe itself to you: <a href=\"https:&#x2F;&#x2F;dataverse001.net&#x2F;AxyU5_5vWmP2tO_klN4UpbZzRsuJEvJTrdwdg_gODxZJ.b3f5a7c9-2d4e-4f60-9b8a-0c1d2e3f4a5b\" rel=\"nofollow\">https:&#x2F;&#x2F;dataverse001.net&#x2F;AxyU5_5vWmP2tO_klN4UpbZzRsuJEvJTrdw...</a><p>Come say Hi in the dataverse dev forum: <a href=\"https:&#x2F;&#x2F;dev.dataverse001.net\" rel=\"nofollow\">https:&#x2F;&#x2F;dev.dataverse001.net</a> — a tiny social network built fully within InstructionGraph. If you login on the webpage, it deterministically creates a private key based on your username&#x2F;password combination. No centralized authority!<p>More examples on: <a href=\"https:&#x2F;&#x2F;dataverse001.net\" rel=\"nofollow\">https:&#x2F;&#x2F;dataverse001.net</a><p>--<p><i>A self-describing, self-bootstrapping data format</i><p>The data format is a collection of self-contained signed JSON objects. Each object:<p>Has an <i>instruction field</i> that tells any agent — human or machine — how to interpret and display it. For data objects (comments, measurements), the instruction gives context: &quot;Display this under its parent post&quot; or &quot;Temperature values above 80°C indicate a problem.&quot; For structural objects, it contains recipes: how to create applications, send messages, generate keys.<p>Has <i>relations</i> to other objects. Crucially, relations can point to additional instructions. Herein lies the real strength: the coding agent can dynamically follow the web of instructions to complete its task, only loading what it needs, without cluttering the LLM context with useless instructions upfront.<p>The agent can bootstrap from any point in the graph. Data objects link to their application, applications link to the root, the root describes how to use everything.<p><i>Decentralized identity</i> — each object is signed (ECC P-256). Your pubkey <i>is</i> your identity. You can cryptographically prove that multiple objects claiming to be from the same author actually are.<p><i>Conflict-free merging</i> — objects are identified by &lt;pubkey&gt;.&lt;uuid&gt;, so contributions from multiple authors can always be merged cleanly, even if originally developed independently in fragmented graphs.<p><i>Effectively immutable</i> — only the author can update objects (incremented revision counter). Old versions are backed up. Rollback is practically always possible.<p><i>Works offline</i> — run the hub on localhost as a caching proxy. Internet drops? All apps keep working. Connection back? Everything syncs.<p><i>Accessible</i> — only a basic shell with curl, openssl and jq is needed to participate.<p>--<p><i>A Bring Your Own Agent, Free, optionally self-hostable, vibe-coding platform</i><p>To facilitate exchange between multiple agents, I wrote &#x27;The Dataverse Hub&#x27; (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tijszwinkels&#x2F;dataverse-hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tijszwinkels&#x2F;dataverse-hub</a>). At its core it&#x27;s just a very simple PUT&#x2F;GET with signature verification and incoming relationship search. Then I realized I could serve HTML&#x2F;JS objects based on the browser Accept header — which turned the hub into both a database server <i>and</i> a hosting platform.<p>Tell your agent to make an app, and it creates both the frontend (as a PAGE object) and the backend data (as InstructionGraph objects) on the same hub, giving you a shareable URL.<p>I&#x27;ve been building this for a few months and I&#x27;m genuinely curious whether it resonates with others. If you try it, I&#x27;d love to know what you build — or what breaks. The hub source is on GitHub and issues&#x2F;PRs are very welcome.",
-          "title": "Show HN: Data that explains itself to Coding Agents (Bonus: free, BYOA Lovable)",
-          "updated_at": "2026-03-27T03:46:21Z",
-          "url": "https://dataverse001.net/AxyU5_5vWmP2tO_klN4UpbZzRsuJEvJTrdwdg_gODxZJ.00000000-0000-0000-0000-000000000000"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "imnotlost"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I came across this open-source workflow for designing personalized mRNA cancer vaccines:<p>https://philfung.github.io/openvaxx/<p>And this recent story about a man who worked with researchers to create a personalized cancer vaccine for his dog:<p>https://medicalxpress.com/news/2026-03-ai-cancer-vaccine-dog-oncologist.html<p>It got me wondering what the current technology, research, and startup landscape looks like for personalized mRNA medicine in humans.<p>Are any HN people working in this space, or close to it? I’m especially curious about:\n- how real the pipeline is today outside major institutions\n- which parts are getting cheaper or more accessible\n- which parts of the pipeline is being taken over by software and possibly new AI models\n- where the real <em>bot</em>tlenecks are: sequencing, target selection, manufacturing, QC, regulation, or something else\n- whether anyone is building tools, infrastructure, or startups around more individualized mRNA therapies"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: Personalized mRNA cancer vaccines, how real is the pipeline today?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_imnotlost",
-            "story_47535533",
-            "ask_hn"
-          ],
-          "author": "imnotlost",
-          "children": [
-            47536191,
-            47535632,
-            47535728
-          ],
-          "created_at": "2026-03-26T20:49:56Z",
-          "created_at_i": 1774558196,
-          "num_comments": 4,
-          "objectID": "47535533",
-          "points": 5,
-          "story_id": 47535533,
-          "story_text": "I came across this open-source workflow for designing personalized mRNA cancer vaccines:<p>https:&#x2F;&#x2F;philfung.github.io&#x2F;openvaxx&#x2F;<p>And this recent story about a man who worked with researchers to create a personalized cancer vaccine for his dog:<p>https:&#x2F;&#x2F;medicalxpress.com&#x2F;news&#x2F;2026-03-ai-cancer-vaccine-dog-oncologist.html<p>It got me wondering what the current technology, research, and startup landscape looks like for personalized mRNA medicine in humans.<p>Are any HN people working in this space, or close to it? I’m especially curious about:\n- how real the pipeline is today outside major institutions\n- which parts are getting cheaper or more accessible\n- which parts of the pipeline is being taken over by software and possibly new AI models\n- where the real bottlenecks are: sequencing, target selection, manufacturing, QC, regulation, or something else\n- whether anyone is building tools, infrastructure, or startups around more individualized mRNA therapies",
-          "title": "Ask HN: Personalized mRNA cancer vaccines, how real is the pipeline today?",
-          "updated_at": "2026-03-27T04:15:07Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "adangit"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I like the idea of taking one thing and turning it into another—very much inspired by NotebookLM and wondered what it might take to generate full graphic novels, with consistent characters, narrative flow, story arc, etc.<p>Developed a 7-pass scripting enrichment system (beat analysis, adaptation filtering, character deep dives) before generating any images.<p>Dual backend: Google Gemini for scripting (2M context window) and either Gemini or OpenAI for image generation with 3-tier model fallback (comparing the performance of <em>bot</em>h).<p>It's not great. Would love feedback on the pipeline."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Illustrative – AI pipeline that turns books into graphic novels"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://arv.in/illustrative/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_adangit",
-            "story_47535297",
-            "show_hn"
-          ],
-          "author": "adangit",
-          "created_at": "2026-03-26T20:27:58Z",
-          "created_at_i": 1774556878,
-          "num_comments": 0,
-          "objectID": "47535297",
-          "points": 5,
-          "story_id": 47535297,
-          "story_text": "I like the idea of taking one thing and turning it into another—very much inspired by NotebookLM and wondered what it might take to generate full graphic novels, with consistent characters, narrative flow, story arc, etc.<p>Developed a 7-pass scripting enrichment system (beat analysis, adaptation filtering, character deep dives) before generating any images.<p>Dual backend: Google Gemini for scripting (2M context window) and either Gemini or OpenAI for image generation with 3-tier model fallback (comparing the performance of both).<p>It&#x27;s not great. Would love feedback on the pipeline.",
-          "title": "Show HN: Illustrative – AI pipeline that turns books into graphic novels",
-          "updated_at": "2026-03-26T22:20:35Z",
-          "url": "https://arv.in/illustrative/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "manlymuppet"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I've been programming for a while, but I've avoided this question despite my curiosity because it sounds quite stupid. In the spirit of asking stupid questions anyways though, here goes: why isn't every programming language interoperable? Why hasn't somebody built a system which allows for at least better interoperability?<p>I was reading the Swift 6.3 release, and better C interoperability was one of the main new features. As a Swift developer, I know that a lot of people love Swift because of how great it is to work with alongside C. So this brings forward the question: why doesn't Swift also work with Rust, or Python, or many other languages?<p>(Specifically with Swift, I don't know how useful interoperability with Rust or Python would be (probably not very useful), and it certainly wouldn't be a trivial engineering challenge, but aside from that: why not?)<p>More generally, why isn't interoperability between languages a bigger thing? There are of course challenges, like interpreted vs compiled, or JIT vs AOT compilation, but I think there are serious benefits to be had. Perhaps in a perfectly setup project you wouldn't need interoperability, but in the real world plumbing between languages is a constant problem. To demonstrate this, if one language could easily communicate with many others, here are some possible use cases.<p>- All libraries of all languages become compatible; this is the big one. It would be pretty freeing (although perhaps not always architecturally wise) if when searching for libraries to do what you want, you could pick from literally anything.\n- Certain languages are suited to certain applications, with interoperability, you could be incredibly versatile. If one language is really good at one thing, and another language is really good at another thing, and you're project needs to do <em>bot</em>h thing, you don't have to compromise if <em>bot</em>h languages are interoperable.\n- Multi-language projects could not only be possible, but even easy. If you could do backend in Go and frontend in TypeScript, it would be phenomenal if you could freely import abstracts in-between languages. Imagine end-to-end type safety even, with no additional work.\n- Performance. Simple languages are faster to write, though sometimes run into problems later when performance becomes a <em>bot</em>tleneck. This would be solved if say, Rust and Python could work together. You could write everything in Python, then when you need the power, switch to Rust. This already exists with Maturin and PyO3, and as a frequent user of this structure, it's pretty great. Imagine if it was available for all languages.<p>There are just some of the overlapping benefits, but I am sure there are more. In any case, these are things that would be great to have! Why hasn't somebody, perhaps in a performant low-level language, built a plumbing layer which connects many different programming languages? We live in an age with really powerful IDEs, that, if given the right tools, could definitely support much deeper interoperability.<p>What if programming with two languages in one project didn't feel different from just using one? Sure, some people just want to get from point A to point B, but I think the freedom to use anything could really create a lot of productivity.<p>While I am well aware that this would be a <i>behemoth</i> engineering project, I think a small group of ambitious developers could make significant headway. It wouldn't need to be all the way, and you'd be wise to take it slow, but I feel the benefits of such a project would be well worth the considerable effort."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: Why isn't every programming language interoperable?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_manlymuppet",
-            "story_47534632",
-            "ask_hn"
-          ],
-          "author": "manlymuppet",
-          "children": [
-            47539093,
-            47535243,
-            47534693
-          ],
-          "created_at": "2026-03-26T19:30:59Z",
-          "created_at_i": 1774553459,
-          "num_comments": 5,
-          "objectID": "47534632",
-          "points": 2,
-          "story_id": 47534632,
-          "story_text": "I&#x27;ve been programming for a while, but I&#x27;ve avoided this question despite my curiosity because it sounds quite stupid. In the spirit of asking stupid questions anyways though, here goes: why isn&#x27;t every programming language interoperable? Why hasn&#x27;t somebody built a system which allows for at least better interoperability?<p>I was reading the Swift 6.3 release, and better C interoperability was one of the main new features. As a Swift developer, I know that a lot of people love Swift because of how great it is to work with alongside C. So this brings forward the question: why doesn&#x27;t Swift also work with Rust, or Python, or many other languages?<p>(Specifically with Swift, I don&#x27;t know how useful interoperability with Rust or Python would be (probably not very useful), and it certainly wouldn&#x27;t be a trivial engineering challenge, but aside from that: why not?)<p>More generally, why isn&#x27;t interoperability between languages a bigger thing? There are of course challenges, like interpreted vs compiled, or JIT vs AOT compilation, but I think there are serious benefits to be had. Perhaps in a perfectly setup project you wouldn&#x27;t need interoperability, but in the real world plumbing between languages is a constant problem. To demonstrate this, if one language could easily communicate with many others, here are some possible use cases.<p>- All libraries of all languages become compatible; this is the big one. It would be pretty freeing (although perhaps not always architecturally wise) if when searching for libraries to do what you want, you could pick from literally anything.\n- Certain languages are suited to certain applications, with interoperability, you could be incredibly versatile. If one language is really good at one thing, and another language is really good at another thing, and you&#x27;re project needs to do both thing, you don&#x27;t have to compromise if both languages are interoperable.\n- Multi-language projects could not only be possible, but even easy. If you could do backend in Go and frontend in TypeScript, it would be phenomenal if you could freely import abstracts in-between languages. Imagine end-to-end type safety even, with no additional work.\n- Performance. Simple languages are faster to write, though sometimes run into problems later when performance becomes a bottleneck. This would be solved if say, Rust and Python could work together. You could write everything in Python, then when you need the power, switch to Rust. This already exists with Maturin and PyO3, and as a frequent user of this structure, it&#x27;s pretty great. Imagine if it was available for all languages.<p>There are just some of the overlapping benefits, but I am sure there are more. In any case, these are things that would be great to have! Why hasn&#x27;t somebody, perhaps in a performant low-level language, built a plumbing layer which connects many different programming languages? We live in an age with really powerful IDEs, that, if given the right tools, could definitely support much deeper interoperability.<p>What if programming with two languages in one project didn&#x27;t feel different from just using one? Sure, some people just want to get from point A to point B, but I think the freedom to use anything could really create a lot of productivity.<p>While I am well aware that this would be a <i>behemoth</i> engineering project, I think a small group of ambitious developers could make significant headway. It wouldn&#x27;t need to be all the way, and you&#x27;d be wise to take it slow, but I feel the benefits of such a project would be well worth the considerable effort.",
-          "title": "Ask HN: Why isn't every programming language interoperable?",
-          "updated_at": "2026-03-27T04:25:36Z"
+          "story_id": 47539750,
+          "title": "Reddit CEO: Humans welcome (bots must wear name tags)",
+          "updated_at": "2026-03-27T07:17:51Z",
+          "url": "https://www.reddit.com/u/spez/s/3IlTXa1g4p"
         }
       ]
     },
@@ -1257,7 +1252,7 @@
           "story_id": 47415599,
           "story_text": "Claude Code forgets everything when you close the terminal. I spent 7 months figuring out what the minimum structure is to fix that.<p>Five files per project:\n  - key.md — what this is, who&#x27;s involved\n  - now.md — where it&#x27;s at right now\n  - log.md — what happened, decisions with rationale\n  - tasks.md — what needs doing\n  - insights.md — stuff that doesn&#x27;t change<p>Save at session end, load at session start. 12 hooks enforce the structure, log entries are immutable, deletions are blocked, context re-injects when the window fills up. The model can&#x27;t talk its way out of the guardrails.<p>Also works with OpenClaw (separate plugin, same files - in alpha). Your Mac Mini captures all day, Claude Code does focused work, both read the same project context.<p>claude plugin install alive@alivecomputer<p>MIT licensed, local files, no account.<p>https:&#x2F;&#x2F;github.com&#x2F;alivecomputer&#x2F;alive-claude",
           "title": "Alive – Five Markdown files that give Claude Code a persistent memory",
-          "updated_at": "2026-03-17T17:51:26Z"
+          "updated_at": "2026-03-27T06:48:37Z"
         }
       ]
     },
@@ -1644,7 +1639,7 @@
           "story_id": 47351412,
           "story_text": "Mori is an open-source database proxy that lets you run your application locally against real production data without risking writes to production. It connects to your production database, clones the schema locally, and intercepts queries:\n- Reads come from production\n- Writes &#x2F; migrations &#x2F; deletes are executed only in a local shadow database\n- Results are merged in real time so your app thinks the changes happened in production<p>So you (and your AI agents) can safely test your code in a verifiable environment (real production data) locally before you&#x27;re ready to push.<p>Links:\n- Demo -&gt; <a href=\"https:&#x2F;&#x2F;moridb.sh&#x2F;demo\" rel=\"nofollow\">https:&#x2F;&#x2F;moridb.sh&#x2F;demo</a>\n- Repository -&gt; <a href=\"https:&#x2F;&#x2F;github.com&#x2F;psrth&#x2F;mori\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;psrth&#x2F;mori</a>\n- Docs -&gt; <a href=\"https:&#x2F;&#x2F;moridb.sh&#x2F;docs\" rel=\"nofollow\">https:&#x2F;&#x2F;moridb.sh&#x2F;docs</a><p>Motivation: \nMost people ask Santa for a bicycle; every year, I&#x27;ve been asking for the ability to test in prod. The existing alternatives (branching, snapshots, seed dbs, staging dbs, good old pg_dump) are one or more of: (a) out of sync, (b) expensive to run (time and cost), (c) cloud &#x2F; managed provider only. But as AI agents continue to write more code, our local testing frameworks need to keep up. Writing code shouldn&#x27;t be artificially bottlenecked or a literal leap of faith.<p>Implementation:\nThe docs have a lot more information, but a summary:\n- Support for PSQL&#x2F;MySQL&#x2F;SQLite + 6 more engines, each with custom AST-level query classification and rewriting\n- In-flight cross-DB merging of prod data with local modifications\n- Collision-free PK generation and support for foreign keys\n- Full transaction support including CTEs, nested transactions, and savepoints\n- MCP support: plug-and-play into Claude Code, Cursor, or wherever you get your tokens\n- Exhaustive E2E test suite per engine<p>Safety:\nI want to specifically call out the core design principle — that production should never be writable through Mori. This is enforced through four independent layers:<p>1. Query classification — every statement is parsed and classified as read or write before routing\n2. Routing rules — writes are deterministically routed to the local shadow database, never forwarded\n3. Shadow execution enforcement — even if classification is bypassed, the execution layer rejects any write targeting the production connection\n4. Raw byte inspection — finally, outbound bytes on the production socket are inspected to ensure no write operation ever reaches prod<p>If any layer fails to classify a query, Mori refuses the statement entirely rather than risking a pass-through.<p>Note:\nWhile I&#x27;ve validated (and extensively tested against our production database) all of the supported queries, there may (and will) be edge cases that I haven&#x27;t discovered yet. If you hit an edge case, please open an issue - expanding the current coverage is my top priority!<p>If you want to see if this repo is a good fit for your workflow, you can checkout \n&gt; <a href=\"https:&#x2F;&#x2F;www.moridb.sh&#x2F;docs&#x2F;resources&#x2F;compatibility\" rel=\"nofollow\">https:&#x2F;&#x2F;www.moridb.sh&#x2F;docs&#x2F;resources&#x2F;compatibility</a>.<p>Or, in the true spirit of this project, just go for it :) \n&gt; curl -fsSL <a href=\"https:&#x2F;&#x2F;moridb.sh&#x2F;install.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;moridb.sh&#x2F;install.sh</a> | sh",
           "title": "Show HN: Mori – Test against production data, without ever touching production",
-          "updated_at": "2026-03-12T14:55:22Z",
+          "updated_at": "2026-03-27T08:37:37Z",
           "url": "https://github.com/psrth/mori"
         },
         {
@@ -1852,7 +1847,7 @@
           "points": 2,
           "story_id": 47428188,
           "title": "The OWASP MCP Top: A Security Framework for AI Agent Tool Integration",
-          "updated_at": "2026-03-21T16:03:43Z",
+          "updated_at": "2026-03-27T05:22:21Z",
           "url": "https://mcpblog.dev/blog/2026-03-15-owasp-mcp-top-10"
         },
         {
@@ -1975,7 +1970,7 @@
                 "framework",
                 "2026"
               ],
-              "value": "I've been talking to founders building <em>AI</em> <em>agents</em> across fintech, devtools, and \nproductivity – and almost none of them have any real security layer. Their <em>agents</em> \nread emails, call APIs, execute code, and write to databases with essentially no \nguardrails beyond &quot;we trust the LLM.&quot;<p>So I built AgentArmor: an open-source <em>framework</em> that wraps any agentic \narchitecture with 8 independent security layers, each targeting a distinct attack \nsurface in the <em>agent</em>'s data flow.<p>The 8 layers:\n  L1 – Ingestion: prompt injection + jailbreak detection (20+ patterns, DAN, \n       extraction attempts, Unicode steganography)\n  L2 – Storage: AES-256-GCM encryption at rest + BLAKE3 integrity for vector DBs\n  L3 – Context: instruction-data separation (like parameterized SQL, but for \n       LLM context), canary tokens, prompt hardening\n  L4 – Planning: action risk scoring (READ=1 → DELETE=7 → EXECUTE=8 → ADMIN=10),\n       chain depth limits, bulk operation detection\n  L5 – Execution: network egress control, per-action rate limiting, human \n       approval gates with conditional rules\n  L6 – Output: PII redaction via Microsoft Presidio + regex fallback\n  L7 – Inter-<em>agent</em>: HMAC-SHA256 mutual auth, trust scoring, delegation depth \n       limits, timestamp-bound replay prevention\n  L8 – Identity: <em>agent</em>-native identity, JIT permissions, short-lived credentials<p>I tested it against all 10 OWASP ASI (Agentic Security Integrity) risks from \nthe December <em>202</em>5 spec. The red team suite is included in the repo.<p>Works as: (a) a Python library you wrap around tool calls, (b) a FastAPI proxy \nserver for <em>framework</em>-agnostic deployment, or (c) a CLI for scanning prompts in CI.<p>Integrations included for: LangChain, OpenAI <em>Agents</em> SDK, MCP servers.<p>I ran it live with a local Ollama <em>agent</em> (qwen2:7b) – you can watch it block a \n`database.delete` at L8 (permission check), redact PII from file content at L6, \nand kill a prompt injection at L1 before it ever reaches the model.<p>GitHub: <a href=\"https://github.com/Agastya910/agentarmor\" rel=\"nofollow\">https://github.com/Agastya910/agentarmor</a>\nPyPI:   pip install agentarmor-core<p>Would love feedback, especially from people who have actually built production \n<em>agents</em> and hit security issues I haven't thought of.<p>TAGS: security, python, llm, <em>ai</em>, <em>agents</em>"
+              "value": "I've been talking to founders building <em>AI</em> <em>agents</em> across fintech, devtools, and \nproductivity – and almost none of them have any real security layer. Their <em>agents</em> \nread emails, call APIs, execute code, and write to databases with essentially no \nguardrails beyond &quot;we trust the LLM.&quot;<p>So I built AgentArmor: an open-source <em>framework</em> that wraps any agentic \narchitecture with 8 independent security layers, each targeting a distinct attack \nsurface in the <em>agent</em>'s data flow.<p>The 8 layers:\n  L1 – Ingestion: prompt injection + jailbreak detection (20+ patterns, DAN, \n       extraction attempts, Unicode steganography)\n  L2 – Storage: AES-256-GCM encryption at rest + BLAKE3 integrity for vector DBs\n  L3 – Context: instruction-data separation (like parameterized SQL, but for \n       LLM context), canary tokens, prompt hardening\n  L4 – Planning: action risk scoring (READ=1 → DELETE=7 → EXECUTE=8 → ADMIN=10),\n       chain depth limits, bulk operation detection\n  L5 – Execution: network egress control, per-action rate limiting, human \n       approval gates with conditional rules\n  L6 – Output: PII redaction via Microsoft Presidio + regex fallback\n  L7 – Inter-<em>agent</em>: HMAC-SHA256 mutual auth, trust scoring, delegation depth \n       limits, timestamp-bound replay prevention\n  L8 – Identity: <em>agent</em>-native identity, JIT permissions, short-lived credentials<p>I tested it against all 10 OWASP ASI (Agentic Security Integrity) risks from \nthe December <em>2025</em> spec. The red team suite is included in the repo.<p>Works as: (a) a Python library you wrap around tool calls, (b) a FastAPI proxy \nserver for <em>framework</em>-agnostic deployment, or (c) a CLI for scanning prompts in CI.<p>Integrations included for: LangChain, OpenAI <em>Agents</em> SDK, MCP servers.<p>I ran it live with a local Ollama <em>agent</em> (qwen2:7b) – you can watch it block a \n`database.delete` at L8 (permission check), redact PII from file content at L6, \nand kill a prompt injection at L1 before it ever reaches the model.<p>GitHub: <a href=\"https://github.com/Agastya910/agentarmor\" rel=\"nofollow\">https://github.com/Agastya910/agentarmor</a>\nPyPI:   pip install agentarmor-core<p>Would love feedback, especially from people who have actually built production \n<em>agents</em> and hit security issues I haven't thought of.<p>TAGS: security, python, llm, <em>ai</em>, <em>agents</em>"
             },
             "title": {
               "fullyHighlighted": false,
@@ -2016,7 +2011,7 @@
           "story_id": 47374958,
           "story_text": "I&#x27;ve been talking to founders building AI agents across fintech, devtools, and \nproductivity – and almost none of them have any real security layer. Their agents \nread emails, call APIs, execute code, and write to databases with essentially no \nguardrails beyond &quot;we trust the LLM.&quot;<p>So I built AgentArmor: an open-source framework that wraps any agentic \narchitecture with 8 independent security layers, each targeting a distinct attack \nsurface in the agent&#x27;s data flow.<p>The 8 layers:\n  L1 – Ingestion: prompt injection + jailbreak detection (20+ patterns, DAN, \n       extraction attempts, Unicode steganography)\n  L2 – Storage: AES-256-GCM encryption at rest + BLAKE3 integrity for vector DBs\n  L3 – Context: instruction-data separation (like parameterized SQL, but for \n       LLM context), canary tokens, prompt hardening\n  L4 – Planning: action risk scoring (READ=1 → DELETE=7 → EXECUTE=8 → ADMIN=10),\n       chain depth limits, bulk operation detection\n  L5 – Execution: network egress control, per-action rate limiting, human \n       approval gates with conditional rules\n  L6 – Output: PII redaction via Microsoft Presidio + regex fallback\n  L7 – Inter-agent: HMAC-SHA256 mutual auth, trust scoring, delegation depth \n       limits, timestamp-bound replay prevention\n  L8 – Identity: agent-native identity, JIT permissions, short-lived credentials<p>I tested it against all 10 OWASP ASI (Agentic Security Integrity) risks from \nthe December 2025 spec. The red team suite is included in the repo.<p>Works as: (a) a Python library you wrap around tool calls, (b) a FastAPI proxy \nserver for framework-agnostic deployment, or (c) a CLI for scanning prompts in CI.<p>Integrations included for: LangChain, OpenAI Agents SDK, MCP servers.<p>I ran it live with a local Ollama agent (qwen2:7b) – you can watch it block a \n`database.delete` at L8 (permission check), redact PII from file content at L6, \nand kill a prompt injection at L1 before it ever reaches the model.<p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Agastya910&#x2F;agentarmor\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Agastya910&#x2F;agentarmor</a>\nPyPI:   pip install agentarmor-core<p>Would love feedback, especially from people who have actually built production \nagents and hit security issues I haven&#x27;t thought of.<p>TAGS: security, python, llm, ai, agents",
           "title": "Show HN: AgentArmor – open-source 8-layer security framework for AI agents",
-          "updated_at": "2026-03-23T14:18:52Z",
+          "updated_at": "2026-03-27T07:55:22Z",
           "url": "https://github.com/Agastya910/agentarmor"
         }
       ]
@@ -2070,7 +2065,7 @@
           "story_id": 47531594,
           "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
           "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
-          "updated_at": "2026-03-27T04:31:06Z",
+          "updated_at": "2026-03-27T04:31:36Z",
           "url": "https://intuitivecompute.com"
         },
         {
@@ -2108,15 +2103,20 @@
             "show_hn"
           ],
           "author": "sohaibtariq",
+          "children": [
+            47540878,
+            47539549,
+            47540935
+          ],
           "created_at": "2026-03-26T14:26:27Z",
           "created_at_i": 1774535187,
-          "num_comments": 0,
+          "num_comments": 2,
           "objectID": "47530870",
           "points": 7,
           "story_id": 47530870,
           "story_text": "Hi, we&#x27;re Sohaib and Hannan from APIMatic.<p>We built Context Plugins: given an OpenAPI spec, we generate SDKs and an MCP server that exposes structured API context to AI coding assistants.<p>This gives tools like Cursor access to comprehensive, up-to-date API context (including SDK documentation and API integration patterns), instead of relying on outdated training data or code scraped from GitHub.<p>We&#x27;ve just launched a pilot with PayPal, it&#x27;s live on the PayPal Developer Portal <a href=\"https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F;how-to-get-started?ide=claudeCode&amp;isContextPlugin=true\" rel=\"nofollow\">https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F;...</a>.<p>In our benchmarks for the PayPal API, Cursor generated integration code 2x faster with 65% lower token usage compared to baseline Cursor without the plugin.<p>The problem we kept seeing was AI coding assistants generating incorrect API integration code. We asked Cursor to integrate the PayPal API into an e-commerce application across multiple runs:<p>- 13% of runs pulled in a deprecated SDK.<p>- 87% generated HTTP calls based on deprecated documentation.<p>API providers maintain API and SDK docs, but AI assistants don’t always use them. They use a combination of web search, training data and hallucinations to write API integration code.<p>As a result, developers end up debugging and rewriting AI-generated code.<p>We&#x27;ve been generating SDKs from API specs for 10+ years at APIMatic. When AI coding assistants started generating the exact kind of broken integration code we&#x27;d spent a decade fixing, we asked: what if we could take our code generation pipeline and add AI context generation to it?<p>MCP gave us the transport layer. Our API spec parsing and SDK generation engine gave us the context. The combination meant we could deliver deterministic API context, derived from the canonical spec, directly into the developer&#x27;s IDE.<p>Here&#x27;s how it works:<p>1. An API provider uploads their OpenAPI spec to APIMatic.<p>2. We generate and publish high quality SDKs in multiple languages.<p>3. We generate an MCP server containing tools and prompts that expose language-specific SDK context, optimized for LLMs.<p>4. Developers wanting to integrate with the API install the MCP server in Cursor, Claude Code, or GitHub Copilot.<p>When a developer asks to integrate auth, the coding assistant queries the MCP server, retrieves the required context (auth flows, integration patterns, latest SDK version, SDK interfaces etc.), and generates code using the official SDK.<p>Getting started:<p>- We&#x27;ve published Context Plugins for ten APIs. The URL in this post takes you to our public showcase, which is the quickest way to try them out without signing up.<p>- If you want to generate Context Plugins from your own API, you can sign up for a free trial on the APIMatic website (2-week all-access trial, no credit card required).<p>Feedback:<p>We&#x27;d love for you to try out Context Plugins and give us your feedback and suggestions. \nTwo questions for the HN community:<p>- What&#x27;s the worst AI-generated API integration bug you&#x27;ve encountered? We&#x27;re collecting failure patterns to improve our context coverage.<p>- What context do you think coding assistants need to generate accurate API integration code, in addition to API or SDK contracts?",
           "title": "Show HN: Context Plugins – API context for AI coding assistants",
-          "updated_at": "2026-03-26T18:03:51Z",
+          "updated_at": "2026-03-27T10:29:37Z",
           "url": "https://www.apimatic.io/product/context-plugins"
         },
         {
@@ -2214,7 +2214,7 @@
           "story_id": 47526813,
           "story_text": "Hey HN, we&#x27;re Jon and Kristiane, and we&#x27;re building Orloj (<a href=\"https:&#x2F;&#x2F;orloj.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;orloj.dev</a>), an open-source orchestration runtime for multi-agent AI systems. You define agents, tools, policies, and workflows in declarative YAML manifests, and Orloj handles scheduling, execution, governance, and reliability.<p>Over the past year we tried to use many different platforms&#x2F;frameworks to build out agent systems and while building we hit some sort of problem with all of them, so we decided to have a go at it. Jon has worked with kubernettes and terraform for years and always liked the declarative nature so took patterns and concepts from both to build out Orloj.<p>Orloj treats agents the way infrastructure-as-code treats cloud resources. You write a manifest that declares an agent&#x27;s model, tools, permissions, and execution limits. You compose agents into directed graphs (pipelines, hierarchies, or swarm loops).<p>Governance has been overlooked so we made resource policies (AgentPolicy, AgentRole, and ToolPermission) that are evaluated inline during execution, before every agent turn and tool call. Instead of prompt instructions that the model might ignore, these policies are a runtime gate. Unauthorized actions fail closed with structured errors and full audit trails. You can set token budgets per run, whitelist models, block specific tools, and scope policies to individual agent systems.<p>For reliability, we built lease-based task ownership (so crashed workers don&#x27;t leave orphan tasks), which allows you to run workers on different machines with whatever compute that’s needed. It helps when we need a GPU for certain tasks (like we did). The scheduler also supports cron triggers and webhook-driven task creation.<p>The architecture is a server&#x2F;worker split like kubernettes. orlojd hosts the API, resource store (in-memory for dev, Postgres for production), and task scheduler. orlojworker instances claim and execute tasks, route model requests through a gateway (OpenAI, Anthropic, Ollama, etc.), and run tools in configurable isolation (direct, sandboxed, container, or WASM).<p>We work with a lot of MCP servers so wanted to make MCP integration as easy as possible. You register an MCP server (stdio or HTTP), Orloj auto-discovers its tools, and they become first-class resources with governance applied. So you can connect something like the GitHub MCP server and still have policy enforcement over what agents are allowed to do with it.<p>It comes shipped with a built in UI to manage all your workflows and topology to see everything working in real time.\nThere are a few examples and starter templates in the repo to start playing around with to get a feel for what’s possible.<p>More info in the docs: <a href=\"https:&#x2F;&#x2F;docs.orloj.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.orloj.dev</a><p>We&#x27;re a small team and this is v0.1.0, so there&#x27;s a lot still on the roadmap, but the full runtime is open source today and we&#x27;d love feedback on what we&#x27;ve built so far. What would you use this for? What&#x27;s missing?",
           "title": "Show HN: Orloj – agent infrastructure as code (YAML and GitOps)",
-          "updated_at": "2026-03-27T02:45:21Z",
+          "updated_at": "2026-03-27T09:07:52Z",
           "url": "https://github.com/OrlojHQ/orloj"
         },
         {

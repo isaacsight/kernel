@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-27T04:31:17.310Z",
+  "timestamp": "2026-03-27T10:46:18.491Z",
   "count": 30,
   "opportunities": [
     {
@@ -18,8 +18,8 @@
     },
     {
       "source": "hn-comment",
-      "title": "Show HN: An open-source safety net for home hemodialysis",
-      "url": "https://news.ycombinator.com/item?id=47460486",
+      "title": "Show HN: TopMail – LaunchFest Winner, $20/Mo Unlimited Email, Coding Agents API",
+      "url": "https://news.ycombinator.com/item?id=47505175",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "We rewrote JSONata with AI in a day, saved $500k/year",
+      "url": "https://news.ycombinator.com/item?id=47539803",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "AI users whose lives were wrecked by delusion",
       "url": "https://news.ycombinator.com/item?id=47536457",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -80,30 +87,23 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "ARC-AGI-3",
-      "url": "https://news.ycombinator.com/item?id=47524661",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
       "source": "github-issue",
-      "title": "feat: enable `# fmt: off` recognized by snakefmt",
-      "url": "https://github.com/snakemake/snakefmt/pull/280",
+      "title": "[Auto-QA] Copilot assignments stalled — review config",
+      "url": "https://github.com/kubestellar/console/issues/3688",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Cursor integration guide",
-      "url": "https://github.com/amaar-mc/wit/issues/5",
+      "title": "[Auto-QA] Components missing test coverage",
+      "url": "https://github.com/kubestellar/console/issues/3687",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "MCP server wrapper for native tool integration",
-      "url": "https://github.com/amaar-mc/wit/issues/3",
+      "title": "[Auto-QA] Import patterns preventing tree-shaking",
+      "url": "https://github.com/kubestellar/console/issues/3686",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,24 +130,31 @@
     },
     {
       "source": "github-issue",
-      "title": "[agento] feat: skeptic Phase 2 - Codex + fail-closed + worker-signals-completion reaction (bd-skp2)",
-      "url": "https://github.com/jleechanorg/agent-orchestrator/pull/223",
+      "title": "fix(matrix): pass originalFilename to saveMediaBuffer",
+      "url": "https://github.com/openclaw/openclaw/pull/55725",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(agents): ignore mixed subagent tool-call replies",
-      "url": "https://github.com/openclaw/openclaw/pull/55510",
+      "title": "feat: add Feishu PR notifications",
+      "url": "https://github.com/nexu-io/nexu/pull/625",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Consolidate plugins & skills into main repo + build Codex plugin",
-      "url": "https://github.com/basicmachines-co/basic-memory/issues/699",
+      "title": "fix(matrix): pass originalFilename to saveMediaBuffer and expose path via MEDIA tag",
+      "url": "https://github.com/openclaw/openclaw/pull/55692",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "Long-harness agentic programming",
+      "url": "https://reddit.com/r/programming/comments/1s4ygvi/longharness_agentic_programming/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-programming",
@@ -160,13 +167,6 @@
       "source": "reddit-programming",
       "title": "Beyond the Vibes: A Rigorous Guide to AI Coding Assistants and Agents",
       "url": "https://reddit.com/r/programming/comments/1ritjkj/beyond_the_vibes_a_rigorous_guide_to_ai_coding/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "OSS Maintainers Can Inject Their Standards Into Contributors' AI Tools",
-      "url": "https://reddit.com/r/programming/comments/1rf6w7s/oss_maintainers_can_inject_their_standards_into/",
       "why": "Discussion in r/programming about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "CodexLib — compressed knowledge packs any AI can ingest instantly (100+ packs, 50 domains, REST API)",
-      "url": "https://reddit.com/r/artificial/comments/1s4phly/codexlib_compressed_knowledge_packs_any_ai_can/",
+      "title": "Abacus.Ai Claw LLM consumes an incredible amount of credit without any usage :(",
+      "url": "https://reddit.com/r/artificial/comments/1s4zgag/abacusai_claw_llm_consumes_an_incredible_amount/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "Reducing AI agent token consumption by 90% by fixing the retrieval layer",
-      "url": "https://reddit.com/r/artificial/comments/1s4dr8y/reducing_ai_agent_token_consumption_by_90_by/",
+      "title": "How to see through the opaqueness of pricing of tokens?",
+      "url": "https://reddit.com/r/artificial/comments/1s4z6pf/how_to_see_through_the_opaqueness_of_pricing_of/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "do you think AI can replace human tutors in language learning?",
-      "url": "https://reddit.com/r/artificial/comments/1s4by8l/do_you_think_ai_can_replace_human_tutors_in/",
+      "title": "AI agent accelerates catalyst discovery for sustainable fuel development",
+      "url": "https://reddit.com/r/artificial/comments/1s4yo21/ai_agent_accelerates_catalyst_discovery_for/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
