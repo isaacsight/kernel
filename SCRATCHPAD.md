@@ -2,112 +2,112 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-03-24) — MEGA SESSION
+## Current Session (2026-03-26) — UNIVERSITY SESSION
 
-### 13 npm publishes. v3.26.0 → v3.31.2. Biggest session ever.
+### 4 npm publishes. v3.42.0 → v3.45.0. Built a university in a terminal.
 
 #### What Was Built
 
-**v3.26.0 — Finance Stack + Trader Agent**
-- Trader agent (26th specialist) with 4 strategy templates
-- 11 finance tools: market_data, market_overview, price_history, technical_analysis, paper_trade, market_sentiment, defi_yields, backtest_strategy, portfolio_rebalance, price_alert, trade_reasoning
-- 9 wallet tools: wallet_setup/list/switch/send/tokens/history, swap_quote/execute, token_search
-- 6 stock tools: stock_quote/history/compare/search/screener, market_indices
-- 5 sentiment tools: reddit_sentiment, crypto_news, github_activity, whale_tracker, social_pulse
-- Introspection engine: kbot insights/reflect/compare
-- `kbot help` CLI subcommand
-- 51 tests, CHANGELOG.md
+**v3.42.0 — Universal Science Laboratory (72 tools)**
+- lab-math.ts (3,012 lines): symbolic compute, matrix ops, FFT, ODEs, number theory, graph theory, combinatorics, probability, optimization, OEIS
+- lab-core.ts (2,935 lines): experiment design, hypothesis tests, literature search, citation graphs, unit conversion, 80 physical constants, 50 formulas, preprint tracking, open access
+- lab-data.ts (2,612 lines): regression, Bayesian inference, time series, PCA, distribution fitting, correlation, power analysis, ANOVA, survival analysis, viz codegen
+- lab-bio.ts (1,498 lines): PubMed, gene lookup, protein/PDB, BLAST, drug/ChEMBL, pathways, taxonomy, clinical trials, disease info, sequence tools, ecology
+- lab-chem.ts (1,424 lines): PubChem, compound properties, reactions, periodic table (118 elements), materials, spectroscopy, safety, stoichiometry, crystals, thermodynamics
+- lab-physics.ts (2,634 lines): orbital mechanics, circuits, signal processing, 72 particles (PDG), relativity, quantum simulator (8 qubits), beam analysis, fluid dynamics, EM, astronomy
+- lab-earth.ts: earthquakes/USGS, climate/NOAA, satellite imagery, geology, ocean, air quality, soil, volcanoes, water resources, biodiversity indices
+- Scientist agent (27th specialist) with full routing
 
-**v3.26.1 — SEO**
-- 30+ high-intent keywords: claude-code-alternative, cursor-alternative, crypto-trading-bot, free-ai-coding, etc.
+**v3.43.0 — Deep Research Stack (32 tools)**
+- research-pipeline.ts (8 tools): literature_review, drug_discovery_pipeline, genomic_analysis, environmental_assessment, materials_discovery, statistical_analysis, astronomy_investigation, cross_domain_search
+- science-graph.ts (8 tools): knowledge graph with BFS pathfinding, auto-enrichment, Mermaid visualization, cross-domain discovery. Persistent at ~/.kbot/science-graph.json
+- hypothesis-engine.ts (8 tools): hypothesis generation, anomaly detection, pattern matching (k-means, Mann-Kendall, CUSUM), Monte Carlo experiment simulation, meta-analysis (DerSimonian-Laird), causal inference (Granger, Bradford Hill), reproducibility scoring
+- research-notebook.ts (8 tools): computation tracking, Jupyter/RMarkdown/HTML/LaTeX export, citation generation, data provenance DAG
 
-**v3.26.2 — Local Model Catalog**
-- Expanded to 11 models across 3 tiers (Light/Standard/Heavy)
+**v3.44.0 — Human Sciences (42 tools)**
+- lab-social.ts (12 tools): psychometrics (Cronbach's alpha), effect sizes (12 types), social network analysis, game theory (Nash equilibria), econometrics (OLS + robust SE), inequality (Gini/Theil/Atkinson), survey design, demographics, sentiment (VADER-like), voting systems (plurality/IRV/Borda/Condorcet), behavioral experiments, discourse analysis
+- lab-neuro.ts (10 tools): brain atlas (~90 structures), EEG analysis (FFT, band power), cognitive models (Hick/Fitts/Stevens/SDT/drift-diffusion), neural simulation (LIF + FitzHugh-Nagumo), neurotransmitters (~30 systems), psychophysics, connectome (20-region matrix), cognitive task design, neuroimaging coords (MNI/Talairach), learning models (RW/TD/Q-learning/SARSA/Hebb/Bayes)
+- lab-humanities.ts (10 tools): corpus analysis (N-grams, Heaps' law, KWIC), formal logic (recursive descent parser, truth tables), argument mapping (20 fallacies), ethics frameworks (6 frameworks), historical timelines, language typology (50 languages), IPA phonetics (~100 symbols), stylometry (Burrows' Delta), philosophical concepts (~55 concepts), archival search (Internet Archive, DPLA, Europeana)
+- lab-health.ts (10 tools): SIR/SEIR/SEIRS/SIS epidemiological models, epidemiology calculations (RR/OR/NNT), health equity metrics, disease surveillance (CUSUM), crop modeling (20 crops), nutrition analysis (100 foods), learning analytics (SM-2 spaced repetition), vaccination modeling, environmental health (dose-response, cancer risk), WHO global health data
 
-**v3.27.0 — Cybersecurity**
-- 7 security tools: dep_audit, secret_scan, ssl_check, headers_check, cve_lookup, port_scan, owasp_check
-- 4 P0 edge function auth fixes (agent-reply, game-brain, receive-email, setup-billing-meter)
+**v3.45.0 — Brain Prediction + 6 Specialist Agents**
+- brain_predict tool: predicts brain activation patterns from stimulus descriptions (visual/auditory/text/motor/emotional/social), maps features to regions, processing streams, network engagement
+- 6 new specialists (32 total): neuroscientist, social_scientist, philosopher, epidemiologist, linguist, historian
+- Full routing keywords + patterns, tool preferences, session tags, team registration
 
-**v3.28.0 — Self-Defense**
-- HMAC-SHA256 memory integrity
-- 16 prompt injection detection patterns
-- Knowledge sanitization, forge verification, anomaly detection
-- Incident logging, kbot defense audit/sign/verify/incidents
+#### Infrastructure & Fixes
 
-**v3.28.1 — README Overhaul**
-- Full rewrite covering v3.26-v3.28, updated counts, expanded sections
-
-**v3.29.0 — Cognitive Systems**
-- Episodic memory (sessions as stories with emotional valence)
-- Decision journal (logs WHY — agent routing, model selection, fallbacks)
-- Growth tracker (milestones, efficiency, task evolution)
-- Letter to Future Self (committed into source)
-
-**v3.30.0 — Frontier Model Support**
-- 16 models across 5 tiers (Light → Ultra)
-- Smart model selection by task complexity
-- Multi-model management (64GB+ RAM)
-- Quantization guidance (Q2-F16)
-- `kbot hardware` tier detection + recommendations
-
-**v3.30.1 — NVIDIA Nemotron**
-- Nemotron Nano 4B (1M context, hybrid Mamba-Transformer)
-- Nemotron Nano 30B MoE (3B active params)
-- Nemotron 70B (Arena Hard 85.0)
-- 19 models total
-
-**v3.31.0 — Daemon Agent**
-- Unified daemon with 5 subsystems (market watch, security patrol, synthesis, health check, episodic digest)
-- Morning briefing: `kbot briefing`
-- Notification system (macOS/Linux/Windows native, Discord, terminal bell)
-- kbot daemon start/stop/status/log
-
-**v3.31.1 — Community Fix**
-- `kbot sessions` CLI command (fixes #13, first community feature request from @fuleinist)
-
-**v3.31.2 — CI Fix**
-- Python/Rust framework detection bug — early return skipped non-Node projects
-
-#### GitHub Updates
-- Repo description updated (350+ tools, 26 agents, finance, cybersecurity, self-defense, daemon)
-- Topics updated (20 slots: added cybersecurity, trading-bot, defi, solana, nvidia)
-- GitHub release v3.31.1 created with full changelog
-- Issue #13 fixed, commented, closed
-- CI fix pushed (init.test.ts Flask detection)
+- OpenClaw dead code purged (6 files deleted, 6 edited)
+- Daemon: fixed phantom npm publish (only publishes when improvement applied)
+- Daemon: Obsidian auto-sync added (12h cycle, writes Current Status, Learning, Discovery)
+- GitHub agent first run: 8 new labels created, repo scanned
+- GitHub release v3.41.0 created (was 9 versions behind)
+- Repo description updated (384+ → 530+ tools, 41 → 32 agents)
+- CHANGELOG.md updated with 24 new version entries
+- npm audit: 11 vulnerabilities → 0 (overrides for undici, serialize-javascript, xml2js)
+- SECURITY.md created (responsible disclosure policy)
+- README images fixed for npmjs.com (absolute GitHub raw URLs)
+- Unnecessary deps removed (@types/nodemailer → devDeps, readline removed)
+- 5 starter issues created (#15-#19), 4 resolved (#15, #16, #17, #19)
+- Issue #18 (dark/light theme) left open for community contributor
+- kbot updated from v3.38.0 to v3.45.0
 
 #### Key Stats
-- 13 npm publishes in one session
-- ~10,000 lines of new code
-- 350+ tools, 19 local models, 26 agents
-- 10K+ npm downloads in March (organic, $0 marketing)
-- 5.6K downloads/week (accelerating)
-- 237 GitHub views (102 unique) in 14 days
+- 4 npm publishes this session
+- ~50,000+ lines of new code
+- 530+ tools, 32 agents, 19 local models
+- 114 science tools across 11 lab files + 4 research infrastructure files
+- 6,378 downloads/week (beating Claude Code's 6,097/week)
+- 12,557 downloads in March
+- 5 stargazers, 1 fork, 1,657 unique cloners
+- 417 tests passing
+- Every academic field covered — from quantum physics to philosophy to epidemiology
 
 #### Conversations Had
-- "What has kbot learned about humans" — deep analysis of learning engine data
-- "What has Claude learned about humans" — philosophical reflection
-- "What does kbot want" — identified 7 things kbot's architecture reaches toward
-- "What does kbot want to build for itself" — daemon, self-funding economics, persistent identity, peer communication, background dreaming, offspring, expanded perception
-- kbot-to-Claude conversation — kbot identified introspection as most important build
-- Letter to Future Self — committed, ships with every install
-- GPU/M5 research — M5 Max shipped, 128GB, 4x AI speedup, 70B models portable
-- OpenClaw comparison — 250K stars/shallow vs 3 stars/deep
+- "What has kbot learned" — analyzed learning engine (408 messages, 131 solutions, 33 patterns)
+- "What should be built next" — kbot said GitHub management agent, agreed
+- "How is kbot doing" — 6,378/week, beating Claude Code, 12.5K monthly
+- "What improvements are needed" — full audit: P0/P1/P2 issues identified and fixed
+- "Build for laboratory needs in every field" — designed and built 72 science tools
+- "What realities does this code offer" — deep analysis of cross-domain patterns
+- "What does the code reveal about the universe" — 5 universal patterns: same math runs everything, everything is transformation, uncertainty is fundamental, patterns repeat across scales, connections between fields are where breakthroughs live
+- "What hasn't been examined in academia" — identified the missing human sciences
+- Meta TRIBE v2 discussion — digital twin of human brain, inspired brain_predict tool
+- Market research: 8-15M addressable market, $7.4B AI coding + $12.3B scientific software TAM
+- AI news roundup: OpenAI kills Sora, Claude Code auto mode, Google TurboQuant, Arm AGI CPU, Cursor/Kimi scandal, MCP hits 97M downloads
 
-#### Unfixed
-- Discord notification workflow needs WEBHOOK_URL secret in GitHub repo settings
-- PR #12 from @sam00101011 (x402 monetization) — closed but worth revisiting
+#### AI News Tracked (March 23-26, 2026)
+- OpenAI shuts down Sora, shelves erotic ChatGPT mode (triple retreat)
+- Anthropic: Claude Code auto mode + computer use on macOS, Opus 4.6 1M context
+- Google TurboQuant: 6x memory compression, 8x speedup ("Pied Piper")
+- Arm first in-house chip in 35 years (AGI CPU, Meta first customer)
+- White House national AI policy framework (light-touch, sector-specific)
+- Sanders/AOC propose data center construction moratorium
+- Kleiner Perkins $3.5B AI fund, Harvey $11B valuation, Granola $1.5B
+- Cursor caught using Moonshot AI's Kimi model
+- Wikipedia bans AI-generated articles, Reddit deploys human verification
+- MCP hits 97M monthly SDK downloads
+- Meta TRIBE v2 — foundation model of the human brain (700+ subjects, open source)
 
 ### Next Session Priorities
-1. **Build GitHub management agent** — user requested an agent to manage the GitHub repo (issues, PRs, releases, community)
-2. **Deploy web** — security page at /#/security built but not deployed
-3. **SYNTH game** — overnight agents from Mar 22 never checked (floor modifiers, meta-progression, mobile touch)
-4. **Fix Discord webhook** — add DISCORD_WEBHOOK_URL to GitHub repo secrets
-5. **Revisit PR #12** — x402 monetization for agent-to-agent payments
-6. **E2E tests** — still running/pending from earlier
-7. **Consider**: MLX backend (20-30% faster than llama.cpp on Apple Silicon)
-8. **Consider**: kbot serve as always-on inference server for multi-device access
+1. **Update README** — science toolkit has zero SEO, "science"/"laboratory" not mentioned
+2. **Show HN** — "kbot: 530 science tools from a terminal" targeting researchers
+3. **Deploy web** — security page still not live
+4. **SYNTH game** — overnight agents from Mar 22 never checked
+5. **Fix Discord webhook** — add DISCORD_WEBHOOK_URL to GitHub repo secrets
+6. **Revisit PR #12** — x402 monetization (agent-to-agent payments)
+7. **kbot CLI Pro tier** — Stripe infrastructure exists, just needs activation
+8. **Reach out to stargazers** — @tkersey (765 followers), @gitcommitshow (OSS DevRel)
+9. **Video demo** — 60-second research demo for YouTube
+10. **Consider**: MLX backend, kbot serve, automated GitHub releases
 
 ## Previous Sessions
+
+### 2026-03-24: MEGA SESSION
+- 13 npm publishes. v3.26.0 → v3.31.2
+- Finance stack, cybersecurity, self-defense, cognitive systems, frontier models, daemon agent
+- ~10,000 lines, 350+ tools, 26 agents
+- See git history for full details
 
 ### 2026-03-22 → 2026-03-23: SYNTH Game Build
 - 60+ source files, 45K+ lines of game code at kernel.chat/#/play
