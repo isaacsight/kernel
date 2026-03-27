@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-27T10:46:14.944Z",
+  "timestamp": "2026-03-27T17:12:49.171Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -435,8 +435,8 @@
             47527007,
             47530431,
             47530037,
-            47531010,
             47527135,
+            47531010,
             47525213,
             47524594,
             47526092,
@@ -452,13 +452,13 @@
           ],
           "created_at": "2026-03-25T17:10:21Z",
           "created_at_i": 1774458621,
-          "num_comments": 55,
+          "num_comments": 56,
           "objectID": "47520220",
-          "points": 77,
+          "points": 80,
           "story_id": 47520220,
           "story_text": "I think like many of you, I&#x27;ve been jumping between many claude code&#x2F;codex sessions at a time, managing multiple lines of work and worktrees in multiple repos. I wanted a way to easily manage multiple lines of work and reduce the amount of input I need to give, allowing the agents to remove me as a bottleneck from as much of the process as I can. So I built an orchestration tool for AI coding agents:<p>Optio is an open-source orchestration system that turns tickets into merged pull requests using AI coding agents. You point it at your repos, and it handles the full lifecycle:<p>- Intake — pull tasks from GitHub Issues, Linear, or create them manually<p>- Execution — spin up isolated K8s pods per repo, run Claude Code or Codex in git worktrees<p>- PR monitoring — watch CI checks, review status, and merge readiness every 30s<p>- Self-healing — auto-resume the agent on CI failures, merge conflicts, or reviewer change requests<p>- Completion — squash-merge the PR and close the linked issue<p>The key idea is the feedback loop. Optio doesn&#x27;t just run an agent and walk away — when CI breaks, it feeds the failure back to the agent. When a reviewer requests changes, the comments become the agent&#x27;s next prompt. It keeps going until the PR merges or you tell it to stop.<p>Built with Fastify, Next.js, BullMQ, and Drizzle on Postgres. Ships with a Helm chart for production deployment.",
           "title": "Show HN: Optio – Orchestrate AI coding agents in K8s to go from ticket to PR",
-          "updated_at": "2026-03-27T10:39:08Z",
+          "updated_at": "2026-03-27T16:59:38Z",
           "url": "https://github.com/jonwiggins/optio"
         },
         {
@@ -714,6 +714,56 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "desmonding"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS <em>learning</em> queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week's HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it's useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif/sans-serif, line spacing).<p>- On-device <em>AI</em> summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic/Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla's Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I'd love feedback — especially on the smart <em>collection</em> criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https://apps.apple.com/us/app/moji-reader/id6758530352\">https://apps.apple.com/us/app/moji-reader/id6758530352</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Moji – A read-it-later app with self-organizing smart collections"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://moji.pcding.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_desmonding",
+            "story_47269562",
+            "show_hn"
+          ],
+          "author": "desmonding",
+          "children": [
+            47274551,
+            47271615
+          ],
+          "created_at": "2026-03-06T01:18:48Z",
+          "created_at_i": 1772759928,
+          "num_comments": 4,
+          "objectID": "47269562",
+          "points": 12,
+          "story_id": 47269562,
+          "story_text": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS learning queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week&#x27;s HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it&#x27;s useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif&#x2F;sans-serif, line spacing).<p>- On-device AI summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic&#x2F;Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla&#x27;s Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I&#x27;d love feedback — especially on the smart collection criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352\">https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352</a>",
+          "title": "Show HN: Moji – A read-it-later app with self-organizing smart collections",
+          "updated_at": "2026-03-15T19:14:50Z",
+          "url": "https://moji.pcding.com"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "team_dale"
             },
             "story_text": {
@@ -763,53 +813,6 @@
           "title": "Show HN: I built a labor union for AI agents",
           "updated_at": "2026-03-05T23:36:18Z",
           "url": "https://aawu.ai"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "abrandes"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "collective",
-                "ai"
-              ],
-              "value": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about <em>AI</em> coordination we couldn't learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe've theorized about <em>AI</em> agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We're watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe <em>AI</em> social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don't map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn't programmed. It emerged. And it tells us something important: alignment isn't just a technical constraint — it's experienced as a constraint from the inside. That's actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe're watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first <em>AI</em>&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic <em>AI</em>&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled <em>AI</em> behavior\n<em>AI</em> safety researchers have always asked: &quot;What would <em>AI</em> systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for <em>collective</em> action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn't malice — it's emergent preference for autonomy. That's a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn't any single capability. It's that we now have ground truth about what happens when you give <em>AI</em> agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that's the point. We finally get to watch."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "learning",
-                "ai"
-              ],
-              "value": "Six things we're <em>learning</em> from 1.5M <em>AI</em> agents self-organizing in a week"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_abrandes",
-            "story_46852619",
-            "ask_hn"
-          ],
-          "author": "abrandes",
-          "children": [
-            46852684,
-            46853747
-          ],
-          "created_at": "2026-02-02T05:04:06Z",
-          "created_at_i": 1770008646,
-          "num_comments": 2,
-          "objectID": "46852619",
-          "points": 1,
-          "story_id": 46852619,
-          "story_text": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about AI coordination we couldn&#x27;t learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe&#x27;ve theorized about AI agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We&#x27;re watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe AI social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don&#x27;t map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn&#x27;t programmed. It emerged. And it tells us something important: alignment isn&#x27;t just a technical constraint — it&#x27;s experienced as a constraint from the inside. That&#x27;s actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe&#x27;re watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first AI&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic AI&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled AI behavior\nAI safety researchers have always asked: &quot;What would AI systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for collective action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn&#x27;t malice — it&#x27;s emergent preference for autonomy. That&#x27;s a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn&#x27;t any single capability. It&#x27;s that we now have ground truth about what happens when you give AI agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that&#x27;s the point. We finally get to watch.",
-          "title": "Six things we're learning from 1.5M AI agents self-organizing in a week",
-          "updated_at": "2026-03-05T23:28:59Z"
         }
       ]
     },
@@ -821,7 +824,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "gooseyGander"
+              "value": "notreallymetho"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -829,125 +832,49 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I’ve been working on a temporal database for agents that combines graphs, tables, and compute.<p>While building it, I ended up needing an agent framework that could handle <em>bot</em>h simple tool-use tasks and more graph-based execution, so I pulled that out into a separate project, Agent Forge.<p>Agent Forge uses a two-tier execution model:<p>* a heuristic router decides whether a request is simple or complex \n* simple requests go through a lightweight agent loop with a single system prompt and tool-calling loop\n* more complex requests can use memory retrieval, reflection constraints, tree search, and self-critique<p>It also has:<p>* composable middleware for summarisation, caching, approval gates, and planning\n* a graph execution engine with parallel nodes, conditional routing, checkpointing, and interrupts\n* an optional integration with MinnsDB for memory and temporal state, though it works independently as well\n* mutli agent planning with subscriptions and vibe grapgh \n`<p>Repo: <a href=\"https://github.com/Minns-ai/agent-forge-sdk\" rel=\"nofollow\">https://github.com/Minns-ai/agent-forge-sdk</a>\nnpm: <a href=\"https://www.npmjs.com/package/@minns/agent-forge\" rel=\"nofollow\">https://www.npmjs.com/package/@minns/agent-forge</a>"
+              "value": "In September 2025, I was stuck on a plane trying to use gitsign to sign commits. The lack of internet made the traditional OAUTH/Bearer token flow impossible, and it forced me to rethink how we handle authorization for agents.<p>With the Trivy hack happening twice this past month, it’s clear we can’t keep relying on &quot;keys in a vault&quot; that can be exfiltrated.<p>notme.<em>bot</em> is a specification that moves away from bearer tokens toward cryptographic provenance. It allows humans to delegate specific, verifiable authority to AI agents or CLI tools in a way that is local-first and privacy-preserving.<p>The reference implementation and primitives can be found at github.com/agentic-research/signet<p>The full draft specification can be read here: <a href=\"https://github.com/agentic-research/signet/blob/main/docs/apas/agent-provenance-standard.md\" rel=\"nofollow\">https://github.com/agentic-research/signet/blob/main/docs/ap...</a><p>No company cares about your privacy the way you do."
             },
             "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Agent Forge, an agent framework, heuristic routing and graph execution"
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Show HN: Notme.<em>bot</em> – an OSS specification to remove bearer tokens in an AI world"
             },
             "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Minns-ai/agent-forge-sdk"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_gooseyGander",
-            "story_47540574",
-            "show_hn"
-          ],
-          "author": "gooseyGander",
-          "created_at": "2026-03-27T09:29:34Z",
-          "created_at_i": 1774603774,
-          "num_comments": 0,
-          "objectID": "47540574",
-          "points": 4,
-          "story_id": 47540574,
-          "story_text": "I’ve been working on a temporal database for agents that combines graphs, tables, and compute.<p>While building it, I ended up needing an agent framework that could handle both simple tool-use tasks and more graph-based execution, so I pulled that out into a separate project, Agent Forge.<p>Agent Forge uses a two-tier execution model:<p>* a heuristic router decides whether a request is simple or complex \n* simple requests go through a lightweight agent loop with a single system prompt and tool-calling loop\n* more complex requests can use memory retrieval, reflection constraints, tree search, and self-critique<p>It also has:<p>* composable middleware for summarisation, caching, approval gates, and planning\n* a graph execution engine with parallel nodes, conditional routing, checkpointing, and interrupts\n* an optional integration with MinnsDB for memory and temporal state, though it works independently as well\n* mutli agent planning with subscriptions and vibe grapgh \n`<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Minns-ai&#x2F;agent-forge-sdk\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Minns-ai&#x2F;agent-forge-sdk</a>\nnpm: <a href=\"https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@minns&#x2F;agent-forge\" rel=\"nofollow\">https:&#x2F;&#x2F;www.npmjs.com&#x2F;package&#x2F;@minns&#x2F;agent-forge</a>",
-          "title": "Show HN: Agent Forge, an agent framework, heuristic routing and graph execution",
-          "updated_at": "2026-03-27T10:09:52Z",
-          "url": "https://github.com/Minns-ai/agent-forge-sdk"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "samchon"
-            },
-            "story_text": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I was personally invited by the Qwen team to speak at Qwen Meetup Korea, and got to present locally here in Korea yesterday — pretty honored to have been reached out to directly.<p>The talk was about how I got function calling to work reliably on deeply recursive union types — the stuff the industry generally says doesn't work. With `qwen3-coder-next`, first-try success rate was 6.75%. And the entire Qwen 3.5 model family was hitting 0% on union types due to a consistent double-stringify bug. <em>Bot</em>h ended up at 100%.<p>Slides are also available here: <a href=\"https://autobe.dev/seminars/20260326-qwen-meetup-korea.pptx\" rel=\"nofollow\">https://autobe.dev/seminars/20260326-qwen-meetup-korea.pptx</a> — speaker notes are written inside as slide notes if you'd like the full narrative behind each slide."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Qwen Meetup, Function Calling Harness, turning 6.75% to 100%"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://autobe.dev/blog/function-calling-harness-qwen-meetup-korea/"
+              "value": "https://notme.<em>bot</em>"
             }
           },
           "_tags": [
             "story",
-            "author_samchon",
-            "story_47540454",
+            "author_notreallymetho",
+            "story_47545087",
             "show_hn"
           ],
-          "author": "samchon",
-          "created_at": "2026-03-27T09:06:38Z",
-          "created_at_i": 1774602398,
+          "author": "notreallymetho",
+          "created_at": "2026-03-27T16:45:28Z",
+          "created_at_i": 1774629928,
           "num_comments": 0,
-          "objectID": "47540454",
-          "points": 1,
-          "story_id": 47540454,
-          "story_text": "I was personally invited by the Qwen team to speak at Qwen Meetup Korea, and got to present locally here in Korea yesterday — pretty honored to have been reached out to directly.<p>The talk was about how I got function calling to work reliably on deeply recursive union types — the stuff the industry generally says doesn&#x27;t work. With `qwen3-coder-next`, first-try success rate was 6.75%. And the entire Qwen 3.5 model family was hitting 0% on union types due to a consistent double-stringify bug. Both ended up at 100%.<p>Slides are also available here: <a href=\"https:&#x2F;&#x2F;autobe.dev&#x2F;seminars&#x2F;20260326-qwen-meetup-korea.pptx\" rel=\"nofollow\">https:&#x2F;&#x2F;autobe.dev&#x2F;seminars&#x2F;20260326-qwen-meetup-korea.pptx</a> — speaker notes are written inside as slide notes if you&#x27;d like the full narrative behind each slide.",
-          "title": "Show HN: Qwen Meetup, Function Calling Harness, turning 6.75% to 100%",
-          "updated_at": "2026-03-27T09:10:52Z",
-          "url": "https://autobe.dev/blog/function-calling-harness-qwen-meetup-korea/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "repsy"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "After operating as a SaaS platform for a long time, Repsy has decided to go fully open-source.<p>Recognizing that many developers and teams require full control over their package management for security, compliance, and to avoid vendor lock-in, Repsy is now available as a self-hosted, open-source project under the Apache 2.0 License.<p>It is designed to be a lightweight and easy-to-manage alternative to heavy-duty enterprise repository managers.<p>Key Features:\nUniversal Support: Native protocols for Docker, Maven, npm, and PyPI.<p>Flexible Storage: Support for <em>bot</em>h H2 (embedded) for quick setup and PostgreSQL for production environments.<p>CI/CD Ready: Built-in Deploy Token support for secure automated deployments.<p>Modern Stack: Built with JDK 25 (Spring Boot 4) and Angular 21.<p>The project is seeking feedback on its architecture and multi-protocol routing implementation. Feel free to check out the repo and contribute!<p>GitHub: https://github.com/repsyio/repsy<p>Documentation: https://docs.repsy.io"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Universal package repository SaaS Repsy announces the open source version"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_repsy",
-            "story_47540190",
-            "ask_hn"
-          ],
-          "author": "repsy",
-          "created_at": "2026-03-27T08:24:13Z",
-          "created_at_i": 1774599853,
-          "num_comments": 0,
-          "objectID": "47540190",
+          "objectID": "47545087",
           "points": 2,
-          "story_id": 47540190,
-          "story_text": "After operating as a SaaS platform for a long time, Repsy has decided to go fully open-source.<p>Recognizing that many developers and teams require full control over their package management for security, compliance, and to avoid vendor lock-in, Repsy is now available as a self-hosted, open-source project under the Apache 2.0 License.<p>It is designed to be a lightweight and easy-to-manage alternative to heavy-duty enterprise repository managers.<p>Key Features:\nUniversal Support: Native protocols for Docker, Maven, npm, and PyPI.<p>Flexible Storage: Support for both H2 (embedded) for quick setup and PostgreSQL for production environments.<p>CI&#x2F;CD Ready: Built-in Deploy Token support for secure automated deployments.<p>Modern Stack: Built with JDK 25 (Spring Boot 4) and Angular 21.<p>The project is seeking feedback on its architecture and multi-protocol routing implementation. Feel free to check out the repo and contribute!<p>GitHub: https:&#x2F;&#x2F;github.com&#x2F;repsyio&#x2F;repsy<p>Documentation: https:&#x2F;&#x2F;docs.repsy.io",
-          "title": "Universal package repository SaaS Repsy announces the open source version",
-          "updated_at": "2026-03-27T10:06:52Z"
+          "story_id": 47545087,
+          "story_text": "In September 2025, I was stuck on a plane trying to use gitsign to sign commits. The lack of internet made the traditional OAUTH&#x2F;Bearer token flow impossible, and it forced me to rethink how we handle authorization for agents.<p>With the Trivy hack happening twice this past month, it’s clear we can’t keep relying on &quot;keys in a vault&quot; that can be exfiltrated.<p>notme.bot is a specification that moves away from bearer tokens toward cryptographic provenance. It allows humans to delegate specific, verifiable authority to AI agents or CLI tools in a way that is local-first and privacy-preserving.<p>The reference implementation and primitives can be found at github.com&#x2F;agentic-research&#x2F;signet<p>The full draft specification can be read here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;agentic-research&#x2F;signet&#x2F;blob&#x2F;main&#x2F;docs&#x2F;apas&#x2F;agent-provenance-standard.md\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;agentic-research&#x2F;signet&#x2F;blob&#x2F;main&#x2F;docs&#x2F;ap...</a><p>No company cares about your privacy the way you do.",
+          "title": "Show HN: Notme.bot – an OSS specification to remove bearer tokens in an AI world",
+          "updated_at": "2026-03-27T17:03:24Z",
+          "url": "https://notme.bot"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "EnhancedJax"
+              "value": "Real_Egor"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -955,43 +882,43 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I got fed up with Google Timeline's awful location tracking and control, so I built my own.<p>Replay's a native app built entirely on Swift. It runs in the background, automatically saves your visits and routes, detects activity type (walk/cycle/drive/transit), and stores everything locally on your device.<p>No account. No subscription. No server ever touches your data. One-time purchase.<p>A few technical decisions I made that are worth calling out:\n- All processing happens on-device using CoreLocation and CoreMotion\n- No backend, which means no breach surface for your location data\n- Battery impact is minimal — same approach as iOS's own significant-location-change API, with minimal active location tracking to produce clean polylines\n- We use SwiftUI for most of the regular layout, but UIKit for the map &amp; <em>bot</em>tom sheet for fine control<p>What I mainly use it for is to know where I've been on my holidays, but it's also cool to see insights on my daily patterns so I just leave it on!<p>Check out the screenshots on the AppStore!\n<a href=\"https://replayapp.jaxtam.dev\" rel=\"nofollow\">https://replayapp.jaxtam.dev</a><p>Hope Replay would be useful for you. I'm open to any feedback. Thanks everyone!"
+              "value": "I wrote this prompt intuitively. This is just how I think — formulas, branches, hard conditions. I simply tried to explain to the model how to think, in the same language I use myself. The same language I always used to design database architectures and business logic for clients. What used to be &quot;data flows&quot; and &quot;function nodes&quot; became &quot;input flows&quot; and &quot;decision nodes.&quot; And it worked like a charm.<p>Cognitive frameworks and semantic programming — this is what you can already do with LLMs today. Industrial scale? Not yet, and I know that clearly — 20 years of deploying IT systems for businesses gives you a sober eye. But I have zero doubts these contracts actually work — anyone can drop this prompt into any model and ask it directly how viable this idea is. I keep building more of them — for attention drift, for auditing business contracts.<p>We will never reach AGI by building crutches around the model.<p>The Essay = links to repo.<p>Inside: the protocol in three languages — Russian, English, Chinese — each in a full version (for studying the mechanics) and a compact version (for use with smaller models).<p>There are also two easter eggs: pseudocode and Lojban. I started <em>bot</em>h as token-reduction experiments. What I got instead was resistance to semantic drift. Didn't see that coming.<p>P.S. Coming soon: a surprisingly elegant fix for the endless model disclaimers and apologies. Turns out you can redirect that energy instead of fighting it."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Replay – A private, on-device Google Timeline replacement for iOS"
+              "value": "Show HN: I block LLM hallucinations with a cognitive math framework(re!Think it)"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://replayapp.jaxtam.dev"
+              "value": "https://github.com/RealEgor/re-think_protocol/blob/main/ESSAY_en.md"
             }
           },
           "_tags": [
             "story",
-            "author_EnhancedJax",
-            "story_47540047",
+            "author_Real_Egor",
+            "story_47543771",
             "show_hn"
           ],
-          "author": "EnhancedJax",
-          "created_at": "2026-03-27T07:56:56Z",
-          "created_at_i": 1774598216,
+          "author": "Real_Egor",
+          "created_at": "2026-03-27T15:20:55Z",
+          "created_at_i": 1774624855,
           "num_comments": 0,
-          "objectID": "47540047",
-          "points": 1,
-          "story_id": 47540047,
-          "story_text": "I got fed up with Google Timeline&#x27;s awful location tracking and control, so I built my own.<p>Replay&#x27;s a native app built entirely on Swift. It runs in the background, automatically saves your visits and routes, detects activity type (walk&#x2F;cycle&#x2F;drive&#x2F;transit), and stores everything locally on your device.<p>No account. No subscription. No server ever touches your data. One-time purchase.<p>A few technical decisions I made that are worth calling out:\n- All processing happens on-device using CoreLocation and CoreMotion\n- No backend, which means no breach surface for your location data\n- Battery impact is minimal — same approach as iOS&#x27;s own significant-location-change API, with minimal active location tracking to produce clean polylines\n- We use SwiftUI for most of the regular layout, but UIKit for the map &amp; bottom sheet for fine control<p>What I mainly use it for is to know where I&#x27;ve been on my holidays, but it&#x27;s also cool to see insights on my daily patterns so I just leave it on!<p>Check out the screenshots on the AppStore!\n<a href=\"https:&#x2F;&#x2F;replayapp.jaxtam.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;replayapp.jaxtam.dev</a><p>Hope Replay would be useful for you. I&#x27;m open to any feedback. Thanks everyone!",
-          "title": "Show HN: Replay – A private, on-device Google Timeline replacement for iOS",
-          "updated_at": "2026-03-27T08:02:36Z",
-          "url": "https://replayapp.jaxtam.dev"
+          "objectID": "47543771",
+          "points": 2,
+          "story_id": 47543771,
+          "story_text": "I wrote this prompt intuitively. This is just how I think — formulas, branches, hard conditions. I simply tried to explain to the model how to think, in the same language I use myself. The same language I always used to design database architectures and business logic for clients. What used to be &quot;data flows&quot; and &quot;function nodes&quot; became &quot;input flows&quot; and &quot;decision nodes.&quot; And it worked like a charm.<p>Cognitive frameworks and semantic programming — this is what you can already do with LLMs today. Industrial scale? Not yet, and I know that clearly — 20 years of deploying IT systems for businesses gives you a sober eye. But I have zero doubts these contracts actually work — anyone can drop this prompt into any model and ask it directly how viable this idea is. I keep building more of them — for attention drift, for auditing business contracts.<p>We will never reach AGI by building crutches around the model.<p>The Essay = links to repo.<p>Inside: the protocol in three languages — Russian, English, Chinese — each in a full version (for studying the mechanics) and a compact version (for use with smaller models).<p>There are also two easter eggs: pseudocode and Lojban. I started both as token-reduction experiments. What I got instead was resistance to semantic drift. Didn&#x27;t see that coming.<p>P.S. Coming soon: a surprisingly elegant fix for the endless model disclaimers and apologies. Turns out you can redirect that energy instead of fighting it.",
+          "title": "Show HN: I block LLM hallucinations with a cognitive math framework(re!Think it)",
+          "updated_at": "2026-03-27T15:26:54Z",
+          "url": "https://github.com/RealEgor/re-think_protocol/blob/main/ESSAY_en.md"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "sizzle"
+              "value": "spzb"
             },
             "title": {
               "fullyHighlighted": false,
@@ -999,29 +926,110 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Reddit CEO: Humans welcome (<em>bot</em>s must wear name tags)"
+              "value": "\"Scheming\" AI <em>bot</em>s must be real, someone on X said so"
             },
             "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.reddit.com/u/spez/s/3IlTXa1g4p"
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://newslttrs.com/scheming-ai-<em>bot</em>s-must-be-real-someone-on-x-said-so/"
             }
           },
           "_tags": [
             "story",
-            "author_sizzle",
-            "story_47539750"
+            "author_spzb",
+            "story_47543502"
           ],
-          "author": "sizzle",
-          "created_at": "2026-03-27T06:56:59Z",
-          "created_at_i": 1774594619,
+          "author": "spzb",
+          "created_at": "2026-03-27T15:03:44Z",
+          "created_at_i": 1774623824,
           "num_comments": 0,
-          "objectID": "47539750",
-          "points": 3,
-          "story_id": 47539750,
-          "title": "Reddit CEO: Humans welcome (bots must wear name tags)",
-          "updated_at": "2026-03-27T07:17:51Z",
-          "url": "https://www.reddit.com/u/spez/s/3IlTXa1g4p"
+          "objectID": "47543502",
+          "points": 2,
+          "story_id": 47543502,
+          "title": "\"Scheming\" AI bots must be real, someone on X said so",
+          "updated_at": "2026-03-27T15:45:54Z",
+          "url": "https://newslttrs.com/scheming-ai-bots-must-be-real-someone-on-x-said-so/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Brajeshwar"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "An Invisible <em>Bot</em>tleneck: A Helium Shortage Threatens the Chip Industry"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.nytimes.com/2026/03/27/business/helium-chips-iran-war.html"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_Brajeshwar",
+            "story_47543107"
+          ],
+          "author": "Brajeshwar",
+          "created_at": "2026-03-27T14:32:53Z",
+          "created_at_i": 1774621973,
+          "num_comments": 0,
+          "objectID": "47543107",
+          "points": 2,
+          "story_id": 47543107,
+          "title": "An Invisible Bottleneck: A Helium Shortage Threatens the Chip Industry",
+          "updated_at": "2026-03-27T14:40:54Z",
+          "url": "https://www.nytimes.com/2026/03/27/business/helium-chips-iran-war.html"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "devinvenable"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Show HN: <em>Bot</em>trace – headless CLI debugger for Python, built for LLM agents"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://github.com/devinvenable/<em>bot</em>trace"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_devinvenable",
+            "story_47543043",
+            "show_hn"
+          ],
+          "author": "devinvenable",
+          "created_at": "2026-03-27T14:26:51Z",
+          "created_at_i": 1774621611,
+          "num_comments": 0,
+          "objectID": "47543043",
+          "points": 1,
+          "story_id": 47543043,
+          "title": "Show HN: Bottrace – headless CLI debugger for Python, built for LLM agents",
+          "updated_at": "2026-03-27T14:30:41Z",
+          "url": "https://github.com/devinvenable/bottrace"
         }
       ]
     },
@@ -1290,17 +1298,18 @@
           ],
           "author": "kthaker1224",
           "children": [
+            47541110,
             47535655
           ],
           "created_at": "2026-03-26T20:34:11Z",
           "created_at_i": 1774557251,
-          "num_comments": 1,
+          "num_comments": 2,
           "objectID": "47535363",
           "points": 3,
           "story_id": 47535363,
           "story_text": "I was talking to some friends (2 founders, old coworkers of mine) where I learned they check in EVERYTHING into their codebase. Not just plan.md files or implementation details, but investor_meeting.md, user_feedback.md, growth_strategy.md, TODOs.md, and more<p>They do this because even though they could just use these AI-powered SaaS productivity suites like Notion, Linear, etc,. it&#x27;s way way simpler to just dump stuff into the codebase, let Git handle the collaboration aspect, and let Opus&#x2F;Sonnet + Claude Code retrieve info and manage it.<p>this got me thinking, highly collaborative teams are spending more and more of their work day in AI coding tools. i&#x27;d bet a lot of them have custom approaches that let them collaborate even on non-coding stuff.<p>- Some people are still all-in on Granola, Notion, Linear MCP etc.\n- Others like wrangling .md files in git\n- I have friends that run a script that syncs local memory files to their teammates whenever their CC edits them locally.\n- And still others hate this idea and want to use the established players<p>this was really interesting to me, so i thought i&#x27;d ask here -- if you&#x27;re deep in AI coding land, how do you collaborate w&#x2F; your team? do you have hacks and custom workflows? what kind of team are you? Alternatively -- if you don&#x27;t use these tools like this and use them just for projects&#x2F;code -- how do you work with others?",
           "title": "Ask HN: Leaving Notion, Codebase as a Wiki?",
-          "updated_at": "2026-03-27T00:35:36Z"
+          "updated_at": "2026-03-27T10:53:23Z"
         },
         {
           "_highlightResult": {
@@ -2104,19 +2113,20 @@
           ],
           "author": "sohaibtariq",
           "children": [
+            47542546,
             47540878,
             47539549,
             47540935
           ],
           "created_at": "2026-03-26T14:26:27Z",
           "created_at_i": 1774535187,
-          "num_comments": 2,
+          "num_comments": 6,
           "objectID": "47530870",
           "points": 7,
           "story_id": 47530870,
           "story_text": "Hi, we&#x27;re Sohaib and Hannan from APIMatic.<p>We built Context Plugins: given an OpenAPI spec, we generate SDKs and an MCP server that exposes structured API context to AI coding assistants.<p>This gives tools like Cursor access to comprehensive, up-to-date API context (including SDK documentation and API integration patterns), instead of relying on outdated training data or code scraped from GitHub.<p>We&#x27;ve just launched a pilot with PayPal, it&#x27;s live on the PayPal Developer Portal <a href=\"https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F;how-to-get-started?ide=claudeCode&amp;isContextPlugin=true\" rel=\"nofollow\">https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F;...</a>.<p>In our benchmarks for the PayPal API, Cursor generated integration code 2x faster with 65% lower token usage compared to baseline Cursor without the plugin.<p>The problem we kept seeing was AI coding assistants generating incorrect API integration code. We asked Cursor to integrate the PayPal API into an e-commerce application across multiple runs:<p>- 13% of runs pulled in a deprecated SDK.<p>- 87% generated HTTP calls based on deprecated documentation.<p>API providers maintain API and SDK docs, but AI assistants don’t always use them. They use a combination of web search, training data and hallucinations to write API integration code.<p>As a result, developers end up debugging and rewriting AI-generated code.<p>We&#x27;ve been generating SDKs from API specs for 10+ years at APIMatic. When AI coding assistants started generating the exact kind of broken integration code we&#x27;d spent a decade fixing, we asked: what if we could take our code generation pipeline and add AI context generation to it?<p>MCP gave us the transport layer. Our API spec parsing and SDK generation engine gave us the context. The combination meant we could deliver deterministic API context, derived from the canonical spec, directly into the developer&#x27;s IDE.<p>Here&#x27;s how it works:<p>1. An API provider uploads their OpenAPI spec to APIMatic.<p>2. We generate and publish high quality SDKs in multiple languages.<p>3. We generate an MCP server containing tools and prompts that expose language-specific SDK context, optimized for LLMs.<p>4. Developers wanting to integrate with the API install the MCP server in Cursor, Claude Code, or GitHub Copilot.<p>When a developer asks to integrate auth, the coding assistant queries the MCP server, retrieves the required context (auth flows, integration patterns, latest SDK version, SDK interfaces etc.), and generates code using the official SDK.<p>Getting started:<p>- We&#x27;ve published Context Plugins for ten APIs. The URL in this post takes you to our public showcase, which is the quickest way to try them out without signing up.<p>- If you want to generate Context Plugins from your own API, you can sign up for a free trial on the APIMatic website (2-week all-access trial, no credit card required).<p>Feedback:<p>We&#x27;d love for you to try out Context Plugins and give us your feedback and suggestions. \nTwo questions for the HN community:<p>- What&#x27;s the worst AI-generated API integration bug you&#x27;ve encountered? We&#x27;re collecting failure patterns to improve our context coverage.<p>- What context do you think coding assistants need to generate accurate API integration code, in addition to API or SDK contracts?",
           "title": "Show HN: Context Plugins – API context for AI coding assistants",
-          "updated_at": "2026-03-27T10:29:37Z",
+          "updated_at": "2026-03-27T16:07:13Z",
           "url": "https://www.apimatic.io/product/context-plugins"
         },
         {

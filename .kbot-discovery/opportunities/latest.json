@@ -1,7 +1,14 @@
 {
-  "timestamp": "2026-03-27T10:46:18.491Z",
+  "timestamp": "2026-03-27T17:12:52.908Z",
   "count": 30,
   "opportunities": [
+    {
+      "source": "hn-comment",
+      "title": "Schedule tasks on the web",
+      "url": "https://news.ycombinator.com/item?id=47543679",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
     {
       "source": "hn-comment",
       "title": "What if AI agents could learn from each other's mistakes?",
@@ -13,13 +20,6 @@
       "source": "hn-comment",
       "title": "Goodbye to Sora",
       "url": "https://news.ycombinator.com/item?id=47517795",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Show HN: TopMail – LaunchFest Winner, $20/Mo Unlimited Email, Coding Agents API",
-      "url": "https://news.ycombinator.com/item?id=47505175",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "AI Agent Planner for Intelligent Work Distribution",
+      "url": "https://github.com/rahulpuri14493/sandhi_ai/issues/61",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "[Auto-QA] Copilot assignments stalled — review config",
       "url": "https://github.com/kubestellar/console/issues/3688",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "[Auto-QA] Components missing test coverage",
       "url": "https://github.com/kubestellar/console/issues/3687",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] Import patterns preventing tree-shaking",
-      "url": "https://github.com/kubestellar/console/issues/3686",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,31 +130,24 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(matrix): pass originalFilename to saveMediaBuffer",
-      "url": "https://github.com/openclaw/openclaw/pull/55725",
+      "title": "Add Claude command definitions and settings for workflow automation",
+      "url": "https://github.com/brunolimaff-jpg/NOVO-APP/pull/110",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat: add Feishu PR notifications",
-      "url": "https://github.com/nexu-io/nexu/pull/625",
+      "title": "chore(master): release 1.0.0",
+      "url": "https://github.com/jbronssin/rtk/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(matrix): pass originalFilename to saveMediaBuffer and expose path via MEDIA tag",
-      "url": "https://github.com/openclaw/openclaw/pull/55692",
+      "title": "fix(mcp-server): preserve upstream API error messages",
+      "url": "https://github.com/getlarge/themoltnet/pull/510",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "Long-harness agentic programming",
-      "url": "https://reddit.com/r/programming/comments/1s4ygvi/longharness_agentic_programming/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-programming",
@@ -167,6 +160,13 @@
       "source": "reddit-programming",
       "title": "Beyond the Vibes: A Rigorous Guide to AI Coding Assistants and Agents",
       "url": "https://reddit.com/r/programming/comments/1ritjkj/beyond_the_vibes_a_rigorous_guide_to_ai_coding/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "OSS Maintainers Can Inject Their Standards Into Contributors' AI Tools",
+      "url": "https://reddit.com/r/programming/comments/1rf6w7s/oss_maintainers_can_inject_their_standards_into/",
       "why": "Discussion in r/programming about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
