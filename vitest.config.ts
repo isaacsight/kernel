@@ -6,7 +6,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/setupTests.ts'],
-    exclude: ['e2e/**', 'node_modules/**', 'legacy/**', '**/node_modules/**', 'packages/kbot/dist/**'],
+    exclude: ['e2e/**', 'node_modules/**', 'legacy/**', '**/node_modules/**', 'packages/**'],
   },
   resolve: {
     alias: {

@@ -25,9 +25,10 @@ beforeAll(() => {
   run('git init')
   run('git config user.email "test@kbot.dev"')
   run('git config user.name "KBot Test"')
+  run('git config commit.gpgsign false')
   writeFileSync(join(TEST_DIR, 'README.md'), '# Test Repo')
   run('git add .')
-  run('git commit -m "initial commit"')
+  run('git commit --no-gpg-sign -m "initial commit"')
 
   // Override cwd so git tools operate on our test repo
   process.chdir(TEST_DIR)

@@ -5,13 +5,16 @@ import type { DoctorReport, CheckStatus } from './doctor.js'
 // ── Mocks ──
 
 // Mock child_process.execSync (used by execQuiet for npm, git, kbot version checks)
+const mockExecSync = vi.fn((cmd: string) => {
+  if (cmd === 'npm --version') return '10.2.0\n'
+  if (cmd === 'git --version') return 'git version 2.43.0\n'
+  if (cmd.includes('npm view @kernel.chat/kbot version')) return '3.42.0\n'
+  throw new Error(`Command not found: ${cmd}`)
+})
+
 vi.mock('node:child_process', () => ({
-  execSync: vi.fn((cmd: string) => {
-    if (cmd === 'npm --version') return '10.2.0\n'
-    if (cmd === 'git --version') return 'git version 2.43.0\n'
-    if (cmd.includes('npm view @kernel.chat/kbot version')) return '3.42.0\n'
-    throw new Error(`Command not found: ${cmd}`)
-  }),
+  default: { execSync: mockExecSync },
+  execSync: mockExecSync,
 }))
 
 // Mock auth.js — provide sensible defaults for a configured setup
