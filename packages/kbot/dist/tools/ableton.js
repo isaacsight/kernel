@@ -16,7 +16,7 @@
 // Requires: AbletonOSC loaded in Ableton Live (Preferences → Link/Tempo/MIDI → Control Surface)
 import { registerTool } from './index.js';
 import { ensureAbleton, formatAbletonError } from '../integrations/ableton-osc.js';
-import { parseProgression, voiceChord, arpeggiate, NAMED_PROGRESSIONS, RHYTHM_PATTERNS, noteNameToMidi, midiToNoteName, } from './music-theory.js';
+import { parseProgression, voiceChord, arpeggiate, NAMED_PROGRESSIONS, RHYTHM_PATTERNS, GENRE_DRUM_PATTERNS, noteNameToMidi, midiToNoteName, } from './music-theory.js';
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function extractArgs(args) {
     return args.map(a => {
@@ -762,6 +762,260 @@ export function registerAbletonTools() {
             }
             catch (err) {
                 return `Ableton connection failed: ${err.message}\n\n${formatAbletonError()}`;
+            }
+        },
+    });
+    // ─── 10. Load Plugin ──────────────────────────────────────────────────
+    registerTool({
+        name: 'ableton_load_plugin',
+        description: 'Load any instrument or plugin onto a track by name — native (Operator, Wavetable, Drift) or third-party VST/AU (Serum 2, Vital, Kontakt). Searches Ableton\'s browser and loads onto the selected track.',
+        parameters: {
+            track: { type: 'number', description: 'Track number (1-based)', required: true },
+            plugin: { type: 'string', description: 'Plugin name to search for (e.g. "Serum 2", "Operator", "Wavetable")', required: true },
+            manufacturer: { type: 'string', description: 'Manufacturer name for VST/AU (e.g. "Xfer Records", "Native Instruments"). Optional — helps narrow search.' },
+        },
+        tier: 'free',
+        timeout: 15_000,
+        async execute(args) {
+            const t = userTrack(args.track);
+            const plugin = String(args.plugin);
+            const manufacturer = args.manufacturer ? String(args.manufacturer) : '';
+            try {
+                const osc = await ensureAbleton();
+                if (manufacturer) {
+                    const result = await osc.query('/live/kbot/load_plugin', t, manufacturer, plugin);
+                    const status = extractArgs(result);
+                    if (status[0] === 'ok') {
+                        return `Loaded **${status[1]}** on track ${args.track}`;
+                    }
+                    return `Could not find "${manufacturer} ${plugin}": ${status.join(', ')}`;
+                }
+                // Try native device first
+                let result = await osc.query('/live/kbot/load_device', t, plugin);
+                let status = extractArgs(result);
+                if (status[0] === 'ok') {
+                    return `Loaded **${status[1]}** on track ${args.track}`;
+                }
+                // Try plugins category
+                result = await osc.query('/live/kbot/load_plugin', t, plugin, plugin);
+                status = extractArgs(result);
+                if (status[0] === 'ok') {
+                    return `Loaded **${status[1]}** on track ${args.track}`;
+                }
+                return `Plugin "${plugin}" not found in Ableton's browser. Check the name and try again.`;
+            }
+            catch (err) {
+                return `Ableton connection failed: ${err.message}\n\n${formatAbletonError()}`;
+            }
+        },
+    });
+    // ─── 11. Load Sample into Drum Rack ───────────────────────────────────
+    registerTool({
+        name: 'ableton_load_sample',
+        description: 'Load a sample (WAV/AIF) from the User Library into a specific Drum Rack pad. The sample must be in Ableton\'s User Library (~/Music/Ableton/User Library/Samples/). Use with splice_download to get samples first.',
+        parameters: {
+            track: { type: 'number', description: 'Track number with Drum Rack (1-based)', required: true },
+            pad: { type: 'number', description: 'MIDI note for the pad: 36=C1(kick), 37=C#1, 38=D1(snare), 39=Eb1(clap), 40=E1, 41=F1, 42=F#1(hihat), 43=G1, 44=Ab1, 45=A1, 46=Bb1(open hat)', required: true },
+            sample: { type: 'string', description: 'Sample filename to search for (e.g. "kick_808", "snare", "hihat")', required: true },
+        },
+        tier: 'free',
+        timeout: 10_000,
+        async execute(args) {
+            const t = userTrack(args.track);
+            const pad = Number(args.pad);
+            const sample = String(args.sample);
+            try {
+                const osc = await ensureAbleton();
+                const result = await osc.query('/live/kbot/load_sample_file', t, pad, sample);
+                const status = extractArgs(result);
+                if (status[0] === 'ok') {
+                    const noteNames = { 36: 'C1', 37: 'C#1', 38: 'D1', 39: 'Eb1', 40: 'E1', 41: 'F1', 42: 'F#1', 43: 'G1', 44: 'Ab1', 45: 'A1', 46: 'Bb1' };
+                    return `Loaded **${status[1]}** onto pad ${noteNames[pad] || pad} (track ${args.track})`;
+                }
+                return `Could not load "${sample}": ${status.join(', ')}`;
+            }
+            catch (err) {
+                return `Ableton connection failed: ${err.message}\n\n${formatAbletonError()}`;
+            }
+        },
+    });
+    // ─── 12. Build Drum Rack ──────────────────────────────────────────────
+    registerTool({
+        name: 'ableton_build_drum_rack',
+        description: 'Build a complete Drum Rack from scratch — creates the rack, loads samples from User Library into pads, and writes a drum pattern. One command to go from nothing to a full drum track with Splice samples.',
+        parameters: {
+            track: { type: 'number', description: 'Track number to build on (1-based)', required: true },
+            kick: { type: 'string', description: 'Kick sample search term (e.g. "kick_808")' },
+            snare: { type: 'string', description: 'Snare sample search term (e.g. "snare")' },
+            clap: { type: 'string', description: 'Clap sample search term (e.g. "clap")' },
+            hihat: { type: 'string', description: 'Hihat sample search term (e.g. "hihat")' },
+            pattern: { type: 'string', description: 'Drum pattern style: "trap", "house", "hiphop", "dnb", "lofi", "rock" (default: trap)' },
+            bars: { type: 'number', description: 'Number of bars (default: 16)' },
+        },
+        tier: 'free',
+        timeout: 30_000,
+        async execute(args) {
+            const t = userTrack(args.track);
+            const bars = Number(args.bars) || 16;
+            const totalBeats = bars * 4;
+            const pattern = String(args.pattern || 'trap').toLowerCase();
+            try {
+                const osc = await ensureAbleton();
+                const lines = ['## Building Drum Rack', ''];
+                // Load samples into pads
+                const padMap = [
+                    { note: 36, name: 'Kick', search: String(args.kick || 'kick') },
+                    { note: 38, name: 'Snare', search: String(args.snare || 'snare') },
+                    { note: 39, name: 'Clap', search: String(args.clap || 'clap') },
+                    { note: 42, name: 'Hihat', search: String(args.hihat || 'hihat') },
+                ];
+                for (const pad of padMap) {
+                    if (pad.search && pad.search !== 'undefined') {
+                        try {
+                            const result = await osc.query('/live/kbot/load_sample_file', t, pad.note, pad.search);
+                            const status = extractArgs(result);
+                            lines.push(`- ${pad.name} (${pad.note}): ${status[0] === 'ok' ? '✓ ' + status[1] : '✗ ' + status.join(', ')}`);
+                        }
+                        catch {
+                            lines.push(`- ${pad.name}: failed to load`);
+                        }
+                    }
+                }
+                lines.push('');
+                // Create clip and write pattern
+                osc.send('/live/clip_slot/delete_clip', t, 0);
+                await new Promise(r => setTimeout(r, 300));
+                osc.send('/live/clip_slot/create_clip', t, 0, totalBeats);
+                await new Promise(r => setTimeout(r, 300));
+                osc.send('/live/clip/set/name', t, 0, `${pattern} drums`);
+                // Write pattern based on genre
+                const patternData = GENRE_DRUM_PATTERNS[pattern] || GENRE_DRUM_PATTERNS['trap'];
+                if (patternData) {
+                    const bpmRange = patternData.bpm;
+                    const drumPattern = patternData.pattern;
+                    // Map pattern names to MIDI notes
+                    const noteMap = {
+                        kick: 36, snare: 38, closed_hihat: 42, open_hihat: 46,
+                        clap: 39, rim: 37, tom_low: 43, tom_mid: 47, tom_high: 50,
+                        crash: 49, ride: 51, shaker: 70, perc: 67,
+                    };
+                    for (const [drumName, hits] of Object.entries(drumPattern)) {
+                        const midiNote = noteMap[drumName] || 36;
+                        for (let bar = 0; bar < bars; bar++) {
+                            for (const hit of hits) {
+                                const beat = bar * 4 + hit * 0.25; // hits are in 16th note positions
+                                const vel = drumName === 'kick' ? 110 : drumName === 'snare' || drumName === 'clap' ? 100 : 75 + Math.floor(Math.random() * 25);
+                                osc.send('/live/clip/add/notes', t, 0, midiNote, beat, 0.2, vel, 0);
+                            }
+                        }
+                    }
+                    lines.push(`**Pattern**: ${pattern} (${bars} bars)`);
+                    lines.push(`**BPM range**: ${bpmRange[0]}-${bpmRange[1]}`);
+                }
+                // Fire the clip
+                osc.send('/live/clip_slot/fire', t, 0);
+                lines.push('');
+                lines.push('▶ Drum Rack built and playing');
+                return lines.join('\n');
+            }
+            catch (err) {
+                return `Ableton connection failed: ${err.message}\n\n${formatAbletonError()}`;
+            }
+        },
+    });
+    // ─── 13. Create Track ─────────────────────────────────────────────────
+    registerTool({
+        name: 'ableton_create_track',
+        description: 'Create a new MIDI or audio track in Ableton and optionally load an instrument on it.',
+        parameters: {
+            type: { type: 'string', description: '"midi" or "audio" (default: midi)', },
+            name: { type: 'string', description: 'Track name' },
+            instrument: { type: 'string', description: 'Optional: instrument to load (e.g. "Serum 2", "Operator")' },
+            manufacturer: { type: 'string', description: 'Optional: plugin manufacturer (e.g. "Xfer Records")' },
+        },
+        tier: 'free',
+        timeout: 15_000,
+        async execute(args) {
+            const trackType = String(args.type || 'midi').toLowerCase();
+            try {
+                const osc = await ensureAbleton();
+                // Create the track
+                if (trackType === 'audio') {
+                    osc.send('/live/kbot/create_audio_track', -1);
+                }
+                else {
+                    osc.send('/live/kbot/create_midi_track', -1);
+                }
+                await new Promise(r => setTimeout(r, 500));
+                // Get the new track count to find the new track's index
+                const countResult = await osc.query('/live/song/get/num_tracks');
+                const newTrackIdx = Number(extractArgs(countResult)[0]) - 1;
+                // Name it
+                if (args.name) {
+                    osc.send('/live/track/set/name', newTrackIdx, String(args.name));
+                }
+                // Load instrument if specified
+                if (args.instrument) {
+                    const manufacturer = args.manufacturer ? String(args.manufacturer) : '';
+                    if (manufacturer) {
+                        await osc.query('/live/kbot/load_plugin', newTrackIdx, manufacturer, String(args.instrument));
+                    }
+                    else {
+                        await osc.query('/live/kbot/load_device', newTrackIdx, String(args.instrument));
+                    }
+                }
+                return `Created ${trackType} track **${args.name || 'Track ' + (newTrackIdx + 1)}**${args.instrument ? ' with ' + args.instrument : ''} (track ${newTrackIdx + 1})`;
+            }
+            catch (err) {
+                return `Ableton connection failed: ${err.message}\n\n${formatAbletonError()}`;
+            }
+        },
+    });
+    // ─── 14. Splice Search & Download ─────────────────────────────────────
+    registerTool({
+        name: 'splice_search',
+        description: 'Search Splice for samples — returns sample names, tags, and UUIDs from splice.com. Requires Playwright MCP for browser automation. Samples can then be downloaded with splice_download.',
+        parameters: {
+            query: { type: 'string', description: 'Search query (e.g. "trap 808 kick", "vocal chop rnb", "ambient pad")', required: true },
+            limit: { type: 'number', description: 'Max results to return (default: 5)' },
+        },
+        tier: 'free',
+        timeout: 15_000,
+        async execute(args) {
+            const query = String(args.query);
+            const limit = Number(args.limit) || 5;
+            try {
+                // Fetch search results from splice.com
+                const https = await import('https');
+                const html = await new Promise((resolve, reject) => {
+                    https.get({
+                        hostname: 'splice.com',
+                        path: '/sounds/search/samples?q=' + encodeURIComponent(query),
+                        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh)' }
+                    }, (res) => {
+                        let data = '';
+                        res.on('data', (c) => data += c);
+                        res.on('end', () => resolve(data));
+                    }).on('error', reject);
+                });
+                // Extract sample info
+                const uuids = [...new Set((html.match(/sounds\/sample\/([a-f0-9]{64})/g) || [])
+                        .map((m) => m.replace('sounds/sample/', '')))];
+                const names = (html.match(/"name":"([^"]+\.wav)"/g) || [])
+                    .map((m) => m.replace(/"name":"/, '').replace(/"$/, ''));
+                if (uuids.length === 0)
+                    return `No results for "${query}" on Splice.`;
+                const lines = [`## Splice Results: "${query}"`, '', `Found ${uuids.length} samples:`, ''];
+                for (let i = 0; i < Math.min(limit, uuids.length); i++) {
+                    lines.push(`${i + 1}. **${names[i] || 'Sample ' + (i + 1)}**`);
+                    lines.push(`   UUID: \`${uuids[i].slice(0, 16)}...\``);
+                }
+                lines.push('');
+                lines.push('Use `splice_download` with Playwright to license and download these samples (1 credit each).');
+                return lines.join('\n');
+            }
+            catch (err) {
+                return `Splice search failed: ${err.message}`;
             }
         },
     });
