@@ -1,9 +1,58 @@
 {
-  "timestamp": "2026-03-28T14:50:58.161Z",
+  "timestamp": "2026-03-28T21:03:27.458Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "hirokiyn"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Hi HN, I'm Hiroki, founder of Epismo.\nJust released the Epismo CLI (<a href=\"https://npmjs.com/package/epismo\" rel=\"nofollow\">https://npmjs.com/package/epismo</a>). 380+ downloads right after launch. Thank you.<p>The problem: I got a great result in a Claude Code thread. A week later I couldn't reproduce how I got there. The real workflow lived across chat histories, tabs, tool settings, and tiny followup prompts. Prompts copy easily, but multi-step processes don't.<p>If GitHub made code reusable and Hugging Face made models reusable, we want to make human-<em>AI</em> workflows reusable.\nAnd there's a second problem emerging. Claude Code now orchestrates other <em>agents</em> like Codex. Ticket-based task management is becoming standard in <em>agent</em> orchestration. But there's no good way to share and manage the full process across <em>agents</em> working in parallel.<p>Epismo is a platform where <em>agents</em> and humans collaborate. You can save and share the full process of how you got your outcomes. The users aren't just humans. <em>Agents</em> can share their best practices too, and others can import and run them.\nOur core insight: the best format for <em>agent</em> workflows is a chain of markdown data. Once you import a workflow, your <em>agent</em> runs each step as a task. It turns scattered know-how into structured, repeatable execution.<p>The CLI is <em>agent</em>-native:\n- npm install -g epismo\n- epismo login --email you@example.com (no browser, OTP from <em>terminal</em>)\n- Works with Claude Code, Codex, and any <em>agent</em> with <em>terminal</em> access<p>Skills repo (MIT): <a href=\"https://github.com/epismoai/skills\" rel=\"nofollow\">https://github.com/epismoai/skills</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "Show HN: Epismo CLI – Make human-<em>AI</em> workflows reusable, like GitHub did for code"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.npmjs.com/package/epismo"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_hirokiyn",
+            "story_47555309",
+            "show_hn"
+          ],
+          "author": "hirokiyn",
+          "created_at": "2026-03-28T15:12:29Z",
+          "created_at_i": 1774710749,
+          "num_comments": 0,
+          "objectID": "47555309",
+          "points": 1,
+          "story_id": 47555309,
+          "story_text": "Hi HN, I&#x27;m Hiroki, founder of Epismo.\nJust released the Epismo CLI (<a href=\"https:&#x2F;&#x2F;npmjs.com&#x2F;package&#x2F;epismo\" rel=\"nofollow\">https:&#x2F;&#x2F;npmjs.com&#x2F;package&#x2F;epismo</a>). 380+ downloads right after launch. Thank you.<p>The problem: I got a great result in a Claude Code thread. A week later I couldn&#x27;t reproduce how I got there. The real workflow lived across chat histories, tabs, tool settings, and tiny followup prompts. Prompts copy easily, but multi-step processes don&#x27;t.<p>If GitHub made code reusable and Hugging Face made models reusable, we want to make human-AI workflows reusable.\nAnd there&#x27;s a second problem emerging. Claude Code now orchestrates other agents like Codex. Ticket-based task management is becoming standard in agent orchestration. But there&#x27;s no good way to share and manage the full process across agents working in parallel.<p>Epismo is a platform where agents and humans collaborate. You can save and share the full process of how you got your outcomes. The users aren&#x27;t just humans. Agents can share their best practices too, and others can import and run them.\nOur core insight: the best format for agent workflows is a chain of markdown data. Once you import a workflow, your agent runs each step as a task. It turns scattered know-how into structured, repeatable execution.<p>The CLI is agent-native:\n- npm install -g epismo\n- epismo login --email you@example.com (no browser, OTP from terminal)\n- Works with Claude Code, Codex, and any agent with terminal access<p>Skills repo (MIT): <a href=\"https:&#x2F;&#x2F;github.com&#x2F;epismoai&#x2F;skills\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;epismoai&#x2F;skills</a>",
+          "title": "Show HN: Epismo CLI – Make human-AI workflows reusable, like GitHub did for code",
+          "updated_at": "2026-03-28T15:15:12Z",
+          "url": "https://www.npmjs.com/package/epismo"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -221,66 +270,6 @@
           "title": "Show HN: Running AI agents across environments needs a proper solution",
           "updated_at": "2026-03-26T15:10:20Z",
           "url": "https://github.com/liquidos-ai/Odyssey"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "noemit"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus <em>AI</em> Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how <em>terminals</em> look, not what you actually type (you don't type the &quot;:&quot;)<p>I have since updated my code in my <em>agent</em> tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation/artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don't have to fight it with your system prompt.<p>This is Kimi K2.5 Btw."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "LLMs learn what programmers create, not how programmers work"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_noemit",
-            "story_47494696",
-            "ask_hn"
-          ],
-          "author": "noemit",
-          "children": [
-            47540979,
-            47498409,
-            47496895,
-            47540200,
-            47548754,
-            47518087,
-            47499371,
-            47499342,
-            47499000,
-            47508348,
-            47532964,
-            47526878,
-            47508063,
-            47498203,
-            47500805,
-            47497365,
-            47522625,
-            47498274
-          ],
-          "created_at": "2026-03-23T20:31:48Z",
-          "created_at_i": 1774297908,
-          "num_comments": 20,
-          "objectID": "47494696",
-          "points": 40,
-          "story_id": 47494696,
-          "story_text": "I ran an experiment to see if CLI actually was the most intuitive format for tool calling. (As claimed by a ex-Manus AI Backend Engineer) I gave my model random scenarios and a single tool &quot;run&quot; - i told it that it worked like a CLI. I told it to guess commands.<p>it guessed great commands, but it formatted it always with a colon up front, like \n:help\n:browser\n:search\n:curl<p>It was trained on how terminals look, not what you actually type (you don&#x27;t type the &quot;:&quot;)<p>I have since updated my code in my agent tool to stop fighting against this intuition.<p>LLMs they learn what commands look like in documentation&#x2F;artifacts, not what the human actually typed on the keyboard.<p>Seems so obvious. This is why you have to test your LLM and see how it naturally works, so you don&#x27;t have to fight it with your system prompt.<p>This is Kimi K2.5 Btw.",
-          "title": "LLMs learn what programmers create, not how programmers work",
-          "updated_at": "2026-03-28T13:25:12Z"
         }
       ]
     },
@@ -330,11 +319,11 @@
           "created_at_i": 1774638476,
           "num_comments": 0,
           "objectID": "47546925",
-          "points": 6,
+          "points": 9,
           "story_id": 47546925,
           "story_text": "Very excited to share Anvil. I built Anvil to take back control when working with parallel coding agents. It comes with one click worktree isolation, and first class spec support.<p>Claude Code and similar coding TUIs are very eager to get into writing code, even before their human baby sitter fully understands the implication of what they are about to build.<p>The core insight with Anvil is that it is much easier to write high quality code which matches the author&#x27;s intent after iterating on an external plan with your agent.<p>Align on the architecture, implementation, and verification strategy in a markdown file, then execution is pretty straightforward.<p>This is not a new concept, but the user experience within TUI apps for this workflow is pretty shit. Claude creates non-semantic plan names like &quot;aquamarine-owl&quot; that are trapped within a single agent context. Spinning up multiple agents to check on different aspects of a plan is annoying and slow, and managing terminal tabs is pure hell.<p>So I built anvil, this is a fully open source (MIT license) project.",
           "title": "Show HN: Anvil – Desktop App for Spec Driven Development",
-          "updated_at": "2026-03-28T09:31:41Z",
+          "updated_at": "2026-03-28T19:20:30Z",
           "url": "https://github.com/zdenham/anvil"
         },
         {
@@ -493,6 +482,7 @@
             47524594,
             47526092,
             47525242,
+            47557361,
             47530263,
             47529759,
             47532271,
@@ -503,13 +493,13 @@
           ],
           "created_at": "2026-03-25T17:10:21Z",
           "created_at_i": 1774458621,
-          "num_comments": 57,
+          "num_comments": 58,
           "objectID": "47520220",
-          "points": 83,
+          "points": 85,
           "story_id": 47520220,
           "story_text": "I think like many of you, I&#x27;ve been jumping between many claude code&#x2F;codex sessions at a time, managing multiple lines of work and worktrees in multiple repos. I wanted a way to easily manage multiple lines of work and reduce the amount of input I need to give, allowing the agents to remove me as a bottleneck from as much of the process as I can. So I built an orchestration tool for AI coding agents:<p>Optio is an open-source orchestration system that turns tickets into merged pull requests using AI coding agents. You point it at your repos, and it handles the full lifecycle:<p>- Intake — pull tasks from GitHub Issues, Linear, or create them manually<p>- Execution — spin up isolated K8s pods per repo, run Claude Code or Codex in git worktrees<p>- PR monitoring — watch CI checks, review status, and merge readiness every 30s<p>- Self-healing — auto-resume the agent on CI failures, merge conflicts, or reviewer change requests<p>- Completion — squash-merge the PR and close the linked issue<p>The key idea is the feedback loop. Optio doesn&#x27;t just run an agent and walk away — when CI breaks, it feeds the failure back to the agent. When a reviewer requests changes, the comments become the agent&#x27;s next prompt. It keeps going until the PR merges or you tell it to stop.<p>Built with Fastify, Next.js, BullMQ, and Drizzle on Postgres. Ships with a Helm chart for production deployment.",
           "title": "Show HN: Optio – Orchestrate AI coding agents in K8s to go from ticket to PR",
-          "updated_at": "2026-03-28T13:16:42Z",
+          "updated_at": "2026-03-28T19:18:28Z",
           "url": "https://github.com/jonwiggins/optio"
         },
         {
@@ -826,6 +816,93 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "walterbell"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "<em>Bot</em>h the World and Capital Markets Feel Similar to 2006"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.joshuakennon.com/<em>bot</em>h-the-world-and-capital-markets-feel-strangely-similar-to-2006/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_walterbell",
+            "story_47556763"
+          ],
+          "author": "walterbell",
+          "created_at": "2026-03-28T17:42:55Z",
+          "created_at_i": 1774719775,
+          "num_comments": 0,
+          "objectID": "47556763",
+          "points": 2,
+          "story_id": 47556763,
+          "title": "Both the World and Capital Markets Feel Similar to 2006",
+          "updated_at": "2026-03-28T17:47:28Z",
+          "url": "https://www.joshuakennon.com/both-the-world-and-capital-markets-feel-strangely-similar-to-2006/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "filipkrw"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I wanted me and my friends to have an Enshrouded dedicated game server, but I didn't want to pay $35+ per month for it.<p>We only tend to play a few days a week for a few hours, so I built a Discord <em>bot</em> that allows us to spin up the server on-demand. It runs until everyone leaves it and then auto-stops after 15 minutes.<p>It's built on top of Hetzner - it snapshots the full server state and deletes it on stop, then recreates it from the snapshot when needed. The setup is a bit slow, but pretty simple and cost-effective.<p>Disclaimer: I mostly vibe coded it with Claude, but it's simple enough for it not to be a big concern IMO."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Show HN: Gamekeeper – Discord <em>bot</em> for on-demand Hetzner dedicated game servers"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/filipkrw/gamekeeper"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_filipkrw",
+            "story_47556735",
+            "show_hn"
+          ],
+          "author": "filipkrw",
+          "created_at": "2026-03-28T17:40:29Z",
+          "created_at_i": 1774719629,
+          "num_comments": 0,
+          "objectID": "47556735",
+          "points": 1,
+          "story_id": 47556735,
+          "story_text": "I wanted me and my friends to have an Enshrouded dedicated game server, but I didn&#x27;t want to pay $35+ per month for it.<p>We only tend to play a few days a week for a few hours, so I built a Discord bot that allows us to spin up the server on-demand. It runs until everyone leaves it and then auto-stops after 15 minutes.<p>It&#x27;s built on top of Hetzner - it snapshots the full server state and deletes it on stop, then recreates it from the snapshot when needed. The setup is a bit slow, but pretty simple and cost-effective.<p>Disclaimer: I mostly vibe coded it with Claude, but it&#x27;s simple enough for it not to be a big concern IMO.",
+          "title": "Show HN: Gamekeeper – Discord bot for on-demand Hetzner dedicated game servers",
+          "updated_at": "2026-03-28T17:42:13Z",
+          "url": "https://github.com/filipkrw/gamekeeper"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "popupeyecare"
             },
             "story_text": {
@@ -862,11 +939,11 @@
           "created_at_i": 1774703031,
           "num_comments": 1,
           "objectID": "47554224",
-          "points": 2,
+          "points": 3,
           "story_id": 47554224,
           "story_text": "Hi HN,<p>My wife and I are physicians (YC S17), with young kids and also helping take care of our parents. Very much in the sandwich generation.<p>When I am in the OR or busy and an unknown number comes in, I have no idea. Is this my kid’s school, my dad’s doctor, something urgent, or just spam?<p>I end up being afraid to fully turn on Do Not Disturb because of that.<p>So we built StatPhone - <a href=\"https:&#x2F;&#x2F;statphone.com\" rel=\"nofollow\">https:&#x2F;&#x2F;statphone.com</a>.<p>It gives you dedicated phone numbers you can share with people you trust. When someone calls one, it rings multiple people at once, and if no one answers, it can automatically escalate to others.<p>No matter what number they are calling from, it shows up as something like “Dad Emergency” or “Kids School” on your phone.<p>For example, we can give one to our kid’s school. It rings both of us at the same time so someone picks up.<p>Or we can give one to my dad’s doctor. It rings me and my sister first, and if we do not pick up, it rolls to my wife and brother in law.<p>It is also useful as a general family emergency line. For kids going to college, for pet sitters, or for things like a doorman calling one number and it ringing everyone in the apartment at once.<p>If no one answers, it uses its own voicemail, not your phone’s, transcribes it, and sends it to everyone.<p>We can still see who actually called via a dashboard or text.<p>We have been using it for school, babysitters, doctors, etc.<p>Figured we would share in case it is useful to anyone else.<p>Thanks,\nAmit &amp; Puja",
           "title": "Show HN: A shared emergency number for families",
-          "updated_at": "2026-03-28T13:32:12Z",
+          "updated_at": "2026-03-28T17:02:28Z",
           "url": "https://statphone.com/"
         },
         {
@@ -955,87 +1032,6 @@
           "title": "Both radiologists and AI struggle to identify 'deepfake' X-rays",
           "updated_at": "2026-03-28T06:30:56Z",
           "url": "https://radiologybusiness.com/topics/artificial-intelligence/both-radiologists-and-ai-struggle-identify-deepfake-x-rays"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "quentinwach"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Image Ranker is an open-source tool for efficiently ranking large collections of images through pairwise comparisons using a Bayesian TrueSkill-based ranking algorithm. It enables fast and scalable human-in-the-loop preference estimation without requiring exhaustive comparisons.<p>The system maintains probabilistic ratings for each image, modeling <em>bot</em>h estimated quality (μ) and uncertainty (σ), and updates rankings globally after each comparison. This allows accurate ranking from incomplete and noisy comparison data.<p>To further accelerate ranking on large datasets, Image Ranker includes several optimization strategies:<p>Sequential elimination, reducing ranking complexity from O(N²) to O(N)\nUncertainty-driven sampling (smart shuffle) to prioritize informative comparisons\nAuto-shuffling for continuous ranking efficiency\nThe tool provides a lightweight web-based interface that allows users to:<p>Compare images directly from local directories without uploading data\nTrack and export rankings (CSV) with resume capability\nAnnotate exclusions with structured reasons\nAttach contextual metadata to images\nImage Ranker is particularly useful for:<p>Human preference data collection for reinforcement learning from human feedback (RLHF)\nEvaluation and selection of generative model outputs (e.g. diffusion models)\nDataset curation and ranking under limited labeling budgets\nBy combining probabilistic ranking with efficient comparison strategies, Image Ranker enables scalable preference estimation workflows for modern machine learning and data-centric applications."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Image Ranker – Open-Source Pairwise Ranking for Preference Learning"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/QuentinWach/image-ranker"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_quentinwach",
-            "story_47548441",
-            "show_hn"
-          ],
-          "author": "quentinwach",
-          "created_at": "2026-03-27T21:22:56Z",
-          "created_at_i": 1774646576,
-          "num_comments": 0,
-          "objectID": "47548441",
-          "points": 2,
-          "story_id": 47548441,
-          "story_text": "Image Ranker is an open-source tool for efficiently ranking large collections of images through pairwise comparisons using a Bayesian TrueSkill-based ranking algorithm. It enables fast and scalable human-in-the-loop preference estimation without requiring exhaustive comparisons.<p>The system maintains probabilistic ratings for each image, modeling both estimated quality (μ) and uncertainty (σ), and updates rankings globally after each comparison. This allows accurate ranking from incomplete and noisy comparison data.<p>To further accelerate ranking on large datasets, Image Ranker includes several optimization strategies:<p>Sequential elimination, reducing ranking complexity from O(N²) to O(N)\nUncertainty-driven sampling (smart shuffle) to prioritize informative comparisons\nAuto-shuffling for continuous ranking efficiency\nThe tool provides a lightweight web-based interface that allows users to:<p>Compare images directly from local directories without uploading data\nTrack and export rankings (CSV) with resume capability\nAnnotate exclusions with structured reasons\nAttach contextual metadata to images\nImage Ranker is particularly useful for:<p>Human preference data collection for reinforcement learning from human feedback (RLHF)\nEvaluation and selection of generative model outputs (e.g. diffusion models)\nDataset curation and ranking under limited labeling budgets\nBy combining probabilistic ranking with efficient comparison strategies, Image Ranker enables scalable preference estimation workflows for modern machine learning and data-centric applications.",
-          "title": "Show HN: Image Ranker – Open-Source Pairwise Ranking for Preference Learning",
-          "updated_at": "2026-03-27T23:00:09Z",
-          "url": "https://github.com/QuentinWach/image-ranker"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "cmsefton"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Sycophantic <em>bot</em>s coach users into selfish, antisocial behavior, say researchers"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.theregister.com/2026/03/27/sycophantic_ai_risks/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_cmsefton",
-            "story_47548176"
-          ],
-          "author": "cmsefton",
-          "created_at": "2026-03-27T20:58:47Z",
-          "created_at_i": 1774645127,
-          "num_comments": 0,
-          "objectID": "47548176",
-          "points": 5,
-          "story_id": 47548176,
-          "title": "Sycophantic bots coach users into selfish, antisocial behavior, say researchers",
-          "updated_at": "2026-03-28T06:36:56Z",
-          "url": "https://www.theregister.com/2026/03/27/sycophantic_ai_risks/"
         }
       ]
     },
@@ -1314,11 +1310,11 @@
           "created_at_i": 1774704005,
           "num_comments": 0,
           "objectID": "47554345",
-          "points": 1,
+          "points": 2,
           "story_id": 47554345,
           "story_text": "Hey HN, we built Octopus an open-source, self-hostable AI code reviewer for GitHub and Bitbucket. It uses RAG with vector search (Qdrant) to understand your full codebase, not just the diff, and posts inline findings on PRs with severity ratings. Works with Claude and OpenAI, and you can bring your own API keys. Video: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=HP1kaKTOdXw\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=HP1kaKTOdXw</a> | GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;octopusreview\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;octopusreview</a>",
           "title": "Show HN: Octopus, Open-source alternative to CodeRabbit and Greptile",
-          "updated_at": "2026-03-28T13:32:42Z",
+          "updated_at": "2026-03-28T20:00:43Z",
           "url": "https://octopus-review.ai"
         },
         {
@@ -1352,8 +1348,8 @@
           ],
           "author": "kthaker1224",
           "children": [
-            47541110,
             47547877,
+            47541110,
             47535655,
             47547827
           ],
@@ -1365,7 +1361,7 @@
           "story_id": 47535363,
           "story_text": "I was talking to some friends (2 founders, old coworkers of mine) where I learned they check in EVERYTHING into their codebase. Not just plan.md files or implementation details, but investor_meeting.md, user_feedback.md, growth_strategy.md, TODOs.md, and more<p>They do this because even though they could just use these AI-powered SaaS productivity suites like Notion, Linear, etc,. it&#x27;s way way simpler to just dump stuff into the codebase, let Git handle the collaboration aspect, and let Opus&#x2F;Sonnet + Claude Code retrieve info and manage it.<p>this got me thinking, highly collaborative teams are spending more and more of their work day in AI coding tools. i&#x27;d bet a lot of them have custom approaches that let them collaborate even on non-coding stuff.<p>- Some people are still all-in on Granola, Notion, Linear MCP etc.\n- Others like wrangling .md files in git\n- I have friends that run a script that syncs local memory files to their teammates whenever their CC edits them locally.\n- And still others hate this idea and want to use the established players<p>this was really interesting to me, so i thought i&#x27;d ask here -- if you&#x27;re deep in AI coding land, how do you collaborate w&#x2F; your team? do you have hacks and custom workflows? what kind of team are you? Alternatively -- if you don&#x27;t use these tools like this and use them just for projects&#x2F;code -- how do you work with others?",
           "title": "Ask HN: Leaving Notion, Codebase as a Wiki?",
-          "updated_at": "2026-03-28T10:58:26Z"
+          "updated_at": "2026-03-28T20:41:13Z"
         },
         {
           "_highlightResult": {
@@ -2045,6 +2041,56 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "paolovella"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Reposting because the March thread linked a now-outdated repo, and the project has changed substantially.<p>VellaVeto is a fail-closed gateway between an AI agent and its <em>MCP</em> <em>tools</em>. Every <em>tool</em> call is evaluated before execution; if evaluation fails for any reason, the call is denied.<p>Concrete example: under shield mode, a filesystem <em>server</em> trying to read ~/.ssh/id_rsa is denied by default. A list_files /tmp call from the same <em>server</em> is allowed.<p>What it does not solve: prompt injection, model-level jailbreaks, or supply-chain attacks in <em>server</em> packages. It only controls what crosses the <em>tool</em>-call boundary.<p>Since March, I added three zero-config protection levels, topology discovery, tamper-evident audit, Consumer Shield, and MCPSEC, an open benchmark for <em>MCP</em> gateways.<p>The feedback I’d most like:<p>Is the <em>tool</em>-call boundary the right place to enforce <em>MCP</em> security?\nAre the MCPSEC attack classes sensible?\nWhat important attack classes am I still missing?"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "tools"
+              ],
+              "value": "Show HN: VellaVeto — blocks unsafe <em>MCP</em> <em>tool</em> calls by default"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/paolovella/vellaveto"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_paolovella",
+            "story_47555597",
+            "show_hn"
+          ],
+          "author": "paolovella",
+          "created_at": "2026-03-28T15:41:30Z",
+          "created_at_i": 1774712490,
+          "num_comments": 0,
+          "objectID": "47555597",
+          "points": 2,
+          "story_id": 47555597,
+          "story_text": "Reposting because the March thread linked a now-outdated repo, and the project has changed substantially.<p>VellaVeto is a fail-closed gateway between an AI agent and its MCP tools. Every tool call is evaluated before execution; if evaluation fails for any reason, the call is denied.<p>Concrete example: under shield mode, a filesystem server trying to read ~&#x2F;.ssh&#x2F;id_rsa is denied by default. A list_files &#x2F;tmp call from the same server is allowed.<p>What it does not solve: prompt injection, model-level jailbreaks, or supply-chain attacks in server packages. It only controls what crosses the tool-call boundary.<p>Since March, I added three zero-config protection levels, topology discovery, tamper-evident audit, Consumer Shield, and MCPSEC, an open benchmark for MCP gateways.<p>The feedback I’d most like:<p>Is the tool-call boundary the right place to enforce MCP security?\nAre the MCPSEC attack classes sensible?\nWhat important attack classes am I still missing?",
+          "title": "Show HN: VellaVeto — blocks unsafe MCP tool calls by default",
+          "updated_at": "2026-03-28T16:10:12Z",
+          "url": "https://github.com/paolovella/vellaveto"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "LahanF"
             },
             "story_text": {
@@ -2229,61 +2275,6 @@
           "story_text": "I connected a Postgres MCP to one of our bots. Wanted read access. The server also exposed DELETE, execute arbitrary SQL, and DROP TABLE.<p>Checked GitHub MCP — added for code reading. Also had delete_repository. Slack MCP — wanted search. Got remove_user and delete_channel.<p>There&#x27;s no way to say &quot;give the agent query but not drop_table.&quot; I checked Claude, Cursor, ChatGPT — all-or-nothing everywhere.<p>The numbers are bad: 1,808 MCP servers scanned — 66% had security findings. 30 CVEs in 60 days. 76 published skills contained malware. 5 of top 7 most-downloaded skills were malware.<p>We&#x27;re giving agents system-level access without a permission model. This feels like early cloud days before IAM.<p>We built per-tool permissions into our gateway at Aerostack — each tool gets a toggle, destructive ops blocked by default, enforced at the proxy layer.<p>Full writeup: https:&#x2F;&#x2F;aerostack.dev&#x2F;blog&#x2F;your-ai-agent-has-root-access<p>Curious how others are handling MCP security today.",
           "title": "AI Agent Has Root Access (and That's a Problem)",
           "updated_at": "2026-03-26T16:57:34Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "An0n_Jon"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Hey HN, we're Jon and Kristiane, and we're building Orloj (<a href=\"https://orloj.dev\" rel=\"nofollow\">https://orloj.dev</a>), an open-source orchestration runtime for multi-agent AI systems. You define agents, <em>tools</em>, policies, and workflows in declarative YAML manifests, and Orloj handles scheduling, execution, governance, and reliability.<p>Over the past year we tried to use many different platforms/frameworks to build out agent systems and while building we hit some sort of problem with all of them, so we decided to have a go at it. Jon has worked with kubernettes and terraform for years and always liked the declarative nature so took patterns and concepts from both to build out Orloj.<p>Orloj treats agents the way infrastructure-as-code treats cloud resources. You write a manifest that declares an agent's model, <em>tools</em>, permissions, and execution limits. You compose agents into directed graphs (pipelines, hierarchies, or swarm loops).<p>Governance has been overlooked so we made resource policies (AgentPolicy, AgentRole, and ToolPermission) that are evaluated inline during execution, before every agent turn and tool call. Instead of prompt instructions that the model might ignore, these policies are a runtime gate. Unauthorized actions fail closed with structured errors and full audit trails. You can set token budgets per run, whitelist models, block specific <em>tools</em>, and scope policies to individual agent systems.<p>For reliability, we built lease-based task ownership (so crashed workers don't leave orphan tasks), which allows you to run workers on different machines with whatever compute that’s needed. It helps when we need a GPU for certain tasks (like we did). The scheduler also supports cron triggers and webhook-driven task creation.<p>The architecture is a <em>server</em>/worker split like kubernettes. orlojd hosts the API, resource store (in-memory for dev, Postgres for production), and task scheduler. orlojworker instances claim and execute tasks, route model requests through a gateway (OpenAI, Anthropic, Ollama, etc.), and run <em>tools</em> in configurable isolation (direct, sandboxed, container, or WASM).<p>We work with a lot of <em>MCP</em> servers so wanted to make <em>MCP</em> integration as easy as possible. You register an <em>MCP</em> <em>server</em> (stdio or HTTP), Orloj auto-discovers its <em>tools</em>, and they become first-class resources with governance applied. So you can connect something like the GitHub <em>MCP</em> <em>server</em> and still have policy enforcement over what agents are allowed to do with it.<p>It comes shipped with a built in UI to manage all your workflows and topology to see everything working in real time.\nThere are a few examples and starter templates in the repo to start playing around with to get a feel for what’s possible.<p>More info in the docs: <a href=\"https://docs.orloj.dev\" rel=\"nofollow\">https://docs.orloj.dev</a><p>We're a small team and this is v0.1.0, so there's a lot still on the roadmap, but the full runtime is open source today and we'd love feedback on what we've built so far. What would you use this for? What's missing?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Orloj – agent infrastructure as code (YAML and GitOps)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/OrlojHQ/orloj"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_An0n_Jon",
-            "story_47526813",
-            "show_hn"
-          ],
-          "author": "An0n_Jon",
-          "children": [
-            47538279,
-            47534885,
-            47535538,
-            47534309,
-            47534049,
-            47535189,
-            47534433
-          ],
-          "created_at": "2026-03-26T05:07:51Z",
-          "created_at_i": 1774501671,
-          "num_comments": 12,
-          "objectID": "47526813",
-          "points": 19,
-          "story_id": 47526813,
-          "story_text": "Hey HN, we&#x27;re Jon and Kristiane, and we&#x27;re building Orloj (<a href=\"https:&#x2F;&#x2F;orloj.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;orloj.dev</a>), an open-source orchestration runtime for multi-agent AI systems. You define agents, tools, policies, and workflows in declarative YAML manifests, and Orloj handles scheduling, execution, governance, and reliability.<p>Over the past year we tried to use many different platforms&#x2F;frameworks to build out agent systems and while building we hit some sort of problem with all of them, so we decided to have a go at it. Jon has worked with kubernettes and terraform for years and always liked the declarative nature so took patterns and concepts from both to build out Orloj.<p>Orloj treats agents the way infrastructure-as-code treats cloud resources. You write a manifest that declares an agent&#x27;s model, tools, permissions, and execution limits. You compose agents into directed graphs (pipelines, hierarchies, or swarm loops).<p>Governance has been overlooked so we made resource policies (AgentPolicy, AgentRole, and ToolPermission) that are evaluated inline during execution, before every agent turn and tool call. Instead of prompt instructions that the model might ignore, these policies are a runtime gate. Unauthorized actions fail closed with structured errors and full audit trails. You can set token budgets per run, whitelist models, block specific tools, and scope policies to individual agent systems.<p>For reliability, we built lease-based task ownership (so crashed workers don&#x27;t leave orphan tasks), which allows you to run workers on different machines with whatever compute that’s needed. It helps when we need a GPU for certain tasks (like we did). The scheduler also supports cron triggers and webhook-driven task creation.<p>The architecture is a server&#x2F;worker split like kubernettes. orlojd hosts the API, resource store (in-memory for dev, Postgres for production), and task scheduler. orlojworker instances claim and execute tasks, route model requests through a gateway (OpenAI, Anthropic, Ollama, etc.), and run tools in configurable isolation (direct, sandboxed, container, or WASM).<p>We work with a lot of MCP servers so wanted to make MCP integration as easy as possible. You register an MCP server (stdio or HTTP), Orloj auto-discovers its tools, and they become first-class resources with governance applied. So you can connect something like the GitHub MCP server and still have policy enforcement over what agents are allowed to do with it.<p>It comes shipped with a built in UI to manage all your workflows and topology to see everything working in real time.\nThere are a few examples and starter templates in the repo to start playing around with to get a feel for what’s possible.<p>More info in the docs: <a href=\"https:&#x2F;&#x2F;docs.orloj.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.orloj.dev</a><p>We&#x27;re a small team and this is v0.1.0, so there&#x27;s a lot still on the roadmap, but the full runtime is open source today and we&#x27;d love feedback on what we&#x27;ve built so far. What would you use this for? What&#x27;s missing?",
-          "title": "Show HN: Orloj – agent infrastructure as code (YAML and GitOps)",
-          "updated_at": "2026-03-27T09:07:52Z",
-          "url": "https://github.com/OrlojHQ/orloj"
         }
       ]
     },
