@@ -1,0 +1,835 @@
+// kbot Ableton Live Tools — Natural language DAW control over OSC
+// Zero external dependencies. Talks to AbletonOSC via UDP on localhost.
+//
+// Tools:
+//   ableton_transport       — play, stop, record, tempo, time sig, seek
+//   ableton_track           — list, create, mute, solo, arm, volume, pan, rename, delete
+//   ableton_clip            — fire, stop, create, delete, duplicate, info
+//   ableton_scene           — fire, list, create, duplicate
+//   ableton_midi            — write/read/clear MIDI notes in clips
+//   ableton_device          — list, get/set params, enable/disable devices
+//   ableton_mixer           — snapshot levels, batch set, sends
+//   ableton_create_progression — chord progressions → MIDI in clips
+//   ableton_session_info    — full session state snapshot
+//   ableton_knowledge       — deep Ableton knowledge base queries (registered in ableton-knowledge.ts)
+//
+// Requires: AbletonOSC loaded in Ableton Live (Preferences → Link/Tempo/MIDI → Control Surface)
+
+import { registerTool } from './index.js'
+import { ensureAbleton, formatAbletonError, type OscArg } from '../integrations/ableton-osc.js'
+import {
+  parseProgression,
+  parseChordSymbol,
+  voiceChord,
+  arpeggiate,
+  NAMED_PROGRESSIONS,
+  SCALES,
+  RHYTHM_PATTERNS,
+  GM_DRUMS,
+  GENRE_DRUM_PATTERNS,
+  noteNameToMidi,
+  midiToNoteName,
+  type MidiNote,
+} from './music-theory.js'
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+function extractArgs(args: OscArg[]): (number | string)[] {
+  return args.map(a => {
+    if (a.type === 'b') return '[blob]'
+    return a.value
+  })
+}
+
+function userTrack(track: unknown): number {
+  // Users say "track 1" (1-based), OSC uses 0-based
+  const n = Number(track)
+  return Math.max(0, n - 1)
+}
+
+function displayTrack(oscIndex: number): number {
+  return oscIndex + 1
+}
+
+// ── Tool Registration ───────────────────────────────────────────────────────
+
+export function registerAbletonTools(): void {
+
+  // ─── 1. Transport ─────────────────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_transport',
+    description: 'Control Ableton Live transport — play, stop, record, set tempo, time signature, and seek position. Requires AbletonOSC running in Live.',
+    parameters: {
+      action: { type: 'string', description: 'Action: "play", "stop", "record", "toggle", "tempo", "time_sig", "position", "status"', required: true },
+      value: { type: 'number', description: 'BPM for tempo, beat position for seek, numerator for time_sig' },
+      value2: { type: 'number', description: 'Denominator for time_sig (e.g. 4 for x/4)' },
+    },
+    tier: 'free',
+    timeout: 10_000,
+    async execute(args) {
+      const action = String(args.action).toLowerCase()
+      try {
+        const osc = await ensureAbleton()
+
+        switch (action) {
+          case 'play':
+          case 'start':
+            osc.send('/live/song/start_playing')
+            return '▶ Playing'
+
+          case 'stop':
+            osc.send('/live/song/stop_playing')
+            return '⏹ Stopped'
+
+          case 'record':
+            osc.send('/live/song/set/record_mode', 1)
+            osc.send('/live/song/start_playing')
+            return '⏺ Recording'
+
+          case 'toggle':
+            osc.send('/live/song/start_playing')
+            return '⏯ Toggled playback'
+
+          case 'tempo':
+          case 'bpm': {
+            const bpm = Number(args.value)
+            if (!bpm || bpm < 20 || bpm > 999) return 'Error: BPM must be between 20 and 999'
+            osc.send('/live/song/set/tempo', bpm)
+            return `Tempo set to **${bpm} BPM**`
+          }
+
+          case 'time_sig':
+          case 'time_signature': {
+            const num = Number(args.value) || 4
+            const den = Number(args.value2) || 4
+            osc.send('/live/song/set/signature_numerator', num)
+            osc.send('/live/song/set/signature_denominator', den)
+            return `Time signature set to **${num}/${den}**`
+          }
+
+          case 'position':
+          case 'seek': {
+            const pos = Number(args.value) || 0
+            osc.send('/live/song/set/current_song_time', pos)
+            return `Seeked to beat **${pos}**`
+          }
+
+          case 'status': {
+            const tempo = await osc.query('/live/song/get/tempo')
+            const playing = await osc.query('/live/song/get/is_playing')
+            const recording = await osc.query('/live/song/get/record_mode')
+            return [
+              '## Transport Status',
+              `- Tempo: **${extractArgs(tempo)[0]} BPM**`,
+              `- Playing: ${extractArgs(playing)[0] ? '▶ Yes' : '⏹ No'}`,
+              `- Recording: ${extractArgs(recording)[0] ? '⏺ Yes' : 'No'}`,
+            ].join('\n')
+          }
+
+          default:
+            return `Unknown action "${action}". Options: play, stop, record, toggle, tempo, time_sig, position, status`
+        }
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 2. Track Control ─────────────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_track',
+    description: 'Control Ableton Live tracks — list all tracks, mute, solo, arm, set volume/pan, rename, create, delete. Track numbers are 1-based (track 1 = first track).',
+    parameters: {
+      action: { type: 'string', description: 'Action: "list", "mute", "unmute", "solo", "unsolo", "arm", "disarm", "volume", "pan", "rename", "info"', required: true },
+      track: { type: 'number', description: 'Track number (1-based). Required for all actions except "list"' },
+      value: { type: 'string', description: 'Volume (0-1), pan (-1 to 1), or new name for rename' },
+    },
+    tier: 'free',
+    timeout: 15_000,
+    async execute(args) {
+      const action = String(args.action).toLowerCase()
+      try {
+        const osc = await ensureAbleton()
+
+        if (action === 'list') {
+          const countResult = await osc.query('/live/song/get/num_tracks')
+          const count = Number(extractArgs(countResult)[0]) || 0
+          const lines: string[] = ['## Tracks', '']
+          lines.push('| # | Name | Volume | Pan | Mute | Solo | Armed |')
+          lines.push('|---|------|--------|-----|------|------|-------|')
+          for (let i = 0; i < Math.min(count, 32); i++) {
+            try {
+              const name = await osc.query('/live/track/get/name', i)
+              const vol = await osc.query('/live/track/get/volume', i)
+              const pan = await osc.query('/live/track/get/panning', i)
+              const mute = await osc.query('/live/track/get/mute', i)
+              const solo = await osc.query('/live/track/get/solo', i)
+              const arm = await osc.query('/live/track/get/arm', i)
+              lines.push(`| ${i + 1} | ${extractArgs(name)[1] || '?'} | ${(Number(extractArgs(vol)[1]) * 100).toFixed(0)}% | ${Number(extractArgs(pan)[1]).toFixed(2)} | ${extractArgs(mute)[1] ? '🔇' : ''} | ${extractArgs(solo)[1] ? '🔊' : ''} | ${extractArgs(arm)[1] ? '⏺' : ''} |`)
+            } catch { /* skip unreachable tracks */ }
+          }
+          return lines.join('\n')
+        }
+
+        const t = userTrack(args.track)
+        if (!args.track) return 'Error: track number required (1-based)'
+
+        switch (action) {
+          case 'mute':
+            osc.send('/live/track/set/mute', t, 1)
+            return `Track ${args.track} muted 🔇`
+          case 'unmute':
+            osc.send('/live/track/set/mute', t, 0)
+            return `Track ${args.track} unmuted`
+          case 'solo':
+            osc.send('/live/track/set/solo', t, 1)
+            return `Track ${args.track} soloed 🔊`
+          case 'unsolo':
+            osc.send('/live/track/set/solo', t, 0)
+            return `Track ${args.track} unsoloed`
+          case 'arm':
+            osc.send('/live/track/set/arm', t, 1)
+            return `Track ${args.track} armed ⏺`
+          case 'disarm':
+            osc.send('/live/track/set/arm', t, 0)
+            return `Track ${args.track} disarmed`
+          case 'volume':
+          case 'vol': {
+            const v = Math.max(0, Math.min(1, Number(args.value)))
+            osc.send('/live/track/set/volume', t, v)
+            return `Track ${args.track} volume → **${(v * 100).toFixed(0)}%**`
+          }
+          case 'pan': {
+            const p = Math.max(-1, Math.min(1, Number(args.value)))
+            osc.send('/live/track/set/panning', t, p)
+            const panLabel = p === 0 ? 'Center' : p < 0 ? `${Math.abs(p * 100).toFixed(0)}% Left` : `${(p * 100).toFixed(0)}% Right`
+            return `Track ${args.track} pan → **${panLabel}**`
+          }
+          case 'rename': {
+            const name = String(args.value || 'Track')
+            osc.send('/live/track/set/name', t, name)
+            return `Track ${args.track} renamed to **${name}**`
+          }
+          case 'info': {
+            const name = await osc.query('/live/track/get/name', t)
+            const vol = await osc.query('/live/track/get/volume', t)
+            const pan = await osc.query('/live/track/get/panning', t)
+            const mute = await osc.query('/live/track/get/mute', t)
+            const solo = await osc.query('/live/track/get/solo', t)
+            const arm = await osc.query('/live/track/get/arm', t)
+            return [
+              `## Track ${args.track}: ${extractArgs(name)[1]}`,
+              `- Volume: ${(Number(extractArgs(vol)[1]) * 100).toFixed(0)}%`,
+              `- Pan: ${Number(extractArgs(pan)[1]).toFixed(2)}`,
+              `- Muted: ${extractArgs(mute)[1] ? 'Yes' : 'No'}`,
+              `- Soloed: ${extractArgs(solo)[1] ? 'Yes' : 'No'}`,
+              `- Armed: ${extractArgs(arm)[1] ? 'Yes' : 'No'}`,
+            ].join('\n')
+          }
+          default:
+            return `Unknown action "${action}". Options: list, mute, unmute, solo, unsolo, arm, disarm, volume, pan, rename, info`
+        }
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 3. Clip Control ──────────────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_clip',
+    description: 'Control Ableton Live clips in Session View — fire, stop, create, delete, duplicate, get info. Track and clip numbers are 1-based.',
+    parameters: {
+      action: { type: 'string', description: '"fire", "stop", "create", "delete", "duplicate", "info", "list"', required: true },
+      track: { type: 'number', description: 'Track number (1-based)', required: true },
+      clip: { type: 'number', description: 'Clip slot number (1-based). Default: 1' },
+      name: { type: 'string', description: 'Clip name (for create)' },
+      length: { type: 'number', description: 'Clip length in beats (for create, default: 16 = 4 bars)' },
+    },
+    tier: 'free',
+    timeout: 10_000,
+    async execute(args) {
+      const action = String(args.action).toLowerCase()
+      const t = userTrack(args.track)
+      const c = Math.max(0, (Number(args.clip) || 1) - 1)
+
+      try {
+        const osc = await ensureAbleton()
+
+        switch (action) {
+          case 'fire':
+          case 'launch':
+            osc.send('/live/clip_slot/fire', t, c)
+            return `Fired clip ${args.clip || 1} on track ${args.track} ▶`
+
+          case 'stop':
+            osc.send('/live/clip_slot/stop', t, c)
+            return `Stopped clip ${args.clip || 1} on track ${args.track} ⏹`
+
+          case 'create': {
+            const length = Number(args.length) || 16
+            const name = String(args.name || `Clip ${c + 1}`)
+            osc.send('/live/clip_slot/create_clip', t, c, length)
+            // Small delay for clip creation
+            await new Promise(r => setTimeout(r, 200))
+            osc.send('/live/clip/set/name', t, c, name)
+            return `Created clip **${name}** (${length} beats / ${length / 4} bars) on track ${args.track}, slot ${(c + 1)}`
+          }
+
+          case 'delete':
+            osc.send('/live/clip_slot/delete_clip', t, c)
+            return `Deleted clip in slot ${c + 1} on track ${args.track}`
+
+          case 'duplicate':
+            osc.send('/live/clip_slot/duplicate_clip_to', t, c, t, c + 1)
+            return `Duplicated clip to slot ${c + 2} on track ${args.track}`
+
+          case 'info': {
+            const name = await osc.query('/live/clip/get/name', t, c)
+            const length = await osc.query('/live/clip/get/length', t, c)
+            const looping = await osc.query('/live/clip/get/looping', t, c)
+            return [
+              `## Clip Info — Track ${args.track}, Slot ${c + 1}`,
+              `- Name: ${extractArgs(name)[2] || '?'}`,
+              `- Length: ${extractArgs(length)[2] || '?'} beats`,
+              `- Looping: ${extractArgs(looping)[2] ? 'Yes' : 'No'}`,
+            ].join('\n')
+          }
+
+          case 'list': {
+            const lines: string[] = [`## Clips on Track ${args.track}`, '']
+            for (let i = 0; i < 16; i++) {
+              try {
+                const hasClip = await osc.query('/live/clip_slot/get/has_clip', t, i)
+                if (extractArgs(hasClip)[2]) {
+                  const name = await osc.query('/live/clip/get/name', t, i)
+                  lines.push(`- Slot ${i + 1}: **${extractArgs(name)[2] || 'Unnamed'}**`)
+                }
+              } catch { break }
+            }
+            if (lines.length === 2) lines.push('No clips found')
+            return lines.join('\n')
+          }
+
+          default:
+            return `Unknown action "${action}". Options: fire, stop, create, delete, duplicate, info, list`
+        }
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 4. Scene Control ─────────────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_scene',
+    description: 'Control Ableton Live scenes — fire (launch all clips in a row), list scenes, create, duplicate.',
+    parameters: {
+      action: { type: 'string', description: '"fire", "list", "create", "duplicate", "rename"', required: true },
+      scene: { type: 'number', description: 'Scene number (1-based)' },
+      name: { type: 'string', description: 'Scene name (for create/rename)' },
+    },
+    tier: 'free',
+    timeout: 10_000,
+    async execute(args) {
+      const action = String(args.action).toLowerCase()
+      try {
+        const osc = await ensureAbleton()
+
+        switch (action) {
+          case 'fire':
+          case 'launch': {
+            const s = Math.max(0, (Number(args.scene) || 1) - 1)
+            osc.send('/live/scene/fire', s)
+            return `Fired scene ${(s + 1)} ▶`
+          }
+
+          case 'list': {
+            const countResult = await osc.query('/live/song/get/num_scenes')
+            const count = Number(extractArgs(countResult)[0]) || 0
+            const lines: string[] = ['## Scenes', '']
+            for (let i = 0; i < Math.min(count, 32); i++) {
+              try {
+                const name = await osc.query('/live/scene/get/name', i)
+                lines.push(`- Scene ${i + 1}: **${extractArgs(name)[1] || 'Unnamed'}**`)
+              } catch { break }
+            }
+            return lines.join('\n')
+          }
+
+          case 'create':
+            osc.send('/live/song/create_scene', -1)
+            return `Created new scene`
+
+          case 'rename': {
+            const s = Math.max(0, (Number(args.scene) || 1) - 1)
+            osc.send('/live/scene/set/name', s, String(args.name || 'Scene'))
+            return `Renamed scene ${s + 1} to **${args.name}**`
+          }
+
+          default:
+            return `Unknown action "${action}". Options: fire, list, create, rename`
+        }
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 5. MIDI Note Writing ─────────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_midi',
+    description: 'Write, read, or clear MIDI notes in Ableton Live clips. Can write individual notes, chords, or full patterns. Track and clip numbers are 1-based.',
+    parameters: {
+      action: { type: 'string', description: '"write", "read", "clear". Default: write', },
+      track: { type: 'number', description: 'Track number (1-based)', required: true },
+      clip: { type: 'number', description: 'Clip slot (1-based, default: 1)' },
+      notes: { type: 'string', description: 'JSON array of notes: [{"pitch":60,"start":0,"duration":1,"velocity":100}] or shorthand: "C4 E4 G4" for chord at beat 0' },
+    },
+    tier: 'free',
+    timeout: 15_000,
+    async execute(args) {
+      const action = String(args.action || 'write').toLowerCase()
+      const t = userTrack(args.track)
+      const c = Math.max(0, (Number(args.clip) || 1) - 1)
+
+      try {
+        const osc = await ensureAbleton()
+
+        if (action === 'clear') {
+          osc.send('/live/clip/remove/notes', t, c)
+          return `Cleared all notes from track ${args.track}, clip ${(c + 1)}`
+        }
+
+        if (action === 'read') {
+          const notes = await osc.query('/live/clip/get/notes', t, c)
+          const rawArgs = extractArgs(notes)
+          if (rawArgs.length < 5) return 'No notes in this clip'
+          const lines: string[] = ['## MIDI Notes', '', '| Pitch | Note | Start | Duration | Velocity |', '|-------|------|-------|----------|----------|']
+          // Notes come as: count, then groups of 5 (pitch, start, duration, velocity, mute)
+          for (let i = 1; i + 4 < rawArgs.length; i += 5) {
+            const pitch = Number(rawArgs[i])
+            const start = Number(rawArgs[i + 1])
+            const dur = Number(rawArgs[i + 2])
+            const vel = Number(rawArgs[i + 3])
+            lines.push(`| ${pitch} | ${midiToNoteName(pitch)} | ${start.toFixed(2)} | ${dur.toFixed(2)} | ${vel} |`)
+          }
+          return lines.join('\n')
+        }
+
+        // Write mode
+        const notesStr = String(args.notes || '')
+        let midiNotes: MidiNote[] = []
+
+        // Try JSON parse first
+        try {
+          const parsed = JSON.parse(notesStr)
+          if (Array.isArray(parsed)) {
+            midiNotes = parsed.map((n: Record<string, unknown>) => ({
+              pitch: Number(n.pitch) || 60,
+              start: Number(n.start) || 0,
+              duration: Number(n.duration) || 1,
+              velocity: Number(n.velocity) || 80,
+            }))
+          }
+        } catch {
+          // Try note name shorthand: "C4 E4 G4" → chord at beat 0
+          const noteNames = notesStr.split(/[\s,]+/).filter(Boolean)
+          let beat = 0
+          for (const name of noteNames) {
+            try {
+              const pitch = noteNameToMidi(name)
+              midiNotes.push({ pitch, start: beat, duration: 1, velocity: 80 })
+            } catch {
+              // Maybe it's a beat marker like "b2:"
+              const beatMatch = name.match(/^b(\d+):?$/)
+              if (beatMatch) beat = Number(beatMatch[1])
+            }
+          }
+        }
+
+        if (midiNotes.length === 0) return 'No valid notes to write. Use JSON array or note names (e.g. "C4 E4 G4")'
+
+        // Send notes via OSC — batch in groups of 50
+        for (let i = 0; i < midiNotes.length; i += 50) {
+          const batch = midiNotes.slice(i, i + 50)
+          for (const note of batch) {
+            osc.send('/live/clip/add/notes', t, c,
+              note.pitch, note.start, note.duration, note.velocity, 0)
+          }
+        }
+
+        const noteList = midiNotes.slice(0, 10).map(n => `${midiToNoteName(n.pitch)} at beat ${n.start}`).join(', ')
+        const extra = midiNotes.length > 10 ? ` + ${midiNotes.length - 10} more` : ''
+        return `Wrote **${midiNotes.length} notes** to track ${args.track}, clip ${c + 1}: ${noteList}${extra}`
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 6. Device Control ────────────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_device',
+    description: 'Control devices (instruments and effects) on Ableton Live tracks. List devices, get/set parameters, enable/disable. Track numbers are 1-based, device/param indices are 0-based.',
+    parameters: {
+      action: { type: 'string', description: '"list", "params", "set", "enable", "disable", "info"', required: true },
+      track: { type: 'number', description: 'Track number (1-based)', required: true },
+      device: { type: 'number', description: 'Device index (0-based) in the device chain' },
+      param: { type: 'number', description: 'Parameter index (0-based) for set action' },
+      value: { type: 'number', description: 'Parameter value (usually 0-1 normalized) for set action' },
+    },
+    tier: 'free',
+    timeout: 15_000,
+    async execute(args) {
+      const action = String(args.action).toLowerCase()
+      const t = userTrack(args.track)
+      const d = Number(args.device) || 0
+
+      try {
+        const osc = await ensureAbleton()
+
+        switch (action) {
+          case 'list': {
+            const devices = await osc.query('/live/track/get/devices/name', t)
+            const names = extractArgs(devices).slice(1) // first arg is track index
+            if (names.length === 0) return `No devices on track ${args.track}`
+            const lines = [`## Devices on Track ${args.track}`, '']
+            names.forEach((name, i) => {
+              lines.push(`- [${i}] **${name}**`)
+            })
+            return lines.join('\n')
+          }
+
+          case 'params':
+          case 'parameters': {
+            const paramNames = await osc.query('/live/device/get/parameters/name', t, d)
+            const paramValues = await osc.query('/live/device/get/parameters/value', t, d)
+            const names = extractArgs(paramNames).slice(2) // skip track + device idx
+            const values = extractArgs(paramValues).slice(2)
+            const lines = [`## Device ${d} Parameters (Track ${args.track})`, '']
+            lines.push('| # | Parameter | Value |')
+            lines.push('|---|-----------|-------|')
+            for (let i = 0; i < Math.min(names.length, values.length, 50); i++) {
+              lines.push(`| ${i} | ${names[i]} | ${typeof values[i] === 'number' ? Number(values[i]).toFixed(3) : values[i]} |`)
+            }
+            return lines.join('\n')
+          }
+
+          case 'set': {
+            const p = Number(args.param)
+            const v = Number(args.value)
+            if (isNaN(p) || isNaN(v)) return 'Error: param and value required for set action'
+            osc.send('/live/device/set/parameter/value', t, d, p, v)
+            return `Set device ${d} param ${p} to **${v}** on track ${args.track}`
+          }
+
+          case 'enable':
+            osc.send('/live/device/set/enabled', t, d, 1)
+            return `Enabled device ${d} on track ${args.track}`
+
+          case 'disable':
+            osc.send('/live/device/set/enabled', t, d, 0)
+            return `Disabled device ${d} on track ${args.track}`
+
+          default:
+            return `Unknown action "${action}". Options: list, params, set, enable, disable`
+        }
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 7. Mixer ─────────────────────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_mixer',
+    description: 'Batch mixer operations — snapshot all track levels, set multiple tracks at once, adjust sends.',
+    parameters: {
+      action: { type: 'string', description: '"snapshot" to see all levels, "set" to batch-set volumes, "send" to set send level', required: true },
+      levels: { type: 'string', description: 'For "set": JSON object mapping track numbers to volumes, e.g. {"1": 0.8, "3": 0.5}' },
+      track: { type: 'number', description: 'Track number (for send action)' },
+      send: { type: 'number', description: 'Send index (0-based, for send action)' },
+      value: { type: 'number', description: 'Send level 0-1 (for send action)' },
+    },
+    tier: 'free',
+    timeout: 20_000,
+    async execute(args) {
+      const action = String(args.action).toLowerCase()
+      try {
+        const osc = await ensureAbleton()
+
+        if (action === 'snapshot') {
+          const countResult = await osc.query('/live/song/get/num_tracks')
+          const count = Number(extractArgs(countResult)[0]) || 0
+          const lines = ['## Mixer Snapshot', '']
+          lines.push('| Track | Name | Volume | Pan |')
+          lines.push('|-------|------|--------|-----|')
+          for (let i = 0; i < Math.min(count, 32); i++) {
+            try {
+              const name = await osc.query('/live/track/get/name', i)
+              const vol = await osc.query('/live/track/get/volume', i)
+              const pan = await osc.query('/live/track/get/panning', i)
+              const volPct = (Number(extractArgs(vol)[1]) * 100).toFixed(0)
+              const panVal = Number(extractArgs(pan)[1])
+              const panStr = panVal === 0 ? 'C' : panVal < 0 ? `L${Math.abs(panVal * 100).toFixed(0)}` : `R${(panVal * 100).toFixed(0)}`
+              lines.push(`| ${i + 1} | ${extractArgs(name)[1]} | ${volPct}% | ${panStr} |`)
+            } catch { break }
+          }
+          return lines.join('\n')
+        }
+
+        if (action === 'set') {
+          try {
+            const levels = JSON.parse(String(args.levels))
+            const changes: string[] = []
+            for (const [trackNum, vol] of Object.entries(levels)) {
+              const t = Math.max(0, Number(trackNum) - 1)
+              const v = Math.max(0, Math.min(1, Number(vol)))
+              osc.send('/live/track/set/volume', t, v)
+              changes.push(`Track ${trackNum} → ${(v * 100).toFixed(0)}%`)
+            }
+            return `Set volumes:\n${changes.map(c => `- ${c}`).join('\n')}`
+          } catch {
+            return 'Error: levels must be valid JSON, e.g. {"1": 0.8, "3": 0.5}'
+          }
+        }
+
+        if (action === 'send') {
+          const t = userTrack(args.track)
+          const s = Number(args.send) || 0
+          const v = Math.max(0, Math.min(1, Number(args.value)))
+          osc.send('/live/track/set/send', t, s, v)
+          return `Track ${args.track} send ${s} → **${(v * 100).toFixed(0)}%**`
+        }
+
+        return `Unknown action "${action}". Options: snapshot, set, send`
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 8. Chord Progression Writer ──────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_create_progression',
+    description: 'Generate a chord progression and write it as MIDI into an Ableton clip. Supports Roman numerals (ii V I), chord symbols (Cmaj7 Am7), named progressions (Andalusian, 12-bar blues, Coltrane changes), 6 voicing styles, and rhythm patterns. Creates the clip if it doesn\'t exist.',
+    parameters: {
+      track: { type: 'number', description: 'Track number (1-based)', required: true },
+      clip: { type: 'number', description: 'Clip slot (1-based, default: 1)' },
+      key: { type: 'string', description: 'Musical key: C, F#, Bb, etc. (default: C)', },
+      scale: { type: 'string', description: 'Scale type: major, minor, dorian, etc. (default: major)' },
+      progression: { type: 'string', description: 'Chord progression — Roman numerals ("ii V I"), chord symbols ("Cmaj7 Am7 Fmaj7 G7"), or named ("andalusian", "coltrane", "12_bar_blues"). Use progression="list" to see all named progressions.', required: true },
+      bars: { type: 'number', description: 'Number of bars (default: 4)' },
+      voicing: { type: 'string', description: 'Voicing style: close, open, drop2, drop3, spread, shell (default: close)' },
+      rhythm: { type: 'string', description: 'Rhythm pattern: whole, half, quarter, eighth, arpeggio_up, arpeggio_down (default: whole)' },
+      octave: { type: 'number', description: 'Base octave (default: 4)' },
+    },
+    tier: 'free',
+    timeout: 20_000,
+    async execute(args) {
+      // List named progressions
+      if (String(args.progression) === 'list') {
+        const lines = ['## Named Progressions', '']
+        lines.push('| Name | Numerals | Description |')
+        lines.push('|------|----------|-------------|')
+        for (const [key, prog] of Object.entries(NAMED_PROGRESSIONS)) {
+          lines.push(`| ${key} | ${prog.numerals} | ${prog.description} |`)
+        }
+        return lines.join('\n')
+      }
+
+      const key = String(args.key || 'C')
+      const scale = String(args.scale || 'major')
+      const voicingStyle = String(args.voicing || 'close') as 'close' | 'open' | 'drop2' | 'drop3' | 'spread' | 'shell'
+      const rhythm = String(args.rhythm || 'whole')
+      const bars = Number(args.bars) || 4
+      const octave = Number(args.octave) || 4
+      const t = userTrack(args.track)
+      const c = Math.max(0, (Number(args.clip) || 1) - 1)
+
+      // Resolve named progression
+      let progressionStr = String(args.progression)
+      const named = NAMED_PROGRESSIONS[progressionStr.toLowerCase().replace(/[\s-]/g, '_')]
+      if (named) {
+        progressionStr = named.numerals
+      }
+
+      // Parse progression into note arrays
+      let chordNotes: number[][]
+      try {
+        chordNotes = parseProgression(progressionStr, key, scale, octave)
+      } catch (err) {
+        return `Error parsing progression: ${(err as Error).message}`
+      }
+
+      if (chordNotes.length === 0) return 'No chords parsed from progression'
+
+      // Apply voicing
+      chordNotes = chordNotes.map(notes => voiceChord(notes, voicingStyle))
+
+      // Generate MIDI notes with rhythm
+      const beatsPerBar = 4
+      const totalBeats = bars * beatsPerBar
+      const beatsPerChord = totalBeats / chordNotes.length
+      const midiNotes: MidiNote[] = []
+
+      for (let i = 0; i < chordNotes.length; i++) {
+        const chordStart = i * beatsPerChord
+        const notes = chordNotes[i]
+
+        if (rhythm.startsWith('arpeggio')) {
+          const pattern = rhythm.includes('down') ? 'down' : 'up'
+          const arpNotes = arpeggiate(notes, pattern, 8, beatsPerChord)
+          for (const n of arpNotes) {
+            midiNotes.push({ ...n, start: n.start + chordStart })
+          }
+        } else {
+          // Block chord with rhythm pattern
+          const divisions = RHYTHM_PATTERNS[rhythm] || RHYTHM_PATTERNS['whole'] || [0]
+          for (const div of divisions) {
+            if (div >= beatsPerChord) break
+            const noteDur = rhythm === 'whole' ? beatsPerChord :
+              rhythm === 'half' ? 2 :
+                rhythm === 'quarter' ? 1 :
+                  rhythm === 'eighth' ? 0.5 : beatsPerChord
+            for (const pitch of notes) {
+              midiNotes.push({
+                pitch,
+                start: chordStart + div,
+                duration: Math.min(noteDur, beatsPerChord - div),
+                velocity: 80,
+              })
+            }
+          }
+        }
+      }
+
+      // Send to Ableton
+      try {
+        const osc = await ensureAbleton()
+
+        // Create clip if needed
+        osc.send('/live/clip_slot/create_clip', t, c, totalBeats)
+        await new Promise(r => setTimeout(r, 200))
+
+        // Write notes
+        for (const note of midiNotes) {
+          osc.send('/live/clip/add/notes', t, c,
+            note.pitch, note.start, note.duration, note.velocity, 0)
+        }
+
+        // Name the clip
+        const chordNames = chordNotes.map((notes, i) => {
+          const tokens = progressionStr.split(/[\s,|]+/)
+          return tokens[i % tokens.length] || '?'
+        }).join(' | ')
+        osc.send('/live/clip/set/name', t, c, `${key} ${chordNames}`)
+
+        return [
+          `## Chord Progression Written`,
+          `**Key**: ${key} ${scale}`,
+          `**Progression**: ${chordNames}`,
+          `**Voicing**: ${voicingStyle}`,
+          `**Rhythm**: ${rhythm}`,
+          `**Location**: Track ${args.track}, Clip ${c + 1} (${totalBeats} beats / ${bars} bars)`,
+          `**Notes written**: ${midiNotes.length}`,
+          named ? `**Named**: ${named.name} — ${named.description}` : '',
+        ].filter(Boolean).join('\n')
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 9. Session Info ──────────────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_session_info',
+    description: 'Get a full snapshot of the current Ableton Live session — tracks, clips, tempo, time signature, playing state, armed tracks, and devices. The producer agent should call this first to understand the session.',
+    parameters: {
+      detail: { type: 'string', description: '"summary" (default), "full", "tracks", "devices"' },
+    },
+    tier: 'free',
+    timeout: 30_000,
+    async execute(args) {
+      const detail = String(args.detail || 'summary').toLowerCase()
+
+      try {
+        const osc = await ensureAbleton()
+        const lines: string[] = []
+
+        // Transport
+        const tempo = await osc.query('/live/song/get/tempo')
+        const playing = await osc.query('/live/song/get/is_playing')
+        const recording = await osc.query('/live/song/get/record_mode')
+
+        lines.push('## Ableton Live Session', '')
+        lines.push(`- **Tempo**: ${extractArgs(tempo)[0]} BPM`)
+        lines.push(`- **Playing**: ${extractArgs(playing)[0] ? '▶ Yes' : '⏹ No'}`)
+        lines.push(`- **Recording**: ${extractArgs(recording)[0] ? '⏺ Yes' : 'No'}`)
+        lines.push('')
+
+        // Tracks
+        const countResult = await osc.query('/live/song/get/num_tracks')
+        const trackCount = Number(extractArgs(countResult)[0]) || 0
+        lines.push(`### Tracks (${trackCount})`, '')
+
+        if (detail === 'summary') {
+          lines.push('| # | Name | Vol | Armed | Muted | Soloed |')
+          lines.push('|---|------|-----|-------|-------|--------|')
+        } else {
+          lines.push('| # | Name | Vol | Pan | Armed | Muted | Soloed |')
+          lines.push('|---|------|-----|-----|-------|-------|--------|')
+        }
+
+        for (let i = 0; i < Math.min(trackCount, 32); i++) {
+          try {
+            const name = await osc.query('/live/track/get/name', i)
+            const vol = await osc.query('/live/track/get/volume', i)
+            const mute = await osc.query('/live/track/get/mute', i)
+            const solo = await osc.query('/live/track/get/solo', i)
+            const arm = await osc.query('/live/track/get/arm', i)
+
+            const volPct = (Number(extractArgs(vol)[1]) * 100).toFixed(0) + '%'
+            const armStr = extractArgs(arm)[1] ? '⏺' : ''
+            const muteStr = extractArgs(mute)[1] ? '🔇' : ''
+            const soloStr = extractArgs(solo)[1] ? '🔊' : ''
+
+            if (detail === 'summary') {
+              lines.push(`| ${i + 1} | ${extractArgs(name)[1]} | ${volPct} | ${armStr} | ${muteStr} | ${soloStr} |`)
+            } else {
+              const pan = await osc.query('/live/track/get/panning', i)
+              const panVal = Number(extractArgs(pan)[1])
+              const panStr = panVal === 0 ? 'C' : panVal < 0 ? `L${Math.abs(panVal * 100).toFixed(0)}` : `R${(panVal * 100).toFixed(0)}`
+              lines.push(`| ${i + 1} | ${extractArgs(name)[1]} | ${volPct} | ${panStr} | ${armStr} | ${muteStr} | ${soloStr} |`)
+            }
+
+            // Show devices in full/devices mode
+            if (detail === 'full' || detail === 'devices') {
+              try {
+                const devices = await osc.query('/live/track/get/devices/name', i)
+                const deviceNames = extractArgs(devices).slice(1)
+                if (deviceNames.length > 0) {
+                  lines.push(`|   | *Devices: ${deviceNames.join(' → ')}* | | | | |`)
+                }
+              } catch { /* no devices */ }
+            }
+          } catch { break }
+        }
+
+        return lines.join('\n')
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+}

@@ -115,6 +115,7 @@ const PARTICLES = {
     xi_c_plus: { name: 'Xi_c+', symbol: '\u039e_c\u207a', category: 'Baryon', mass_MeV: 2467.71, charge: 1, spin: '1/2', lifetime_s: 4.56e-13, quark_content: 'usc' },
     xi_c_zero: { name: 'Xi_c0', symbol: '\u039e_c\u2070', category: 'Baryon', mass_MeV: 2470.44, charge: 0, spin: '1/2', lifetime_s: 1.53e-13, quark_content: 'dsc' },
     omega_c: { name: 'Omega_c0', symbol: '\u03a9_c\u2070', category: 'Baryon', mass_MeV: 2695.2, charge: 0, spin: '1/2', lifetime_s: 2.68e-13, quark_content: 'ssc' },
+    xi_cc_plus: { name: 'Xi_cc+', symbol: '\u039e_cc\u207a', category: 'Baryon', mass_MeV: 3621.2, charge: 1, spin: '1/2', lifetime_s: 2.56e-13, quark_content: 'ccd', decay_modes: ['Lambda_c+ K- pi+ (dominant)', 'Xi_c+ pi+ pi-'] },
     lambda_b: { name: 'Lambda_b0', symbol: '\u039b_b\u2070', category: 'Baryon', mass_MeV: 5619.60, charge: 0, spin: '1/2', lifetime_s: 1.471e-12, quark_content: 'udb' },
     xi_b_zero: { name: 'Xi_b0', symbol: '\u039e_b\u2070', category: 'Baryon', mass_MeV: 5791.9, charge: 0, spin: '1/2', lifetime_s: 1.480e-12, quark_content: 'usb' },
     xi_b_minus: { name: 'Xi_b-', symbol: '\u039e_b\u207b', category: 'Baryon', mass_MeV: 5797.0, charge: -1, spin: '1/2', lifetime_s: 1.572e-12, quark_content: 'dsb' },
@@ -1049,7 +1050,7 @@ export function registerLabPhysicsTools() {
     // ═══════════════════════════════════════════════════════════════════════════
     registerTool({
         name: 'particle_physics_data',
-        description: 'Look up particle properties from embedded PDG data. ~70 particles: leptons, quarks, gauge bosons, Higgs, mesons (pions, kaons, D, B, J/psi, Upsilon), baryons (proton, neutron, Lambda, Sigma, Xi, Omega, charmed/bottom baryons).',
+        description: 'Look up particle properties from embedded PDG data. ~73 particles: leptons, quarks, gauge bosons, Higgs, mesons (pions, kaons, D, B, J/psi, Upsilon), baryons (proton, neutron, Lambda, Sigma, Xi, Omega, charmed/bottom baryons, Xi_cc+ doubly charmed baryon confirmed March 2026).',
         parameters: {
             particle: { type: 'string', description: 'Particle name, symbol, or key (e.g. "electron", "pi+", "J/psi", "higgs", "omega_minus")', required: true },
         },

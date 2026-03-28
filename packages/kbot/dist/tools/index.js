@@ -275,6 +275,10 @@ const LAZY_MODULE_IMPORTS = [
     { path: './research-notebook.js', registerFn: 'registerResearchNotebookTools' },
     { path: './hypothesis-engine.js', registerFn: 'registerHypothesisEngineTools' },
     { path: './emergent.js', registerFn: 'registerEmergentTools' },
+    { path: './security-hunt.js', registerFn: 'registerSecurityHuntTools' },
+    { path: './lab-frontier.js', registerFn: 'registerFrontierTools' },
+    { path: './ableton.js', registerFn: 'registerAbletonTools' },
+    { path: './ableton-knowledge.js', registerFn: 'registerAbletonKnowledgeTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;

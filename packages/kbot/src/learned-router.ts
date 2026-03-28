@@ -188,6 +188,17 @@ const AGENT_KEYWORDS: Record<string, string[]> = {
     'historiography', 'periodization', 'antiquity', 'medieval', 'colonial',
     'revolution', 'empire', 'ancient', 'archaeology',
   ],
+  producer: [
+    'ableton', 'daw', 'produce', 'producer', 'production', 'session',
+    'clip', 'scene', 'tempo', 'bpm', 'transport', 'arm', 'mute', 'solo',
+    'midi', 'chord', 'progression', 'melody', 'bassline', 'beat', 'drum',
+    'mix', 'mixer', 'volume', 'pan', 'send', 'return', 'sidechain',
+    'device', 'plugin', 'vst', 'instrument', 'effect', 'fx',
+    'reverb', 'delay', 'compressor', 'eq', 'filter', 'arrangement',
+    'launch', 'fire', 'warp', 'loop', 'synth', 'wavetable', 'operator',
+    'sampler', 'mastering', 'limiter', 'stereo', 'automation',
+    'groove', 'swing', 'quantize', 'humanize', 'kick', 'snare', 'hihat',
+  ],
   creative: CREATIVE_KEYWORDS,
   developer: DEVELOPER_KEYWORDS,
   trader: TRADER_KEYWORDS,
@@ -225,6 +236,15 @@ const CATEGORY_PATTERNS: Array<{ pattern: RegExp; agent: string; confidence: num
   ...CREATIVE_PATTERNS,
   ...DEVELOPER_PATTERNS,
   ...TRADER_PATTERNS.map(pattern => ({ pattern, agent: 'trader' as const, confidence: 0.75 })),
+  { pattern: /\b(ableton|daw|live\s*set|session\s*view)\b/i, agent: 'producer', confidence: 0.85 },
+  { pattern: /\b(play|stop|record)\b.*\b(track|clip|scene)\b/i, agent: 'producer', confidence: 0.8 },
+  { pattern: /\b(mute|solo|arm)\b.*\b(track|channel)\b/i, agent: 'producer', confidence: 0.8 },
+  { pattern: /\b(set|change)\b.*\b(tempo|bpm)\b/i, agent: 'producer', confidence: 0.8 },
+  { pattern: /\b(add|write|create|make)\b.*\b(chord|melody|midi|progression|beat|pattern|drum)\b.*\b(track|clip)\b/i, agent: 'producer', confidence: 0.8 },
+  { pattern: /\b(fire|launch)\b.*\b(scene|clip)\b/i, agent: 'producer', confidence: 0.8 },
+  { pattern: /\b(sidechain|parallel\s*compress)\b/i, agent: 'producer', confidence: 0.85 },
+  { pattern: /\b(wavetable|operator|analog|drift|meld|simpler|collision|tension|electric)\b/i, agent: 'producer', confidence: 0.8 },
+  { pattern: /\b(make|build|set\s*up)\b.*\b(house|techno|hip\s*hop|trap|ambient|lofi|jazz|pop|rnb)\b.*\b(track|beat|song)\b/i, agent: 'producer', confidence: 0.85 },
 ]
 
 /**

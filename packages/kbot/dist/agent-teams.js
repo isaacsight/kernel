@@ -37,7 +37,15 @@ const TOOL_PREFERENCES = {
     guardian: [
         'read_file', 'glob', 'grep', 'bash', 'dep_audit',
         'secret_scan', 'ssl_check', 'headers_check', 'cve_lookup',
-        'port_scan', 'owasp_check',
+        'port_scan', 'owasp_check', 'supply_chain_audit', 'checksum_verify',
+        'security_hunt',
+    ],
+    producer: [
+        'ableton_transport', 'ableton_track', 'ableton_clip', 'ableton_scene',
+        'ableton_midi', 'ableton_device', 'ableton_mixer', 'ableton_create_progression',
+        'ableton_session_info', 'ableton_knowledge',
+        'magenta_continue', 'magenta_harmonize', 'magenta_drumify', 'magenta_interpolate',
+        'generate_music_pattern', 'read_file', 'write_file', 'bash',
     ],
     aesthete: [
         'read_file', 'write_file', 'edit_file', 'glob', 'grep',

@@ -161,6 +161,7 @@ const AGENT_NAMES = [
   'scholar',
   'auditor',
   'benchmarker',
+  'producer',
 ] as const
 
 // ── Generators ──

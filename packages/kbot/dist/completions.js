@@ -154,6 +154,7 @@ const AGENT_NAMES = [
     'scholar',
     'auditor',
     'benchmarker',
+    'producer',
 ];
 // ── Generators ──
 function generateBash() {
