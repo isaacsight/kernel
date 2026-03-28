@@ -1,8 +1,63 @@
 {
-  "timestamp": "2026-03-28T02:38:20.734Z",
-  "projects": [],
+  "timestamp": "2026-03-28T14:48:23.366Z",
+  "projects": [
+    {
+      "name": "debba/tabularis",
+      "url": "https://github.com/debba/tabularis",
+      "stars": 884,
+      "description": "A lightweight, developer-focused database management tool. Supports MySQL, PostgreSQL and SQLite. Hackable with plugins. Built for speed, security, and aesthetics."
+    },
+    {
+      "name": "FrankChen021/datastoria",
+      "url": "https://github.com/FrankChen021/datastoria",
+      "stars": 307,
+      "description": "AI-native ClickHouse console for your cluster diagnostics and query generation, optimization and data visualization."
+    },
+    {
+      "name": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": 20358,
+      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+    },
+    {
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 641,
+      "description": "Agent Skills for Solopreneurs"
+    },
+    {
+      "name": "Mirascope/mirascope",
+      "url": "https://github.com/Mirascope/mirascope",
+      "stars": 1441,
+      "description": "The LLM Anti-Framework"
+    },
+    {
+      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "stars": 138,
+      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+    },
+    {
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
+      "stars": 0,
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+    },
+    {
+      "name": "sudokrang/aceforge",
+      "url": "https://github.com/sudokrang/aceforge",
+      "stars": 1,
+      "description": "Self-evolving skill engine for OpenClaw agents. Observes tool usage, crystallizes patterns into auditable SKILL.md files through a dual-model LLM pipeline, and continuously validates with 23 adversarial mutations. Research-grounded. Human-approved. Nothing auto-deploys."
+    },
+    {
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "stars": 0,
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    }
+  ],
   "latestPaper": {
-    "title": "unknown",
-    "summary": "unknown"
+    "title": "Vega: Learning to Drive with Natural Language Instructions",
+    "summary": "Vision-language-action models have reshaped autonomous driving to incorporate languages into the decision-making process. However, most existing pipelines only utilize the language modality for scene descriptions or reasoning and lack the flexibility to follow diverse user instructions for personalized driving. To address this, we first construct a large-scale driving dataset (InstructScene) containing around 100,000 scenes annotated with diverse driving instructions with the corresponding traje"
   }
 }

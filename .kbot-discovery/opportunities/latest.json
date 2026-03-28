@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-28T08:48:27.963Z",
+  "timestamp": "2026-03-28T14:51:01.979Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Fix: Discord can not find function withFileLockadd, and fix model.ts …",
-      "url": "https://github.com/openclaw/openclaw/pull/56287",
+      "title": "feat: add lark-openclaw integration skill",
+      "url": "https://github.com/larksuite/cli/pull/36",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "openclaw-wechat: WeChat personal account channel via GUI automation",
-      "url": "https://github.com/PabloLION/free-idea/issues/63",
+      "title": "feat: add Cursor Agent CLI backend extension",
+      "url": "https://github.com/openclaw/openclaw/pull/56407",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(matrix): prevent mixed matrix-js-sdk entrypoints from crashing plugin load",
-      "url": "https://github.com/openclaw/openclaw/pull/56273",
+      "title": "fix: support canonical skill source field",
+      "url": "https://github.com/openclaw/openclaw/pull/56385",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "zsh-patina - A blazingly fast Zsh syntax highlighter",
+      "url": "https://reddit.com/r/commandline/comments/1s618ty/zshpatina_a_blazingly_fast_zsh_syntax_highlighter/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "Clinic – Connect your Claude Code / OpenClaw to your Gmail, GitHub, Notion, and 39 more services in one command (open source)",
       "url": "https://reddit.com/r/commandline/comments/1s467gf/clinic_connect_your_claude_code_openclaw_to_your/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,10 +192,10 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "CCGram v2.3. Control shell sessions and coding agents from Telegram via tmux (now with NL-to-command generation)",
-      "url": "https://reddit.com/r/commandline/comments/1s350bl/ccgram_v23_control_shell_sessions_and_coding/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "US presidential debates should run a parallel AI bot debate alongside the human one — complement not replace. Good idea or not?",
+      "url": "https://reddit.com/r/artificial/comments/1s5x7v8/us_presidential_debates_should_run_a_parallel_ai/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Supporting AI Startups",
       "url": "https://reddit.com/r/artificial/comments/1s5esbv/supporting_ai_startups/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Abacus.Ai Claw LLM consumes an incredible amount of credit without any usage :(",
-      "url": "https://reddit.com/r/artificial/comments/1s4zgag/abacusai_claw_llm_consumes_an_incredible_amount/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
