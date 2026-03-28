@@ -1,63 +1,8 @@
 {
-  "timestamp": "2026-03-27T12:47:59.914Z",
-  "projects": [
-    {
-      "name": "activepieces/activepieces",
-      "url": "https://github.com/activepieces/activepieces",
-      "stars": 21448,
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
-    },
-    {
-      "name": "truffle-ai/dexto",
-      "url": "https://github.com/truffle-ai/dexto",
-      "stars": 604,
-      "description": "A coding agent and general agent harness for building and orchestrating agentic applications."
-    },
-    {
-      "name": "clawwork-ai/ClawWork",
-      "url": "https://github.com/clawwork-ai/ClawWork",
-      "stars": 319,
-      "description": "Client for OpenClaw — Connect ClawWork to your own OpenClaw and unlock 10x multi-session productivity."
-    },
-    {
-      "name": "Panniantong/Agent-Reach",
-      "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 10959,
-      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
-    },
-    {
-      "name": "Haervwe/open-webui-tools",
-      "url": "https://github.com/Haervwe/open-webui-tools",
-      "stars": 622,
-      "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
-    },
-    {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 640,
-      "description": "Agent Skills for Solopreneurs"
-    },
-    {
-      "name": "alvinunreal/awesome-openclaw",
-      "url": "https://github.com/alvinunreal/awesome-openclaw",
-      "stars": 1,
-      "description": "A curated list of the best OpenClaw resources: official projects, skills, plugins, dashboards, deployment tooling, memory systems, and guides."
-    },
-    {
-      "name": "xinlingzhifei/openclaw-smart-agent",
-      "url": "https://github.com/xinlingzhifei/openclaw-smart-agent",
-      "stars": 0,
-      "description": "OpenClaw smart agent runtime, plugin, and workspace skill for single-machine multi-agent orchestration."
-    },
-    {
-      "name": "sudokrang/aceforge",
-      "url": "https://github.com/sudokrang/aceforge",
-      "stars": 1,
-      "description": "Self-evolving skill engine for OpenClaw agents. Observes tool usage, crystallizes patterns into auditable SKILL.md files through a dual-model LLM pipeline, and continuously validates with 23 adversarial mutations. Research-grounded. Human-approved. Nothing auto-deploys."
-    }
-  ],
+  "timestamp": "2026-03-28T02:38:20.734Z",
+  "projects": [],
   "latestPaper": {
-    "title": "Vega: Learning to Drive with Natural Language Instructions",
-    "summary": "Vision-language-action models have reshaped autonomous driving to incorporate languages into the decision-making process. However, most existing pipelines only utilize the language modality for scene descriptions or reasoning and lack the flexibility to follow diverse user instructions for personalized driving. To address this, we first construct a large-scale driving dataset (InstructScene) containing around 100,000 scenes annotated with diverse driving instructions with the corresponding traje"
+    "title": "unknown",
+    "summary": "unknown"
   }
 }
