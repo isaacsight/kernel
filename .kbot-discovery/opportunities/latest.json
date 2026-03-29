@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-28T21:03:31.211Z",
+  "timestamp": "2026-03-29T06:04:19.476Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,24 +67,38 @@
     },
     {
       "source": "hn-comment",
+      "title": "Will the AI data centre boom become a $9T bust?",
+      "url": "https://news.ycombinator.com/item?id=47560527",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "I am leaving the AI party after one drink",
+      "url": "https://news.ycombinator.com/item?id=47559598",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "The risk of AI isn't making us lazy, but making \"lazy\" look productive",
       "url": "https://news.ycombinator.com/item?id=47555793",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "I made aipack and wanted to share",
-      "url": "https://news.ycombinator.com/item?id=47551802",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "[Auto-QA] Copilot assignments stalled — review config",
+      "url": "https://github.com/kubestellar/console/issues/3827",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
-      "source": "hn-comment",
-      "title": "Why are executives enamored with AI, but ICs aren't?",
-      "url": "https://news.ycombinator.com/item?id=47550392",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "[Auto-QA] Potential memory leaks in component cleanup",
+      "url": "https://github.com/kubestellar/console/issues/3820",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -95,15 +109,8 @@
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] 1 adoption & engagement psychology opportunities found",
-      "url": "https://github.com/kubestellar/console/issues/3791",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] Cards missing demo data support",
-      "url": "https://github.com/kubestellar/console/issues/3790",
+      "title": "ui files missing from plugin?",
+      "url": "https://github.com/cdeust/Cortex/issues/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -123,29 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "deps(deps): bump the security-updates group with 10 updates",
-      "url": "https://github.com/koushik369mondal/WanderLust/pull/455",
+      "title": "docs: clarify browser plugin setup",
+      "url": "https://github.com/openclaw/openclaw/pull/56824",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Fix HTTP OpenAI-compatible routes missing operator.write scope checks",
-      "url": "https://github.com/openclaw/openclaw/pull/56618",
+      "title": "chore(deps): update dependency openclaw/openclaw to v2026.3.28",
+      "url": "https://github.com/justmiles/carapace/pull/21",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(assembler): avoid synthetic orphan tool repairs",
-      "url": "https://github.com/Martian-Engineering/lossless-claw/pull/205",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[agento] chore: upstream sync review and P0/P1 cherry-picks",
-      "url": "https://github.com/jleechanorg/agent-orchestrator/pull/263",
+      "title": "chore(deps): update ghcr.io/openclaw/openclaw docker tag to v2026.3.28",
+      "url": "https://github.com/keiretsu-labs/kubernetes-manifests/pull/1021",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "I tested what happens when you give an AI coding agent access to 2 million research papers. It found techniques it couldn't have known about.",
-      "url": "https://reddit.com/r/artificial/comments/1s6afwm/i_tested_what_happens_when_you_give_an_ai_coding/",
+      "title": "I am usig claude agents wrong?",
+      "url": "https://reddit.com/r/artificial/comments/1s6lu5k/i_am_usig_claude_agents_wrong/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "AMD introduces GAIA agent UI for privacy-first web app for local AI agents",
-      "url": "https://reddit.com/r/artificial/comments/1s67ajg/amd_introduces_gaia_agent_ui_for_privacyfirst_web/",
+      "title": "Surveillance data used to be boring. AI made it dangerous.",
+      "url": "https://reddit.com/r/artificial/comments/1s6hvhk/surveillance_data_used_to_be_boring_ai_made_it/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "US presidential debates should run a parallel AI bot debate alongside the human one — complement not replace. Good idea or not?",
-      "url": "https://reddit.com/r/artificial/comments/1s5x7v8/us_presidential_debates_should_run_a_parallel_ai/",
+      "title": "The AI hype misses the people who actually need it most",
+      "url": "https://reddit.com/r/artificial/comments/1s6fws6/the_ai_hype_misses_the_people_who_actually_need/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
