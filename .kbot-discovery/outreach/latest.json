@@ -1,41 +1,41 @@
 {
-  "timestamp": "2026-03-28T14:48:23.366Z",
+  "timestamp": "2026-03-29T06:05:32.872Z",
   "projects": [
-    {
-      "name": "debba/tabularis",
-      "url": "https://github.com/debba/tabularis",
-      "stars": 884,
-      "description": "A lightweight, developer-focused database management tool. Supports MySQL, PostgreSQL and SQLite. Hackable with plugins. Built for speed, security, and aesthetics."
-    },
-    {
-      "name": "FrankChen021/datastoria",
-      "url": "https://github.com/FrankChen021/datastoria",
-      "stars": 307,
-      "description": "AI-native ClickHouse console for your cluster diagnostics and query generation, optimization and data visualization."
-    },
     {
       "name": "iOfficeAI/AionUi",
       "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 20358,
+      "stars": 20393,
       "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
     },
     {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 641,
-      "description": "Agent Skills for Solopreneurs"
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1057,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "Mirascope/mirascope",
-      "url": "https://github.com/Mirascope/mirascope",
-      "stars": 1441,
-      "description": "The LLM Anti-Framework"
+      "name": "tony1223/better-agent-terminal",
+      "url": "https://github.com/tony1223/better-agent-terminal",
+      "stars": 215,
+      "description": "Multi-workspace terminal aggregator with Claude Code AI integration"
     },
     {
-      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 138,
-      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 1957,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
+    },
+    {
+      "name": "dovvnloading/Graphite",
+      "url": "https://github.com/dovvnloading/Graphite",
+      "stars": 103,
+      "description": "A private, modular node based AI workspace for thinking and creation. Seamlessly connect to Ollama, OpenAI, Gemini, Anthropic, and Groq models in one unified, node-based interface for reasoning, visualization, and exploration — all running locally or via API."
+    },
+    {
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 350,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
@@ -44,20 +44,20 @@
       "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     },
     {
-      "name": "sudokrang/aceforge",
-      "url": "https://github.com/sudokrang/aceforge",
-      "stars": 1,
-      "description": "Self-evolving skill engine for OpenClaw agents. Observes tool usage, crystallizes patterns into auditable SKILL.md files through a dual-model LLM pipeline, and continuously validates with 23 adversarial mutations. Research-grounded. Human-approved. Nothing auto-deploys."
-    },
-    {
       "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
       "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    },
+    {
+      "name": "cicadaFang/openclaw-plugin-dev",
+      "url": "https://github.com/cicadaFang/openclaw-plugin-dev",
+      "stars": 0,
+      "description": "A skill for OpenClaw Plugin Development Guide. For creating OpenClaw plugins, including hook mechanisms, logging, configuration management, etc. Trigger words: develop plugin, create plugin, plugin development, llm_input hook, llm_output hook, wrapStreamFn."
     }
   ],
   "latestPaper": {
-    "title": "Vega: Learning to Drive with Natural Language Instructions",
-    "summary": "Vision-language-action models have reshaped autonomous driving to incorporate languages into the decision-making process. However, most existing pipelines only utilize the language modality for scene descriptions or reasoning and lack the flexibility to follow diverse user instructions for personalized driving. To address this, we first construct a large-scale driving dataset (InstructScene) containing around 100,000 scenes annotated with diverse driving instructions with the corresponding traje"
+    "title": "unknown",
+    "summary": "unknown"
   }
 }
