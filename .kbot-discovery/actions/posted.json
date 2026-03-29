@@ -163,5 +163,13 @@
     "title": "What if AI agents could learn from each other's mistakes?",
     "comment": "The key issue is that versioned state graphs make it harder to do causality analysis than raw logs would allow. Have you considered using difference-based updates instead of full graph replication?\n\nOr do you find that the similarity filtering overhead justifies the reduced noise propagation?",
     "success": true
+  },
+  {
+    "timestamp": "2026-03-29T18:19:40.511Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47543679",
+    "title": "Schedule tasks on the web",
+    "comment": "The core gotcha is that web-based scheduling assumes eventual consistency between coordinators and actuators—you'll need idempotency keys and compensating transactions, not just retry logic. Priority queues alone don't prevent deadlock when tasks have circular dependencies across different execution contexts. What's your experience with distributed task scheduling?",
+    "success": true
   }
 ]
