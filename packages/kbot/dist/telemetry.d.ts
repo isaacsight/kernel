@@ -10,7 +10,7 @@ export interface TelemetryEvent {
     /** Duration in milliseconds (for timed events) */
     duration_ms?: number;
 }
-export type EventType = 'session_start' | 'session_end' | 'tool_call_start' | 'tool_call_end' | 'tool_call_error' | 'checkpoint_save' | 'checkpoint_resume' | 'agent_route' | 'api_call' | 'api_error' | 'cost_update';
+export type EventType = 'session_start' | 'session_end' | 'tool_call_start' | 'tool_call_end' | 'tool_call_error' | 'checkpoint_save' | 'checkpoint_resume' | 'agent_route' | 'api_call' | 'api_error' | 'cost_update' | 'prediction_made';
 export declare class TelemetryEmitter {
     private dir;
     private sessionId;

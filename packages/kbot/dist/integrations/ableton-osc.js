@@ -162,8 +162,12 @@ export function decodeOscMessage(buf) {
                 args.push({ type: 'b', value });
                 break;
             }
-            case 'T': // OSC True — skip, no data bytes
-            case 'F': // OSC False — skip, no data bytes
+            case 'T': // OSC True — decode as integer 1
+                args.push({ type: 'i', value: 1 });
+                break;
+            case 'F': // OSC False — decode as integer 0
+                args.push({ type: 'i', value: 0 });
+                break;
             case 'N': // OSC Nil — skip
                 break;
             default:

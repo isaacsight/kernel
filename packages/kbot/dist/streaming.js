@@ -374,7 +374,6 @@ export async function streamOpenAIResponse(apiKey, apiUrl, model, system, messag
                         while (state.toolCalls.length <= idx) {
                             state.toolCalls.push({ id: '', name: '', partialJson: '' });
                         }
-                        const prevId = state.toolCalls[idx].id;
                         if (tc.id)
                             state.toolCalls[idx].id = String(tc.id);
                         const fn = tc.function;

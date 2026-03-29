@@ -36,7 +36,7 @@ async function main() {
         .name('kbot')
         .description('kbot — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
         .version(VERSION)
-        .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 32)')
+        .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 35)')
         .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
         .option('-s, --stream', 'Stream the response')
         .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
@@ -78,7 +78,7 @@ async function main() {
         console.log(`  ${chalk.dim('─'.repeat(50))}`);
         console.log(`  ${chalk.white('kbot auth')}         Configure your API key (20 providers)`);
         console.log(`  ${chalk.white('kbot doctor')}       Diagnose setup issues`);
-        console.log(`  ${chalk.white('kbot agents')}       List all 32 specialist agents`);
+        console.log(`  ${chalk.white('kbot agents')}       List all 35 specialist agents`);
         console.log(`  ${chalk.white('kbot status')}       Full dashboard — tools, agents, stats`);
         console.log(`  ${chalk.white('kbot init')}         Set up kbot for this project (60s)`);
         console.log(`  ${chalk.white('kbot update')}       Update to the latest version`);
@@ -99,7 +99,7 @@ async function main() {
         console.log(`  ${chalk.cyan('https://github.com/isaacsight/kernel/issues')}  ${chalk.dim('Bug reports')}`);
         console.log(`  ${chalk.cyan('support@kernel.chat')}  ${chalk.dim('Email (AI-assisted replies)')}`);
         console.log();
-        console.log(`  ${chalk.dim('32 specialist agents · 360+ tools · 20 providers · MIT licensed')}`);
+        console.log(`  ${chalk.dim('35 specialist agents · 360+ tools · 20 providers · MIT licensed')}`);
         console.log();
         process.exit(0);
     });
@@ -439,7 +439,6 @@ async function main() {
         .command('status')
         .description('Show daemon status — uptime, subsystems, alerts')
         .action(async () => {
-        const chalk = (await import('chalk')).default;
         const { getDaemonStatus, getDaemonLog } = await import('./daemon.js');
         const status = getDaemonStatus();
         console.log();
@@ -508,7 +507,6 @@ async function main() {
         .option('--model <model>', 'Ollama model for analysis', 'qwen2.5-coder:32b')
         .action(async (opts) => {
         const { loadConfig, saveConfig, runDiscoveryCycle } = await import('./discovery.js');
-        const chalk = (await import('chalk')).default;
         const readline = await import('node:readline');
         let config = loadConfig();
         // First run — interactive setup
@@ -576,7 +574,6 @@ async function main() {
         .description('Show discovery agent status and stats')
         .action(async () => {
         const { getDiscoveryState, loadConfig } = await import('./discovery.js');
-        const chalk = (await import('chalk')).default;
         const config = loadConfig();
         const state = getDiscoveryState();
         console.log();
@@ -714,7 +711,6 @@ async function main() {
         const { existsSync } = await import('node:fs');
         const { join } = await import('node:path');
         const { initProject, formatInitReport } = await import('./init.js');
-        const chalk = (await import('chalk')).default;
         const AMETHYST = chalk.hex('#6B5B95');
         const root = process.cwd();
         // Check for existing config
@@ -748,7 +744,6 @@ async function main() {
         .option('--reset', 'Reset the observer log and cursor')
         .action(async (opts) => {
         const { ingestObservations, getObserverStats, getLogPath } = await import('./observer.js');
-        const chalk = (await import('chalk')).default;
         if (opts.reset) {
             const { existsSync, unlinkSync } = await import('node:fs');
             const { join } = await import('node:path');
@@ -902,7 +897,6 @@ async function main() {
         .description('Full defense audit — memory integrity, anomalies, incidents, recommendations')
         .action(async () => {
         const { runDefenseAudit } = await import('./self-defense.js');
-        const chalk = (await import('chalk')).default;
         const audit = runDefenseAudit();
         console.log();
         console.log(`  ${chalk.bold('kbot defense audit')}`);
@@ -959,7 +953,6 @@ async function main() {
         .description('Verify memory file integrity — detect tampering')
         .action(async () => {
         const { verifyMemoryIntegrity } = await import('./self-defense.js');
-        const chalk = (await import('chalk')).default;
         const results = verifyMemoryIntegrity();
         if (results.length === 0) {
             printInfo('No memory files to verify. Run `kbot defense sign` first.');
@@ -1004,7 +997,6 @@ async function main() {
             console.log(JSON.stringify(profile, null, 2));
         }
         else {
-            const chalk = (await import('chalk')).default;
             const ACCENT = process.stdout.isTTY !== false ? chalk.hex('#A78BFA') : chalk;
             process.stderr.write('\n  ' + ACCENT('kbot Machine') + '\n');
             process.stderr.write(formatMachineProfile(profile));
@@ -1014,7 +1006,6 @@ async function main() {
         .command('hardware')
         .description('Detect your hardware tier and get personalized model recommendations for local AI')
         .action(async () => {
-        const chalk = (await import('chalk')).default;
         const { detectHardwareTier, getMultiModelConfig, QUANT_OPTIONS, DEFAULT_MODELS } = await import('./inference.js');
         const hw = detectHardwareTier();
         const mm = getMultiModelConfig();
@@ -1084,7 +1075,6 @@ async function main() {
         .description('Run full synthesis cycle (all 8 operations)')
         .action(async () => {
         const { synthesize, formatSynthesisResult } = await import('./synthesis-engine.js');
-        const chalk = (await import('chalk')).default;
         process.stderr.write('\n' + chalk.dim('Running synthesis cycle...') + '\n\n');
         const result = synthesize();
         console.log(formatSynthesisResult(result));
@@ -1096,7 +1086,6 @@ async function main() {
         const { getSynthesisEngineStats, buildSkillMap, formatSkillMap } = await import('./synthesis-engine.js');
         const { synthesizeMemory, getInsights, getSynthesisStats } = await import('./memory-synthesis.js');
         const { getExtendedStats } = await import('./learning.js');
-        const chalk = (await import('chalk')).default;
         process.stderr.write('\n');
         // Memory synthesis (existing)
         synthesizeMemory();
@@ -1163,7 +1152,6 @@ async function main() {
         .description('Build and display active corrections for prompt injection')
         .action(async () => {
         const { buildActiveCorrections } = await import('./synthesis-engine.js');
-        const chalk = (await import('chalk')).default;
         const corrections = buildActiveCorrections();
         if (corrections.length === 0) {
             console.log(chalk.dim('\nNo corrections extracted yet. Need more reflections or explicit corrections.\n'));
@@ -1183,7 +1171,6 @@ async function main() {
         .action(async () => {
         const { consumeDiscoveredTools } = await import('./synthesis-engine.js');
         const { join } = await import('path');
-        const chalk = (await import('chalk')).default;
         const discDir = join(process.cwd(), '.kbot-discovery');
         const adoptions = consumeDiscoveredTools(discDir);
         if (adoptions.length === 0) {
@@ -1203,7 +1190,6 @@ async function main() {
         .action(async () => {
         const { extractPaperInsights } = await import('./synthesis-engine.js');
         const { join } = await import('path');
-        const chalk = (await import('chalk')).default;
         const discDir = join(process.cwd(), '.kbot-discovery');
         const insights = extractPaperInsights(discDir);
         if (insights.length === 0) {
@@ -1222,7 +1208,6 @@ async function main() {
     // Default action (no subcommand) — run full cycle
     synthCmd.action(async () => {
         const { synthesize, formatSynthesisResult } = await import('./synthesis-engine.js');
-        const chalk = (await import('chalk')).default;
         process.stderr.write('\n' + chalk.dim('Running synthesis cycle...') + '\n\n');
         const result = synthesize();
         console.log(formatSynthesisResult(result));
@@ -1236,7 +1221,6 @@ async function main() {
         .description('List all locally forged tools')
         .action(async () => {
         const { listForgedTools } = await import('./tools/forge.js');
-        const chalk = (await import('chalk')).default;
         const tools = listForgedTools();
         if (tools.length === 0) {
             printInfo('No forged tools yet. Use `kbot forge create` or ask kbot to create one.');
@@ -1258,7 +1242,6 @@ async function main() {
                 signal: AbortSignal.timeout(8_000),
             });
             const data = await res.json();
-            const chalk = (await import('chalk')).default;
             if (!data.tools || data.tools.length === 0) {
                 printInfo(`No tools found for "${query}". Be the first — forge one and publish it!`);
                 return;
@@ -1301,7 +1284,6 @@ async function main() {
         .description('Autopoietic health check — system viability, component status, self-healing log')
         .action(async () => {
         const { AutopoieticSystem } = await import('./autopoiesis.js');
-        const chalk = (await import('chalk')).default;
         const AMETHYST = chalk.hex('#6B5B95');
         process.stderr.write('\n');
         printInfo('kbot Vitals — Autopoietic System Health');
@@ -1393,7 +1375,6 @@ async function main() {
         .action(async (opts) => {
         // Check both subcommand and parent opts (commander absorbs --json at parent level)
         const jsonMode = opts.json || program.opts().json;
-        const chalk = (await import('chalk')).default;
         const AMETHYST = chalk.hex('#6B5B95');
         const DIM = chalk.dim;
         const GREEN = chalk.hex('#4ADE80');
@@ -1468,7 +1449,7 @@ async function main() {
                 latestVersion: latestVersion || null,
                 isLatest,
                 tools: toolCount,
-                agents: 26,
+                agents: 35,
                 cognitiveModules: cognitiveCount,
                 learning: {
                     patterns: stats.patternsCount,
@@ -1548,7 +1529,6 @@ async function main() {
         .option('--security', 'Focus on security (blocklist bypasses, injection vectors)')
         .action(async (opts) => {
         const { runAgent } = await import('./agent.js');
-        const chalk = (await import('chalk')).default;
         process.stderr.write(`\n  ${chalk.hex('#DC143C')('🛡 Immune Agent')} — Self-Audit\n\n`);
         const target = opts.file
             ? `Read and audit this specific file: ${opts.file}`
@@ -2241,7 +2221,6 @@ async function main() {
             printError('No users specified. Use --users email1,email2 or --open for all inbound.');
             return;
         }
-        const chalk = (await import('chalk')).default;
         const mode = agentUsers.length === 0 ? 'OPEN (all inbound)' : `${agentUsers.length} users`;
         console.log();
         console.log(chalk.hex('#6B5B95')('  ◉ Kernel Email Agent'));
@@ -2316,7 +2295,6 @@ async function main() {
                 supabaseKey = supabaseKey || get('SUPABASE_SERVICE_KEY');
             }
         }
-        const chalk = (await import('chalk')).default;
         console.log();
         console.log(chalk.hex('#6B5B95')('  ◉ Kernel iMessage Agent'));
         console.log(chalk.dim(`  Model: ${opts.model || 'qwen2.5-coder:32b'}`));
@@ -2622,6 +2600,143 @@ async function main() {
         const md = generateChangelog({ since: changelogOpts.since, format: 'markdown' });
         process.stdout.write(md);
     });
+    // ── Bench ──
+    program
+        .command('bench')
+        .description('Run benchmarks — evaluate kbot against standardized coding and research tasks')
+        .option('--category <cat>', 'Filter by category (codegen, bugfix, refactor, explain, research, science)')
+        .option('--difficulty <diff>', 'Filter by difficulty (easy, medium, hard)')
+        .option('--compare', 'Compare with previous run')
+        .option('--history', 'Show benchmark history')
+        .option('--verbose', 'Show detailed per-task results')
+        .option('--limit <n>', 'Limit number of tasks', parseInt)
+        .action(async (benchOpts) => {
+        const { registerBenchCommand } = await import('./bench.js');
+        // Delegate to the bench module's own handler
+        const { runBenchmark, getBenchHistory, compareBenchmarks, formatBenchResult } = await import('./bench.js');
+        if (benchOpts.history) {
+            const history = getBenchHistory();
+            if (history.length === 0) {
+                console.error(chalk.dim('  No benchmark history. Run `kbot bench` first.'));
+                return;
+            }
+            for (const h of history.slice(-10)) {
+                console.error(`  ${chalk.dim(h.timestamp.slice(0, 10))}  ${chalk.hex('#6B5B95')(h.totalScore.toFixed(1) + '/100')}  ${chalk.dim(h.provider + '/' + h.model)}  ${chalk.dim(h.tasks.length + ' tasks')}`);
+            }
+            return;
+        }
+        const result = await runBenchmark({
+            categories: benchOpts.category ? [benchOpts.category] : undefined,
+            difficulty: benchOpts.difficulty,
+            verbose: benchOpts.verbose,
+            limit: benchOpts.limit,
+        });
+        formatBenchResult(result);
+        if (benchOpts.compare) {
+            const history = getBenchHistory();
+            if (history.length >= 2) {
+                console.error(compareBenchmarks(history[history.length - 2], result));
+            }
+        }
+    });
+    // ── Lab ──
+    program
+        .command('lab')
+        .description('Science lab — interactive research REPL with domain-specific tools and notebooks')
+        .option('--domain <domain>', 'Start in a specific domain (physics, chemistry, biology, math, neuro, earth, social, humanities, health)')
+        .option('--resume <id>', 'Resume a previous lab session')
+        .option('--name <name>', 'Name this lab session')
+        .action(async (labOpts) => {
+        const { startLab } = await import('./lab.js');
+        await startLab({
+            domain: labOpts.domain,
+            resume: labOpts.resume,
+            name: labOpts.name,
+        });
+    });
+    // ── Teach ──
+    program
+        .command('teach [input...]')
+        .description('Teach kbot patterns, rules, and preferences explicitly')
+        .option('--list', 'List all teachings')
+        .option('--stats', 'Show teaching statistics')
+        .option('--remove <id>', 'Remove a teaching by ID')
+        .option('--export', 'Export teachings as JSON')
+        .option('--import <file>', 'Import teachings from JSON file')
+        .action(async (input, teachOpts) => {
+        const { handleTeachCommand } = await import('./teach.js');
+        const args = [];
+        if (teachOpts.list)
+            args.push('list');
+        else if (teachOpts.stats)
+            args.push('stats');
+        else if (teachOpts.remove)
+            args.push('remove', teachOpts.remove);
+        else if (teachOpts.export)
+            args.push('export');
+        else if (teachOpts.import)
+            args.push('import', teachOpts.import);
+        else if (input.length > 0)
+            args.push(input.join(' '));
+        await handleTeachCommand(args);
+    });
+    // ── Sessions ──
+    program
+        .command('sessions')
+        .description('Manage multiple parallel kbot sessions')
+        .option('--create <name>', 'Create a new named session')
+        .option('--switch <name>', 'Switch to a session')
+        .option('--kill <name>', 'Kill a session')
+        .option('--agent <agent>', 'Set specialist agent for new session')
+        .option('--task <task>', 'Set task description for new session')
+        .action(async (sessOpts) => {
+        const { createSession, listSessions, switchSession, killSession, formatSessionList, formatSessionStatus } = await import('./multi-session.js');
+        if (sessOpts.create) {
+            const s = createSession({ name: sessOpts.create, agent: sessOpts.agent, task: sessOpts.task });
+            console.error(chalk.hex('#6B5B95')(`  Created session: ${s.name} (${s.id.slice(0, 8)})`));
+            return;
+        }
+        if (sessOpts.switch) {
+            const s = switchSession(sessOpts.switch);
+            if (s)
+                console.error(chalk.hex('#6B5B95')(`  Switched to: ${s.name}`));
+            else
+                console.error(chalk.red(`  Session not found: ${sessOpts.switch}`));
+            return;
+        }
+        if (sessOpts.kill) {
+            const ok = killSession(sessOpts.kill);
+            if (ok)
+                console.error(chalk.hex('#6B5B95')(`  Killed session: ${sessOpts.kill}`));
+            else
+                console.error(chalk.red(`  Session not found: ${sessOpts.kill}`));
+            return;
+        }
+        // Default: list sessions
+        const sessions = listSessions();
+        if (sessions.length === 0) {
+            console.error(chalk.dim('  No active sessions. Create one with `kbot sessions --create <name>`'));
+        }
+        else {
+            console.error(formatSessionList(sessions));
+        }
+    });
+    program
+        .command('release')
+        .description('Create a GitHub release with auto-generated changelog')
+        .option('--draft', 'Create as draft release')
+        .option('--tag <tag>', 'Override tag (default: vX.Y.Z from package.json)')
+        .option('--dry-run', 'Preview release notes without creating the release')
+        .option('--json', 'Output result as JSON')
+        .action(async (releaseOpts) => {
+        const { runRelease } = await import('./github-release.js');
+        await runRelease({
+            draft: releaseOpts.draft,
+            tag: releaseOpts.tag,
+            dryRun: releaseOpts.dryRun,
+            json: releaseOpts.json || program.opts().json,
+        });
+    });
     // ── Automate subcommands ──
     const automateCmd = program
         .command('automate')
@@ -2776,7 +2891,7 @@ async function main() {
     if (opts.quiet)
         setQuiet(true);
     // If a sub-command was run, we're done
-    if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery'].includes(program.args[0]))
+    if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions'].includes(program.args[0]))
         return;
     // Check for API key (BYOK or local provider)
     let byokActive = isByokEnabled();
@@ -3261,7 +3376,7 @@ async function byokFlow() {
     console.log();
     printSuccess(`BYOK mode enabled — ${providerConfig.name}`);
     printInfo('You pay the provider directly. No message limits. No restrictions.');
-    printInfo('All 362 tools + 32 agents + learning system = yours.');
+    printInfo('All 362 tools + 35 agents + learning system = yours.');
     console.log();
     printSuccess('Ready. Run `kbot` to start.');
 }
@@ -3539,7 +3654,7 @@ async function startRepl(agentOpts, context, tier, byokActive = false, localActi
         const suggestions = await detectProjectSuggestions();
         console.log();
         console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'));
-        console.log(chalk.dim('  │') + chalk.bold('  32 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'));
+        console.log(chalk.dim('  │') + chalk.bold('  35 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'));
         console.log(chalk.dim('  │                                                 │'));
         if (suggestions.length > 0) {
             for (const s of suggestions.slice(0, 4)) {

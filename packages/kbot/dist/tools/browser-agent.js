@@ -320,10 +320,10 @@ async function callOpenAIVision(apiKey, apiUrl, model, system, userText, screens
 }
 /** Google Gemini vision API */
 async function callGoogleVision(apiKey, model, system, userText, screenshotBase64) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
     const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
         body: JSON.stringify({
             systemInstruction: { parts: [{ text: system }] },
             contents: [{

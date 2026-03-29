@@ -262,7 +262,8 @@ export function registerAbletonTools(): void {
         switch (action) {
           case 'fire':
           case 'launch':
-            osc.send('/live/clip_slot/fire', t, c)
+            osc.send('/live/song/set/clip_trigger_quantization', 0) // immediate launch
+            osc.send('/live/clip/fire', t, c) // auto-starts transport
             return `Fired clip ${args.clip || 1} on track ${args.track} ▶`
 
           case 'stop':
@@ -862,14 +863,23 @@ export function registerAbletonTools(): void {
           return `Could not find "${manufacturer} ${plugin}": ${status.join(', ')}`
         }
 
-        // Try native device first
-        let result = await osc.query('/live/kbot/load_device', t, plugin)
+        // Try load_plugin first — _deep_plugin_search correctly handles native
+        // instruments by returning the first loadable child of matching browser folders.
+        // This works for both native (Drum Rack, Operator, Wavetable) and third-party plugins.
+        let result = await osc.query('/live/kbot/load_plugin', t, plugin, '')
         let status = extractArgs(result)
         if (status[0] === 'ok') {
           return `Loaded **${status[1]}** on track ${args.track}`
         }
 
-        // Try plugins category
+        // Fallback: try load_device (uses _search_tree, less reliable for native instruments)
+        result = await osc.query('/live/kbot/load_device', t, plugin)
+        status = extractArgs(result)
+        if (status[0] === 'ok') {
+          return `Loaded **${status[1]}** on track ${args.track}`
+        }
+
+        // Final fallback: try plugins category with name as both manufacturer and plugin
         result = await osc.query('/live/kbot/load_plugin', t, plugin, plugin)
         status = extractArgs(result)
         if (status[0] === 'ok') {
@@ -999,8 +1009,9 @@ export function registerAbletonTools(): void {
           lines.push(`**BPM range**: ${bpmRange[0]}-${bpmRange[1]}`)
         }
 
-        // Fire the clip
-        osc.send('/live/clip_slot/fire', t, 0)
+        // Fire the clip — set immediate quantization and use clip/fire (auto-starts transport)
+        osc.send('/live/song/set/clip_trigger_quantization', 0)
+        osc.send('/live/clip/fire', t, 0)
 
         lines.push('')
         lines.push('▶ Drum Rack built and playing')
@@ -1047,13 +1058,19 @@ export function registerAbletonTools(): void {
           osc.send('/live/track/set/name', newTrackIdx, String(args.name))
         }
 
-        // Load instrument if specified
+        // Load instrument if specified — use load_plugin first (handles native + third-party)
         if (args.instrument) {
           const manufacturer = args.manufacturer ? String(args.manufacturer) : ''
           if (manufacturer) {
             await osc.query('/live/kbot/load_plugin', newTrackIdx, manufacturer, String(args.instrument))
           } else {
-            await osc.query('/live/kbot/load_device', newTrackIdx, String(args.instrument))
+            // Try load_plugin first (works for native instruments via _deep_plugin_search fallback)
+            const result = await osc.query('/live/kbot/load_plugin', newTrackIdx, String(args.instrument), '')
+            const status = extractArgs(result)
+            if (status[0] !== 'ok') {
+              // Fallback to load_device
+              await osc.query('/live/kbot/load_device', newTrackIdx, String(args.instrument))
+            }
           }
         }
 

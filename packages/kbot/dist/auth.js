@@ -49,7 +49,7 @@ export const PROVIDERS = {
         fastModel: 'gemini-2.5-flash',
         inputCost: 1.25,
         outputCost: 10.0,
-        authHeader: 'bearer', // uses ?key= param instead
+        authHeader: 'bearer', // uses x-goog-api-key header
         models: ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash'],
     },
     mistral: {
@@ -548,9 +548,9 @@ async function verifyByokKey(key, provider) {
             return true;
         }
         if (p.apiStyle === 'google') {
-            const res = await fetch(`${p.apiUrl}/${p.fastModel}:generateContent?key=${key}`, {
+            const res = await fetch(`${p.apiUrl}/${p.fastModel}:generateContent`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
                 body: JSON.stringify({
                     contents: [{ parts: [{ text: 'hi' }] }],
                     generationConfig: { maxOutputTokens: 1 },

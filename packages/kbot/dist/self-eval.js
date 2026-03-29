@@ -87,6 +87,9 @@ function buildHeaders(provider, apiKey) {
         headers['x-api-key'] = apiKey;
         headers['anthropic-version'] = '2023-06-01';
     }
+    else if (provider.apiStyle === 'google') {
+        headers['x-goog-api-key'] = apiKey;
+    }
     else if (apiKey && apiKey !== 'local') {
         headers['Authorization'] = `Bearer ${apiKey}`;
     }
@@ -115,9 +118,9 @@ function buildBody(provider, model, prompt) {
     });
 }
 /** Build the full URL for the request */
-function buildUrl(provider, byokProvider, model, apiKey) {
+function buildUrl(provider, byokProvider, model, _apiKey) {
     if (provider.apiStyle === 'google') {
-        return `${provider.apiUrl}/${model}:generateContent?key=${apiKey}`;
+        return `${provider.apiUrl}/${model}:generateContent`;
     }
     return provider.apiUrl;
 }
