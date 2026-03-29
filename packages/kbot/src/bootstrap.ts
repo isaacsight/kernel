@@ -686,7 +686,7 @@ export function formatBootstrapMarkdown(report: BootstrapReport): string {
   lines.push(`*The bootstrap pattern: close the gap between what your project IS and what the world PERCEIVES.*`)
   lines.push(`*Fix one thing per run. Compound.*`)
   lines.push('')
-  lines.push(`*[kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 23 agents, 290 tools, 20 providers*`)
+  lines.push(`*[kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 35 agents, 560+ tools, 20 providers*`)
 
   return lines.join('\n')
 }

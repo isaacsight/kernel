@@ -201,7 +201,7 @@ export function LandingPage() {
           The AI that gets smarter every time anyone uses it.
         </p>
         <p className="ka-landing-tagline ka-hero-anim" style={{ animationDelay: '0.55s' }}>
-          Terminal AI agent. 290 tools. 23 specialists. Runs offline.
+          Terminal AI agent. 560+ tools. 35 specialists. Science lab. Runs offline.
           {downloads && <><br />{downloads.toLocaleString()} downloads this week.</>}
         </p>
 
@@ -243,7 +243,7 @@ export function LandingPage() {
             <div className="ka-landing-line" style={{ marginTop: 12 }}>
               This is a TypeScript monorepo with a React frontend and<br />
               Supabase backend. The main product is kbot, a terminal AI<br />
-              agent in packages/kbot/ with 290 tools across 46 modules...
+              agent in packages/kbot/ with 560+ tools across 80+ modules...
             </div>
             <div className="ka-landing-line ka-landing-dim" style={{ marginTop: 8 }}>
               3 tool calls &middot; 847 tokens &middot; $0.003

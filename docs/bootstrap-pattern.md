@@ -14,7 +14,7 @@ This document describes the pattern, its implementation in kbot, and why it may 
 
 Open source projects die of invisibility, not incapability.
 
-Consider: a terminal AI agent with 290 tools, 23 specialist agents, 20 providers, a learning engine, and a programmatic SDK. It has ~1,200 npm downloads per day. It has 1 GitHub star.
+Consider: a terminal AI agent with 560+ tools, 35 specialist agents, 20 providers, a learning engine, and a programmatic SDK. It has ~1,200 npm downloads per day. It has 1 GitHub star.
 
 The product isn't the problem. The gap between capability and perception is the problem.
 
