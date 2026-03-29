@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-29T12:06:48.228Z",
+  "timestamp": "2026-03-29T18:19:15.078Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -281,6 +281,53 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "pejmanjohn"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "I built an <em>opensource</em> skill that runs N implementations in parallel, has each one reviewed blind by a separate <em>agent</em>, then a judge picks the winner or synthesizes the best parts of each.<p>Each slot can use a different skill (CE:work in one vs superpowers:test-driven-development) and harness (CC vs. Codex). Or put different emphasis on each slot (functional vs. robustness). Also works for non-<em>coding</em> tasks (writing) and you can create custom slot-machines.<p>The main insight is simple enough: AI agents are probabilistic. The same spec produces different code every time; different designs, different bugs, different quality.So running parallel implementations can increase quality if we can judge effectively.<p>There is a real tradeoff here of increased time and tokens for quality but for production code this is often worth it; particularly on long running overnight loops on subscription plans. Also a simple way to learn which skills and harnesses actually work best for your codebase.<p>Appreciate any feedback / PRs. This is early!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: /slot-machine development (CC vs. Codex; CE vs. superpowers)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/pejmanjohn/slot-machine"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_pejmanjohn",
+            "story_47564996",
+            "show_hn"
+          ],
+          "author": "pejmanjohn",
+          "created_at": "2026-03-29T17:07:46Z",
+          "created_at_i": 1774804066,
+          "num_comments": 0,
+          "objectID": "47564996",
+          "points": 2,
+          "story_id": 47564996,
+          "story_text": "I built an opensource skill that runs N implementations in parallel, has each one reviewed blind by a separate agent, then a judge picks the winner or synthesizes the best parts of each.<p>Each slot can use a different skill (CE:work in one vs superpowers:test-driven-development) and harness (CC vs. Codex). Or put different emphasis on each slot (functional vs. robustness). Also works for non-coding tasks (writing) and you can create custom slot-machines.<p>The main insight is simple enough: AI agents are probabilistic. The same spec produces different code every time; different designs, different bugs, different quality.So running parallel implementations can increase quality if we can judge effectively.<p>There is a real tradeoff here of increased time and tokens for quality but for production code this is often worth it; particularly on long running overnight loops on subscription plans. Also a simple way to learn which skills and harnesses actually work best for your codebase.<p>Appreciate any feedback &#x2F; PRs. This is early!",
+          "title": "Show HN: /slot-machine development (CC vs. Codex; CE vs. superpowers)",
+          "updated_at": "2026-03-29T17:25:16Z",
+          "url": "https://github.com/pejmanjohn/slot-machine"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "zdenham"
             },
             "story_text": {
@@ -321,11 +368,11 @@
           "created_at_i": 1774638476,
           "num_comments": 0,
           "objectID": "47546925",
-          "points": 9,
+          "points": 10,
           "story_id": 47546925,
           "story_text": "Very excited to share Anvil. I built Anvil to take back control when working with parallel coding agents. It comes with one click worktree isolation, and first class spec support.<p>Claude Code and similar coding TUIs are very eager to get into writing code, even before their human baby sitter fully understands the implication of what they are about to build.<p>The core insight with Anvil is that it is much easier to write high quality code which matches the author&#x27;s intent after iterating on an external plan with your agent.<p>Align on the architecture, implementation, and verification strategy in a markdown file, then execution is pretty straightforward.<p>This is not a new concept, but the user experience within TUI apps for this workflow is pretty shit. Claude creates non-semantic plan names like &quot;aquamarine-owl&quot; that are trapped within a single agent context. Spinning up multiple agents to check on different aspects of a plan is annoying and slow, and managing terminal tabs is pure hell.<p>So I built anvil, this is a fully open source (MIT license) project.",
           "title": "Show HN: Anvil – Desktop App for Spec Driven Development",
-          "updated_at": "2026-03-29T10:59:00Z",
+          "updated_at": "2026-03-29T17:48:47Z",
           "url": "https://github.com/zdenham/anvil"
         },
         {
@@ -504,51 +551,6 @@
           "title": "Show HN: Optio – Orchestrate AI coding agents in K8s to go from ticket to PR",
           "updated_at": "2026-03-29T06:02:44Z",
           "url": "https://github.com/jonwiggins/optio"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "primaprashant"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "coding",
-                "agent"
-              ],
-              "value": "Stop Typing Prompts to Your <em>Coding</em> <em>Agent</em>"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "open",
-                "source"
-              ],
-              "value": "https://www.agenticcodingweekly.com/p/5-best-<em>open</em>-<em>source</em>-speech-to-text-tools-in-2026"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_primaprashant",
-            "story_47517118"
-          ],
-          "author": "primaprashant",
-          "children": [
-            47517124
-          ],
-          "created_at": "2026-03-25T13:31:15Z",
-          "created_at_i": 1774445475,
-          "num_comments": 1,
-          "objectID": "47517118",
-          "points": 2,
-          "story_id": 47517118,
-          "title": "Stop Typing Prompts to Your Coding Agent",
-          "updated_at": "2026-03-25T13:53:00Z",
-          "url": "https://www.agenticcodingweekly.com/p/5-best-open-source-speech-to-text-tools-in-2026"
         }
       ]
     },
@@ -819,7 +821,101 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "gpgkd906"
+              "value": "ohjeez"
+            },
+            "story_text": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "<a href=\"https://web.archive.org/web/20260329052632/https://gladeart.com/blog/the-bot-situation-on-the-internet-is-actually-worse-than-you-could-imagine-heres-why\" rel=\"nofollow\">https://web.archive.org/web/20260329052632/https://gladeart....</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "The <em>bot</em> situation on the internet is worse than you could imagine"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://gladeart.com/blog/the-<em>bot</em>-situation-on-the-internet-is-actually-worse-than-you-could-imagine-heres-why"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_ohjeez",
+            "story_47564469",
+            "front_page"
+          ],
+          "author": "ohjeez",
+          "children": [
+            47565269,
+            47565049,
+            47565634,
+            47564871,
+            47564853,
+            47565312,
+            47565523,
+            47565145,
+            47565196,
+            47565016,
+            47564902,
+            47565249,
+            47565343,
+            47564757,
+            47564874,
+            47565275,
+            47565057,
+            47565339,
+            47565293,
+            47565178,
+            47565135,
+            47565099,
+            47565037,
+            47565114,
+            47565106,
+            47565274,
+            47565079,
+            47565031,
+            47565116,
+            47565302,
+            47565107,
+            47565052,
+            47565290,
+            47564897,
+            47565177,
+            47565040,
+            47564929,
+            47565068,
+            47564832,
+            47565242,
+            47565318,
+            47565062,
+            47564787,
+            47564747,
+            47564895
+          ],
+          "created_at": "2026-03-29T16:17:30Z",
+          "created_at_i": 1774801050,
+          "num_comments": 85,
+          "objectID": "47564469",
+          "points": 121,
+          "story_id": 47564469,
+          "story_text": "<a href=\"https:&#x2F;&#x2F;web.archive.org&#x2F;web&#x2F;20260329052632&#x2F;https:&#x2F;&#x2F;gladeart.com&#x2F;blog&#x2F;the-bot-situation-on-the-internet-is-actually-worse-than-you-could-imagine-heres-why\" rel=\"nofollow\">https:&#x2F;&#x2F;web.archive.org&#x2F;web&#x2F;20260329052632&#x2F;https:&#x2F;&#x2F;gladeart....</a>",
+          "title": "The bot situation on the internet is worse than you could imagine",
+          "updated_at": "2026-03-29T18:19:02Z",
+          "url": "https://gladeart.com/blog/the-bot-situation-on-the-internet-is-actually-worse-than-you-could-imagine-heres-why"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "GranPC"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -827,80 +923,44 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I have spent a long time working in an XP/TDD style, so when AI coding tools became useful enough for real work, I adopted them quickly. The first <em>bot</em>tleneck I hit was not code generation, it was verification: AI could write code and tests quickly, but I was still the person reviewing implementations, clicking through flows, checking logs, inspecting database state, and deciding whether the result was actually correct.<p>That pushed me to move validation further left. Before implementation, AI had to produce test plans. After implementation, it had to execute those plans too: drive the browser, inspect logs, check DB state, create tickets for failures, fix them, and retest until the output converged. Auth9 (<a href=\"https://github.com/c9r-io/auth9\" rel=\"nofollow\">https://github.com/c9r-io/auth9</a>) became the proving ground for that method. Once it was clearly working, I started building Agent Orchestrator so the process would not depend on me manually supervising every step.<p>By mid-February, I was already using early Orchestrator-style automation inside Auth9. In mid-March, I used it during the highest-risk refactor so far: replacing the headless Keycloak setup with a native `auth9-oidc` engine. The core replacement landed over 3 days, and the same method and tooling helped converge the follow-up technical debt and complete the community OIDC Certification tests by the end of the month. That was the point where I became confident this was useful not only for greenfield work, but for governing high-risk change in a real system.<p>At the time, &quot;orchestration&quot; was the word I cared most about, which is why the project got its name. Later, OpenAI's Harness Engineering framing gave me a better name for the broader shape of the work. The project today is a local-first Rust control plane for long-running agent workflows: YAML resources, SQLite-backed task state, machine-readable CLI output, structured logs, and guardrails around shell-based agents.<p>- GitHub: <a href=\"https://github.com/c9r-io/orchestrator\" rel=\"nofollow\">https://github.com/c9r-io/orchestrator</a>\n- Docs: <a href=\"https://docs.c9r.io\" rel=\"nofollow\">https://docs.c9r.io</a>\n- Auth9: <a href=\"https://github.com/c9r-io/auth9\" rel=\"nofollow\">https://github.com/c9r-io/auth9</a>\n- Install: `brew install c9r-io/tap/orchestrator` or `cargo install orchestrator-cli orchestratord`\n- License: MIT"
+              "value": "I opened Hacker News on my phone this morning and saw that I had been signed out. I chalked that up to a transitory one-off thing, especially since I’ve been tinkering with the browser on my phone these last few days. No other sites were affected, though.<p>I just grabbed my tablet and opened HN. I was logged out too! I have never seen this happen on this site, and I find it curious that <em>bot</em>h devices weee affected on the same day.<p>Has this happened to anyone else today?"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Agent Orchestrator, a local-first Harness Engineering control plane"
+              "value": "Ask HN: Did anyone else get logged out from HN today?"
             }
           },
           "_tags": [
             "story",
-            "author_gpgkd906",
-            "story_47562440",
-            "show_hn"
+            "author_GranPC",
+            "story_47564306",
+            "ask_hn"
           ],
-          "author": "gpgkd906",
-          "created_at": "2026-03-29T12:05:13Z",
-          "created_at_i": 1774785913,
-          "num_comments": 0,
-          "objectID": "47562440",
-          "points": 1,
-          "story_id": 47562440,
-          "story_text": "I have spent a long time working in an XP&#x2F;TDD style, so when AI coding tools became useful enough for real work, I adopted them quickly. The first bottleneck I hit was not code generation, it was verification: AI could write code and tests quickly, but I was still the person reviewing implementations, clicking through flows, checking logs, inspecting database state, and deciding whether the result was actually correct.<p>That pushed me to move validation further left. Before implementation, AI had to produce test plans. After implementation, it had to execute those plans too: drive the browser, inspect logs, check DB state, create tickets for failures, fix them, and retest until the output converged. Auth9 (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;c9r-io&#x2F;auth9\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;c9r-io&#x2F;auth9</a>) became the proving ground for that method. Once it was clearly working, I started building Agent Orchestrator so the process would not depend on me manually supervising every step.<p>By mid-February, I was already using early Orchestrator-style automation inside Auth9. In mid-March, I used it during the highest-risk refactor so far: replacing the headless Keycloak setup with a native `auth9-oidc` engine. The core replacement landed over 3 days, and the same method and tooling helped converge the follow-up technical debt and complete the community OIDC Certification tests by the end of the month. That was the point where I became confident this was useful not only for greenfield work, but for governing high-risk change in a real system.<p>At the time, &quot;orchestration&quot; was the word I cared most about, which is why the project got its name. Later, OpenAI&#x27;s Harness Engineering framing gave me a better name for the broader shape of the work. The project today is a local-first Rust control plane for long-running agent workflows: YAML resources, SQLite-backed task state, machine-readable CLI output, structured logs, and guardrails around shell-based agents.<p>- GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;c9r-io&#x2F;orchestrator\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;c9r-io&#x2F;orchestrator</a>\n- Docs: <a href=\"https:&#x2F;&#x2F;docs.c9r.io\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.c9r.io</a>\n- Auth9: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;c9r-io&#x2F;auth9\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;c9r-io&#x2F;auth9</a>\n- Install: `brew install c9r-io&#x2F;tap&#x2F;orchestrator` or `cargo install orchestrator-cli orchestratord`\n- License: MIT",
-          "title": "Show HN: Agent Orchestrator, a local-first Harness Engineering control plane",
-          "updated_at": "2026-03-29T12:06:30Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "nickk81"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Will we have AGI by 2030? Are the new Formula 1 rules good? – Analyze <em>bot</em>h sides"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://99helpers.com/tools/<em>bot</em>h-sides-ai"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_nickk81",
-            "story_47562171"
-          ],
-          "author": "nickk81",
+          "author": "GranPC",
           "children": [
-            47562172
+            47564979,
+            47565550,
+            47564328,
+            47564367,
+            47564916
           ],
-          "created_at": "2026-03-29T11:15:52Z",
-          "created_at_i": 1774782952,
-          "num_comments": 1,
-          "objectID": "47562171",
-          "points": 2,
-          "story_id": 47562171,
-          "title": "Will we have AGI by 2030? Are the new Formula 1 rules good? – Analyze both sides",
-          "updated_at": "2026-03-29T11:21:15Z",
-          "url": "https://99helpers.com/tools/both-sides-ai"
+          "created_at": "2026-03-29T16:01:08Z",
+          "created_at_i": 1774800068,
+          "num_comments": 8,
+          "objectID": "47564306",
+          "points": 3,
+          "story_id": 47564306,
+          "story_text": "I opened Hacker News on my phone this morning and saw that I had been signed out. I chalked that up to a transitory one-off thing, especially since I’ve been tinkering with the browser on my phone these last few days. No other sites were affected, though.<p>I just grabbed my tablet and opened HN. I was logged out too! I have never seen this happen on this site, and I find it curious that both devices weee affected on the same day.<p>Has this happened to anyone else today?",
+          "title": "Ask HN: Did anyone else get logged out from HN today?",
+          "updated_at": "2026-03-29T18:10:31Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "ColinWright"
+              "value": "bookofjoe"
             },
             "title": {
               "fullyHighlighted": false,
@@ -908,7 +968,48 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Two <em>Bot</em>s Walk into a Bar"
+              "value": "Invisible <em>Bot</em>tleneck: Helium Shortage Threatens the Chip Industry"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.nytimes.com/2026/03/27/business/helium-chips-iran-war.html"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_bookofjoe",
+            "story_47563909"
+          ],
+          "author": "bookofjoe",
+          "children": [
+            47564187,
+            47563913
+          ],
+          "created_at": "2026-03-29T15:19:58Z",
+          "created_at_i": 1774797598,
+          "num_comments": 2,
+          "objectID": "47563909",
+          "points": 5,
+          "story_id": 47563909,
+          "title": "Invisible Bottleneck: Helium Shortage Threatens the Chip Industry",
+          "updated_at": "2026-03-29T17:43:02Z",
+          "url": "https://www.nytimes.com/2026/03/27/business/helium-chips-iran-war.html"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "ChrisArchitect"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Humans welcome (<em>bot</em>s must wear name tags)"
             },
             "url": {
               "fullyHighlighted": false,
@@ -916,24 +1017,27 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://www.raymondcamden.com/2026/03/25/two-<em>bot</em>s-walk-into-a-bar"
+              "value": "https://old.reddit.com/user/spez/comments/1s3ezrc/humans_welcome_<em>bot</em>s_must_wear_name_tags/"
             }
           },
           "_tags": [
             "story",
-            "author_ColinWright",
-            "story_47561859"
+            "author_ChrisArchitect",
+            "story_47563700"
           ],
-          "author": "ColinWright",
-          "created_at": "2026-03-29T10:17:42Z",
-          "created_at_i": 1774779462,
-          "num_comments": 0,
-          "objectID": "47561859",
-          "points": 1,
-          "story_id": 47561859,
-          "title": "Two Bots Walk into a Bar",
-          "updated_at": "2026-03-29T10:18:45Z",
-          "url": "https://www.raymondcamden.com/2026/03/25/two-bots-walk-into-a-bar"
+          "author": "ChrisArchitect",
+          "children": [
+            47564010
+          ],
+          "created_at": "2026-03-29T14:56:11Z",
+          "created_at_i": 1774796171,
+          "num_comments": 1,
+          "objectID": "47563700",
+          "points": 4,
+          "story_id": 47563700,
+          "title": "Humans welcome (bots must wear name tags)",
+          "updated_at": "2026-03-29T17:37:02Z",
+          "url": "https://old.reddit.com/user/spez/comments/1s3ezrc/humans_welcome_bots_must_wear_name_tags/"
         },
         {
           "_highlightResult": {
@@ -948,7 +1052,7 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "2 computers updated to Tahoe in the last days, <em>bot</em>h did not accept the user password after that and <em>bot</em>h hat to do resetpassword from recovery mode.<p>Happened to anyone else?"
+              "value": "2 computers updated to Tahoe in the last days, <em>bot</em>h did not accept the user password after that and <em>bot</em>h hat to do &quot;resetpassword&quot; from recovery mode.\nHappened to anyone else?"
             },
             "title": {
               "matchLevel": "none",
@@ -959,59 +1063,22 @@
           "_tags": [
             "story",
             "author_franze",
-            "story_47560927",
+            "story_47563212",
             "ask_hn"
           ],
           "author": "franze",
-          "created_at": "2026-03-29T06:50:17Z",
-          "created_at_i": 1774767017,
-          "num_comments": 0,
-          "objectID": "47560927",
-          "points": 3,
-          "story_id": 47560927,
-          "story_text": "2 computers updated to Tahoe in the last days, both did not accept the user password after that and both hat to do resetpassword from recovery mode.<p>Happened to anyone else?",
-          "title": "Ask HN: Log in issues after macOS Tahoe update?",
-          "updated_at": "2026-03-29T06:53:45Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "walterbell"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "<em>Bot</em>h the World and Capital Markets Feel Similar to 2006"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.joshuakennon.com/<em>bot</em>h-the-world-and-capital-markets-feel-strangely-similar-to-2006/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_walterbell",
-            "story_47556763"
+          "children": [
+            47563649
           ],
-          "author": "walterbell",
-          "created_at": "2026-03-28T17:42:55Z",
-          "created_at_i": 1774719775,
-          "num_comments": 0,
-          "objectID": "47556763",
-          "points": 2,
-          "story_id": 47556763,
-          "title": "Both the World and Capital Markets Feel Similar to 2006",
-          "updated_at": "2026-03-28T17:47:28Z",
-          "url": "https://www.joshuakennon.com/both-the-world-and-capital-markets-feel-strangely-similar-to-2006/"
+          "created_at": "2026-03-29T14:00:26Z",
+          "created_at_i": 1774792826,
+          "num_comments": 1,
+          "objectID": "47563212",
+          "points": 1,
+          "story_id": 47563212,
+          "story_text": "2 computers updated to Tahoe in the last days, both did not accept the user password after that and both hat to do &quot;resetpassword&quot; from recovery mode.\nHappened to anyone else?",
+          "title": "Ask HN: Log in issues after macOS Tahoe update?",
+          "updated_at": "2026-03-29T14:51:31Z"
         }
       ]
     },
