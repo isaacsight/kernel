@@ -288,6 +288,8 @@ export async function proposeImprovement(weakness: Weakness): Promise<Proposal |
     if (provider.authHeader === 'x-api-key') {
       headers['x-api-key'] = apiKey
       headers['anthropic-version'] = '2023-06-01'
+    } else if (provider.apiStyle === 'google') {
+      headers['x-goog-api-key'] = apiKey
     } else if (apiKey && apiKey !== 'local') {
       headers['Authorization'] = `Bearer ${apiKey}`
     }
@@ -303,7 +305,7 @@ export async function proposeImprovement(weakness: Weakness): Promise<Proposal |
         messages: [{ role: 'user', content: prompt }],
       })
     } else if (provider.apiStyle === 'google') {
-      url = `${provider.apiUrl}/${model}:generateContent?key=${apiKey}`
+      url = `${provider.apiUrl}/${model}:generateContent`
       body = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: { maxOutputTokens: 4096 },

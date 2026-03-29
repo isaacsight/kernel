@@ -456,7 +456,6 @@ export async function streamOpenAIResponse(
             while (state.toolCalls.length <= idx) {
               state.toolCalls.push({ id: '', name: '', partialJson: '' })
             }
-            const prevId = state.toolCalls[idx].id
             if (tc.id) state.toolCalls[idx].id = String(tc.id)
             const fn = tc.function as Record<string, string> | undefined
             if (fn?.name) {

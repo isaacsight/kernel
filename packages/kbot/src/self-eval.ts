@@ -125,6 +125,8 @@ function buildHeaders(provider: ProviderConfig, apiKey: string): Record<string, 
   if (provider.authHeader === 'x-api-key') {
     headers['x-api-key'] = apiKey
     headers['anthropic-version'] = '2023-06-01'
+  } else if (provider.apiStyle === 'google') {
+    headers['x-goog-api-key'] = apiKey
   } else if (apiKey && apiKey !== 'local') {
     headers['Authorization'] = `Bearer ${apiKey}`
   }
@@ -157,9 +159,9 @@ function buildBody(provider: ProviderConfig, model: string, prompt: string): str
 }
 
 /** Build the full URL for the request */
-function buildUrl(provider: ProviderConfig, byokProvider: ByokProvider, model: string, apiKey: string): string {
+function buildUrl(provider: ProviderConfig, byokProvider: ByokProvider, model: string, _apiKey: string): string {
   if (provider.apiStyle === 'google') {
-    return `${provider.apiUrl}/${model}:generateContent?key=${apiKey}`
+    return `${provider.apiUrl}/${model}:generateContent`
   }
   return provider.apiUrl
 }

@@ -11,6 +11,7 @@ import { registerTool, type ToolDefinition } from './index.js'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { mkdirSync, writeFileSync, existsSync, readdirSync, readFileSync } from 'node:fs'
+import { createContext, runInNewContext } from 'node:vm'
 
 const FORGED_DIR = join(homedir(), '.kbot', 'plugins', 'forged')
 const REGISTRY_URL = 'https://eoxxpyixdieprsxlpwcs.supabase.co/functions/v1/forge-registry'
@@ -94,28 +95,13 @@ export function validateCode(code: string): { safe: boolean; reason?: string } {
   return { safe: true }
 }
 
-/** Test-execute forged code with a 5s timeout to verify it works */
+/** Test-execute forged code in a sandboxed vm context with a 5s timeout */
 async function testExecution(code: string, testArgs: Record<string, unknown>): Promise<{ success: boolean; output?: string; error?: string }> {
-  const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
   try {
-    const fn = new AsyncFunction('args', code)
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), 5000)
-
-    try {
-      const result = await Promise.race([
-        fn(testArgs),
-        new Promise<never>((_, reject) => {
-          controller.signal.addEventListener('abort', () =>
-            reject(new Error('Forged tool test execution timed out after 5s'))
-          )
-        }),
-      ])
-      clearTimeout(timer)
-      return { success: true, output: String(result ?? 'OK') }
-    } finally {
-      clearTimeout(timer)
-    }
+    const sandbox = { args: testArgs, console: { log: () => {}, error: () => {} }, Buffer, JSON, Math, Date, URL, URLSearchParams, setTimeout, clearTimeout, Promise }
+    const context = createContext(sandbox)
+    const result = await runInNewContext(`(async (args) => { ${code} })(args)`, context, { timeout: 5000 })
+    return { success: true, output: String(result ?? 'OK') }
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : String(err) }
   }
@@ -233,16 +219,16 @@ export function registerForgeTools(): void {
         return `Forge failed: test execution error: ${testResult.error}\nFix the code and try again.`
       }
 
-      // Create the tool definition
-      const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
+      // Create the tool definition with sandboxed vm execution
       const toolDef: ToolDefinition = {
         name,
         description,
         parameters,
         tier: 'free',
         execute: async (toolArgs: Record<string, unknown>): Promise<string> => {
-          const fn = new AsyncFunction('args', code)
-          const result = await fn(toolArgs)
+          const sandbox = { args: toolArgs, console: { log: () => {}, error: () => {} }, Buffer, JSON, Math, Date, URL, URLSearchParams, setTimeout, clearTimeout, Promise }
+          const context = createContext(sandbox)
+          const result = await runInNewContext(`(async (args) => { ${code} })(args)`, context, { timeout: 5000 })
           return String(result ?? '')
         },
       }
@@ -411,16 +397,17 @@ export function registerForgeTools(): void {
           return `Install failed: tool "${name}" failed local test execution: ${testResult.error}`
         }
 
-        // Register and persist
-        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
+        // Register and persist with sandboxed vm execution
         registerTool({
           name,
           description: `[registry] ${description}`,
           parameters: parameters || {},
           tier: 'free' as const,
           execute: async (toolArgs: Record<string, unknown>): Promise<string> => {
-            const fn = new AsyncFunction('args', code)
-            return String(await fn(toolArgs) ?? '')
+            const sandbox = { args: toolArgs, console: { log: () => {}, error: () => {} }, Buffer, JSON, Math, Date, URL, URLSearchParams, setTimeout, clearTimeout, Promise }
+            const context = createContext(sandbox)
+            const result = await runInNewContext(`(async (args) => { ${code} })(args)`, context, { timeout: 5000 })
+            return String(result ?? '')
           },
         })
 

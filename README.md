@@ -1,6 +1,6 @@
 <p align="center">
   <strong>kbot</strong><br>
-  Open-source terminal AI agent. 23 agents, 290 tools, 20 providers, local-first.
+  Open-source terminal AI agent. 35 agents. 560+ tools. 20 providers. Science, finance, security, and more.
 </p>
 
 <p align="center">
@@ -27,25 +27,26 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, SambaNova, Cerebras, OpenRouter, and more. Switch with one command.
 - **Runs fully offline** — Embedded llama.cpp, Ollama, LM Studio, or Jan. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster over time.
-- **23 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, and 19 more).
-- **290 tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, MCP, and more.
+- **35 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, quant, and 30 more).
+- **560+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, and more.
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
 
 ### How it compares
 
-| | kbot | Claude Code | Aider | OpenCode |
-|---|---|---|---|---|
-| AI providers | 20 | 1 | 6 | 75+ |
-| Specialist agents | 23 | 0 | 0 | 0 |
-| Built-in tools | 290 | ~15 | ~10 | ~10 |
-| Learning engine | Yes | No | No | No |
-| Offline mode | Embedded + Ollama | No | Ollama | Ollama |
-| SDK | Yes | No | No | No |
-| MCP server | Yes | N/A | No | No |
-| Web companion | kernel.chat | No | No | No |
-| Open source | MIT | Source available | Apache 2.0 | MIT |
-| Cost | BYOK / $0 local | $20+/mo | BYOK | BYOK |
+| | kbot | Claude Code | Codex CLI | Aider | OpenCode |
+|---|---|---|---|---|---|
+| AI providers | 20 | 1 | 1 | 6 | 75+ |
+| Specialist agents | 35 | 0 | 0 | 0 | 0 |
+| Built-in tools | 560+ | ~20 | ~15 | ~10 | ~15 |
+| Science tools | 114 | 0 | 0 | 0 | 0 |
+| Learning engine | Yes | No | No | No | No |
+| Offline mode | Embedded + Ollama | No | No | Ollama | Ollama |
+| SDK | Yes | No | Yes | No | No |
+| MCP server | Yes | N/A | No | No | No |
+| Web companion | kernel.chat | No | No | No | No |
+| Open source | MIT | Source available | Apache 2.0 | Apache 2.0 | MIT |
+| Cost | BYOK / $0 local | $20+/mo | BYOK | BYOK | BYOK |
 
 ## Quick Start
 
@@ -90,7 +91,7 @@ kbot auto-routes to the right agent for each task. Or pick one with `--agent <na
 | **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter |
 | **Presets** | claude-code, cursor, copilot, creative, developer |
 
-## 290 Tools
+## 560+ Tools
 
 | Category | Examples |
 |----------|---------|
@@ -118,6 +119,18 @@ kbot auto-routes to the right agent for each task. Or pick one with `--agent <na
 | **IDE** | MCP server, ACP server, LSP bridge |
 | **Forge** | create tools at runtime, publish to registry, install from registry |
 | **Meta** | subagents, worktrees, planner, sessions, checkpoints, self-eval |
+| **Science & Math** | symbolic compute, matrix ops, FFT, ODEs, probability, optimization, graph theory, OEIS |
+| **Physics** | orbital mechanics, circuits, signal processing, particles (PDG), relativity, quantum simulator, beam analysis, fluid dynamics |
+| **Chemistry** | PubChem compounds, reactions, periodic table (118 elements), spectroscopy, stoichiometry, thermodynamics |
+| **Biology** | PubMed, gene lookup, protein/PDB, BLAST, drug/ChEMBL, pathways, taxonomy, clinical trials |
+| **Earth & Climate** | earthquakes/USGS, climate/NOAA, satellite imagery, geology, ocean, air quality, volcanoes, water resources |
+| **Neuroscience** | brain atlas, EEG analysis, cognitive models, neural simulation, connectome, psychophysics |
+| **Social Science** | psychometrics, game theory, econometrics, social network analysis, survey design, voting systems |
+| **Humanities** | corpus analysis, formal logic, argument mapping, ethics frameworks, historical timelines, stylometry |
+| **Health & Epidemiology** | SIR/SEIR models, epidemiology calculations, disease surveillance, nutrition, vaccination modeling |
+| **Finance** | market data, technical analysis, paper trading, DeFi yields, wallet & swaps, stock screener, sentiment |
+| **Cybersecurity** | dep_audit, secret_scan, ssl_check, headers_check, cve_lookup, port_scan, owasp_check |
+| **Self-Defense** | memory HMAC, prompt injection detection, knowledge sanitization, forge verification, anomaly detection |
 
 ## 20 Providers
 
@@ -170,7 +183,7 @@ graph TD
     D -->|Multi-step| F[Autonomous Planner]
     E --> G[Provider API + Tool Loop]
     F --> G
-    G --> H{290 Tools}
+    G --> H{560+ Tools}
     H --> I[File ops, bash, git, GitHub, search, deploy, DB, game dev...]
     G --> J[Learning Engine]
     J --> K[Patterns + Solutions + User Profile]

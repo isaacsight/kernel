@@ -19,7 +19,7 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**Self-defending AI agent. 384+ tools. 41 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
+**Self-defending AI agent. 560+ tools. 35 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
 
 > **New: [The Kernel Stack](./KERNEL_STACK.md)** — the architecture behind kbot + Claude Code. Agentic, self-improving, compound AI. Read the manifesto.
 
@@ -36,8 +36,8 @@ npm install -g @kernel.chat/kbot
 | **Claude Code Plugin** | kbot registers its 9 core specialists as Claude Code teammates via the Agent Teams integration. Delegate tasks to `coder`, `researcher`, `guardian`, etc. directly from Claude Code sessions. |
 | **Voice Mode** | `kbot voice` — full voice loop with speech-to-text input and text-to-speech output. Hands-free agentic coding. Works with system TTS and Whisper STT. |
 | **OpenClaw Integration** | [`@kernel.chat/kbot-openclaw`](https://www.npmjs.com/package/@kernel.chat/kbot-openclaw) — kbot as the brain for 50+ messaging channels. Discord, Slack, Telegram, WhatsApp, iMessage, email, and more. One agent, every platform. |
-| **41 agents** | 15 new specialist and domain agents since v3.28, including meta-agent, dream agent, and expanded presets. |
-| **384+ tools** | 34 new tools across finance, creative, build matrix, and meta-cognition categories. |
+| **35 agents** | 15 new specialist and domain agents since v3.28, including meta-agent, dream agent, and expanded presets. |
+| **560+ tools** | 210+ new tools across science, research, finance, creative, build matrix, and meta-cognition categories. |
 
 ### v3.28 — Self-Defense System
 
@@ -88,7 +88,7 @@ Other AI agents are static — fixed tools, single providers, no memory, no lear
 - **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, and 13 more. Switch anytime.
 - **Runs fully offline** — Embedded llama.cpp runs GGUF models directly. No Ollama needed. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster and smarter over time.
-- **41 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Say "analyze BTC" and it routes to `trader`. Auto-routed with probabilistic confidence.
+- **35 specialist agents** — Say "fix the auth bug" and it routes to `coder`. Say "research JWT tokens" and it routes to `researcher`. Say "analyze BTC" and it routes to `trader`. Auto-routed with probabilistic confidence.
 - **Crash-proof** — Checkpoints after every tool call. Resume interrupted sessions automatically.
 - **Use as a library** — Clean SDK with typed exports. Build your own tools on top of kbot.
 - **Works in your IDE** — Built-in MCP server for VS Code, Cursor, Zed, Neovim. ACP for JetBrains.
@@ -177,7 +177,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 384+ tools
+// List all 560+ tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -191,7 +191,7 @@ import { ResponseStream } from '@kernel.chat/kbot'                     // Stream
 
 ## Specialists
 
-41 agents, auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
+35 agents, auto-routed by Bayesian skill ratings, or pick one with `kbot --agent <name>`:
 
 | | Agents |
 |---|---|
@@ -209,7 +209,7 @@ kbot --agent coder "refactor this into smaller functions"
 kbot --agent trader "analyze BTC momentum and run a paper trade"
 ```
 
-## 384+ Tools
+## 560+ Tools
 
 | Category | Examples |
 |----------|---------|
@@ -236,6 +236,16 @@ kbot --agent trader "analyze BTC momentum and run a paper trade"
 | **Memory** | persistent save, search, update, forget — survives across sessions |
 | **IDE** | MCP server, ACP server, LSP bridge |
 | **Finance** | market data, technical analysis, paper trading, DeFi yields, Solana wallet & swaps, stock screener, sentiment, whale tracking |
+| **Science & Math** | symbolic compute, matrix ops, FFT, ODEs, probability, optimization, graph theory, combinatorics, OEIS |
+| **Physics** | orbital mechanics, circuits, signal processing, particle physics (PDG), relativity, quantum simulator, beam analysis, fluid dynamics, EM, astronomy |
+| **Chemistry** | PubChem compounds, reactions, periodic table (118 elements), materials, spectroscopy, stoichiometry, crystals, thermodynamics |
+| **Biology** | PubMed, gene lookup, protein/PDB, BLAST, drug/ChEMBL, pathways, taxonomy, clinical trials, ecology, sequence tools |
+| **Earth & Climate** | earthquakes/USGS, climate/NOAA, satellite imagery, geology, ocean, air quality, soil, volcanoes, water resources, biodiversity |
+| **Neuroscience** | brain atlas, EEG analysis, cognitive models, neural simulation, neurotransmitters, connectome, psychophysics, neuroimaging, learning models |
+| **Social Science** | psychometrics, game theory, econometrics, social network analysis, inequality metrics, survey design, voting systems, behavioral experiments |
+| **Humanities** | corpus analysis, formal logic, argument mapping, ethics frameworks, historical timelines, language typology, phonetics (IPA), stylometry, philosophical concepts |
+| **Health & Epidemiology** | SIR/SEIR/SEIRS models, epidemiology calculations, disease surveillance, crop modeling, nutrition, learning analytics, vaccination modeling, environmental health |
+| **Deep Research** | literature review, drug discovery pipeline, genomic analysis, environmental assessment, materials discovery, knowledge graphs, hypothesis engine, meta-analysis, research notebooks |
 | **Cybersecurity** | dep_audit, secret_scan, ssl_check, headers_check, cve_lookup, port_scan, owasp_check |
 | **Self-Defense** | memory HMAC, injection detection, knowledge sanitization, forge verification, anomaly detection, incident log |
 | **System** | vitals, immune audit, defense audit, cost tracking, fallback status |
@@ -263,6 +273,30 @@ kbot --agent trader "what's crypto twitter saying about the next FOMC?"
 ```
 
 **31 finance tools** across 5 categories: market data (11), wallet & swaps (9), stocks (6), and sentiment (5). All paper trading is simulated — no real funds are moved unless you explicitly configure and confirm a live wallet transaction.
+
+## Science & Research
+
+The only terminal AI agent with a built-in science laboratory. 114 research tools across 11 domains:
+
+```bash
+# Physics
+kbot "calculate the orbital period of a satellite at 400km altitude"
+kbot "simulate a quantum circuit with 4 qubits in a GHZ state"
+
+# Biology
+kbot "search PubMed for CRISPR delivery mechanisms published in 2025"
+kbot "look up the protein structure for insulin receptor"
+
+# Chemistry
+kbot "what are the properties of aspirin from PubChem?"
+kbot "balance the equation: Fe + O2 -> Fe2O3"
+
+# Deep Research
+kbot "run a literature review on transformer attention mechanisms"
+kbot "generate hypotheses for why coral bleaching accelerated in 2025"
+```
+
+114 tools across: math, physics, chemistry, biology, earth science, neuroscience, social science, humanities, health/epidemiology, deep research pipelines, and knowledge graphs.
 
 ## Middleware Pipeline
 
@@ -471,7 +505,7 @@ kbot meta
 
 Self-referential self-improvement. Inspired by Meta's HyperAgents paper ([arXiv 2603.19461](https://arxiv.org/abs/2603.19461)), the Meta-Agent implements a two-agent architecture:
 
-1. **Task agents** solve problems (the 41 specialists you already use)
+1. **Task agents** solve problems (the 35 specialists you already use)
 2. **The Meta-Agent** observes their performance, identifies weaknesses, and improves them
 
 The improvement loop runs automatically:
@@ -618,7 +652,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, adding tools, and 
 </details>
 
 <details>
-<summary><strong>Agent Routing</strong> — 41 specialists, auto-routed by intent</summary>
+<summary><strong>Agent Routing</strong> — 35 specialists, auto-routed by intent</summary>
 <img src="https://raw.githubusercontent.com/isaacsight/kernel/main/tools/video-assets/demo-agents.gif" alt="kbot agent routing" width="700">
 </details>
 

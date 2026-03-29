@@ -63,7 +63,7 @@ async function main(): Promise<void> {
     .name('kbot')
     .description('kbot — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
     .version(VERSION)
-    .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 32)')
+    .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 35)')
     .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
     .option('-s, --stream', 'Stream the response')
     .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
@@ -106,7 +106,7 @@ async function main(): Promise<void> {
       console.log(`  ${chalk.dim('─'.repeat(50))}`)
       console.log(`  ${chalk.white('kbot auth')}         Configure your API key (20 providers)`)
       console.log(`  ${chalk.white('kbot doctor')}       Diagnose setup issues`)
-      console.log(`  ${chalk.white('kbot agents')}       List all 32 specialist agents`)
+      console.log(`  ${chalk.white('kbot agents')}       List all 35 specialist agents`)
       console.log(`  ${chalk.white('kbot status')}       Full dashboard — tools, agents, stats`)
       console.log(`  ${chalk.white('kbot init')}         Set up kbot for this project (60s)`)
       console.log(`  ${chalk.white('kbot update')}       Update to the latest version`)
@@ -127,7 +127,7 @@ async function main(): Promise<void> {
       console.log(`  ${chalk.cyan('https://github.com/isaacsight/kernel/issues')}  ${chalk.dim('Bug reports')}`)
       console.log(`  ${chalk.cyan('support@kernel.chat')}  ${chalk.dim('Email (AI-assisted replies)')}`)
       console.log()
-      console.log(`  ${chalk.dim('32 specialist agents · 360+ tools · 20 providers · MIT licensed')}`)
+      console.log(`  ${chalk.dim('35 specialist agents · 360+ tools · 20 providers · MIT licensed')}`)
       console.log()
       process.exit(0)
     })
@@ -467,7 +467,6 @@ async function main(): Promise<void> {
     .command('status')
     .description('Show daemon status — uptime, subsystems, alerts')
     .action(async () => {
-      const chalk = (await import('chalk')).default
       const { getDaemonStatus, getDaemonLog } = await import('./daemon.js')
       const status = getDaemonStatus()
 
@@ -542,7 +541,6 @@ async function main(): Promise<void> {
     .option('--model <model>', 'Ollama model for analysis', 'qwen2.5-coder:32b')
     .action(async (opts: { dryRun?: boolean; interval?: string; model?: string }) => {
       const { loadConfig, saveConfig, runDiscoveryCycle } = await import('./discovery.js')
-      const chalk = (await import('chalk')).default
       const readline = await import('node:readline')
 
       let config = loadConfig()
@@ -619,7 +617,6 @@ async function main(): Promise<void> {
     .description('Show discovery agent status and stats')
     .action(async () => {
       const { getDiscoveryState, loadConfig } = await import('./discovery.js')
-      const chalk = (await import('chalk')).default
       const config = loadConfig()
       const state = getDiscoveryState()
 
@@ -767,7 +764,6 @@ async function main(): Promise<void> {
       const { existsSync } = await import('node:fs')
       const { join } = await import('node:path')
       const { initProject, formatInitReport } = await import('./init.js')
-      const chalk = (await import('chalk')).default
       const AMETHYST = chalk.hex('#6B5B95')
       const root = process.cwd()
 
@@ -806,7 +802,6 @@ async function main(): Promise<void> {
     .option('--reset', 'Reset the observer log and cursor')
     .action(async (opts: { stats?: boolean; reset?: boolean }) => {
       const { ingestObservations, getObserverStats, getLogPath } = await import('./observer.js')
-      const chalk = (await import('chalk')).default
 
       if (opts.reset) {
         const { existsSync, unlinkSync } = await import('node:fs')
@@ -971,7 +966,6 @@ async function main(): Promise<void> {
     .description('Full defense audit — memory integrity, anomalies, incidents, recommendations')
     .action(async () => {
       const { runDefenseAudit } = await import('./self-defense.js')
-      const chalk = (await import('chalk')).default
       const audit = runDefenseAudit()
 
       console.log()
@@ -1036,7 +1030,6 @@ async function main(): Promise<void> {
     .description('Verify memory file integrity — detect tampering')
     .action(async () => {
       const { verifyMemoryIntegrity } = await import('./self-defense.js')
-      const chalk = (await import('chalk')).default
       const results = verifyMemoryIntegrity()
       if (results.length === 0) {
         printInfo('No memory files to verify. Run `kbot defense sign` first.')
@@ -1079,7 +1072,6 @@ async function main(): Promise<void> {
       if (opts.json) {
         console.log(JSON.stringify(profile, null, 2))
       } else {
-        const chalk = (await import('chalk')).default
         const ACCENT = process.stdout.isTTY !== false ? chalk.hex('#A78BFA') : chalk
         process.stderr.write('\n  ' + ACCENT('kbot Machine') + '\n')
         process.stderr.write(formatMachineProfile(profile))
@@ -1090,7 +1082,6 @@ async function main(): Promise<void> {
     .command('hardware')
     .description('Detect your hardware tier and get personalized model recommendations for local AI')
     .action(async () => {
-      const chalk = (await import('chalk')).default
       const { detectHardwareTier, getMultiModelConfig, QUANT_OPTIONS, DEFAULT_MODELS } = await import('./inference.js')
 
       const hw = detectHardwareTier()
@@ -1171,7 +1162,6 @@ async function main(): Promise<void> {
     .description('Run full synthesis cycle (all 8 operations)')
     .action(async () => {
       const { synthesize, formatSynthesisResult } = await import('./synthesis-engine.js')
-      const chalk = (await import('chalk')).default
 
       process.stderr.write('\n' + chalk.dim('Running synthesis cycle...') + '\n\n')
       const result = synthesize()
@@ -1185,7 +1175,6 @@ async function main(): Promise<void> {
       const { getSynthesisEngineStats, buildSkillMap, formatSkillMap } = await import('./synthesis-engine.js')
       const { synthesizeMemory, getInsights, getSynthesisStats } = await import('./memory-synthesis.js')
       const { getExtendedStats } = await import('./learning.js')
-      const chalk = (await import('chalk')).default
 
       process.stderr.write('\n')
 
@@ -1263,7 +1252,6 @@ async function main(): Promise<void> {
     .description('Build and display active corrections for prompt injection')
     .action(async () => {
       const { buildActiveCorrections } = await import('./synthesis-engine.js')
-      const chalk = (await import('chalk')).default
 
       const corrections = buildActiveCorrections()
       if (corrections.length === 0) {
@@ -1286,7 +1274,6 @@ async function main(): Promise<void> {
     .action(async () => {
       const { consumeDiscoveredTools } = await import('./synthesis-engine.js')
       const { join } = await import('path')
-      const chalk = (await import('chalk')).default
 
       const discDir = join(process.cwd(), '.kbot-discovery')
       const adoptions = consumeDiscoveredTools(discDir)
@@ -1309,7 +1296,6 @@ async function main(): Promise<void> {
     .action(async () => {
       const { extractPaperInsights } = await import('./synthesis-engine.js')
       const { join } = await import('path')
-      const chalk = (await import('chalk')).default
 
       const discDir = join(process.cwd(), '.kbot-discovery')
       const insights = extractPaperInsights(discDir)
@@ -1331,7 +1317,6 @@ async function main(): Promise<void> {
   // Default action (no subcommand) — run full cycle
   synthCmd.action(async () => {
     const { synthesize, formatSynthesisResult } = await import('./synthesis-engine.js')
-    const chalk = (await import('chalk')).default
 
     process.stderr.write('\n' + chalk.dim('Running synthesis cycle...') + '\n\n')
     const result = synthesize()
@@ -1348,7 +1333,6 @@ async function main(): Promise<void> {
     .description('List all locally forged tools')
     .action(async () => {
       const { listForgedTools } = await import('./tools/forge.js')
-      const chalk = (await import('chalk')).default
       const tools = listForgedTools()
 
       if (tools.length === 0) {
@@ -1373,7 +1357,6 @@ async function main(): Promise<void> {
           signal: AbortSignal.timeout(8_000),
         })
         const data = await res.json()
-        const chalk = (await import('chalk')).default
 
         if (!data.tools || data.tools.length === 0) {
           printInfo(`No tools found for "${query}". Be the first — forge one and publish it!`)
@@ -1420,7 +1403,6 @@ async function main(): Promise<void> {
     .description('Autopoietic health check — system viability, component status, self-healing log')
     .action(async () => {
       const { AutopoieticSystem } = await import('./autopoiesis.js')
-      const chalk = (await import('chalk')).default
       const AMETHYST = chalk.hex('#6B5B95')
 
       process.stderr.write('\n')
@@ -1519,7 +1501,6 @@ async function main(): Promise<void> {
     .action(async (opts: { json?: boolean }) => {
       // Check both subcommand and parent opts (commander absorbs --json at parent level)
       const jsonMode = opts.json || program.opts().json
-      const chalk = (await import('chalk')).default
       const AMETHYST = chalk.hex('#6B5B95')
       const DIM = chalk.dim
       const GREEN = chalk.hex('#4ADE80')
@@ -1602,7 +1583,7 @@ async function main(): Promise<void> {
           latestVersion: latestVersion || null,
           isLatest,
           tools: toolCount,
-          agents: 26,
+          agents: 35,
           cognitiveModules: cognitiveCount,
           learning: {
             patterns: stats.patternsCount,
@@ -1692,7 +1673,6 @@ async function main(): Promise<void> {
     .option('--security', 'Focus on security (blocklist bypasses, injection vectors)')
     .action(async (opts: { file?: string; security?: boolean }) => {
       const { runAgent } = await import('./agent.js')
-      const chalk = (await import('chalk')).default
       process.stderr.write(`\n  ${chalk.hex('#DC143C')('🛡 Immune Agent')} — Self-Audit\n\n`)
 
       const target = opts.file
@@ -2413,7 +2393,6 @@ async function main(): Promise<void> {
         return
       }
 
-      const chalk = (await import('chalk')).default
       const mode = agentUsers.length === 0 ? 'OPEN (all inbound)' : `${agentUsers.length} users`
       console.log()
       console.log(chalk.hex('#6B5B95')('  ◉ Kernel Email Agent'))
@@ -2495,7 +2474,6 @@ async function main(): Promise<void> {
         }
       }
 
-      const chalk = (await import('chalk')).default
       console.log()
       console.log(chalk.hex('#6B5B95')('  ◉ Kernel iMessage Agent'))
       console.log(chalk.dim(`  Model: ${opts.model || 'qwen2.5-coder:32b'}`))
@@ -3435,7 +3413,7 @@ async function byokFlow(): Promise<void> {
   console.log()
   printSuccess(`BYOK mode enabled — ${providerConfig.name}`)
   printInfo('You pay the provider directly. No message limits. No restrictions.')
-  printInfo('All 362 tools + 32 agents + learning system = yours.')
+  printInfo('All 362 tools + 35 agents + learning system = yours.')
   console.log()
   printSuccess('Ready. Run `kbot` to start.')
 }
@@ -3734,7 +3712,7 @@ async function startRepl(
     const suggestions = await detectProjectSuggestions()
     console.log()
     console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'))
-    console.log(chalk.dim('  │') + chalk.bold('  32 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'))
+    console.log(chalk.dim('  │') + chalk.bold('  35 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'))
     console.log(chalk.dim('  │                                                 │'))
     if (suggestions.length > 0) {
       for (const s of suggestions.slice(0, 4)) {

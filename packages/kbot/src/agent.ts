@@ -274,11 +274,14 @@ async function callAnthropic(
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(300_000), // 5 min timeout
   })
 
   if (!res.ok) {
     const errBody = await safeReadBody(res, 1024 * 100).catch(() => '{}')
-    const err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` }
+    let err: { message: string }
+    try { err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` } }
+    catch { err = { message: `HTTP ${res.status}` } }
     throw new Error(err.message || `Anthropic error: ${res.status}`)
   }
 
@@ -341,7 +344,9 @@ async function callOpenAICompat(
 
   if (!res.ok) {
     const errBody = await safeReadBody(res, 1024 * 100).catch(() => '{}')
-    const err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` }
+    let err: { message: string }
+    try { err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` } }
+    catch { err = { message: `HTTP ${res.status}` } }
     throw new Error(err.message || `API error: ${res.status}`)
   }
 
@@ -593,15 +598,18 @@ async function callGemini(
     body.systemInstruction = { parts: [{ text: systemContext }] }
   }
 
-  const res = await fetch(`${apiUrl}/${model}:generateContent?key=${apiKey}`, {
+  const res = await fetch(`${apiUrl}/${model}:generateContent`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(300_000), // 5 min timeout
   })
 
   if (!res.ok) {
     const errBody = await safeReadBody(res, 1024 * 100).catch(() => '{}')
-    const err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` }
+    let err: { message: string }
+    try { err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` } }
+    catch { err = { message: `HTTP ${res.status}` } }
     throw new Error(err.message || `Gemini error: ${res.status}`)
   }
 
@@ -627,11 +635,14 @@ async function callCohere(
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify({ model, messages: apiMessages, max_tokens: 8192 }),
+    signal: AbortSignal.timeout(300_000), // 5 min timeout
   })
 
   if (!res.ok) {
     const errBody = await safeReadBody(res, 1024 * 100).catch(() => '{}')
-    const err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` }
+    let err: { message: string }
+    try { err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` } }
+    catch { err = { message: `HTTP ${res.status}` } }
     throw new Error(err.message || `Cohere error: ${res.status}`)
   }
 
@@ -1179,7 +1190,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
     // Predictive processing — anticipate what the user will ask next
     const prediction = predictive.predict([originalMessage], toolSequenceLog)
     if (prediction && prediction.confidence > 0.6) {
-      telemetry.emit('session_start', { cogModule: 'prediction', intent: prediction.predictedAction, confidence: prediction.confidence })
+      telemetry.emit('prediction_made', { cogModule: 'prediction', intent: prediction.predictedAction, confidence: prediction.confidence })
     }
 
     // Free energy — observe the incoming message and update beliefs
@@ -1197,9 +1208,6 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
     // Temporal — what did the user do last? Can we anticipate?
     const anticipated = anticipateNext([originalMessage], originalMessage)
-    if (anticipated.length > 0 && anticipated[0].confidence > 0.5) {
-      // Pre-load context for anticipated next action
-    }
   } catch { /* cognitive stack is non-critical — never block the agent loop */ }
 
   // ── Tool execution pipeline ──

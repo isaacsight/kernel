@@ -2,7 +2,66 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-03-26) — UNIVERSITY SESSION
+## Current Session (2026-03-29) — NIGHT SHIFT: RESEARCH + CODE IMPROVEMENTS
+
+### What Was Done
+
+#### Security Fixes (3 HIGH severity)
+1. **Gemini API key moved from URL to header** — All 6 occurrences across 5 files (agent.ts, auth.ts, self-eval.ts, evolution.ts, browser-agent.ts) now use `x-goog-api-key` header
+2. **JSON.parse safety** — All 4 provider error handlers wrapped in try-catch (was crashing on HTML error pages)
+3. **Fetch timeouts added** — callAnthropic, callGemini, callCohere now have 5-minute timeouts (callOpenAI already had one)
+
+#### Security Fixes (1 MEDIUM severity)
+4. **Forge sandbox hardened** — Replaced `AsyncFunction` constructor with Node.js `vm.runInNewContext()` for forged tool execution. Sandbox restricts access to safe globals only (no process, require, fs)
+
+#### Bug Fixes
+5. **Agent count mismatch** — Updated all 6 references from 26/32 to 35 (actual count)
+6. **Dead code removed** — Unused `prevId` in streaming.ts, empty anticipation block in agent.ts
+7. **Duplicate telemetry** — Changed second `session_start` to `prediction_made`, added to EventType union
+8. **Git cache invalidation** — `_repoRoot` changed from single string to Map<cwd, root> so directory changes work
+9. **Duplicate chalk imports** — Removed 22 unnecessary dynamic `import('chalk')` calls in cli.ts
+
+#### README Updates
+10. **Root README** — Updated 290→560+ tools, 23→35 agents, added 12 new science/research tool categories, added Codex CLI to comparison table, added "Science tools" row (114 for kbot, 0 for all others)
+11. **Package README** — Updated 384→560+ tools, 41→35 agents, added 10 science tool categories, added new "Science & Research" section with examples
+12. **package.json** — Updated description (540→560+ tools, 32→35 agents), added 7 science keywords for npm SEO
+
+#### Tests Added (273 new tests)
+13. **memory.test.ts** — 40 tests covering loadMemory, saveMemory, addTurn, compactHistory, clearHistory
+14. **agent-protocol.test.ts** — 94 tests covering handoff, blackboard, negotiation, trust delegation
+15. **graph-memory.test.ts** — 106 tests covering nodes, edges, BFS, paths, decay, prune, context generation
+16. **context.test.ts** — 33 tests covering gatherContext, formatContextForPrompt, machine profile
+17. **Total: 690 tests passing** (up from 417)
+
+#### Competitive Research
+- Full competitive analysis of 9 AI CLI tools (Claude Code, Cursor, Codex CLI, Gemini CLI, OpenCode, Aider, Cline, Warp, Factory Droid)
+- Key finding: **kbot's science tools are unique in the market** — zero competitors have terminal science tools
+- OpenCode leads stars (132K), Codex CLI leads users (2M WAU), Cursor leads revenue ($2B ARR)
+- kbot's moats: tool breadth (560+ vs ~20 for competitors), science tools (114, uncontested), multi-provider (20), forge (unique), learning engine (unique)
+- Saved to memory for future sessions
+
+#### Key Stats
+- 0 type errors (tsc --noEmit clean)
+- 690 tests passing (26 test files)
+- 10 code improvements applied
+- 12 new tool categories in README
+- 7 new npm SEO keywords
+
+### Known Remaining Issues
+- Forge AsyncFunction pattern still in DANGEROUS_PATTERNS blocklist (correct, for defense in depth)
+- Module-level mutable state in memory.ts, learning.ts not safe for concurrent `kbot serve` mode
+- edit_file diff preview shows fragment instead of full context
+- DNS rebinding possible in fetch.ts SSRF protection
+- Gemini/Cohere providers don't support tool calling (silent degradation)
+
+### Next Session Priorities
+1. **Show HN** — "kbot: 560 science tools from a terminal" targeting researchers
+2. **Deploy web** — security page still not live
+3. **Fix concurrent state** — Make memory/learning safe for `kbot serve` mode
+4. **Terminal-Bench submission** — Get a public benchmark score
+5. **Video demo** — 60-second research demo for YouTube
+
+## Previous Session (2026-03-26) — UNIVERSITY SESSION
 
 ### 4 npm publishes. v3.42.0 → v3.45.0. Built a university in a terminal.
 

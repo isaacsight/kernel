@@ -48,6 +48,7 @@ export type EventType =
   | 'api_call'
   | 'api_error'
   | 'cost_update'
+  | 'prediction_made'
 
 // ── Constants ──
 

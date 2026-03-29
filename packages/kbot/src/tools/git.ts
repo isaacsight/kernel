@@ -9,15 +9,18 @@ function esc(s: string): string {
   return `'${s.replace(/'/g, "'\\''")}'`
 }
 
-/** Get the git repo root directory (cached) */
-let _repoRoot: string | null = null
+/** Get the git repo root directory (cached per working directory) */
+const _repoRootCache = new Map<string, string>()
 function getRepoRoot(): string {
-  if (_repoRoot) return _repoRoot
+  const cwd = process.cwd()
+  const cached = _repoRootCache.get(cwd)
+  if (cached) return cached
   try {
-    _repoRoot = execSync('git rev-parse --show-toplevel', { encoding: 'utf-8', timeout: 5_000 }).trim()
-    return _repoRoot
+    const root = execSync('git rev-parse --show-toplevel', { encoding: 'utf-8', timeout: 5_000, cwd }).trim()
+    _repoRootCache.set(cwd, root)
+    return root
   } catch {
-    return process.cwd()
+    return cwd
   }
 }
 
