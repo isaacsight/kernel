@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-29T06:04:19.476Z",
+  "timestamp": "2026-03-29T12:06:51.732Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "docs: clarify browser plugin setup",
-      "url": "https://github.com/openclaw/openclaw/pull/56824",
+      "title": "docs: Add Skill Development Guide (技能开发指南)",
+      "url": "https://github.com/openclaw/openclaw/pull/56993",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "chore(deps): update dependency openclaw/openclaw to v2026.3.28",
-      "url": "https://github.com/justmiles/carapace/pull/21",
+      "title": "chore(deps): bump the llm group across 1 directory with 4 updates",
+      "url": "https://github.com/saishin-i/dify-sample/pull/23",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "chore(deps): update ghcr.io/openclaw/openclaw docker tag to v2026.3.28",
-      "url": "https://github.com/keiretsu-labs/kubernetes-manifests/pull/1021",
+      "title": "update podman next steps to source env",
+      "url": "https://github.com/openclaw/openclaw/pull/56976",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "What website do you wish had a CLI?",
+      "url": "https://reddit.com/r/commandline/comments/1s6sj8r/what_website_do_you_wish_had_a_cli/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "zsh-patina - A blazingly fast Zsh syntax highlighter",
       "url": "https://reddit.com/r/commandline/comments/1s618ty/zshpatina_a_blazingly_fast_zsh_syntax_highlighter/",
       "why": "Discussion in r/commandline about AI agents",
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "Clinic – Connect your Claude Code / OpenClaw to your Gmail, GitHub, Notion, and 39 more services in one command (open source)",
       "url": "https://reddit.com/r/commandline/comments/1s467gf/clinic_connect_your_claude_code_openclaw_to_your/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "wardn - cli tool that encrypts your API keys and gives agents fake placeholder tokens",
-      "url": "https://reddit.com/r/commandline/comments/1s3n8kb/wardn_cli_tool_that_encrypts_your_api_keys_and/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
