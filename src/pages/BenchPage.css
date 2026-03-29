@@ -1,0 +1,518 @@
+/* kbot Benchmark Dashboard */
+
+.ka-bench {
+  min-height: 100vh;
+  background: #0d0d0d;
+  color: #e8e6e3;
+  font-family: 'EB Garamond', Georgia, serif;
+  overflow-x: hidden;
+}
+
+/* Hero */
+.ka-bench-hero {
+  text-align: center;
+  padding: 120px 24px 80px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ka-bench-badge {
+  display: inline-block;
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6B5B95;
+  border: 1px solid #6B5B9540;
+  border-radius: 20px;
+  padding: 4px 16px;
+  margin-bottom: 32px;
+}
+
+.ka-bench-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: clamp(36px, 8vw, 64px);
+  font-weight: 700;
+  color: #FAF9F6;
+  margin: 0 0 16px;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.ka-bench-subtitle {
+  font-size: clamp(18px, 3.5vw, 24px);
+  color: #aaa;
+  margin: 0 0 48px;
+  line-height: 1.4;
+}
+
+/* Hero stats grid */
+.ka-bench-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.ka-bench-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 24px 12px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 10px;
+  transition: border-color 0.2s;
+}
+
+.ka-bench-stat:hover {
+  border-color: #6B5B9540;
+}
+
+.ka-bench-stat-value {
+  font-family: 'Courier Prime', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: #6B5B95;
+  line-height: 1;
+}
+
+.ka-bench-stat-label {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  color: #FAF9F6;
+  font-weight: 700;
+}
+
+.ka-bench-stat-desc {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Sections */
+.ka-bench-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.ka-bench-h2 {
+  font-family: 'Courier Prime', monospace;
+  font-size: 28px;
+  color: #FAF9F6;
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.ka-bench-section-desc {
+  font-size: 16px;
+  color: #888;
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+/* Divider */
+.ka-bench-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #333, transparent);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Comparison table */
+.ka-bench-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ka-bench-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  min-width: 700px;
+}
+
+.ka-bench-table th {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid #333;
+  color: #666;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.ka-bench-table th:nth-child(2) {
+  color: #6B5B95;
+  font-weight: 700;
+}
+
+.ka-bench-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid #1a1a1a;
+  color: #888;
+  white-space: nowrap;
+}
+
+.ka-bench-table td:first-child {
+  color: #aaa;
+}
+
+.ka-bench-table td:nth-child(2) {
+  color: #6B5B95;
+  font-weight: 700;
+}
+
+.ka-bench-weak {
+  color: #DC2626 !important;
+  opacity: 0.7;
+}
+
+/* Category bar charts */
+.ka-bench-charts {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ka-bench-chart-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 120px;
+  gap: 16px;
+  align-items: center;
+}
+
+.ka-bench-chart-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+}
+
+.ka-bench-chart-name {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.ka-bench-chart-score {
+  font-family: 'Courier Prime', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: #6B5B95;
+  line-height: 1;
+}
+
+.ka-bench-chart-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ka-bench-chart-track {
+  height: 14px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ka-bench-chart-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ka-bench-chart-bar--kbot {
+  background: linear-gradient(90deg, #6B5B95, #8B7BB5);
+}
+
+.ka-bench-chart-bar--competitor {
+  background: #333;
+}
+
+.ka-bench-chart-competitor {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ka-bench-chart-comp-name {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ka-bench-chart-comp-score {
+  font-family: 'Courier Prime', monospace;
+  font-size: 16px;
+  color: #555;
+  line-height: 1;
+}
+
+/* Legend */
+.ka-bench-chart-legend {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.ka-bench-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #666;
+}
+
+.ka-bench-legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.ka-bench-legend-swatch--kbot {
+  background: linear-gradient(90deg, #6B5B95, #8B7BB5);
+}
+
+.ka-bench-legend-swatch--competitor {
+  background: #333;
+}
+
+/* Terminal mockup */
+.ka-bench-terminal {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.ka-bench-terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: #252525;
+  border-bottom: 1px solid #333;
+}
+
+.ka-bench-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.ka-bench-terminal-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #666;
+  margin-left: 8px;
+}
+
+.ka-bench-terminal-body {
+  padding: 16px 20px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.ka-bench-line {
+  color: #e8e6e3;
+}
+
+.ka-bench-prompt {
+  color: #6B5B95;
+  margin-right: 8px;
+}
+
+.ka-bench-dim {
+  color: #555;
+}
+
+.ka-bench-green {
+  color: #28c840;
+}
+
+/* Install CTA */
+.ka-bench-install {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  margin: 32px auto 0;
+}
+
+.ka-bench-install:hover {
+  border-color: #6B5B95;
+}
+
+.ka-bench-install code {
+  font-family: 'Courier Prime', monospace;
+  font-size: 15px;
+  color: #6B5B95;
+}
+
+.ka-bench-copy {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #666;
+  border-left: 1px solid #333;
+  padding-left: 16px;
+}
+
+/* CTA section */
+.ka-bench-cta-section {
+  text-align: center;
+}
+
+.ka-bench-cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.ka-bench-cta {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  padding: 10px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+  background: #6B5B95;
+  color: #FAF9F6;
+  border: 1px solid #6B5B95;
+  font-weight: 700;
+}
+
+.ka-bench-cta:hover {
+  background: #7B6BA5;
+}
+
+.ka-bench-cta--secondary {
+  background: transparent;
+  color: #999;
+  border-color: #333;
+  font-weight: 400;
+}
+
+.ka-bench-cta--secondary:hover {
+  border-color: #6B5B95;
+  color: #FAF9F6;
+}
+
+/* Footer */
+.ka-bench-footer {
+  text-align: center;
+  padding: 40px 24px 60px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.ka-bench-footer-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.ka-bench-footer-links a {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ka-bench-footer-links a:hover {
+  color: #6B5B95;
+}
+
+.ka-bench-copyright {
+  font-size: 13px;
+  color: #444;
+  margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .ka-bench-hero {
+    padding: 80px 20px 60px;
+  }
+
+  .ka-bench-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .ka-bench-stat {
+    padding: 16px 8px;
+  }
+
+  .ka-bench-stat-value {
+    font-size: 24px;
+  }
+
+  .ka-bench-section {
+    padding: 40px 20px;
+  }
+
+  .ka-bench-chart-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .ka-bench-chart-label {
+    text-align: left;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .ka-bench-chart-competitor {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .ka-bench-install {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ka-bench-copy {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .ka-bench-table {
+    font-size: 11px;
+  }
+
+  .ka-bench-table th,
+  .ka-bench-table td {
+    padding: 6px 8px;
+  }
+}

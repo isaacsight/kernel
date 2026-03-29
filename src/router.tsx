@@ -21,6 +21,7 @@ const LiveSharePage = lazyRetry(() => import('./pages/LiveSharePage').then(m => 
 const WorkspaceAdminPage = lazyRetry(() => import('./pages/WorkspaceAdminPage').then(m => ({ default: m.WorkspaceAdminPage })))
 const PlayPage = lazyRetry(() => import('./pages/PlayPage').then(m => ({ default: m.PlayPage })))
 const SecurityPage = lazyRetry(() => import('./pages/SecurityPage').then(m => ({ default: m.SecurityPage })))
+const BenchPage = lazyRetry(() => import('./pages/BenchPage'))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -123,6 +124,11 @@ export const router = createHashRouter([
       { path: 'security', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
           <SecurityPage />
+        </Suspense>
+      ) },
+      { path: 'bench', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading benchmarks...</div>}>
+          <BenchPage />
         </Suspense>
       ) },
       { path: '*', element: <Navigate to="/" replace /> },

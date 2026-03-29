@@ -2765,6 +2765,139 @@ async function main(): Promise<void> {
       process.stdout.write(md)
     })
 
+  // ── Bench ──
+  program
+    .command('bench')
+    .description('Run benchmarks — evaluate kbot against standardized coding and research tasks')
+    .option('--category <cat>', 'Filter by category (codegen, bugfix, refactor, explain, research, science)')
+    .option('--difficulty <diff>', 'Filter by difficulty (easy, medium, hard)')
+    .option('--compare', 'Compare with previous run')
+    .option('--history', 'Show benchmark history')
+    .option('--verbose', 'Show detailed per-task results')
+    .option('--limit <n>', 'Limit number of tasks', parseInt)
+    .action(async (benchOpts: { category?: string; difficulty?: string; compare?: boolean; history?: boolean; verbose?: boolean; limit?: number }) => {
+      const { registerBenchCommand } = await import('./bench.js')
+      // Delegate to the bench module's own handler
+      const { runBenchmark, getBenchHistory, compareBenchmarks, formatBenchResult } = await import('./bench.js')
+
+      if (benchOpts.history) {
+        const history = getBenchHistory()
+        if (history.length === 0) { console.error(chalk.dim('  No benchmark history. Run `kbot bench` first.')); return }
+        for (const h of history.slice(-10)) {
+          console.error(`  ${chalk.dim(h.timestamp.slice(0, 10))}  ${chalk.hex('#6B5B95')(h.totalScore.toFixed(1) + '/100')}  ${chalk.dim(h.provider + '/' + h.model)}  ${chalk.dim(h.tasks.length + ' tasks')}`)
+        }
+        return
+      }
+
+      const result = await runBenchmark({
+        categories: benchOpts.category ? [benchOpts.category] : undefined,
+        difficulty: benchOpts.difficulty,
+        verbose: benchOpts.verbose,
+        limit: benchOpts.limit,
+      })
+      formatBenchResult(result)
+
+      if (benchOpts.compare) {
+        const history = getBenchHistory()
+        if (history.length >= 2) {
+          console.error(compareBenchmarks(history[history.length - 2], result))
+        }
+      }
+    })
+
+  // ── Lab ──
+  program
+    .command('lab')
+    .description('Science lab — interactive research REPL with domain-specific tools and notebooks')
+    .option('--domain <domain>', 'Start in a specific domain (physics, chemistry, biology, math, neuro, earth, social, humanities, health)')
+    .option('--resume <id>', 'Resume a previous lab session')
+    .option('--name <name>', 'Name this lab session')
+    .action(async (labOpts: { domain?: string; resume?: string; name?: string }) => {
+      const { startLab } = await import('./lab.js')
+      await startLab({
+        domain: labOpts.domain as any,
+        resume: labOpts.resume,
+        name: labOpts.name,
+      })
+    })
+
+  // ── Teach ──
+  program
+    .command('teach [input...]')
+    .description('Teach kbot patterns, rules, and preferences explicitly')
+    .option('--list', 'List all teachings')
+    .option('--stats', 'Show teaching statistics')
+    .option('--remove <id>', 'Remove a teaching by ID')
+    .option('--export', 'Export teachings as JSON')
+    .option('--import <file>', 'Import teachings from JSON file')
+    .action(async (input: string[], teachOpts: { list?: boolean; stats?: boolean; remove?: string; export?: boolean; import?: string }) => {
+      const { handleTeachCommand } = await import('./teach.js')
+      const args = []
+      if (teachOpts.list) args.push('list')
+      else if (teachOpts.stats) args.push('stats')
+      else if (teachOpts.remove) args.push('remove', teachOpts.remove)
+      else if (teachOpts.export) args.push('export')
+      else if (teachOpts.import) args.push('import', teachOpts.import)
+      else if (input.length > 0) args.push(input.join(' '))
+      await handleTeachCommand(args)
+    })
+
+  // ── Sessions ──
+  program
+    .command('sessions')
+    .description('Manage multiple parallel kbot sessions')
+    .option('--create <name>', 'Create a new named session')
+    .option('--switch <name>', 'Switch to a session')
+    .option('--kill <name>', 'Kill a session')
+    .option('--agent <agent>', 'Set specialist agent for new session')
+    .option('--task <task>', 'Set task description for new session')
+    .action(async (sessOpts: { create?: string; switch?: string; kill?: string; agent?: string; task?: string }) => {
+      const { createSession, listSessions, switchSession, killSession, formatSessionList, formatSessionStatus } = await import('./multi-session.js')
+
+      if (sessOpts.create) {
+        const s = createSession({ name: sessOpts.create, agent: sessOpts.agent, task: sessOpts.task })
+        console.error(chalk.hex('#6B5B95')(`  Created session: ${s.name} (${s.id.slice(0, 8)})`))
+        return
+      }
+      if (sessOpts.switch) {
+        const s = switchSession(sessOpts.switch)
+        if (s) console.error(chalk.hex('#6B5B95')(`  Switched to: ${s.name}`))
+        else console.error(chalk.red(`  Session not found: ${sessOpts.switch}`))
+        return
+      }
+      if (sessOpts.kill) {
+        const ok = killSession(sessOpts.kill)
+        if (ok) console.error(chalk.hex('#6B5B95')(`  Killed session: ${sessOpts.kill}`))
+        else console.error(chalk.red(`  Session not found: ${sessOpts.kill}`))
+        return
+      }
+
+      // Default: list sessions
+      const sessions = listSessions()
+      if (sessions.length === 0) {
+        console.error(chalk.dim('  No active sessions. Create one with `kbot sessions --create <name>`'))
+      } else {
+        console.error(formatSessionList(sessions))
+      }
+    })
+
+  program
+    .command('release')
+    .description('Create a GitHub release with auto-generated changelog')
+    .option('--draft', 'Create as draft release')
+    .option('--tag <tag>', 'Override tag (default: vX.Y.Z from package.json)')
+    .option('--dry-run', 'Preview release notes without creating the release')
+    .option('--json', 'Output result as JSON')
+    .action(async (releaseOpts: { draft?: boolean; tag?: string; dryRun?: boolean; json?: boolean }) => {
+      const { runRelease } = await import('./github-release.js')
+      await runRelease({
+        draft: releaseOpts.draft,
+        tag: releaseOpts.tag,
+        dryRun: releaseOpts.dryRun,
+        json: releaseOpts.json || program.opts().json,
+      })
+    })
+
   // ── Automate subcommands ──
   const automateCmd = program
     .command('automate')
@@ -2925,7 +3058,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions'].includes(program.args[0])) return
 
   // Check for API key (BYOK or local provider)
   let byokActive = isByokEnabled()
