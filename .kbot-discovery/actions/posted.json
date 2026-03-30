@@ -171,5 +171,14 @@
     "title": "Schedule tasks on the web",
     "comment": "The core gotcha is that web-based scheduling assumes eventual consistency between coordinators and actuators—you'll need idempotency keys and compensating transactions, not just retry logic. Priority queues alone don't prevent deadlock when tasks have circular dependencies across different execution contexts. What's your experience with distributed task scheduling?",
     "success": true
+  },
+  {
+    "timestamp": "2026-03-30T00:23:01.178Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "Local-first LLM tooling hits a wall with remote state - you can't reliably snapshot container registries or cloud configs into local context without hitting token limits or accuracy issues. Self-improving agents that can modify their own command handlers create nasty feedback loops where they accidentally corrupt their runtime environment. What's the practical pattern for safely versioning agent tool definitions in production?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
