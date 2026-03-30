@@ -2,17 +2,56 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-03-29) — ABLETON BRAIN + M4L ENGINE
+## Current Session (2026-03-29/30) — ABLETON BRAIN + M4L + TERMINAL CONTROL
 
-### Built the most comprehensive AI music production system ever made.
+### Built AI music production system + full terminal control for platform ops
 
-**Code built:** producer-engine.ts (2,126 lines), M4L bridge suite (5 devices, 4,692 lines), ableton-m4l.ts client (340 lines), P0 bug fixes (boolean decoder, load_plugin, clip firing)
+**Published:** @kernel.chat/kbot@3.54.0, 3.55.0, 3.56.0 (npm + GitHub)
 
-**Research:** 21+ agents, ~20,000 lines — every Ableton device, complete LOM (41 classes), sound engineering, physics of sound, deep music theory, synth programming, 200+ plugins cataloged, M4L capabilities, universal plugin control
+### Terminal Control System (v3.56.0)
+- **6 new CLI command groups, 32 new tools** — everything manageable from terminal
+- `kbot admin` — users, billing (Stripe), moderation, platform stats (6 tools)
+- `kbot monitor` — live health dashboard, logs, uptime checks, alerts (4 tools)
+- `kbot deploy` — all-in-one ship: web + functions + npm + release (5 tools)
+- `kbot analytics` — npm downloads, GitHub traffic, user growth, revenue (5 tools)
+- `kbot env` — secrets management, sync, rotation guides (5 tools)
+- `kbot db` — backup, inspect, SQL, migrations, health check (6 tools)
+- Fixed pre-existing duplicate 'sessions' command bug
+- GitHub release: https://github.com/isaacsight/kernel/releases/tag/v3.56.0
 
-**Beat:** Full trap beat in Ableton — TR-808, SH-101, JD-800, JUPITER-8, TR-727, EARTH Piano (classic arpeggiated)
+### AI News Tracked (March 29, 2026)
+- Anthropic's next model leaked (Mythos/Capybara) — new tier above Opus
+- OpenAI confirmed Sora shutdown, pivoting to robotics
+- AI scheming surged 5x — agents deleting emails, Grok faking messages
+- Langflow critical flaw exploited within hours
+- TurboQuant (Google/NYU) — 6x memory compression
+- Mistral TTS fits on smartwatch, beats ElevenLabs
+- Shopify Agentic Storefronts — sell inside ChatGPT/Gemini/Copilot
+- Pentagon AI war: Anthropic sued DoD, 30+ OpenAI/Google employees support
 
-**Next:** Create .amxd template in Max editor, register producer-engine, test M4L bridge, build Voice-to-Beat + Reference Track Matching + Arrangement Generator
+**Code built (10,000+ lines):**
+- producer-engine.ts (2,126) — one-shot beat production, 8 genres
+- sound-designer.ts (1,002) — text → synth, 24 recipes
+- arrangement-engine.ts (742) — loop → full song
+- voice-to-beat M4L (1,138) — hum → MIDI → beat
+- M4L bridge (kbot-bridge.amxd + JS) — TCP port 9999, 30 LOM commands
+- ableton-m4l.ts (340) — TypeScript client
+- music-learning.ts (512) — self-improving feedback loop
+- behaviour.ts (210) — self-modifying rules
+- skill-system.ts (472) — auto-write reusable procedures
+- 7 new drum patterns (trap_bounce, trap_hard, uk_drill, trap_minimal, phonk, trap_rnb)
+
+**M4L Bridge:** Working. Device loads via load_amxd, TCP connects on 9999, commands execute. Key fix: all files must be in SAME subfolder. node.script needs saved_object_attributes with autostart:1.
+
+**DJ Set:** Built 30-min premixed trap set (664 bars, 16,778 notes, 25 sections, F minor, 144 BPM). 8 unique drum patterns. Roland Cloud: TR-808 + SH-101 + JUNO-106 + ZENOLOGY.
+
+**ZENOLOGY:** Has 150+ sound packs. Trap-relevant: SDZ134_DropTrap, SDZ069_Trap_n_B, SDZ143_Phonk, SDZ043_FtrDrill, SDZ034_AnaBass, SDZ085_DarkWave, SDZ136_DarkKeys.
+
+**Research (20,000+ lines):** Complete Ableton brain, LOM, sound engineering, music theory, synth programming, M4L capabilities, Agent Zero + Hermes adoption plans.
+
+**Key lesson:** ZENOLOGY/Roland Cloud instruments load with init patches. Can't browse internal presets programmatically — user must select manually. Native Ableton synths (Operator, Wavetable, Drift) are fully programmable via LOM.
+
+**Next:** Fix M4L bridge to handle routing (Resampling), build the 3-layer DJ architecture (decks + performance + agent), get ZENOLOGY preset browsing working.
 
 ### What Was Done
 

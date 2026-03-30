@@ -29,7 +29,7 @@ No other shipping tool combines:
 
 The cognitive modules aren't metaphors — they're TypeScript implementations. Free Energy (Friston, 2010) drives explore-vs-exploit decisions. Predictive Processing (Clark, 2013) anticipates your next action. Strange Loops (Hofstadter, 1979) detects when the agent reasons about its own reasoning.
 
-Stats: 290 built-in tools, 23 specialist agents, 20 providers, MIT licensed, ~1,200 installs/day.
+Stats: 600+ built-in tools, 35 specialist agents, 20 providers, MIT licensed, ~1,200 installs/day.
 
 Try it:
 ```

@@ -82,7 +82,7 @@ $ kbot "what does this codebase do?"
   backend. The main product is kbot, a terminal AI agent in
   packages/kbot/. Key files:
   - src/ — React 19 web app
-  - packages/kbot/src/ — CLI agent with 560+ tools
+  - packages/kbot/src/ — CLI agent with 600+ tools
   - supabase/ — Edge functions and migrations
 
   💡 Tip: try `kbot --agent coder "fix the bug in auth.ts"`

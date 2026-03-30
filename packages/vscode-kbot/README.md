@@ -1,6 +1,6 @@
 # kbot for VS Code
 
-Open-source AI agent with 23 specialists, 290 tools, and 20 providers — now in your editor.
+Open-source AI agent with 35 specialists, 600+ tools, and 20 providers — now in your editor.
 
 ## Features
 

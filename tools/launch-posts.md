@@ -26,7 +26,7 @@ The academic term is "autopoiesis" — a system that produces the components tha
 itself. kbot monitors its own health, heals degraded components, and grows its capability
 surface every time it runs. Run `kbot vitals` to see it.
 
-289 tools. 22 specialist agents. 20 AI providers. Runs offline (embedded llama.cpp).
+600+ tools. 35 specialist agents. 20 AI providers. Runs offline (embedded llama.cpp).
 MIT licensed. 8 runtime dependencies.
 
 npm i -g @kernel.chat/kbot && kbot "hello"
@@ -95,7 +95,7 @@ kbot "hello"
 
 No API key needed. Embedded AI engine.
 20 providers when you want them.
-289 tools and growing — because users forge new ones.
+600+ tools and growing — because users forge new ones.
 
 GitHub: github.com/isaacsight/kernel
 
@@ -113,7 +113,7 @@ The system improves the system that improves itself.
 ## Reddit Posts
 
 ### r/commandline
-**Title:** kbot — terminal AI agent that creates its own tools at runtime (289 tools, self-evolving, open source)
+**Title:** kbot — terminal AI agent that creates its own tools at runtime (600+ tools, self-evolving, open source)
 **Body:**
 ```
 kbot is an open-source terminal AI agent that gets smarter over time.
@@ -127,7 +127,7 @@ Other things that make it different:
 - Fallback chains: URL fails → web search. Command not found → npx. Auto-recovery.
 - Cost-aware routing: "hi" uses the cheap model. Complex tasks use the full one.
 - Autopoietic health: `kbot vitals` shows live system viability.
-- 290 tools, 23 agents, 20 providers, runs offline.
+- 600+ tools, 35 agents, 20 providers, runs offline.
 
 npm i -g @kernel.chat/kbot
 kbot "hello"
@@ -384,7 +384,7 @@ No API key needed. Works offline. Gets smarter over time.
 
 ## Key Message
 
-**Old story**: "290 tools, 20 providers, runs offline."
+**Old story**: "600+ tools, 20 providers, runs offline."
 **New story**: "The only AI agent that builds its own tools."
 
 One sentence. forge_tool is the demo. The registry is the moat. Autopoiesis is the science.

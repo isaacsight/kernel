@@ -1,6 +1,6 @@
 <p align="center">
   <strong>kbot</strong><br>
-  Open-source terminal AI agent. 35 agents. 560+ tools. 20 providers. Science, finance, security, and more.
+  Open-source terminal AI agent. 35 agents. 600+ tools. 20 providers. Science, finance, security, and more.
 </p>
 
 <p align="center">
@@ -28,7 +28,7 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **Runs fully offline** — Embedded llama.cpp, Ollama, LM Studio, or Jan. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster over time.
 - **35 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, quant, and 30 more).
-- **560+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, and more.
+- **600+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, and more.
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
 
@@ -38,7 +38,7 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 |---|---|---|---|---|---|
 | AI providers | 20 | 1 | 1 | 6 | 75+ |
 | Specialist agents | 35 | 0 | 0 | 0 | 0 |
-| Built-in tools | 560+ | ~20 | ~15 | ~10 | ~15 |
+| Built-in tools | 600+ | ~20 | ~15 | ~10 | ~15 |
 | Science tools | 114 | 0 | 0 | 0 | 0 |
 | Learning engine | Yes | No | No | No | No |
 | Offline mode | Embedded + Ollama | No | No | Ollama | Ollama |
@@ -91,7 +91,7 @@ kbot auto-routes to the right agent for each task. Or pick one with `--agent <na
 | **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter |
 | **Presets** | claude-code, cursor, copilot, creative, developer |
 
-## 560+ Tools
+## 600+ Tools
 
 | Category | Examples |
 |----------|---------|
@@ -183,7 +183,7 @@ graph TD
     D -->|Multi-step| F[Autonomous Planner]
     E --> G[Provider API + Tool Loop]
     F --> G
-    G --> H{560+ Tools}
+    G --> H{600+ Tools}
     H --> I[File ops, bash, git, GitHub, search, deploy, DB, game dev...]
     G --> J[Learning Engine]
     J --> K[Patterns + Solutions + User Profile]

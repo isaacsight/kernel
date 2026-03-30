@@ -1,6 +1,6 @@
 // kbot Agent API — Replit Template
 //
-// This gives you a full AI agent backend with 290 tools in ~30 lines.
+// This gives you a full AI agent backend with 600+ tools in ~30 lines.
 //
 // Setup:
 //   1. Add your API key to Replit Secrets → ANTHROPIC_API_KEY (or any of 20 providers)

@@ -1,7 +1,7 @@
 {
   "name": "kbot",
   "displayName": "kbot — AI Agent",
-  "description": "Open-source terminal AI agent with 23 specialists, 290 tools, 20 providers. Runs offline.",
+  "description": "Open-source terminal AI agent with 35 specialists, 600+ tools, 20 providers. Runs offline.",
   "version": "0.1.0",
   "publisher": "kernel-chat",
   "license": "MIT",

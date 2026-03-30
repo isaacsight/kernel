@@ -1,21 +1,21 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-03-30T13:04:50.625Z",
-    "intel": "2026-03-30T07:59:03.159Z",
-    "outreach": "2026-03-30T06:09:40.078Z",
-    "writing": "2026-03-29T14:04:13.008Z",
+    "pulse": "2026-03-30T22:26:56.391Z",
+    "intel": "2026-03-30T16:31:25.326Z",
+    "outreach": "2026-03-30T20:16:20.706Z",
+    "writing": "2026-03-30T16:31:25.469Z",
     "evolution": "2026-03-30T06:07:40.900Z",
-    "opportunities": "2026-03-30T07:59:07.650Z",
-    "actions": "2026-03-30T08:09:47.547Z",
-    "synthesis": "2026-03-30T13:04:50.658Z",
-    "obsidian": "2026-03-30T06:09:40.149Z"
+    "opportunities": "2026-03-30T16:31:25.355Z",
+    "actions": "2026-03-30T16:31:25.355Z",
+    "synthesis": "2026-03-30T22:26:57.074Z",
+    "obsidian": "2026-03-30T20:16:20.713Z"
   },
   "stats": {
-    "totalRuns": 1030,
-    "totalPulses": 451,
-    "totalIntel": 58,
-    "totalOutreach": 24,
-    "totalWriting": 12,
+    "totalRuns": 1047,
+    "totalPulses": 459,
+    "totalIntel": 59,
+    "totalOutreach": 25,
+    "totalWriting": 13,
     "totalEvolution": 15,
     "errorsToday": 0,
     "lastErrorDate": "2026-03-30",
@@ -24,12 +24,12 @@
     "postsFlagged": 0,
     "evolutionSuccesses": 2,
     "evolutionFailures": 6,
-    "totalSynthesis": 245,
-    "totalObsidianSyncs": 7
+    "totalSynthesis": 253,
+    "totalObsidianSyncs": 8
   },
   "knownStars": 6,
-  "knownDownloads": 0,
-  "hnScore": 0,
+  "knownDownloads": 148,
+  "hnScore": 1,
   "hnComments": 0,
   "feedback": [
     {
@@ -38,11 +38,11 @@
       "title": "Schedule tasks on the web",
       "scoreAtPost": 1,
       "commentsAtPost": 0,
-      "lastCheckedAt": "2026-03-30T09:34:27.665Z",
+      "lastCheckedAt": "2026-03-30T20:56:55.406Z",
       "currentScore": 0,
       "currentComments": 0,
       "repliesReceived": 0,
-      "outcome": "pending"
+      "outcome": "ignored"
     }
   ],
   "reachedMilestones": [

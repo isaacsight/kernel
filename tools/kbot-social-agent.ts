@@ -182,7 +182,7 @@ function nextIndex(state: SocialState, bank: string, size: number): number {
 // ─── Content Banks ──────────────────────────────────────────
 
 const TWEETS = [
-  () => `kbot v${getVersion()} — ${getToolCount()} tools, 23 agents, 20 providers.\n\nWorks on first run. No API key needed.\n\nnpm i -g @kernel.chat/kbot`,
+  () => `kbot v${getVersion()} — ${getToolCount()} tools, 35 agents, 20 providers.\n\nWorks on first run. No API key needed.\n\nnpm i -g @kernel.chat/kbot`,
   () => `Your terminal is smarter than your IDE.\n\nkbot has ${getToolCount()} tools built in — git, deploy, database, game dev, web search, research papers.\n\nOne install: npm i -g @kernel.chat/kbot`,
   () => `kbot learns your coding patterns.\n\nNot "remembers your chat." Actually extracts patterns and gets faster over time.\n\nBayesian skill ratings. 22 specialist agents.\n\nnpm i -g @kernel.chat/kbot`,
   () => `20 AI providers. Zero lock-in.\n\nClaude today. GPT tomorrow. Ollama on the airplane.\n\nkbot lets you switch with one command.\n\nnpm i -g @kernel.chat/kbot`,

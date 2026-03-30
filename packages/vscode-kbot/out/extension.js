@@ -52,7 +52,7 @@ function activate(context) {
     // ── Status Bar ──
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.text = '$(hubot) kbot';
-    statusBarItem.tooltip = 'kbot — AI Agent (23 specialists, 290 tools)';
+    statusBarItem.tooltip = 'kbot — AI Agent (35 specialists, 600+ tools)';
     statusBarItem.command = 'kbot.startChat';
     statusBarItem.show();
     context.subscriptions.push(statusBarItem);

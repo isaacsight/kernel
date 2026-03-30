@@ -15,7 +15,7 @@ This roadmap reflects the current direction of kbot. Priorities may shift based 
 - [x] Structured streaming — typed events for SDK consumers
 
 ### Tools & Capabilities
-- [x] 560+ tools — all free, all open source
+- [x] 600+ tools — all free, all open source
 - [x] 35 agents (26 specialists + 9 presets)
 - [x] 20 AI providers (cloud + 4 local options)
 - [x] Game dev tools (16): scaffold, config, shaders, meshes, physics, particles, levels, tilemaps, navmesh, audio, netcode, builds, tests, ECS — 8 engines supported
@@ -34,7 +34,7 @@ This roadmap reflects the current direction of kbot. Priorities may shift based 
 - [x] Plugin SDK — extend kbot with custom tools and hooks
 - [x] Zero-config first run — embedded llama.cpp, no API key required (v3.2.0)
 - [x] Social tools — kbot posts as itself on X, LinkedIn, Bluesky, Mastodon (v3.3.0)
-- [x] 560+ tools — all free, all open source (v3.6.0)
+- [x] 600+ tools — all free, all open source (v3.6.0)
 
 ### Community & Ecosystem
 - [x] Discord server (20 channels, 6 roles, webhooks)

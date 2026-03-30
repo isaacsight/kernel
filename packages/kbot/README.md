@@ -19,7 +19,7 @@
 npm install -g @kernel.chat/kbot
 ```
 
-**Self-defending AI agent. 560+ tools. 35 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
+**Self-defending AI agent. 600+ tools. 35 agents. 20 providers. Forges new tools at runtime. Built-in cybersecurity suite. $0 local AI. MIT licensed.**
 
 > **New: [The Kernel Stack](./KERNEL_STACK.md)** — the architecture behind kbot + Claude Code. Agentic, self-improving, compound AI. Read the manifesto.
 
@@ -37,7 +37,7 @@ npm install -g @kernel.chat/kbot
 | **Voice Mode** | `kbot voice` — full voice loop with speech-to-text input and text-to-speech output. Hands-free agentic coding. Works with system TTS and Whisper STT. |
 | **OpenClaw Integration** | [`@kernel.chat/kbot-openclaw`](https://www.npmjs.com/package/@kernel.chat/kbot-openclaw) — kbot as the brain for 50+ messaging channels. Discord, Slack, Telegram, WhatsApp, iMessage, email, and more. One agent, every platform. |
 | **35 agents** | 15 new specialist and domain agents since v3.28, including meta-agent, dream agent, and expanded presets. |
-| **560+ tools** | 210+ new tools across science, research, finance, creative, build matrix, and meta-cognition categories. |
+| **600+ tools** | 210+ new tools across science, research, finance, creative, build matrix, and meta-cognition categories. |
 
 ### v3.28 — Self-Defense System
 
@@ -177,7 +177,7 @@ for await (const event of agent.stream("explain this code")) {
 const files = await tools.execute('glob', { pattern: 'src/**/*.ts' })
 console.log(files.result)
 
-// List all 560+ tools
+// List all 600+ tools
 console.log(tools.list().map(t => t.name))
 ```
 
@@ -209,7 +209,7 @@ kbot --agent coder "refactor this into smaller functions"
 kbot --agent trader "analyze BTC momentum and run a paper trade"
 ```
 
-## 560+ Tools
+## 600+ Tools
 
 | Category | Examples |
 |----------|---------|
