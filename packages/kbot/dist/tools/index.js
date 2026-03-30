@@ -291,6 +291,11 @@ const LAZY_MODULE_IMPORTS = [
     { path: './env-manager.js', registerFn: 'registerEnvTools' },
     { path: './db-admin.js', registerFn: 'registerDbAdminTools' },
     { path: './visa-payments.js', registerFn: 'registerVisaPaymentTools' },
+    { path: './security-brain.js', registerFn: 'registerSecurityBrainTools' },
+    { path: './ctf.js', registerFn: 'registerCtfTools' },
+    { path: './pentest.js', registerFn: 'registerPentestTools' },
+    { path: './redblue.js', registerFn: 'registerRedBlueTools' },
+    { path: './hacker-toolkit.js', registerFn: 'registerHackerToolkitTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;
