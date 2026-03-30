@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-03-30T07:58:59.362Z",
+  "timestamp": "2026-03-30T16:31:25.260Z",
   "hn": {
-    "score": 1,
+    "score": 0,
     "comments": 0,
     "newComments": 0
   },
@@ -10,6 +10,6 @@
     "delta": 0
   },
   "npm": {
-    "downloads": 148
+    "downloads": 0
   }
 }

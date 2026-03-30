@@ -1,18 +1,18 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-03-30T07:27:14.667Z",
-    "intel": "2026-03-30T07:27:18.164Z",
+    "pulse": "2026-03-30T13:04:50.625Z",
+    "intel": "2026-03-30T07:59:03.159Z",
     "outreach": "2026-03-30T06:09:40.078Z",
     "writing": "2026-03-29T14:04:13.008Z",
     "evolution": "2026-03-30T06:07:40.900Z",
-    "opportunities": "2026-03-30T07:42:38.461Z",
-    "actions": "2026-03-30T08:09:36.476Z",
-    "synthesis": "2026-03-30T07:27:15.097Z",
+    "opportunities": "2026-03-30T07:59:07.650Z",
+    "actions": "2026-03-30T08:09:47.547Z",
+    "synthesis": "2026-03-30T13:04:50.658Z",
     "obsidian": "2026-03-30T06:09:40.149Z"
   },
   "stats": {
-    "totalRuns": 1026,
-    "totalPulses": 447,
+    "totalRuns": 1030,
+    "totalPulses": 451,
     "totalIntel": 58,
     "totalOutreach": 24,
     "totalWriting": 12,
@@ -24,12 +24,12 @@
     "postsFlagged": 0,
     "evolutionSuccesses": 2,
     "evolutionFailures": 6,
-    "totalSynthesis": 241,
+    "totalSynthesis": 245,
     "totalObsidianSyncs": 7
   },
   "knownStars": 6,
-  "knownDownloads": 148,
-  "hnScore": 1,
+  "knownDownloads": 0,
+  "hnScore": 0,
   "hnComments": 0,
   "feedback": [
     {
@@ -38,7 +38,7 @@
       "title": "Schedule tasks on the web",
       "scoreAtPost": 1,
       "commentsAtPost": 0,
-      "lastCheckedAt": "2026-03-30T07:27:14.665Z",
+      "lastCheckedAt": "2026-03-30T09:34:27.665Z",
       "currentScore": 0,
       "currentComments": 0,
       "repliesReceived": 0,
