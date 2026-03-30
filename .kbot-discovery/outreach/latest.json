@@ -1,59 +1,59 @@
 {
-  "timestamp": "2026-03-29T18:07:01.894Z",
+  "timestamp": "2026-03-30T06:09:40.075Z",
   "projects": [
     {
-      "name": "Narcooo/inkos",
-      "url": "https://github.com/Narcooo/inkos",
-      "stars": 2802,
-      "description": "Autonomous novel writing CLI AI Agent — agents write, audit, and revise novels with human review gates"
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1057,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
       "name": "dcostenco/prism-mcp",
       "url": "https://github.com/dcostenco/prism-mcp",
-      "stars": 98,
+      "stars": 101,
       "description": "🧠 Prism MCP — Persistent memory for AI coding agents. Session history, semantic search, TurboQuant 10x compression, visual memory, autonomous Web Scholar, CRDT multi-agent merging, and a Mind Palace dashboard. Works with Claude, Cursor, Windsurf, Gemini."
     },
     {
-      "name": "rshodoskar-star/openclaw-desktop",
-      "url": "https://github.com/rshodoskar-star/openclaw-desktop",
-      "stars": 152,
-      "description": "🖥️ A native desktop client for OpenClaw  premium UI experience without the browser. Built with Electron + React + TypeScript. Bilingual Arabic/English with full RTL support."
-    },
-    {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 351,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+      "name": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": 20480,
+      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
     },
     {
       "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
       "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 143,
+      "stars": 145,
       "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
     },
     {
-      "name": "Mirascope/mirascope",
-      "url": "https://github.com/Mirascope/mirascope",
-      "stars": 1442,
-      "description": "The LLM Anti-Framework"
+      "name": "dovvnloading/Graphite",
+      "url": "https://github.com/dovvnloading/Graphite",
+      "stars": 105,
+      "description": "A private, modular node based AI workspace for thinking and creation. Seamlessly connect to Ollama, OpenAI, Gemini, Anthropic, and Groq models in one unified, node-based interface for reasoning, visualization, and exploration — all running locally or via API."
     },
     {
-      "name": "koach08/agentsift",
-      "url": "https://github.com/koach08/agentsift",
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 354,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+    },
+    {
+      "name": "wuyunting555/openclaw-toolbox",
+      "url": "https://github.com/wuyunting555/openclaw-toolbox",
       "stars": 0,
-      "description": "Security scanner for AI agent plugins, skills, and MCP packages. npm audit for the AI agent ecosystem."
+      "description": "wenwubei 的 OpenClaw skills、plugins 和工具仓库"
     },
     {
-      "name": "sudokrang/aceforge",
-      "url": "https://github.com/sudokrang/aceforge",
-      "stars": 1,
-      "description": "Self-evolving skill engine for OpenClaw agents. Observes tool usage, crystallizes patterns into auditable SKILL.md files through a dual-model LLM pipeline, and continuously validates with 23 adversarial mutations. Research-grounded. Human-approved. Nothing auto-deploys."
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
+      "stars": 0,
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     },
     {
-      "name": "alvinunreal/awesome-openclaw",
-      "url": "https://github.com/alvinunreal/awesome-openclaw",
-      "stars": 173,
-      "description": "A curated list of the best OpenClaw resources: official projects, skills, plugins, dashboards, deployment tooling, memory systems, and guides."
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "stars": 0,
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     }
   ],
   "latestPaper": {

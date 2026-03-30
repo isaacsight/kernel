@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-03-30T00:21:53.024Z",
-  "count": 30,
+  "timestamp": "2026-03-30T07:42:36.904Z",
+  "count": 27,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -11,15 +11,15 @@
     },
     {
       "source": "hn-comment",
-      "title": "Show HN: TopMail – LaunchFest Winner, $20/Mo Unlimited Email, Coding Agents API",
-      "url": "https://news.ycombinator.com/item?id=47505175",
+      "title": "Show HN: An open-source safety net for home hemodialysis",
+      "url": "https://news.ycombinator.com/item?id=47460486",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Show HN: An open-source safety net for home hemodialysis",
-      "url": "https://news.ycombinator.com/item?id=47460486",
+      "title": "Show HN: Soros – AI for geopolitical macro investing",
+      "url": "https://news.ycombinator.com/item?id=47418557",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,45 +67,24 @@
     },
     {
       "source": "hn-comment",
-      "title": "Are LLMs a Dead End? [video]",
-      "url": "https://news.ycombinator.com/item?id=47565014",
+      "title": "The Cognitive Dark Forest",
+      "url": "https://news.ycombinator.com/item?id=47570522",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Will the AI data centre boom become a $9T bust?",
-      "url": "https://news.ycombinator.com/item?id=47560527",
+      "title": "So where are all the AI apps?",
+      "url": "https://news.ycombinator.com/item?id=47505810",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "I am leaving the AI party after one drink",
-      "url": "https://news.ycombinator.com/item?id=47559598",
+      "title": "Thinking Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning",
+      "url": "https://news.ycombinator.com/item?id=47474654",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "github-issue",
-      "title": "MCP transport support for AI agent tool calls",
-      "url": "https://github.com/amgb20/MPP-Inspector/issues/18",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "help wanted: making agents reliably choose roslyn_* tools",
-      "url": "https://github.com/MadQ/RoslynMcp/issues/99",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add JSON output format for gitintel stats",
-      "url": "https://github.com/gitintel-ai/GitIntelAI/issues/19",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -130,43 +109,43 @@
     },
     {
       "source": "github-issue",
-      "title": "chore(main): release 0.8.0",
-      "url": "https://github.com/clawvisor/clawvisor/pull/86",
+      "title": "deps: bump the npm-development group with 4 updates",
+      "url": "https://github.com/amourjun/openclaw-managed-a2a/pull/5",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(discord): return native /status reply directly",
-      "url": "https://github.com/openclaw/openclaw/pull/57343",
+      "title": "feat: ClawHub plugin — one-click install for OpenClaw ecosystem",
+      "url": "https://github.com/vivekchand/clawmetry/issues/407",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Improvement]: Harvest high-value upstream PRs into fork build",
-      "url": "https://github.com/Arry8/openclaw/issues/67",
+      "title": "refactor: improve code quality and performance",
+      "url": "https://github.com/nodetool-ai/nodetool/pull/2444",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "AI Agents Could Make Free Software Matter Again",
+      "url": "https://reddit.com/r/programming/comments/1s7jzpo/ai_agents_could_make_free_software_matter_again/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "JetBrains Air: The Future of Multi-Agent Coding, or Just More AI Noise?",
+      "url": "https://reddit.com/r/programming/comments/1s7h8bw/jetbrains_air_the_future_of_multiagent_coding_or/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-programming",
       "title": "AMD GAIA 0.16 introduces C++17 agent framework for building AI PC agents in pure C++",
       "url": "https://reddit.com/r/programming/comments/1rncnnk/amd_gaia_016_introduces_c17_agent_framework_for/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "Beyond the Vibes: A Rigorous Guide to AI Coding Assistants and Agents",
-      "url": "https://reddit.com/r/programming/comments/1ritjkj/beyond_the_vibes_a_rigorous_guide_to_ai_coding/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "OSS Maintainers Can Inject Their Standards Into Contributors' AI Tools",
-      "url": "https://reddit.com/r/programming/comments/1rf6w7s/oss_maintainers_can_inject_their_standards_into/",
       "why": "Discussion in r/programming about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
@@ -193,22 +172,22 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "CLI for Google AI Search (gai.google) — run AI-powered code/tech searches headlessly from your terminal",
+      "url": "https://reddit.com/r/artificial/comments/1s7k1sg/cli_for_google_ai_search_gaigoogle_run_aipowered/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "We built a fully deterministic control layer for agents. Would love feedback. No pitch",
+      "url": "https://reddit.com/r/artificial/comments/1s7dlk7/we_built_a_fully_deterministic_control_layer_for/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "I am usig claude agents wrong?",
       "url": "https://reddit.com/r/artificial/comments/1s6lu5k/i_am_usig_claude_agents_wrong/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Surveillance data used to be boring. AI made it dangerous.",
-      "url": "https://reddit.com/r/artificial/comments/1s6hvhk/surveillance_data_used_to_be_boring_ai_made_it/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "The AI hype misses the people who actually need it most",
-      "url": "https://reddit.com/r/artificial/comments/1s6fws6/the_ai_hype_misses_the_people_who_actually_need/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
