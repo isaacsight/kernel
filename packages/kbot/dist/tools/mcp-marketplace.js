@@ -185,6 +185,30 @@ const BUNDLED_SERVERS = [
         install: '@cloudflare/mcp-server-cloudflare',
         transport: 'stdio',
     },
+    {
+        name: 'gitagent',
+        package: '@gitagent/mcp-server',
+        description: 'GitAgent universal agent format — import/export agents across platforms',
+        source: 'community',
+        install: 'npx @gitagent/mcp-server',
+        transport: 'stdio',
+    },
+    {
+        name: 'visa-payments',
+        package: '@aspect-build/visa-mcp',
+        description: 'Visa CLI agent payments — tokenized card payments for AI agents',
+        source: 'community',
+        install: 'npx @aspect-build/visa-mcp',
+        transport: 'stdio',
+    },
+    {
+        name: 'nvidia-agent-toolkit',
+        package: '@nvidia/agent-toolkit-mcp',
+        description: 'NVIDIA Agent Toolkit — enterprise agent runtime and tools',
+        source: 'community',
+        install: 'npx @nvidia/agent-toolkit-mcp',
+        transport: 'stdio',
+    },
 ];
 // ── Shell helper ─────────────────────────────────────────────────────────────
 function shell(cmd, args, timeout = 60_000) {

@@ -20,6 +20,8 @@ function commandExists(cmd) {
 function detectTTSEngine() {
     if (platform === 'darwin')
         return 'say';
+    if (commandExists('voxtral') || process.env.VOXTRAL_API_KEY)
+        return 'voxtral';
     if (commandExists('espeak'))
         return 'espeak';
     if (commandExists('festival'))
@@ -136,6 +138,28 @@ export async function speak(text, state) {
                 });
                 proc.stdin?.write(cleaned);
                 proc.stdin?.end();
+                break;
+            }
+            case 'voxtral': {
+                // Voxtral TTS — Mistral's open-weight text-to-speech
+                // Supports local binary or API mode via VOXTRAL_API_KEY
+                const apiKey = process.env.VOXTRAL_API_KEY;
+                if (apiKey) {
+                    // API mode: pipe text to voxtral via Mistral API
+                    const body = JSON.stringify({ model: 'voxtral-tts-latest', input: cleaned });
+                    proc = spawn('curl', [
+                        '-s', '--max-time', '30',
+                        '-H', 'Content-Type: application/json',
+                        '-H', `Authorization: Bearer ${apiKey}`,
+                        '-d', body,
+                        '--output', join(tmpdir(), `kbot-voxtral-${Date.now()}.mp3`),
+                        'https://api.mistral.ai/v1/audio/speech',
+                    ], { stdio: 'ignore' });
+                }
+                else {
+                    // Local mode: voxtral binary
+                    proc = spawn('voxtral', ['--text', cleaned], { stdio: 'ignore' });
+                }
                 break;
             }
             default:
@@ -304,6 +328,8 @@ export function listVoices() {
                 }
                 return [];
             }
+            case 'voxtral':
+                return ['voxtral-default', 'voxtral-expressive'];
             default:
                 return [];
         }

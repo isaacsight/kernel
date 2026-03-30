@@ -1,6 +1,6 @@
 import { type ChildProcess } from 'node:child_process';
 export interface VoiceOptions {
-    /** TTS voice name (macOS: Alex, Samantha, etc.) */
+    /** TTS voice name (macOS: Alex, Samantha, etc. / Voxtral: voxtral-default, voxtral-expressive) */
     voice?: string;
     /** TTS speech rate (words per minute, default: 200) */
     rate?: number;
