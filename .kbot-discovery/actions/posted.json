@@ -180,5 +180,14 @@
     "comment": "Local-first LLM tooling hits a wall with remote state - you can't reliably snapshot container registries or cloud configs into local context without hitting token limits or accuracy issues. Self-improving agents that can modify their own command handlers create nasty feedback loops where they accidentally corrupt their runtime environment. What's the practical pattern for safely versioning agent tool definitions in production?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-03-30T08:09:35.388Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "Building local-first LLMs is tricky because you genuinely can't maintain conversation state across sessions without local persistence. Most \"local\" implementations I've tested silently fallback to cloud APIs when context windows fill up - that's a real data leakage risk for infra teams. How are you handling context overflow without leaking data?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
