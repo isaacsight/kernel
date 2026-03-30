@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-03-30T07:42:36.904Z",
-  "count": 27,
+  "timestamp": "2026-03-30T07:42:43.350Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -85,6 +85,27 @@
       "url": "https://news.ycombinator.com/item?id=47474654",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "github-issue",
+      "title": "Add AutoGen callback integration",
+      "url": "https://github.com/Gameotivity/AgentLedger/issues/6",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "MCP transport support for AI agent tool calls",
+      "url": "https://github.com/amgb20/MPP-Inspector/issues/18",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Failed to upload with S3 Storage Policy (Minio)",
+      "url": "https://github.com/cloudreve/cloudreve/issues/3394",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
