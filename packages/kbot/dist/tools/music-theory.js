@@ -818,9 +818,69 @@ export const GENRE_DRUM_PATTERNS = {
         pattern: {
             kick: [0, 7, 8], // sparse kick, half-time feel
             snare: [8], // snare on beat 3 (half-time)
-            closed_hihat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], // 16th hi-hats
+            closed_hihat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
             open_hihat: [6, 14],
             clap: [8],
+        },
+    },
+    trap_bounce: {
+        bpm: [135, 150],
+        pattern: {
+            kick: [0, 3, 8, 14], // bounce pattern
+            snare: [4, 12], // snare on 2+4
+            closed_hihat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            open_hihat: [3, 11],
+            clap: [4],
+        },
+    },
+    trap_hard: {
+        bpm: [135, 155],
+        pattern: {
+            kick: [0, 2, 8, 10], // double kick hits
+            snare: [4, 12], // snare on 2+4
+            closed_hihat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            open_hihat: [3, 11],
+            clap: [4, 12],
+            cowbell: [4],
+        },
+    },
+    uk_drill: {
+        bpm: [138, 145],
+        pattern: {
+            kick: [0, 7, 8, 14], // displaced kicks
+            snare: [4, 12], // snare on 2+4
+            closed_hihat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], // triplet feel (12 per bar)
+            open_hihat: [5],
+            clap: [4],
+        },
+    },
+    trap_minimal: {
+        bpm: [130, 150],
+        pattern: {
+            kick: [0, 8], // just 1 and 3
+            closed_hihat: [0, 2, 4, 6, 8, 10, 12, 14], // 8th notes only
+            open_hihat: [6],
+        },
+    },
+    phonk: {
+        bpm: [130, 145],
+        pattern: {
+            kick: [0, 8], // sparse kick
+            snare: [4, 12], // snare on 2+4
+            closed_hihat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            open_hihat: [6],
+            cowbell: [0, 4, 8, 12], // cowbell every beat
+            clap: [4],
+        },
+    },
+    trap_rnb: {
+        bpm: [65, 85],
+        pattern: {
+            kick: [0, 8], // soft kick
+            snare: [4, 12], // snare on 2+4
+            closed_hihat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            open_hihat: [3, 11],
+            clap: [4],
         },
     },
     dnb: {

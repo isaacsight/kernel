@@ -84,11 +84,18 @@ const patcher = {
         box: {
           id: "obj-3",
           maxclass: "newobj",
-          text: "node.script kbot-bridge-server.js",
+          text: "node.script kbot-bridge-server.js @autostart 1",
           numinlets: 1,
           numoutlets: 2,
           outlettype: ["", ""],
-          patching_rect: [50, 80, 220, 22]
+          patching_rect: [50, 80, 280, 22],
+          saved_object_attributes: {
+            autostart: 1,
+            defer: 0,
+            node: "",
+            npm: "",
+            watch: 1
+          }
         }
       },
       // route command — splits incoming messages

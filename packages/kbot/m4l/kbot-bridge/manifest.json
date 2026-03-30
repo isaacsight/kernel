@@ -1,0 +1,45 @@
+{
+  "name": "kbot Bridge",
+  "version": "1.0.0",
+  "description": "WebSocket server for full Ableton LOM access from kbot CLI. Replaces AbletonOSC + kbot_bridge.py.",
+  "author": "kernel.chat",
+  "license": "MIT",
+  "type": "Audio Effect",
+  "category": "Utility",
+  "tags": ["kbot", "bridge", "websocket", "lom", "remote-control"],
+  "port": 9999,
+  "protocol": "websocket",
+  "requires": {
+    "ableton_live": "12.0+",
+    "max_for_live": "9.0+",
+    "node_for_max": true
+  },
+  "files": [
+    "kbot-bridge.js",
+    "kbot-bridge-lom.js",
+    "kbot-bridge.maxpat"
+  ],
+  "installation": {
+    "target": "~/Music/Ableton/User Library/Presets/Audio Effects/Max Audio Effect/kbot/",
+    "instructions": "Drop onto Master track. Auto-starts WebSocket server on port 9999."
+  },
+  "actions": [
+    "get_transport", "set_transport", "start_playing", "stop_playing", "continue_playing",
+    "list_tracks", "create_track", "delete_track", "set_track", "get_track",
+    "create_clip", "delete_clip", "fire_clip", "stop_clip", "get_clip_info", "duplicate_clip",
+    "add_notes", "get_notes", "remove_notes", "replace_notes",
+    "load_plugin", "list_devices", "get_device_params", "set_device_param", "enable_device",
+    "browse_presets", "load_preset",
+    "load_drum_sample", "list_drum_pads", "swap_drum_sample", "set_pad_params",
+    "create_envelope", "clear_envelope",
+    "fire_scene", "list_scenes", "create_scene",
+    "get_mix_snapshot", "set_sends", "get_master", "set_master",
+    "list_returns", "create_return", "set_return",
+    "list_grooves", "apply_groove",
+    "get_session_info", "undo", "redo",
+    "mixer.analyze", "mixer.auto_mix", "mixer.get_status",
+    "melody.generate",
+    "drum.load_sample", "drum.list_pads", "drum.swap_sample", "drum.set_pad_params",
+    "preset.list", "preset.load", "preset.save"
+  ]
+}

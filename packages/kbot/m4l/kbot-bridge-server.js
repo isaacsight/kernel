@@ -25,6 +25,7 @@ let socketBuffer = new Map(); // socket -> partial data buffer
 
 const server = net.createServer((socket) => {
   Max.post("kbot: client connected from " + socket.remoteAddress);
+  Max.outlet("status", 1);  // Tell the UI we're ONLINE
   socketBuffer.set(socket, "");
 
   socket.on("data", (raw) => {
@@ -60,6 +61,7 @@ const server = net.createServer((socket) => {
 
   socket.on("close", () => {
     Max.post("kbot: client disconnected");
+    Max.outlet("status", 0);  // Tell the UI we're OFFLINE
     socketBuffer.delete(socket);
     // Clean up any pending requests for this socket
     for (const [id, s] of activeSockets) {
