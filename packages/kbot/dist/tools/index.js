@@ -290,6 +290,7 @@ const LAZY_MODULE_IMPORTS = [
     { path: './analytics.js', registerFn: 'registerAnalyticsTools' },
     { path: './env-manager.js', registerFn: 'registerEnvTools' },
     { path: './db-admin.js', registerFn: 'registerDbAdminTools' },
+    { path: './visa-payments.js', registerFn: 'registerVisaPaymentTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;

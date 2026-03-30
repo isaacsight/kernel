@@ -25,7 +25,7 @@ function runVisaCli(args: string, timeout = 30_000): string {
       env: { ...process.env },
     }).trim()
   } catch (err) {
-    const message = err instanceof Error ? (err as NodeJS.ErrnoException).stderr?.toString() || err.message : String(err)
+    const message = err instanceof Error ? err.message : String(err)
     throw new Error(`visa-cli error: ${message}`)
   }
 }
