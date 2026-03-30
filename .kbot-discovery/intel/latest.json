@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-30T07:42:40.853Z",
+  "timestamp": "2026-03-30T07:59:03.155Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -837,17 +837,18 @@
             47571319,
             47571285,
             47571344,
+            47571630,
             47571155,
             47571415
           ],
           "created_at": "2026-03-30T06:29:17Z",
           "created_at_i": 1774852157,
-          "num_comments": 15,
+          "num_comments": 20,
           "objectID": "47571064",
-          "points": 14,
+          "points": 15,
           "story_id": 47571064,
           "title": "AI and bots have officially taken over the internet",
-          "updated_at": "2026-03-30T07:40:49Z",
+          "updated_at": "2026-03-30T07:58:49Z",
           "url": "https://www.cnbc.com/2026/03/26/ai-bots-humans-internet.html"
         },
         {
@@ -1043,8 +1044,8 @@
             47569141,
             47565114,
             47565079,
-            47568530,
             47567007,
+            47568530,
             47565106,
             47565293,
             47565037,
@@ -1076,11 +1077,11 @@
           "created_at_i": 1774801050,
           "num_comments": 155,
           "objectID": "47564469",
-          "points": 213,
+          "points": 214,
           "story_id": 47564469,
           "story_text": "<a href=\"https:&#x2F;&#x2F;web.archive.org&#x2F;web&#x2F;20260329052632&#x2F;https:&#x2F;&#x2F;gladeart.com&#x2F;blog&#x2F;the-bot-situation-on-the-internet-is-actually-worse-than-you-could-imagine-heres-why\" rel=\"nofollow\">https:&#x2F;&#x2F;web.archive.org&#x2F;web&#x2F;20260329052632&#x2F;https:&#x2F;&#x2F;gladeart....</a>",
           "title": "The bot situation on the internet is worse than you could imagine",
-          "updated_at": "2026-03-30T07:39:34Z",
+          "updated_at": "2026-03-30T07:56:34Z",
           "url": "https://gladeart.com/blog/the-bot-situation-on-the-internet-is-actually-worse-than-you-could-imagine-heres-why"
         }
       ]

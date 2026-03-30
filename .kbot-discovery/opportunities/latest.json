@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-30T07:42:43.350Z",
+  "timestamp": "2026-03-30T07:59:06.588Z",
   "count": 30,
   "opportunities": [
     {
@@ -81,8 +81,8 @@
     },
     {
       "source": "hn-comment",
-      "title": "Thinking Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning",
-      "url": "https://news.ycombinator.com/item?id=47474654",
+      "title": "Why I love NixOS",
+      "url": "https://news.ycombinator.com/item?id=47482095",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "Bump the llm group across 1 directory with 4 updates",
+      "url": "https://github.com/285519099/MyDify/pull/29",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "deps: bump the npm-development group with 4 updates",
       "url": "https://github.com/amourjun/openclaw-managed-a2a/pull/5",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "feat: ClawHub plugin — one-click install for OpenClaw ecosystem",
       "url": "https://github.com/vivekchand/clawmetry/issues/407",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "refactor: improve code quality and performance",
-      "url": "https://github.com/nodetool-ai/nodetool/pull/2444",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
