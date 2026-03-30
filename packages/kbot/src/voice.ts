@@ -10,7 +10,7 @@ import chalk from 'chalk'
 // ---------------------------------------------------------------------------
 
 export interface VoiceOptions {
-  /** TTS voice name (macOS: Alex, Samantha, etc.) */
+  /** TTS voice name (macOS: Alex, Samantha, etc. / Voxtral: voxtral-default, voxtral-expressive) */
   voice?: string
   /** TTS speech rate (words per minute, default: 200) */
   rate?: number
@@ -43,8 +43,9 @@ function commandExists(cmd: string): boolean {
   }
 }
 
-function detectTTSEngine(): 'say' | 'espeak' | 'festival' | null {
+function detectTTSEngine(): 'say' | 'espeak' | 'festival' | 'voxtral' | null {
   if (platform === 'darwin') return 'say'
+  if (commandExists('voxtral') || process.env.VOXTRAL_API_KEY) return 'voxtral'
   if (commandExists('espeak')) return 'espeak'
   if (commandExists('festival')) return 'festival'
   return null
@@ -192,6 +193,28 @@ export async function speak(text: string, state: VoiceState): Promise<void> {
         })
         proc.stdin?.write(cleaned)
         proc.stdin?.end()
+        break
+      }
+
+      case 'voxtral': {
+        // Voxtral TTS — Mistral's open-weight text-to-speech
+        // Supports local binary or API mode via VOXTRAL_API_KEY
+        const apiKey = process.env.VOXTRAL_API_KEY
+        if (apiKey) {
+          // API mode: pipe text to voxtral via Mistral API
+          const body = JSON.stringify({ model: 'voxtral-tts-latest', input: cleaned })
+          proc = spawn('curl', [
+            '-s', '--max-time', '30',
+            '-H', 'Content-Type: application/json',
+            '-H', `Authorization: Bearer ${apiKey}`,
+            '-d', body,
+            '--output', join(tmpdir(), `kbot-voxtral-${Date.now()}.mp3`),
+            'https://api.mistral.ai/v1/audio/speech',
+          ], { stdio: 'ignore' })
+        } else {
+          // Local mode: voxtral binary
+          proc = spawn('voxtral', ['--text', cleaned], { stdio: 'ignore' })
+        }
         break
       }
 
@@ -383,6 +406,9 @@ export function listVoices(): string[] {
         }
         return []
       }
+
+      case 'voxtral':
+        return ['voxtral-default', 'voxtral-expressive']
 
       default:
         return []
