@@ -2681,46 +2681,7 @@ async function main() {
         await handleTeachCommand(args);
     });
     // ── Sessions ──
-    program
-        .command('sessions')
-        .description('Manage multiple parallel kbot sessions')
-        .option('--create <name>', 'Create a new named session')
-        .option('--switch <name>', 'Switch to a session')
-        .option('--kill <name>', 'Kill a session')
-        .option('--agent <agent>', 'Set specialist agent for new session')
-        .option('--task <task>', 'Set task description for new session')
-        .action(async (sessOpts) => {
-        const { createSession, listSessions, switchSession, killSession, formatSessionList, formatSessionStatus } = await import('./multi-session.js');
-        if (sessOpts.create) {
-            const s = createSession({ name: sessOpts.create, agent: sessOpts.agent, task: sessOpts.task });
-            console.error(chalk.hex('#6B5B95')(`  Created session: ${s.name} (${s.id.slice(0, 8)})`));
-            return;
-        }
-        if (sessOpts.switch) {
-            const s = switchSession(sessOpts.switch);
-            if (s)
-                console.error(chalk.hex('#6B5B95')(`  Switched to: ${s.name}`));
-            else
-                console.error(chalk.red(`  Session not found: ${sessOpts.switch}`));
-            return;
-        }
-        if (sessOpts.kill) {
-            const ok = killSession(sessOpts.kill);
-            if (ok)
-                console.error(chalk.hex('#6B5B95')(`  Killed session: ${sessOpts.kill}`));
-            else
-                console.error(chalk.red(`  Session not found: ${sessOpts.kill}`));
-            return;
-        }
-        // Default: list sessions
-        const sessions = listSessions();
-        if (sessions.length === 0) {
-            console.error(chalk.dim('  No active sessions. Create one with `kbot sessions --create <name>`'));
-        }
-        else {
-            console.error(formatSessionList(sessions));
-        }
-    });
+    program;
     program
         .command('release')
         .description('Create a GitHub release with auto-generated changelog')
@@ -2884,6 +2845,318 @@ async function main() {
         const { generateCompletions } = await import('./completions.js');
         process.stdout.write(generateCompletions(shell));
     });
+    // ── Admin — manage users, billing, moderation ──
+    const adminCmd = program
+        .command('admin')
+        .description('Platform administration — users, billing, moderation, stats');
+    adminCmd
+        .command('users')
+        .description('List platform users')
+        .option('--filter <filter>', 'Filter: all, free, pro, max, active, churned', 'all')
+        .option('--search <email>', 'Search by email')
+        .option('--limit <n>', 'Max results', '50')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const result = await executeTool({ id: 'admin_users', name: 'admin_users', arguments: opts });
+        console.log(result.result);
+    });
+    adminCmd
+        .command('user <email>')
+        .description('Get detailed info for a user')
+        .action(async (email) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const result = await executeTool({ id: 'admin_user_detail', name: 'admin_user_detail', arguments: { email } });
+        console.log(result.result);
+    });
+    adminCmd
+        .command('stats')
+        .description('Platform-wide stats')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const result = await executeTool({ id: 'admin_stats', name: 'admin_stats', arguments: {} });
+        console.log(result.result);
+    });
+    adminCmd
+        .command('billing <action>')
+        .description('Billing: mrr, invoices, customer, create-invoice')
+        .option('--email <email>', 'Customer email')
+        .option('--amount <cents>', 'Amount in cents')
+        .option('--description <desc>', 'Invoice description')
+        .action(async (action, opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const result = await executeTool({ id: 'admin_billing', name: 'admin_billing', arguments: { action, ...opts } });
+        console.log(result.result);
+    });
+    adminCmd
+        .command('moderate')
+        .description('View moderation queue')
+        .option('--approve <id>', 'Approve item')
+        .option('--reject <id>', 'Reject item')
+        .option('--reason <reason>', 'Rejection reason')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const action = opts.approve ? 'approve' : opts.reject ? 'reject' : 'queue';
+        const result = await executeTool({ id: 'admin_moderate', name: 'admin_moderate', arguments: {
+                action, item_id: opts.approve || opts.reject || '', reason: opts.reason || '',
+            } });
+        console.log(result.result);
+    });
+    // ── Monitor — platform health dashboard ──
+    program
+        .command('monitor')
+        .description('Platform health dashboard — messages, errors, costs, services')
+        .option('--period <period>', 'Period: 1h, 24h, 7d', '24h')
+        .option('--logs', 'Show recent platform logs')
+        .option('--uptime', 'Service health check only')
+        .option('--alerts', 'Show active alerts only')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        if (opts.uptime) {
+            const r = await executeTool({ id: 'platform_uptime', name: 'platform_uptime', arguments: {} });
+            console.log(r.result);
+            return;
+        }
+        if (opts.logs) {
+            const r = await executeTool({ id: 'platform_logs', name: 'platform_logs', arguments: { limit: '30' } });
+            console.log(r.result);
+            return;
+        }
+        if (opts.alerts) {
+            const r = await executeTool({ id: 'platform_alerts', name: 'platform_alerts', arguments: { period: opts.period } });
+            console.log(r.result);
+            return;
+        }
+        const r = await executeTool({ id: 'platform_monitor', name: 'platform_monitor', arguments: { period: opts.period } });
+        console.log(r.result);
+    });
+    // ── Analytics — downloads, stars, users, revenue ──
+    const analyticsCmd = program
+        .command('analytics')
+        .description('Analytics dashboard — npm, GitHub, users, revenue');
+    analyticsCmd
+        .command('overview')
+        .description('Full analytics dashboard')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'analytics_overview', name: 'analytics_overview', arguments: {} });
+        console.log(r.result);
+    });
+    analyticsCmd
+        .command('npm')
+        .description('npm download stats and trends')
+        .option('--period <period>', 'week, month, year', 'month')
+        .option('--compare <pkg>', 'Compare against another package')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'analytics_npm', name: 'analytics_npm', arguments: opts });
+        console.log(r.result);
+    });
+    analyticsCmd
+        .command('github')
+        .description('GitHub repo stats and traffic')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'analytics_github', name: 'analytics_github', arguments: {} });
+        console.log(r.result);
+    });
+    analyticsCmd
+        .command('users')
+        .description('User growth and churn metrics')
+        .option('--period <period>', '7d, 30d, 90d', '30d')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'analytics_users', name: 'analytics_users', arguments: opts });
+        console.log(r.result);
+    });
+    analyticsCmd
+        .command('revenue')
+        .description('Revenue: MRR, subscriptions, API costs')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'analytics_revenue', name: 'analytics_revenue', arguments: {} });
+        console.log(r.result);
+    });
+    // ── Deploy — ship everything from terminal ──
+    const deployCmd = program
+        .command('deploy')
+        .description('Deploy: web, edge functions, npm, GitHub release — or all at once');
+    deployCmd
+        .command('all')
+        .description('Ship everything: typecheck → web → functions → npm → release')
+        .option('--skip <steps>', 'Skip: web,functions,npm,release')
+        .option('--dry-run', 'Show plan without executing')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'deploy_all', name: 'deploy_all', arguments: {
+                skip: opts.skip, dry_run: opts.dryRun ? 'true' : 'false',
+            } });
+        console.log(r.result);
+    });
+    deployCmd
+        .command('web')
+        .description('Build and deploy web to GitHub Pages')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'deploy_web', name: 'deploy_web', arguments: {} });
+        console.log(r.result);
+    });
+    deployCmd
+        .command('functions [name]')
+        .description('Deploy Supabase edge functions')
+        .action(async (name) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'deploy_functions', name: 'deploy_functions', arguments: { function_name: name } });
+        console.log(r.result);
+    });
+    deployCmd
+        .command('npm')
+        .description('Build and publish to npm')
+        .option('--dry-run', 'Build only, do not publish')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'deploy_npm', name: 'deploy_npm', arguments: { dry_run: opts.dryRun ? 'true' : 'false' } });
+        console.log(r.result);
+    });
+    deployCmd
+        .command('release')
+        .description('Create GitHub release')
+        .option('--notes <notes>', 'Release notes')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'deploy_release', name: 'deploy_release', arguments: { notes: opts.notes } });
+        console.log(r.result);
+    });
+    // ── Env — environment variable management ──
+    const envCmd = program
+        .command('env')
+        .description('Manage environment variables and secrets');
+    envCmd
+        .command('check')
+        .description('Verify all required env vars are set')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'env_check', name: 'env_check', arguments: {} });
+        console.log(r.result);
+    });
+    envCmd
+        .command('list')
+        .description('List Supabase secrets')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'env_list', name: 'env_list', arguments: {} });
+        console.log(r.result);
+    });
+    envCmd
+        .command('set <name> <value>')
+        .description('Set a Supabase secret')
+        .action(async (name, value) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'env_set', name: 'env_set', arguments: { name, value } });
+        console.log(r.result);
+    });
+    envCmd
+        .command('sync <keys>')
+        .description('Sync local .env keys to Supabase secrets')
+        .option('--dry-run', 'Show what would be synced')
+        .action(async (keys, opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'env_sync', name: 'env_sync', arguments: { keys, dry_run: opts.dryRun ? 'true' : 'false' } });
+        console.log(r.result);
+    });
+    envCmd
+        .command('rotate <key>')
+        .description('Rotate a secret (shows guide or applies new value)')
+        .option('--value <value>', 'New value')
+        .action(async (key, opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'env_rotate', name: 'env_rotate', arguments: { key, new_value: opts.value } });
+        console.log(r.result);
+    });
+    // ── DB — database administration ──
+    const dbCmd = program
+        .command('db')
+        .description('Database administration — backup, inspect, query, migrate');
+    dbCmd
+        .command('backup')
+        .description('Dump database to file')
+        .option('--output <path>', 'Output file path')
+        .option('--schema-only', 'Schema only, no data')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'db_backup', name: 'db_backup', arguments: { output: opts.output, schema_only: opts.schemaOnly ? 'true' : 'false' } });
+        console.log(r.result);
+    });
+    dbCmd
+        .command('tables')
+        .description('List all tables with row counts')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'db_tables', name: 'db_tables', arguments: {} });
+        console.log(r.result);
+    });
+    dbCmd
+        .command('inspect <table>')
+        .description('Inspect table schema and sample data')
+        .option('--sample <n>', 'Number of sample rows', '5')
+        .action(async (table, opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'db_inspect', name: 'db_inspect', arguments: { table, sample: opts.sample } });
+        console.log(r.result);
+    });
+    dbCmd
+        .command('sql <query>')
+        .description('Run SQL query (read-only recommended)')
+        .action(async (query) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'db_sql', name: 'db_sql', arguments: { query } });
+        console.log(r.result);
+    });
+    dbCmd
+        .command('migrations')
+        .description('List and run database migrations')
+        .option('--run', 'Apply pending migrations')
+        .option('--new <name>', 'Create new migration')
+        .action(async (opts) => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const action = opts.run ? 'run' : opts.new ? 'new' : 'list';
+        const r = await executeTool({ id: 'db_migrations', name: 'db_migrations', arguments: { action, name: opts.new } });
+        console.log(r.result);
+    });
+    dbCmd
+        .command('health')
+        .description('Database health check')
+        .action(async () => {
+        await ensureLazyToolsLoaded();
+        const { executeTool } = await import('./tools/index.js');
+        const r = await executeTool({ id: 'db_health', name: 'db_health', arguments: {} });
+        console.log(r.result);
+    });
     program.parse(process.argv);
     const opts = program.opts();
     const promptArgs = program.args;
@@ -2891,7 +3164,7 @@ async function main() {
     if (opts.quiet)
         setQuiet(true);
     // If a sub-command was run, we're done
-    if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions'].includes(program.args[0]))
+    if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions', 'admin', 'monitor', 'analytics', 'deploy', 'env', 'db'].includes(program.args[0]))
         return;
     // Check for API key (BYOK or local provider)
     let byokActive = isByokEnabled();

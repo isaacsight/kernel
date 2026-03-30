@@ -284,6 +284,12 @@ const LAZY_MODULE_IMPORTS = [
     { path: './arrangement-engine.js', registerFn: 'registerArrangementEngine' },
     { path: '../behaviour.js', registerFn: 'registerBehaviourTools' },
     { path: '../skill-system.js', registerFn: 'registerSkillTools' },
+    { path: './admin.js', registerFn: 'registerAdminTools' },
+    { path: './monitor.js', registerFn: 'registerMonitorTools' },
+    { path: './deploy-all.js', registerFn: 'registerDeployAllTools' },
+    { path: './analytics.js', registerFn: 'registerAnalyticsTools' },
+    { path: './env-manager.js', registerFn: 'registerEnvTools' },
+    { path: './db-admin.js', registerFn: 'registerDbAdminTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;
