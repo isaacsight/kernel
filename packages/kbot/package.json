@@ -1,7 +1,7 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "3.59.0",
-  "description": "The only AI agent that builds its own tools — and defends itself. Your AI answers to you, not a government. NEW: GPT-5.4 + DeepSeek V4 + Mistral Small 4 + Voxtral TTS + Visa agent payments + GitAgent export. 600+ tools, 35 agents, 20 providers. Fully local, fully sovereign. MIT.",
+  "version": "3.60.0",
+  "description": "The only AI agent that builds its own tools — and defends itself. Your AI answers to you, not a government. NEW: Computer-use desktop agent, macOS permission wizard, session isolation, M4L devices, Serum 2 presets, DJ tools. 670+ tools, 35 agents, 20 providers. Fully local, fully sovereign. MIT.",
   "type": "module",
   "repository": {
     "type": "git",
