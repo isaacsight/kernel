@@ -1,8 +1,63 @@
 {
-  "timestamp": "2026-03-30T20:16:20.705Z",
-  "projects": [],
+  "timestamp": "2026-03-31T08:26:56.957Z",
+  "projects": [
+    {
+      "name": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": 20589,
+      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+    },
+    {
+      "name": "scitix/siclaw",
+      "url": "https://github.com/scitix/siclaw",
+      "stars": 85,
+      "description": "AI-powered SRE platform — read-only infrastructure diagnostics with deep investigation, security governance, and team collaboration"
+    },
+    {
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 42643,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+    },
+    {
+      "name": "Panniantong/Agent-Reach",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "stars": 14007,
+      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
+    },
+    {
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 655,
+      "description": "Agent Skills for Solopreneurs"
+    },
+    {
+      "name": "Haervwe/open-webui-tools",
+      "url": "https://github.com/Haervwe/open-webui-tools",
+      "stars": 627,
+      "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
+    },
+    {
+      "name": "philipbankier/awesome-agent-skills",
+      "url": "https://github.com/philipbankier/awesome-agent-skills",
+      "stars": 2,
+      "description": "A curated directory of skills, tools, and plugins for AI coding agents — across every platform. MCP servers, Agent Skills, Cursor rules, and more."
+    },
+    {
+      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
+      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
+      "stars": 0,
+      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+    },
+    {
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
+      "stars": 0,
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+    }
+  ],
   "latestPaper": {
-    "title": "unknown",
-    "summary": "unknown"
+    "title": "RAD-AI: Rethinking Architecture Documentation for AI-Augmented Ecosystems",
+    "summary": "AI-augmented ecosystems (interconnected systems where multiple AI components interact through shared data and infrastructure) are becoming the architectural norm for smart cities, autonomous fleets, and intelligent platforms. Yet the architecture documentation frameworks practitioners rely on, arc42 and the C4 model, were designed for deterministic software and cannot capture probabilistic behavior, data-dependent evolution, or dual ML/software lifecycles. This gap carries regulatory consequence"
   }
 }

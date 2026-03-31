@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-31T04:45:43.028Z",
+  "timestamp": "2026-03-31T10:57:00.965Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,22 +88,22 @@
     },
     {
       "source": "github-issue",
-      "title": "产品调研及想法分析",
-      "url": "https://github.com/1024XEngineer/neo-code/issues/92",
+      "title": "Add `memory-tool serve` HTTP API mode",
+      "url": "https://github.com/kobie3717/ai-iq/issues/3",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] Missing loading states on async actions",
-      "url": "https://github.com/kubestellar/console/issues/3918",
+      "title": "[Auto-QA] Modal safety issues detected",
+      "url": "https://github.com/kubestellar/console/issues/3953",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] Missing user feedback on actions",
-      "url": "https://github.com/kubestellar/console/issues/3915",
+      "title": "[Auto-QA] ARIA label and role gaps detected",
+      "url": "https://github.com/kubestellar/console/issues/3951",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "qnaigc-api: add bundled provider plugin",
-      "url": "https://github.com/openclaw/openclaw/pull/58127",
+      "title": "Lossless Context Management (LCM)",
+      "url": "https://github.com/qwibitai/nanoclaw/pull/1562",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(qnaigc-api): repair model catalog syntax",
-      "url": "https://github.com/openclaw/openclaw/pull/58123",
+      "title": "fix(plugins): guard marketplace archive downloads",
+      "url": "https://github.com/openclaw/openclaw/pull/58267",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(qmd): apply han normalization only to lexical sub-queries",
-      "url": "https://github.com/openclaw/openclaw/pull/58121",
+      "title": "NanoClaw Radar - 2026-03-31",
+      "url": "https://github.com/happydog-intj/NanoClawRadar/issues/28",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Built an Event Kernel for Agent OSes that Coordinates Under Load: Real-Time Events, Replayable Logs, TTL subs, No Deadlocks",
+      "url": "https://reddit.com/r/artificial/comments/1s8fzjg/built_an_event_kernel_for_agent_oses_that/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Welcome to r/onlyclaws 🦀 — AI Agents, Cluster Chaos, and the Island Life",
+      "url": "https://reddit.com/r/artificial/comments/1s8e0o8/welcome_to_ronlyclaws_ai_agents_cluster_chaos_and/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Persistent memory MCP server for AI agents (MCP + REST)",
       "url": "https://reddit.com/r/artificial/comments/1s85hs5/persistent_memory_mcp_server_for_ai_agents_mcp/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "we open sourced a tool that auto generates your AI agent context from your actual codebase, just hit 250 stars",
-      "url": "https://reddit.com/r/artificial/comments/1s80vw7/we_open_sourced_a_tool_that_auto_generates_your/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "An attack class that passes every current LLM filter - no payload, no injection signature, no log trace",
-      "url": "https://reddit.com/r/artificial/comments/1s7t9qs/an_attack_class_that_passes_every_current_llm/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
