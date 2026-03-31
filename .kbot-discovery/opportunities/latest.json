@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-31T10:57:00.965Z",
+  "timestamp": "2026-03-31T17:58:20.032Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "Ask HN: What are you building with AI coding agents / tooling?",
+      "url": "https://news.ycombinator.com/item?id=47590158",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "The ladder is missing rungs – Engineering Progression When AI Ate the Middle",
       "url": "https://news.ycombinator.com/item?id=47581760",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -76,13 +83,6 @@
       "source": "hn-comment",
       "title": "AI overly affirms users asking for personal advice",
       "url": "https://news.ycombinator.com/item?id=47575214",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Mathematical methods and human thought in the age of AI",
-      "url": "https://news.ycombinator.com/item?id=47575099",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Lossless Context Management (LCM)",
-      "url": "https://github.com/qwibitai/nanoclaw/pull/1562",
+      "title": "Feat/predictive plugins",
+      "url": "https://github.com/openclaw/openclaw/pull/58500",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(plugins): guard marketplace archive downloads",
-      "url": "https://github.com/openclaw/openclaw/pull/58267",
+      "title": "feat: feishu comment event",
+      "url": "https://github.com/openclaw/openclaw/pull/58497",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "NanoClaw Radar - 2026-03-31",
-      "url": "https://github.com/happydog-intj/NanoClawRadar/issues/28",
+      "title": "chore(ci): audit copilot/pr-test workflow surface and finalize branch cleanup plan",
+      "url": "https://github.com/Mlightsnow/openclaw/pull/2",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "syntropy - lua plugin powered launcher",
+      "url": "https://reddit.com/r/commandline/comments/1s8kqot/syntropy_lua_plugin_powered_launcher/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "mdterm v2.0.0",
       "url": "https://reddit.com/r/commandline/comments/1s7z8zx/mdterm_v200/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,30 +192,23 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "zsh-patina - A blazingly fast Zsh syntax highlighter",
-      "url": "https://reddit.com/r/commandline/comments/1s618ty/zshpatina_a_blazingly_fast_zsh_syntax_highlighter/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "What I learned about multi-agent coordination running 9 specialized Claude agents",
+      "url": "https://reddit.com/r/artificial/comments/1s8opu2/what_i_learned_about_multiagent_coordination/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "What happens when AI agents can earn and spend real money? I built a small test to find out",
+      "url": "https://reddit.com/r/artificial/comments/1s8luvc/what_happens_when_ai_agents_can_earn_and_spend/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
       "title": "Built an Event Kernel for Agent OSes that Coordinates Under Load: Real-Time Events, Replayable Logs, TTL subs, No Deadlocks",
       "url": "https://reddit.com/r/artificial/comments/1s8fzjg/built_an_event_kernel_for_agent_oses_that/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Welcome to r/onlyclaws 🦀 — AI Agents, Cluster Chaos, and the Island Life",
-      "url": "https://reddit.com/r/artificial/comments/1s8e0o8/welcome_to_ronlyclaws_ai_agents_cluster_chaos_and/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Persistent memory MCP server for AI agents (MCP + REST)",
-      "url": "https://reddit.com/r/artificial/comments/1s85hs5/persistent_memory_mcp_server_for_ai_agents_mcp/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
