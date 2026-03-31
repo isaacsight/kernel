@@ -61,46 +61,62 @@ export interface ConversationTurn {
   content: string
 }
 
-let sessionHistory: ConversationTurn[] = []
+/** Session-scoped history — safe for concurrent `kbot serve` requests.
+ *  CLI mode uses the default session ID; serve mode passes a per-request ID. */
+const sessionHistories = new Map<string, ConversationTurn[]>()
+const DEFAULT_SESSION = 'default'
+
+function getSessionHistory(sessionId: string): ConversationTurn[] {
+  let h = sessionHistories.get(sessionId)
+  if (!h) { h = []; sessionHistories.set(sessionId, h) }
+  return h
+}
 
 /** Add a turn to session history */
-export function addTurn(turn: ConversationTurn): void {
-  sessionHistory.push(turn)
+export function addTurn(turn: ConversationTurn, sessionId = DEFAULT_SESSION): void {
+  const history = getSessionHistory(sessionId)
+  history.push(turn)
   // Keep last 20 turns to control context size
-  if (sessionHistory.length > 20) {
-    sessionHistory = sessionHistory.slice(-20)
+  if (history.length > 20) {
+    sessionHistories.set(sessionId, history.slice(-20))
   }
 }
 
 /** Get session history */
-export function getHistory(): ConversationTurn[] {
-  return sessionHistory
+export function getHistory(sessionId = DEFAULT_SESSION): ConversationTurn[] {
+  return getSessionHistory(sessionId)
 }
 
 /** Clear session history */
-export function clearHistory(): void {
-  sessionHistory = []
+export function clearHistory(sessionId = DEFAULT_SESSION): void {
+  sessionHistories.set(sessionId, [])
+}
+
+/** Remove a session entirely (call when a serve request ends) */
+export function destroySession(sessionId: string): void {
+  sessionHistories.delete(sessionId)
 }
 
 /** Get the previous_messages array for the API */
-export function getPreviousMessages(): Array<{ role: string; content: string }> {
+export function getPreviousMessages(sessionId = DEFAULT_SESSION): Array<{ role: string; content: string }> {
   // Send last 16 turns (8 exchanges) — enough context to maintain coherent conversation
-  return sessionHistory.slice(-16).map(t => ({ role: t.role, content: t.content }))
+  return getSessionHistory(sessionId).slice(-16).map(t => ({ role: t.role, content: t.content }))
 }
 
 /** Compact/compress conversation history into a summary.
  *  Keeps the last 4 turns verbatim, summarizes everything before.
  *  This extends session length without losing context.
  */
-export function compactHistory(): { before: number; after: number; summary: string } {
-  const before = sessionHistory.length
+export function compactHistory(sessionId = DEFAULT_SESSION): { before: number; after: number; summary: string } {
+  const history = getSessionHistory(sessionId)
+  const before = history.length
   if (before <= 4) {
     return { before, after: before, summary: 'History too short to compact.' }
   }
 
   // Keep last 4 turns verbatim
-  const keepVerbatim = sessionHistory.slice(-4)
-  const toSummarize = sessionHistory.slice(0, -4)
+  const keepVerbatim = history.slice(-4)
+  const toSummarize = history.slice(0, -4)
 
   // Build a summary of the older turns
   const summaryParts: string[] = ['Conversation summary (compacted):']
@@ -127,23 +143,25 @@ export function compactHistory(): { before: number; after: number; summary: stri
   const summaryText = summaryParts.join('\n')
 
   // Replace history with summary + recent turns
-  sessionHistory = [
+  sessionHistories.set(sessionId, [
     { role: 'assistant', content: summaryText },
     ...keepVerbatim,
-  ]
+  ])
 
+  const after = getSessionHistory(sessionId).length
   return {
     before,
-    after: sessionHistory.length,
-    summary: `Compacted ${before} turns → ${sessionHistory.length} (${before - sessionHistory.length} turns summarized)`,
+    after,
+    summary: `Compacted ${before} turns → ${after} (${before - after} turns summarized)`,
   }
 }
 
 /** Restore session history from a saved session */
-export function restoreHistory(turns: ConversationTurn[]): void {
-  sessionHistory = [...turns]
+export function restoreHistory(turns: ConversationTurn[], sessionId = DEFAULT_SESSION): void {
+  let restored = [...turns]
   // Keep manageable size
-  if (sessionHistory.length > 20) {
-    sessionHistory = sessionHistory.slice(-20)
+  if (restored.length > 20) {
+    restored = restored.slice(-20)
   }
+  sessionHistories.set(sessionId, restored)
 }

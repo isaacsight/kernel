@@ -2,7 +2,40 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-03-29/30) — ABLETON BRAIN + M4L + TERMINAL CONTROL
+## Current Session (2026-03-31) — CODE QUALITY & CONCURRENCY FIXES
+
+### Night shift — 5 bug fixes, 1 security fix, 8 new tests
+
+#### Bug Fixes Applied
+1. **Concurrent state in memory.ts** — Replaced single `sessionHistory` array with `Map<string, ConversationTurn[]>` keyed by session ID. All functions accept optional `sessionId` param (default `'default'`). Added `destroySession()` for serve mode cleanup. CLI unchanged.
+2. **Concurrent state in learning.ts** — Added concurrency docs (shared state is intentional for learning). Added `selfTrainRunning` guard to prevent overlapping `selfTrain()` runs.
+3. **DNS rebinding in fetch.ts** — SSRF protection now resolves hostname via `dns.lookup()` and checks resolved IP against blocked ranges. Domains pointing to 127.0.0.1 are now caught.
+4. **Gemini/Cohere silent degradation** — Added upfront warning when these providers are used with tools: "provider doesn't support native tool calling — tools will be parsed from text output".
+5. **edit_file diff preview** — Now passes full file content to diff preview (was passing just the matched fragment). Diff algorithm shows 3 lines of context with `...` separators.
+
+#### Serve Mode Session Isolation (bonus)
+- Wired `sessionId` through `AgentOptions` → `runAgent` → all memory calls
+- `serve.ts` now creates a unique session per HTTP request and destroys it after
+- Concurrent `/stream` requests no longer share conversation history
+
+#### Tests
+- 8 new session isolation tests in memory.test.ts
+- **698 tests passing** (up from 690)
+- 0 type errors (tsc --noEmit clean)
+- Clean build
+
+#### Stats
+- 600 registered tools (verified: 549 in tools/ + 51 elsewhere)
+- README "600+" claim is accurate
+
+### Not done (left for Isaac)
+- No git commit made (waiting for review)
+- No npm publish
+- No push
+
+---
+
+## Previous Session (2026-03-29/30) — ABLETON BRAIN + M4L + TERMINAL CONTROL
 
 ### Built AI music production system + full terminal control for platform ops
 

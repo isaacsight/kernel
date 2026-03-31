@@ -663,6 +663,10 @@ async function callProvider(provider, apiKey, model, systemContext, messages, to
             };
         }
         else {
+            // Warn when tools are requested but provider doesn't support them natively
+            if (tools && tools.length > 0 && (p.apiStyle === 'google' || p.apiStyle === 'cohere')) {
+                printWarn(`${p.apiStyle} provider doesn't support native tool calling — tools will be parsed from text output`);
+            }
             switch (p.apiStyle) {
                 case 'anthropic':
                     result = await callAnthropic(apiKey, p.apiUrl, model, systemContext, messages, tools, options);
@@ -710,6 +714,8 @@ async function callProvider(provider, apiKey, model, systemContext, messages, to
 export async function runAgent(message, options = {}) {
     // UIAdapter: defaults to TerminalUIAdapter for CLI, can be overridden for SDK use
     const ui = options.ui ?? new TerminalUIAdapter();
+    // Session-scoped conversation history (isolates concurrent serve requests)
+    const memSession = options.sessionId || 'default';
     let apiKey = getByokKey();
     let byokProvider = getByokProvider();
     let isLocal = byokProvider ? isLocalProvider(byokProvider) : false;
@@ -739,8 +745,8 @@ export async function runAgent(message, options = {}) {
     if (!parsed.isMultimodal) {
         const localResult = await tryLocalFirst(message);
         if (localResult !== null) {
-            addTurn({ role: 'user', content: message });
-            addTurn({ role: 'assistant', content: localResult });
+            addTurn({ role: 'user', content: message }, memSession);
+            addTurn({ role: 'assistant', content: localResult }, memSession);
             ui.onInfo('(handled locally — 0 tokens used)');
             return { content: localResult, agent: 'local', model: 'none', toolCalls: 0 };
         }
@@ -749,7 +755,7 @@ export async function runAgent(message, options = {}) {
     // generate reflections from the previous response
     if (isUserRejection(message)) {
         try {
-            const history = getHistory();
+            const history = getHistory(memSession);
             const lastAssistant = [...history].reverse().find(t => t.role === 'assistant');
             const lastUser = [...history].reverse().find(t => t.role === 'user');
             if (lastAssistant && lastUser) {
@@ -768,8 +774,8 @@ export async function runAgent(message, options = {}) {
                 agent: options.agent || 'coder',
             }, { autoApprove: false, onApproval: async () => true });
             const summary = formatPlanSummary(plan);
-            addTurn({ role: 'user', content: message });
-            addTurn({ role: 'assistant', content: summary });
+            addTurn({ role: 'user', content: message }, memSession);
+            addTurn({ role: 'assistant', content: summary }, memSession);
             return {
                 content: summary,
                 agent: options.agent || 'coder',
@@ -1123,7 +1129,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
             }));
             // Build messages with RLM-style context management
             const rawMessages = [
-                ...getPreviousMessages(),
+                ...getPreviousMessages(memSession),
                 { role: 'user', content: message },
                 ...loopMessages,
             ];
@@ -1285,8 +1291,8 @@ Always quote file paths that contain spaces. Never reference internal system nam
                     }
                     catch { /* self-eval errors are non-critical */ }
                 }
-                addTurn({ role: 'user', content: originalMessage });
-                addTurn({ role: 'assistant', content });
+                addTurn({ role: 'user', content: originalMessage }, memSession);
+                addTurn({ role: 'assistant', content }, memSession);
                 // ── Recursive Learning: record what worked (async — non-blocking) ──
                 const totalTokens = lastResponse.usage
                     ? (lastResponse.usage.input_tokens || 0) + (lastResponse.usage.output_tokens || 0)

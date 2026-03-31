@@ -1,0 +1,38 @@
+{
+  "name": "kbot Hat Machine",
+  "version": "1.0.0",
+  "description": "Genre-specific hi-hat pattern generator with density, swing, and roll control. 6 styles from house offbeat to trap triplet.",
+  "author": "kernel.chat",
+  "license": "MIT",
+  "type": "MIDI Effect",
+  "category": "Drums",
+  "tags": ["kbot", "hihat", "hat", "drums", "pattern", "house", "garage", "trap", "triplet", "roll", "dj"],
+  "requires": {
+    "ableton_live": "12.0+",
+    "max_for_live": "9.0+"
+  },
+  "files": [
+    "kbot-hat-machine.js",
+    "kbot-hat-machine.maxpat"
+  ],
+  "installation": {
+    "target": "~/Music/Ableton/User Library/Presets/MIDI Effects/Max MIDI Effect/kbot/",
+    "instructions": "Drop onto a MIDI track with a Drum Rack. Use Style dial to pick hat pattern, Density to fill in."
+  },
+  "parameters": {
+    "Style": { "type": "int", "range": [0, 5], "default": 0, "description": "0=House, 1=Tech, 2=Garage, 3=Trap16, 4=TrapTriplet, 5=Breakbeat" },
+    "Density": { "type": "float", "range": [0.0, 1.0], "default": 0.5, "description": "Pattern density: sparse to full" },
+    "Swing": { "type": "float", "range": [0.0, 1.0], "default": 0.0, "description": "Shuffle amount" },
+    "Open %": { "type": "float", "range": [0.0, 0.5], "default": 0.08, "description": "Probability of open hat on any hit" },
+    "Active": { "type": "bool", "default": true, "description": "Enable/disable hat generation" },
+    "Roll": { "type": "momentary", "description": "Hold for hi-hat roll crescendo" }
+  },
+  "styles": [
+    { "name": "House", "description": "Classic offbeat 8ths" },
+    { "name": "Tech Shuffle", "description": "Shuffled 8ths with ghost notes" },
+    { "name": "Garage Skip", "description": "2-step shuffle, skippy feel" },
+    { "name": "Trap 16th", "description": "16th note rolls with accents" },
+    { "name": "Trap Triplet", "description": "Classic trap triplet hi-hat roll" },
+    { "name": "Breakbeat", "description": "Syncopated, funky" }
+  ]
+}

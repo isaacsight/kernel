@@ -1,5 +1,5 @@
 // Tests for kbot Memory — persistent memory + session history
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 // Mock node:fs before importing the module under test
 vi.mock('node:fs', () => ({
     existsSync: vi.fn(),
@@ -11,7 +11,7 @@ vi.mock('node:fs', () => ({
 vi.mock('node:os', () => ({
     homedir: vi.fn(() => '/mock-home'),
 }));
-import { loadMemory, appendMemory, clearMemory, getMemoryPrompt, addTurn, getHistory, clearHistory, getPreviousMessages, compactHistory, restoreHistory, } from './memory.js';
+import { loadMemory, appendMemory, clearMemory, getMemoryPrompt, addTurn, getHistory, clearHistory, getPreviousMessages, compactHistory, restoreHistory, destroySession, } from './memory.js';
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'node:fs';
 const mockedExistsSync = vi.mocked(existsSync);
 const mockedReadFileSync = vi.mocked(readFileSync);
@@ -364,6 +364,87 @@ describe('restoreHistory', () => {
         addTurn({ role: 'user', content: 'something' });
         restoreHistory([]);
         expect(getHistory()).toEqual([]);
+    });
+});
+// ─── Session isolation (serve mode) ─────────────────────────────────────
+describe('session isolation', () => {
+    afterEach(() => {
+        destroySession('session-a');
+        destroySession('session-b');
+    });
+    it('different sessions have independent history', () => {
+        addTurn({ role: 'user', content: 'from A' }, 'session-a');
+        addTurn({ role: 'user', content: 'from B' }, 'session-b');
+        expect(getHistory('session-a')).toHaveLength(1);
+        expect(getHistory('session-a')[0].content).toBe('from A');
+        expect(getHistory('session-b')).toHaveLength(1);
+        expect(getHistory('session-b')[0].content).toBe('from B');
+    });
+    it('default session is isolated from named sessions', () => {
+        addTurn({ role: 'user', content: 'default' });
+        addTurn({ role: 'user', content: 'named' }, 'session-a');
+        expect(getHistory()).toHaveLength(1);
+        expect(getHistory()[0].content).toBe('default');
+        expect(getHistory('session-a')).toHaveLength(1);
+        expect(getHistory('session-a')[0].content).toBe('named');
+    });
+    it('clearHistory only clears the specified session', () => {
+        addTurn({ role: 'user', content: 'keep' }, 'session-a');
+        addTurn({ role: 'user', content: 'clear' }, 'session-b');
+        clearHistory('session-b');
+        expect(getHistory('session-a')).toHaveLength(1);
+        expect(getHistory('session-b')).toHaveLength(0);
+    });
+    it('destroySession removes the session entirely', () => {
+        addTurn({ role: 'user', content: 'temp' }, 'session-a');
+        destroySession('session-a');
+        // After destroy, a new getHistory call should return empty (fresh session)
+        expect(getHistory('session-a')).toHaveLength(0);
+    });
+    it('getPreviousMessages respects session ID', () => {
+        addTurn({ role: 'user', content: 'a1' }, 'session-a');
+        addTurn({ role: 'assistant', content: 'a2' }, 'session-a');
+        addTurn({ role: 'user', content: 'b1' }, 'session-b');
+        const msgsA = getPreviousMessages('session-a');
+        const msgsB = getPreviousMessages('session-b');
+        expect(msgsA).toHaveLength(2);
+        expect(msgsB).toHaveLength(1);
+        expect(msgsA[0].content).toBe('a1');
+        expect(msgsB[0].content).toBe('b1');
+    });
+    it('compactHistory works per-session', () => {
+        // Add 6 turns to session-a (enough to compact)
+        for (let i = 0; i < 6; i++) {
+            addTurn({ role: i % 2 === 0 ? 'user' : 'assistant', content: `a-${i}` }, 'session-a');
+        }
+        // Add 2 turns to session-b (too short to compact)
+        addTurn({ role: 'user', content: 'b-0' }, 'session-b');
+        addTurn({ role: 'assistant', content: 'b-1' }, 'session-b');
+        const resultA = compactHistory('session-a');
+        const resultB = compactHistory('session-b');
+        expect(resultA.before).toBe(6);
+        expect(resultA.after).toBe(5); // 1 summary + 4 kept
+        expect(resultB.summary).toContain('too short');
+        // session-b should be unchanged
+        expect(getHistory('session-b')).toHaveLength(2);
+    });
+    it('restoreHistory works per-session', () => {
+        const turns = [
+            { role: 'user', content: 'restored' },
+            { role: 'assistant', content: 'reply' },
+        ];
+        restoreHistory(turns, 'session-a');
+        expect(getHistory('session-a')).toHaveLength(2);
+        expect(getHistory('session-a')[0].content).toBe('restored');
+        // Default session should be unaffected
+        expect(getHistory()).toHaveLength(0);
+    });
+    it('session cap of 20 turns works per-session', () => {
+        for (let i = 0; i < 25; i++) {
+            addTurn({ role: 'user', content: `msg-${i}` }, 'session-a');
+        }
+        expect(getHistory('session-a')).toHaveLength(20);
+        expect(getHistory('session-a')[0].content).toBe('msg-5');
     });
 });
 //# sourceMappingURL=memory.test.js.map

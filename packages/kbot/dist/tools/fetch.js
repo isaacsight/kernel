@@ -1,9 +1,10 @@
 // kbot Fetch Tool — URL content fetching with SSRF protection
 // Fetches web content and strips HTML → plain text.
+// DNS rebinding defense: resolves hostname → IP before fetching, then checks the IP.
+import { lookup } from 'node:dns/promises';
 import { registerTool } from './index.js';
-/** Private/reserved IP patterns — block SSRF */
-const BLOCKED_HOSTS = [
-    /^localhost$/i,
+/** Private/reserved IP patterns — block SSRF (applied to resolved IPs, not just hostnames) */
+const BLOCKED_IP_PATTERNS = [
     /^127\.\d+\.\d+\.\d+$/,
     /^10\.\d+\.\d+\.\d+$/,
     /^172\.(1[6-9]|2\d|3[01])\.\d+\.\d+$/,
@@ -13,10 +14,38 @@ const BLOCKED_HOSTS = [
     /^fd[0-9a-f]{2}:/i,
     /^fe80:/i,
     /^169\.254\.\d+\.\d+$/,
+];
+const BLOCKED_HOSTNAMES = [
+    /^localhost$/i,
     /\.local$/i,
 ];
+function isBlockedIP(ip) {
+    return BLOCKED_IP_PATTERNS.some(p => p.test(ip));
+}
 function isBlockedHost(hostname) {
-    return BLOCKED_HOSTS.some(p => p.test(hostname));
+    return BLOCKED_HOSTNAMES.some(p => p.test(hostname));
+}
+/** Resolve hostname to IP and check against blocked ranges (DNS rebinding defense) */
+async function checkHostSSRF(hostname) {
+    // Check hostname patterns first (localhost, .local)
+    if (isBlockedHost(hostname))
+        return 'Blocked host (private/reserved)';
+    // If it's already an IP literal, check directly
+    if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname) || hostname.includes(':')) {
+        if (isBlockedIP(hostname))
+            return 'Blocked host (private/reserved IP range)';
+        return null;
+    }
+    // Resolve DNS and check the actual IP
+    try {
+        const { address } = await lookup(hostname);
+        if (isBlockedIP(address))
+            return `Blocked: ${hostname} resolves to private IP ${address}`;
+    }
+    catch {
+        // DNS resolution failed — let fetch handle it (could be a valid host we can't resolve locally)
+    }
+    return null;
 }
 /** Strip HTML tags and decode entities → plain text */
 function htmlToText(html) {
@@ -62,8 +91,9 @@ export function registerFetchTools() {
             if (!['http:', 'https:'].includes(parsed.protocol)) {
                 return `Error: Only http/https URLs are supported`;
             }
-            if (isBlockedHost(parsed.hostname)) {
-                return `Error: Blocked host (private/reserved IP range)`;
+            const ssrfBlock = await checkHostSSRF(parsed.hostname);
+            if (ssrfBlock) {
+                return `Error: ${ssrfBlock}`;
             }
             try {
                 const controller = new AbortController();

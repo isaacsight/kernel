@@ -12,13 +12,15 @@ export interface ConversationTurn {
     content: string;
 }
 /** Add a turn to session history */
-export declare function addTurn(turn: ConversationTurn): void;
+export declare function addTurn(turn: ConversationTurn, sessionId?: string): void;
 /** Get session history */
-export declare function getHistory(): ConversationTurn[];
+export declare function getHistory(sessionId?: string): ConversationTurn[];
 /** Clear session history */
-export declare function clearHistory(): void;
+export declare function clearHistory(sessionId?: string): void;
+/** Remove a session entirely (call when a serve request ends) */
+export declare function destroySession(sessionId: string): void;
 /** Get the previous_messages array for the API */
-export declare function getPreviousMessages(): Array<{
+export declare function getPreviousMessages(sessionId?: string): Array<{
     role: string;
     content: string;
 }>;
@@ -26,11 +28,11 @@ export declare function getPreviousMessages(): Array<{
  *  Keeps the last 4 turns verbatim, summarizes everything before.
  *  This extends session length without losing context.
  */
-export declare function compactHistory(): {
+export declare function compactHistory(sessionId?: string): {
     before: number;
     after: number;
     summary: string;
 };
 /** Restore session history from a saved session */
-export declare function restoreHistory(turns: ConversationTurn[]): void;
+export declare function restoreHistory(turns: ConversationTurn[], sessionId?: string): void;
 //# sourceMappingURL=memory.d.ts.map

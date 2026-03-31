@@ -43,29 +43,51 @@ async function showDiffPreview(path: string, oldContent: string, newContent: str
       process.stderr.write(`  ${chalk.dim(`  +${newLines.length - maxShow} more lines`)}\n`)
     }
   } else {
-    // Show a context diff
-    let i = 0, j = 0
-    while (i < oldLines.length || j < newLines.length) {
-      if (diffLines >= maxShow) {
-        const remaining = Math.max(oldLines.length - i, newLines.length - j)
-        if (remaining > 0) process.stderr.write(`  ${chalk.dim(`  +${remaining} more lines`)}\n`)
-        break
+    // Show a unified-style context diff with surrounding lines
+    const CONTEXT = 3 // lines of context around changes
+    // Find changed regions: collect indices where lines differ
+    const maxLen = Math.max(oldLines.length, newLines.length)
+    const changedIndices = new Set<number>()
+    for (let k = 0; k < maxLen; k++) {
+      if (k >= oldLines.length || k >= newLines.length || oldLines[k] !== newLines[k]) {
+        // Mark this index and surrounding context
+        for (let c = Math.max(0, k - CONTEXT); c <= Math.min(maxLen - 1, k + CONTEXT); c++) {
+          changedIndices.add(c)
+        }
       }
-      if (i < oldLines.length && j < newLines.length && oldLines[i] === newLines[j]) {
-        // Same line — skip (only show context around changes)
-        i++; j++
-        continue
+    }
+
+    let lastShown = -2 // track gaps for "..." separator
+    for (let k = 0; k < maxLen && diffLines < maxShow; k++) {
+      if (!changedIndices.has(k)) continue
+
+      // Show separator if there's a gap
+      if (k > lastShown + 1 && lastShown >= 0) {
+        process.stderr.write(`  ${chalk.dim('  ...')}\n`)
       }
-      // Show removed lines
-      if (i < oldLines.length && (j >= newLines.length || oldLines[i] !== newLines[j])) {
-        process.stderr.write(`  ${chalk.red('-')} ${oldLines[i]}\n`)
-        i++; diffLines++
+      lastShown = k
+
+      const oldLine = k < oldLines.length ? oldLines[k] : undefined
+      const newLine = k < newLines.length ? newLines[k] : undefined
+
+      if (oldLine === newLine) {
+        // Context line (unchanged)
+        process.stderr.write(`  ${chalk.dim(' ')} ${oldLine}\n`)
+        diffLines++
+      } else {
+        if (oldLine !== undefined) {
+          process.stderr.write(`  ${chalk.red('-')} ${oldLine}\n`)
+          diffLines++
+        }
+        if (newLine !== undefined) {
+          process.stderr.write(`  ${chalk.green('+')} ${newLine}\n`)
+          diffLines++
+        }
       }
-      // Show added lines
-      if (j < newLines.length && (i >= oldLines.length || oldLines[i - 1] !== newLines[j])) {
-        process.stderr.write(`  ${chalk.green('+')} ${newLines[j]}\n`)
-        j++; diffLines++
-      }
+    }
+    if (diffLines >= maxShow) {
+      const remaining = [...changedIndices].filter(k => k > lastShown).length
+      if (remaining > 0) process.stderr.write(`  ${chalk.dim(`  +${remaining} more lines`)}\n`)
     }
   }
 
@@ -164,8 +186,8 @@ export function registerFileTools(): void {
 
       const updated = content.replace(old_string, new_string)
 
-      // Diff preview in normal/strict mode
-      const approved = await showDiffPreview(path, old_string, new_string)
+      // Diff preview in normal/strict mode — pass full file content for proper context
+      const approved = await showDiffPreview(path, content, updated)
       if (!approved) return `Skipped: edit to ${path} was denied by user`
 
       writeFileSync(path, updated)

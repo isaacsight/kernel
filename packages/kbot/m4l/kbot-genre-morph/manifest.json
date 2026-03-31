@@ -1,0 +1,35 @@
+{
+  "name": "kbot Genre Morph",
+  "version": "1.0.0",
+  "description": "Real-time drum pattern morphing across House, Tech House, UK Garage, and Trap. One dial to rule them all.",
+  "author": "kernel.chat",
+  "license": "MIT",
+  "type": "MIDI Effect",
+  "category": "Drums",
+  "tags": ["kbot", "genre", "morph", "drums", "house", "techhouse", "garage", "trap", "dj", "pattern"],
+  "requires": {
+    "ableton_live": "12.0+",
+    "max_for_live": "9.0+"
+  },
+  "files": [
+    "kbot-genre-morph.js",
+    "kbot-genre-morph.maxpat"
+  ],
+  "installation": {
+    "target": "~/Music/Ableton/User Library/Presets/MIDI Effects/Max MIDI Effect/kbot/",
+    "instructions": "Drop onto a MIDI track with a Drum Rack. Turn the Genre dial to morph between genres."
+  },
+  "parameters": {
+    "Genre": { "type": "float", "range": [0.0, 1.0], "default": 0.0, "description": "0=House, 0.33=Tech House, 0.66=UK Garage, 1.0=Trap" },
+    "Variation": { "type": "int", "range": [0, 2], "default": 0, "description": "Pattern variation within current genre" },
+    "Humanize": { "type": "float", "range": [0.0, 1.0], "default": 0.15, "description": "Velocity humanization amount" },
+    "Active": { "type": "bool", "default": true, "description": "Enable/disable pattern generation" },
+    "AutoBPM": { "type": "bool", "default": false, "description": "Auto-adjust Ableton tempo to match genre" }
+  },
+  "genres": {
+    "House": { "bpm": 124, "patterns": 3, "elements": ["4-on-floor kick", "clap 2&4", "offbeat hats", "shaker"] },
+    "Tech House": { "bpm": 126, "patterns": 3, "elements": ["4-on-floor kick", "ghost clap", "shuffled hats", "rim", "perc"] },
+    "UK Garage": { "bpm": 132, "patterns": 3, "elements": ["2-step kick", "snare 2&4", "shuffled hats", "perc"] },
+    "Trap": { "bpm": 140, "patterns": 3, "elements": ["sparse 808 kick", "snare on 3", "16th hat rolls", "open hat"] }
+  }
+}

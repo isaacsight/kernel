@@ -1,0 +1,42 @@
+{
+  "name": "kbot DJ FX",
+  "version": "1.0.0",
+  "description": "One-knob DJ performance effects: Filter sweep, Echo freeze, Reverb wash, Stutter, Brake/Riser. Kill button resets all.",
+  "author": "kernel.chat",
+  "license": "MIT",
+  "type": "Audio Effect",
+  "category": "DJ",
+  "tags": ["kbot", "dj", "fx", "filter", "delay", "echo", "reverb", "stutter", "brake", "riser", "performance"],
+  "requires": {
+    "ableton_live": "12.0+",
+    "max_for_live": "9.0+"
+  },
+  "files": [
+    "kbot-dj-fx.js",
+    "kbot-dj-fx.maxpat"
+  ],
+  "installation": {
+    "target": "~/Music/Ableton/User Library/Presets/Audio Effects/Max Audio Effect/kbot/",
+    "instructions": "Drop onto any audio track or master. Each dial is a one-knob macro. Kill button resets all effects instantly."
+  },
+  "parameters": {
+    "Filter": { "type": "float", "range": [0.0, 1.0], "default": 0.5, "description": "LP (left) ← flat (center) → HP (right)" },
+    "Echo": { "type": "float", "range": [0.0, 1.0], "default": 0.0, "description": "Tempo-synced delay with feedback. High = freeze." },
+    "Wash": { "type": "float", "range": [0.0, 1.0], "default": 0.0, "description": "Reverb from dry to infinite wash" },
+    "Stutter": { "type": "int", "range": [0, 5], "default": 0, "description": "0=Off, 1=1bar, 2=1/2, 3=1/4, 4=1/8, 5=1/16" },
+    "Brake/Rise": { "type": "float", "range": [-1.0, 1.0], "default": 0.0, "description": "Negative=vinyl brake, Positive=riser" },
+    "Kill": { "type": "momentary", "description": "Panic button — resets all effects to clean" }
+  },
+  "effects": [
+    { "name": "Filter", "dsp": "svf~ (state variable filter)", "description": "DJ-style LP/HP sweep with resonance peak at extremes" },
+    { "name": "Echo", "dsp": "tapin~/tapout~ with feedback", "description": "Tempo-synced delay, ramps to echo freeze at max" },
+    { "name": "Wash", "dsp": "Multi-tap reverb approximation", "description": "Reverb from tight room to infinite wash" },
+    { "name": "Stutter", "dsp": "Buffer capture + retriggered playback", "description": "Beat repeat at musical divisions" },
+    { "name": "Brake/Riser", "dsp": "Playback rate / HP noise sweep", "description": "Vinyl brake or filtered noise build" }
+  ],
+  "messages": {
+    "kill": "Reset all effects to clean state",
+    "echo_freeze": "Instant echo freeze (max feedback + wet)",
+    "wash": "Instant reverb wash (max size + wet)"
+  }
+}

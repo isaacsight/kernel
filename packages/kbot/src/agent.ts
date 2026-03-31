@@ -38,7 +38,7 @@ import {
   learnFromExchange, learnFact, updateProjectMemory,
   shouldAutoTrain, selfTrain,
 } from './learning.js'
-import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory } from './memory.js'
+import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory, destroySession } from './memory.js'
 import { autoCompact, compressToolResult, type ConversationTurn } from './context-manager.js'
 import { learnedRoute, recordRoute } from './learned-router.js'
 import { buildCacheablePrompt, createPromptSections } from './prompt-cache.js'
@@ -152,6 +152,8 @@ export interface AgentOptions {
   responseStream?: ResponseStream
   /** Plan mode — read-only exploration, no writes or command execution */
   plan?: boolean
+  /** Session ID for isolated conversation history (serve mode). Defaults to 'default'. */
+  sessionId?: string
 }
 
 
@@ -823,6 +825,10 @@ async function callProvider(
         stop_reason: embResult.stop_reason,
       }
     } else {
+      // Warn when tools are requested but provider doesn't support them natively
+      if (tools && tools.length > 0 && (p.apiStyle === 'google' || p.apiStyle === 'cohere')) {
+        printWarn(`${p.apiStyle} provider doesn't support native tool calling — tools will be parsed from text output`)
+      }
       switch (p.apiStyle) {
         case 'anthropic': result = await callAnthropic(apiKey, p.apiUrl, model, systemContext, messages, tools, options); break
         case 'google':    result = await callGemini(apiKey, p.apiUrl, model, systemContext, messages); break
@@ -867,6 +873,8 @@ export async function runAgent(
 ): Promise<AgentResponse> {
   // UIAdapter: defaults to TerminalUIAdapter for CLI, can be overridden for SDK use
   const ui = options.ui ?? new TerminalUIAdapter()
+  // Session-scoped conversation history (isolates concurrent serve requests)
+  const memSession = options.sessionId || 'default'
 
   let apiKey = getByokKey()
   let byokProvider = getByokProvider()
@@ -899,8 +907,8 @@ export async function runAgent(
   if (!parsed.isMultimodal) {
     const localResult = await tryLocalFirst(message)
     if (localResult !== null) {
-      addTurn({ role: 'user', content: message })
-      addTurn({ role: 'assistant', content: localResult })
+      addTurn({ role: 'user', content: message }, memSession)
+      addTurn({ role: 'assistant', content: localResult }, memSession)
       ui.onInfo('(handled locally — 0 tokens used)')
       return { content: localResult, agent: 'local', model: 'none', toolCalls: 0 }
     }
@@ -910,7 +918,7 @@ export async function runAgent(
   // generate reflections from the previous response
   if (isUserRejection(message)) {
     try {
-      const history = getHistory()
+      const history = getHistory(memSession)
       const lastAssistant = [...history].reverse().find(t => t.role === 'assistant')
       const lastUser = [...history].reverse().find(t => t.role === 'user')
       if (lastAssistant && lastUser) {
@@ -929,8 +937,8 @@ export async function runAgent(
         agent: options.agent || 'coder',
       }, { autoApprove: false, onApproval: async () => true })
       const summary = formatPlanSummary(plan)
-      addTurn({ role: 'user', content: message })
-      addTurn({ role: 'assistant', content: summary })
+      addTurn({ role: 'user', content: message }, memSession)
+      addTurn({ role: 'assistant', content: summary }, memSession)
       return {
         content: summary,
         agent: options.agent || 'coder',
@@ -1313,7 +1321,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
       // Build messages with RLM-style context management
       const rawMessages: ProviderMessage[] = [
-        ...getPreviousMessages(),
+        ...getPreviousMessages(memSession),
         { role: 'user', content: message },
         ...loopMessages,
       ]
@@ -1484,8 +1492,8 @@ Always quote file paths that contain spaces. Never reference internal system nam
           } catch { /* self-eval errors are non-critical */ }
         }
 
-        addTurn({ role: 'user', content: originalMessage })
-        addTurn({ role: 'assistant', content })
+        addTurn({ role: 'user', content: originalMessage }, memSession)
+        addTurn({ role: 'assistant', content }, memSession)
 
         // ── Recursive Learning: record what worked (async — non-blocking) ──
         const totalTokens = lastResponse.usage

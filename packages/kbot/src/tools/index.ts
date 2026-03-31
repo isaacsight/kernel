@@ -381,6 +381,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './pentest.js',          registerFn: 'registerPentestTools' },
   { path: './redblue.js',          registerFn: 'registerRedBlueTools' },
   { path: './hacker-toolkit.js',   registerFn: 'registerHackerToolkitTools' },
+  { path: './dj-set-builder.js',  registerFn: 'registerDjSetBuilderTools' },
 ]
 
 /** Track whether lazy tools have been registered */

@@ -19,6 +19,8 @@ import { extractMcpAppFromText, renderMcpApp, listAppCapableTools } from './mcp-
 import { printInfo, printSuccess } from './ui.js';
 import { ResponseStream } from './streaming.js';
 import { runAgent } from './agent.js';
+import { destroySession } from './memory.js';
+import { randomUUID } from 'node:crypto';
 import { mountA2ARoutes } from './a2a.js';
 const __require = createRequire(import.meta.url);
 const VERSION = __require('../package.json').version;
@@ -105,6 +107,8 @@ export async function startServe(options) {
                 });
                 const stream = new ResponseStream();
                 stream.on(ResponseStream.createSSEListener(res));
+                // Isolate conversation history per request
+                const sessionId = `serve_${randomUUID()}`;
                 try {
                     await runAgent(message, {
                         responseStream: stream,
@@ -112,6 +116,7 @@ export async function startServe(options) {
                         agent,
                         model,
                         thinking,
+                        sessionId,
                     });
                 }
                 catch (err) {
@@ -119,6 +124,9 @@ export async function startServe(options) {
                         type: 'error',
                         message: err instanceof Error ? err.message : String(err),
                     });
+                }
+                finally {
+                    destroySession(sessionId);
                 }
                 res.end();
                 return;

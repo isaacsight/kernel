@@ -26,6 +26,8 @@ export interface AgentOptions {
     responseStream?: ResponseStream;
     /** Plan mode — read-only exploration, no writes or command execution */
     plan?: boolean;
+    /** Session ID for isolated conversation history (serve mode). Defaults to 'default'. */
+    sessionId?: string;
 }
 export interface AgentResponse {
     content: string;

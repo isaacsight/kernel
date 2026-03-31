@@ -8,6 +8,12 @@
 // 3. USER PROFILE — Learn user preferences, style, and common workflows
 //
 // Everything persists to ~/.kbot/memory/ as JSON files.
+//
+// CONCURRENCY NOTE: Module-level state (patterns, solutions, profile, etc.) is
+// intentionally shared across concurrent requests in `kbot serve` mode — learning
+// data is cumulative and global. All mutation functions are synchronous, so they
+// cannot interleave in Node.js's single-threaded event loop. The debounced saveJSON
+// writer coalesces concurrent writes. selfTrain() uses a guard to prevent overlapping runs.
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync, readFileSync, writeFileSync, writeFile, mkdirSync } from 'node:fs';
@@ -704,8 +710,22 @@ let trainingLog = loadJSON(TRAINING_FILE, {
     insightsSynthesized: 0,
     patternsOptimized: 0,
 });
+/** Guard to prevent overlapping selfTrain runs in serve mode */
+let selfTrainRunning = false;
 /** Run self-training: prune stale knowledge, optimize patterns, synthesize insights */
 export function selfTrain() {
+    if (selfTrainRunning) {
+        return { pruned: 0, optimized: 0, synthesized: 0, summary: 'Self-training already in progress — skipped.' };
+    }
+    selfTrainRunning = true;
+    try {
+        return selfTrainInner();
+    }
+    finally {
+        selfTrainRunning = false;
+    }
+}
+function selfTrainInner() {
     let pruned = 0;
     let optimized = 0;
     let synthesized = 0;

@@ -547,8 +547,35 @@ function replaceNotes(p) {
 // DEVICES
 // ═══════════════════════════════════════════════════════════════════════════
 
+function searchBrowserItem(browser, basePath, searchName, maxDepth) {
+    // Recursively search browser tree for a device matching searchName
+    if (maxDepth <= 0) return null;
+    try {
+        var item = api(basePath);
+        var itemName = safeGetStr(item, "name").toLowerCase();
+        var isLoadable = safeGet(item, "is_loadable") == 1;
+
+        // Direct match and loadable — load it
+        if (itemName.indexOf(searchName) >= 0 && isLoadable) {
+            browser.call("load_item", item.id);
+            return { name: safeGetStr(item, "name") };
+        }
+
+        // If it's a folder, search children
+        var children = item.get("children");
+        if (children && children.length > 0) {
+            var count = Math.floor(children.length / 2);
+            for (var k = 0; k < count; k++) {
+                var result = searchBrowserItem(browser, basePath + " children " + k, searchName, maxDepth - 1);
+                if (result) return result;
+            }
+        }
+    } catch (e) {}
+    return null;
+}
+
 function loadPlugin(p) {
-    // Use Ableton's browser to find and load a plugin
+    // Use Ableton's browser to find and load a plugin (deep search)
     var app = api("live_app");
     var browser = api("live_app browser");
 
@@ -585,43 +612,14 @@ function loadPlugin(p) {
                 var searchName = (p.name || "").toLowerCase();
                 var childName = name.toLowerCase();
 
-                if (childName.indexOf(searchName) >= 0) {
-                    if (isLoadable) {
-                        // Load it
-                        browser.call("load_item", child.id);
-                        return {
-                            device: name,
-                            track: p.track,
-                            category: category
-                        };
-                    } else {
-                        // It's a folder -- look for loadable children
-                        var subChildren = child.get("children");
-                        if (subChildren && subChildren.length > 0) {
-                            var subCount = Math.floor(subChildren.length / 2);
+                // Deep recursive search (up to 4 levels) for device name
+                var found = searchBrowserItem(browser, filterPath + " children " + i, searchName, 3);
+                if (found) return { device: found.name, track: p.track, category: category };
 
-                            // If manufacturer specified, search deeper
-                            for (var j = 0; j < subCount; j++) {
-                                var sub = api(filterPath + " children " + i + " children " + j);
-                                var subName = safeGetStr(sub, "name");
-                                var subLoadable = safeGet(sub, "is_loadable") == 1;
-
-                                if (subLoadable) {
-                                    if (p.manufacturer) {
-                                        if (subName.toLowerCase().indexOf(p.manufacturer.toLowerCase()) >= 0 ||
-                                            subName.toLowerCase().indexOf(searchName) >= 0) {
-                                            browser.call("load_item", sub.id);
-                                            return { device: subName, track: p.track, category: category };
-                                        }
-                                    } else {
-                                        // Load first loadable child
-                                        browser.call("load_item", sub.id);
-                                        return { device: subName, track: p.track, category: category };
-                                    }
-                                }
-                            }
-                        }
-                    }
+                // Also check direct match at this level
+                if (childName.indexOf(searchName) >= 0 && isLoadable) {
+                    browser.call("load_item", child.id);
+                    return { device: name, track: p.track, category: category };
                 }
             }
         } catch (e) {
