@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-30T22:42:00.943Z",
+  "timestamp": "2026-03-31T04:45:43.028Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "The ladder is missing rungs – Engineering Progression When AI Ate the Middle",
+      "url": "https://news.ycombinator.com/item?id=47581760",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "AI overly affirms users asking for personal advice",
       "url": "https://news.ycombinator.com/item?id=47575214",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -80,11 +87,11 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "How the AI Bubble Bursts",
-      "url": "https://news.ycombinator.com/item?id=47573772",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "产品调研及想法分析",
+      "url": "https://github.com/1024XEngineer/neo-code/issues/92",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "[Auto-QA] Missing user feedback on actions",
       "url": "https://github.com/kubestellar/console/issues/3915",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] Silent failures in error handling detected",
-      "url": "https://github.com/kubestellar/console/issues/3913",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "chore(main): release 1.0.0",
-      "url": "https://github.com/Glad-Labs/glad-labs-codebase/pull/1459",
+      "title": "qnaigc-api: add bundled provider plugin",
+      "url": "https://github.com/openclaw/openclaw/pull/58127",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[SUBMISSION] Adverant-Nexus-Plugin-OpenClaw",
-      "url": "https://github.com/ProSkillsMD/proskills/issues/3372",
+      "title": "fix(qnaigc-api): repair model catalog syntax",
+      "url": "https://github.com/openclaw/openclaw/pull/58123",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "chore(main): release 0.8.0",
-      "url": "https://github.com/clawvisor/clawvisor/pull/99",
+      "title": "fix(qmd): apply han normalization only to lexical sub-queries",
+      "url": "https://github.com/openclaw/openclaw/pull/58121",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },

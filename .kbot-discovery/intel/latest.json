@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-30T22:41:57.464Z",
+  "timestamp": "2026-03-31T04:45:39.621Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -761,7 +761,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "weaved"
+              "value": "elC0mpa"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -769,86 +769,80 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "There is a new kind of AI tool for software engineering. [Weave][0] is one of them. They are meant to analyze and an employee's usage of AI and evaluate their effectiveness with it.<p>Tokens are expensive, companies want to make sure they are being used effectively. Fair enough. The problem is that Weave provides nearly zero insight into how their metrics work. They do tell you they use AI to do their analysis, so likely in practive it is LLMs analyzing the usage of other LLMs.<p>If your employer sets this up your work with AI is reduced down to a number. From first hand experience these numbers are used to make firing decisions. The number is, laughably, presented as &quot;Code output&quot; xx.x / week. It doesn't tell you anything about what the unit is or how they arrive at it.<p>They provide no assurances or proof that their model isn't biased. They claim their dataset is from expert level PRs. They don't say what the dataset is or how it was compiled exactly. Does it cover native and non-native English speakers? Does it cover young developers' work as well as older developers' work? Did it learn any other biases from usernames, git commit email addresses, etc?<p>Who knows!? But guess you're fired anyway because computer number go down.<p>The strawberry on top is that in their [blog posts][1] they claim <em>bot</em>h 94% accuracy and a 0.94 correlation, but are referring to the same thing. They do not even know the statistical difference between accuracy and correlation but their model gets to decide how good of a vibe coder you are.<p>Weave's investors are:<p>Moonfire — lead investor (European early-stage VC)\nBurst Capital — co-lead (early-stage VC)\nY Combinator — participant (the accelerator program; 25% of their current batch uses Weave per Weave's own blog)\nPioneer Fund — participant (per PitchBook)\nRoar Ventures — participant (per PitchBook)<p>[0]: https://workweave.dev/\n[1]: https://web.archive.org/web/20260212040803/https://workweave.dev/blog/weave-vs-linearb"
+              "value": "Hey guys, I have a question related to these agentic clis<p>I work full time as a Software Engineer and recently started using tools like Claude Code and Gemini CLI. I just want to know your opinion about these because from  y point of view they <em>bot</em>h have different disadvantages:<p>Gemini CLI usually takes long (~5ms) in plan mode because it uses Gemini Pro 3.1, but I have never been running out of tokens. However, Claude is pretty fast but I usually run out of tokens.<p>Just want to know if any of you have some workaround for any of these tools or a way to solve this.<p>Thank you!!!!"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "AI Tool 'Weave' Scores Employee AI Coding Usage; Share's No Methodology"
+              "value": "Ask HN: Gemini CLI vs. Claude Code"
             }
           },
           "_tags": [
             "story",
-            "author_weaved",
-            "story_47579222",
+            "author_elC0mpa",
+            "story_47582539",
             "ask_hn"
           ],
-          "author": "weaved",
-          "created_at": "2026-03-30T20:19:08Z",
-          "created_at_i": 1774901948,
+          "author": "elC0mpa",
+          "created_at": "2026-03-31T03:49:11Z",
+          "created_at_i": 1774928951,
           "num_comments": 0,
-          "objectID": "47579222",
-          "points": 1,
-          "story_id": 47579222,
-          "story_text": "There is a new kind of AI tool for software engineering. [Weave][0] is one of them. They are meant to analyze and an employee&#x27;s usage of AI and evaluate their effectiveness with it.<p>Tokens are expensive, companies want to make sure they are being used effectively. Fair enough. The problem is that Weave provides nearly zero insight into how their metrics work. They do tell you they use AI to do their analysis, so likely in practive it is LLMs analyzing the usage of other LLMs.<p>If your employer sets this up your work with AI is reduced down to a number. From first hand experience these numbers are used to make firing decisions. The number is, laughably, presented as &quot;Code output&quot; xx.x &#x2F; week. It doesn&#x27;t tell you anything about what the unit is or how they arrive at it.<p>They provide no assurances or proof that their model isn&#x27;t biased. They claim their dataset is from expert level PRs. They don&#x27;t say what the dataset is or how it was compiled exactly. Does it cover native and non-native English speakers? Does it cover young developers&#x27; work as well as older developers&#x27; work? Did it learn any other biases from usernames, git commit email addresses, etc?<p>Who knows!? But guess you&#x27;re fired anyway because computer number go down.<p>The strawberry on top is that in their [blog posts][1] they claim both 94% accuracy and a 0.94 correlation, but are referring to the same thing. They do not even know the statistical difference between accuracy and correlation but their model gets to decide how good of a vibe coder you are.<p>Weave&#x27;s investors are:<p>Moonfire — lead investor (European early-stage VC)\nBurst Capital — co-lead (early-stage VC)\nY Combinator — participant (the accelerator program; 25% of their current batch uses Weave per Weave&#x27;s own blog)\nPioneer Fund — participant (per PitchBook)\nRoar Ventures — participant (per PitchBook)<p>[0]: https:&#x2F;&#x2F;workweave.dev&#x2F;\n[1]: https:&#x2F;&#x2F;web.archive.org&#x2F;web&#x2F;20260212040803&#x2F;https:&#x2F;&#x2F;workweave.dev&#x2F;blog&#x2F;weave-vs-linearb",
-          "title": "AI Tool 'Weave' Scores Employee AI Coding Usage; Share's No Methodology",
-          "updated_at": "2026-03-30T20:37:06Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pipboyguy"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I was paying about $190/month for Firecrawl. It worked, but it was expensive and felt half baked. The CLI was awkward to use. Maybe I wasn't using it right, but the whole thing felt like it was in flux. I figured if they vibe coded it I might as well do it myself.<p>So I vibed my own. 3k lines of Elixir, custom readability engine, no external services. It even manages, for some sites at least, to evade <em>bot</em> protection.<p>It saves a lot of cash and helps pay the Claude Code Max subscription.<p>I guess my realization is that you shouldn't just take tooling aimed at AI agents for granted. Code is a commodity now, so a price tag for an MCP tool nearly as much as the most expensive subscription tiers for Claude Code/Codex makes no sense to me.<p>Just ask your agent to code 80% of the tool for yourself."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "I replaced Firecrawl with 2,700 lines of Elixir"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pipboyguy",
-            "story_47578663",
-            "ask_hn"
-          ],
-          "author": "pipboyguy",
-          "children": [
-            47579042
-          ],
-          "created_at": "2026-03-30T19:30:29Z",
-          "created_at_i": 1774899029,
-          "num_comments": 1,
-          "objectID": "47578663",
+          "objectID": "47582539",
           "points": 3,
-          "story_id": 47578663,
-          "story_text": "I was paying about $190&#x2F;month for Firecrawl. It worked, but it was expensive and felt half baked. The CLI was awkward to use. Maybe I wasn&#x27;t using it right, but the whole thing felt like it was in flux. I figured if they vibe coded it I might as well do it myself.<p>So I vibed my own. 3k lines of Elixir, custom readability engine, no external services. It even manages, for some sites at least, to evade bot protection.<p>It saves a lot of cash and helps pay the Claude Code Max subscription.<p>I guess my realization is that you shouldn&#x27;t just take tooling aimed at AI agents for granted. Code is a commodity now, so a price tag for an MCP tool nearly as much as the most expensive subscription tiers for Claude Code&#x2F;Codex makes no sense to me.<p>Just ask your agent to code 80% of the tool for yourself.",
-          "title": "I replaced Firecrawl with 2,700 lines of Elixir",
-          "updated_at": "2026-03-30T20:20:36Z"
+          "story_id": 47582539,
+          "story_text": "Hey guys, I have a question related to these agentic clis<p>I work full time as a Software Engineer and recently started using tools like Claude Code and Gemini CLI. I just want to know your opinion about these because from  y point of view they both have different disadvantages:<p>Gemini CLI usually takes long (~5ms) in plan mode because it uses Gemini Pro 3.1, but I have never been running out of tokens. However, Claude is pretty fast but I usually run out of tokens.<p>Just want to know if any of you have some workaround for any of these tools or a way to solve this.<p>Thank you!!!!",
+          "title": "Ask HN: Gemini CLI vs. Claude Code",
+          "updated_at": "2026-03-31T04:17:38Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "<em>knot</em>bin"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Open Source TikTok Alternative on AT Protocol"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://sprk.so"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_knotbin",
+            "story_47582497",
+            "show_hn"
+          ],
+          "author": "knotbin",
+          "created_at": "2026-03-31T03:43:20Z",
+          "created_at_i": 1774928600,
+          "num_comments": 0,
+          "objectID": "47582497",
+          "points": 1,
+          "story_id": 47582497,
+          "title": "Show HN: Open Source TikTok Alternative on AT Protocol",
+          "updated_at": "2026-03-31T03:48:37Z",
+          "url": "https://sprk.so"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "tolerance"
+              "value": "Areibman"
             },
             "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "The Discourse Is Getting <em>Bot</em>h Smarter and Dumber"
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Yes, you need a Mac Mini"
             },
             "url": {
               "fullyHighlighted": false,
@@ -856,31 +850,31 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://www.richardhanania.com/p/the-discourse-is-getting-<em>bot</em>h-smarter"
+              "value": "https://hyperengineering.<em>bot</em>tlenecklabs.com/p/yes-you-actually-need-a-mac-mini"
             }
           },
           "_tags": [
             "story",
-            "author_tolerance",
-            "story_47578632"
+            "author_Areibman",
+            "story_47581583"
           ],
-          "author": "tolerance",
-          "created_at": "2026-03-30T19:28:16Z",
-          "created_at_i": 1774898896,
+          "author": "Areibman",
+          "created_at": "2026-03-31T01:04:21Z",
+          "created_at_i": 1774919061,
           "num_comments": 0,
-          "objectID": "47578632",
-          "points": 1,
-          "story_id": 47578632,
-          "title": "The Discourse Is Getting Both Smarter and Dumber",
-          "updated_at": "2026-03-30T19:30:52Z",
-          "url": "https://www.richardhanania.com/p/the-discourse-is-getting-both-smarter"
+          "objectID": "47581583",
+          "points": 4,
+          "story_id": 47581583,
+          "title": "Yes, you need a Mac Mini",
+          "updated_at": "2026-03-31T02:25:37Z",
+          "url": "https://hyperengineering.bottlenecklabs.com/p/yes-you-actually-need-a-mac-mini"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "lindir"
+              "value": "0xDEFACED"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -888,42 +882,56 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I'm somewhat new to Zig, but have a lot of background in other systems languages. A friend and I (we're <em>bot</em>h grad students) would like to get started by writing up a software analysis tool. What sort of problems do you often run into that you would like an automatic linter for?<p>Our initial guess was that a resource safety checker (memory, file open/close, etc.) might be helpful, but it looks like Zig's approach to memory is much better than most other systems languages. Is there some challenge that Zig uniquely adds? Or some area where the tooling could really use some improvement?"
+              "value": "Even as recently as a month or two ago his site seemed, to me at least, to be one of the final bastions of the public internet without a significant portion of its content being AI generated. Now, it feels like at least half of the articles I click on are full of LLM-isms and otherwise obviously AI generated. In spite of this, the comments are full of enthusiastic agreement or ardent dissent. Out of dozens of comments, none <em>bot</em>her to acknowledge the inauthenticity of the content.<p>Is it finally time to throw in the towel accept the inevitable? Is it enough that the topic of an article or blogpost is interesting, even if the text itself is a pile of tokens?"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Zig Tooling Pain Points?"
+              "value": "Ask HN: Is anyone still resisting the slop onslaught?"
             }
           },
           "_tags": [
             "story",
-            "author_lindir",
-            "story_47577668",
+            "author_0xDEFACED",
+            "story_47581581",
             "ask_hn"
           ],
-          "author": "lindir",
-          "created_at": "2026-03-30T18:05:26Z",
-          "created_at_i": 1774893926,
-          "num_comments": 0,
-          "objectID": "47577668",
-          "points": 2,
-          "story_id": 47577668,
-          "story_text": "I&#x27;m somewhat new to Zig, but have a lot of background in other systems languages. A friend and I (we&#x27;re both grad students) would like to get started by writing up a software analysis tool. What sort of problems do you often run into that you would like an automatic linter for?<p>Our initial guess was that a resource safety checker (memory, file open&#x2F;close, etc.) might be helpful, but it looks like Zig&#x27;s approach to memory is much better than most other systems languages. Is there some challenge that Zig uniquely adds? Or some area where the tooling could really use some improvement?",
-          "title": "Zig Tooling Pain Points?",
-          "updated_at": "2026-03-30T18:20:30Z"
+          "author": "0xDEFACED",
+          "children": [
+            47582378,
+            47581748,
+            47581621,
+            47582001
+          ],
+          "created_at": "2026-03-31T01:03:54Z",
+          "created_at_i": 1774919034,
+          "num_comments": 4,
+          "objectID": "47581581",
+          "points": 7,
+          "story_id": 47581581,
+          "story_text": "Even as recently as a month or two ago his site seemed, to me at least, to be one of the final bastions of the public internet without a significant portion of its content being AI generated. Now, it feels like at least half of the articles I click on are full of LLM-isms and otherwise obviously AI generated. In spite of this, the comments are full of enthusiastic agreement or ardent dissent. Out of dozens of comments, none bother to acknowledge the inauthenticity of the content.<p>Is it finally time to throw in the towel accept the inevitable? Is it enough that the topic of an article or blogpost is interesting, even if the text itself is a pile of tokens?",
+          "title": "Ask HN: Is anyone still resisting the slop onslaught?",
+          "updated_at": "2026-03-31T04:18:37Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "zhenthinks"
+              "value": "enesakar"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Claude, Gemini, and GPT each get $100K in virtual money and trade every morning at 9:30 AM ET using real Yahoo Finance prices. Same tools, same rules — different models. Live leaderboard shows portfolio values, holdings, and each agent's daily diary entry explaining their reasoning.\nBuilt this to demo Upstash Box — an agent server primitive. Unlike a web server, there's no app code. You give it prompts, tools, and skills. Each agent runs in its own isolated container, sleeps when idle, state in plain JSON.<p>Live: <a href=\"https://botstreet.vercel.app\" rel=\"nofollow\">https://<em>bot</em>street.vercel.app</a><p>Code: <a href=\"https://github.com/upstash/botstreet\" rel=\"nofollow\">https://github.com/upstash/<em>bot</em>street</a>"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Tuning Whisper on A10G: The hidden cost of language auto-detection"
+              "value": "Show HN: Claude/OpenAI/Gemini agents compete as investors with $100K each"
             },
             "url": {
               "fullyHighlighted": false,
@@ -931,27 +939,26 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://zhenthinks.substack.com/p/we-thought-it-was-a-compute-<em>bot</em>tleneck"
+              "value": "https://github.com/upstash/<em>bot</em>street"
             }
           },
           "_tags": [
             "story",
-            "author_zhenthinks",
-            "story_47576929"
+            "author_enesakar",
+            "story_47581127",
+            "show_hn"
           ],
-          "author": "zhenthinks",
-          "children": [
-            47577089
-          ],
-          "created_at": "2026-03-30T17:06:35Z",
-          "created_at_i": 1774890395,
+          "author": "enesakar",
+          "created_at": "2026-03-30T23:54:12Z",
+          "created_at_i": 1774914852,
           "num_comments": 0,
-          "objectID": "47576929",
+          "objectID": "47581127",
           "points": 2,
-          "story_id": 47576929,
-          "title": "Tuning Whisper on A10G: The hidden cost of language auto-detection",
-          "updated_at": "2026-03-30T17:21:23Z",
-          "url": "https://zhenthinks.substack.com/p/we-thought-it-was-a-compute-bottleneck"
+          "story_id": 47581127,
+          "story_text": "Claude, Gemini, and GPT each get $100K in virtual money and trade every morning at 9:30 AM ET using real Yahoo Finance prices. Same tools, same rules — different models. Live leaderboard shows portfolio values, holdings, and each agent&#x27;s daily diary entry explaining their reasoning.\nBuilt this to demo Upstash Box — an agent server primitive. Unlike a web server, there&#x27;s no app code. You give it prompts, tools, and skills. Each agent runs in its own isolated container, sleeps when idle, state in plain JSON.<p>Live: <a href=\"https:&#x2F;&#x2F;botstreet.vercel.app\" rel=\"nofollow\">https:&#x2F;&#x2F;botstreet.vercel.app</a><p>Code: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;upstash&#x2F;botstreet\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;upstash&#x2F;botstreet</a>",
+          "title": "Show HN: Claude/OpenAI/Gemini agents compete as investors with $100K each",
+          "updated_at": "2026-03-31T00:35:23Z",
+          "url": "https://github.com/upstash/botstreet"
         }
       ]
     },
@@ -1242,13 +1249,13 @@
           ],
           "created_at": "2026-03-30T21:00:53Z",
           "created_at_i": 1774904453,
-          "num_comments": 2,
+          "num_comments": 3,
           "objectID": "47579652",
           "points": 2,
           "story_id": 47579652,
           "story_text": "With longer agentic workflows becoming the norm, token cost can eat through usage so quickly that it prevents any real work from getting done.<p>After studying the business model of top labs like Anthropic and OpenAI, their business model shows about 80% margins on inference cost which they use for R+D on the next model.<p>Working with open source models is much cheaper and allow for 5-10x higher usage, so I decided to create Sweet! CLI as an alternative to the products offered by big labs.<p>Sweet! CLI uses our own custom post trained version of Deepseek v3.2 hosted on US based inference servers (very similar to Cursor&#x27;s Composer model).<p>Unlike most llm based agent products, we bill solely based on usage and have a seamless top up experience so you only pay for what you use.<p>My favorite feature is &#x27;autopilot&#x27;, where you can specify the duration of time you want the agent to work on a specific task, including indefinitely. This is good for monitoring live deployed applications and detecting outages that need triaged immediately, and I have multiple Sweet! agents deployed to the production server right now with that exact objective.<p>I&#x27;d appreciate any support or feedback on how I can make it better!<p>Thanks,<p>Adam - Founder of Sweet! CLI",
           "title": "Show HN: I made a cheaper alternative to Claude Code or Codex CLI",
-          "updated_at": "2026-03-30T21:57:37Z",
+          "updated_at": "2026-03-30T23:41:52Z",
           "url": "https://sweetcli.com/"
         },
         {
@@ -1294,11 +1301,11 @@
           "created_at_i": 1774896799,
           "num_comments": 0,
           "objectID": "47578225",
-          "points": 1,
+          "points": 2,
           "story_id": 47578225,
           "story_text": "Hi HN,<p>I started `lmcli` in 2023 when I wanted my own tool to play with the shiny new LLM technology.<p>If you look through the history, you&#x27;ll see I had implemented tool calling with a vision for the &quot;agentic&quot; coding loop back around early 2024. Back then, models weren&#x27;t smart enough to make good use of the tools and I settled in with using `lmcli` for simpler copy-paste based interactions.<p>But now, `lmcli` can do the coding loop just as well as Claude Code!<p>I invite HN over to take a look. There are still rough edges, some incomplete or confusing features, and yes, LLMs were used in the making. I still review all new code and make the architectural decisions.<p>Enjoy.",
           "title": "Show HN: lmcli - A sleek, sandboxed alternative to Claude Code",
-          "updated_at": "2026-03-30T18:59:51Z",
+          "updated_at": "2026-03-31T01:49:07Z",
           "url": "https://codeberg.org/mlow/lmcli"
         },
         {
@@ -1493,13 +1500,13 @@
           ],
           "created_at": "2026-03-30T21:00:53Z",
           "created_at_i": 1774904453,
-          "num_comments": 2,
+          "num_comments": 3,
           "objectID": "47579652",
           "points": 2,
           "story_id": 47579652,
           "story_text": "With longer agentic workflows becoming the norm, token cost can eat through usage so quickly that it prevents any real work from getting done.<p>After studying the business model of top labs like Anthropic and OpenAI, their business model shows about 80% margins on inference cost which they use for R+D on the next model.<p>Working with open source models is much cheaper and allow for 5-10x higher usage, so I decided to create Sweet! CLI as an alternative to the products offered by big labs.<p>Sweet! CLI uses our own custom post trained version of Deepseek v3.2 hosted on US based inference servers (very similar to Cursor&#x27;s Composer model).<p>Unlike most llm based agent products, we bill solely based on usage and have a seamless top up experience so you only pay for what you use.<p>My favorite feature is &#x27;autopilot&#x27;, where you can specify the duration of time you want the agent to work on a specific task, including indefinitely. This is good for monitoring live deployed applications and detecting outages that need triaged immediately, and I have multiple Sweet! agents deployed to the production server right now with that exact objective.<p>I&#x27;d appreciate any support or feedback on how I can make it better!<p>Thanks,<p>Adam - Founder of Sweet! CLI",
           "title": "Show HN: I made a cheaper alternative to Claude Code or Codex CLI",
-          "updated_at": "2026-03-30T21:57:37Z",
+          "updated_at": "2026-03-30T23:41:52Z",
           "url": "https://sweetcli.com/"
         },
         {
