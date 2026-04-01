@@ -12,6 +12,7 @@
 import { createInterface } from 'node:readline'
 import { existsSync } from 'node:fs'
 import { join, basename } from 'node:path'
+import { homedir } from 'node:os'
 import { Command } from 'commander'
 import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupKbotLocal, isOllamaRunning, listOllamaModels, warmOllamaModelCache, detectLocalRuntime, type ByokProvider } from './auth.js'
 import { runAndPrint, runAgent, runAgentFromCheckpoint, type AgentOptions } from './agent.js'
@@ -50,6 +51,7 @@ import {
 import { checkForUpdate, selfUpdate } from './updater.js'
 import { runTutorial } from './tutorial.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
+import { getBuddy, getBuddyGreeting, formatBuddyStatus } from './buddy.js'
 import chalk from 'chalk'
 
 import { createRequire } from 'node:module'
@@ -2619,7 +2621,7 @@ async function main(): Promise<void> {
     .option('--json', 'Output raw JSON')
     .option('--badge', 'Print only the badge markdown (for adding to READMEs)')
     .action(async (repo: string, auditOpts: { share?: boolean; json?: boolean; badge?: boolean }) => {
-      const { auditRepo, formatAuditReport } = await import('./tools/audit.js')
+      const { auditRepo, formatAuditReport, formatAuditTerminal } = await import('./tools/audit.js')
       printInfo(`Auditing ${repo}...`)
       try {
         const result = await auditRepo(repo)
@@ -2636,15 +2638,17 @@ async function main(): Promise<void> {
           return
         }
 
-        const report = formatAuditReport(result)
-        console.log(report)
+        // Terminal gets the styled version; --share gist gets markdown
+        const terminalReport = formatAuditTerminal(result)
+        console.log(terminalReport)
 
-        // Auto-share as gist
+        // Auto-share as gist (uses markdown format for portability)
         if (auditOpts.share) {
           printInfo('Sharing audit report...')
           try {
+            const markdownReport = formatAuditReport(result)
             const { createGist } = await import('./share.js')
-            const url = createGist(report, `kbot-audit-${repo.replace('/', '-')}.md`, `kbot Audit: ${repo} — Grade ${result.grade}`, true)
+            const url = createGist(markdownReport, `kbot-audit-${repo.replace('/', '-')}.md`, `kbot Audit: ${repo} — Grade ${result.grade}`, true)
             if (url?.startsWith('http')) {
               printSuccess(`Shared! ${url}`)
               printInfo(`Badge for ${repo}'s README:`)
@@ -4401,6 +4405,18 @@ async function startRepl(
   }
 
   const sessionCount = incrementSessions()
+
+  // Buddy greeting — Tamagotchi companion appears at startup
+  {
+    const buddy = getBuddy()
+    const isFirstRun = sessionCount <= 1 && !existsSync(join(homedir(), '.kbot', 'config.json'))
+    const greeting = isFirstRun
+      ? `Hey! I'm ${buddy.name} the ${buddy.species}. Let's set up your API key!`
+      : getBuddyGreeting()
+    console.log()
+    console.log(formatBuddyStatus(greeting))
+    console.log()
+  }
 
   // Seed knowledge on first run — give new users a head start
   if (sessionCount <= 2) {

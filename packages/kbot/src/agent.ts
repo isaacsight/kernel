@@ -40,6 +40,7 @@ import {
 } from './learning.js'
 import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory, destroySession } from './memory.js'
 import { getDreamPrompt, dreamAfterSession } from './dream.js'
+import { setBuddyMood } from './buddy.js'
 import { notifyTurn, startMemoryScanner, stopMemoryScanner } from './memory-scanner.js'
 import { autoCompact, compressToolResult, type ConversationTurn } from './context-manager.js'
 import { learnedRoute, recordRoute } from './learned-router.js'
@@ -1179,6 +1180,8 @@ Always quote file paths that contain spaces. Never reference internal system nam
     message: originalMessage.slice(0, 200),
   })
 
+  setBuddyMood('thinking')
+
   // Start passive memory scanner for this session
   startMemoryScanner()
 
@@ -1762,6 +1765,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
         results.push(result)
         ui.onToolCallEnd(call.name, result.result, result.error ? result.result : undefined, result.duration_ms)
 
+        // Update buddy mood based on tool outcome
+        setBuddyMood(result.error ? 'error' : 'success')
+
         // ── Observer: record tool call for cross-session learning ──
         try {
           const { recordObservation } = await import('./observer.js')
@@ -1838,6 +1844,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
     } catch (err) {
       spinnerHandle?.stop()
+      setBuddyMood('error')
       // ── Telemetry: session failure ──
       telemetry.emit('session_end', { status: 'failed', error: String(err), toolCallCount })
       telemetry.destroy().catch(() => {})
@@ -1859,7 +1866,11 @@ Always quote file paths that contain spaces. Never reference internal system nam
   stopMemoryScanner()
 
   // ── Dream Engine: consolidate session memories (non-blocking, $0 via Ollama) ──
+  setBuddyMood('learning')
   dreamAfterSession(sessionId)
+
+  // Session complete — buddy returns to idle
+  setBuddyMood('idle')
 
   const content = lastResponse?.content || 'Reached maximum tool iterations.'
   return {

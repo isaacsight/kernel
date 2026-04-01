@@ -29,6 +29,12 @@ import {
   learnFact,
 } from './learning.js'
 import { getMemoryScannerStats } from './memory-scanner.js'
+import {
+  getLearningReport as getMusicLearningReport,
+  getRecentHistory as getMusicRecentHistory,
+  getPreferences as getMusicPreferences,
+} from './music-learning.js'
+import { registerAmendment } from './prompt-evolution.js'
 
 // ── Constants ──
 
@@ -67,7 +73,7 @@ export interface DreamInsight {
   source: string
 }
 
-export type DreamCategory = 'pattern' | 'preference' | 'skill' | 'project' | 'relationship'
+export type DreamCategory = 'pattern' | 'preference' | 'skill' | 'project' | 'relationship' | 'music'
 
 export interface DreamState {
   /** Total dream cycles completed */
@@ -240,6 +246,21 @@ function buildConsolidationPrompt(
         .join('\n')
     : '(no recent detections)'
 
+  // ── Tier 6: Music learning — sound, pattern, mix memories ──
+  const musicPrefs = getMusicPreferences()
+  const hasMusicData = musicPrefs.totalBeats > 0 || musicPrefs.totalSessions > 0
+  let musicText = '(no music production data yet)'
+  if (hasMusicData) {
+    const report = getMusicLearningReport()
+    const recentEvents = getMusicRecentHistory(10)
+    const recentText = recentEvents.length > 0
+      ? recentEvents.map(e =>
+          `- [${e.action}] ${e.genre} ${e.key} ${e.bpm}bpm — ${e.detail || 'no detail'} (${e.feedback})`
+        ).join('\n')
+      : ''
+    musicText = report + (recentText ? `\n\n**Recent production events:**\n${recentText}` : '')
+  }
+
   return `You are a memory consolidation system. Analyze this conversation session and ALL accumulated knowledge tiers to extract durable cross-tier insights.
 
 EXISTING DREAM INSIGHTS (Tier 4 — Dream Journal):
@@ -260,6 +281,9 @@ ${profileText}
 RECENT MEMORY SCANNER DETECTIONS (Tier 5 — Passive Detection):
 ${scannerText}
 
+MUSIC PRODUCTION LEARNING (Tier 6 — Musical Memory):
+${musicText}
+
 SESSION TO CONSOLIDATE:
 ${historyText}
 
@@ -269,6 +293,14 @@ Extract 1-5 insights by synthesizing across ALL tiers. Each insight should be:
 - Non-obvious (not derivable from reading code)
 - Cross-tier when possible (e.g., a pattern + preference = workflow insight)
 - About the USER, their preferences, patterns, workflows, or project context
+
+For music/production sessions, pay special attention to:
+- Which sounds, instruments, and presets scored well and why
+- BPM + key + genre combinations that the user gravitates toward
+- Mix decisions that worked (volume balance, send levels, panning)
+- Production patterns (e.g., "808 sub bass in F1 works well at 142 BPM for trap")
+- Cross-domain insights (e.g., coding workflow preferences that mirror production habits)
+Use category "music" for production-specific insights.
 
 Pay special attention to:
 - Patterns that confirm or contradict existing insights
@@ -280,7 +312,7 @@ Format each insight as a JSON array of objects:
 [
   {
     "content": "the insight text",
-    "category": "pattern|preference|skill|project|relationship",
+    "category": "pattern|preference|skill|project|relationship|music",
     "keywords": ["keyword1", "keyword2"]
   }
 ]
@@ -333,6 +365,7 @@ export function applyDreamInsights(insights: DreamInsight[]): ApplyResult {
     preferencesApplied: 0,
     patternsHinted: 0,
     factsLearned: 0,
+    promptAmendments: 0,
   }
 
   for (const insight of insights) {
@@ -354,6 +387,19 @@ export function applyDreamInsights(insights: DreamInsight[]): ApplyResult {
         const techTerms = extractTechTermsFromInsight(insight.content)
         if (techTerms.length > 0) {
           updateProfile({ techTerms })
+        }
+
+        // High-relevance preference insights → prompt evolution amendments.
+        // This wires dream consolidation into the GEPA prompt evolution system
+        // so kbot's specialist prompts self-improve based on learned behavior.
+        if (insight.relevance > 0.8) {
+          const amendment = insightToAmendment(insight.content)
+          if (amendment) {
+            // Target the 'kernel' agent (general) — the preference applies broadly.
+            // Tag with the dream insight ID for traceability / rollback.
+            registerAmendment('kernel', amendment, `dream preference: ${insight.content.slice(0, 80)}`, insight.id)
+            result.promptAmendments++
+          }
         }
 
         result.preferencesApplied++
@@ -398,6 +444,15 @@ export function applyDreamInsights(insights: DreamInsight[]): ApplyResult {
         result.factsLearned++
         break
       }
+
+      case 'music': {
+        // Music production insights → context facts.
+        // These capture durable knowledge like "808 sub in F1 at 142 BPM works for trap"
+        // and feed back into the learning system for future prompt enrichment.
+        learnFact(insight.content, 'context', 'observed')
+        result.factsLearned++
+        break
+      }
     }
   }
 
@@ -408,6 +463,59 @@ export interface ApplyResult {
   preferencesApplied: number
   patternsHinted: number
   factsLearned: number
+  promptAmendments: number
+}
+
+/**
+ * Convert a preference insight into a concrete prompt amendment.
+ * Maps common preference patterns to actionable instructions for the agent.
+ * Returns null if no actionable amendment can be derived.
+ */
+function insightToAmendment(insightContent: string): string | null {
+  const lower = insightContent.toLowerCase()
+
+  // Speed / action-oriented preferences
+  if (/\b(?:speed|fast|quick|ship|action|just do it|don't ask)\b/.test(lower)) {
+    return 'Be action-oriented. Ship first, polish later. Don\'t ask for permission on non-destructive operations.'
+  }
+
+  // Conciseness preferences
+  if (/\b(?:concise|brief|short|terse|no fluff|straight to the point)\b/.test(lower)) {
+    return 'Keep responses concise. Lead with the answer or action. Skip preambles and restating the question.'
+  }
+
+  // Detail / thoroughness preferences
+  if (/\b(?:detailed|thorough|explain|verbose|show work|step.by.step)\b/.test(lower)) {
+    return 'Be thorough in explanations. Show reasoning steps. Include context and alternatives when relevant.'
+  }
+
+  // Code-first preferences
+  if (/\b(?:code.first|show.code|less.talk|implementation|no.theory)\b/.test(lower)) {
+    return 'Lead with code. Show the implementation first, then explain only if the user asks.'
+  }
+
+  // Terminal / CLI preferences
+  if (/\b(?:terminal|cli|command.line|shell|no.gui|no.web)\b/.test(lower)) {
+    return 'Prefer terminal-based solutions. Use CLI tools over web interfaces. Everything should be scriptable.'
+  }
+
+  // Safety / careful preferences
+  if (/\b(?:careful|safe|confirm|check.first|verify|double.check)\b/.test(lower)) {
+    return 'Verify before acting. Confirm destructive operations. Read files before editing. Run builds after changes.'
+  }
+
+  // Exploration / creative preferences
+  if (/\b(?:creative|explore|try.new|experiment|novel|unconventional)\b/.test(lower)) {
+    return 'Explore creative solutions. Consider unconventional approaches. Suggest alternatives the user might not have considered.'
+  }
+
+  // Fallback: use the insight content directly as a general behavioral nudge
+  // Only if the insight is short enough to be a useful prompt instruction
+  if (insightContent.length <= 200) {
+    return `User preference: ${insightContent}`
+  }
+
+  return null
 }
 
 /** Extract tech-related terms from insight text */
@@ -522,7 +630,9 @@ export async function dream(sessionId = 'default'): Promise<DreamResult> {
 
   if (rawInsights) {
     try {
-      const parsed = JSON.parse(rawInsights) as Array<{
+      // Strip markdown code fences if Ollama wraps the JSON
+      const cleaned = rawInsights.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim()
+      const parsed = JSON.parse(cleaned) as Array<{
         content: string
         category: DreamCategory
         keywords: string[]
@@ -566,7 +676,8 @@ export async function dream(sessionId = 'default'): Promise<DreamResult> {
 
     if (rawReinforce) {
       try {
-        const indices = JSON.parse(rawReinforce) as number[]
+        const cleanedR = rawReinforce.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim()
+        const indices = JSON.parse(cleanedR) as number[]
         if (Array.isArray(indices)) {
           const now = new Date().toISOString()
           for (const idx of indices) {

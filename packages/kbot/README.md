@@ -1,6 +1,8 @@
+# kbot
+
 <p align="center">
   <strong>kbot</strong><br>
-  Open-source terminal AI agent. 35 agents. 670+ tools. 20 providers. Science, finance, security, and more.
+  Open-source terminal AI agent. 35 agents. 686+ tools. 20 providers. Science, finance, security, and more.
 </p>
 
 <p align="center">
@@ -28,9 +30,34 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **Runs fully offline** — Embedded llama.cpp, Ollama, LM Studio, or Jan. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster over time.
 - **35 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, quant, and 30 more).
-- **670+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, and more.
+- **686+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, and more.
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
+
+## Highlights
+
+### Dream Engine — Your AI Remembers You
+
+After each session, kbot "dreams" — consolidating what it learned about you into durable insights using local Ollama models. $0 cost. Insights feed back into future sessions automatically.
+
+```
+kbot dream run        # Trigger consolidation
+kbot dream status     # See what kbot learned
+kbot dream journal    # Full insight history
+kbot dream search     # Find specific memories
+```
+
+5-tier memory: pattern cache -> solution index -> user profile -> dream journal -> passive scanner. All tiers feed each other through the dream engine.
+
+### Audit Any Repo in One Command
+
+```
+kbot audit facebook/react
+kbot audit --share vercel/next.js   # Creates a public Gist
+kbot audit --badge your/repo        # Badge for your README
+```
+
+Checks security, documentation, code quality, CI/CD, community health, and DevOps. Scored out of 100, graded A-F. Add the badge to your README.
 
 ### How it compares
 
@@ -38,7 +65,7 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 |---|---|---|---|---|---|
 | AI providers | 20 | 1 | 1 | 6 | 75+ |
 | Specialist agents | 35 | 0 | 0 | 0 | 0 |
-| Built-in tools | 600+ | ~20 | ~15 | ~10 | ~15 |
+| Built-in tools | 686+ | ~20 | ~15 | ~10 | ~15 |
 | Science tools | 114 | 0 | 0 | 0 | 0 |
 | Learning engine | Yes | No | No | No | No |
 | Offline mode | Embedded + Ollama | No | No | Ollama | Ollama |
@@ -91,7 +118,7 @@ kbot auto-routes to the right agent for each task. Or pick one with `--agent <na
 | **Domain** | infrastructure, quant, investigator, oracle, chronist, sage, communicator, adapter |
 | **Presets** | claude-code, cursor, copilot, creative, developer |
 
-## 600+ Tools
+## 686+ Tools
 
 | Category | Examples |
 |----------|---------|
@@ -183,7 +210,7 @@ graph TD
     D -->|Multi-step| F[Autonomous Planner]
     E --> G[Provider API + Tool Loop]
     F --> G
-    G --> H{600+ Tools}
+    G --> H{686+ Tools}
     H --> I[File ops, bash, git, GitHub, search, deploy, DB, game dev...]
     G --> J[Learning Engine]
     J --> K[Patterns + Solutions + User Profile]
@@ -216,7 +243,11 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim.
 | `kbot auth` | Configure API key |
 | `kbot local` | Use local AI (Ollama, embedded, LM Studio, Jan) |
 | `kbot serve` | Start HTTP REST + SSE streaming server |
-| `kbot audit <repo>` | Security + quality audit of any GitHub repo |
+| `kbot audit <repo>` | Security + quality audit of any GitHub repo (A-F grade) |
+| `kbot dream run` | Consolidate session learnings into durable insights |
+| `kbot dream status` | See what kbot has learned about you |
+| `kbot dream journal` | Full insight history |
+| `kbot dream search` | Find specific memories |
 | `kbot contribute <repo>` | Find good-first-issues and quick wins |
 | `kbot share` | Share conversation as GitHub Gist |
 | `kbot pair` | File watcher with auto-analysis |

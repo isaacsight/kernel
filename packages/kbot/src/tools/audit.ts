@@ -3,11 +3,12 @@
 // Security, code quality, documentation, dependency health — all in one report.
 // Designed to be shared. Every audit links back to kbot.
 
+import chalk from 'chalk'
 import { registerTool } from './index.js'
 
 const GITHUB_API = 'https://api.github.com'
 const HEADERS = {
-  'User-Agent': 'KBot/2.18 (Audit)',
+  'User-Agent': 'KBot/3.65 (Audit)',
   'Accept': 'application/vnd.github.v3+json',
 }
 
@@ -22,7 +23,7 @@ async function rawFetch(repo: string, path: string, branch = 'main'): Promise<st
     try {
       const res = await fetch(
         `https://raw.githubusercontent.com/${repo}/${b}/${path}`,
-        { headers: { 'User-Agent': 'KBot/2.18' } },
+        { headers: { 'User-Agent': 'KBot/3.65' } },
       )
       if (res.ok) return res.text()
     } catch { /* try next */ }
@@ -302,7 +303,7 @@ function formatAuditReport(result: AuditResult): string {
     `[![kbot audit: ${result.grade}](${badgeUrl})](https://www.npmjs.com/package/@kernel.chat/kbot)`,
     '```',
     '',
-    `*Audited by [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 25 specialist agents, 290+ tools, 20 AI providers*`,
+    `*Audited by [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 35 specialist agents, 686+ tools, 20 AI providers*`,
     `*Install: \`npm install -g @kernel.chat/kbot\` | Audit any repo: \`kbot audit owner/repo\`*`,
   )
 
@@ -319,6 +320,151 @@ function formatAuditSummary(result: AuditResult): string {
   else if (warns.length > 0) summary += ` — Needs work: ${warns.join(', ')}`
   else summary += ' — Clean bill of health'
   return summary
+}
+
+// ── Terminal-styled audit report (chalk) ──────────────────────────────────────
+
+const VIOLET = '#A78BFA'
+const GREEN = '#4ADE80'
+const YELLOW = '#FBBF24'
+const RED = '#F87171'
+const DIM = '#6B7280'
+const WHITE = '#F9FAFB'
+
+function gradeColor(grade: string): string {
+  if (grade === 'A') return GREEN
+  if (grade === 'B') return GREEN
+  if (grade === 'C') return YELLOW
+  if (grade === 'D') return YELLOW
+  return RED
+}
+
+function statusColor(status: string): string {
+  if (status === 'pass') return GREEN
+  if (status === 'warn') return YELLOW
+  return RED
+}
+
+function scoreBar(score: number, max: number, width = 20): string {
+  const pct = max > 0 ? score / max : 0
+  const filled = Math.round(pct * width)
+  const empty = width - filled
+  const color = pct >= 0.8 ? GREEN : pct >= 0.6 ? YELLOW : RED
+  return chalk.hex(color)('\u2588'.repeat(filled)) + chalk.hex(DIM)('\u2591'.repeat(empty))
+}
+
+function boxLine(content: string, width: number): string {
+  // Strip ANSI for length calculation
+  const stripped = content.replace(/\x1b\[[0-9;]*m/g, '')
+  const pad = Math.max(0, width - stripped.length - 4)
+  return chalk.hex(DIM)('\u2502') + ' ' + content + ' '.repeat(pad) + ' ' + chalk.hex(DIM)('\u2502')
+}
+
+function findingIcon(finding: string, _sectionStatus: string): string {
+  // Heuristic: positive findings get check, negative get appropriate icon
+  const negative = /^(no |missing |could not |stale |\.env NOT|not |high dep|default branch is NOT)/i
+  const warning = /^(readme is short|updated \d+d ago)/i
+  if (negative.test(finding)) return chalk.hex(RED)('\u2717')
+  if (warning.test(finding)) return chalk.hex(YELLOW)('\u26A0')
+  return chalk.hex(GREEN)('\u2713')
+}
+
+function formatAuditTerminal(result: AuditResult): string {
+  const pct = Math.round((result.score / result.maxScore) * 100)
+  const gc = gradeColor(result.grade)
+  const lines: string[] = []
+  const W = 60 // inner width
+
+  // ── Header box ──
+  const title = `AUDIT REPORT: ${result.repo}`
+  const titlePad = Math.max(0, W - title.length - 2)
+  const leftPad = Math.floor(titlePad / 2)
+  const rightPad = titlePad - leftPad
+
+  lines.push('')
+  lines.push(
+    chalk.hex(VIOLET)('\u256D') +
+    chalk.hex(VIOLET)('\u2500'.repeat(leftPad + 1)) +
+    chalk.hex(WHITE).bold(` ${title} `) +
+    chalk.hex(VIOLET)('\u2500'.repeat(rightPad + 1)) +
+    chalk.hex(VIOLET)('\u256E')
+  )
+
+  // Grade line inside box
+  const gradeLine = `  Grade ${chalk.hex(gc).bold(result.grade)}  ${chalk.hex(DIM)('\u2502')}  ${result.score}/${result.maxScore} (${pct}%)`
+  lines.push(boxLine(gradeLine, W + 4))
+
+  // Score bar inside box
+  const bar = scoreBar(result.score, result.maxScore, 30)
+  const barLine = `  ${bar}  ${chalk.hex(gc).bold(`${pct}%`)}`
+  lines.push(boxLine(barLine, W + 4))
+
+  // Summary inside box
+  lines.push(boxLine('', W + 4))
+  lines.push(boxLine(`  ${chalk.hex(WHITE)(result.summary)}`, W + 4))
+
+  // Close header box
+  lines.push(
+    chalk.hex(VIOLET)('\u2570') +
+    chalk.hex(VIOLET)('\u2500'.repeat(W + 2)) +
+    chalk.hex(VIOLET)('\u256F')
+  )
+  lines.push('')
+
+  // ── Sections ──
+  for (const section of result.sections) {
+    const sPct = section.maxScore > 0 ? Math.round((section.score / section.maxScore) * 100) : 0
+    const sc = statusColor(section.status)
+    const statusDot = section.status === 'pass'
+      ? chalk.hex(GREEN)('\u25CF')
+      : section.status === 'warn'
+        ? chalk.hex(YELLOW)('\u25CF')
+        : chalk.hex(RED)('\u25CF')
+
+    // Section header
+    lines.push(
+      `  ${statusDot} ${chalk.hex(WHITE).bold(section.name)}  ` +
+      chalk.hex(DIM)('\u2500'.repeat(Math.max(1, 40 - section.name.length))) +
+      `  ${scoreBar(section.score, section.maxScore, 12)} ` +
+      chalk.hex(sc).bold(`${sPct}%`)
+    )
+
+    // Findings
+    for (const f of section.findings) {
+      const icon = findingIcon(f, section.status)
+      lines.push(`    ${icon} ${chalk.hex(DIM)(f)}`)
+    }
+    lines.push('')
+  }
+
+  // ── Footer ──
+  const sep = chalk.hex(VIOLET)('\u2500'.repeat(W + 2))
+  lines.push(sep)
+  lines.push('')
+
+  // Badge markdown
+  const badgeColor = pct >= 80 ? 'brightgreen' : pct >= 60 ? 'yellow' : 'red'
+  const badgeUrl = `https://img.shields.io/badge/kbot_audit-${result.grade}_(${pct}%25)-${badgeColor}`
+  lines.push(chalk.hex(VIOLET).bold('  Add this badge to your README:'))
+  lines.push('')
+  lines.push(chalk.hex(DIM)(`  [![kbot audit: ${result.grade}](${badgeUrl})](https://www.npmjs.com/package/@kernel.chat/kbot)`))
+  lines.push('')
+
+  // Install CTA
+  lines.push(
+    chalk.hex(DIM)('  Audited by ') +
+    chalk.hex(VIOLET).bold('kbot') +
+    chalk.hex(DIM)(' \u2014 35 specialist agents, 686+ tools, 20 AI providers')
+  )
+  lines.push(
+    chalk.hex(DIM)('  Install: ') +
+    chalk.hex(WHITE)('npm install -g @kernel.chat/kbot') +
+    chalk.hex(DIM)('  |  Audit any repo: ') +
+    chalk.hex(WHITE)('kbot audit owner/repo')
+  )
+  lines.push('')
+
+  return lines.join('\n')
 }
 
 export function registerAuditTools(): void {
@@ -343,4 +489,4 @@ export function registerAuditTools(): void {
 }
 
 // Export for CLI subcommand
-export { auditRepo, formatAuditReport }
+export { auditRepo, formatAuditReport, formatAuditTerminal }
