@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-31T17:58:20.032Z",
+  "timestamp": "2026-04-01T00:09:33.634Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,43 +67,43 @@
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN: What are you building with AI coding agents / tooling?",
-      "url": "https://news.ycombinator.com/item?id=47590158",
+      "title": "Ask HN: Are you too getting addicted to the dev workflow of coding with agents?",
+      "url": "https://news.ycombinator.com/item?id=47594743",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "The ladder is missing rungs – Engineering Progression When AI Ate the Middle",
-      "url": "https://news.ycombinator.com/item?id=47581760",
+      "title": "Slop is not necessarily the future",
+      "url": "https://news.ycombinator.com/item?id=47592049",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "AI overly affirms users asking for personal advice",
-      "url": "https://news.ycombinator.com/item?id=47575214",
+      "title": "Good code will still win",
+      "url": "https://news.ycombinator.com/item?id=47591227",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "github-issue",
+      "title": "Add AI Chrome SaaS Tool landing page",
+      "url": "https://github.com/nisarllc206-sys/Chrome-sas-landing-page-repo-nisarllc206/pull/1",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Build MCP Server for BlackVault",
+      "url": "https://github.com/venkat22022202/black-vault/issues/11",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
       "title": "Add `memory-tool serve` HTTP API mode",
       "url": "https://github.com/kobie3717/ai-iq/issues/3",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] Modal safety issues detected",
-      "url": "https://github.com/kubestellar/console/issues/3953",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] ARIA label and role gaps detected",
-      "url": "https://github.com/kubestellar/console/issues/3951",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Feat/predictive plugins",
-      "url": "https://github.com/openclaw/openclaw/pull/58500",
+      "title": "chore(deps): bump the npm_and_yarn group across 3 directories with 5 updates",
+      "url": "https://github.com/polaris-dxz/xclaw/pull/22",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat: feishu comment event",
-      "url": "https://github.com/openclaw/openclaw/pull/58497",
+      "title": "feat(mistral): add Voxtral TTS support",
+      "url": "https://github.com/openclaw/openclaw/pull/58607",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "chore(ci): audit copilot/pr-test workflow surface and finalize branch cleanup plan",
-      "url": "https://github.com/Mlightsnow/openclaw/pull/2",
+      "title": "Upgrade GWS toolkit to Phase 2 route-aware writes",
+      "url": "https://github.com/hughdidit/DAISy-Agency/pull/269",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "So i tried Karis CLI",
+      "url": "https://reddit.com/r/commandline/comments/1s90ntr/so_i_tried_karis_cli/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "syntropy - lua plugin powered launcher",
       "url": "https://reddit.com/r/commandline/comments/1s8kqot/syntropy_lua_plugin_powered_launcher/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,10 +192,10 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "What website do you wish had a CLI?",
-      "url": "https://reddit.com/r/commandline/comments/1s6sj8r/what_website_do_you_wish_had_a_cli/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "Is the Mirage Effect a bug, or is it Geometric Reconstruction in action?\nA framework for why VLMs perform better \"hallucinating\" than guessing, and what that may tell us about what's really inside these models",
+      "url": "https://reddit.com/r/artificial/comments/1s91dsr/is_the_mirage_effect_a_bug_or_is_it_geometric/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "What happens when AI agents can earn and spend real money? I built a small test to find out",
       "url": "https://reddit.com/r/artificial/comments/1s8luvc/what_happens_when_ai_agents_can_earn_and_spend/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Built an Event Kernel for Agent OSes that Coordinates Under Load: Real-Time Events, Replayable Logs, TTL subs, No Deadlocks",
-      "url": "https://reddit.com/r/artificial/comments/1s8fzjg/built_an_event_kernel_for_agent_oses_that/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

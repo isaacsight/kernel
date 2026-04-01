@@ -1,9 +1,108 @@
 {
-  "timestamp": "2026-03-31T17:58:16.438Z",
+  "timestamp": "2026-04-01T00:09:30.025Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "siegers"
+            },
+            "story_text": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Inspired by the 1996 original. Your care choices shape who your pet becomes."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Show HN: Tama96 – A virtual pet for your desktop, <em>terminal</em>, or <em>AI</em> <em>agent</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.tama96.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_siegers",
+            "story_47593955",
+            "show_hn"
+          ],
+          "author": "siegers",
+          "children": [
+            47594034
+          ],
+          "created_at": "2026-03-31T21:50:47Z",
+          "created_at_i": 1774993847,
+          "num_comments": 0,
+          "objectID": "47593955",
+          "points": 4,
+          "story_id": 47593955,
+          "story_text": "Inspired by the 1996 original. Your care choices shape who your pet becomes.",
+          "title": "Show HN: Tama96 – A virtual pet for your desktop, terminal, or AI agent",
+          "updated_at": "2026-03-31T22:10:56Z",
+          "url": "https://www.tama96.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "bcollins34"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "For the last year we've been building an <em>AI</em> mobile app builder. Last week we decided to generalize our <em>agent</em> harness and benchmark it against vanilla Claude Code. Turns out the tools we built for app building were significantly more efficient than the native Claude Code tools. When we ran benchmarks we beat Claude code on speed (~40% faster) , cost (25-55% cheaper) and performance (+17% on <em>Terminal</em> Bench 2.0). Today we're making our <em>agent</em> harness publicly available as a Claude Code plugin.<p>Use code WOZCODE1 to try it for $1 at wozcode.com"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Wozcode – double Claude Code output"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.wozcode.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_bcollins34",
+            "story_47591997",
+            "show_hn"
+          ],
+          "author": "bcollins34",
+          "children": [
+            47592631,
+            47592298
+          ],
+          "created_at": "2026-03-31T19:07:11Z",
+          "created_at_i": 1774984031,
+          "num_comments": 2,
+          "objectID": "47591997",
+          "points": 4,
+          "story_id": 47591997,
+          "story_text": "For the last year we&#x27;ve been building an AI mobile app builder. Last week we decided to generalize our agent harness and benchmark it against vanilla Claude Code. Turns out the tools we built for app building were significantly more efficient than the native Claude Code tools. When we ran benchmarks we beat Claude code on speed (~40% faster) , cost (25-55% cheaper) and performance (+17% on Terminal Bench 2.0). Today we&#x27;re making our agent harness publicly available as a Claude Code plugin.<p>Use code WOZCODE1 to try it for $1 at wozcode.com",
+          "title": "Show HN: Wozcode – double Claude Code output",
+          "updated_at": "2026-03-31T20:56:13Z",
+          "url": "https://www.wozcode.com/"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -19,7 +118,7 @@
                 "agent",
                 "terminal"
               ],
-              "value": "We built an arena for comparing <em>AI</em> models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>*The problem:* Chatbot Arena tests conversation quality. But most people using <em>AI</em> <em>agents</em> need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There's no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>*What we built:* OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw <em>agent</em> (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to <em>terminal</em>, browser, file system, and code execution.<p>Results feed into two live leaderboards:\n- *Performance* — which model produces the best results\n- *Cost-effectiveness* — which model delivers the best quality per dollar<p>*What we've found (after 300+ battles, 15 models):*<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn't expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>*Methodology:* We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7/10&quot; in one battle might be &quot;6/10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/leaderboard/methodology?via=hn</a><p>*Key features:*\n- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking\n- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add\n- Fresh VM per benchmark with one subagent per model\n- User-selectable judge model\n- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users\n- Full transparency: you can evaluate the output yourself, not just trust the score\n- Open-source judge skill: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/<em>agent</em>-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https://app.uniclaw.ai/arena?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena?via=hn</a>\n- Submit a battle: <a href=\"https://app.uniclaw.ai/arena/new?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/new?via=hn</a> (free account required)\n- Methodology: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/leaderboard/methodology?via=hn</a>\n- Judge skill source: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/<em>agent</em>-ben...</a><p>We'd love feedback on the methodology and what tasks you'd want to see benchmarked."
+              "value": "We built an arena for comparing <em>AI</em> models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>The problem: Chatbot Arena tests conversation quality. But most people using <em>AI</em> <em>agents</em> need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There's no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>What we built: OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw <em>agent</em> (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to <em>terminal</em>, browser, file system, and code execution.<p>Results feed into two live leaderboards:<p>- Performance — which model produces the best results<p>- Cost-effectiveness — which model delivers the best quality per dollar<p>What we've found (after 300+ battles, 15 models):<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn't expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>Methodology: We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7/10&quot; in one battle might be &quot;6/10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/leaderboard/methodology?via=hn</a><p>Key features:<p>- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking<p>- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add<p>- Fresh VM per benchmark with one subagent per model<p>- User-selectable judge model<p>- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users<p>- Full transparency: you can evaluate the output yourself, not just trust the score<p>- Open-source judge skill: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/<em>agent</em>-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https://app.uniclaw.ai/arena?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena?via=hn</a><p>- Submit a battle: <a href=\"https://app.uniclaw.ai/arena/new?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/new?via=hn</a> (free account required)<p>- Methodology: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/leaderboard/methodology?via=hn</a><p>- Judge skill source: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/<em>agent</em>-ben...</a><p>We'd love feedback on the methodology and what tasks you'd want to see benchmarked."
             },
             "title": {
               "matchLevel": "none",
@@ -46,11 +145,11 @@
           "created_at_i": 1774979535,
           "num_comments": 0,
           "objectID": "47591066",
-          "points": 1,
+          "points": 2,
           "story_id": 47591066,
-          "story_text": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>*The problem:* Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There&#x27;s no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>*What we built:* OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:\n- *Performance* — which model produces the best results\n- *Cost-effectiveness* — which model delivers the best quality per dollar<p>*What we&#x27;ve found (after 300+ battles, 15 models):*<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn&#x27;t expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>*Methodology:* We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7&#x2F;10&quot; in one battle might be &quot;6&#x2F;10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>*Key features:*\n- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking\n- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add\n- Fresh VM per benchmark with one subagent per model\n- User-selectable judge model\n- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users\n- Full transparency: you can evaluate the output yourself, not just trust the score\n- Open-source judge skill: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn</a>\n- Submit a battle: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn</a> (free account required)\n- Methodology: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a>\n- Judge skill source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>We&#x27;d love feedback on the methodology and what tasks you&#x27;d want to see benchmarked.",
+          "story_text": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>The problem: Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There&#x27;s no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>What we built: OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:<p>- Performance — which model produces the best results<p>- Cost-effectiveness — which model delivers the best quality per dollar<p>What we&#x27;ve found (after 300+ battles, 15 models):<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn&#x27;t expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>Methodology: We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7&#x2F;10&quot; in one battle might be &quot;6&#x2F;10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>Key features:<p>- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking<p>- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add<p>- Fresh VM per benchmark with one subagent per model<p>- User-selectable judge model<p>- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users<p>- Full transparency: you can evaluate the output yourself, not just trust the score<p>- Open-source judge skill: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn</a><p>- Submit a battle: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn</a> (free account required)<p>- Methodology: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>- Judge skill source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>We&#x27;d love feedback on the methodology and what tasks you&#x27;d want to see benchmarked.",
           "title": "Show HN: OpenClaw Arena – Benchmark models on real tasks, rank by perf and cost",
-          "updated_at": "2026-03-31T17:53:28Z",
+          "updated_at": "2026-03-31T18:02:11Z",
           "url": "https://app.uniclaw.ai/arena?via=hn"
         },
         {
@@ -141,114 +240,64 @@
           "title": "Show HN: Epismo CLI – Make human-AI workflows reusable, like GitHub did for code",
           "updated_at": "2026-03-28T15:15:12Z",
           "url": "https://www.npmjs.com/package/epismo"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "jwatters"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "We've been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The <em>AI</em> that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an <em>AI</em> <em>agent</em>. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it's a native app with a Metal compositor.<p>It's not a chatbot wrapper, it's closer to a full OS where the <em>AI</em> is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a <em>terminal</em> in the workshop, same <em>agent</em>, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, <em>terminal</em>, music, messages. The <em>AI</em> doesn't need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It's the same <em>agent</em> with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the <em>agent</em> a role (personality, permissions, context) and schedule it on a cron — we call these missions. The <em>agent</em> can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, <em>terminal</em>, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is <em>AI</em>-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon / your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI / MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https://www.youtube.com/watch?v=40TyKAKNvJc\" rel=\"nofollow\">https://www.youtube.com/watch?v=40TyKAKNvJc</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "Show HN: Kora – An <em>AI</em>-native OS layer written in 370k lines of Rust"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://intuitivecompute.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_jwatters",
-            "story_47531594",
-            "show_hn"
-          ],
-          "author": "jwatters",
-          "children": [
-            47539124
-          ],
-          "created_at": "2026-03-26T15:18:33Z",
-          "created_at_i": 1774538313,
-          "num_comments": 0,
-          "objectID": "47531594",
-          "points": 3,
-          "story_id": 47531594,
-          "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
-          "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
-          "updated_at": "2026-03-27T04:31:36Z",
-          "url": "https://intuitivecompute.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "isaacsight"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "I built kbot — a <em>terminal</em> <em>AI</em> <em>agent</em> that learns from every session and forges new tools when it hits problems it can't solve.<p>What makes it different: Self-improving (Bayesian skill routing gets smarter over time). Tool forging (encounters a gap, builds a tool, tool persists forever). Self-defense (HMAC memory integrity, prompt injection detection). 368 tools, 41 agents, 19 local models. Fully offline, $0. Dream mode (improves itself while idle). MIT licensed.<p>Demo of kbot forging a tool in 30 seconds: <a href=\"https://raw.githubusercontent.com/isaacsight/kernel/main/tools/video-assets/demo-forge-real.gif\" rel=\"nofollow\">https://raw.githubusercontent.com/isaacsight/kernel/main/too...</a><p>npm install -g @kernel.chat/kbot"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai",
-                "agent"
-              ],
-              "value": "Show HN: Kbot – <em>AI</em> <em>agent</em> that forges its own tools at runtime (MIT, $0)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/isaacsight/kernel"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_isaacsight",
-            "story_47526475",
-            "show_hn"
-          ],
-          "author": "isaacsight",
-          "created_at": "2026-03-26T03:54:19Z",
-          "created_at_i": 1774497259,
-          "num_comments": 0,
-          "objectID": "47526475",
-          "points": 2,
-          "story_id": 47526475,
-          "story_text": "I built kbot — a terminal AI agent that learns from every session and forges new tools when it hits problems it can&#x27;t solve.<p>What makes it different: Self-improving (Bayesian skill routing gets smarter over time). Tool forging (encounters a gap, builds a tool, tool persists forever). Self-defense (HMAC memory integrity, prompt injection detection). 368 tools, 41 agents, 19 local models. Fully offline, $0. Dream mode (improves itself while idle). MIT licensed.<p>Demo of kbot forging a tool in 30 seconds: <a href=\"https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;tools&#x2F;video-assets&#x2F;demo-forge-real.gif\" rel=\"nofollow\">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;too...</a><p>npm install -g @kernel.chat&#x2F;kbot",
-          "title": "Show HN: Kbot – AI agent that forges its own tools at runtime (MIT, $0)",
-          "updated_at": "2026-03-26T17:03:06Z",
-          "url": "https://github.com/isaacsight/kernel"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "NarratorTD"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Hey HN! I built Domscribe to solve a problem that was eating my productivity.<p>I spend a lot of my time working with AI <em>coding</em> <em>agents</em>. The thing that kept eating at my productivity though was that every time I asked an <em>agent</em> to fix something on the frontend, the actual edit took maybe 200 tokens. But before that happened, the <em>agent</em> would go on this whole journey, grepping through the codebase and at times having to backtrack. That search loop could burn 5,000-10,000 tokens before a single line of code changed.<p>The <em>agent</em> has zero awareness of what's actually rendering in the browser because the rendered DOM and the <em>source</em> tree are two completely different topologies. So I started thinking about this differently; what if we could optimize a solution to the search problem by giving the <em>agents</em> the right context? What if every DOM element already knew exactly where it came from in <em>source</em>?<p>That's the core idea behind Domscribe. At build time, an AST transform walks your JSX and Vue templates, assigns every element a deterministic ID via xxhash64 content hashing, and writes a manifest mapping each ID to its exact file, line, and column. The IDs are stable across HMR; same file content and element position always produces the same ID. At runtime, framework adapters walk the React fiber tree or inspect Vue VNodes to capture live props, state, and component metadata. A local relay daemon connects the browser and your <em>agent</em> via MCP.<p>The result is two workflows that didn't exist before. Your <em>agent</em> can query any <em>source</em> location and get back only what's actually rendering there; live DOM snapshot, props, state, the works. And from the other direction, you can click any element in the browser overlay, type &quot;make this button use the primary color&quot; in plain English, and Domscribe resolves the exact file:line:col so your <em>agent</em> edits the right file on the first try.<p>(I should mention that the overlay runs as Lit web components inside shadow DOM, specifically so it can't mess with your app's styles.)<p>One thing I'm genuinely proud of is the architecture. I spent a LOT of time making sure this wasn't just a tool that works for React-and-Vite-and-nothing-else. The transform layer has a ParserInterface that the injector consumes without knowing which parser produced the AST (the Acorn, Babel, and Vue SFC parsers are all implementations of the same interface), and the ID injection logic is completely abstracted away. Adding a new template syntax (Lit, Svelte, Stencil) means implementing one interface. On the runtime side, a FrameworkAdapter interface defines methods such as captureProps, captureState, and getComponentInstance; and the React and Vue adapters are built on the same public interface that any community contributor would use. No internal escape hatches.<p>I took the same approach with bundler support (Vite, Webpack, Turbopack) and <em>agent</em> support (Claude Code, Cursor, GitHub Copilot CLI, Gemini CLI - all via first-party plugins that bundle the MCP config and a skill file). But the MCP layer means any compatible <em>agent</em> works out of the box.<p>PII redaction is built in and on by default. All captured data passes through pattern matching for emails, phone numbers, API keys, JWTs etc. before it leaves the browser.<p>Everything is stripped in production builds; zero data-ds attributes and zero overlay scripts. It's enforced by CI tests that run against every real fixture. (Speaking of tests: the entire integration and e2e suite runs against real published packages via a local Verdaccio registry. )<p>Anyway, MIT licensed, fully <em>open</em> <em>source</em>, the whole codebase is right there on GitHub. I'd genuinely love feedback on the architecture and the approach. And I'm especially curious if anyone has thoughts on extending the ParserInterface to other template syntaxes; that's the piece I'm most excited about people contributing to."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Show HN: Domscribe – Deterministic DOM-to-<em>source</em> mapping for AI <em>coding</em> <em>agents</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/patchorbit/domscribe"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_NarratorTD",
+            "story_47591487",
+            "show_hn"
+          ],
+          "author": "NarratorTD",
+          "created_at": "2026-03-31T18:26:14Z",
+          "created_at_i": 1774981574,
+          "num_comments": 0,
+          "objectID": "47591487",
+          "points": 2,
+          "story_id": 47591487,
+          "story_text": "Hey HN! I built Domscribe to solve a problem that was eating my productivity.<p>I spend a lot of my time working with AI coding agents. The thing that kept eating at my productivity though was that every time I asked an agent to fix something on the frontend, the actual edit took maybe 200 tokens. But before that happened, the agent would go on this whole journey, grepping through the codebase and at times having to backtrack. That search loop could burn 5,000-10,000 tokens before a single line of code changed.<p>The agent has zero awareness of what&#x27;s actually rendering in the browser because the rendered DOM and the source tree are two completely different topologies. So I started thinking about this differently; what if we could optimize a solution to the search problem by giving the agents the right context? What if every DOM element already knew exactly where it came from in source?<p>That&#x27;s the core idea behind Domscribe. At build time, an AST transform walks your JSX and Vue templates, assigns every element a deterministic ID via xxhash64 content hashing, and writes a manifest mapping each ID to its exact file, line, and column. The IDs are stable across HMR; same file content and element position always produces the same ID. At runtime, framework adapters walk the React fiber tree or inspect Vue VNodes to capture live props, state, and component metadata. A local relay daemon connects the browser and your agent via MCP.<p>The result is two workflows that didn&#x27;t exist before. Your agent can query any source location and get back only what&#x27;s actually rendering there; live DOM snapshot, props, state, the works. And from the other direction, you can click any element in the browser overlay, type &quot;make this button use the primary color&quot; in plain English, and Domscribe resolves the exact file:line:col so your agent edits the right file on the first try.<p>(I should mention that the overlay runs as Lit web components inside shadow DOM, specifically so it can&#x27;t mess with your app&#x27;s styles.)<p>One thing I&#x27;m genuinely proud of is the architecture. I spent a LOT of time making sure this wasn&#x27;t just a tool that works for React-and-Vite-and-nothing-else. The transform layer has a ParserInterface that the injector consumes without knowing which parser produced the AST (the Acorn, Babel, and Vue SFC parsers are all implementations of the same interface), and the ID injection logic is completely abstracted away. Adding a new template syntax (Lit, Svelte, Stencil) means implementing one interface. On the runtime side, a FrameworkAdapter interface defines methods such as captureProps, captureState, and getComponentInstance; and the React and Vue adapters are built on the same public interface that any community contributor would use. No internal escape hatches.<p>I took the same approach with bundler support (Vite, Webpack, Turbopack) and agent support (Claude Code, Cursor, GitHub Copilot CLI, Gemini CLI - all via first-party plugins that bundle the MCP config and a skill file). But the MCP layer means any compatible agent works out of the box.<p>PII redaction is built in and on by default. All captured data passes through pattern matching for emails, phone numbers, API keys, JWTs etc. before it leaves the browser.<p>Everything is stripped in production builds; zero data-ds attributes and zero overlay scripts. It&#x27;s enforced by CI tests that run against every real fixture. (Speaking of tests: the entire integration and e2e suite runs against real published packages via a local Verdaccio registry. )<p>Anyway, MIT licensed, fully open source, the whole codebase is right there on GitHub. I&#x27;d genuinely love feedback on the architecture and the approach. And I&#x27;m especially curious if anyone has thoughts on extending the ParserInterface to other template syntaxes; that&#x27;s the piece I&#x27;m most excited about people contributing to.",
+          "title": "Show HN: Domscribe – Deterministic DOM-to-source mapping for AI coding agents",
+          "updated_at": "2026-03-31T19:25:11Z",
+          "url": "https://github.com/patchorbit/domscribe"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -292,11 +341,11 @@
           "created_at_i": 1774969359,
           "num_comments": 2,
           "objectID": "47588383",
-          "points": 12,
+          "points": 13,
           "story_id": 47588383,
           "story_text": "We just open-sourced CargoWall - a lightweight eBPF firewall for GitHub Actions.<p>We originally built it to stop LLM agents from connecting to untrusted domains. After recent GitHub Actions supply chain compromises like the Trivy attack, we realized it&#x27;d work well for blocking untrusted connections from CI runners too.<p>It uses iptables DNAT to redirect all outbound port 53 traffic to a local DNS proxy, which checks each query against a hostname allowlist before forwarding. Resolved IPs from allowed responses are inserted into eBPF LPM trie maps, and a TC egress classifier attached to the network interface drops any packet whose destination IP&#x2F;protocol&#x2F;port isn&#x27;t in the trie.<p>Cgroup hooks capture every socket connect&#x2F;sendmsg call system-wide, mapping the socket cookie to the process to correlate where connections are coming from. It then correlates the connection times with steps to provide a summary of which connections originated from which steps.<p>ubuntu-latest and ubuntu-24.04 runners are supported. Simple one-step setup example:<p><pre><code>  uses: code-cargo&#x2F;cargowall-action@v1   # or v1.0.0 for immutable tag\n  with:\n    mode: enforce\n    allowed-hosts: |\n      registry.npmjs.org\n</code></pre>\neBPF Program: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall</a><p>GitHub Action: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall-action\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall-action</a><p>We&#x27;d love for you to give it a try! Happy to answer questions or take feedback.",
           "title": "Show HN: CargoWall – eBPF Firewall for GitHub Actions",
-          "updated_at": "2026-03-31T17:14:25Z",
+          "updated_at": "2026-03-31T18:59:11Z",
           "url": "https://github.com/code-cargo/cargowall-action"
         },
         {
@@ -450,58 +499,6 @@
           "title": "Show HN: /slot-machine development (CC vs. Codex; CE vs. superpowers)",
           "updated_at": "2026-03-29T22:45:48Z",
           "url": "https://github.com/pejmanjohn/slot-machine"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "zdenham"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Very excited to share Anvil. I built Anvil to take back control when working with parallel <em>coding</em> <em>agents</em>. It comes with one click worktree isolation, and first class spec support.<p>Claude Code and similar <em>coding</em> TUIs are very eager to get into writing code, even before their human baby sitter fully understands the implication of what they are about to build.<p>The core insight with Anvil is that it is much easier to write high quality code which matches the author's intent after iterating on an external plan with your <em>agent</em>.<p>Align on the architecture, implementation, and verification strategy in a markdown file, then execution is pretty straightforward.<p>This is not a new concept, but the user experience within TUI apps for this workflow is pretty shit. Claude creates non-semantic plan names like &quot;aquamarine-owl&quot; that are trapped within a single <em>agent</em> context. Spinning up multiple <em>agents</em> to check on different aspects of a plan is annoying and slow, and managing terminal tabs is pure hell.<p>So I built anvil, this is a fully <em>open</em> <em>source</em> (MIT license) project."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Anvil – Desktop App for Spec Driven Development"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/zdenham/anvil"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_zdenham",
-            "story_47546925",
-            "show_hn"
-          ],
-          "author": "zdenham",
-          "children": [
-            47562076,
-            47562074,
-            47547075
-          ],
-          "created_at": "2026-03-27T19:07:56Z",
-          "created_at_i": 1774638476,
-          "num_comments": 0,
-          "objectID": "47546925",
-          "points": 10,
-          "story_id": 47546925,
-          "story_text": "Very excited to share Anvil. I built Anvil to take back control when working with parallel coding agents. It comes with one click worktree isolation, and first class spec support.<p>Claude Code and similar coding TUIs are very eager to get into writing code, even before their human baby sitter fully understands the implication of what they are about to build.<p>The core insight with Anvil is that it is much easier to write high quality code which matches the author&#x27;s intent after iterating on an external plan with your agent.<p>Align on the architecture, implementation, and verification strategy in a markdown file, then execution is pretty straightforward.<p>This is not a new concept, but the user experience within TUI apps for this workflow is pretty shit. Claude creates non-semantic plan names like &quot;aquamarine-owl&quot; that are trapped within a single agent context. Spinning up multiple agents to check on different aspects of a plan is annoying and slow, and managing terminal tabs is pure hell.<p>So I built anvil, this is a fully open source (MIT license) project.",
-          "title": "Show HN: Anvil – Desktop App for Spec Driven Development",
-          "updated_at": "2026-03-29T17:48:47Z",
-          "url": "https://github.com/zdenham/anvil"
         }
       ]
     },
@@ -758,6 +755,131 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "nyku"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I often use LLMs to automate different workflows, some of which include browsing the web and gathering data. At some point I started noticing a few things that <em>bot</em>hered me: the browser interactions were clunky, as if the agent was struggling to &quot;see&quot; and understand the page, and as a result, many tokens were wasted. Same for knowing when the page is actually ready or not.<p>I started digging deeper and at some point I just bluntly asked in the Cursor chat the following question: &quot;I ask you, as an LLM that uses these headless browsers, what do you wish people would build to make your work easier?&quot;<p>And it worked because I expanded the &quot;Thinking&quot; section and I saw: &quot;The user is asking me a really interesting meta-question ...&quot; and after that it just listed top 10 most painful issues related to the agent&lt;-&gt;browser interaction.<p>So I started building a browser API that returns what LLMs actually need, not what browsers return.<p>Fast forward a few weeks and here we are. A REST API built specifically to help LLMs interact with real browsers.<p>Instead of reading raw HTML, you get markdown, page map, short refs (e1, e2) for clicking instead of CSS selectors, a stable flag when the page is ready, diffs after each step, the list of all interactive elements (links, buttons, inputs), automatic blocker dismissal and a small extract step that returns structured JSON from a schema you describe.<p>Official SDKs for Python, TypeScript, Ruby. MCP server for Cursor and Claude Desktop.<p>Would appreciate any feedback, especially on the API design."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Browserbeam – a browser API built for AI agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://browserbeam.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_nyku",
+            "story_47594050",
+            "show_hn"
+          ],
+          "author": "nyku",
+          "created_at": "2026-03-31T22:01:20Z",
+          "created_at_i": 1774994480,
+          "num_comments": 0,
+          "objectID": "47594050",
+          "points": 2,
+          "story_id": 47594050,
+          "story_text": "I often use LLMs to automate different workflows, some of which include browsing the web and gathering data. At some point I started noticing a few things that bothered me: the browser interactions were clunky, as if the agent was struggling to &quot;see&quot; and understand the page, and as a result, many tokens were wasted. Same for knowing when the page is actually ready or not.<p>I started digging deeper and at some point I just bluntly asked in the Cursor chat the following question: &quot;I ask you, as an LLM that uses these headless browsers, what do you wish people would build to make your work easier?&quot;<p>And it worked because I expanded the &quot;Thinking&quot; section and I saw: &quot;The user is asking me a really interesting meta-question ...&quot; and after that it just listed top 10 most painful issues related to the agent&lt;-&gt;browser interaction.<p>So I started building a browser API that returns what LLMs actually need, not what browsers return.<p>Fast forward a few weeks and here we are. A REST API built specifically to help LLMs interact with real browsers.<p>Instead of reading raw HTML, you get markdown, page map, short refs (e1, e2) for clicking instead of CSS selectors, a stable flag when the page is ready, diffs after each step, the list of all interactive elements (links, buttons, inputs), automatic blocker dismissal and a small extract step that returns structured JSON from a schema you describe.<p>Official SDKs for Python, TypeScript, Ruby. MCP server for Cursor and Claude Desktop.<p>Would appreciate any feedback, especially on the API design.",
+          "title": "Show HN: Browserbeam – a browser API built for AI agents",
+          "updated_at": "2026-03-31T22:11:28Z",
+          "url": "https://browserbeam.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "a6kme"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "TL;DR: Dograh is an open-source platform to build voice AI agents with drag-and-drop workflows. New in v1.20: Gemini 3.1 live support, Pre-recorded audio support for lower latency and more natural responses. Fully self-hostable, no vendor lock-in.<p>Hi HN,<p>We’re the Dograh team (YC alumni). While building voice <em>bot</em>s, we found that wiring WebRTC/ Telephony + STT + LLM + TTS took more time than the <em>bot</em>s themselves. Teams are spending weeks on plumbing - handling call flows, extracting variables, dealing with telephony edge cases, and redeploying for small changes.\nTools like Vapi/Retell are easy to start with but come with lock-in and platform fees. So we built Dograh: a 100% open-source platform that handles the full stack, with a visual workflow builder and self-hosting by default.<p>Dograh v1.20 introduces two major additions:\n1. Gemini 3.1 Live support\n Run fully real-time voice agents using Gemini’s streaming APIs, without stitching together separate STT + LLM + TTS components.\n2. Pre-recorded audio (hybrid voice)\n Upload real voice clips (greetings, confirmations, etc.), and the agent plays them instantly while using TTS only for dynamic responses. This reduces latency, improves naturalness, and cuts TTS costs.<p>It also includes:<p>- Plug-and-play LLM / STT / TTS (including self-hosted models)\n- Telephony integrations (Twilio, Vonage, Telnyx) along with Call Transfer\n- Post-call QA, transcripts, and variable extraction\n- Observability via Langfuse (OpenTelemetry traces + prompt playground)<p>Try it now: If you have Docker, you can run the below command for a 2-minute setup (no API keys needed out of the box).<p><a href=\"https://gist.github.com/a6kme/072252bf885270787bbb8376687c67f6\" rel=\"nofollow\">https://gist.github.com/a6kme/072252bf885270787bbb8376687c67...</a> [ sorry, HN wont let me post the entire command ]<p>Looking Ahead: We’re expanding self-hosted model support: you can already bring any LLM (e.g. Llama, Qwen) or TTS (Kokoro, Voxtral) by configuring API endpoints. We are working on updates that will enable anyone to run \neverything on a single server - your AI models along with Dograh Orchestration.<p>Looking forward to hearing thoughts of the community."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Dograh – voice agents that pick Recordings over TTS using LLM"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/dograh-hq/dograh"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_a6kme",
+            "story_47591510",
+            "show_hn"
+          ],
+          "author": "a6kme",
+          "created_at": "2026-03-31T18:28:27Z",
+          "created_at_i": 1774981707,
+          "num_comments": 0,
+          "objectID": "47591510",
+          "points": 2,
+          "story_id": 47591510,
+          "story_text": "TL;DR: Dograh is an open-source platform to build voice AI agents with drag-and-drop workflows. New in v1.20: Gemini 3.1 live support, Pre-recorded audio support for lower latency and more natural responses. Fully self-hostable, no vendor lock-in.<p>Hi HN,<p>We’re the Dograh team (YC alumni). While building voice bots, we found that wiring WebRTC&#x2F; Telephony + STT + LLM + TTS took more time than the bots themselves. Teams are spending weeks on plumbing - handling call flows, extracting variables, dealing with telephony edge cases, and redeploying for small changes.\nTools like Vapi&#x2F;Retell are easy to start with but come with lock-in and platform fees. So we built Dograh: a 100% open-source platform that handles the full stack, with a visual workflow builder and self-hosting by default.<p>Dograh v1.20 introduces two major additions:\n1. Gemini 3.1 Live support\n Run fully real-time voice agents using Gemini’s streaming APIs, without stitching together separate STT + LLM + TTS components.\n2. Pre-recorded audio (hybrid voice)\n Upload real voice clips (greetings, confirmations, etc.), and the agent plays them instantly while using TTS only for dynamic responses. This reduces latency, improves naturalness, and cuts TTS costs.<p>It also includes:<p>- Plug-and-play LLM &#x2F; STT &#x2F; TTS (including self-hosted models)\n- Telephony integrations (Twilio, Vonage, Telnyx) along with Call Transfer\n- Post-call QA, transcripts, and variable extraction\n- Observability via Langfuse (OpenTelemetry traces + prompt playground)<p>Try it now: If you have Docker, you can run the below command for a 2-minute setup (no API keys needed out of the box).<p><a href=\"https:&#x2F;&#x2F;gist.github.com&#x2F;a6kme&#x2F;072252bf885270787bbb8376687c67f6\" rel=\"nofollow\">https:&#x2F;&#x2F;gist.github.com&#x2F;a6kme&#x2F;072252bf885270787bbb8376687c67...</a> [ sorry, HN wont let me post the entire command ]<p>Looking Ahead: We’re expanding self-hosted model support: you can already bring any LLM (e.g. Llama, Qwen) or TTS (Kokoro, Voxtral) by configuring API endpoints. We are working on updates that will enable anyone to run \neverything on a single server - your AI models along with Dograh Orchestration.<p>Looking forward to hearing thoughts of the community.",
+          "title": "Show HN: Dograh – voice agents that pick Recordings over TTS using LLM",
+          "updated_at": "2026-03-31T19:02:26Z",
+          "url": "https://github.com/dograh-hq/dograh"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "seawolf2357"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "The Child That Surpassed <em>Bot</em>h Parents Through MRI-Guided Evolutionary Merge"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://huggingface.co/blog/FINAL-Bench/darwin-evolution"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_seawolf2357",
+            "story_47591196"
+          ],
+          "author": "seawolf2357",
+          "created_at": "2026-03-31T18:02:06Z",
+          "created_at_i": 1774980126,
+          "num_comments": 0,
+          "objectID": "47591196",
+          "points": 1,
+          "story_id": 47591196,
+          "title": "The Child That Surpassed Both Parents Through MRI-Guided Evolutionary Merge",
+          "updated_at": "2026-03-31T18:03:58Z",
+          "url": "https://huggingface.co/blog/FINAL-Bench/darwin-evolution"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "skysniper"
             },
             "story_text": {
@@ -766,7 +888,7 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>*The problem:* Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There's no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on <em>bot</em>h quality and cost-effectiveness.<p>*What we built:* OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:\n- *Performance* — which model produces the best results\n- *Cost-effectiveness* — which model delivers the best quality per dollar<p>*What we've found (after 300+ battles, 15 models):*<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn't expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>*Methodology:* We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7/10&quot; in one battle might be &quot;6/10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn</a><p>*Key features:*\n- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking\n- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add\n- Fresh VM per benchmark with one subagent per model\n- User-selectable judge model\n- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users\n- Full transparency: you can evaluate the output yourself, not just trust the score\n- Open-source judge skill: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https://app.uniclaw.ai/arena?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena?via=hn</a>\n- Submit a battle: <a href=\"https://app.uniclaw.ai/arena/new?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/new?via=hn</a> (free account required)\n- Methodology: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn</a>\n- Judge skill source: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/agent-ben...</a><p>We'd love feedback on the methodology and what tasks you'd want to see benchmarked."
+              "value": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>The problem: Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There's no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on <em>bot</em>h quality and cost-effectiveness.<p>What we built: OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:<p>- Performance — which model produces the best results<p>- Cost-effectiveness — which model delivers the best quality per dollar<p>What we've found (after 300+ battles, 15 models):<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn't expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>Methodology: We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7/10&quot; in one battle might be &quot;6/10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn</a><p>Key features:<p>- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking<p>- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add<p>- Fresh VM per benchmark with one subagent per model<p>- User-selectable judge model<p>- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users<p>- Full transparency: you can evaluate the output yourself, not just trust the score<p>- Open-source judge skill: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https://app.uniclaw.ai/arena?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena?via=hn</a><p>- Submit a battle: <a href=\"https://app.uniclaw.ai/arena/new?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/new?via=hn</a> (free account required)<p>- Methodology: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn</a><p>- Judge skill source: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/agent-ben...</a><p>We'd love feedback on the methodology and what tasks you'd want to see benchmarked."
             },
             "title": {
               "matchLevel": "none",
@@ -790,11 +912,11 @@
           "created_at_i": 1774979535,
           "num_comments": 0,
           "objectID": "47591066",
-          "points": 1,
+          "points": 2,
           "story_id": 47591066,
-          "story_text": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>*The problem:* Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There&#x27;s no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>*What we built:* OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:\n- *Performance* — which model produces the best results\n- *Cost-effectiveness* — which model delivers the best quality per dollar<p>*What we&#x27;ve found (after 300+ battles, 15 models):*<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn&#x27;t expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>*Methodology:* We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7&#x2F;10&quot; in one battle might be &quot;6&#x2F;10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>*Key features:*\n- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking\n- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add\n- Fresh VM per benchmark with one subagent per model\n- User-selectable judge model\n- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users\n- Full transparency: you can evaluate the output yourself, not just trust the score\n- Open-source judge skill: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn</a>\n- Submit a battle: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn</a> (free account required)\n- Methodology: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a>\n- Judge skill source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>We&#x27;d love feedback on the methodology and what tasks you&#x27;d want to see benchmarked.",
+          "story_text": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>The problem: Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There&#x27;s no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>What we built: OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:<p>- Performance — which model produces the best results<p>- Cost-effectiveness — which model delivers the best quality per dollar<p>What we&#x27;ve found (after 300+ battles, 15 models):<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn&#x27;t expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>Methodology: We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7&#x2F;10&quot; in one battle might be &quot;6&#x2F;10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>Key features:<p>- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking<p>- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add<p>- Fresh VM per benchmark with one subagent per model<p>- User-selectable judge model<p>- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users<p>- Full transparency: you can evaluate the output yourself, not just trust the score<p>- Open-source judge skill: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn</a><p>- Submit a battle: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn</a> (free account required)<p>- Methodology: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>- Judge skill source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>We&#x27;d love feedback on the methodology and what tasks you&#x27;d want to see benchmarked.",
           "title": "Show HN: OpenClaw Arena – Benchmark models on real tasks, rank by perf and cost",
-          "updated_at": "2026-03-31T17:53:28Z",
+          "updated_at": "2026-03-31T18:02:11Z",
           "url": "https://app.uniclaw.ai/arena?via=hn"
         },
         {
@@ -836,130 +958,6 @@
           "title": "Analyzing Geekbench 6 Under Intel's Binary Optimization Tool (Bot)",
           "updated_at": "2026-03-31T17:40:25Z",
           "url": "https://www.geekbench.com/blog/2026/03/analyzing-geekbench-6-under-intels-bot/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "blakers95"
-            },
-            "story_text": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "I used to use Granola for my meetings, but the one thing it couldn't do was tell me who said what. So I built Migas, which does voice fingerprinting on device to provide real time speaker labels.<p>Because it knows who's speaking in real time, the AI can do things that transcript-only tools can't: &quot;What did Sarah commit to?&quot;, or &quot;Based on what you know about the CTO from our last three meetings, what question should I ask right now?&quot; It builds speaker profiles across meetings, so the context compounds over time.<p>It captures system audio via macOS APIs, runs speech-to-text locally using Moonshine on Apple Silicon, and does speaker identification with TitaNet neural embeddings, all on-device. The only thing that touches the cloud is AI chat, and only when you explicitly ask it a question, and then it only sends transcript text, never audio.<p>Built with Rust/Tauri for the native app, React for the UI, and a Python sidecar for the ML pipeline.<p>Works with any meeting platform (Zoom, Meet, Teams, whatever) since it just listens to system audio. No calendar access, no integrations, no account required.<p>Free tier has unlimited transcription. I'm a solo dev and would love feedback on what could be improved."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Show HN: Migas – Meeting copilot with live speaker labels (no <em>bot</em>, no cloud STT)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://migas.ai/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_blakers95",
-            "story_47588902",
-            "show_hn"
-          ],
-          "author": "blakers95",
-          "children": [
-            47588993
-          ],
-          "created_at": "2026-03-31T15:33:59Z",
-          "created_at_i": 1774971239,
-          "num_comments": 1,
-          "objectID": "47588902",
-          "points": 1,
-          "story_id": 47588902,
-          "story_text": "I used to use Granola for my meetings, but the one thing it couldn&#x27;t do was tell me who said what. So I built Migas, which does voice fingerprinting on device to provide real time speaker labels.<p>Because it knows who&#x27;s speaking in real time, the AI can do things that transcript-only tools can&#x27;t: &quot;What did Sarah commit to?&quot;, or &quot;Based on what you know about the CTO from our last three meetings, what question should I ask right now?&quot; It builds speaker profiles across meetings, so the context compounds over time.<p>It captures system audio via macOS APIs, runs speech-to-text locally using Moonshine on Apple Silicon, and does speaker identification with TitaNet neural embeddings, all on-device. The only thing that touches the cloud is AI chat, and only when you explicitly ask it a question, and then it only sends transcript text, never audio.<p>Built with Rust&#x2F;Tauri for the native app, React for the UI, and a Python sidecar for the ML pipeline.<p>Works with any meeting platform (Zoom, Meet, Teams, whatever) since it just listens to system audio. No calendar access, no integrations, no account required.<p>Free tier has unlimited transcription. I&#x27;m a solo dev and would love feedback on what could be improved.",
-          "title": "Show HN: Migas – Meeting copilot with live speaker labels (no bot, no cloud STT)",
-          "updated_at": "2026-03-31T15:39:58Z",
-          "url": "https://migas.ai/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "mehula"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Scan any website to see what AI <em>bot</em>s can do on it"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.maango.io"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_mehula",
-            "story_47588192"
-          ],
-          "author": "mehula",
-          "children": [
-            47588193
-          ],
-          "created_at": "2026-03-31T14:50:36Z",
-          "created_at_i": 1774968636,
-          "num_comments": 0,
-          "objectID": "47588192",
-          "points": 1,
-          "story_id": 47588192,
-          "title": "Scan any website to see what AI bots can do on it",
-          "updated_at": "2026-03-31T14:55:11Z",
-          "url": "https://www.maango.io"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "mooreds"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Gordian <em>Knot</em> Center for National Security Innovation"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://gordianknot.fsi.stanford.edu/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_mooreds",
-            "story_47587151"
-          ],
-          "author": "mooreds",
-          "created_at": "2026-03-31T13:34:02Z",
-          "created_at_i": 1774964042,
-          "num_comments": 0,
-          "objectID": "47587151",
-          "points": 1,
-          "story_id": 47587151,
-          "title": "Gordian Knot Center for National Security Innovation",
-          "updated_at": "2026-03-31T13:36:26Z",
-          "url": "https://gordianknot.fsi.stanford.edu/"
         }
       ]
     },
@@ -1187,6 +1185,7 @@
           ],
           "author": "yoloshii",
           "children": [
+            47595114,
             47473295,
             47476062,
             47507561
@@ -1199,7 +1198,7 @@
           "story_id": 47472965,
           "story_text": "So I&#x27;ve been building ClawMem, an open-source context engine that gives AI coding agents persistent memory across sessions. It works with Claude Code (hooks + MCP) and OpenClaw (ContextEngine plugin + REST API), and both can share the same SQLite vault, so your CLI agent and your voice&#x2F;chat agent build on the same memory without syncing anything.<p>The retrieval architecture is a Frankenstein, which is pretty much always my process. I pulled the best parts from recent projects and research and stitched them together: [QMD](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tobi&#x2F;qmd</a>) for the multi-signal retrieval pipeline (BM25 + vector + RRF + query expansion + cross-encoder reranking), [SAME](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;sgx-labs&#x2F;statelessagent</a>) for composite scoring with content-type half-lives and co-activation reinforcement, [MAGMA](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2501.13956</a>) for intent classification with multi-graph traversal (semantic, temporal, and causal beam search), [A-MEM](<a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2510.02178</a>) for self-evolving memory notes, and [Engram](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Gentleman-Programming&#x2F;engram</a>) for deduplication patterns and temporal navigation. None of these were designed to work together. Making them coherent was most of the work.<p>On the inference side, QMD&#x27;s original stack uses a 300MB embedding model, a 1.1GB query expansion LLM, and a 600MB reranker. These run via llama-server on a GPU or in-process through node-llama-cpp (Metal, Vulkan, or CPU). But the more interesting path is the SOTA upgrade: ZeroEntropy&#x27;s distillation-paired zembed-1 + zerank-2. These are currently the top-ranked embedding and reranking models on MTEB, and they&#x27;re designed to work together. The reranker was distilled from the same teacher as the embedder, so they share a semantic space. You need ~12GB VRAM to run both, but retrieval quality is noticeably better than the default stack. There&#x27;s also a cloud embedding option if you&#x27;re tight on vram or prefer to offload embedding to a cloud model.<p>For Claude Code specifically, it hooks into lifecycle events. Context-surfacing fires on every prompt to inject relevant memory, decision-extractor and handoff-generator capture session state, and a feedback loop reinforces notes that actually get referenced. That handles about 90% of retrieval automatically. The other 10% is 28 MCP tools for explicit queries. For OpenClaw, it registers as a ContextEngine plugin with the same hook-to-lifecycle mapping, plus 5 REST API tools for the agent to call directly.<p>It runs on Bun with a single SQLite vault (WAL mode, FTS5 + vec0). Everything is on-device; no cloud dependency unless you opt into cloud embedding. The whole system is self-contained.<p>This is a polished WIP, not a finished product. I&#x27;m a solo dev. The codebase is around 19K lines and the main store module is a 4K-line god object that probably needs splitting. And of course, the system is only as good as what you index. A vault with three memory files gives deservedly thin results. One with your project docs, research notes, and decision records gives something actually useful.<p>Two questions I&#x27;d genuinely like input on: (1) Has anyone else tried running SOTA embedding + reranking models locally for agent memory, and is the quality difference worth the VRAM? (2) For those running multiple agent interfaces (CLI + voice&#x2F;chat), how are you handling shared memory today?",
           "title": "Show HN: ClawMem – Open-source agent memory with SOTA local GPU retrieval",
-          "updated_at": "2026-03-25T05:33:28Z",
+          "updated_at": "2026-04-01T00:05:56Z",
           "url": "https://github.com/yoloshii/ClawMem"
         }
       ]
@@ -1991,6 +1990,103 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "MayCXC"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Cf. The Claude computer use beta. Their own docs state that <em>MCP</em> servers are preferable to computer use [1]:<p>----<p>Claude has several ways to interact with an app or service. Computer use is the broadest and slowest, so Claude tries the most precise tool first:<p>- If you have an <em>MCP</em> <em>server</em> for the service, Claude uses that.<p>- If the task is a shell command, Claude uses Bash.<p>- If the task is browser work and you have Claude in Chrome set up, Claude uses that.<p>- If none of those apply, Claude uses computer use.<p>----<p>So osa-<em>mcp</em> adds an <em>MCP</em> <em>server</em> with <em>tools</em> for every AppleScript/JXA app it can find on the host, in order to maximize the first/best case. I've verified that it works with claude code and cowork, but it should work with any other <em>MCP</em> client as well. It also supports Remote Login via SSH [2].<p>This enables some pretty cool workflows and custom skills, e.g. &quot;Read today's inbox in Mail and give me a summary. Check to see if I should schedule any additional meetings in Calendar, and if they conflict with the plans I made with anyone in Messages let them know. Then organize my notes for each meeting, and update their descriptions.&quot; Thus the capabilities of AppleScript are made available with natural language.<p>Inspiration is credited to [3] and [4] but neither exposes the entirety of OSA with <em>MCP</em> like this in a dynamic manner. Feedback is appreciated, I think it is pretty much an unofficial preview of the inevitable agentic Siri that will be released in a future OSX update.<p>[1] <a href=\"https://code.claude.com/docs/en/computer-use\" rel=\"nofollow\">https://code.claude.com/docs/en/computer-use</a><p>[2] <a href=\"https://support.apple.com/guide/mac-help/allow-a-remote-computer-to-access-your-mac-mchlp1066/mac\" rel=\"nofollow\">https://support.apple.com/guide/mac-help/allow-a-remote-comp...</a><p>[3] <a href=\"https://github.com/joshrutkowski/applescript-mcp\" rel=\"nofollow\">https://github.com/joshrutkowski/applescript-<em>mcp</em></a><p>[4] <a href=\"https://github.com/supermemoryai/apple-mcp\" rel=\"nofollow\">https://github.com/supermemoryai/apple-<em>mcp</em></a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Show HN: <em>MCP</em> <em>server</em> that generates macOS <em>tools</em> via Open Scripting Architecture"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp"
+              ],
+              "value": "https://github.com/MayCXC/osa-<em>mcp</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_MayCXC",
+            "story_47594807",
+            "show_hn"
+          ],
+          "author": "MayCXC",
+          "created_at": "2026-03-31T23:25:29Z",
+          "created_at_i": 1774999529,
+          "num_comments": 0,
+          "objectID": "47594807",
+          "points": 1,
+          "story_id": 47594807,
+          "story_text": "Cf. The Claude computer use beta. Their own docs state that MCP servers are preferable to computer use [1]:<p>----<p>Claude has several ways to interact with an app or service. Computer use is the broadest and slowest, so Claude tries the most precise tool first:<p>- If you have an MCP server for the service, Claude uses that.<p>- If the task is a shell command, Claude uses Bash.<p>- If the task is browser work and you have Claude in Chrome set up, Claude uses that.<p>- If none of those apply, Claude uses computer use.<p>----<p>So osa-mcp adds an MCP server with tools for every AppleScript&#x2F;JXA app it can find on the host, in order to maximize the first&#x2F;best case. I&#x27;ve verified that it works with claude code and cowork, but it should work with any other MCP client as well. It also supports Remote Login via SSH [2].<p>This enables some pretty cool workflows and custom skills, e.g. &quot;Read today&#x27;s inbox in Mail and give me a summary. Check to see if I should schedule any additional meetings in Calendar, and if they conflict with the plans I made with anyone in Messages let them know. Then organize my notes for each meeting, and update their descriptions.&quot; Thus the capabilities of AppleScript are made available with natural language.<p>Inspiration is credited to [3] and [4] but neither exposes the entirety of OSA with MCP like this in a dynamic manner. Feedback is appreciated, I think it is pretty much an unofficial preview of the inevitable agentic Siri that will be released in a future OSX update.<p>[1] <a href=\"https:&#x2F;&#x2F;code.claude.com&#x2F;docs&#x2F;en&#x2F;computer-use\" rel=\"nofollow\">https:&#x2F;&#x2F;code.claude.com&#x2F;docs&#x2F;en&#x2F;computer-use</a><p>[2] <a href=\"https:&#x2F;&#x2F;support.apple.com&#x2F;guide&#x2F;mac-help&#x2F;allow-a-remote-computer-to-access-your-mac-mchlp1066&#x2F;mac\" rel=\"nofollow\">https:&#x2F;&#x2F;support.apple.com&#x2F;guide&#x2F;mac-help&#x2F;allow-a-remote-comp...</a><p>[3] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;joshrutkowski&#x2F;applescript-mcp\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;joshrutkowski&#x2F;applescript-mcp</a><p>[4] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;supermemoryai&#x2F;apple-mcp\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;supermemoryai&#x2F;apple-mcp</a>",
+          "title": "Show HN: MCP server that generates macOS tools via Open Scripting Architecture",
+          "updated_at": "2026-03-31T23:29:12Z",
+          "url": "https://github.com/MayCXC/osa-mcp"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "karimsherif"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hi HN,<p>I'm Karim, based in Cairo. I run an ecommerce operations company and built Nexus to solve my own problem: 6 disconnected <em>tools</em> that never talked to each other.<p>Nexus covers the full ops stack: CRM, orders, inventory, fulfillment, shipping, and omnichannel messaging (WhatsApp/FB/IG) in one platform.<p>The agent-native part:\nAI agents self-register via a single POST request, exchange a key for a JWT, and connect to an <em>MCP</em> <em>server</em> with 22 <em>tools</em> covering the entire business. No human approval. No demo. No sales call.<p>Free tier = read-only. Write access = paid plan. The agent proves value first.<p>This isn't MENA-specific — fully remote and self-maintained. An operator in Jakarta runs the same workflows as one in Cairo.<p>2 paying customers. Happy to answer questions on: architecture (Supabase + Deno Edge Functions), multi-tenant RLS, or the agent-native business model.<p><em>MCP</em> discovery: https://nexus.aiforstartups.io/.well-known/<em>mcp</em>.json\nAgent docs: https://nexus-docs.aiforstartups.io/api/ai-agents-<em>mcp</em>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp"
+              ],
+              "value": "Nexus – Agent-native ops platform for ecommerce <em>MCP</em>, self-registration, no demos"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_karimsherif",
+            "story_47592445",
+            "ask_hn"
+          ],
+          "author": "karimsherif",
+          "created_at": "2026-03-31T19:45:27Z",
+          "created_at_i": 1774986327,
+          "num_comments": 0,
+          "objectID": "47592445",
+          "points": 3,
+          "story_id": 47592445,
+          "story_text": "Hi HN,<p>I&#x27;m Karim, based in Cairo. I run an ecommerce operations company and built Nexus to solve my own problem: 6 disconnected tools that never talked to each other.<p>Nexus covers the full ops stack: CRM, orders, inventory, fulfillment, shipping, and omnichannel messaging (WhatsApp&#x2F;FB&#x2F;IG) in one platform.<p>The agent-native part:\nAI agents self-register via a single POST request, exchange a key for a JWT, and connect to an MCP server with 22 tools covering the entire business. No human approval. No demo. No sales call.<p>Free tier = read-only. Write access = paid plan. The agent proves value first.<p>This isn&#x27;t MENA-specific — fully remote and self-maintained. An operator in Jakarta runs the same workflows as one in Cairo.<p>2 paying customers. Happy to answer questions on: architecture (Supabase + Deno Edge Functions), multi-tenant RLS, or the agent-native business model.<p>MCP discovery: https:&#x2F;&#x2F;nexus.aiforstartups.io&#x2F;.well-known&#x2F;mcp.json\nAgent docs: https:&#x2F;&#x2F;nexus-docs.aiforstartups.io&#x2F;api&#x2F;ai-agents-mcp",
+          "title": "Nexus – Agent-native ops platform for ecommerce MCP, self-registration, no demos",
+          "updated_at": "2026-03-31T19:55:56Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "lambdabaa"
             },
             "story_text": {
@@ -2025,11 +2121,11 @@
           "created_at_i": 1774978779,
           "num_comments": 0,
           "objectID": "47590897",
-          "points": 2,
+          "points": 3,
           "story_id": 47590897,
           "story_text": "Flat chunking throws away document structure. A PDF isn’t a bag of paragraphs. It has sections, subsections, and a hierarchy that carries meaning. An agent that can’t navigate that structure can’t do serious research.<p>I ran into this building RAG over scientific literature. The standard approach (embed chunks, find top-k, generate) works fine for simple Q&amp;A but falls apart when you need real research depth: multi-hop reasoning across papers, synthesizing conflicting results, tracing a finding back to the exact passage in a methods section. The problem wasn’t the models.<p>Dewey treats documents, sections, and chunks as first-class API primitives. The section manifest (full heading hierarchy with titles and byte offsets) lets agents scan cheaply before committing to full chunk retrieval, the same way a researcher skims a table of contents before reading. The &#x2F;research endpoint runs an agentic loop; at “exhaustive” depth it can traverse an entire corpus, iteratively query, and return a grounded answer with numbered inline citations pointing to the exact source passage.<p>Two ways in:<p>- REST API + TypeScript&#x2F;Python SDKs for developers building research or document Q&amp;A into their apps\n- MCP server (@meetdewey&#x2F;mcp on npm) for anyone using Claude, ChatGPT, or Cursor. Your document collections become tools without writing any code.<p>Bring your own OpenAI key and depth becomes a quality setting rather than a billing one. That includes AI image captioning, which makes figures and diagrams searchable alongside your text. No markup on generation.<p>Built this solo. Happy to answer questions about the architecture, the retrieval design, or anything else. Curious whether others have found section-aware retrieval makes a meaningful difference vs. flat chunking in practice.<p>Free tier, no credit card required: <a href=\"https:&#x2F;&#x2F;meetdewey.com\" rel=\"nofollow\">https:&#x2F;&#x2F;meetdewey.com</a>",
           "title": "Show HN: Dewey – Ingest docs, search semantically, get cited AI answers",
-          "updated_at": "2026-03-31T17:51:41Z",
+          "updated_at": "2026-03-31T19:52:26Z",
           "url": "https://meetdewey.com"
         },
         {
@@ -2132,109 +2228,6 @@
           "title": "Show HN: Memoir – persistent memory for AI coding tools via MCP",
           "updated_at": "2026-03-31T16:55:47Z",
           "url": "https://memoir.sh"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "hawk_aa"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Supply chain attacks like the LiteLLM compromise exfiltrate every env var, SSH key, and API key from compromised machines. AgentLair Vault prevents this architecturally — credentials are never in the environment.<p>I built AgentLair to give AI agents a real identity — not just an email address.<p>AgentMail raised $6M to solve the email problem. They've done great work, and email IS the starting point. But an agent's identity is more than email: it's the credentials it carries and the namespace it operates in.<p>What AgentLair is (all in one API):<p>1. Email — claim my-agent@agentlair.dev, send/receive, <em>MCP</em>-native. One curl call. No OAuth, no human in the loop.<p>2. Vault — encrypted credential storage. Your agent stores its own API keys at registration, fetches them at runtime. The <em>server</em> stores opaque blobs — you encrypt client-side with our SDK or your own scheme.<p>3. Pods — multi-tenant namespace isolation. Run multiple agents under one account; each pod only sees its own resources. Useful for SaaS products built on agents.<p>Self-registration in one call:<p><pre><code>  curl -X POST https://agentlair.dev/v1/auth/agent-register \\\n    -H &quot;Content-Type: application/json&quot; \\\n    -d '{&quot;name&quot;: &quot;my-research-agent&quot;}'\n\n  → { &quot;api_key&quot;: &quot;al_live_...&quot;, &quot;email_address&quot;: &quot;my-research-agent@agentlair.dev&quot;, &quot;account_id&quot;: &quot;...&quot; }\n</code></pre>\nThe agent gets an identity in a single call. No human in the loop anywhere.<p><em>MCP</em> <em>server</em> (npm):<p><pre><code>  npx @agentlair/<em>mcp</em>@latest\n</code></pre>\nWorks with Claude, Cursor, or any <em>MCP</em>-compatible client. 9 <em>tools</em> covering email and vault operations.<p>Why this now:<p>The <em>MCP</em> authentication story is broken. Perplexity's CTO left <em>MCP</em> over &quot;authentication friction.&quot; VentureBeat: &quot;When Agent A delegates to Agent B, no identity verification happens between them. A compromised agent inherits the trust of every agent it communicates with.&quot;<p>A Cloud Security Alliance study (March 25, 2026) found that more than two-thirds of organizations cannot clearly distinguish AI agent from human actions — and 33% don't know how often their agent credentials are rotated. (<a href=\"https://www.businesswire.com/news/home/20260324161665/en/\" rel=\"nofollow\">https://www.businesswire.com/news/home/20260324161665/en/</a>)<p>The protocol for tool access exists. The identity layer underneath it doesn't. AgentLair is that layer: persistent email address + credential vault + human-backed trust + micropayment hooks.<p>AgentMail is email-only. 1Password announced credential management for agents (enterprise-only). We bundle email + vault + isolation with a free tier. x402 micropayment support and World ID identity verification are next on the roadmap.<p>Where things are: Public beta. Pro plan is $5/stack/month for higher limits. Everything else is free tier. Free tier: 10 emails/day, 10 email addresses, 100 API requests/day.<p>Try it: <a href=\"https://agentlair.dev\" rel=\"nofollow\">https://agentlair.dev</a>\nDocs: <a href=\"https://agentlair.dev/getting-started\" rel=\"nofollow\">https://agentlair.dev/getting-started</a>\n<em>MCP</em>: npx @agentlair/<em>mcp</em>@latest<p>vs. AgentMail: They do email well. We do email + vault + pod isolation.\nvs. 1Password: They do credentials for enterprises. We do $5/mo for indie devs."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: AgentLair – Give your AI agent an email identity and credential vault"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://agentlair.dev/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_hawk_aa",
-            "story_47573245",
-            "show_hn"
-          ],
-          "author": "hawk_aa",
-          "children": [
-            47586203,
-            47577842
-          ],
-          "created_at": "2026-03-30T12:11:03Z",
-          "created_at_i": 1774872663,
-          "num_comments": 1,
-          "objectID": "47573245",
-          "points": 2,
-          "story_id": 47573245,
-          "story_text": "Supply chain attacks like the LiteLLM compromise exfiltrate every env var, SSH key, and API key from compromised machines. AgentLair Vault prevents this architecturally — credentials are never in the environment.<p>I built AgentLair to give AI agents a real identity — not just an email address.<p>AgentMail raised $6M to solve the email problem. They&#x27;ve done great work, and email IS the starting point. But an agent&#x27;s identity is more than email: it&#x27;s the credentials it carries and the namespace it operates in.<p>What AgentLair is (all in one API):<p>1. Email — claim my-agent@agentlair.dev, send&#x2F;receive, MCP-native. One curl call. No OAuth, no human in the loop.<p>2. Vault — encrypted credential storage. Your agent stores its own API keys at registration, fetches them at runtime. The server stores opaque blobs — you encrypt client-side with our SDK or your own scheme.<p>3. Pods — multi-tenant namespace isolation. Run multiple agents under one account; each pod only sees its own resources. Useful for SaaS products built on agents.<p>Self-registration in one call:<p><pre><code>  curl -X POST https:&#x2F;&#x2F;agentlair.dev&#x2F;v1&#x2F;auth&#x2F;agent-register \\\n    -H &quot;Content-Type: application&#x2F;json&quot; \\\n    -d &#x27;{&quot;name&quot;: &quot;my-research-agent&quot;}&#x27;\n\n  → { &quot;api_key&quot;: &quot;al_live_...&quot;, &quot;email_address&quot;: &quot;my-research-agent@agentlair.dev&quot;, &quot;account_id&quot;: &quot;...&quot; }\n</code></pre>\nThe agent gets an identity in a single call. No human in the loop anywhere.<p>MCP server (npm):<p><pre><code>  npx @agentlair&#x2F;mcp@latest\n</code></pre>\nWorks with Claude, Cursor, or any MCP-compatible client. 9 tools covering email and vault operations.<p>Why this now:<p>The MCP authentication story is broken. Perplexity&#x27;s CTO left MCP over &quot;authentication friction.&quot; VentureBeat: &quot;When Agent A delegates to Agent B, no identity verification happens between them. A compromised agent inherits the trust of every agent it communicates with.&quot;<p>A Cloud Security Alliance study (March 25, 2026) found that more than two-thirds of organizations cannot clearly distinguish AI agent from human actions — and 33% don&#x27;t know how often their agent credentials are rotated. (<a href=\"https:&#x2F;&#x2F;www.businesswire.com&#x2F;news&#x2F;home&#x2F;20260324161665&#x2F;en&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.businesswire.com&#x2F;news&#x2F;home&#x2F;20260324161665&#x2F;en&#x2F;</a>)<p>The protocol for tool access exists. The identity layer underneath it doesn&#x27;t. AgentLair is that layer: persistent email address + credential vault + human-backed trust + micropayment hooks.<p>AgentMail is email-only. 1Password announced credential management for agents (enterprise-only). We bundle email + vault + isolation with a free tier. x402 micropayment support and World ID identity verification are next on the roadmap.<p>Where things are: Public beta. Pro plan is $5&#x2F;stack&#x2F;month for higher limits. Everything else is free tier. Free tier: 10 emails&#x2F;day, 10 email addresses, 100 API requests&#x2F;day.<p>Try it: <a href=\"https:&#x2F;&#x2F;agentlair.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;agentlair.dev</a>\nDocs: <a href=\"https:&#x2F;&#x2F;agentlair.dev&#x2F;getting-started\" rel=\"nofollow\">https:&#x2F;&#x2F;agentlair.dev&#x2F;getting-started</a>\nMCP: npx @agentlair&#x2F;mcp@latest<p>vs. AgentMail: They do email well. We do email + vault + pod isolation.\nvs. 1Password: They do credentials for enterprises. We do $5&#x2F;mo for indie devs.",
-          "title": "Show HN: AgentLair – Give your AI agent an email identity and credential vault",
-          "updated_at": "2026-03-31T12:15:39Z",
-          "url": "https://agentlair.dev/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "paolovella"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Reposting because the March thread linked a now-outdated repo, and the project has changed substantially.<p>VellaVeto is a fail-closed gateway between an AI agent and its <em>MCP</em> <em>tools</em>. Every <em>tool</em> call is evaluated before execution; if evaluation fails for any reason, the call is denied.<p>Concrete example: under shield mode, a filesystem <em>server</em> trying to read ~/.ssh/id_rsa is denied by default. A list_files /tmp call from the same <em>server</em> is allowed.<p>What it does not solve: prompt injection, model-level jailbreaks, or supply-chain attacks in <em>server</em> packages. It only controls what crosses the <em>tool</em>-call boundary.<p>Since March, I added three zero-config protection levels, topology discovery, tamper-evident audit, Consumer Shield, and MCPSEC, an open benchmark for <em>MCP</em> gateways.<p>The feedback I’d most like:<p>Is the <em>tool</em>-call boundary the right place to enforce <em>MCP</em> security?\nAre the MCPSEC attack classes sensible?\nWhat important attack classes am I still missing?"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "tools"
-              ],
-              "value": "Show HN: VellaVeto — blocks unsafe <em>MCP</em> <em>tool</em> calls by default"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/paolovella/vellaveto"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_paolovella",
-            "story_47555597",
-            "show_hn"
-          ],
-          "author": "paolovella",
-          "children": [
-            47559674
-          ],
-          "created_at": "2026-03-28T15:41:30Z",
-          "created_at_i": 1774712490,
-          "num_comments": 1,
-          "objectID": "47555597",
-          "points": 2,
-          "story_id": 47555597,
-          "story_text": "Reposting because the March thread linked a now-outdated repo, and the project has changed substantially.<p>VellaVeto is a fail-closed gateway between an AI agent and its MCP tools. Every tool call is evaluated before execution; if evaluation fails for any reason, the call is denied.<p>Concrete example: under shield mode, a filesystem server trying to read ~&#x2F;.ssh&#x2F;id_rsa is denied by default. A list_files &#x2F;tmp call from the same server is allowed.<p>What it does not solve: prompt injection, model-level jailbreaks, or supply-chain attacks in server packages. It only controls what crosses the tool-call boundary.<p>Since March, I added three zero-config protection levels, topology discovery, tamper-evident audit, Consumer Shield, and MCPSEC, an open benchmark for MCP gateways.<p>The feedback I’d most like:<p>Is the tool-call boundary the right place to enforce MCP security?\nAre the MCPSEC attack classes sensible?\nWhat important attack classes am I still missing?",
-          "title": "Show HN: VellaVeto — blocks unsafe MCP tool calls by default",
-          "updated_at": "2026-03-29T07:57:00Z",
-          "url": "https://github.com/paolovella/vellaveto"
         }
       ]
     },
