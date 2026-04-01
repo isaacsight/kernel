@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>kbot</strong><br>
-  Open-source terminal AI agent. 35 agents. 686+ tools. 20 providers. Science, finance, security, and more.
+  Open-source terminal AI agent. 693+ tools. 35 agents. 20 providers. Dreams, learns, watches your system. $0 local.
 </p>
 
 <p align="center">
@@ -30,7 +30,7 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **Runs fully offline** — Embedded llama.cpp, Ollama, LM Studio, or Jan. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster over time.
 - **35 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, quant, and 30 more).
-- **686+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, and more.
+- **693+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, and more.
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
 
@@ -47,7 +47,23 @@ kbot dream journal    # Full insight history
 kbot dream search     # Find specific memories
 ```
 
-5-tier memory: pattern cache -> solution index -> user profile -> dream journal -> passive scanner. All tiers feed each other through the dream engine.
+7-tier memory: pattern cache -> solution index -> user profile -> dream journal -> passive scanner -> music production -> desktop behavior. All tiers feed each other bidirectionally through the dream engine. Dream insights automatically evolve kbot's prompts so it gets better at being *your* specific tool.
+
+### Always-On System Manager
+
+kbot runs 24/7 in the background, managing your entire development environment:
+
+```
+kbot watchdog             # Service dashboard — CPU, RAM, disk, all services
+kbot wd --restart email   # Restart a crashed service
+kbot dream status         # What kbot learned about you
+```
+
+- **Service watchdog** — health-checks all background services, auto-restarts crashes
+- **Morning briefing** — daily email with downloads, stars, emails, dream insights, service health
+- **Behavior learning** — observes which apps you use and when, dreams about your workflow patterns
+- **Companion memory** — email agent remembers every user's preferences, goals, and conversation history
+- **Proactive follow-ups** — checks in with users who go quiet, referencing their specific context
 
 ### Audit Any Repo in One Command
 
@@ -65,9 +81,12 @@ Checks security, documentation, code quality, CI/CD, community health, and DevOp
 |---|---|---|---|---|---|
 | AI providers | 20 | 1 | 1 | 6 | 75+ |
 | Specialist agents | 35 | 0 | 0 | 0 | 0 |
-| Built-in tools | 686+ | ~20 | ~15 | ~10 | ~15 |
+| Built-in tools | 693+ | ~20 | ~15 | ~10 | ~15 |
 | Science tools | 114 | 0 | 0 | 0 | 0 |
-| Learning engine | Yes | No | No | No | No |
+| Memory system | 7-tier bidirectional | File-based | No | No | No |
+| Dream engine | Yes ($0 local) | Cloud API | No | No | No |
+| Service watchdog | Yes | No | No | No | No |
+| Behavior learning | Yes | No | No | No | No |
 | Offline mode | Embedded + Ollama | No | No | Ollama | Ollama |
 | SDK | Yes | No | Yes | No | No |
 | MCP server | Yes | N/A | No | No | No |
@@ -248,6 +267,8 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim.
 | `kbot dream status` | See what kbot has learned about you |
 | `kbot dream journal` | Full insight history |
 | `kbot dream search` | Find specific memories |
+| `kbot watchdog` | System dashboard — services, CPU, RAM, disk, Ollama, dreams |
+| `kbot wd --restart <svc>` | Restart a crashed background service |
 | `kbot contribute <repo>` | Find good-first-issues and quick wins |
 | `kbot share` | Share conversation as GitHub Gist |
 | `kbot pair` | File watcher with auto-analysis |

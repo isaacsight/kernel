@@ -1,7 +1,7 @@
 {
   "name": "@kernel.chat/kbot",
   "version": "3.67.0",
-  "description": "Open-source terminal AI agent. 686+ tools, 35 agents, 20 providers. Fully local, fully sovereign. MIT.",
+  "description": "Open-source terminal AI agent. 693+ tools, 35 agents, 20 providers. Dreams, learns, watches your system. Fully local, fully sovereign. MIT.",
   "type": "module",
   "repository": {
     "type": "git",
