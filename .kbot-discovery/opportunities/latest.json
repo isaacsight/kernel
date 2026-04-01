@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-01T06:13:14.088Z",
+  "timestamp": "2026-04-01T12:24:34.366Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,29 +67,29 @@
     },
     {
       "source": "hn-comment",
-      "title": "Mathematical methods and human thought in the age of AI",
-      "url": "https://news.ycombinator.com/item?id=47575099",
+      "title": "Claude Code's source code has been leaked via a map file in their NPM registry",
+      "url": "https://news.ycombinator.com/item?id=47599131",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "The Cognitive Dark Forest",
-      "url": "https://news.ycombinator.com/item?id=47570522",
+      "title": "Claude Code Unpacked : A visual guide",
+      "url": "https://news.ycombinator.com/item?id=47598686",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "So where are all the AI apps?",
-      "url": "https://news.ycombinator.com/item?id=47505810",
+      "title": "MooseStack: The 'Next.js' for Real-Time Analytics on ClickHouse",
+      "url": "https://news.ycombinator.com/item?id=47598131",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "github-issue",
-      "title": "consultation",
-      "url": "https://github.com/Ccom5/GF/issues/2",
+      "title": "[Auto-QA] High-complexity components could be split",
+      "url": "https://github.com/kubestellar/console/issues/4061",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,24 +130,31 @@
     },
     {
       "source": "github-issue",
-      "title": "chore(deps): update ghcr.io/openclaw/openclaw docker tag to v2026.3.31",
-      "url": "https://github.com/keiretsu-labs/kubernetes-manifests/pull/1044",
+      "title": "sync with openclaw",
+      "url": "https://github.com/lad75020/openclaw/pull/3",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Feat/register stream fn wrapper",
-      "url": "https://github.com/davidrudduck/openclaw/pull/14",
+      "title": "feat: Option B chunk 2 — team-only diary permissions",
+      "url": "https://github.com/getlarge/themoltnet/pull/583",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "docs: tighten public docs surfaces and Mintlify delivery baseline",
-      "url": "https://github.com/loongclaw-ai/loongclaw/pull/756",
+      "title": "[Feature Proposal] Migrate oh-my-openclaw multi-agent orchestration to official OpenClaw ecosystem",
+      "url": "https://github.com/openclaw/openclaw/issues/58963",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "Which programming language would AI use without any human interference?",
+      "url": "https://reddit.com/r/programming/comments/1s9f18s/which_programming_language_would_ai_use_without/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-programming",
@@ -160,13 +167,6 @@
       "source": "reddit-programming",
       "title": "AMD GAIA 0.16 introduces C++17 agent framework for building AI PC agents in pure C++",
       "url": "https://reddit.com/r/programming/comments/1rncnnk/amd_gaia_016_introduces_c17_agent_framework_for/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "Beyond the Vibes: A Rigorous Guide to AI Coding Assistants and Agents",
-      "url": "https://reddit.com/r/programming/comments/1ritjkj/beyond_the_vibes_a_rigorous_guide_to_ai_coding/",
       "why": "Discussion in r/programming about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
@@ -193,8 +193,8 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "Anthropic Leaked 512,000 Lines of Claude Code Source. Here's What the Code Actually Reveals.",
-      "url": "https://reddit.com/r/artificial/comments/1s9agwr/anthropic_leaked_512000_lines_of_claude_code/",
+      "title": "Biggest Opportunity for Builders to monetise their agents",
+      "url": "https://reddit.com/r/artificial/comments/1s9e04v/biggest_opportunity_for_builders_to_monetise/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },

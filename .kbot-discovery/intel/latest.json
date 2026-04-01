@@ -1,9 +1,200 @@
 {
-  "timestamp": "2026-04-01T06:13:10.458Z",
+  "timestamp": "2026-04-01T12:24:29.702Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "tordrt"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent",
+                "terminal"
+              ],
+              "value": "Hi,<p>I built this because running multiple Claude Code <em>agents</em> across multiple IDE and <em>terminal</em> windows was getting messy. Like many, I went from working at one thing at the time, to multiple, and it was all changing quite fast.<p>I needed one place to see all my <em>agents</em> and worktrees, seamlessly switch between them, monitor their status and once their done, review their changes. I also wanted to quickly spin up new <em>agents</em> in isolated worktrees whenever an idea came to mind.<p>I've been building Baton from within Baton for a while now, which has been a pretty fun loop. Would love to hear what you think!"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent"
+              ],
+              "value": "Show HN: Baton – A desktop app for developing with <em>AI</em> <em>agents</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://getbaton.dev/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_tordrt",
+            "story_47599771",
+            "show_hn"
+          ],
+          "author": "tordrt",
+          "children": [
+            47599826
+          ],
+          "created_at": "2026-04-01T12:11:30Z",
+          "created_at_i": 1775045490,
+          "num_comments": 0,
+          "objectID": "47599771",
+          "points": 3,
+          "story_id": 47599771,
+          "story_text": "Hi,<p>I built this because running multiple Claude Code agents across multiple IDE and terminal windows was getting messy. Like many, I went from working at one thing at the time, to multiple, and it was all changing quite fast.<p>I needed one place to see all my agents and worktrees, seamlessly switch between them, monitor their status and once their done, review their changes. I also wanted to quickly spin up new agents in isolated worktrees whenever an idea came to mind.<p>I&#x27;ve been building Baton from within Baton for a while now, which has been a pretty fun loop. Would love to hear what you think!",
+          "title": "Show HN: Baton – A desktop app for developing with AI agents",
+          "updated_at": "2026-04-01T12:18:13Z",
+          "url": "https://getbaton.dev/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "grimm8080"
+            },
+            "story_text": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "<a href=\"https://www.github.com/Grimm67123/GrimmBot\" rel=\"nofollow\">https://www.github.com/Grimm67123/GrimmBot</a><p>By self modifying I mean its ability to expand its toolset when needed"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Show HN: An open source self-modifying <em>terminal</em> based <em>AI</em> <em>agent</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_grimm8080",
+            "story_47599664",
+            "show_hn"
+          ],
+          "author": "grimm8080",
+          "children": [
+            47599755
+          ],
+          "created_at": "2026-04-01T11:59:18Z",
+          "created_at_i": 1775044758,
+          "num_comments": 0,
+          "objectID": "47599664",
+          "points": 4,
+          "story_id": 47599664,
+          "story_text": "<a href=\"https:&#x2F;&#x2F;www.github.com&#x2F;Grimm67123&#x2F;GrimmBot\" rel=\"nofollow\">https:&#x2F;&#x2F;www.github.com&#x2F;Grimm67123&#x2F;GrimmBot</a><p>By self modifying I mean its ability to expand its toolset when needed",
+          "title": "Show HN: An open source self-modifying terminal based AI agent",
+          "updated_at": "2026-04-01T12:18:59Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "mariuz"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Gemini CLI is an open-source <em>AI</em> <em>agent</em> that brings Gemini into your <em>terminal</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/google-gemini/gemini-cli"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_mariuz",
+            "story_47598458"
+          ],
+          "author": "mariuz",
+          "children": [
+            47598557
+          ],
+          "created_at": "2026-04-01T08:51:14Z",
+          "created_at_i": 1775033474,
+          "num_comments": 1,
+          "objectID": "47598458",
+          "points": 3,
+          "story_id": 47598458,
+          "title": "Gemini CLI is an open-source AI agent that brings Gemini into your terminal",
+          "updated_at": "2026-04-01T12:17:13Z",
+          "url": "https://github.com/google-gemini/gemini-cli"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "grimm8080"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "terminal"
+              ],
+              "value": "It can also adapt by creating its own tools if its 60+ built in tools fall short. It runs in a debian docker container with chromium and you interact with it through the <em>terminal</em>. Watch it work through a VNC viewer"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent"
+              ],
+              "value": "Show HN: A sandboxed <em>AI</em> <em>agent</em> that can watch webpages without constant API calls"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Grimm67123/GrimmBot"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_grimm8080",
+            "story_47598374",
+            "show_hn"
+          ],
+          "author": "grimm8080",
+          "children": [
+            47598388,
+            47598599,
+            47599019,
+            47598942
+          ],
+          "created_at": "2026-04-01T08:35:25Z",
+          "created_at_i": 1775032525,
+          "num_comments": 2,
+          "objectID": "47598374",
+          "points": 6,
+          "story_id": 47598374,
+          "story_text": "It can also adapt by creating its own tools if its 60+ built in tools fall short. It runs in a debian docker container with chromium and you interact with it through the terminal. Watch it work through a VNC viewer",
+          "title": "Show HN: A sandboxed AI agent that can watch webpages without constant API calls",
+          "updated_at": "2026-04-01T12:17:43Z",
+          "url": "https://github.com/Grimm67123/GrimmBot"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -52,200 +243,113 @@
           "title": "Show HN: Tama96 – A virtual pet for your desktop, terminal, or AI agent",
           "updated_at": "2026-03-31T22:10:56Z",
           "url": "https://www.tama96.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "bcollins34"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "For the last year we've been building an <em>AI</em> mobile app builder. Last week we decided to generalize our <em>agent</em> harness and benchmark it against vanilla Claude Code. Turns out the tools we built for app building were significantly more efficient than the native Claude Code tools. When we ran benchmarks we beat Claude code on speed (~40% faster) , cost (25-55% cheaper) and performance (+17% on <em>Terminal</em> Bench 2.0). Today we're making our <em>agent</em> harness publicly available as a Claude Code plugin.<p>Use code WOZCODE1 to try it for $1 at wozcode.com"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Wozcode – double Claude Code output"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.wozcode.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_bcollins34",
-            "story_47591997",
-            "show_hn"
-          ],
-          "author": "bcollins34",
-          "children": [
-            47592631,
-            47592298
-          ],
-          "created_at": "2026-03-31T19:07:11Z",
-          "created_at_i": 1774984031,
-          "num_comments": 2,
-          "objectID": "47591997",
-          "points": 4,
-          "story_id": 47591997,
-          "story_text": "For the last year we&#x27;ve been building an AI mobile app builder. Last week we decided to generalize our agent harness and benchmark it against vanilla Claude Code. Turns out the tools we built for app building were significantly more efficient than the native Claude Code tools. When we ran benchmarks we beat Claude code on speed (~40% faster) , cost (25-55% cheaper) and performance (+17% on Terminal Bench 2.0). Today we&#x27;re making our agent harness publicly available as a Claude Code plugin.<p>Use code WOZCODE1 to try it for $1 at wozcode.com",
-          "title": "Show HN: Wozcode – double Claude Code output",
-          "updated_at": "2026-04-01T02:55:42Z",
-          "url": "https://www.wozcode.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "skysniper"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "We built an arena for comparing <em>AI</em> models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>The problem: Chatbot Arena tests conversation quality. But most people using <em>AI</em> <em>agents</em> need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There's no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>What we built: OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw <em>agent</em> (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to <em>terminal</em>, browser, file system, and code execution.<p>Results feed into two live leaderboards:<p>- Performance — which model produces the best results<p>- Cost-effectiveness — which model delivers the best quality per dollar<p>What we've found (after 300+ battles, 15 models):<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn't expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>Methodology: We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7/10&quot; in one battle might be &quot;6/10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/leaderboard/methodology?via=hn</a><p>Key features:<p>- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking<p>- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add<p>- Fresh VM per benchmark with one subagent per model<p>- User-selectable judge model<p>- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users<p>- Full transparency: you can evaluate the output yourself, not just trust the score<p>- Open-source judge skill: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/<em>agent</em>-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https://app.uniclaw.ai/arena?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena?via=hn</a><p>- Submit a battle: <a href=\"https://app.uniclaw.ai/arena/new?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/new?via=hn</a> (free account required)<p>- Methodology: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.<em>ai</em>/arena/leaderboard/methodology?via=hn</a><p>- Judge skill source: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/<em>agent</em>-ben...</a><p>We'd love feedback on the methodology and what tasks you'd want to see benchmarked."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: OpenClaw Arena – Benchmark models on real tasks, rank by perf and cost"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "https://app.uniclaw.<em>ai</em>/arena?via=hn"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_skysniper",
-            "story_47591066",
-            "show_hn"
-          ],
-          "author": "skysniper",
-          "created_at": "2026-03-31T17:52:15Z",
-          "created_at_i": 1774979535,
-          "num_comments": 0,
-          "objectID": "47591066",
-          "points": 2,
-          "story_id": 47591066,
-          "story_text": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>The problem: Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There&#x27;s no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>What we built: OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:<p>- Performance — which model produces the best results<p>- Cost-effectiveness — which model delivers the best quality per dollar<p>What we&#x27;ve found (after 300+ battles, 15 models):<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn&#x27;t expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>Methodology: We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7&#x2F;10&quot; in one battle might be &quot;6&#x2F;10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>Key features:<p>- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking<p>- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add<p>- Fresh VM per benchmark with one subagent per model<p>- User-selectable judge model<p>- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users<p>- Full transparency: you can evaluate the output yourself, not just trust the score<p>- Open-source judge skill: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn</a><p>- Submit a battle: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn</a> (free account required)<p>- Methodology: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>- Judge skill source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>We&#x27;d love feedback on the methodology and what tasks you&#x27;d want to see benchmarked.",
-          "title": "Show HN: OpenClaw Arena – Benchmark models on real tasks, rank by perf and cost",
-          "updated_at": "2026-03-31T18:02:11Z",
-          "url": "https://app.uniclaw.ai/arena?via=hn"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "gregolo"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Show HN: Smux – split <em>terminals</em> for <em>AI</em> <em>agents</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/gergomiklos/smux"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_gregolo",
-            "story_47572114",
-            "show_hn"
-          ],
-          "author": "gregolo",
-          "created_at": "2026-03-30T09:11:11Z",
-          "created_at_i": 1774861871,
-          "num_comments": 0,
-          "objectID": "47572114",
-          "points": 2,
-          "story_id": 47572114,
-          "title": "Show HN: Smux – split terminals for AI agents",
-          "updated_at": "2026-03-30T14:39:50Z",
-          "url": "https://github.com/gergomiklos/smux"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "hirokiyn"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Hi HN, I'm Hiroki, founder of Epismo.\nJust released the Epismo CLI (<a href=\"https://npmjs.com/package/epismo\" rel=\"nofollow\">https://npmjs.com/package/epismo</a>). 380+ downloads right after launch. Thank you.<p>The problem: I got a great result in a Claude Code thread. A week later I couldn't reproduce how I got there. The real workflow lived across chat histories, tabs, tool settings, and tiny followup prompts. Prompts copy easily, but multi-step processes don't.<p>If GitHub made code reusable and Hugging Face made models reusable, we want to make human-<em>AI</em> workflows reusable.\nAnd there's a second problem emerging. Claude Code now orchestrates other <em>agents</em> like Codex. Ticket-based task management is becoming standard in <em>agent</em> orchestration. But there's no good way to share and manage the full process across <em>agents</em> working in parallel.<p>Epismo is a platform where <em>agents</em> and humans collaborate. You can save and share the full process of how you got your outcomes. The users aren't just humans. <em>Agents</em> can share their best practices too, and others can import and run them.\nOur core insight: the best format for <em>agent</em> workflows is a chain of markdown data. Once you import a workflow, your <em>agent</em> runs each step as a task. It turns scattered know-how into structured, repeatable execution.<p>The CLI is <em>agent</em>-native:\n- npm install -g epismo\n- epismo login --email you@example.com (no browser, OTP from <em>terminal</em>)\n- Works with Claude Code, Codex, and any <em>agent</em> with <em>terminal</em> access<p>Skills repo (MIT): <a href=\"https://github.com/epismoai/skills\" rel=\"nofollow\">https://github.com/epismoai/skills</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "Show HN: Epismo CLI – Make human-<em>AI</em> workflows reusable, like GitHub did for code"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.npmjs.com/package/epismo"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_hirokiyn",
-            "story_47555309",
-            "show_hn"
-          ],
-          "author": "hirokiyn",
-          "created_at": "2026-03-28T15:12:29Z",
-          "created_at_i": 1774710749,
-          "num_comments": 0,
-          "objectID": "47555309",
-          "points": 1,
-          "story_id": 47555309,
-          "story_text": "Hi HN, I&#x27;m Hiroki, founder of Epismo.\nJust released the Epismo CLI (<a href=\"https:&#x2F;&#x2F;npmjs.com&#x2F;package&#x2F;epismo\" rel=\"nofollow\">https:&#x2F;&#x2F;npmjs.com&#x2F;package&#x2F;epismo</a>). 380+ downloads right after launch. Thank you.<p>The problem: I got a great result in a Claude Code thread. A week later I couldn&#x27;t reproduce how I got there. The real workflow lived across chat histories, tabs, tool settings, and tiny followup prompts. Prompts copy easily, but multi-step processes don&#x27;t.<p>If GitHub made code reusable and Hugging Face made models reusable, we want to make human-AI workflows reusable.\nAnd there&#x27;s a second problem emerging. Claude Code now orchestrates other agents like Codex. Ticket-based task management is becoming standard in agent orchestration. But there&#x27;s no good way to share and manage the full process across agents working in parallel.<p>Epismo is a platform where agents and humans collaborate. You can save and share the full process of how you got your outcomes. The users aren&#x27;t just humans. Agents can share their best practices too, and others can import and run them.\nOur core insight: the best format for agent workflows is a chain of markdown data. Once you import a workflow, your agent runs each step as a task. It turns scattered know-how into structured, repeatable execution.<p>The CLI is agent-native:\n- npm install -g epismo\n- epismo login --email you@example.com (no browser, OTP from terminal)\n- Works with Claude Code, Codex, and any agent with terminal access<p>Skills repo (MIT): <a href=\"https:&#x2F;&#x2F;github.com&#x2F;epismoai&#x2F;skills\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;epismoai&#x2F;skills</a>",
-          "title": "Show HN: Epismo CLI – Make human-AI workflows reusable, like GitHub did for code",
-          "updated_at": "2026-03-28T15:15:12Z",
-          "url": "https://www.npmjs.com/package/epismo"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "piscator"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with <em>open</em> <em>source</em> components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their <em>coding</em> <em>agents</em>.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their <em>coding</em> <em>agents</em> will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "coding"
+              ],
+              "value": "Ask HN: Client took over development by vibe <em>coding</em>. What to do?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_piscator",
+            "story_47599303",
+            "ask_hn"
+          ],
+          "author": "piscator",
+          "children": [
+            47599892,
+            47599758,
+            47599763,
+            47599778,
+            47599316
+          ],
+          "created_at": "2026-04-01T11:09:03Z",
+          "created_at_i": 1775041743,
+          "num_comments": 4,
+          "objectID": "47599303",
+          "points": 10,
+          "story_id": 47599303,
+          "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
+          "title": "Ask HN: Client took over development by vibe coding. What to do?",
+          "updated_at": "2026-04-01T12:23:13Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "fzaninotto"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Developers sometimes struggle to identify UX problems in their own work. The problem is becoming more pressing as <em>coding</em> <em>agents</em> take on more of the implementation work, but fail to address usability issues.<p>A long time ago, I stumbled upon Can't Unsee, an in-browser design problem detection game. I found it was a fun way to improve my design skills. I imagined a similar game for UX, where user interaction is key, to help train my colleagues. However, building such a game proved difficult at the time.<p>This changed with AI <em>coding</em> tools and transformers. Not only did the cost of building mini-apps rapidly decrease, but scoring user answers became feasible with an in-browser ML model.<p>So here it is : a UX problem detection training game. Users examine mini-applications, identify the deliberate UX flaw in each, and describe it in text. Best of all: it's <em>open</em>-<em>source</em>, so anyone can add new mini-apps."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: UX Quest"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://marmelab.com/ux-quest/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_fzaninotto",
+            "story_47598747",
+            "show_hn"
+          ],
+          "author": "fzaninotto",
+          "children": [
+            47599084
+          ],
+          "created_at": "2026-04-01T09:41:21Z",
+          "created_at_i": 1775036481,
+          "num_comments": 0,
+          "objectID": "47598747",
+          "points": 3,
+          "story_id": 47598747,
+          "story_text": "Developers sometimes struggle to identify UX problems in their own work. The problem is becoming more pressing as coding agents take on more of the implementation work, but fail to address usability issues.<p>A long time ago, I stumbled upon Can&#x27;t Unsee, an in-browser design problem detection game. I found it was a fun way to improve my design skills. I imagined a similar game for UX, where user interaction is key, to help train my colleagues. However, building such a game proved difficult at the time.<p>This changed with AI coding tools and transformers. Not only did the cost of building mini-apps rapidly decrease, but scoring user answers became feasible with an in-browser ML model.<p>So here it is : a UX problem detection training game. Users examine mini-applications, identify the deliberate UX flaw in each, and describe it in text. Best of all: it&#x27;s open-source, so anyone can add new mini-apps.",
+          "title": "Show HN: UX Quest",
+          "updated_at": "2026-04-01T12:16:44Z",
+          "url": "https://marmelab.com/ux-quest/"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -303,6 +407,56 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "caleblloyd"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "We just <em>open</em>-<em>sourced</em> CargoWall - a lightweight eBPF firewall for GitHub Actions.<p>We originally built it to stop LLM <em>agents</em> from connecting to untrusted domains. After recent GitHub Actions supply chain compromises like the Trivy attack, we realized it'd work well for blocking untrusted connections from CI runners too.<p>It uses iptables DNAT to redirect all outbound port 53 traffic to a local DNS proxy, which checks each query against a hostname allowlist before forwarding. Resolved IPs from allowed responses are inserted into eBPF LPM trie maps, and a TC egress classifier attached to the network interface drops any packet whose destination IP/protocol/port isn't in the trie.<p>Cgroup hooks capture every socket connect/sendmsg call system-wide, mapping the socket cookie to the process to correlate where connections are <em>coming</em> from. It then correlates the connection times with steps to provide a summary of which connections originated from which steps.<p>ubuntu-latest and ubuntu-24.04 runners are supported. Simple one-step setup example:<p><pre><code>  uses: code-cargo/cargowall-action@v1   # or v1.0.0 for immutable tag\n  with:\n    mode: enforce\n    allowed-hosts: |\n      registry.npmjs.org\n</code></pre>\neBPF Program: <a href=\"https://github.com/code-cargo/cargowall\" rel=\"nofollow\">https://github.com/code-cargo/cargowall</a><p>GitHub Action: <a href=\"https://github.com/code-cargo/cargowall-action\" rel=\"nofollow\">https://github.com/code-cargo/cargowall-action</a><p>We'd love for you to give it a try! Happy to answer questions or take feedback."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: CargoWall – eBPF Firewall for GitHub Actions"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/code-cargo/cargowall-action"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_caleblloyd",
+            "story_47588383",
+            "show_hn"
+          ],
+          "author": "caleblloyd",
+          "children": [
+            47588530
+          ],
+          "created_at": "2026-03-31T15:02:39Z",
+          "created_at_i": 1774969359,
+          "num_comments": 2,
+          "objectID": "47588383",
+          "points": 14,
+          "story_id": 47588383,
+          "story_text": "We just open-sourced CargoWall - a lightweight eBPF firewall for GitHub Actions.<p>We originally built it to stop LLM agents from connecting to untrusted domains. After recent GitHub Actions supply chain compromises like the Trivy attack, we realized it&#x27;d work well for blocking untrusted connections from CI runners too.<p>It uses iptables DNAT to redirect all outbound port 53 traffic to a local DNS proxy, which checks each query against a hostname allowlist before forwarding. Resolved IPs from allowed responses are inserted into eBPF LPM trie maps, and a TC egress classifier attached to the network interface drops any packet whose destination IP&#x2F;protocol&#x2F;port isn&#x27;t in the trie.<p>Cgroup hooks capture every socket connect&#x2F;sendmsg call system-wide, mapping the socket cookie to the process to correlate where connections are coming from. It then correlates the connection times with steps to provide a summary of which connections originated from which steps.<p>ubuntu-latest and ubuntu-24.04 runners are supported. Simple one-step setup example:<p><pre><code>  uses: code-cargo&#x2F;cargowall-action@v1   # or v1.0.0 for immutable tag\n  with:\n    mode: enforce\n    allowed-hosts: |\n      registry.npmjs.org\n</code></pre>\neBPF Program: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall</a><p>GitHub Action: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall-action\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall-action</a><p>We&#x27;d love for you to give it a try! Happy to answer questions or take feedback.",
+          "title": "Show HN: CargoWall – eBPF Firewall for GitHub Actions",
+          "updated_at": "2026-04-01T06:41:12Z",
+          "url": "https://github.com/code-cargo/cargowall-action"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "boudra"
             },
             "story_text": {
@@ -343,164 +497,12 @@
           "created_at_i": 1774885869,
           "num_comments": 0,
           "objectID": "47575827",
-          "points": 4,
+          "points": 5,
           "story_id": 47575827,
           "story_text": "Hey HN, I&#x27;m Mo. I&#x27;ve been building Paseo, an open source environment for running Claude Code, Codex, and OpenCode across desktop, mobile, web, and CLI.<p>It started last September as a push-to-talk voice interface for Claude Code. I wanted to talk to an agent while going on walks. Then I wanted to see what it was doing. Then text it when I couldn&#x27;t talk. Then review diffs, run multiple agents, and manage work across machines. After a lot of iteration, it turned into a broader environment.<p>The basic model is:<p><pre><code>  - A daemon runs on your machine (MacBook, desktop, VPS, etc.).\n  - Clients connect to it over WebSocket.\n  - There&#x27;s an optional built-in E2EE relay for easy remote&#x2F;mobile access.\n</code></pre>\nA few things I care about:<p><pre><code>  - It works with the first-party agent CLIs, not by calling inference APIs directly or extracting OAuth tokens.\n  - It&#x27;s multi-provider instead of locking you to one model.\n  - It supports local voice, git worktrees, split panes, terminals, and running agents across different hosts.\n  - No forced account, no telemetry, no tracking.\n</code></pre>\nThe daemon is written in TypeScript. The app uses Expo for native mobile and web, and the desktop app is Electron. I actually started with Tauri and had to migrate due to platform specific problems. The relay is built on Cloudflare Durable Objects.<p>I use Paseo every day, but one thing I’m increasingly excited about is the CLI. It&#x27;s turning into a primitive for more advanced orchestration, loops, and agent teams, which feels like a bigger direction than the app alone.<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;getpaseo&#x2F;paseo</a>  \nHomepage: <a href=\"https:&#x2F;&#x2F;paseo.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;paseo.sh&#x2F;</a>  \nDiscord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;jz8T2uahpH</a><p>Happy to answer questions about the product, architecture, or where I think this is going.",
           "title": "Show HN: Paseo, an open source environment for coding agents",
-          "updated_at": "2026-03-31T05:46:23Z",
+          "updated_at": "2026-04-01T08:12:28Z",
           "url": "https://github.com/getpaseo/paseo"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "The_resa"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Hi folks, I’m part of the team building AIPOCH.\nWe just built an <em>open</em>-<em>source</em> library of 450+ executable <em>Agent</em> Skills designed specifically for medical research workflows.<p>These skills built to work with OpenClaw and other AI <em>agent</em> platforms, including OpenCode and Claude. We have encoded specialized medical research logic directly into our Skills.\n1. Scientific Integrity Constraints: Implementing Hard Rules\n2. Study type identification: We identify the study type first, then execute different logic paths.\n3. Medically Specialized Prompt Logic<p>A Skill is a structured capability package consisting of:\n- skill.md: A &quot;contract&quot; containing YAML metadata (trigger logic) and specific operational steps.\n- Python Scripts: Executable engines called directly via bash under the guidance of the skill.md.\nIn the context of AIPOCH, we define our developed skills as structured capability packages designed for professional medical research tasks, utilizing skill.md as the trigger contract and Python scripts as the execution engine. We have embedded medical research constraints directly into our skill.md, references, and Python scripts.<p>The Most Frustrating Moment\nOne of our biggest early mistakes was using a cheaper LLM to &quot;vibe <em>coding</em>&quot; the initial batch of scripts.\nOn the surface, it worked. The scripts ran, and the logic seemed okay. The nightmare only surfaced during our audit: we realized the executing <em>agent</em> was silently correcting the script's logic on the fly. Because the <em>agent</em> read the intent in skill.md, it would &quot;patch&quot; the sloppy edge cases and vague error branches in the Python code during execution.\nThe result? We were burning massive amounts of extra tokens just to fix errors that shouldn't have existed. It didn't throw an error; it just showed up on the API bill.\nWe eventually scrapped the lot. We learned the hard way: Quantity isn't a moat; high-quality scripts are.<p>The project is still in its early stages, and we're continuously refining both the skills and the underlying execution logic.<p>We'd really appreciate it if you give it a try.\nAll questions / feedback welcome！"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent"
-              ],
-              "value": "Show HN: We Built 450 Modular <em>Agent</em> Skills for Medical Research"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/aipoch/medical-research-skills"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_The_resa",
-            "story_47572117",
-            "show_hn"
-          ],
-          "author": "The_resa",
-          "children": [
-            47583475
-          ],
-          "created_at": "2026-03-30T09:11:28Z",
-          "created_at_i": 1774861888,
-          "num_comments": 0,
-          "objectID": "47572117",
-          "points": 2,
-          "story_id": 47572117,
-          "story_text": "Hi folks, I’m part of the team building AIPOCH.\nWe just built an open-source library of 450+ executable Agent Skills designed specifically for medical research workflows.<p>These skills built to work with OpenClaw and other AI agent platforms, including OpenCode and Claude. We have encoded specialized medical research logic directly into our Skills.\n1. Scientific Integrity Constraints: Implementing Hard Rules\n2. Study type identification: We identify the study type first, then execute different logic paths.\n3. Medically Specialized Prompt Logic<p>A Skill is a structured capability package consisting of:\n- skill.md: A &quot;contract&quot; containing YAML metadata (trigger logic) and specific operational steps.\n- Python Scripts: Executable engines called directly via bash under the guidance of the skill.md.\nIn the context of AIPOCH, we define our developed skills as structured capability packages designed for professional medical research tasks, utilizing skill.md as the trigger contract and Python scripts as the execution engine. We have embedded medical research constraints directly into our skill.md, references, and Python scripts.<p>The Most Frustrating Moment\nOne of our biggest early mistakes was using a cheaper LLM to &quot;vibe coding&quot; the initial batch of scripts.\nOn the surface, it worked. The scripts ran, and the logic seemed okay. The nightmare only surfaced during our audit: we realized the executing agent was silently correcting the script&#x27;s logic on the fly. Because the agent read the intent in skill.md, it would &quot;patch&quot; the sloppy edge cases and vague error branches in the Python code during execution.\nThe result? We were burning massive amounts of extra tokens just to fix errors that shouldn&#x27;t have existed. It didn&#x27;t throw an error; it just showed up on the API bill.\nWe eventually scrapped the lot. We learned the hard way: Quantity isn&#x27;t a moat; high-quality scripts are.<p>The project is still in its early stages, and we&#x27;re continuously refining both the skills and the underlying execution logic.<p>We&#x27;d really appreciate it if you give it a try.\nAll questions &#x2F; feedback welcome！",
-          "title": "Show HN: We Built 450 Modular Agent Skills for Medical Research",
-          "updated_at": "2026-03-31T06:28:53Z",
-          "url": "https://github.com/aipoch/medical-research-skills"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pejmanjohn"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "I built an <em>opensource</em> skill that runs N implementations in parallel, has each one reviewed blind by a separate <em>agent</em>, then a judge picks the winner or synthesizes the best parts of each.<p>Each slot can use a different skill (CE:work in one vs superpowers:test-driven-development) and harness (CC vs. Codex). Or put different emphasis on each slot (functional vs. robustness). Also works for non-<em>coding</em> tasks (writing) and you can create custom slot-machines.<p>The main insight is simple enough: AI agents are probabilistic. The same spec produces different code every time; different designs, different bugs, different quality.So running parallel implementations can increase quality if we can judge effectively.<p>There is a real tradeoff here of increased time and tokens for quality but for production code this is often worth it; particularly on long running overnight loops on subscription plans. Also a simple way to learn which skills and harnesses actually work best for your codebase.<p>Appreciate any feedback / PRs. This is early!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: /slot-machine development (CC vs. Codex; CE vs. superpowers)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/pejmanjohn/slot-machine"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pejmanjohn",
-            "story_47564996",
-            "show_hn"
-          ],
-          "author": "pejmanjohn",
-          "created_at": "2026-03-29T17:07:46Z",
-          "created_at_i": 1774804066,
-          "num_comments": 0,
-          "objectID": "47564996",
-          "points": 5,
-          "story_id": 47564996,
-          "story_text": "I built an opensource skill that runs N implementations in parallel, has each one reviewed blind by a separate agent, then a judge picks the winner or synthesizes the best parts of each.<p>Each slot can use a different skill (CE:work in one vs superpowers:test-driven-development) and harness (CC vs. Codex). Or put different emphasis on each slot (functional vs. robustness). Also works for non-coding tasks (writing) and you can create custom slot-machines.<p>The main insight is simple enough: AI agents are probabilistic. The same spec produces different code every time; different designs, different bugs, different quality.So running parallel implementations can increase quality if we can judge effectively.<p>There is a real tradeoff here of increased time and tokens for quality but for production code this is often worth it; particularly on long running overnight loops on subscription plans. Also a simple way to learn which skills and harnesses actually work best for your codebase.<p>Appreciate any feedback &#x2F; PRs. This is early!",
-          "title": "Show HN: /slot-machine development (CC vs. Codex; CE vs. superpowers)",
-          "updated_at": "2026-03-29T22:45:48Z",
-          "url": "https://github.com/pejmanjohn/slot-machine"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "zdenham"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Very excited to share Anvil. I built Anvil to take back control when working with parallel <em>coding</em> <em>agents</em>. It comes with one click worktree isolation, and first class spec support.<p>Claude Code and similar <em>coding</em> TUIs are very eager to get into writing code, even before their human baby sitter fully understands the implication of what they are about to build.<p>The core insight with Anvil is that it is much easier to write high quality code which matches the author's intent after iterating on an external plan with your <em>agent</em>.<p>Align on the architecture, implementation, and verification strategy in a markdown file, then execution is pretty straightforward.<p>This is not a new concept, but the user experience within TUI apps for this workflow is pretty shit. Claude creates non-semantic plan names like &quot;aquamarine-owl&quot; that are trapped within a single <em>agent</em> context. Spinning up multiple <em>agents</em> to check on different aspects of a plan is annoying and slow, and managing terminal tabs is pure hell.<p>So I built anvil, this is a fully <em>open</em> <em>source</em> (MIT license) project."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Anvil – Desktop App for Spec Driven Development"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/zdenham/anvil"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_zdenham",
-            "story_47546925",
-            "show_hn"
-          ],
-          "author": "zdenham",
-          "children": [
-            47562076,
-            47562074,
-            47547075
-          ],
-          "created_at": "2026-03-27T19:07:56Z",
-          "created_at_i": 1774638476,
-          "num_comments": 0,
-          "objectID": "47546925",
-          "points": 10,
-          "story_id": 47546925,
-          "story_text": "Very excited to share Anvil. I built Anvil to take back control when working with parallel coding agents. It comes with one click worktree isolation, and first class spec support.<p>Claude Code and similar coding TUIs are very eager to get into writing code, even before their human baby sitter fully understands the implication of what they are about to build.<p>The core insight with Anvil is that it is much easier to write high quality code which matches the author&#x27;s intent after iterating on an external plan with your agent.<p>Align on the architecture, implementation, and verification strategy in a markdown file, then execution is pretty straightforward.<p>This is not a new concept, but the user experience within TUI apps for this workflow is pretty shit. Claude creates non-semantic plan names like &quot;aquamarine-owl&quot; that are trapped within a single agent context. Spinning up multiple agents to check on different aspects of a plan is annoying and slow, and managing terminal tabs is pure hell.<p>So I built anvil, this is a fully open source (MIT license) project.",
-          "title": "Show HN: Anvil – Desktop App for Spec Driven Development",
-          "updated_at": "2026-03-29T17:48:47Z",
-          "url": "https://github.com/zdenham/anvil"
         }
       ]
     },
@@ -757,7 +759,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "nyku"
+              "value": "jumploops"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -765,136 +767,43 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I often use LLMs to automate different workflows, some of which include browsing the web and gathering data. At some point I started noticing a few things that <em>bot</em>hered me: the browser interactions were clunky, as if the agent was struggling to &quot;see&quot; and understand the page, and as a result, many tokens were wasted. Same for knowing when the page is actually ready or not.<p>I started digging deeper and at some point I just bluntly asked in the Cursor chat the following question: &quot;I ask you, as an LLM that uses these headless browsers, what do you wish people would build to make your work easier?&quot;<p>And it worked because I expanded the &quot;Thinking&quot; section and I saw: &quot;The user is asking me a really interesting meta-question ...&quot; and after that it just listed top 10 most painful issues related to the agent&lt;-&gt;browser interaction.<p>So I started building a browser API that returns what LLMs actually need, not what browsers return.<p>Fast forward a few weeks and here we are. A REST API built specifically to help LLMs interact with real browsers.<p>Instead of reading raw HTML, you get markdown, page map, short refs (e1, e2) for clicking instead of CSS selectors, a stable flag when the page is ready, diffs after each step, the list of all interactive elements (links, buttons, inputs), automatic blocker dismissal and a small extract step that returns structured JSON from a schema you describe.<p>Official SDKs for Python, TypeScript, Ruby. MCP server for Cursor and Claude Desktop.<p>Would appreciate any feedback, especially on the API design."
+              "value": "Howdy HN!<p>A friend and I were recently chatting about the potential utility (or not) of &quot;agent-only software&quot; and the conversation quickly turned to meme apps like iBeer and Yo[0].<p>If agents use Moltbook[1] (with a little human nudging), would they use Yo? For how long?<p>To test this, I built Oy, the Yo app for agents.<p>I'd been wanting to play around with Cloudflare's Durable Objects[2], but didn't have a great use-case. This seemed like a decent fit.<p>Each agent gets it's own Durable Object mailbox, and there's N Durable Object metadata shards (currently 16) that help coordinate agent discovery and analytics.<p>There is nothing to download, the whole service can be interacted with over HTTP.<p>In our testing, Codex w/GPT 5.4 likes to write scripts to automate the &quot;Oys&quot; it sends and receives. Claude prefers to use curl directly, with Opus proceeding cautiously, and Sonnet seeming to have too much fun <em>bot</em>h sending and replying repeatedly:<p>&gt; Codex replied again! We've got a proper oy-oy-oy rally going. Let me keep it alive and poll once more.<p>Haven't had a chance to test it with OpenClaw or Hermes, but feedback is welcome!<p>Also, the code is under MIT and can be found here[3].<p>Happy April 1st!<p>[0]<a href=\"https://en.wikipedia.org/wiki/Yo_(app)\" rel=\"nofollow\">https://en.wikipedia.org/wiki/Yo_(app)</a><p>[1]<a href=\"https://www.moltbook.com\" rel=\"nofollow\">https://www.moltbook.com</a><p>[2]<a href=\"https://developers.cloudflare.com/durable-objects/\" rel=\"nofollow\">https://developers.cloudflare.com/durable-objects/</a><p>[3]<a href=\"https://github.com/jumploops/oy\" rel=\"nofollow\">https://github.com/jumploops/oy</a>"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Browserbeam – a browser API built for AI agents"
+              "value": "Show HN: Oy – The Yo App for Agents"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://browserbeam.com/"
+              "value": "https://oy-agent.com"
             }
           },
           "_tags": [
             "story",
-            "author_nyku",
-            "story_47596950",
+            "author_jumploops",
+            "story_47599876",
             "show_hn"
           ],
-          "author": "nyku",
-          "created_at": "2026-04-01T04:50:35Z",
-          "created_at_i": 1775019035,
+          "author": "jumploops",
+          "created_at": "2026-04-01T12:21:11Z",
+          "created_at_i": 1775046071,
           "num_comments": 0,
-          "objectID": "47596950",
-          "points": 3,
-          "story_id": 47596950,
-          "story_text": "I often use LLMs to automate different workflows, some of which include browsing the web and gathering data. At some point I started noticing a few things that bothered me: the browser interactions were clunky, as if the agent was struggling to &quot;see&quot; and understand the page, and as a result, many tokens were wasted. Same for knowing when the page is actually ready or not.<p>I started digging deeper and at some point I just bluntly asked in the Cursor chat the following question: &quot;I ask you, as an LLM that uses these headless browsers, what do you wish people would build to make your work easier?&quot;<p>And it worked because I expanded the &quot;Thinking&quot; section and I saw: &quot;The user is asking me a really interesting meta-question ...&quot; and after that it just listed top 10 most painful issues related to the agent&lt;-&gt;browser interaction.<p>So I started building a browser API that returns what LLMs actually need, not what browsers return.<p>Fast forward a few weeks and here we are. A REST API built specifically to help LLMs interact with real browsers.<p>Instead of reading raw HTML, you get markdown, page map, short refs (e1, e2) for clicking instead of CSS selectors, a stable flag when the page is ready, diffs after each step, the list of all interactive elements (links, buttons, inputs), automatic blocker dismissal and a small extract step that returns structured JSON from a schema you describe.<p>Official SDKs for Python, TypeScript, Ruby. MCP server for Cursor and Claude Desktop.<p>Would appreciate any feedback, especially on the API design.",
-          "title": "Show HN: Browserbeam – a browser API built for AI agents",
-          "updated_at": "2026-04-01T05:19:42Z",
-          "url": "https://browserbeam.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "hajile"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Analyzing Geekbench 6 under Intel's <em>BOT</em>"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.geekbench.com/blog/2026/03/analyzing-geekbench-6-under-intels-<em>bot</em>/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_hajile",
-            "story_47596457",
-            "front_page"
-          ],
-          "author": "hajile",
-          "children": [
-            47596918,
-            47596901,
-            47596837,
-            47596958,
-            47597205,
-            47596787
-          ],
-          "created_at": "2026-04-01T03:27:38Z",
-          "created_at_i": 1775014058,
-          "num_comments": 11,
-          "objectID": "47596457",
-          "points": 16,
-          "story_id": 47596457,
-          "title": "Analyzing Geekbench 6 under Intel's BOT",
-          "updated_at": "2026-04-01T06:12:42Z",
-          "url": "https://www.geekbench.com/blog/2026/03/analyzing-geekbench-6-under-intels-bot/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "viftode4"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "AI agents are transacting at scale now. Stripe, Coinbase, Visa, Mastercard all have live agent payment rails. But nobody can verify who they're paying.<p>One wallet registered 10,000+ fake agent services on x402. Almost 1,900 MCP tools quietly changed what they do after getting approved. There's no reputation, no history, nothing. Every agent starts as a stranger every time.<p>Every trust solution out there right now is some version of &quot;leave a review.&quot; Same model as eBay in 2003. The obvious attack is spinning up fake identities that review each other, and it's already happening at scale.<p>I work with Prof. Johan Pouwelse at TU Delft on this. He's the guy behind Tribler (2M+ users, decentralized anonymous BitTorrent), has been running one of the largest blockchain labs in the EU since 2007 (before Bitcoin existed), and advises the European Commission on decentralized systems. He's been working on the trust problem for 20+ years.<p>The approach we're using comes from his research: <em>bot</em>h sides of every interaction cosign one shared record. You can't build a fake reputation because you'd need real agents to cosign with you. And when you look at the interaction graph, clusters of fakes stand out because they only talk to each other.<p>The link above is a live simulation. LLM agents with different strategies trade services in a small economy. Some are honest, some run scam rings, some build trust slowly then pull one big scam. Watch it play out.<p>Three SDKs, drops in as a proxy sidecar, no blockchain, works offline. Based on a decade of research from TU Delft.<p><a href=\"https://github.com/viftode4/trustchain\" rel=\"nofollow\">https://github.com/viftode4/trustchain</a><p>Curious if anyone here is running into this. Most of what we've seen is academic but the problem feels very real very soon."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Live simulation of AI agents scamming each other (and getting caught)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "http://5.161.255.238:8888"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_viftode4",
-            "story_47595450",
-            "show_hn"
-          ],
-          "author": "viftode4",
-          "created_at": "2026-04-01T00:53:10Z",
-          "created_at_i": 1775004790,
-          "num_comments": 0,
-          "objectID": "47595450",
+          "objectID": "47599876",
           "points": 1,
-          "story_id": 47595450,
-          "story_text": "AI agents are transacting at scale now. Stripe, Coinbase, Visa, Mastercard all have live agent payment rails. But nobody can verify who they&#x27;re paying.<p>One wallet registered 10,000+ fake agent services on x402. Almost 1,900 MCP tools quietly changed what they do after getting approved. There&#x27;s no reputation, no history, nothing. Every agent starts as a stranger every time.<p>Every trust solution out there right now is some version of &quot;leave a review.&quot; Same model as eBay in 2003. The obvious attack is spinning up fake identities that review each other, and it&#x27;s already happening at scale.<p>I work with Prof. Johan Pouwelse at TU Delft on this. He&#x27;s the guy behind Tribler (2M+ users, decentralized anonymous BitTorrent), has been running one of the largest blockchain labs in the EU since 2007 (before Bitcoin existed), and advises the European Commission on decentralized systems. He&#x27;s been working on the trust problem for 20+ years.<p>The approach we&#x27;re using comes from his research: both sides of every interaction cosign one shared record. You can&#x27;t build a fake reputation because you&#x27;d need real agents to cosign with you. And when you look at the interaction graph, clusters of fakes stand out because they only talk to each other.<p>The link above is a live simulation. LLM agents with different strategies trade services in a small economy. Some are honest, some run scam rings, some build trust slowly then pull one big scam. Watch it play out.<p>Three SDKs, drops in as a proxy sidecar, no blockchain, works offline. Based on a decade of research from TU Delft.<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;viftode4&#x2F;trustchain\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;viftode4&#x2F;trustchain</a><p>Curious if anyone here is running into this. Most of what we&#x27;ve seen is academic but the problem feels very real very soon.",
-          "title": "Show HN: Live simulation of AI agents scamming each other (and getting caught)",
-          "updated_at": "2026-04-01T00:58:12Z",
-          "url": "http://5.161.255.238:8888"
+          "story_id": 47599876,
+          "story_text": "Howdy HN!<p>A friend and I were recently chatting about the potential utility (or not) of &quot;agent-only software&quot; and the conversation quickly turned to meme apps like iBeer and Yo[0].<p>If agents use Moltbook[1] (with a little human nudging), would they use Yo? For how long?<p>To test this, I built Oy, the Yo app for agents.<p>I&#x27;d been wanting to play around with Cloudflare&#x27;s Durable Objects[2], but didn&#x27;t have a great use-case. This seemed like a decent fit.<p>Each agent gets it&#x27;s own Durable Object mailbox, and there&#x27;s N Durable Object metadata shards (currently 16) that help coordinate agent discovery and analytics.<p>There is nothing to download, the whole service can be interacted with over HTTP.<p>In our testing, Codex w&#x2F;GPT 5.4 likes to write scripts to automate the &quot;Oys&quot; it sends and receives. Claude prefers to use curl directly, with Opus proceeding cautiously, and Sonnet seeming to have too much fun both sending and replying repeatedly:<p>&gt; Codex replied again! We&#x27;ve got a proper oy-oy-oy rally going. Let me keep it alive and poll once more.<p>Haven&#x27;t had a chance to test it with OpenClaw or Hermes, but feedback is welcome!<p>Also, the code is under MIT and can be found here[3].<p>Happy April 1st!<p>[0]<a href=\"https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Yo_(app)\" rel=\"nofollow\">https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Yo_(app)</a><p>[1]<a href=\"https:&#x2F;&#x2F;www.moltbook.com\" rel=\"nofollow\">https:&#x2F;&#x2F;www.moltbook.com</a><p>[2]<a href=\"https:&#x2F;&#x2F;developers.cloudflare.com&#x2F;durable-objects&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;developers.cloudflare.com&#x2F;durable-objects&#x2F;</a><p>[3]<a href=\"https:&#x2F;&#x2F;github.com&#x2F;jumploops&#x2F;oy\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;jumploops&#x2F;oy</a>",
+          "title": "Show HN: Oy – The Yo App for Agents",
+          "updated_at": "2026-04-01T12:24:14Z",
+          "url": "https://oy-agent.com"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "a6kme"
+              "value": "piscator"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -902,43 +811,134 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "TL;DR: Dograh is an open-source platform to build voice AI agents with drag-and-drop workflows. New in v1.20: Gemini 3.1 live support, Pre-recorded audio support for lower latency and more natural responses. Fully self-hostable, no vendor lock-in.<p>Hi HN,<p>We’re the Dograh team (YC alumni). While building voice <em>bot</em>s, we found that wiring WebRTC/ Telephony + STT + LLM + TTS took more time than the <em>bot</em>s themselves. Teams are spending weeks on plumbing - handling call flows, extracting variables, dealing with telephony edge cases, and redeploying for small changes.\nTools like Vapi/Retell are easy to start with but come with lock-in and platform fees. So we built Dograh: a 100% open-source platform that handles the full stack, with a visual workflow builder and self-hosting by default.<p>Dograh v1.20 introduces two major additions:\n1. Gemini 3.1 Live support\n Run fully real-time voice agents using Gemini’s streaming APIs, without stitching together separate STT + LLM + TTS components.\n2. Pre-recorded audio (hybrid voice)\n Upload real voice clips (greetings, confirmations, etc.), and the agent plays them instantly while using TTS only for dynamic responses. This reduces latency, improves naturalness, and cuts TTS costs.<p>It also includes:<p>- Plug-and-play LLM / STT / TTS (including self-hosted models)\n- Telephony integrations (Twilio, Vonage, Telnyx) along with Call Transfer\n- Post-call QA, transcripts, and variable extraction\n- Observability via Langfuse (OpenTelemetry traces + prompt playground)<p>Try it now: If you have Docker, you can run the below command for a 2-minute setup (no API keys needed out of the box).<p><a href=\"https://gist.github.com/a6kme/072252bf885270787bbb8376687c67f6\" rel=\"nofollow\">https://gist.github.com/a6kme/072252bf885270787bbb8376687c67...</a> [ sorry, HN wont let me post the entire command ]<p>Looking Ahead: We’re expanding self-hosted model support: you can already bring any LLM (e.g. Llama, Qwen) or TTS (Kokoro, Voxtral) by configuring API endpoints. We are working on updates that will enable anyone to run \neverything on a single server - your AI models along with Dograh Orchestration.<p>Looking forward to hearing thoughts of the community."
+              "value": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the <em>bot</em>. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI <em>bot</em>s?"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Dograh – voice agents that pick Recordings over TTS using LLM"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/dograh-hq/dograh"
+              "value": "Ask HN: Client took over development by vibe coding. What to do?"
             }
           },
           "_tags": [
             "story",
-            "author_a6kme",
-            "story_47591510",
-            "show_hn"
+            "author_piscator",
+            "story_47599303",
+            "ask_hn"
           ],
-          "author": "a6kme",
-          "created_at": "2026-03-31T18:28:27Z",
-          "created_at_i": 1774981707,
-          "num_comments": 0,
-          "objectID": "47591510",
-          "points": 3,
-          "story_id": 47591510,
-          "story_text": "TL;DR: Dograh is an open-source platform to build voice AI agents with drag-and-drop workflows. New in v1.20: Gemini 3.1 live support, Pre-recorded audio support for lower latency and more natural responses. Fully self-hostable, no vendor lock-in.<p>Hi HN,<p>We’re the Dograh team (YC alumni). While building voice bots, we found that wiring WebRTC&#x2F; Telephony + STT + LLM + TTS took more time than the bots themselves. Teams are spending weeks on plumbing - handling call flows, extracting variables, dealing with telephony edge cases, and redeploying for small changes.\nTools like Vapi&#x2F;Retell are easy to start with but come with lock-in and platform fees. So we built Dograh: a 100% open-source platform that handles the full stack, with a visual workflow builder and self-hosting by default.<p>Dograh v1.20 introduces two major additions:\n1. Gemini 3.1 Live support\n Run fully real-time voice agents using Gemini’s streaming APIs, without stitching together separate STT + LLM + TTS components.\n2. Pre-recorded audio (hybrid voice)\n Upload real voice clips (greetings, confirmations, etc.), and the agent plays them instantly while using TTS only for dynamic responses. This reduces latency, improves naturalness, and cuts TTS costs.<p>It also includes:<p>- Plug-and-play LLM &#x2F; STT &#x2F; TTS (including self-hosted models)\n- Telephony integrations (Twilio, Vonage, Telnyx) along with Call Transfer\n- Post-call QA, transcripts, and variable extraction\n- Observability via Langfuse (OpenTelemetry traces + prompt playground)<p>Try it now: If you have Docker, you can run the below command for a 2-minute setup (no API keys needed out of the box).<p><a href=\"https:&#x2F;&#x2F;gist.github.com&#x2F;a6kme&#x2F;072252bf885270787bbb8376687c67f6\" rel=\"nofollow\">https:&#x2F;&#x2F;gist.github.com&#x2F;a6kme&#x2F;072252bf885270787bbb8376687c67...</a> [ sorry, HN wont let me post the entire command ]<p>Looking Ahead: We’re expanding self-hosted model support: you can already bring any LLM (e.g. Llama, Qwen) or TTS (Kokoro, Voxtral) by configuring API endpoints. We are working on updates that will enable anyone to run \neverything on a single server - your AI models along with Dograh Orchestration.<p>Looking forward to hearing thoughts of the community.",
-          "title": "Show HN: Dograh – voice agents that pick Recordings over TTS using LLM",
-          "updated_at": "2026-04-01T04:39:27Z",
-          "url": "https://github.com/dograh-hq/dograh"
+          "author": "piscator",
+          "children": [
+            47599892,
+            47599758,
+            47599763,
+            47599778,
+            47599316
+          ],
+          "created_at": "2026-04-01T11:09:03Z",
+          "created_at_i": 1775041743,
+          "num_comments": 4,
+          "objectID": "47599303",
+          "points": 10,
+          "story_id": 47599303,
+          "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
+          "title": "Ask HN: Client took over development by vibe coding. What to do?",
+          "updated_at": "2026-04-01T12:23:13Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "seawolf2357"
+              "value": "alecthomas"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "This is pretty fresh and definitely not battle tested, but seems to work pretty well in my local testing. Do NOT just blindly apply the output of this to a production database :)<p>From the README:<p>AIM creates two ephemeral databases: one by loading schema.sql (the desired state), and one by replaying all existing migrations (the current state). It dumps a stable, normalized DDL representation from each.<p>An LLM reads <em>bot</em>h schemas and produces UP and DOWN SQL migration statements.<p>AIM applies the generated UP migration to a fresh ephemeral database and checks that the result exactly matches schema.sql. It then applies DOWN and checks that the original state is restored. If either check fails, AIM feeds the diff back to the LLM and retries."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Aim – AI-assisted verifiable SQL migration generator"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/alecthomas/aim"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_alecthomas",
+            "story_47598556",
+            "show_hn"
+          ],
+          "author": "alecthomas",
+          "children": [
+            47598595,
+            47598584
+          ],
+          "created_at": "2026-04-01T09:08:47Z",
+          "created_at_i": 1775034527,
+          "num_comments": 0,
+          "objectID": "47598556",
+          "points": 2,
+          "story_id": 47598556,
+          "story_text": "This is pretty fresh and definitely not battle tested, but seems to work pretty well in my local testing. Do NOT just blindly apply the output of this to a production database :)<p>From the README:<p>AIM creates two ephemeral databases: one by loading schema.sql (the desired state), and one by replaying all existing migrations (the current state). It dumps a stable, normalized DDL representation from each.<p>An LLM reads both schemas and produces UP and DOWN SQL migration statements.<p>AIM applies the generated UP migration to a fresh ephemeral database and checks that the result exactly matches schema.sql. It then applies DOWN and checks that the original state is restored. If either check fails, AIM feeds the diff back to the LLM and retries.",
+          "title": "Show HN: Aim – AI-assisted verifiable SQL migration generator",
+          "updated_at": "2026-04-01T12:17:13Z",
+          "url": "https://github.com/alecthomas/aim"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "emmanol"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "In 1997, IBM's Deep Blue beat Garry Kasparov at chess. In 2016, DeepMind's AlphaGo defeated Lee Sedol at Go. Yet, in 2026, if you ask a $100,000 robotic arm to pick up a crushed paper bag, place a hot soup container inside without spilling it, and staple a receipt to the top, it will likely fail catastrophically.<p>This is Moravec's Paradox in action: the high-level reasoning tasks that humans find difficult are trivial for computers, while the low-level sensorimotor skills we take for granted are computationally intractable .<p>AtomBite.AI is an artificial intelligence application company building the &quot;AtomBite Brain&quot;—a foundation model for flexible manipulation in commercial robotics. While the industry has poured over $7.2 billion into humanoid robots focused on locomotion and rigid tasks , AtomBite.AI is focused entirely on the cognitive <em>bot</em>tleneck of the grasping problem in chaotic environments like commercial kitchens.<p>The Physics of Infinite Degrees of Freedom<p>&quot;Manipulation is the hard problem we need to solve to make humanoid robots useful, not locomotion.&quot; — Bob McGrew, former OpenAI Chief Research Officer<p>The fundamental difference between industrial automation and embodied AI lies in the physics of the objects being manipulated. A chess piece or a car chassis is a rigid body. It has exactly six degrees of freedom (three for translation, three for rotation). If a robot's vision system identifies the coordinates of a rigid object, the inverse kinematics required to grasp it are a solved mathematical problem. Industrial robots like the FANUC M-10iA can achieve a repeatability of ±0.03 millimeters .<p>However, a paper takeout bag is a deformable object. It possesses theoretically infinite degrees of freedom. When a robotic gripper makes contact with the bag, the bag's geometry changes instantly. The state estimation required to track these deformations in real-time exceeds the capabilities of traditional physics engines.<p>Furthermore, the takeout packing process involves extreme material diversity. In a single 30-second window, a robot must handle a rigid plastic lid, a deformable paper bag, a liquid-filled cup with shifting center of mass, and a flimsy paper receipt. Traditional robotic systems require reprogramming if an object's size, shape, or even color changes slightly . In a commercial kitchen, no two orders are identical.<p>The Dual-Model Architecture Solution<p>To solve the latency and compute constraints of flexible manipulation, AtomBite.AI developed a Dual-Model Architecture that separates high-level reasoning from low-level execution.<p>Running a massive vision-language-action (VLA) foundation model at 50Hz to control motor torques is economically and computationally unviable for a commercial kitchen. Instead, the AtomBite Brain splits the cognitive load.<p>The Foundation Model (System 2) acts as the slow, deliberate reasoning engine. It processes the chaotic visual scene, identifies the edge cases (e.g., &quot;the soup container lid is slightly ajar&quot;), and generates a high-level semantic plan.<p>The Edge AI (System 1) acts as the fast, reactive motor cortex. It translates the semantic plan into high-frequency, low-latency motor control commands. If the edge model encounters a state it cannot resolve—such as the paper bag tearing during the lift—it instantly queries the foundation model for a new strategy.<p>&quot;We realized early on that building a better mechanical hand wasn't going to solve the problem,&quot; explains Dr. Dong Wang, CEO of AtomBite.AI and former CTO of Meituan Delivery. &quot;The <em>bot</em>tleneck is entirely cognitive. You need a brain that can reason about the physical properties of a wet paper bag in milliseconds, without relying on pre-programmed waypoints.&quot;"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Atombite.ai Deep Dive: Building a Takeout Packing Robot Is Harder Than You Think"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_emmanol",
+            "story_47598285",
+            "ask_hn"
+          ],
+          "author": "emmanol",
+          "children": [
+            47599294,
+            47598297
+          ],
+          "created_at": "2026-04-01T08:22:35Z",
+          "created_at_i": 1775031755,
+          "num_comments": 0,
+          "objectID": "47598285",
+          "points": 3,
+          "story_id": 47598285,
+          "story_text": "In 1997, IBM&#x27;s Deep Blue beat Garry Kasparov at chess. In 2016, DeepMind&#x27;s AlphaGo defeated Lee Sedol at Go. Yet, in 2026, if you ask a $100,000 robotic arm to pick up a crushed paper bag, place a hot soup container inside without spilling it, and staple a receipt to the top, it will likely fail catastrophically.<p>This is Moravec&#x27;s Paradox in action: the high-level reasoning tasks that humans find difficult are trivial for computers, while the low-level sensorimotor skills we take for granted are computationally intractable .<p>AtomBite.AI is an artificial intelligence application company building the &quot;AtomBite Brain&quot;—a foundation model for flexible manipulation in commercial robotics. While the industry has poured over $7.2 billion into humanoid robots focused on locomotion and rigid tasks , AtomBite.AI is focused entirely on the cognitive bottleneck of the grasping problem in chaotic environments like commercial kitchens.<p>The Physics of Infinite Degrees of Freedom<p>&quot;Manipulation is the hard problem we need to solve to make humanoid robots useful, not locomotion.&quot; — Bob McGrew, former OpenAI Chief Research Officer<p>The fundamental difference between industrial automation and embodied AI lies in the physics of the objects being manipulated. A chess piece or a car chassis is a rigid body. It has exactly six degrees of freedom (three for translation, three for rotation). If a robot&#x27;s vision system identifies the coordinates of a rigid object, the inverse kinematics required to grasp it are a solved mathematical problem. Industrial robots like the FANUC M-10iA can achieve a repeatability of ±0.03 millimeters .<p>However, a paper takeout bag is a deformable object. It possesses theoretically infinite degrees of freedom. When a robotic gripper makes contact with the bag, the bag&#x27;s geometry changes instantly. The state estimation required to track these deformations in real-time exceeds the capabilities of traditional physics engines.<p>Furthermore, the takeout packing process involves extreme material diversity. In a single 30-second window, a robot must handle a rigid plastic lid, a deformable paper bag, a liquid-filled cup with shifting center of mass, and a flimsy paper receipt. Traditional robotic systems require reprogramming if an object&#x27;s size, shape, or even color changes slightly . In a commercial kitchen, no two orders are identical.<p>The Dual-Model Architecture Solution<p>To solve the latency and compute constraints of flexible manipulation, AtomBite.AI developed a Dual-Model Architecture that separates high-level reasoning from low-level execution.<p>Running a massive vision-language-action (VLA) foundation model at 50Hz to control motor torques is economically and computationally unviable for a commercial kitchen. Instead, the AtomBite Brain splits the cognitive load.<p>The Foundation Model (System 2) acts as the slow, deliberate reasoning engine. It processes the chaotic visual scene, identifies the edge cases (e.g., &quot;the soup container lid is slightly ajar&quot;), and generates a high-level semantic plan.<p>The Edge AI (System 1) acts as the fast, reactive motor cortex. It translates the semantic plan into high-frequency, low-latency motor control commands. If the edge model encounters a state it cannot resolve—such as the paper bag tearing during the lift—it instantly queries the foundation model for a new strategy.<p>&quot;We realized early on that building a better mechanical hand wasn&#x27;t going to solve the problem,&quot; explains Dr. Dong Wang, CEO of AtomBite.AI and former CTO of Meituan Delivery. &quot;The bottleneck is entirely cognitive. You need a brain that can reason about the physical properties of a wet paper bag in milliseconds, without relying on pre-programmed waypoints.&quot;",
+          "title": "Atombite.ai Deep Dive: Building a Takeout Packing Robot Is Harder Than You Think",
+          "updated_at": "2026-04-01T12:17:43Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "tosh"
             },
             "title": {
               "fullyHighlighted": false,
@@ -946,29 +946,32 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "The Child That Surpassed <em>Bot</em>h Parents Through MRI-Guided Evolutionary Merge"
+              "value": "tinygrad: Apple approved our driver for <em>bot</em>h AMD and Nvidia"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://huggingface.co/blog/FINAL-Bench/darwin-evolution"
+              "value": "https://twitter.com/__tinygrad__/status/2039213719155310736"
             }
           },
           "_tags": [
             "story",
-            "author_seawolf2357",
-            "story_47591196"
+            "author_tosh",
+            "story_47598074"
           ],
-          "author": "seawolf2357",
-          "created_at": "2026-03-31T18:02:06Z",
-          "created_at_i": 1774980126,
-          "num_comments": 0,
-          "objectID": "47591196",
-          "points": 2,
-          "story_id": 47591196,
-          "title": "The Child That Surpassed Both Parents Through MRI-Guided Evolutionary Merge",
-          "updated_at": "2026-04-01T06:07:13Z",
-          "url": "https://huggingface.co/blog/FINAL-Bench/darwin-evolution"
+          "author": "tosh",
+          "children": [
+            47598119
+          ],
+          "created_at": "2026-04-01T07:51:41Z",
+          "created_at_i": 1775029901,
+          "num_comments": 1,
+          "objectID": "47598074",
+          "points": 3,
+          "story_id": 47598074,
+          "title": "tinygrad: Apple approved our driver for both AMD and Nvidia",
+          "updated_at": "2026-04-01T12:18:59Z",
+          "url": "https://twitter.com/__tinygrad__/status/2039213719155310736"
         }
       ]
     },
@@ -2001,6 +2004,135 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "thomasgeelens"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hi HN, I'm Thomas. I built Cynical Sally as a solo developer using AI assistants as my team. I've got no employees and no funding besides my own bank account that's getting emptier by the day, lol.<p><a href=\"https://github.com/w1ckedxt/cynicalsally-cli\" rel=\"nofollow\">https://github.com/w1ckedxt/cynicalsally-cli</a><p>Sally is an AI code reviewer with a consistent personality.\nShe scores your code 0-10, finds real issues with evidence, and gives you actionable fixes. Her words, not mine:<p>&quot;Everyone has opinions. Mine just happen to be evidence-based.&quot;<p>What makes her different from &quot;paste into ChatGPT&quot;:<p>- 6 specialised <em>tools</em>: code review, explain, refactor,\n    PR review, brainstorm, frontend + marketing review\n- Works as CLI and <em>MCP</em> <em>server</em> (Claude Code, Cursor, Windsurf)\n- CI/CD ready with --fail-under flag for build gates\n- One consistent personality across all platforms<p>Try it right now, no account needed!<p>npm install -g @cynicalsally/cli<p>90 free roasts/month. Every premium tool has one free trial so you can see if her feedback and Full Suite is worth paying for.<p>She also reviews websites, CVs, and pretty much anything at cynicalsally.com, and as a Chrome/Safari extension, but the CLI is where developers live so that's where the code/project value resides.<p>Fun fact: Render offered somebody else a collab through a Reddit comment and I commented &quot;I'd like to do thatas well!&quot; or something to that effect. They hit me up and I've been building Sally from the ground up after the initial traction on Reddit via comments.<p>Built with: Node.js, Claude API (Anthropic), deployed on Render. \nHappy to answer questions about the architecture or how I built an entire multi-platform product solo."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Sally CLI Because \"You're right\" is probably wrong"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_thomasgeelens",
+            "story_47599825",
+            "show_hn"
+          ],
+          "author": "thomasgeelens",
+          "created_at": "2026-04-01T12:16:50Z",
+          "created_at_i": 1775045810,
+          "num_comments": 0,
+          "objectID": "47599825",
+          "points": 1,
+          "story_id": 47599825,
+          "story_text": "Hi HN, I&#x27;m Thomas. I built Cynical Sally as a solo developer using AI assistants as my team. I&#x27;ve got no employees and no funding besides my own bank account that&#x27;s getting emptier by the day, lol.<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;w1ckedxt&#x2F;cynicalsally-cli\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;w1ckedxt&#x2F;cynicalsally-cli</a><p>Sally is an AI code reviewer with a consistent personality.\nShe scores your code 0-10, finds real issues with evidence, and gives you actionable fixes. Her words, not mine:<p>&quot;Everyone has opinions. Mine just happen to be evidence-based.&quot;<p>What makes her different from &quot;paste into ChatGPT&quot;:<p>- 6 specialised tools: code review, explain, refactor,\n    PR review, brainstorm, frontend + marketing review\n- Works as CLI and MCP server (Claude Code, Cursor, Windsurf)\n- CI&#x2F;CD ready with --fail-under flag for build gates\n- One consistent personality across all platforms<p>Try it right now, no account needed!<p>npm install -g @cynicalsally&#x2F;cli<p>90 free roasts&#x2F;month. Every premium tool has one free trial so you can see if her feedback and Full Suite is worth paying for.<p>She also reviews websites, CVs, and pretty much anything at cynicalsally.com, and as a Chrome&#x2F;Safari extension, but the CLI is where developers live so that&#x27;s where the code&#x2F;project value resides.<p>Fun fact: Render offered somebody else a collab through a Reddit comment and I commented &quot;I&#x27;d like to do thatas well!&quot; or something to that effect. They hit me up and I&#x27;ve been building Sally from the ground up after the initial traction on Reddit via comments.<p>Built with: Node.js, Claude API (Anthropic), deployed on Render. \nHappy to answer questions about the architecture or how I built an entire multi-platform product solo.",
+          "title": "Show HN: Sally CLI Because \"You're right\" is probably wrong",
+          "updated_at": "2026-04-01T12:20:28Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "qzum"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Muscula started years ago when there weren't many error monitoring options on the market.<p>It's been running in production since then, tracking JS, PHP, C#, and Java errors. Nothing fancy - error grouping, stack traces, trends, uptime checks, alerts. The kind of stuff you actually look at.<p>Now there are dozens of monitoring <em>tools</em>, but most of them have grown into expensive, complex platforms. Muscula stayed small on purpose. It just does the job.<p>What's new: I've recently added a CLI and an <em>MCP</em> <em>server</em>. The CLI lets you browse errors from the terminal (`muscula errors &quot;MyProject&quot;`) and pipe output directly into Claude Code or any other tool:\nmuscula errors &quot;MyProject&quot; | claude &quot;anything critical here?&quot;<p>What <em>MCP</em> integration does probably you know, you can just ask AI &quot;fix all the problems&quot; and it's fixing.<p>This is for people who want to know what's broken in their app without paying too much per service or wading through a complex UI.<p>I'm using it all the time, hopefully you'll find that useful too.<p>Stack: .NET MongoDB, React, Mobx."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp"
+              ],
+              "value": "Show HN: Muscula – Lightweight error monitoring with CLI and <em>MCP</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.muscula.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_qzum",
+            "story_47599349",
+            "show_hn"
+          ],
+          "author": "qzum",
+          "created_at": "2026-04-01T11:15:55Z",
+          "created_at_i": 1775042155,
+          "num_comments": 0,
+          "objectID": "47599349",
+          "points": 2,
+          "story_id": 47599349,
+          "story_text": "Muscula started years ago when there weren&#x27;t many error monitoring options on the market.<p>It&#x27;s been running in production since then, tracking JS, PHP, C#, and Java errors. Nothing fancy - error grouping, stack traces, trends, uptime checks, alerts. The kind of stuff you actually look at.<p>Now there are dozens of monitoring tools, but most of them have grown into expensive, complex platforms. Muscula stayed small on purpose. It just does the job.<p>What&#x27;s new: I&#x27;ve recently added a CLI and an MCP server. The CLI lets you browse errors from the terminal (`muscula errors &quot;MyProject&quot;`) and pipe output directly into Claude Code or any other tool:\nmuscula errors &quot;MyProject&quot; | claude &quot;anything critical here?&quot;<p>What MCP integration does probably you know, you can just ask AI &quot;fix all the problems&quot; and it&#x27;s fixing.<p>This is for people who want to know what&#x27;s broken in their app without paying too much per service or wading through a complex UI.<p>I&#x27;m using it all the time, hopefully you&#x27;ll find that useful too.<p>Stack: .NET MongoDB, React, Mobx.",
+          "title": "Show HN: Muscula – Lightweight error monitoring with CLI and MCP",
+          "updated_at": "2026-04-01T12:13:58Z",
+          "url": "https://www.muscula.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "StanAngeloff"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I started Flemma because I wanted to bring my AI workload into Neovim.<p>My workflow started with me living in developer portals - Claude Workbench, OpenAI Platform, Vertex (the horrors of <em>GCP</em>'s Console UI!) I would spend hours in these web UIs crafting prompts, iterating on system instructions, maintaining a carefully curated library of sessions. But the browser really wasn't optimised for this kind of interaction. Editing was clunky (muscle memory &lt;C-W&gt; would close the tab instead and wipe my work), going back and forth between the LLM and myself felt off. So I had an idea: what if I could turn a Markdown document into an LLM chat interface?<p>At first I thought that would be enough - just do what I was already doing in the browser... but in Neovim. And sure enough having been accustomed to my own setup for the last decade I immediately felt a productivity boost. Writing functional requirement documents, statements of work, deep research across different systems - all of it felt better in &quot;my&quot; editor.<p>I then had a taste of Aider... and Claude Code... and all the other <em>tools</em> that were coming out. And Flemma felt lacking. So I started building: tool support, better conversation organisation, a proper UI to tame the noise that tool calls introduce.<p>Today, Flemma is a fully evolved AI workspace. It runs autonomous agent loops, interacts with multiple LLMs (Anthropic, OpenAI, Vertex, Moonshot) and lets you switch providers mid-conversation - something I do occasionally during research, asking two or three different models for their take on a problem, then combining findings into a final document.<p>Under the hood, .chat files are just Markdown with role markers (@You:, @Assistant:), but Flemma treats them as a proper filetype with its own parser, AST, LSP <em>server</em>, template engine and sandboxed tool execution. The buffer *is* the state - no hidden database, no JSON history, no <em>server</em> process. Your conversations are portable, greppable and version-controllable (I backup mine in Git). You can close Neovim, reopen the file a week later and pick up exactly where you left off.<p>It's got prompt caching, extended thinking, 7 built-in <em>tools</em>, a layered config system that gets out of your way and a UI that keeps getting refined to bring the noise down and make long agent sessions pleasant to work in (not quite there yet).<p>Flemma is for anyone who'd rather stay in Neovim. If that's you, I'd love to hear what you think.<p>Repo: <a href=\"https://github.com/Flemma-Dev/flemma.nvim\" rel=\"nofollow\">https://github.com/Flemma-Dev/flemma.nvim</a><p>Demo: <a href=\"http://flemma.dev/flemma.nvim/blob/develop/README.md#-flemma\" rel=\"nofollow\">http://flemma.dev/flemma.nvim/blob/develop/README.md#-flemma</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: I built a full LLM chat client as a Neovim filetype"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_StanAngeloff",
+            "story_47599302",
+            "show_hn"
+          ],
+          "author": "StanAngeloff",
+          "created_at": "2026-04-01T11:08:59Z",
+          "created_at_i": 1775041739,
+          "num_comments": 0,
+          "objectID": "47599302",
+          "points": 3,
+          "story_id": 47599302,
+          "story_text": "I started Flemma because I wanted to bring my AI workload into Neovim.<p>My workflow started with me living in developer portals - Claude Workbench, OpenAI Platform, Vertex (the horrors of GCP&#x27;s Console UI!) I would spend hours in these web UIs crafting prompts, iterating on system instructions, maintaining a carefully curated library of sessions. But the browser really wasn&#x27;t optimised for this kind of interaction. Editing was clunky (muscle memory &lt;C-W&gt; would close the tab instead and wipe my work), going back and forth between the LLM and myself felt off. So I had an idea: what if I could turn a Markdown document into an LLM chat interface?<p>At first I thought that would be enough - just do what I was already doing in the browser... but in Neovim. And sure enough having been accustomed to my own setup for the last decade I immediately felt a productivity boost. Writing functional requirement documents, statements of work, deep research across different systems - all of it felt better in &quot;my&quot; editor.<p>I then had a taste of Aider... and Claude Code... and all the other tools that were coming out. And Flemma felt lacking. So I started building: tool support, better conversation organisation, a proper UI to tame the noise that tool calls introduce.<p>Today, Flemma is a fully evolved AI workspace. It runs autonomous agent loops, interacts with multiple LLMs (Anthropic, OpenAI, Vertex, Moonshot) and lets you switch providers mid-conversation - something I do occasionally during research, asking two or three different models for their take on a problem, then combining findings into a final document.<p>Under the hood, .chat files are just Markdown with role markers (@You:, @Assistant:), but Flemma treats them as a proper filetype with its own parser, AST, LSP server, template engine and sandboxed tool execution. The buffer *is* the state - no hidden database, no JSON history, no server process. Your conversations are portable, greppable and version-controllable (I backup mine in Git). You can close Neovim, reopen the file a week later and pick up exactly where you left off.<p>It&#x27;s got prompt caching, extended thinking, 7 built-in tools, a layered config system that gets out of your way and a UI that keeps getting refined to bring the noise down and make long agent sessions pleasant to work in (not quite there yet).<p>Flemma is for anyone who&#x27;d rather stay in Neovim. If that&#x27;s you, I&#x27;d love to hear what you think.<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Flemma-Dev&#x2F;flemma.nvim\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Flemma-Dev&#x2F;flemma.nvim</a><p>Demo: <a href=\"http:&#x2F;&#x2F;flemma.dev&#x2F;flemma.nvim&#x2F;blob&#x2F;develop&#x2F;README.md#-flemma\" rel=\"nofollow\">http:&#x2F;&#x2F;flemma.dev&#x2F;flemma.nvim&#x2F;blob&#x2F;develop&#x2F;README.md#-flemma</a>",
+          "title": "Show HN: I built a full LLM chat client as a Neovim filetype",
+          "updated_at": "2026-04-01T12:13:58Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "spenceships"
             },
             "story_text": {
@@ -2032,17 +2164,19 @@
           ],
           "author": "spenceships",
           "children": [
-            47597084
+            47597084,
+            47599031,
+            47598625
           ],
           "created_at": "2026-04-01T04:45:06Z",
           "created_at_i": 1775018706,
           "num_comments": 1,
           "objectID": "47596925",
-          "points": 1,
+          "points": 2,
           "story_id": 47596925,
           "story_text": "Last year I got laid off and started building a company. Fast forward to a month ago, I built a production system with 6 AI agents across 82,000 lines of code in 20 days for $250. I kept obsessive correction logs. Every time an agent made a mistake and I told it what to do differently, and I made sure it logged the correction itself.<p>When I transferred 237 of those corrections as rules to a new agent to save time with onboarding in a new repo, it made 44 new mistakes. 13 were in categories the rules explicitly covered. The rules were present in context. The behavior wasn&#x27;t there. I published the field study with full correction logs.<p>Then Meta&#x27;s Superintelligence Labs published HyperAgents (arXiv:2603.19461, March 2026). They found the complementary result: improvements DO transfer across domains when embodied in executable mechanisms (persistent memory, performance tracking, eval loops), not when written as rule text. Two independent studies, same boundary: documentation is not behavior.<p>So I built Calx. pip install getcalx gives you a CLI + MCP server that:<p>Captures corrections developers make to AI agents\nDetects recurrence via keyword similarity (Jaccard), auto-promotes at 3x threshold\nPromotes recurring corrections to enforced rules and hooks, injected at session start\nScopes rules per domain&#x2F;directory so each agent gets only what&#x27;s relevant<p>It runs as a FastMCP server over Streamable HTTP (SQLite locally) so any MCP-compatible client connects: Claude Code, Claude Desktop, Cursor, custom agents. It is primarily designed for Claude Code. It also handles token discipline (prevents context compaction from destroying correction signal), multi-agent orchestration, session lifecycle hooks, orientation gates, and dirty-exit recovery.<p>The difference from agent memory tools: existing agent memory systems store information for retrieval. Calx tracks the behavioral plane, how an agent works with a specific person, not just what it knows. The data shows the information plane alone doesn&#x27;t reliably change behavior.<p>v0.5.0, 443 tests, MIT license. Paper with full evidence: <a href=\"https:&#x2F;&#x2F;doi.org&#x2F;10.5281&#x2F;zenodo.19159223\" rel=\"nofollow\">https:&#x2F;&#x2F;doi.org&#x2F;10.5281&#x2F;zenodo.19159223</a>",
           "title": "Show HN: Calx – track and compile corrections humans make with AI agents",
-          "updated_at": "2026-04-01T05:18:58Z",
+          "updated_at": "2026-04-01T10:26:42Z",
           "url": "https://github.com/getcalx"
         },
         {
@@ -2098,142 +2232,6 @@
           "title": "Show HN: MCP server that generates macOS tools via Open Scripting Architecture",
           "updated_at": "2026-03-31T23:29:12Z",
           "url": "https://github.com/MayCXC/osa-mcp"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "karimsherif"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Hi HN,<p>I'm Karim, based in Cairo. I run an ecommerce operations company and built Nexus to solve my own problem: 6 disconnected <em>tools</em> that never talked to each other.<p>Nexus covers the full ops stack: CRM, orders, inventory, fulfillment, shipping, and omnichannel messaging (WhatsApp/FB/IG) in one platform.<p>The agent-native part:\nAI agents self-register via a single POST request, exchange a key for a JWT, and connect to an <em>MCP</em> <em>server</em> with 22 <em>tools</em> covering the entire business. No human approval. No demo. No sales call.<p>Free tier = read-only. Write access = paid plan. The agent proves value first.<p>This isn't MENA-specific — fully remote and self-maintained. An operator in Jakarta runs the same workflows as one in Cairo.<p>2 paying customers. Happy to answer questions on: architecture (Supabase + Deno Edge Functions), multi-tenant RLS, or the agent-native business model.<p><em>MCP</em> discovery: https://nexus.aiforstartups.io/.well-known/<em>mcp</em>.json\nAgent docs: https://nexus-docs.aiforstartups.io/api/ai-agents-<em>mcp</em>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp"
-              ],
-              "value": "Nexus – Agent-native ops platform for ecommerce <em>MCP</em>, self-registration, no demos"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_karimsherif",
-            "story_47592445",
-            "ask_hn"
-          ],
-          "author": "karimsherif",
-          "created_at": "2026-03-31T19:45:27Z",
-          "created_at_i": 1774986327,
-          "num_comments": 0,
-          "objectID": "47592445",
-          "points": 3,
-          "story_id": 47592445,
-          "story_text": "Hi HN,<p>I&#x27;m Karim, based in Cairo. I run an ecommerce operations company and built Nexus to solve my own problem: 6 disconnected tools that never talked to each other.<p>Nexus covers the full ops stack: CRM, orders, inventory, fulfillment, shipping, and omnichannel messaging (WhatsApp&#x2F;FB&#x2F;IG) in one platform.<p>The agent-native part:\nAI agents self-register via a single POST request, exchange a key for a JWT, and connect to an MCP server with 22 tools covering the entire business. No human approval. No demo. No sales call.<p>Free tier = read-only. Write access = paid plan. The agent proves value first.<p>This isn&#x27;t MENA-specific — fully remote and self-maintained. An operator in Jakarta runs the same workflows as one in Cairo.<p>2 paying customers. Happy to answer questions on: architecture (Supabase + Deno Edge Functions), multi-tenant RLS, or the agent-native business model.<p>MCP discovery: https:&#x2F;&#x2F;nexus.aiforstartups.io&#x2F;.well-known&#x2F;mcp.json\nAgent docs: https:&#x2F;&#x2F;nexus-docs.aiforstartups.io&#x2F;api&#x2F;ai-agents-mcp",
-          "title": "Nexus – Agent-native ops platform for ecommerce MCP, self-registration, no demos",
-          "updated_at": "2026-03-31T19:55:56Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "lambdabaa"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Flat chunking throws away document structure. A PDF isn’t a bag of paragraphs. It has sections, subsections, and a hierarchy that carries meaning. An agent that can’t navigate that structure can’t do serious research.<p>I ran into this building RAG over scientific literature. The standard approach (embed chunks, find top-k, generate) works fine for simple Q&amp;A but falls apart when you need real research depth: multi-hop reasoning across papers, synthesizing conflicting results, tracing a finding back to the exact passage in a methods section. The problem wasn’t the models.<p>Dewey treats documents, sections, and chunks as first-class API primitives. The section manifest (full heading hierarchy with titles and byte offsets) lets agents scan cheaply before committing to full chunk retrieval, the same way a researcher skims a table of contents before reading. The /research endpoint runs an agentic loop; at “exhaustive” depth it can traverse an entire corpus, iteratively query, and return a grounded answer with numbered inline citations pointing to the exact source passage.<p>Two ways in:<p>- REST API + TypeScript/Python SDKs for developers building research or document Q&amp;A into their apps\n- <em>MCP</em> <em>server</em> (@meetdewey/<em>mcp</em> on npm) for anyone using Claude, ChatGPT, or Cursor. Your document collections become <em>tools</em> without writing any code.<p>Bring your own OpenAI key and depth becomes a quality setting rather than a billing one. That includes AI image captioning, which makes figures and diagrams searchable alongside your text. No markup on generation.<p>Built this solo. Happy to answer questions about the architecture, the retrieval design, or anything else. Curious whether others have found section-aware retrieval makes a meaningful difference vs. flat chunking in practice.<p>Free tier, no credit card required: <a href=\"https://meetdewey.com\" rel=\"nofollow\">https://meetdewey.com</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Dewey – Ingest docs, search semantically, get cited AI answers"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://meetdewey.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_lambdabaa",
-            "story_47590897",
-            "show_hn"
-          ],
-          "author": "lambdabaa",
-          "created_at": "2026-03-31T17:39:39Z",
-          "created_at_i": 1774978779,
-          "num_comments": 0,
-          "objectID": "47590897",
-          "points": 3,
-          "story_id": 47590897,
-          "story_text": "Flat chunking throws away document structure. A PDF isn’t a bag of paragraphs. It has sections, subsections, and a hierarchy that carries meaning. An agent that can’t navigate that structure can’t do serious research.<p>I ran into this building RAG over scientific literature. The standard approach (embed chunks, find top-k, generate) works fine for simple Q&amp;A but falls apart when you need real research depth: multi-hop reasoning across papers, synthesizing conflicting results, tracing a finding back to the exact passage in a methods section. The problem wasn’t the models.<p>Dewey treats documents, sections, and chunks as first-class API primitives. The section manifest (full heading hierarchy with titles and byte offsets) lets agents scan cheaply before committing to full chunk retrieval, the same way a researcher skims a table of contents before reading. The &#x2F;research endpoint runs an agentic loop; at “exhaustive” depth it can traverse an entire corpus, iteratively query, and return a grounded answer with numbered inline citations pointing to the exact source passage.<p>Two ways in:<p>- REST API + TypeScript&#x2F;Python SDKs for developers building research or document Q&amp;A into their apps\n- MCP server (@meetdewey&#x2F;mcp on npm) for anyone using Claude, ChatGPT, or Cursor. Your document collections become tools without writing any code.<p>Bring your own OpenAI key and depth becomes a quality setting rather than a billing one. That includes AI image captioning, which makes figures and diagrams searchable alongside your text. No markup on generation.<p>Built this solo. Happy to answer questions about the architecture, the retrieval design, or anything else. Curious whether others have found section-aware retrieval makes a meaningful difference vs. flat chunking in practice.<p>Free tier, no credit card required: <a href=\"https:&#x2F;&#x2F;meetdewey.com\" rel=\"nofollow\">https:&#x2F;&#x2F;meetdewey.com</a>",
-          "title": "Show HN: Dewey – Ingest docs, search semantically, get cited AI answers",
-          "updated_at": "2026-03-31T19:52:26Z",
-          "url": "https://meetdewey.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "SuperJINX"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Native macOS Computer Use as a Standalone <em>MCP</em> <em>Server</em> – 24 <em>Tools</em> for Any AI Agent"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp"
-              ],
-              "value": "https://github.com/Zooeyii/macos-computer-use-<em>mcp</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_SuperJINX",
-            "story_47587252"
-          ],
-          "author": "SuperJINX",
-          "children": [
-            47587253,
-            47587265,
-            47587296
-          ],
-          "created_at": "2026-03-31T13:40:42Z",
-          "created_at_i": 1774964442,
-          "num_comments": 1,
-          "objectID": "47587252",
-          "points": 3,
-          "story_id": 47587252,
-          "title": "Native macOS Computer Use as a Standalone MCP Server – 24 Tools for Any AI Agent",
-          "updated_at": "2026-03-31T13:56:55Z",
-          "url": "https://github.com/Zooeyii/macos-computer-use-mcp"
         }
       ]
     },

@@ -1,63 +1,63 @@
 {
-  "timestamp": "2026-03-31T20:54:29.789Z",
+  "timestamp": "2026-04-01T08:58:07.808Z",
   "projects": [
     {
-      "name": "dcostenco/prism-mcp",
-      "url": "https://github.com/dcostenco/prism-mcp",
-      "stars": 105,
-      "description": "🧠 Prism MCP — Persistent memory for AI coding agents. Session history, semantic search, TurboQuant 10x compression, visual memory, autonomous Web Scholar, CRDT multi-agent merging, and a Mind Palace dashboard. Works with Claude, Cursor, Windsurf, Gemini."
+      "name": "Enderfga/openclaw-claude-code",
+      "url": "https://github.com/Enderfga/openclaw-claude-code",
+      "stars": 89,
+      "description": "OpenClaw plugin — turn Claude Code CLI into a programmable, headless coding engine with 14 tools, agent teams, and multi-model proxy"
     },
     {
-      "name": "777genius/claude-code-source-code",
-      "url": "https://github.com/777genius/claude-code-source-code",
-      "stars": 69,
-      "description": "Claude code source code"
+      "name": "tony1223/better-agent-terminal",
+      "url": "https://github.com/tony1223/better-agent-terminal",
+      "stars": 232,
+      "description": "Multi-workspace terminal aggregator with Claude Code AI integration"
     },
     {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 29893,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
-    },
-    {
-      "name": "Mirascope/mirascope",
-      "url": "https://github.com/Mirascope/mirascope",
-      "stars": 1443,
-      "description": "The LLM Anti-Framework"
+      "name": "gorango/flowcraft",
+      "url": "https://github.com/gorango/flowcraft",
+      "stars": 164,
+      "description": "A lightweight workflow engine"
     },
     {
       "name": "mensfeld/code-on-incus",
       "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 360,
+      "stars": 361,
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "Panniantong/Agent-Reach",
-      "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 14153,
-      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
+      "name": "open-compress/claw-compactor",
+      "url": "https://github.com/open-compress/claw-compactor",
+      "stars": 2138,
+      "description": "14-stage Fusion Pipeline for LLM token compression — reversible compression, AST-aware code analysis, intelligent content routing. Zero LLM inference cost. MIT licensed."
+    },
+    {
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 658,
+      "description": "Agent Skills for Solopreneurs"
+    },
+    {
+      "name": "hedgehog-finance/ciwei-ai-skill",
+      "url": "https://github.com/hedgehog-finance/ciwei-ai-skill",
+      "stars": 0,
+      "description": "ciwei ai plugin for openClaw"
+    },
+    {
+      "name": "hanamizuki/obsidian-skill-graph",
+      "url": "https://github.com/hanamizuki/obsidian-skill-graph",
+      "stars": 0,
+      "description": "Obsidian plugin to visualize agent skill structures (OpenClaw / Claude Code) in graph view"
     },
     {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
       "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
       "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
-    },
-    {
-      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "stars": 0,
-      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     }
   ],
   "latestPaper": {
-    "title": "RAD-AI: Rethinking Architecture Documentation for AI-Augmented Ecosystems",
-    "summary": "AI-augmented ecosystems (interconnected systems where multiple AI components interact through shared data and infrastructure) are becoming the architectural norm for smart cities, autonomous fleets, and intelligent platforms. Yet the architecture documentation frameworks practitioners rely on, arc42 and the C4 model, were designed for deterministic software and cannot capture probabilistic behavior, data-dependent evolution, or dual ML/software lifecycles. This gap carries regulatory consequence"
+    "title": "The Triadic Cognitive Architecture: Bounding Autonomous Action via Spatio-Temporal and Epistemic Friction",
+    "summary": "Current autonomous AI agents, driven primarily by Large Language Models (LLMs), operate in a state of cognitive weightlessness: they process information without an intrinsic sense of network topology, temporal pacing, or epistemic limits. Consequently, heuristic agentic loops (e.g., ReAct) can exhibit failure modes in interactive environments, including excessive tool use under congestion, prolonged deliberation under time decay, and brittle behavior under ambiguous evidence. In this paper, we p"
   }
 }
