@@ -40,6 +40,7 @@ import {
 } from './learning.js'
 import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory, destroySession } from './memory.js'
 import { getDreamPrompt, dreamAfterSession } from './dream.js'
+import { notifyTurn, startMemoryScanner, stopMemoryScanner } from './memory-scanner.js'
 import { autoCompact, compressToolResult, type ConversationTurn } from './context-manager.js'
 import { learnedRoute, recordRoute } from './learned-router.js'
 import { buildCacheablePrompt, createPromptSections } from './prompt-cache.js'
@@ -909,7 +910,9 @@ export async function runAgent(
     const localResult = await tryLocalFirst(message)
     if (localResult !== null) {
       addTurn({ role: 'user', content: message }, memSession)
+      notifyTurn({ role: 'user', content: message }, memSession)
       addTurn({ role: 'assistant', content: localResult }, memSession)
+      notifyTurn({ role: 'assistant', content: localResult }, memSession)
       ui.onInfo('(handled locally — 0 tokens used)')
       return { content: localResult, agent: 'local', model: 'none', toolCalls: 0 }
     }
@@ -939,7 +942,9 @@ export async function runAgent(
       }, { autoApprove: false, onApproval: async () => true })
       const summary = formatPlanSummary(plan)
       addTurn({ role: 'user', content: message }, memSession)
+      notifyTurn({ role: 'user', content: message }, memSession)
       addTurn({ role: 'assistant', content: summary }, memSession)
+      notifyTurn({ role: 'assistant', content: summary }, memSession)
       return {
         content: summary,
         agent: options.agent || 'coder',
@@ -1173,6 +1178,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
     model: options.model || 'auto',
     message: originalMessage.slice(0, 200),
   })
+
+  // Start passive memory scanner for this session
+  startMemoryScanner()
 
   // ── Gödel limits: detect undecidable loops and hand off to human ──
   const loopDetector = new LoopDetector({
@@ -1494,7 +1502,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
         }
 
         addTurn({ role: 'user', content: originalMessage }, memSession)
+        notifyTurn({ role: 'user', content: originalMessage }, memSession)
         addTurn({ role: 'assistant', content }, memSession)
+        notifyTurn({ role: 'assistant', content }, memSession)
 
         // ── Recursive Learning: record what worked (async — non-blocking) ──
         const totalTokens = lastResponse.usage
@@ -1844,6 +1854,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
     reason: 'loop_exhausted',
   })
   telemetry.destroy().catch(() => {})
+
+  // ── Memory Scanner: stop and persist session stats ──
+  stopMemoryScanner()
 
   // ── Dream Engine: consolidate session memories (non-blocking, $0 via Ollama) ──
   dreamAfterSession(sessionId)

@@ -384,6 +384,9 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './dj-set-builder.js',  registerFn: 'registerDjSetBuilderTools' },
   { path: './serum2-preset.js',  registerFn: 'registerSerum2PresetTools' },
   { path: './dream-tools.js',   registerFn: 'registerDreamTools' },
+  { path: './memory-scanner-tools.js', registerFn: 'registerMemoryScannerTools' },
+  { path: './buddy-tools.js',  registerFn: 'registerBuddyTools' },
+  { path: './voice-input-tools.js', registerFn: 'registerVoiceInputTools' },
 ]
 
 /** Track whether lazy tools have been registered */
