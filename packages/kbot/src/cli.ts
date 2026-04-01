@@ -3364,18 +3364,27 @@ async function main(): Promise<void> {
     .description('Run a dream cycle now (uses local Ollama)')
     .action(async () => {
       const { dream } = await import('./dream.js')
-      printInfo('Dreaming... consolidating session memories with local AI')
+      console.log()
+      console.log(`  ${chalk.hex('#A78BFA')('◆')} ${chalk.bold('Dream Engine')}  ${chalk.dim('consolidating memories...')}`)
+      console.log()
       const result = await dream()
       if (result.success) {
-        printSuccess(`Dream cycle #${result.cycle} complete`)
-        console.log(`  New insights: ${result.newInsights}`)
-        console.log(`  Reinforced: ${result.reinforced}`)
-        console.log(`  Archived: ${result.archived} aged-out`)
-        console.log(`  Duration: ${result.duration}ms`)
+        console.log(`  ${chalk.hex('#4ADE80')('✓')} ${chalk.bold(`Cycle #${result.cycle} complete`)}  ${chalk.dim(`${result.duration}ms`)}`)
+        console.log()
+        console.log(`    ${chalk.hex('#4ADE80')('+')} ${chalk.bold(String(result.newInsights))} new insights`)
+        console.log(`    ${chalk.hex('#A78BFA')('↻')} ${chalk.bold(String(result.reinforced))} reinforced`)
+        if (result.archived > 0) {
+          console.log(`    ${chalk.dim('↓')} ${chalk.dim(`${result.archived} archived (aged out)`)}`)
+        }
+        console.log()
+        console.log(`  ${chalk.dim('View results:')} ${chalk.hex('#A78BFA')('kbot dream status')}`)
       } else {
-        printWarn(result.error || 'Dream cycle failed')
-        if (result.archived > 0) console.log(`  (Still archived ${result.archived} aged-out insights)`)
+        console.log(`  ${chalk.hex('#FBBF24')('!')} ${result.error || 'Dream cycle failed'}`)
+        if (result.archived > 0) {
+          console.log(`    ${chalk.dim('↓')} ${chalk.dim(`${result.archived} insights archived (aging only)`)}`)
+        }
       }
+      console.log()
     })
 
   dreamCmd
@@ -3384,22 +3393,91 @@ async function main(): Promise<void> {
     .action(async () => {
       const { getDreamStatus } = await import('./dream.js')
       const { state, insights, archiveCount } = getDreamStatus()
-      console.log(chalk.bold('\nDream Engine'))
-      console.log(chalk.dim('═══════════════════'))
-      console.log(`Cycles:    ${state.cycles}`)
-      console.log(`Last:      ${state.lastDream || 'never'}`)
-      console.log(`Active:    ${state.activeInsights} insights`)
-      console.log(`Archived:  ${state.totalArchived} (${archiveCount} files)`)
+
+      // ── Helper functions ──
+      const W = 56 // inner width
+      const box = {
+        tl: '╭', tr: '╮', bl: '╰', br: '╯', h: '─', v: '│',
+        pad: (s: string, w: number) => {
+          // Pad string to width, accounting for chalk ANSI codes
+          const visible = s.replace(/\x1b\[[0-9;]*m/g, '')
+          const diff = w - visible.length
+          return diff > 0 ? s + ' '.repeat(diff) : s
+        },
+      }
+      const relevanceBar = (pct: number, len = 20) => {
+        const filled = Math.round((pct / 100) * len)
+        const empty = len - filled
+        const color = pct >= 70 ? chalk.hex('#4ADE80') : pct >= 40 ? chalk.hex('#FBBF24') : chalk.hex('#F87171')
+        return color('█'.repeat(filled)) + chalk.dim('░'.repeat(empty))
+      }
+      const categoryColor = (cat: string) => {
+        const colors: Record<string, string> = {
+          pattern: '#A78BFA', preference: '#67E8F9', skill: '#4ADE80',
+          project: '#FB923C', relationship: '#F472B6',
+        }
+        return chalk.hex(colors[cat] || '#A78BFA')
+      }
+      const categoryChip = (cat: string) => {
+        const c = categoryColor(cat)
+        return c(` ${cat.toUpperCase()} `)
+      }
+
+      // ── Header box ──
+      console.log()
+      console.log(chalk.hex('#A78BFA')(`  ${box.tl}${box.h.repeat(W)}${box.tr}`))
+      console.log(chalk.hex('#A78BFA')(`  ${box.v}`) + box.pad(`  ${chalk.hex('#A78BFA').bold('◆ DREAM ENGINE')}  ${chalk.dim('memory consolidation')}`, W) + chalk.hex('#A78BFA')(box.v))
+      console.log(chalk.hex('#A78BFA')(`  ${box.bl}${box.h.repeat(W)}${box.br}`))
+      console.log()
+
+      // ── Stats row ──
+      const lastDreamDisplay = state.lastDream
+        ? new Date(state.lastDream).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : chalk.dim('never')
+      console.log(`  ${chalk.bold('Cycles')}  ${chalk.hex('#A78BFA')(String(state.cycles))}    ${chalk.bold('Last')}  ${lastDreamDisplay}    ${chalk.bold('Active')}  ${chalk.hex('#4ADE80')(String(state.activeInsights))}`)
+      console.log(`  ${chalk.bold('Total')}   ${chalk.dim(String(state.totalInsights))}    ${chalk.bold('Archived')}  ${chalk.dim(`${state.totalArchived} (${archiveCount} files)`)}`)
+      console.log()
+
       if (insights.length > 0) {
+        // ── Average relevance bar ──
         const avgRel = Math.round(insights.reduce((s, i) => s + i.relevance, 0) / insights.length * 100)
-        console.log(`Avg relevance: ${avgRel}%`)
-        console.log(chalk.bold('\nTop insights:'))
+        console.log(`  ${chalk.bold('Avg Relevance')}  ${relevanceBar(avgRel, 24)}  ${chalk.bold(`${avgRel}%`)}`)
+        console.log()
+
+        // ── Category breakdown ──
+        const catCounts: Record<string, number> = {}
+        for (const i of insights) catCounts[i.category] = (catCounts[i.category] || 0) + 1
+        const chips = Object.entries(catCounts)
+          .sort((a, b) => b[1] - a[1])
+          .map(([cat, count]) => `${categoryChip(cat)} ${chalk.dim(`${count}`)}`)
+          .join('  ')
+        console.log(`  ${chalk.bold('Categories')}  ${chips}`)
+        console.log()
+
+        // ── Divider ──
+        console.log(chalk.dim(`  ${'─'.repeat(W)}`))
+        console.log()
+
+        // ── Top insights ──
+        console.log(`  ${chalk.bold('Top Insights')}`)
+        console.log()
         for (const i of insights.slice(0, 8)) {
           const pct = Math.round(i.relevance * 100)
-          console.log(`  ${chalk.green(`${pct}%`)} [${chalk.cyan(i.category)}] ${i.content}`)
+          const bar = relevanceBar(pct, 12)
+          const tag = categoryChip(i.category)
+          console.log(`  ${bar} ${chalk.bold(`${pct}%`)}  ${tag}`)
+          console.log(`  ${chalk.white(i.content)}`)
+          if (i.keywords.length > 0) {
+            console.log(`  ${chalk.dim(i.keywords.map(k => `#${k}`).join('  '))}  ${chalk.dim('·')}  ${chalk.dim(`${i.sessions} sessions`)}`)
+          }
+          console.log()
         }
       } else {
-        console.log(chalk.dim('\nNo insights yet. Run: kbot dream run'))
+        console.log(chalk.dim(`  ${'─'.repeat(W)}`))
+        console.log()
+        console.log(`  ${chalk.dim('No insights yet.')}`)
+        console.log(`  ${chalk.dim('Run:')} ${chalk.hex('#A78BFA')('kbot dream run')} ${chalk.dim('to start consolidating memories')}`)
+        console.log()
       }
     })
 
@@ -3409,15 +3487,55 @@ async function main(): Promise<void> {
     .action(async (query: string) => {
       const { searchDreams } = await import('./dream.js')
       const results = searchDreams(query)
+
+      // Helpers
+      const relevanceBar = (pct: number, len = 12) => {
+        const filled = Math.round((pct / 100) * len)
+        const empty = len - filled
+        const color = pct >= 70 ? chalk.hex('#4ADE80') : pct >= 40 ? chalk.hex('#FBBF24') : chalk.hex('#F87171')
+        return color('█'.repeat(filled)) + chalk.dim('░'.repeat(empty))
+      }
+      const categoryColor = (cat: string) => {
+        const colors: Record<string, string> = {
+          pattern: '#A78BFA', preference: '#67E8F9', skill: '#4ADE80',
+          project: '#FB923C', relationship: '#F472B6',
+        }
+        return chalk.hex(colors[cat] || '#A78BFA')
+      }
+      const highlightQuery = (text: string, q: string) => {
+        const terms = q.toLowerCase().split(/\s+/)
+        let result = text
+        for (const term of terms) {
+          const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+          result = result.replace(regex, chalk.hex('#FBBF24').bold.underline('$1'))
+        }
+        return result
+      }
+
       if (results.length === 0) {
-        printInfo(`No insights match "${query}"`)
+        console.log()
+        console.log(`  ${chalk.hex('#A78BFA')('◆')} ${chalk.bold('Dream Search')}  ${chalk.dim(`"${query}"`)}`)
+        console.log()
+        console.log(`  ${chalk.dim('No insights match this query.')}`)
+        console.log(`  ${chalk.dim('Try broader keywords or run')} ${chalk.hex('#A78BFA')('kbot dream run')} ${chalk.dim('first.')}`)
+        console.log()
         return
       }
-      console.log(chalk.bold(`\n${results.length} insights matching "${query}":\n`))
+
+      console.log()
+      console.log(`  ${chalk.hex('#A78BFA')('◆')} ${chalk.bold('Dream Search')}  ${chalk.dim(`"${query}"`)}  ${chalk.hex('#4ADE80')(`${results.length} found`)}`)
+      console.log(chalk.dim(`  ${'─'.repeat(52)}`))
+      console.log()
+
       for (const i of results.slice(0, 15)) {
         const pct = Math.round(i.relevance * 100)
-        console.log(`  ${chalk.green(`${pct}%`)} [${chalk.cyan(i.category)}] ${i.content}`)
-        console.log(chalk.dim(`         ${i.keywords.join(', ')} | ${i.sessions} sessions | ${i.created.split('T')[0]}`))
+        const bar = relevanceBar(pct)
+        const tag = categoryColor(i.category)(` ${i.category.toUpperCase()} `)
+        console.log(`  ${bar} ${chalk.bold(`${pct}%`)}  ${tag}`)
+        console.log(`  ${highlightQuery(i.content, query)}`)
+        const keywordsHighlighted = i.keywords.map(k => highlightQuery(`#${k}`, query)).join('  ')
+        console.log(`  ${keywordsHighlighted}  ${chalk.dim('·')}  ${chalk.dim(`${i.sessions} sessions`)}  ${chalk.dim('·')}  ${chalk.dim(i.created.split('T')[0])}`)
+        console.log()
       }
     })
 
@@ -3425,9 +3543,95 @@ async function main(): Promise<void> {
     .command('journal')
     .description('Print the full dream journal')
     .action(async () => {
-      const { getDreamPrompt } = await import('./dream.js')
-      const journal = getDreamPrompt(50)
-      console.log(journal || chalk.dim('Dream journal is empty. Run: kbot dream run'))
+      const { getDreamStatus } = await import('./dream.js')
+      const { state, insights } = getDreamStatus()
+
+      // Helpers
+      const W = 56
+      const box = {
+        tl: '╭', tr: '╮', bl: '╰', br: '╯', h: '─', v: '│',
+        pad: (s: string, w: number) => {
+          const visible = s.replace(/\x1b\[[0-9;]*m/g, '')
+          const diff = w - visible.length
+          return diff > 0 ? s + ' '.repeat(diff) : s
+        },
+      }
+      const relevanceBar = (pct: number, len = 16) => {
+        const filled = Math.round((pct / 100) * len)
+        const empty = len - filled
+        const color = pct >= 70 ? chalk.hex('#4ADE80') : pct >= 40 ? chalk.hex('#FBBF24') : chalk.hex('#F87171')
+        return color('█'.repeat(filled)) + chalk.dim('░'.repeat(empty))
+      }
+      const categoryColors: Record<string, string> = {
+        pattern: '#A78BFA', preference: '#67E8F9', skill: '#4ADE80',
+        project: '#FB923C', relationship: '#F472B6',
+      }
+      const categoryIcon: Record<string, string> = {
+        pattern: '◇', preference: '♡', skill: '⚡', project: '▸', relationship: '◈',
+      }
+      const categoryColor = (cat: string) => chalk.hex(categoryColors[cat] || '#A78BFA')
+
+      if (insights.length === 0) {
+        console.log()
+        console.log(`  ${chalk.hex('#A78BFA')('◆')} ${chalk.bold('Dream Journal')}`)
+        console.log()
+        console.log(`  ${chalk.dim('The journal is empty.')}`)
+        console.log(`  ${chalk.dim('Run')} ${chalk.hex('#A78BFA')('kbot dream run')} ${chalk.dim('after a session to consolidate memories.')}`)
+        console.log()
+        return
+      }
+
+      // ── Header ──
+      console.log()
+      console.log(chalk.hex('#A78BFA')(`  ${box.tl}${box.h.repeat(W)}${box.tr}`))
+      const headerContent = `  ${chalk.hex('#A78BFA').bold('◆ DREAM JOURNAL')}  ${chalk.dim(`${insights.length} insights · cycle ${state.cycles}`)}`
+      console.log(chalk.hex('#A78BFA')(`  ${box.v}`) + box.pad(headerContent, W) + chalk.hex('#A78BFA')(box.v))
+      console.log(chalk.hex('#A78BFA')(`  ${box.bl}${box.h.repeat(W)}${box.br}`))
+      console.log()
+
+      // ── Group by category ──
+      const grouped: Record<string, typeof insights> = {}
+      for (const i of insights) {
+        if (!grouped[i.category]) grouped[i.category] = []
+        grouped[i.category].push(i)
+      }
+
+      // Sort categories by total insight count descending
+      const catOrder = Object.entries(grouped).sort((a, b) => b[1].length - a[1].length)
+
+      for (const [cat, catInsights] of catOrder) {
+        const icon = categoryIcon[cat] || '●'
+        const cc = categoryColor(cat)
+
+        // ── Category section header ──
+        console.log(`  ${cc(`${icon} ${cat.toUpperCase()}`)}  ${chalk.dim(`(${catInsights.length})`)}`)
+        console.log(`  ${cc('─'.repeat(W))}`)
+        console.log()
+
+        for (const i of catInsights) {
+          const pct = Math.round(i.relevance * 100)
+          const bar = relevanceBar(pct)
+          const date = i.created.split('T')[0]
+          const reinforced = i.lastReinforced !== i.created
+            ? chalk.dim(` · reinforced ${i.lastReinforced.split('T')[0]}`)
+            : ''
+
+          // Card: relevance bar + content + metadata
+          console.log(`  ${bar} ${chalk.bold(`${pct}%`)}  ${chalk.dim(`${i.sessions} sessions`)}${reinforced}`)
+          console.log(`  ${chalk.white(i.content)}`)
+          if (i.keywords.length > 0) {
+            console.log(`  ${chalk.dim(i.keywords.map(k => `#${k}`).join('  '))}`)
+          }
+          console.log(`  ${chalk.dim(`${date} · ${i.source} · ${i.id}`)}`)
+          console.log()
+        }
+      }
+
+      // ── Footer ──
+      console.log(chalk.dim(`  ${'─'.repeat(W)}`))
+      const avgRel = Math.round(insights.reduce((s, i) => s + i.relevance, 0) / insights.length * 100)
+      console.log(`  ${chalk.dim(`${insights.length} active insights · avg relevance ${avgRel}% · ${state.totalArchived} archived`)}`)
+      console.log()
     })
 
   program.parse(process.argv)

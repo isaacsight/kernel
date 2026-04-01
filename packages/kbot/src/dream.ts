@@ -20,6 +20,15 @@ import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, renameSync } from 'node:fs'
 import { getHistory, type ConversationTurn } from './memory.js'
 import { loadMemory } from './memory.js'
+import {
+  getTopPatterns,
+  getTopSolutions,
+  getProfileSummary,
+  updateProfile,
+  recordPattern,
+  learnFact,
+} from './learning.js'
+import { getMemoryScannerStats } from './memory-scanner.js'
 
 // ── Constants ──
 
@@ -203,22 +212,69 @@ function buildConsolidationPrompt(
     ? existingInsights.slice(0, 20).map(i => `- [${i.category}] ${i.content}`).join('\n')
     : '(none yet)'
 
-  return `You are a memory consolidation system. Analyze this conversation session and extract durable insights.
+  // ── Tier 1: Pattern cache — intent → tool sequences ──
+  const topPatterns = getTopPatterns(10)
+  const patternsText = topPatterns.length > 0
+    ? topPatterns.map(p =>
+        `- "${p.intent}" → ${p.toolSequence.join(' → ')} (${p.hits}x, ${Math.round(p.successRate * 100)}% success)`
+      ).join('\n')
+    : '(no patterns yet)'
 
-EXISTING INSIGHTS:
+  // ── Tier 2: Solution index — Q&A pairs ──
+  const topSolutions = getTopSolutions(5)
+  const solutionsText = topSolutions.length > 0
+    ? topSolutions.map(s =>
+        `- Q: ${s.question.slice(0, 100)} → confidence: ${Math.round(s.confidence * 100)}%, reused ${s.reuses}x`
+      ).join('\n')
+    : '(no solutions yet)'
+
+  // ── Tier 3: User profile ──
+  const profileText = getProfileSummary() || '(no profile data yet)'
+
+  // ── Tier 5: Memory scanner — recent passive detections ──
+  const scannerStats = getMemoryScannerStats()
+  const scannerText = scannerStats.recentDetections.length > 0
+    ? scannerStats.recentDetections
+        .slice(-5)
+        .map(d => `- [${d.kind}] ${d.content.slice(0, 150)} (confidence: ${Math.round(d.confidence * 100)}%)`)
+        .join('\n')
+    : '(no recent detections)'
+
+  return `You are a memory consolidation system. Analyze this conversation session and ALL accumulated knowledge tiers to extract durable cross-tier insights.
+
+EXISTING DREAM INSIGHTS (Tier 4 — Dream Journal):
 ${existingText}
 
 EXISTING PERSISTENT MEMORY:
 ${existingMemory.slice(0, 2000) || '(empty)'}
 
+LEARNED PATTERNS (Tier 1 — Pattern Cache):
+${patternsText}
+
+PROVEN SOLUTIONS (Tier 2 — Solution Index):
+${solutionsText}
+
+USER PROFILE (Tier 3):
+${profileText}
+
+RECENT MEMORY SCANNER DETECTIONS (Tier 5 — Passive Detection):
+${scannerText}
+
 SESSION TO CONSOLIDATE:
 ${historyText}
 
 INSTRUCTIONS:
-Extract 1-5 insights from this session. Each insight should be:
+Extract 1-5 insights by synthesizing across ALL tiers. Each insight should be:
 - Durable (useful beyond this session)
 - Non-obvious (not derivable from reading code)
-- About the USER, their preferences, patterns, or project context
+- Cross-tier when possible (e.g., a pattern + preference = workflow insight)
+- About the USER, their preferences, patterns, workflows, or project context
+
+Pay special attention to:
+- Patterns that confirm or contradict existing insights
+- Scanner corrections that reveal unrecognized preferences
+- Solution clusters that suggest emerging expertise areas
+- Profile trends that indicate shifting priorities
 
 Format each insight as a JSON array of objects:
 [
@@ -260,6 +316,155 @@ If none are reinforced, return: []
 Respond ONLY with the JSON array.`
 }
 
+// ── Memory Cascade: Feed Insights Back into Tiers ──
+
+/**
+ * Apply dream insights back into the learning system.
+ * This is the feedback loop that makes the memory cascade bidirectional:
+ *   - "preference" insights → update user profile via learnFact()
+ *   - "pattern" insights → hint the pattern cache via recordPattern()
+ *   - "skill" insights → record as observed knowledge
+ *   - "project" insights → record as project context
+ *
+ * Called at the end of every dream cycle after new insights are extracted.
+ */
+export function applyDreamInsights(insights: DreamInsight[]): ApplyResult {
+  const result: ApplyResult = {
+    preferencesApplied: 0,
+    patternsHinted: 0,
+    factsLearned: 0,
+  }
+
+  for (const insight of insights) {
+    switch (insight.category) {
+      case 'preference': {
+        // Feed preference insights back into the knowledge base as observed facts.
+        // This lets the learning context builder surface them in future prompts.
+        learnFact(insight.content, 'preference', 'observed')
+
+        // Also nudge the user profile if the insight mentions style/tech preferences
+        const lower = insight.content.toLowerCase()
+        if (/\b(?:concise|brief|short)\b/.test(lower)) {
+          updateProfile({ taskType: 'prefers-concise' })
+        } else if (/\b(?:detailed|thorough|verbose)\b/.test(lower)) {
+          updateProfile({ taskType: 'prefers-detailed' })
+        }
+
+        // Extract any tech terms mentioned in the preference
+        const techTerms = extractTechTermsFromInsight(insight.content)
+        if (techTerms.length > 0) {
+          updateProfile({ techTerms })
+        }
+
+        result.preferencesApplied++
+        break
+      }
+
+      case 'pattern': {
+        // Feed pattern insights into the knowledge base.
+        // If the insight describes a tool workflow, hint the pattern cache.
+        learnFact(insight.content, 'context', 'observed')
+
+        // Try to extract a tool sequence from the insight text
+        // (e.g., "User typically reads files then runs tests" → [read_file, run_tests])
+        const toolHints = extractToolHintsFromInsight(insight.content)
+        if (toolHints.length >= 2) {
+          // Record as a pattern with the insight content as the "intent"
+          const intentWords = insight.keywords.join(' ') || insight.content.slice(0, 80)
+          recordPattern(intentWords, toolHints, 0)
+        }
+
+        result.patternsHinted++
+        break
+      }
+
+      case 'skill': {
+        // Skills are knowledge about what the user is good at or learning.
+        learnFact(insight.content, 'context', 'observed')
+        result.factsLearned++
+        break
+      }
+
+      case 'project': {
+        // Project insights become project-scoped knowledge.
+        learnFact(insight.content, 'project', 'observed')
+        result.factsLearned++
+        break
+      }
+
+      case 'relationship': {
+        // Relationship insights (how user interacts, team dynamics) → context facts.
+        learnFact(insight.content, 'context', 'observed')
+        result.factsLearned++
+        break
+      }
+    }
+  }
+
+  return result
+}
+
+export interface ApplyResult {
+  preferencesApplied: number
+  patternsHinted: number
+  factsLearned: number
+}
+
+/** Extract tech-related terms from insight text */
+function extractTechTermsFromInsight(text: string): string[] {
+  const techTerms = new Set([
+    'react', 'typescript', 'node', 'python', 'rust', 'go', 'docker',
+    'api', 'database', 'supabase', 'postgres', 'redis', 'mongodb',
+    'css', 'html', 'json', 'sql', 'git', 'npm', 'vite', 'webpack',
+    'tailwind', 'next', 'express', 'fastify', 'deno', 'bun',
+    'playwright', 'vitest', 'jest', 'eslint', 'prettier',
+    'ollama', 'anthropic', 'openai', 'claude', 'gpt',
+    'ableton', 'serum', 'splice', 'osc', 'midi',
+  ])
+  return text.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => techTerms.has(w))
+}
+
+/** Try to extract tool names from insight text describing a workflow */
+function extractToolHintsFromInsight(text: string): string[] {
+  const toolNames = new Set([
+    'read_file', 'write_file', 'edit_file', 'glob', 'grep', 'bash',
+    'git_status', 'git_diff', 'git_commit', 'git_push', 'git_log',
+    'run_tests', 'test_run', 'build_run', 'type_check', 'lint_check',
+    'web_search', 'url_fetch', 'screenshot', 'browser_navigate',
+    'kbot_agent', 'spawn_agent', 'memory_save', 'memory_search',
+    'research', 'papers_search', 'github_search',
+  ])
+
+  // Match tool-like words (snake_case) in the text
+  const words = text.toLowerCase().replace(/[^a-z0-9_\s]/g, ' ').split(/\s+/)
+  const found = words.filter(w => toolNames.has(w))
+  if (found.length >= 2) return found
+
+  // Fallback: look for verb patterns that map to common tools
+  const verbMap: Array<[RegExp, string]> = [
+    [/\bread(?:s|ing)?\s+(?:file|code|source)/i, 'read_file'],
+    [/\bwrit(?:e|es|ing)\s+(?:file|code)/i, 'write_file'],
+    [/\bedit(?:s|ing)?\b/i, 'edit_file'],
+    [/\bsearch(?:es|ing)?\s+(?:web|online|internet)/i, 'web_search'],
+    [/\brun(?:s|ning)?\s+test/i, 'run_tests'],
+    [/\bgrep(?:s|ping)?\b/i, 'grep'],
+    [/\bgit\s+(?:commit|push|diff|status|log)/i, 'git_commit'],
+    [/\bbuild(?:s|ing)?\b/i, 'build_run'],
+    [/\bbash\b|\bshell\b|\bcommand\b/i, 'bash'],
+  ]
+
+  const mapped: string[] = []
+  for (const [pattern, tool] of verbMap) {
+    if (pattern.test(text) && !mapped.includes(tool)) {
+      mapped.push(tool)
+    }
+  }
+  return mapped
+}
+
 // ── Core Dream Functions ──
 
 /** Run a full dream cycle — consolidate, reinforce, age */
@@ -272,6 +477,7 @@ export async function dream(sessionId = 'default'): Promise<DreamResult> {
     cycle: 0,
     duration: 0,
     error: null,
+    applied: null,
   }
 
   const start = Date.now()
@@ -309,9 +515,10 @@ export async function dream(sessionId = 'default'): Promise<DreamResult> {
   journal = aged
   result.archived = archived.length
 
-  // Phase 2: Extract new insights from session
+  // Phase 2: Extract new insights from session (cross-tier consolidation)
   const consolidationPrompt = buildConsolidationPrompt(history, journal, memory)
   const rawInsights = await ollamaGenerate(consolidationPrompt)
+  const newlyCreatedInsights: DreamInsight[] = []
 
   if (rawInsights) {
     try {
@@ -331,7 +538,7 @@ export async function dream(sessionId = 'default'): Promise<DreamResult> {
           )
           if (isDupe) continue
 
-          journal.push({
+          const insight: DreamInsight = {
             id: generateId(),
             content: p.content,
             category: p.category || 'pattern',
@@ -341,7 +548,9 @@ export async function dream(sessionId = 'default'): Promise<DreamResult> {
             created: now,
             lastReinforced: now,
             source: `session_${state.cycles + 1}`,
-          })
+          }
+          journal.push(insight)
+          newlyCreatedInsights.push(insight)
           result.newInsights++
         }
       }
@@ -384,6 +593,13 @@ export async function dream(sessionId = 'default'): Promise<DreamResult> {
     result.archived += overflow.length
   }
 
+  // Phase 5: Feed new insights back into learning tiers (memory cascade)
+  // This is the key integration — dream insights don't just sit in the journal,
+  // they propagate back into the pattern cache, solution index, and user profile.
+  if (newlyCreatedInsights.length > 0) {
+    result.applied = applyDreamInsights(newlyCreatedInsights)
+  }
+
   // Save everything
   saveJournal(journal)
 
@@ -409,6 +625,8 @@ export interface DreamResult {
   cycle: number
   duration: number
   error: string | null
+  /** Feedback from applying insights back into learning tiers */
+  applied: ApplyResult | null
 }
 
 // ── Query Functions ──

@@ -11,6 +11,7 @@
 //   5. Documentation gaps   — every 12 hours (generate JSDoc)
 //   6. Embedding index      — every 8 hours (semantic search index)
 //   7. Daily digest         — once per day (summarize changes)
+//   8. Dream consolidation  — every 2 hours (memory consolidation via dream engine)
 //
 // Runs via macOS launchd every 15 minutes. Tasks self-schedule.
 // ═══════════════════════════════════════════════════════════════════════
@@ -49,6 +50,7 @@ const INTERVALS = {
   testCoverage: 12 * 60 * 60_000, // 12 hours
   documentation: 12 * 60 * 60_000,// 12 hours
   dailyDigest: 24 * 60 * 60_000,  // 24 hours
+  dreamConsolidation: 2 * 60 * 60_000,  // 2 hours
 } as const
 
 // i18n languages (from src/i18n.ts)
@@ -808,6 +810,43 @@ Keep it under 300 words. Be direct and useful.`,
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// TASK 8: Dream Consolidation
+// Consolidates session memories into durable insights via the dream engine
+// ═══════════════════════════════════════════════════════════════════════
+
+async function taskDreamConsolidation(_state: DaemonState): Promise<number> {
+  // Dynamic import — dream.ts lives in the kbot package
+  const { dream } = await import('../packages/kbot/src/dream.js') as {
+    dream: (sessionId?: string) => Promise<{
+      success: boolean
+      newInsights: number
+      reinforced: number
+      archived: number
+      cycle: number
+      duration: number
+      error: string | null
+    }>
+  }
+
+  const result = await dream()
+
+  // Session too short or no sessions — skip gracefully
+  if (!result.success && result.error) {
+    log(`[dreamConsolidation] Skipped: ${result.error}`)
+    return 0
+  }
+
+  log(
+    `[dreamConsolidation] Cycle ${result.cycle} complete in ${result.duration}ms — ` +
+    `${result.newInsights} new insights, ${result.reinforced} reinforced, ${result.archived} archived`
+  )
+
+  // Token count is 0 here — the dream engine calls Ollama directly
+  // and manages its own token tracking. We return 0 to avoid double-counting.
+  return 0
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // MAIN ORCHESTRATOR
 // ═══════════════════════════════════════════════════════════════════════
 
@@ -844,6 +883,7 @@ async function main(): Promise<void> {
   await runTask('testCoverage', state, INTERVALS.testCoverage, () => taskTestCoverage(state))
   await runTask('embeddings', state, INTERVALS.embeddings, () => taskEmbeddings(state))
   await runTask('i18nSync', state, INTERVALS.i18nSync, () => taskI18nSync(state))
+  await runTask('dreamConsolidation', state, INTERVALS.dreamConsolidation, () => taskDreamConsolidation(state))
 
   saveState(state)
   log(`═══ Daemon run complete. Errors today: ${state.stats.errorsToday} ═══\n`)
