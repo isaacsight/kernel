@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-01T12:24:34.366Z",
+  "timestamp": "2026-04-01T18:28:12.359Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,24 +67,31 @@
     },
     {
       "source": "hn-comment",
+      "title": "CockroachDB has just dropped a bunch of AI-ready features",
+      "url": "https://news.ycombinator.com/item?id=47601811",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Ask HN: Client took over development by vibe coding. What to do?",
+      "url": "https://news.ycombinator.com/item?id=47600126",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Claude Code's source code has been leaked via a map file in their NPM registry",
       "url": "https://news.ycombinator.com/item?id=47599131",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Claude Code Unpacked : A visual guide",
-      "url": "https://news.ycombinator.com/item?id=47598686",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "MooseStack: The 'Next.js' for Real-Time Analytics on ClickHouse",
-      "url": "https://news.ycombinator.com/item?id=47598131",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "fix: Extension causes high cpu load",
+      "url": "https://github.com/snakemake/snakemake-lang-vscode-plugin/pull/53",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "Add AI Chrome SaaS Tool landing page",
       "url": "https://github.com/nisarllc206-sys/Chrome-sas-landing-page-repo-nisarllc206/pull/1",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Build MCP Server for BlackVault",
-      "url": "https://github.com/venkat22022202/black-vault/issues/11",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,31 +130,24 @@
     },
     {
       "source": "github-issue",
-      "title": "sync with openclaw",
-      "url": "https://github.com/lad75020/openclaw/pull/3",
+      "title": "feat: CLI 产品化改进 - v5.0.0 核心能力增强",
+      "url": "https://github.com/qiyueqiu/Agent-Service-Bus/pull/19",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat: Option B chunk 2 — team-only diary permissions",
-      "url": "https://github.com/getlarge/themoltnet/pull/583",
+      "title": "[Fix] Remove spurious plugin id mismatch warning",
+      "url": "https://github.com/openclaw/openclaw/pull/59185",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Feature Proposal] Migrate oh-my-openclaw multi-agent orchestration to official OpenClaw ecosystem",
-      "url": "https://github.com/openclaw/openclaw/issues/58963",
+      "title": "RFC: Credential Provider Plugin",
+      "url": "https://github.com/openclaw/openclaw/issues/59165",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "reddit-programming",
-      "title": "Which programming language would AI use without any human interference?",
-      "url": "https://reddit.com/r/programming/comments/1s9f18s/which_programming_language_would_ai_use_without/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-programming",
@@ -167,6 +160,13 @@
       "source": "reddit-programming",
       "title": "AMD GAIA 0.16 introduces C++17 agent framework for building AI PC agents in pure C++",
       "url": "https://reddit.com/r/programming/comments/1rncnnk/amd_gaia_016_introduces_c17_agent_framework_for/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "Beyond the Vibes: A Rigorous Guide to AI Coding Assistants and Agents",
+      "url": "https://reddit.com/r/programming/comments/1ritjkj/beyond_the_vibes_a_rigorous_guide_to_ai_coding/",
       "why": "Discussion in r/programming about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Combining the robot operating system with LLMs for natural-language control",
+      "url": "https://reddit.com/r/artificial/comments/1s9p4tl/combining_the_robot_operating_system_with_llms/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "The Claude Code leak accidentally published the first complete blueprint for production AI agents. Here's what it tells us about where this is all going.",
+      "url": "https://reddit.com/r/artificial/comments/1s9jprb/the_claude_code_leak_accidentally_published_the/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Biggest Opportunity for Builders to monetise their agents",
       "url": "https://reddit.com/r/artificial/comments/1s9e04v/biggest_opportunity_for_builders_to_monetise/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "The missing layer between current AI and AGI may be intent architecture",
-      "url": "https://reddit.com/r/artificial/comments/1s98x0b/the_missing_layer_between_current_ai_and_agi_may/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "I built a market simulation platform where AI agents have memory, personality, and a social graph. Here is what I learned about making synthetic populations useful.",
-      "url": "https://reddit.com/r/artificial/comments/1s98btf/i_built_a_market_simulation_platform_where_ai/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
