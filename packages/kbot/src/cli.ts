@@ -81,6 +81,7 @@ async function main(): Promise<void> {
     .option('--lite', 'Lightweight mode — skip heavy tools (auto-enabled on Replit)')
     .option('--safe', 'Confirm destructive operations')
     .option('--strict', 'Confirm ALL operations')
+    .option('--ollama-launch', 'Auto-configure for ollama launch (sets Ollama as provider)')
     .argument('[prompt...]', 'One-shot prompt')
     .helpOption('-h, --help', 'display help for command')
     .addHelpCommand(false)
@@ -3364,9 +3365,28 @@ async function main(): Promise<void> {
   // If a sub-command was run, we're done
   if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions', 'admin', 'monitor', 'analytics', 'deploy', 'env', 'db'].includes(program.args[0])) return
 
+  // ── Ollama Launch Integration ──
+  // Detect when kbot is started via `ollama launch kbot` or `kbot --ollama-launch`
+  const isOllamaLaunch = opts.ollamaLaunch || process.env.KBOT_OLLAMA_LAUNCH === '1'
+  if (isOllamaLaunch) {
+    const ollamaHost = process.env.OLLAMA_HOST || 'http://localhost:11434'
+    const ollamaModel = process.env.OLLAMA_MODEL || undefined
+    const ok = await setupOllama(ollamaModel)
+    if (ok) {
+      printSuccess(`kbot connected to Ollama at ${ollamaHost}`)
+      const models = await listOllamaModels()
+      if (models.length > 0) printInfo(`${models.length} models available. Using: ${ollamaModel || PROVIDERS.ollama.defaultModel}`)
+      printInfo('670+ tools ready. Type your prompt or press Enter for interactive mode.')
+    } else {
+      printError(`Cannot reach Ollama at ${ollamaHost}. Is it running?`)
+      printInfo('Start Ollama: ollama serve')
+      process.exit(1)
+    }
+  }
+
   // Check for API key (BYOK or local provider)
-  let byokActive = isByokEnabled()
-  let localActive = byokActive && isLocalProvider(getByokProvider())
+  let byokActive = isOllamaLaunch || isByokEnabled()
+  let localActive = byokActive && (isOllamaLaunch || isLocalProvider(getByokProvider()))
 
   // AUTO-SETUP: If no provider configured, try to auto-detect and configure one
   if (!byokActive) {

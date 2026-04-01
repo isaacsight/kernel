@@ -1,0 +1,59 @@
+{
+  "name": "kbot",
+  "display_name": "kbot",
+  "description": "Open-source terminal AI agent — 670+ tools, 35 agents, science, finance, security, music production, and more.",
+  "version": "3.60.1",
+  "homepage": "https://kernel.chat",
+  "repository": "https://github.com/isaacsight/kernel",
+  "license": "MIT",
+  "author": "kernel.chat group",
+  "category": "coding-agent",
+  "install": {
+    "npm": "@kernel.chat/kbot"
+  },
+  "launch": {
+    "command": "kbot",
+    "args": ["--ollama-launch"],
+    "env": {
+      "KBOT_OLLAMA_LAUNCH": "1",
+      "OLLAMA_HOST": "http://localhost:11434"
+    }
+  },
+  "capabilities": [
+    "coding",
+    "file-editing",
+    "shell-execution",
+    "web-search",
+    "research",
+    "science",
+    "music-production",
+    "finance",
+    "security",
+    "game-dev",
+    "multi-agent",
+    "learning-engine",
+    "mcp-server"
+  ],
+  "models": {
+    "recommended": "qwen2.5-coder:32b",
+    "minimum_context": 8192,
+    "recommended_context": 65536,
+    "supported": [
+      "qwen2.5-coder:7b",
+      "qwen2.5-coder:14b",
+      "qwen2.5-coder:32b",
+      "qwen3:32b",
+      "llama3.1:8b",
+      "llama3.1:70b",
+      "llama3.3:70b",
+      "gemma3:12b",
+      "gemma3:27b",
+      "deepseek-r1:14b",
+      "deepseek-r1:32b",
+      "deepseek-r1:70b",
+      "phi4:14b",
+      "mistral-small3:22b",
+      "codellama:13b"
+    ]
+  }
+}
