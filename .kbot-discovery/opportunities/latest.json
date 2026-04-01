@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-01T00:09:33.634Z",
+  "timestamp": "2026-04-01T06:13:14.088Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,24 +67,31 @@
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN: Are you too getting addicted to the dev workflow of coding with agents?",
-      "url": "https://news.ycombinator.com/item?id=47594743",
+      "title": "Mathematical methods and human thought in the age of AI",
+      "url": "https://news.ycombinator.com/item?id=47575099",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Slop is not necessarily the future",
-      "url": "https://news.ycombinator.com/item?id=47592049",
+      "title": "The Cognitive Dark Forest",
+      "url": "https://news.ycombinator.com/item?id=47570522",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Good code will still win",
-      "url": "https://news.ycombinator.com/item?id=47591227",
+      "title": "So where are all the AI apps?",
+      "url": "https://news.ycombinator.com/item?id=47505810",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "github-issue",
+      "title": "consultation",
+      "url": "https://github.com/Ccom5/GF/issues/2",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "Build MCP Server for BlackVault",
       "url": "https://github.com/venkat22022202/black-vault/issues/11",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add `memory-tool serve` HTTP API mode",
-      "url": "https://github.com/kobie3717/ai-iq/issues/3",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "chore(deps): bump the npm_and_yarn group across 3 directories with 5 updates",
-      "url": "https://github.com/polaris-dxz/xclaw/pull/22",
+      "title": "chore(deps): update ghcr.io/openclaw/openclaw docker tag to v2026.3.31",
+      "url": "https://github.com/keiretsu-labs/kubernetes-manifests/pull/1044",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(mistral): add Voxtral TTS support",
-      "url": "https://github.com/openclaw/openclaw/pull/58607",
+      "title": "Feat/register stream fn wrapper",
+      "url": "https://github.com/davidrudduck/openclaw/pull/14",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Upgrade GWS toolkit to Phase 2 route-aware writes",
-      "url": "https://github.com/hughdidit/DAISy-Agency/pull/269",
+      "title": "docs: tighten public docs surfaces and Mintlify delivery baseline",
+      "url": "https://github.com/loongclaw-ai/loongclaw/pull/756",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "Is the Mirage Effect a bug, or is it Geometric Reconstruction in action?\nA framework for why VLMs perform better \"hallucinating\" than guessing, and what that may tell us about what's really inside these models",
-      "url": "https://reddit.com/r/artificial/comments/1s91dsr/is_the_mirage_effect_a_bug_or_is_it_geometric/",
+      "title": "Anthropic Leaked 512,000 Lines of Claude Code Source. Here's What the Code Actually Reveals.",
+      "url": "https://reddit.com/r/artificial/comments/1s9agwr/anthropic_leaked_512000_lines_of_claude_code/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "What I learned about multi-agent coordination running 9 specialized Claude agents",
-      "url": "https://reddit.com/r/artificial/comments/1s8opu2/what_i_learned_about_multiagent_coordination/",
+      "title": "The missing layer between current AI and AGI may be intent architecture",
+      "url": "https://reddit.com/r/artificial/comments/1s98x0b/the_missing_layer_between_current_ai_and_agi_may/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "What happens when AI agents can earn and spend real money? I built a small test to find out",
-      "url": "https://reddit.com/r/artificial/comments/1s8luvc/what_happens_when_ai_agents_can_earn_and_spend/",
+      "title": "I built a market simulation platform where AI agents have memory, personality, and a social graph. Here is what I learned about making synthetic populations useful.",
+      "url": "https://reddit.com/r/artificial/comments/1s98btf/i_built_a_market_simulation_platform_where_ai/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

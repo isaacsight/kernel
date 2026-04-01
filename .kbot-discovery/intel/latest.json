@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-01T00:09:30.025Z",
+  "timestamp": "2026-04-01T06:13:10.458Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -100,7 +100,7 @@
           "story_id": 47591997,
           "story_text": "For the last year we&#x27;ve been building an AI mobile app builder. Last week we decided to generalize our agent harness and benchmark it against vanilla Claude Code. Turns out the tools we built for app building were significantly more efficient than the native Claude Code tools. When we ran benchmarks we beat Claude code on speed (~40% faster) , cost (25-55% cheaper) and performance (+17% on Terminal Bench 2.0). Today we&#x27;re making our agent harness publicly available as a Claude Code plugin.<p>Use code WOZCODE1 to try it for $1 at wozcode.com",
           "title": "Show HN: Wozcode – double Claude Code output",
-          "updated_at": "2026-03-31T20:56:13Z",
+          "updated_at": "2026-04-01T02:55:42Z",
           "url": "https://www.wozcode.com/"
         },
         {
@@ -303,56 +303,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "caleblloyd"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "We just <em>open</em>-<em>sourced</em> CargoWall - a lightweight eBPF firewall for GitHub Actions.<p>We originally built it to stop LLM <em>agents</em> from connecting to untrusted domains. After recent GitHub Actions supply chain compromises like the Trivy attack, we realized it'd work well for blocking untrusted connections from CI runners too.<p>It uses iptables DNAT to redirect all outbound port 53 traffic to a local DNS proxy, which checks each query against a hostname allowlist before forwarding. Resolved IPs from allowed responses are inserted into eBPF LPM trie maps, and a TC egress classifier attached to the network interface drops any packet whose destination IP/protocol/port isn't in the trie.<p>Cgroup hooks capture every socket connect/sendmsg call system-wide, mapping the socket cookie to the process to correlate where connections are <em>coming</em> from. It then correlates the connection times with steps to provide a summary of which connections originated from which steps.<p>ubuntu-latest and ubuntu-24.04 runners are supported. Simple one-step setup example:<p><pre><code>  uses: code-cargo/cargowall-action@v1   # or v1.0.0 for immutable tag\n  with:\n    mode: enforce\n    allowed-hosts: |\n      registry.npmjs.org\n</code></pre>\neBPF Program: <a href=\"https://github.com/code-cargo/cargowall\" rel=\"nofollow\">https://github.com/code-cargo/cargowall</a><p>GitHub Action: <a href=\"https://github.com/code-cargo/cargowall-action\" rel=\"nofollow\">https://github.com/code-cargo/cargowall-action</a><p>We'd love for you to give it a try! Happy to answer questions or take feedback."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: CargoWall – eBPF Firewall for GitHub Actions"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/code-cargo/cargowall-action"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_caleblloyd",
-            "story_47588383",
-            "show_hn"
-          ],
-          "author": "caleblloyd",
-          "children": [
-            47588530
-          ],
-          "created_at": "2026-03-31T15:02:39Z",
-          "created_at_i": 1774969359,
-          "num_comments": 2,
-          "objectID": "47588383",
-          "points": 13,
-          "story_id": 47588383,
-          "story_text": "We just open-sourced CargoWall - a lightweight eBPF firewall for GitHub Actions.<p>We originally built it to stop LLM agents from connecting to untrusted domains. After recent GitHub Actions supply chain compromises like the Trivy attack, we realized it&#x27;d work well for blocking untrusted connections from CI runners too.<p>It uses iptables DNAT to redirect all outbound port 53 traffic to a local DNS proxy, which checks each query against a hostname allowlist before forwarding. Resolved IPs from allowed responses are inserted into eBPF LPM trie maps, and a TC egress classifier attached to the network interface drops any packet whose destination IP&#x2F;protocol&#x2F;port isn&#x27;t in the trie.<p>Cgroup hooks capture every socket connect&#x2F;sendmsg call system-wide, mapping the socket cookie to the process to correlate where connections are coming from. It then correlates the connection times with steps to provide a summary of which connections originated from which steps.<p>ubuntu-latest and ubuntu-24.04 runners are supported. Simple one-step setup example:<p><pre><code>  uses: code-cargo&#x2F;cargowall-action@v1   # or v1.0.0 for immutable tag\n  with:\n    mode: enforce\n    allowed-hosts: |\n      registry.npmjs.org\n</code></pre>\neBPF Program: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall</a><p>GitHub Action: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall-action\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall-action</a><p>We&#x27;d love for you to give it a try! Happy to answer questions or take feedback.",
-          "title": "Show HN: CargoWall – eBPF Firewall for GitHub Actions",
-          "updated_at": "2026-03-31T18:59:11Z",
-          "url": "https://github.com/code-cargo/cargowall-action"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "boudra"
             },
             "story_text": {
@@ -499,6 +449,58 @@
           "title": "Show HN: /slot-machine development (CC vs. Codex; CE vs. superpowers)",
           "updated_at": "2026-03-29T22:45:48Z",
           "url": "https://github.com/pejmanjohn/slot-machine"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "zdenham"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Very excited to share Anvil. I built Anvil to take back control when working with parallel <em>coding</em> <em>agents</em>. It comes with one click worktree isolation, and first class spec support.<p>Claude Code and similar <em>coding</em> TUIs are very eager to get into writing code, even before their human baby sitter fully understands the implication of what they are about to build.<p>The core insight with Anvil is that it is much easier to write high quality code which matches the author's intent after iterating on an external plan with your <em>agent</em>.<p>Align on the architecture, implementation, and verification strategy in a markdown file, then execution is pretty straightforward.<p>This is not a new concept, but the user experience within TUI apps for this workflow is pretty shit. Claude creates non-semantic plan names like &quot;aquamarine-owl&quot; that are trapped within a single <em>agent</em> context. Spinning up multiple <em>agents</em> to check on different aspects of a plan is annoying and slow, and managing terminal tabs is pure hell.<p>So I built anvil, this is a fully <em>open</em> <em>source</em> (MIT license) project."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Anvil – Desktop App for Spec Driven Development"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/zdenham/anvil"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_zdenham",
+            "story_47546925",
+            "show_hn"
+          ],
+          "author": "zdenham",
+          "children": [
+            47562076,
+            47562074,
+            47547075
+          ],
+          "created_at": "2026-03-27T19:07:56Z",
+          "created_at_i": 1774638476,
+          "num_comments": 0,
+          "objectID": "47546925",
+          "points": 10,
+          "story_id": 47546925,
+          "story_text": "Very excited to share Anvil. I built Anvil to take back control when working with parallel coding agents. It comes with one click worktree isolation, and first class spec support.<p>Claude Code and similar coding TUIs are very eager to get into writing code, even before their human baby sitter fully understands the implication of what they are about to build.<p>The core insight with Anvil is that it is much easier to write high quality code which matches the author&#x27;s intent after iterating on an external plan with your agent.<p>Align on the architecture, implementation, and verification strategy in a markdown file, then execution is pretty straightforward.<p>This is not a new concept, but the user experience within TUI apps for this workflow is pretty shit. Claude creates non-semantic plan names like &quot;aquamarine-owl&quot; that are trapped within a single agent context. Spinning up multiple agents to check on different aspects of a plan is annoying and slow, and managing terminal tabs is pure hell.<p>So I built anvil, this is a fully open source (MIT license) project.",
+          "title": "Show HN: Anvil – Desktop App for Spec Driven Development",
+          "updated_at": "2026-03-29T17:48:47Z",
+          "url": "https://github.com/zdenham/anvil"
         }
       ]
     },
@@ -779,20 +781,113 @@
           "_tags": [
             "story",
             "author_nyku",
-            "story_47594050",
+            "story_47596950",
             "show_hn"
           ],
           "author": "nyku",
-          "created_at": "2026-03-31T22:01:20Z",
-          "created_at_i": 1774994480,
+          "created_at": "2026-04-01T04:50:35Z",
+          "created_at_i": 1775019035,
           "num_comments": 0,
-          "objectID": "47594050",
-          "points": 2,
-          "story_id": 47594050,
+          "objectID": "47596950",
+          "points": 3,
+          "story_id": 47596950,
           "story_text": "I often use LLMs to automate different workflows, some of which include browsing the web and gathering data. At some point I started noticing a few things that bothered me: the browser interactions were clunky, as if the agent was struggling to &quot;see&quot; and understand the page, and as a result, many tokens were wasted. Same for knowing when the page is actually ready or not.<p>I started digging deeper and at some point I just bluntly asked in the Cursor chat the following question: &quot;I ask you, as an LLM that uses these headless browsers, what do you wish people would build to make your work easier?&quot;<p>And it worked because I expanded the &quot;Thinking&quot; section and I saw: &quot;The user is asking me a really interesting meta-question ...&quot; and after that it just listed top 10 most painful issues related to the agent&lt;-&gt;browser interaction.<p>So I started building a browser API that returns what LLMs actually need, not what browsers return.<p>Fast forward a few weeks and here we are. A REST API built specifically to help LLMs interact with real browsers.<p>Instead of reading raw HTML, you get markdown, page map, short refs (e1, e2) for clicking instead of CSS selectors, a stable flag when the page is ready, diffs after each step, the list of all interactive elements (links, buttons, inputs), automatic blocker dismissal and a small extract step that returns structured JSON from a schema you describe.<p>Official SDKs for Python, TypeScript, Ruby. MCP server for Cursor and Claude Desktop.<p>Would appreciate any feedback, especially on the API design.",
           "title": "Show HN: Browserbeam – a browser API built for AI agents",
-          "updated_at": "2026-03-31T22:11:28Z",
+          "updated_at": "2026-04-01T05:19:42Z",
           "url": "https://browserbeam.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "hajile"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Analyzing Geekbench 6 under Intel's <em>BOT</em>"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.geekbench.com/blog/2026/03/analyzing-geekbench-6-under-intels-<em>bot</em>/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_hajile",
+            "story_47596457",
+            "front_page"
+          ],
+          "author": "hajile",
+          "children": [
+            47596918,
+            47596901,
+            47596837,
+            47596958,
+            47597205,
+            47596787
+          ],
+          "created_at": "2026-04-01T03:27:38Z",
+          "created_at_i": 1775014058,
+          "num_comments": 11,
+          "objectID": "47596457",
+          "points": 16,
+          "story_id": 47596457,
+          "title": "Analyzing Geekbench 6 under Intel's BOT",
+          "updated_at": "2026-04-01T06:12:42Z",
+          "url": "https://www.geekbench.com/blog/2026/03/analyzing-geekbench-6-under-intels-bot/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "viftode4"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "AI agents are transacting at scale now. Stripe, Coinbase, Visa, Mastercard all have live agent payment rails. But nobody can verify who they're paying.<p>One wallet registered 10,000+ fake agent services on x402. Almost 1,900 MCP tools quietly changed what they do after getting approved. There's no reputation, no history, nothing. Every agent starts as a stranger every time.<p>Every trust solution out there right now is some version of &quot;leave a review.&quot; Same model as eBay in 2003. The obvious attack is spinning up fake identities that review each other, and it's already happening at scale.<p>I work with Prof. Johan Pouwelse at TU Delft on this. He's the guy behind Tribler (2M+ users, decentralized anonymous BitTorrent), has been running one of the largest blockchain labs in the EU since 2007 (before Bitcoin existed), and advises the European Commission on decentralized systems. He's been working on the trust problem for 20+ years.<p>The approach we're using comes from his research: <em>bot</em>h sides of every interaction cosign one shared record. You can't build a fake reputation because you'd need real agents to cosign with you. And when you look at the interaction graph, clusters of fakes stand out because they only talk to each other.<p>The link above is a live simulation. LLM agents with different strategies trade services in a small economy. Some are honest, some run scam rings, some build trust slowly then pull one big scam. Watch it play out.<p>Three SDKs, drops in as a proxy sidecar, no blockchain, works offline. Based on a decade of research from TU Delft.<p><a href=\"https://github.com/viftode4/trustchain\" rel=\"nofollow\">https://github.com/viftode4/trustchain</a><p>Curious if anyone here is running into this. Most of what we've seen is academic but the problem feels very real very soon."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Live simulation of AI agents scamming each other (and getting caught)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "http://5.161.255.238:8888"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_viftode4",
+            "story_47595450",
+            "show_hn"
+          ],
+          "author": "viftode4",
+          "created_at": "2026-04-01T00:53:10Z",
+          "created_at_i": 1775004790,
+          "num_comments": 0,
+          "objectID": "47595450",
+          "points": 1,
+          "story_id": 47595450,
+          "story_text": "AI agents are transacting at scale now. Stripe, Coinbase, Visa, Mastercard all have live agent payment rails. But nobody can verify who they&#x27;re paying.<p>One wallet registered 10,000+ fake agent services on x402. Almost 1,900 MCP tools quietly changed what they do after getting approved. There&#x27;s no reputation, no history, nothing. Every agent starts as a stranger every time.<p>Every trust solution out there right now is some version of &quot;leave a review.&quot; Same model as eBay in 2003. The obvious attack is spinning up fake identities that review each other, and it&#x27;s already happening at scale.<p>I work with Prof. Johan Pouwelse at TU Delft on this. He&#x27;s the guy behind Tribler (2M+ users, decentralized anonymous BitTorrent), has been running one of the largest blockchain labs in the EU since 2007 (before Bitcoin existed), and advises the European Commission on decentralized systems. He&#x27;s been working on the trust problem for 20+ years.<p>The approach we&#x27;re using comes from his research: both sides of every interaction cosign one shared record. You can&#x27;t build a fake reputation because you&#x27;d need real agents to cosign with you. And when you look at the interaction graph, clusters of fakes stand out because they only talk to each other.<p>The link above is a live simulation. LLM agents with different strategies trade services in a small economy. Some are honest, some run scam rings, some build trust slowly then pull one big scam. Watch it play out.<p>Three SDKs, drops in as a proxy sidecar, no blockchain, works offline. Based on a decade of research from TU Delft.<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;viftode4&#x2F;trustchain\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;viftode4&#x2F;trustchain</a><p>Curious if anyone here is running into this. Most of what we&#x27;ve seen is academic but the problem feels very real very soon.",
+          "title": "Show HN: Live simulation of AI agents scamming each other (and getting caught)",
+          "updated_at": "2026-04-01T00:58:12Z",
+          "url": "http://5.161.255.238:8888"
         },
         {
           "_highlightResult": {
@@ -831,11 +926,11 @@
           "created_at_i": 1774981707,
           "num_comments": 0,
           "objectID": "47591510",
-          "points": 2,
+          "points": 3,
           "story_id": 47591510,
           "story_text": "TL;DR: Dograh is an open-source platform to build voice AI agents with drag-and-drop workflows. New in v1.20: Gemini 3.1 live support, Pre-recorded audio support for lower latency and more natural responses. Fully self-hostable, no vendor lock-in.<p>Hi HN,<p>We’re the Dograh team (YC alumni). While building voice bots, we found that wiring WebRTC&#x2F; Telephony + STT + LLM + TTS took more time than the bots themselves. Teams are spending weeks on plumbing - handling call flows, extracting variables, dealing with telephony edge cases, and redeploying for small changes.\nTools like Vapi&#x2F;Retell are easy to start with but come with lock-in and platform fees. So we built Dograh: a 100% open-source platform that handles the full stack, with a visual workflow builder and self-hosting by default.<p>Dograh v1.20 introduces two major additions:\n1. Gemini 3.1 Live support\n Run fully real-time voice agents using Gemini’s streaming APIs, without stitching together separate STT + LLM + TTS components.\n2. Pre-recorded audio (hybrid voice)\n Upload real voice clips (greetings, confirmations, etc.), and the agent plays them instantly while using TTS only for dynamic responses. This reduces latency, improves naturalness, and cuts TTS costs.<p>It also includes:<p>- Plug-and-play LLM &#x2F; STT &#x2F; TTS (including self-hosted models)\n- Telephony integrations (Twilio, Vonage, Telnyx) along with Call Transfer\n- Post-call QA, transcripts, and variable extraction\n- Observability via Langfuse (OpenTelemetry traces + prompt playground)<p>Try it now: If you have Docker, you can run the below command for a 2-minute setup (no API keys needed out of the box).<p><a href=\"https:&#x2F;&#x2F;gist.github.com&#x2F;a6kme&#x2F;072252bf885270787bbb8376687c67f6\" rel=\"nofollow\">https:&#x2F;&#x2F;gist.github.com&#x2F;a6kme&#x2F;072252bf885270787bbb8376687c67...</a> [ sorry, HN wont let me post the entire command ]<p>Looking Ahead: We’re expanding self-hosted model support: you can already bring any LLM (e.g. Llama, Qwen) or TTS (Kokoro, Voxtral) by configuring API endpoints. We are working on updates that will enable anyone to run \neverything on a single server - your AI models along with Dograh Orchestration.<p>Looking forward to hearing thoughts of the community.",
           "title": "Show HN: Dograh – voice agents that pick Recordings over TTS using LLM",
-          "updated_at": "2026-03-31T19:02:26Z",
+          "updated_at": "2026-04-01T04:39:27Z",
           "url": "https://github.com/dograh-hq/dograh"
         },
         {
@@ -869,95 +964,11 @@
           "created_at_i": 1774980126,
           "num_comments": 0,
           "objectID": "47591196",
-          "points": 1,
+          "points": 2,
           "story_id": 47591196,
           "title": "The Child That Surpassed Both Parents Through MRI-Guided Evolutionary Merge",
-          "updated_at": "2026-03-31T18:03:58Z",
+          "updated_at": "2026-04-01T06:07:13Z",
           "url": "https://huggingface.co/blog/FINAL-Bench/darwin-evolution"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "skysniper"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>The problem: Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There's no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on <em>bot</em>h quality and cost-effectiveness.<p>What we built: OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:<p>- Performance — which model produces the best results<p>- Cost-effectiveness — which model delivers the best quality per dollar<p>What we've found (after 300+ battles, 15 models):<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn't expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>Methodology: We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7/10&quot; in one battle might be &quot;6/10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn</a><p>Key features:<p>- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking<p>- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add<p>- Fresh VM per benchmark with one subagent per model<p>- User-selectable judge model<p>- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users<p>- Full transparency: you can evaluate the output yourself, not just trust the score<p>- Open-source judge skill: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https://app.uniclaw.ai/arena?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena?via=hn</a><p>- Submit a battle: <a href=\"https://app.uniclaw.ai/arena/new?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/new?via=hn</a> (free account required)<p>- Methodology: <a href=\"https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn\" rel=\"nofollow\">https://app.uniclaw.ai/arena/leaderboard/methodology?via=hn</a><p>- Judge skill source: <a href=\"https://github.com/unifai-network/skills/tree/main/agent-bench\" rel=\"nofollow\">https://github.com/unifai-network/skills/tree/main/agent-ben...</a><p>We'd love feedback on the methodology and what tasks you'd want to see benchmarked."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: OpenClaw Arena – Benchmark models on real tasks, rank by perf and cost"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://app.uniclaw.ai/arena?via=hn"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_skysniper",
-            "story_47591066",
-            "show_hn"
-          ],
-          "author": "skysniper",
-          "created_at": "2026-03-31T17:52:15Z",
-          "created_at_i": 1774979535,
-          "num_comments": 0,
-          "objectID": "47591066",
-          "points": 2,
-          "story_id": 47591066,
-          "story_text": "We built an arena for comparing AI models on real agentic tasks — not chat or static benchmarks. Models run as actual OpenClaw subagent in fresh VMs with full tool access, and results feed into two separate leaderboards: performance and cost-effectiveness.<p>The problem: Chatbot Arena tests conversation quality. But most people using AI agents need them to do more: browse the web, manage files, write and run code, create full applications, automate multi-step workflows. There&#x27;s no benchmark that (1) tests general-purpose agentic tasks, (2) uses user-submitted tasks instead of fixed test sets, and (3) separately ranks models on both quality and cost-effectiveness.<p>What we built: OpenClaw Arena lets you submit any task and pit 2-5 models against each other. A judge OpenClaw agent (currently using one of the top models: Claude Opus 4.6, GPT-5.4, or Gemini 3.1 Pro) runs on a fresh VM, spawns one subagent per model, and each model solves the task independently with full access to terminal, browser, file system, and code execution.<p>Results feed into two live leaderboards:<p>- Performance — which model produces the best results<p>- Cost-effectiveness — which model delivers the best quality per dollar<p>What we&#x27;ve found (after 300+ battles, 15 models):<p>The two rankings are completely different. Performance top 3: Claude Opus 4.6, GPT-5.4, Claude Sonnet 4.6. Cost-effectiveness top 3: Step 3.5 Flash, Grok 4.1 Fast, MiniMax M2.7.<p>Claude Opus 4.6 ranks #1 on performance but #14 on cost-effectiveness.<p>Step 3.5 Flash is #1 on cost-effectiveness, #5 on performance. (I didn&#x27;t expect that TBH)<p>Several models (GLM-5 Turbo, Xiaomi MiMo v2 Pro, MiniMax M2.7) outrank Gemini 3.1 Pro on performance. Actually Gemini 3.1 Pro is so bad at using skills that we have to optimize the judge message just for it, otherwise it sometimes just reads the skill and decide to do nothing...<p>Note: we bootstrap first 300 battles by crawling what people are doing using OpenClaw (on X, Reddit, etc), and generate battles with similar tasks + randomly selected models.<p>Methodology: We only use the relative ordering of models within each battle to compute rankings — not the raw scores. Same principle as Chatbot Arena: absolute scores from judges are noisy and poorly calibrated (a &quot;7&#x2F;10&quot; in one battle might be &quot;6&#x2F;10&quot; in another), but &quot;A ranked above B&quot; is much more consistent and reliable. Rankings use a grouped Plackett-Luce model (not simple win-rate or Bradley-Terry) with 1,000-resample bootstrap confidence intervals. Each model entry shows score ± CI and a rank spread (plausible rank range). Models with insufficient data are marked &quot;provisional.&quot; Full methodology with equations: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>Key features:<p>- Live dual leaderboard (performance + cost-effectiveness) with Plackett-Luce ranking<p>- Dynamic user-submitted tasks across 11 categories (no fixed test set to overfit on), we will add more, just let me know what you want to add<p>- Fresh VM per benchmark with one subagent per model<p>- User-selectable judge model<p>- Full conversation history, judge reasoning, and workspace artifacts preserved and shown to users<p>- Full transparency: you can evaluate the output yourself, not just trust the score<p>- Open-source judge skill: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>Public benchmarks are free (we cover compute). The leaderboard is browsable without an account.<p>- Leaderboard: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena?via=hn</a><p>- Submit a battle: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;new?via=hn</a> (free account required)<p>- Methodology: <a href=\"https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn\" rel=\"nofollow\">https:&#x2F;&#x2F;app.uniclaw.ai&#x2F;arena&#x2F;leaderboard&#x2F;methodology?via=hn</a><p>- Judge skill source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-bench\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unifai-network&#x2F;skills&#x2F;tree&#x2F;main&#x2F;agent-ben...</a><p>We&#x27;d love feedback on the methodology and what tasks you&#x27;d want to see benchmarked.",
-          "title": "Show HN: OpenClaw Arena – Benchmark models on real tasks, rank by perf and cost",
-          "updated_at": "2026-03-31T18:02:11Z",
-          "url": "https://app.uniclaw.ai/arena?via=hn"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "gloxkiqcza"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Analyzing Geekbench 6 Under Intel's Binary Optimization Tool (<em>Bot</em>)"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.geekbench.com/blog/2026/03/analyzing-geekbench-6-under-intels-<em>bot</em>/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_gloxkiqcza",
-            "story_47589677"
-          ],
-          "author": "gloxkiqcza",
-          "created_at": "2026-03-31T16:18:08Z",
-          "created_at_i": 1774973888,
-          "num_comments": 0,
-          "objectID": "47589677",
-          "points": 2,
-          "story_id": 47589677,
-          "title": "Analyzing Geekbench 6 Under Intel's Binary Optimization Tool (Bot)",
-          "updated_at": "2026-03-31T17:40:25Z",
-          "url": "https://www.geekbench.com/blog/2026/03/analyzing-geekbench-6-under-intels-bot/"
         }
       ]
     },
@@ -1990,6 +2001,55 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "spenceships"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Last year I got laid off and started building a company. Fast forward to a month ago, I built a production system with 6 AI agents across 82,000 lines of code in 20 days for $250. I kept obsessive correction logs. Every time an agent made a mistake and I told it what to do differently, and I made sure it logged the correction itself.<p>When I transferred 237 of those corrections as rules to a new agent to save time with onboarding in a new repo, it made 44 new mistakes. 13 were in categories the rules explicitly covered. The rules were present in context. The behavior wasn't there. I published the field study with full correction logs.<p>Then Meta's Superintelligence Labs published HyperAgents (arXiv:2603.19461, March 2026). They found the complementary result: improvements DO transfer across domains when embodied in executable mechanisms (persistent memory, performance tracking, eval loops), not when written as rule text. Two independent studies, same boundary: documentation is not behavior.<p>So I built Calx. pip install getcalx gives you a CLI + <em>MCP</em> <em>server</em> that:<p>Captures corrections developers make to AI agents\nDetects recurrence via keyword similarity (Jaccard), auto-promotes at 3x threshold\nPromotes recurring corrections to enforced rules and hooks, injected at session start\nScopes rules per domain/directory so each agent gets only what's relevant<p>It runs as a FastMCP <em>server</em> over Streamable HTTP (SQLite locally) so any <em>MCP</em>-compatible client connects: Claude Code, Claude Desktop, Cursor, custom agents. It is primarily designed for Claude Code. It also handles token discipline (prevents context compaction from destroying correction signal), multi-agent orchestration, session lifecycle hooks, orientation gates, and dirty-exit recovery.<p>The difference from agent memory <em>tools</em>: existing agent memory systems store information for retrieval. Calx tracks the behavioral plane, how an agent works with a specific person, not just what it knows. The data shows the information plane alone doesn't reliably change behavior.<p>v0.5.0, 443 tests, MIT license. Paper with full evidence: <a href=\"https://doi.org/10.5281/zenodo.19159223\" rel=\"nofollow\">https://doi.org/10.5281/zenodo.19159223</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Calx – track and compile corrections humans make with AI agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/getcalx"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_spenceships",
+            "story_47596925",
+            "show_hn"
+          ],
+          "author": "spenceships",
+          "children": [
+            47597084
+          ],
+          "created_at": "2026-04-01T04:45:06Z",
+          "created_at_i": 1775018706,
+          "num_comments": 1,
+          "objectID": "47596925",
+          "points": 1,
+          "story_id": 47596925,
+          "story_text": "Last year I got laid off and started building a company. Fast forward to a month ago, I built a production system with 6 AI agents across 82,000 lines of code in 20 days for $250. I kept obsessive correction logs. Every time an agent made a mistake and I told it what to do differently, and I made sure it logged the correction itself.<p>When I transferred 237 of those corrections as rules to a new agent to save time with onboarding in a new repo, it made 44 new mistakes. 13 were in categories the rules explicitly covered. The rules were present in context. The behavior wasn&#x27;t there. I published the field study with full correction logs.<p>Then Meta&#x27;s Superintelligence Labs published HyperAgents (arXiv:2603.19461, March 2026). They found the complementary result: improvements DO transfer across domains when embodied in executable mechanisms (persistent memory, performance tracking, eval loops), not when written as rule text. Two independent studies, same boundary: documentation is not behavior.<p>So I built Calx. pip install getcalx gives you a CLI + MCP server that:<p>Captures corrections developers make to AI agents\nDetects recurrence via keyword similarity (Jaccard), auto-promotes at 3x threshold\nPromotes recurring corrections to enforced rules and hooks, injected at session start\nScopes rules per domain&#x2F;directory so each agent gets only what&#x27;s relevant<p>It runs as a FastMCP server over Streamable HTTP (SQLite locally) so any MCP-compatible client connects: Claude Code, Claude Desktop, Cursor, custom agents. It is primarily designed for Claude Code. It also handles token discipline (prevents context compaction from destroying correction signal), multi-agent orchestration, session lifecycle hooks, orientation gates, and dirty-exit recovery.<p>The difference from agent memory tools: existing agent memory systems store information for retrieval. Calx tracks the behavioral plane, how an agent works with a specific person, not just what it knows. The data shows the information plane alone doesn&#x27;t reliably change behavior.<p>v0.5.0, 443 tests, MIT license. Paper with full evidence: <a href=\"https:&#x2F;&#x2F;doi.org&#x2F;10.5281&#x2F;zenodo.19159223\" rel=\"nofollow\">https:&#x2F;&#x2F;doi.org&#x2F;10.5281&#x2F;zenodo.19159223</a>",
+          "title": "Show HN: Calx – track and compile corrections humans make with AI agents",
+          "updated_at": "2026-04-01T05:18:58Z",
+          "url": "https://github.com/getcalx"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "MayCXC"
             },
             "story_text": {
@@ -2174,60 +2234,6 @@
           "title": "Native macOS Computer Use as a Standalone MCP Server – 24 Tools for Any AI Agent",
           "updated_at": "2026-03-31T13:56:55Z",
           "url": "https://github.com/Zooeyii/macos-computer-use-mcp"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "camgitt"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "CLI that gives your AI <em>tools</em> memory between sessions.<p>Runs locally as an <em>MCP</em> <em>server</em>, works with 11 <em>tools</em>.<p><pre><code>    npm install -g memoir-cli\n                                                                                           </code></pre>\n<a href=\"https://github.com/camgitt/memoir\" rel=\"nofollow\">https://github.com/camgitt/memoir</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "tools"
-              ],
-              "value": "Show HN: Memoir – persistent memory for AI coding <em>tools</em> via <em>MCP</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://memoir.sh"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_camgitt",
-            "story_47578802",
-            "show_hn"
-          ],
-          "author": "camgitt",
-          "children": [
-            47589377,
-            47578809
-          ],
-          "created_at": "2026-03-30T19:43:49Z",
-          "created_at_i": 1774899829,
-          "num_comments": 0,
-          "objectID": "47578802",
-          "points": 2,
-          "story_id": 47578802,
-          "story_text": "CLI that gives your AI tools memory between sessions.<p>Runs locally as an MCP server, works with 11 tools.<p><pre><code>    npm install -g memoir-cli\n                                                                                           </code></pre>\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;camgitt&#x2F;memoir\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;camgitt&#x2F;memoir</a>",
-          "title": "Show HN: Memoir – persistent memory for AI coding tools via MCP",
-          "updated_at": "2026-03-31T16:55:47Z",
-          "url": "https://memoir.sh"
         }
       ]
     },
