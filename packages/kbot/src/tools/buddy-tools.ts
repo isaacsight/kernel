@@ -1,16 +1,20 @@
 // kbot Buddy Tools — Interact with your terminal companion
 //
-// Two tools:
-//   buddy_status — Show buddy name, species, mood, and sprite
-//   buddy_rename — Give your buddy a custom name (persisted to ~/.kbot/buddy.json)
+// Three tools:
+//   buddy_status       — Show buddy name, species, mood, and sprite
+//   buddy_rename       — Give your buddy a custom name (persisted to ~/.kbot/buddy.json)
+//   buddy_achievements — Show all achievements with unlock status and progress
 
 import { registerTool } from './index.js'
 import {
   getBuddy,
   getBuddySprite,
   getBuddyGreeting,
+  getBuddyLevel,
   formatBuddyStatus,
   renameBuddy,
+  getAchievements,
+  getAchievementProgress,
   type BuddyMood,
 } from '../buddy.js'
 
@@ -29,16 +33,22 @@ export function registerBuddyTools(): void {
     tier: 'free',
     async execute(args) {
       const buddy = getBuddy()
+      const lvl = getBuddyLevel()
       const mood = args.mood ? String(args.mood) as BuddyMood : undefined
       if (mood && !VALID_MOODS.includes(mood)) {
         return `Unknown mood "${mood}". Valid moods: ${VALID_MOODS.join(', ')}`
       }
       const sprite = getBuddySprite(mood).join('\n')
       const greeting = getBuddyGreeting()
+      const xpProgress = lvl.xpToNext !== null
+        ? `${lvl.xp}/${lvl.xp + lvl.xpToNext} XP (${lvl.xpToNext} to next)`
+        : `${lvl.xp} XP (MAX)`
       return [
         `Name: ${buddy.name}`,
         `Species: ${buddy.species}`,
         `Mood: ${mood || buddy.mood}`,
+        `Level: ${lvl.level} — ${lvl.title}`,
+        `XP: ${xpProgress}`,
         '',
         sprite,
         '',
@@ -68,6 +78,48 @@ export function registerBuddyTools(): void {
       renameBuddy(newName)
 
       return formatBuddyStatus(`${oldName} is now ${newName}!`)
+    },
+  })
+
+  registerTool({
+    name: 'buddy_achievements',
+    description: 'Show all buddy achievements — unlocked ones with date, locked ones with progress hints. Milestones that unlock as you use kbot.',
+    parameters: {},
+    tier: 'free',
+    async execute() {
+      const achievements = getAchievements()
+      const buddy = getBuddy()
+
+      const unlocked = achievements.filter(a => a.unlockedAt !== null)
+      const locked = achievements.filter(a => a.unlockedAt === null)
+
+      const lines: string[] = []
+      lines.push(`=== ${buddy.name}'s Achievements ===`)
+      lines.push(`${unlocked.length}/${achievements.length} unlocked`)
+      lines.push('')
+
+      if (unlocked.length > 0) {
+        lines.push('-- Unlocked --')
+        for (const a of unlocked) {
+          const date = new Date(a.unlockedAt!).toLocaleDateString()
+          lines.push(`  [${a.icon}] ${a.name} — ${a.description}`)
+          lines.push(`      Unlocked ${date}`)
+        }
+        lines.push('')
+      }
+
+      if (locked.length > 0) {
+        lines.push('-- Locked --')
+        for (const a of locked) {
+          const progress = getAchievementProgress(a.id)
+          lines.push(`  [ ] ${a.name} — ${a.description}`)
+          if (progress) {
+            lines.push(`      Progress: ${progress}`)
+          }
+        }
+      }
+
+      return lines.join('\n')
     },
   })
 }

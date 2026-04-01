@@ -1,29 +1,77 @@
-// kbot Buddy System — Terminal companion sprites
+// kbot Buddy System — Terminal companion sprites + Achievements
 //
 // Deterministic companion assignment based on config path hash.
 // Same user always gets the same buddy. Mood changes based on session activity.
 // Pure ASCII art, max 5 lines tall, 15 chars wide. Tamagotchi energy.
 //
-// Persists buddy name to ~/.kbot/buddy.json
+// Achievements: milestones that unlock as the user uses kbot. Persisted in buddy.json.
+//
+// Persists buddy name + achievements to ~/.kbot/buddy.json
 
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createHash } from 'node:crypto'
+import { getDreamStatus, type DreamInsight, type DreamCategory } from './dream.js'
+import { getExtendedStats } from './learning.js'
+import { getToolMetrics } from './tools/index.js'
 
 // ── Types ──
 
 export type BuddySpecies = 'fox' | 'owl' | 'cat' | 'robot' | 'ghost' | 'mushroom' | 'octopus' | 'dragon'
 export type BuddyMood = 'idle' | 'thinking' | 'success' | 'error' | 'learning'
+export type BuddyLevel = 0 | 1 | 2 | 3
+
+export interface BuddyEvolution {
+  level: BuddyLevel
+  xp: number
+  evolvedAt: string[]   // ISO timestamps of each evolution
+}
 
 export interface BuddyState {
   species: BuddySpecies
   name: string
   mood: BuddyMood
+  evolution: BuddyEvolution
+}
+
+export interface BuddyLevelInfo {
+  level: BuddyLevel
+  xp: number
+  xpToNext: number | null  // null at max level
+  title: string
+}
+
+// ── Achievement Types ──
+
+export interface Achievement {
+  /** Unique achievement ID */
+  id: string
+  /** Display name */
+  name: string
+  /** Description of what the user did */
+  description: string
+  /** Single ASCII char icon (trophy, star, bolt, etc.) */
+  icon: string
+  /** ISO timestamp when unlocked, null if locked */
+  unlockedAt: string | null
+}
+
+/** Persistent achievement state stored in buddy.json */
+interface AchievementRecord {
+  id: string
+  unlockedAt: string
 }
 
 interface BuddyConfig {
   name?: string
+  evolution?: BuddyEvolution
+  /** Dream insight IDs already narrated at startup (avoid repeats) */
+  narratedDreamIds?: string[]
+  /** Unlocked achievements */
+  achievements?: AchievementRecord[]
+  /** Dates (YYYY-MM-DD) when kbot was used, for streak tracking */
+  usageDates?: string[]
 }
 
 // ── Paths ──
@@ -49,6 +97,28 @@ const DEFAULT_NAMES: Record<BuddySpecies, string> = {
   mushroom: 'Spore',
   octopus: 'Ink',
   dragon: 'Ember',
+}
+
+// ── Evolution thresholds ──
+// XP required to reach each level. 1 XP per session, bonus for special actions.
+
+const LEVEL_THRESHOLDS: Record<BuddyLevel, number> = {
+  0: 0,
+  1: 50,
+  2: 150,
+  3: 500,
+}
+
+/** Titles per species at each evolution level */
+const LEVEL_TITLES: Record<BuddySpecies, Record<BuddyLevel, string>> = {
+  fox:      { 0: 'Kit',       1: 'Scout',     2: 'Tracker',    3: 'Phantom' },
+  owl:      { 0: 'Owlet',     1: 'Watcher',   2: 'Sage',       3: 'Oracle' },
+  cat:      { 0: 'Kitten',    1: 'Prowler',   2: 'Shadow',     3: 'Sphinx' },
+  robot:    { 0: 'Spark',     1: 'Circuit',   2: 'Core',       3: 'Singularity' },
+  ghost:    { 0: 'Wisp',      1: 'Shade',     2: 'Phantom',    3: 'Wraith' },
+  mushroom: { 0: 'Spore',     1: 'Sprout',    2: 'Mycelium',   3: 'Overmind' },
+  octopus:  { 0: 'Hatchling', 1: 'Drifter',   2: 'Kraken',     3: 'Leviathan' },
+  dragon:   { 0: 'Whelp',     1: 'Drake',     2: 'Wyrm',       3: 'Ancient' },
 }
 
 // ── ASCII Sprites ──
@@ -354,6 +424,87 @@ const SPRITES: Record<BuddySpecies, Record<BuddyMood, string[]>> = {
   },
 }
 
+// ── Evolved Sprite Transforms ──
+// Each level modifies the base sprite with small visual upgrades.
+// Level 0 = base sprites. Levels 1-3 add sparkles, upgraded features, crowns.
+
+function applySpriteEvolution(species: BuddySpecies, mood: BuddyMood, level: BuddyLevel): string[] {
+  const base = SPRITES[species][mood].map(l => l)
+  if (level === 0) return base
+
+  switch (species) {
+    case 'fox':
+      // L1: sparkle ear tips. L2: star paws. L3: glowing eyes.
+      if (level >= 1) base[0] = '  /\\*  /\\*'
+      if (level >= 2) base[4] = '(*|   |*) '
+      if (level >= 3) base[1] = ' ( @ . @ ) '
+      break
+    case 'owl':
+      // L1: sparkle crest. L2: reinforced perch. L3: crown + glowing eyes.
+      if (level >= 1) base[0] = '  {o,o}* '
+      if (level >= 2) base[2] = ' ="--"=" '
+      if (level >= 3) { base[0] = ' ^{@,@}* '; base[2] = ' ="=="=" ' }
+      break
+    case 'cat':
+      // L1: whisker sparks. L2: flared paws. L3: crown + glowing eyes.
+      if (level >= 1) base[2] = ' >*^*<   '
+      if (level >= 2) base[4] = ' *~ ~*   '
+      if (level >= 3) { base[0] = '^/\\_/\\^  '; base[1] = '( @.@ )  ' }
+      break
+    case 'robot':
+      // L1: antenna spark. L2: bracket eyes upgrade. L3: glow eyes + crown.
+      if (level >= 1) base[0] = ' [====*] '
+      if (level >= 2) {
+        base[1] = base[1].replace('[o o]', '{o o}').replace('[^ ^]', '{^ ^}').replace('[x x]', '{x x}')
+      }
+      if (level >= 3) {
+        base[0] = '^[==*==]^'
+        base[1] = base[1]
+          .replace('{o o}', '{@ @}').replace('{^ ^}', '{@ @}').replace('{x x}', '{X X}')
+          .replace('[o o]', '{@ @}').replace('[^ ^]', '{@ @}').replace('[x x]', '{X X}')
+      }
+      break
+    case 'ghost':
+      // L1: glow aura dots. L2: sparkle trail. L3: crown + glowing eyes.
+      if (level >= 1) base[0] = ' *.---.* '
+      if (level >= 2) base[4] = ' *~~W~~* '
+      if (level >= 3) {
+        base[0] = '^*.---.*^'
+        base[1] = base[1].replace('o o', '@ @').replace('^ ^', '@ @').replace('; ;', '@ @')
+      }
+      break
+    case 'mushroom':
+      // L1: spore dots on cap. L2: sparkle stem. L3: crown + glow spots.
+      if (level >= 1) base[0] = ' .*-^-.* '
+      if (level >= 2) base[2] = '|==*=*==|'
+      if (level >= 3) {
+        base[0] = '^.*-^-.*^'
+        base[1] = base[1].replace('o o', '@ @').replace('^ ^', '@ @').replace('; ;', '@ @')
+      }
+      break
+    case 'octopus':
+      // L1: bubble on head. L2: sparkle tentacles. L3: crown + glow eyes.
+      if (level >= 1) base[0] = ' *.---.  '
+      if (level >= 2) base[4] = ' *~ ~ ~* '
+      if (level >= 3) {
+        base[0] = '^*.---.*'
+        base[1] = base[1].replace('o o', '@ @').replace('^ ^', '@ @').replace('; ;', '@ @')
+      }
+      break
+    case 'dragon':
+      // L1: flame spark on tail. L2: bigger wing marks. L3: crown + fire eyes.
+      if (level >= 1) base[4] = '  ^^ *   '
+      if (level >= 2) base[2] = '|  ==/\\* '
+      if (level >= 3) {
+        base[0] = ' ^/\\_    '
+        base[1] = base[1].replace('o >', '@ >*').replace('^ >', '@ >*').replace('; >', '@ >*')
+      }
+      break
+  }
+
+  return base
+}
+
 // ── Greetings per species ──
 
 const GREETINGS: Record<BuddySpecies, string[]> = {
@@ -382,6 +533,7 @@ const MOOD_MESSAGES: Record<BuddyMood, string[]> = {
 let currentMood: BuddyMood = 'idle'
 let cachedSpecies: BuddySpecies | null = null
 let cachedName: string | null = null
+let cachedEvolution: BuddyEvolution | null = null
 
 // ── Config persistence ──
 
@@ -424,14 +576,399 @@ function resolveName(): string {
   return cachedName
 }
 
+function resolveEvolution(): BuddyEvolution {
+  if (cachedEvolution) return cachedEvolution
+  const config = loadBuddyConfig()
+  cachedEvolution = config.evolution ?? { level: 0 as BuddyLevel, xp: 0, evolvedAt: [] }
+  return cachedEvolution
+}
+
+/**
+ * Compute the level for a given XP total.
+ * Returns the highest level whose threshold the XP meets or exceeds.
+ */
+function computeLevel(xp: number): BuddyLevel {
+  if (xp >= LEVEL_THRESHOLDS[3]) return 3
+  if (xp >= LEVEL_THRESHOLDS[2]) return 2
+  if (xp >= LEVEL_THRESHOLDS[1]) return 1
+  return 0
+}
+
+// ── Achievement Definitions ──
+// Each definition has an id, display info, and a check function that receives
+// the current snapshot of kbot stats. The check returns true when the condition
+// is met. Achievements are checked at session end via checkAchievements().
+
+interface AchievementDef {
+  id: string
+  name: string
+  description: string
+  icon: string
+  check: (ctx: AchievementContext) => boolean
+  progressHint: (ctx: AchievementContext) => string
+}
+
+interface AchievementContext {
+  stats: ReturnType<typeof getExtendedStats>
+  dreamCycles: number
+  dreamInsights: number
+  uniqueToolsUsed: number
+  buddyRenamed: boolean
+  currentHour: number
+  sessionsToday: number
+  streakDays: number
+  providersConfigured: number
+}
+
+/** Build context snapshot for achievement checks */
+function buildAchievementContext(): AchievementContext {
+  const stats = getExtendedStats()
+  const dreamStatus = getDreamStatus()
+  const toolMetrics = getToolMetrics()
+  const config = loadBuddyConfig()
+
+  const uniqueToolsUsed = toolMetrics.length
+  const buddyRenamed = config.name != null && config.name !== DEFAULT_NAMES[resolveSpecies()]
+  const currentHour = new Date().getHours()
+  const today = new Date().toISOString().slice(0, 10)
+  const usageDates = config.usageDates ?? []
+  const sessionsToday = usageDates.filter(d => d === today).length
+  const streakDays = calculateStreak(usageDates)
+  const providersConfigured = countProviders()
+
+  return {
+    stats,
+    dreamCycles: dreamStatus.state.cycles,
+    dreamInsights: dreamStatus.insights.length,
+    uniqueToolsUsed,
+    buddyRenamed,
+    currentHour,
+    sessionsToday,
+    streakDays,
+    providersConfigured,
+  }
+}
+
+/** Count consecutive usage days ending at today or yesterday */
+function calculateStreak(usageDates: string[]): number {
+  if (usageDates.length === 0) return 0
+  const unique = [...new Set(usageDates)].sort().reverse()
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const mostRecent = unique[0]
+  const diffFromToday = Math.floor(
+    (today.getTime() - new Date(mostRecent).getTime()) / (1000 * 60 * 60 * 24)
+  )
+  if (diffFromToday > 1) return 0
+  let streak = 1
+  for (let i = 1; i < unique.length; i++) {
+    const prev = new Date(unique[i - 1])
+    const curr = new Date(unique[i])
+    const diff = Math.floor((prev.getTime() - curr.getTime()) / (1000 * 60 * 60 * 24))
+    if (diff === 1) {
+      streak++
+    } else {
+      break
+    }
+  }
+  return streak
+}
+
+/** Count configured AI providers from ~/.kbot/config.json */
+function countProviders(): number {
+  const configPath = join(KBOT_DIR, 'config.json')
+  if (!existsSync(configPath)) return 0
+  try {
+    const raw = readFileSync(configPath, 'utf-8')
+    const config = JSON.parse(raw) as Record<string, unknown>
+    let count = 0
+    const providerKeys = [
+      'anthropic', 'openai', 'google', 'mistral', 'xai', 'deepseek', 'groq',
+      'cohere', 'together', 'fireworks', 'perplexity', 'openrouter', 'replicate',
+      'sambanova', 'cerebras', 'hyperbolic', 'lepton', 'novita', 'ollama', 'lmstudio',
+    ]
+    for (const p of providerKeys) {
+      if (config[`${p}_key`] || config['byok_provider'] === p) count++
+    }
+    return Math.max(count, config['byok_provider'] ? 1 : 0)
+  } catch {
+    return 0
+  }
+}
+
+const ACHIEVEMENT_DEFS: AchievementDef[] = [
+  {
+    id: 'first_steps',
+    name: 'First Steps',
+    description: 'Complete your first session',
+    icon: '+',
+    check: ctx => ctx.stats.sessions >= 1,
+    progressHint: ctx => `${ctx.stats.sessions}/1 sessions`,
+  },
+  {
+    id: 'first_dream',
+    name: 'First Dream',
+    description: 'Complete your first dream cycle',
+    icon: '*',
+    check: ctx => ctx.dreamCycles >= 1,
+    progressHint: ctx => `${ctx.dreamCycles}/1 dream cycles`,
+  },
+  {
+    id: 'pattern_seeker',
+    name: 'Pattern Seeker',
+    description: 'Reach 10 cached patterns in the learning engine',
+    icon: '?',
+    check: ctx => ctx.stats.patternsCount >= 10,
+    progressHint: ctx => `${ctx.stats.patternsCount}/10 patterns`,
+  },
+  {
+    id: 'solution_architect',
+    name: 'Solution Architect',
+    description: 'Reach 25 cached solutions',
+    icon: '!',
+    check: ctx => ctx.stats.solutionsCount >= 25,
+    progressHint: ctx => `${ctx.stats.solutionsCount}/25 solutions`,
+  },
+  {
+    id: 'night_owl',
+    name: 'Night Owl',
+    description: 'Use kbot after midnight',
+    icon: '@',
+    check: ctx => ctx.currentHour >= 0 && ctx.currentHour < 5,
+    progressHint: () => 'Use kbot between 12am-5am',
+  },
+  {
+    id: 'centurion',
+    name: 'Centurion',
+    description: 'Reach 100 sessions',
+    icon: '#',
+    check: ctx => ctx.stats.sessions >= 100,
+    progressHint: ctx => `${ctx.stats.sessions}/100 sessions`,
+  },
+  {
+    id: 'tool_master',
+    name: 'Tool Master',
+    description: 'Use 50 different tools',
+    icon: '%',
+    check: ctx => ctx.uniqueToolsUsed >= 50,
+    progressHint: ctx => `${ctx.uniqueToolsUsed}/50 unique tools`,
+  },
+  {
+    id: 'dream_weaver',
+    name: 'Dream Weaver',
+    description: 'Reach 10 dream insights',
+    icon: '~',
+    check: ctx => ctx.dreamInsights >= 10,
+    progressHint: ctx => `${ctx.dreamInsights}/10 dream insights`,
+  },
+  {
+    id: 'speed_demon',
+    name: 'Speed Demon',
+    description: 'Complete 5 sessions in one day',
+    icon: '>',
+    check: ctx => ctx.sessionsToday >= 5,
+    progressHint: ctx => `${ctx.sessionsToday}/5 sessions today`,
+  },
+  {
+    id: 'memory_palace',
+    name: 'Memory Palace',
+    description: 'Reach 50 facts in the knowledge base',
+    icon: '^',
+    check: ctx => ctx.stats.knowledgeCount >= 50,
+    progressHint: ctx => `${ctx.stats.knowledgeCount}/50 knowledge facts`,
+  },
+  {
+    id: 'companion_bond',
+    name: 'Companion Bond',
+    description: 'Rename your buddy',
+    icon: '&',
+    check: ctx => ctx.buddyRenamed,
+    progressHint: () => 'Use buddy_rename to name your companion',
+  },
+  {
+    id: 'chatterbox',
+    name: 'Chatterbox',
+    description: 'Send 500 messages',
+    icon: '$',
+    check: ctx => ctx.stats.totalMessages >= 500,
+    progressHint: ctx => `${ctx.stats.totalMessages}/500 messages`,
+  },
+  {
+    id: 'streak_7',
+    name: 'On a Roll',
+    description: 'Use kbot 7 days in a row',
+    icon: '=',
+    check: ctx => ctx.streakDays >= 7,
+    progressHint: ctx => `${ctx.streakDays}/7 day streak`,
+  },
+  {
+    id: 'polyglot',
+    name: 'Polyglot',
+    description: 'Configure 3 or more AI providers',
+    icon: ':',
+    check: ctx => ctx.providersConfigured >= 3,
+    progressHint: ctx => `${ctx.providersConfigured}/3 providers`,
+  },
+  {
+    id: 'deep_dreamer',
+    name: 'Deep Dreamer',
+    description: 'Complete 25 dream cycles',
+    icon: '(',
+    check: ctx => ctx.dreamCycles >= 25,
+    progressHint: ctx => `${ctx.dreamCycles}/25 dream cycles`,
+  },
+  {
+    id: 'thousand_voices',
+    name: 'Thousand Voices',
+    description: 'Send 1,000 messages',
+    icon: ')',
+    check: ctx => ctx.stats.totalMessages >= 1000,
+    progressHint: ctx => `${ctx.stats.totalMessages}/1000 messages`,
+  },
+  {
+    id: 'knowledge_sage',
+    name: 'Knowledge Sage',
+    description: 'Reach 100 facts in the knowledge base',
+    icon: '{',
+    check: ctx => ctx.stats.knowledgeCount >= 100,
+    progressHint: ctx => `${ctx.stats.knowledgeCount}/100 knowledge facts`,
+  },
+  {
+    id: 'streak_30',
+    name: 'Ironclad',
+    description: 'Use kbot 30 days in a row',
+    icon: '}',
+    check: ctx => ctx.streakDays >= 30,
+    progressHint: ctx => `${ctx.streakDays}/30 day streak`,
+  },
+]
+
+// ── Achievement Engine ──
+
+/** Record today's usage date for streak tracking */
+function recordUsageDate(): void {
+  const config = loadBuddyConfig()
+  const today = new Date().toISOString().slice(0, 10)
+  const dates = config.usageDates ?? []
+  dates.push(today)
+  // Keep last 90 days of usage data to bound storage
+  const cutoff = new Date()
+  cutoff.setDate(cutoff.getDate() - 90)
+  const cutoffStr = cutoff.toISOString().slice(0, 10)
+  config.usageDates = dates.filter(d => d >= cutoffStr)
+  saveBuddyConfig(config)
+}
+
+/**
+ * Check all achievement conditions and unlock any newly earned.
+ * Returns the list of newly unlocked achievements (empty if none).
+ * Call this at session end in agent.ts.
+ */
+export function checkAchievements(): Achievement[] {
+  recordUsageDate()
+
+  const config = loadBuddyConfig()
+  const existing = config.achievements ?? []
+  const unlockedIds = new Set(existing.map(a => a.id))
+  const ctx = buildAchievementContext()
+  const newlyUnlocked: Achievement[] = []
+
+  for (const def of ACHIEVEMENT_DEFS) {
+    if (unlockedIds.has(def.id)) continue
+    if (def.check(ctx)) {
+      const now = new Date().toISOString()
+      existing.push({ id: def.id, unlockedAt: now })
+      newlyUnlocked.push({
+        id: def.id,
+        name: def.name,
+        description: def.description,
+        icon: def.icon,
+        unlockedAt: now,
+      })
+    }
+  }
+
+  if (newlyUnlocked.length > 0) {
+    config.achievements = existing
+    saveBuddyConfig(config)
+  }
+
+  return newlyUnlocked
+}
+
+/**
+ * Get all achievements with their unlock status.
+ * Unlocked ones include the timestamp; locked ones show null.
+ */
+export function getAchievements(): Achievement[] {
+  const config = loadBuddyConfig()
+  const unlockedMap = new Map(
+    (config.achievements ?? []).map(a => [a.id, a.unlockedAt])
+  )
+
+  return ACHIEVEMENT_DEFS.map(def => ({
+    id: def.id,
+    name: def.name,
+    description: def.description,
+    icon: def.icon,
+    unlockedAt: unlockedMap.get(def.id) ?? null,
+  }))
+}
+
+/**
+ * Get a progress hint for a locked achievement.
+ * Returns null if the achievement is unlocked or not found.
+ */
+export function getAchievementProgress(achievementId: string): string | null {
+  const def = ACHIEVEMENT_DEFS.find(d => d.id === achievementId)
+  if (!def) return null
+  const config = loadBuddyConfig()
+  const isUnlocked = (config.achievements ?? []).some(a => a.id === achievementId)
+  if (isUnlocked) return null
+  const ctx = buildAchievementContext()
+  return def.progressHint(ctx)
+}
+
+/**
+ * Format achievement unlock notification for terminal display.
+ * Shows the buddy sprite in success mood with a celebration message.
+ */
+export function formatAchievementUnlock(achievement: Achievement): string {
+  const name = resolveName()
+  const species = resolveSpecies()
+  const sprite = getBuddySprite('success')
+  const text = `Achievement unlocked: ${achievement.name}!`
+
+  const inner = ` ${achievement.icon} ${text} ${achievement.icon} `
+  const width = inner.length
+  const top = '.' + '-'.repeat(width) + '.'
+  const mid = '|' + inner + '|'
+  const bot = "'" + '-'.repeat(width) + "'"
+
+  const lines: string[] = []
+  lines.push(`  ${top}`)
+  lines.push(`  ${mid}`)
+  lines.push(`  ${bot}`)
+
+  for (const line of sprite) {
+    lines.push(`  ${line}`)
+  }
+
+  lines.push(`  ~ ${name} the ${species} ~`)
+  lines.push(`  ${achievement.description}`)
+
+  return lines.join('\n')
+}
+
 // ── Public API ──
 
-/** Get the buddy's current state (species, name, mood) */
+/** Get the buddy's current state (species, name, mood, evolution) */
 export function getBuddy(): BuddyState {
   return {
     species: resolveSpecies(),
     name: resolveName(),
     mood: currentMood,
+    evolution: resolveEvolution(),
   }
 }
 
@@ -440,11 +977,13 @@ export function setBuddyMood(mood: BuddyMood): void {
   currentMood = mood
 }
 
-/** Get the ASCII sprite for the buddy in the given mood (defaults to current) */
+/** Get the ASCII sprite for the buddy in the given mood (defaults to current).
+ *  Applies evolution visual upgrades based on the buddy's current level. */
 export function getBuddySprite(mood?: BuddyMood): string[] {
   const m = mood ?? currentMood
   const species = resolveSpecies()
-  return SPRITES[species][m]
+  const evo = resolveEvolution()
+  return applySpriteEvolution(species, m, evo.level)
 }
 
 /** Get a random greeting for the buddy */
@@ -461,6 +1000,68 @@ export function renameBuddy(newName: string): void {
   config.name = newName.trim()
   saveBuddyConfig(config)
   cachedName = config.name
+}
+
+/**
+ * Add XP to the buddy. Checks for level-ups and persists to buddy.json.
+ * Returns the updated level info, and whether a level-up just occurred.
+ *
+ * XP sources:
+ *   - Session complete: +1
+ *   - Dream cycle:      +2
+ *   - Tool creation:    +3
+ *   - First error fix:  +1
+ */
+export function addBuddyXP(amount: number): { levelInfo: BuddyLevelInfo; leveledUp: boolean } {
+  const config = loadBuddyConfig()
+  const evo: BuddyEvolution = config.evolution ?? { level: 0 as BuddyLevel, xp: 0, evolvedAt: [] }
+  const prevLevel = evo.level
+
+  evo.xp += amount
+  const newLevel = computeLevel(evo.xp)
+
+  let leveledUp = false
+  if (newLevel > prevLevel) {
+    evo.level = newLevel
+    evo.evolvedAt.push(new Date().toISOString())
+    leveledUp = true
+  }
+
+  config.evolution = evo
+  saveBuddyConfig(config)
+  cachedEvolution = evo
+
+  const species = resolveSpecies()
+  const nextLevel = (newLevel < 3 ? (newLevel + 1) as BuddyLevel : null)
+  const xpToNext = nextLevel !== null ? LEVEL_THRESHOLDS[nextLevel] - evo.xp : null
+
+  return {
+    levelInfo: {
+      level: evo.level,
+      xp: evo.xp,
+      xpToNext,
+      title: LEVEL_TITLES[species][evo.level],
+    },
+    leveledUp,
+  }
+}
+
+/**
+ * Get the buddy's current level info without modifying state.
+ * Includes level, XP, XP to next level, and species-specific title.
+ */
+export function getBuddyLevel(): BuddyLevelInfo {
+  const species = resolveSpecies()
+  const evo = resolveEvolution()
+  const nextLevel = (evo.level < 3 ? (evo.level + 1) as BuddyLevel : null)
+  const xpToNext = nextLevel !== null ? LEVEL_THRESHOLDS[nextLevel] - evo.xp : null
+
+  return {
+    level: evo.level,
+    xp: evo.xp,
+    xpToNext,
+    title: LEVEL_TITLES[species][evo.level],
+  }
 }
 
 /** Pick a random message for the current mood */
@@ -487,6 +1088,7 @@ export function formatBuddyStatus(message?: string): string {
   const name = resolveName()
   const species = resolveSpecies()
   const sprite = getBuddySprite()
+  const lvl = getBuddyLevel()
   const text = message || moodMessage()
 
   // Build speech bubble
@@ -506,8 +1108,115 @@ export function formatBuddyStatus(message?: string): string {
     lines.push(`  ${line}`)
   }
 
-  // Name tag
+  // Name tag with level title
+  const xpBar = lvl.xpToNext !== null ? ` [${lvl.xp}/${lvl.xp + lvl.xpToNext} XP]` : ' [MAX]'
   lines.push(`  ~ ${name} the ${species} ~`)
+  lines.push(`  Lv.${lvl.level} ${lvl.title}${xpBar}`)
 
   return lines.join('\n')
+}
+
+// ── Dream Narration ──
+
+/** Max narrated IDs to keep in buddy.json (rolling window) */
+const MAX_NARRATED_IDS = 200
+
+/** 24 hours in milliseconds */
+const RECENT_THRESHOLD_MS = 24 * 60 * 60 * 1000
+
+/**
+ * Narration templates per dream category.
+ * Each array has several options — one is picked at random for variety.
+ * The placeholder `%s` is replaced with the insight content.
+ */
+const NARRATION_TEMPLATES: Record<DreamCategory, string[]> = {
+  preference: [
+    'I noticed you always %s. I\'ll remember that.',
+    'I dreamed about how you %s. Makes sense to me.',
+    'Something I picked up on — you %s. Noted.',
+  ],
+  pattern: [
+    'I learned that when you %s, things go better.',
+    'I dreamed about your workflow — %s.',
+    'I noticed a pattern: %s.',
+  ],
+  project: [
+    'About your project — %s.',
+    'I was thinking about the codebase. %s.',
+    'Dreamed about the project last night. %s.',
+  ],
+  relationship: [
+    'Working with you, I\'ve learned %s.',
+    'I picked up on something between us — %s.',
+    'After our sessions together, %s.',
+  ],
+  music: [
+    'Your music sessions taught me — %s.',
+    'I dreamed in sound last night. %s.',
+    'Something about your beats — %s.',
+  ],
+  skill: [
+    'I can tell you\'re getting sharper at %s.',
+    'I dreamed about your skills — %s.',
+    'You\'re leveling up. %s.',
+  ],
+}
+
+/**
+ * Convert an insight's content into a casual first-person buddy sentence.
+ * Lowercases the first character of the insight to flow naturally into templates.
+ */
+function narrateInsight(insight: DreamInsight): string {
+  const templates = NARRATION_TEMPLATES[insight.category] ?? NARRATION_TEMPLATES.pattern
+  const template = templates[Math.floor(Math.random() * templates.length)]
+  // Lowercase the first char so it reads naturally after the template prefix
+  const content = insight.content.charAt(0).toLowerCase() + insight.content.slice(1)
+  // Strip trailing period from content if the template already ends the sentence
+  const trimmed = content.replace(/\.\s*$/, '')
+  return template.replace('%s', trimmed)
+}
+
+/**
+ * Get a dream narration for the buddy to tell the user at startup.
+ *
+ * Picks the highest-relevance insight that was reinforced in the last 24 hours
+ * and hasn't already been narrated. Returns `null` if there's nothing new to say.
+ *
+ * Tracks narrated insight IDs in buddy.json to avoid repeats.
+ */
+export function getBuddyDreamNarration(): string | null {
+  let status: ReturnType<typeof getDreamStatus>
+  try {
+    status = getDreamStatus()
+  } catch {
+    return null
+  }
+
+  const { insights } = status
+  if (insights.length === 0) return null
+
+  const config = loadBuddyConfig()
+  const narrated = new Set(config.narratedDreamIds ?? [])
+  const now = Date.now()
+
+  // Find the best un-narrated insight reinforced in the last 24 hours
+  const candidate = insights
+    .filter(i => {
+      if (narrated.has(i.id)) return false
+      const reinforcedAge = now - new Date(i.lastReinforced).getTime()
+      return reinforcedAge < RECENT_THRESHOLD_MS && i.relevance > 0.3
+    })
+    .sort((a, b) => b.relevance - a.relevance)[0] ?? null
+
+  if (!candidate) return null
+
+  // Record this insight as narrated
+  const updatedIds = [...(config.narratedDreamIds ?? []), candidate.id]
+  // Keep the list bounded
+  config.narratedDreamIds = updatedIds.length > MAX_NARRATED_IDS
+    ? updatedIds.slice(-MAX_NARRATED_IDS)
+    : updatedIds
+  saveBuddyConfig(config)
+
+  return narrateInsight(candidate)
 }

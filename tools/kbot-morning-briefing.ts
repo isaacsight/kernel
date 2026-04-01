@@ -17,6 +17,7 @@ import { join } from 'path'
 import { execSync } from 'child_process'
 import { homedir } from 'os'
 import { createClient } from '@supabase/supabase-js'
+import { getBuddy, getBuddySprite } from '../packages/kbot/src/buddy.js'
 
 // ── Config ───────────────────────────────────────────────────────────
 
@@ -455,10 +456,55 @@ Rules:
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// BUDDY GREETING
+// ═══════════════════════════════════════════════════════════════════════
+
+function generateBuddyOneLiner(data: BriefingData): string {
+  const buddy = getBuddy()
+  const name = buddy.name
+
+  // Pick the most notable data point
+  if (data.discovery.starsDelta > 0) {
+    return `${data.discovery.starsDelta} new star${data.discovery.starsDelta === 1 ? '' : 's'} overnight — let's keep building! — ${name}`
+  }
+  if (data.emails.count > 0 && data.emails.senders.length > 0) {
+    const sender = data.emails.senders[0]
+    return `${sender} wrote in. You should check it. — ${name}`
+  }
+  if (data.services.some(s => s.status !== 'running')) {
+    const down = data.services.filter(s => s.status !== 'running').map(s => s.name)
+    return `${down.join(', ')} ${down.length === 1 ? 'is' : 'are'} down. I'm keeping an eye on it. — ${name}`
+  }
+  if (data.daemonHealth.errorsToday > 0) {
+    return `${data.daemonHealth.errorsToday} error${data.daemonHealth.errorsToday === 1 ? '' : 's'} overnight. Nothing critical, but worth a look. — ${name}`
+  }
+  const running = data.services.filter(s => s.status === 'running').length
+  if (running === data.services.length) {
+    return `All ${running} services running smooth. I watched them all night. — ${name}`
+  }
+  return `Morning. Everything looks normal from here. — ${name}`
+}
+
+function buildBuddyHtml(data: BriefingData): string {
+  const sprite = getBuddySprite('idle')
+  const oneLiner = generateBuddyOneLiner(data)
+
+  // Escape HTML entities in the ASCII art
+  const spriteText = sprite
+    .map(line => line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'))
+    .join('\n')
+
+  return `<div style="text-align: center; margin: 20px 0;">
+  <pre style="display: inline-block; background: #f5f5f0; padding: 16px; border-radius: 8px; font-family: 'Courier Prime', 'Courier New', monospace; font-size: 14px; line-height: 1.4;">${spriteText}</pre>
+  <p style="font-style: italic; color: #6B5B95; margin-top: 8px; font-size: 14px;">${oneLiner}</p>
+</div>`
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // EMAIL SENDER
 // ═══════════════════════════════════════════════════════════════════════
 
-async function sendBriefingEmail(briefingText: string): Promise<boolean> {
+async function sendBriefingEmail(briefingText: string, data: BriefingData): Promise<boolean> {
   const dateStr = formatDate(new Date())
 
   // Convert markdown bold to HTML bold, paragraphs to <p> tags
@@ -482,6 +528,7 @@ async function sendBriefingEmail(briefingText: string): Promise<boolean> {
       <h1 style="margin: 0; font-size: 18px; font-family: 'Courier New', 'Courier Prime', monospace; color: #6B5B95; letter-spacing: 2px; text-transform: uppercase;">Morning Briefing</h1>
       <p style="margin: 4px 0 0 0; font-size: 13px; color: #888; font-family: 'Courier New', monospace;">${dateStr} &middot; kbot &middot; kernel.chat</p>
     </div>
+    ${buildBuddyHtml(data)}
     <div style="font-size: 15px;">
       ${bodyHtml}
     </div>
@@ -575,7 +622,7 @@ async function main(): Promise<void> {
   }
 
   // Send email
-  const sent = await sendBriefingEmail(briefingText)
+  const sent = await sendBriefingEmail(briefingText, data)
   if (sent) {
     log(`Briefing emailed to ${RECIPIENT}`)
     observeToolCall('morning_briefing_sent', { to: RECIPIENT })

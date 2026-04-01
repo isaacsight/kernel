@@ -51,7 +51,7 @@ import {
 import { checkForUpdate, selfUpdate } from './updater.js'
 import { runTutorial } from './tutorial.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
-import { getBuddy, getBuddyGreeting, formatBuddyStatus } from './buddy.js'
+import { getBuddy, getBuddyGreeting, formatBuddyStatus, getBuddyDreamNarration } from './buddy.js'
 import chalk from 'chalk'
 
 import { createRequire } from 'node:module'
@@ -4542,6 +4542,18 @@ async function startRepl(
       : getBuddyGreeting()
     console.log()
     console.log(formatBuddyStatus(greeting))
+
+    // Dream narration — buddy tells the user what it dreamed about
+    if (!isFirstRun) {
+      try {
+        const dreamNarration = getBuddyDreamNarration()
+        if (dreamNarration) {
+          console.log()
+          console.log(formatBuddyStatus(dreamNarration))
+        }
+      } catch { /* dream narration is non-critical */ }
+    }
+
     console.log()
   }
 
