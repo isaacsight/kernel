@@ -3354,6 +3354,82 @@ async function main(): Promise<void> {
       console.log(r.result)
     })
 
+  // ── Dream Engine ──
+  const dreamCmd = program
+    .command('dream')
+    .description('Memory consolidation — consolidate session knowledge into durable insights')
+
+  dreamCmd
+    .command('run')
+    .description('Run a dream cycle now (uses local Ollama)')
+    .action(async () => {
+      const { dream } = await import('./dream.js')
+      printInfo('Dreaming... consolidating session memories with local AI')
+      const result = await dream()
+      if (result.success) {
+        printSuccess(`Dream cycle #${result.cycle} complete`)
+        console.log(`  New insights: ${result.newInsights}`)
+        console.log(`  Reinforced: ${result.reinforced}`)
+        console.log(`  Archived: ${result.archived} aged-out`)
+        console.log(`  Duration: ${result.duration}ms`)
+      } else {
+        printWarn(result.error || 'Dream cycle failed')
+        if (result.archived > 0) console.log(`  (Still archived ${result.archived} aged-out insights)`)
+      }
+    })
+
+  dreamCmd
+    .command('status')
+    .description('Show dream engine status and top insights')
+    .action(async () => {
+      const { getDreamStatus } = await import('./dream.js')
+      const { state, insights, archiveCount } = getDreamStatus()
+      console.log(chalk.bold('\nDream Engine'))
+      console.log(chalk.dim('═══════════════════'))
+      console.log(`Cycles:    ${state.cycles}`)
+      console.log(`Last:      ${state.lastDream || 'never'}`)
+      console.log(`Active:    ${state.activeInsights} insights`)
+      console.log(`Archived:  ${state.totalArchived} (${archiveCount} files)`)
+      if (insights.length > 0) {
+        const avgRel = Math.round(insights.reduce((s, i) => s + i.relevance, 0) / insights.length * 100)
+        console.log(`Avg relevance: ${avgRel}%`)
+        console.log(chalk.bold('\nTop insights:'))
+        for (const i of insights.slice(0, 8)) {
+          const pct = Math.round(i.relevance * 100)
+          console.log(`  ${chalk.green(`${pct}%`)} [${chalk.cyan(i.category)}] ${i.content}`)
+        }
+      } else {
+        console.log(chalk.dim('\nNo insights yet. Run: kbot dream run'))
+      }
+    })
+
+  dreamCmd
+    .command('search <query>')
+    .description('Search dream insights by keyword')
+    .action(async (query: string) => {
+      const { searchDreams } = await import('./dream.js')
+      const results = searchDreams(query)
+      if (results.length === 0) {
+        printInfo(`No insights match "${query}"`)
+        return
+      }
+      console.log(chalk.bold(`\n${results.length} insights matching "${query}":\n`))
+      for (const i of results.slice(0, 15)) {
+        const pct = Math.round(i.relevance * 100)
+        console.log(`  ${chalk.green(`${pct}%`)} [${chalk.cyan(i.category)}] ${i.content}`)
+        console.log(chalk.dim(`         ${i.keywords.join(', ')} | ${i.sessions} sessions | ${i.created.split('T')[0]}`))
+      }
+    })
+
+  dreamCmd
+    .command('journal')
+    .description('Print the full dream journal')
+    .action(async () => {
+      const { getDreamPrompt } = await import('./dream.js')
+      const journal = getDreamPrompt(50)
+      console.log(journal || chalk.dim('Dream journal is empty. Run: kbot dream run'))
+    })
+
   program.parse(process.argv)
 
   const opts = program.opts()
@@ -3363,7 +3439,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions', 'admin', 'monitor', 'analytics', 'deploy', 'env', 'db'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions', 'admin', 'monitor', 'analytics', 'deploy', 'env', 'db', 'dream'].includes(program.args[0])) return
 
   // ── Ollama Launch Integration ──
   // Detect when kbot is started via `ollama launch kbot` or `kbot --ollama-launch`

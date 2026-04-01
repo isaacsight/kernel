@@ -39,6 +39,7 @@ import {
   shouldAutoTrain, selfTrain,
 } from './learning.js'
 import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory, destroySession } from './memory.js'
+import { getDreamPrompt, dreamAfterSession } from './dream.js'
 import { autoCompact, compressToolResult, type ConversationTurn } from './context-manager.js'
 import { learnedRoute, recordRoute } from './learned-router.js'
 import { buildCacheablePrompt, createPromptSections } from './prompt-cache.js'
@@ -1135,7 +1136,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
     persona: PERSONA,
     matrixPrompt: matrixPrompt || undefined,
     contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet || undefined,
-    memorySnippet: (memorySnippet || '') + reflectionSnippet || undefined,
+    memorySnippet: (memorySnippet || '') + getDreamPrompt(8) + reflectionSnippet || undefined,
     learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '') + (correctionsSnippet ? '\n\n' + correctionsSnippet : '')) || undefined,
   })
   const provider = byokProvider || 'anthropic'
@@ -1843,6 +1844,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
     reason: 'loop_exhausted',
   })
   telemetry.destroy().catch(() => {})
+
+  // ── Dream Engine: consolidate session memories (non-blocking, $0 via Ollama) ──
+  dreamAfterSession(sessionId)
 
   const content = lastResponse?.content || 'Reached maximum tool iterations.'
   return {
