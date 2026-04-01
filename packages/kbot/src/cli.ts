@@ -1081,6 +1081,133 @@ async function main(): Promise<void> {
       }
     })
 
+  // ── Watchdog — Service & System Status Dashboard ──
+  program
+    .command('watchdog')
+    .alias('wd')
+    .description('Service watchdog — live status of all kbot background services and system health')
+    .option('--json', 'Output as JSON')
+    .option('--restart <service>', 'Restart a specific service (email-agent, discovery, serve, discord, mlx, collective-sync, daemon, kbot-local)')
+    .action(async (opts: { json?: boolean; restart?: string }) => {
+      const { getSystemHealth, getServiceStatus, restartService } = await import('./tools/watchdog.js')
+
+      // ── Restart mode ──
+      if (opts.restart) {
+        const result = restartService(opts.restart)
+        if (result.success) {
+          console.log()
+          console.log(`  ${chalk.hex('#4ADE80')('✓')} ${result.message}`)
+          console.log()
+        } else {
+          console.log()
+          console.log(`  ${chalk.hex('#F87171')('✗')} ${result.message}`)
+          console.log()
+        }
+        return
+      }
+
+      const h = getSystemHealth()
+
+      // ── JSON mode ──
+      if (opts.json) {
+        console.log(JSON.stringify(h, null, 2))
+        return
+      }
+
+      // ── Dashboard rendering ──
+      const ACCENT = chalk.hex('#A78BFA')
+      const GREEN = chalk.hex('#4ADE80')
+      const YELLOW = chalk.hex('#FBBF24')
+      const RED = chalk.hex('#F87171')
+      const DIM = chalk.dim
+
+      const running = h.services.filter(s => s.status === 'running').length
+      const total = h.services.length
+      const allUp = running === total
+
+      // Box drawing
+      const W = 42
+      const box = {
+        tl: '\u256D', tr: '\u256E', bl: '\u2570', br: '\u256F', h: '\u2500', v: '\u2502',
+        pad: (s: string, w: number) => {
+          const visible = s.replace(/\x1b\[[0-9;]*m/g, '')
+          const diff = w - visible.length
+          return diff > 0 ? s + ' '.repeat(diff) : s
+        },
+      }
+
+      const row = (content: string) => {
+        return ACCENT(box.v) + ' ' + box.pad(content, W - 2) + ' ' + ACCENT(box.v)
+      }
+
+      console.log()
+      console.log('  ' + ACCENT(`${box.tl}${box.h.repeat(W)}${box.tr}`))
+      console.log('  ' + row(`${ACCENT.bold('\u25C6 KBOT SYSTEM STATUS')}`))
+      console.log('  ' + ACCENT(`${box.tl}${box.h.repeat(W)}${box.tr}`.replace(box.tl, '\u251C').replace(box.tr, '\u2524')))
+
+      // Service count
+      const svcColor = allUp ? GREEN : running > 0 ? YELLOW : RED
+      console.log('  ' + row(`Services:  ${svcColor(`${running}/${total} running`)}`))
+
+      // CPU
+      console.log('  ' + row(`CPU Load:  ${chalk.white(h.loadAvg)}`))
+
+      // RAM
+      console.log('  ' + row(`RAM:       ${chalk.white(h.memUsed)} / ${DIM(h.memTotal)}`))
+
+      // Disk
+      console.log('  ' + row(`Disk:      ${chalk.white(h.diskFree)} free ${DIM(`/ ${h.diskTotal}`)}`))
+
+      // Ollama
+      const ollamaColor = h.ollamaStatus === 'online' ? GREEN : RED
+      const ollamaInfo = h.ollamaModels.length > 0 ? ` ${DIM(`(${h.ollamaModels.length} models)`)}` : ''
+      console.log('  ' + row(`Ollama:    ${ollamaColor(h.ollamaStatus)}${ollamaInfo}`))
+
+      // Dreams
+      console.log('  ' + row(`Dreams:    ${ACCENT(`${h.dreamCycles}`)} cycles, ${ACCENT(`${h.dreamInsights}`)} insights`))
+
+      // Memory
+      console.log('  ' + row(`Memory:    ${chalk.white(h.kbotMemorySize)}`))
+
+      console.log('  ' + ACCENT(`${box.bl}${box.h.repeat(W)}${box.br}`))
+      console.log()
+
+      // ── Services table ──
+      console.log(`  ${chalk.bold('SERVICES')}`)
+      console.log(`  ${DIM('\u2500'.repeat(64))}`)
+
+      for (const s of h.services) {
+        const icon = s.status === 'running' ? GREEN('\u2713')
+          : s.status === 'dead' ? RED('\u2717')
+          : DIM('\u2500')
+        const nameStr = chalk.bold(s.shortName.padEnd(18))
+        const pidStr = s.pid ? DIM(`PID ${String(s.pid).padEnd(8)}`) : DIM('PID -'.padEnd(12))
+
+        let statusStr: string
+        if (s.status === 'running') {
+          statusStr = `CPU ${chalk.white(s.cpu.padEnd(7))} MEM ${chalk.white(s.mem.padEnd(7))} up ${GREEN(s.uptime)}`
+        } else if (s.status === 'dead') {
+          statusStr = RED('dead — restart with: kbot wd --restart ' + s.shortName)
+        } else {
+          statusStr = DIM('not loaded')
+        }
+
+        console.log(`  ${icon} ${nameStr} ${pidStr} ${statusStr}`)
+      }
+
+      console.log()
+
+      // Ollama model list
+      if (h.ollamaModels.length > 0) {
+        console.log(`  ${chalk.bold('OLLAMA MODELS')}`)
+        console.log(`  ${DIM('\u2500'.repeat(64))}`)
+        for (const m of h.ollamaModels) {
+          console.log(`  ${ACCENT('\u25B8')} ${chalk.white(m)}`)
+        }
+        console.log()
+      }
+    })
+
   program
     .command('hardware')
     .description('Detect your hardware tier and get personalized model recommendations for local AI')

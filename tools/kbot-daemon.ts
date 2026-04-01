@@ -12,6 +12,7 @@
 //   6. Embedding index      — every 8 hours (semantic search index)
 //   7. Daily digest         — once per day (summarize changes)
 //   8. Dream consolidation  — every 2 hours (memory consolidation via dream engine)
+//   9. Morning briefing     — once per day (email summary of overnight data)
 //
 // Runs via macOS launchd every 15 minutes. Tasks self-schedule.
 // ═══════════════════════════════════════════════════════════════════════
@@ -51,6 +52,7 @@ const INTERVALS = {
   documentation: 12 * 60 * 60_000,// 12 hours
   dailyDigest: 24 * 60 * 60_000,  // 24 hours
   dreamConsolidation: 2 * 60 * 60_000,  // 2 hours
+  morningBriefing: 24 * 60 * 60_000,   // 24 hours
 } as const
 
 // i18n languages (from src/i18n.ts)
@@ -155,7 +157,7 @@ function contentHash(text: string): string {
 }
 
 function ensureDirs(): void {
-  const dirs = ['git-reviews', 'i18n-sync', 'test-coverage', 'code-quality', 'documentation', 'embeddings', 'daily-digest']
+  const dirs = ['git-reviews', 'i18n-sync', 'test-coverage', 'code-quality', 'documentation', 'embeddings', 'daily-digest', 'morning-briefing']
   for (const d of dirs) {
     const p = join(REPORTS_DIR, d)
     if (!existsSync(p)) mkdirSync(p, { recursive: true })
@@ -847,6 +849,22 @@ async function taskDreamConsolidation(_state: DaemonState): Promise<number> {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// TASK 9: Morning Briefing
+// Gathers overnight data and emails a summary to Isaac
+// ═══════════════════════════════════════════════════════════════════════
+
+async function taskMorningBriefing(_state: DaemonState): Promise<number> {
+  // Dynamic import — morning briefing is a standalone script with its own export
+  const { runMorningBriefing } = await import('./kbot-morning-briefing.js') as {
+    runMorningBriefing: () => Promise<number>
+  }
+
+  const tokens = await runMorningBriefing()
+  log('[morningBriefing] Briefing generated and emailed')
+  return tokens
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // MAIN ORCHESTRATOR
 // ═══════════════════════════════════════════════════════════════════════
 
@@ -884,6 +902,7 @@ async function main(): Promise<void> {
   await runTask('embeddings', state, INTERVALS.embeddings, () => taskEmbeddings(state))
   await runTask('i18nSync', state, INTERVALS.i18nSync, () => taskI18nSync(state))
   await runTask('dreamConsolidation', state, INTERVALS.dreamConsolidation, () => taskDreamConsolidation(state))
+  await runTask('morningBriefing', state, INTERVALS.morningBriefing, () => taskMorningBriefing(state))
 
   saveState(state)
   log(`═══ Daemon run complete. Errors today: ${state.stats.errorsToday} ═══\n`)

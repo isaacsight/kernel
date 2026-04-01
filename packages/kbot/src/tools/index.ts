@@ -388,6 +388,8 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './memory-scanner-tools.js', registerFn: 'registerMemoryScannerTools' },
   { path: './buddy-tools.js',  registerFn: 'registerBuddyTools' },
   { path: './voice-input-tools.js', registerFn: 'registerVoiceInputTools' },
+  { path: './watchdog.js',         registerFn: 'registerWatchdogTools' },
+  { path: './behavior-tools.js',   registerFn: 'registerBehaviorTools' },
 ]
 
 /** Track whether lazy tools have been registered */

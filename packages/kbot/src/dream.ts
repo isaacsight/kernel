@@ -34,6 +34,7 @@ import {
   getRecentHistory as getMusicRecentHistory,
   getPreferences as getMusicPreferences,
 } from './music-learning.js'
+import { getBehaviorForDream } from './user-behavior.js'
 import { registerAmendment } from './prompt-evolution.js'
 
 // ── Constants ──
@@ -261,6 +262,9 @@ function buildConsolidationPrompt(
     musicText = report + (recentText ? `\n\n**Recent production events:**\n${recentText}` : '')
   }
 
+  // ── Tier 7: User computer behavior — desktop observation ──
+  const behaviorText = getBehaviorForDream(48) || '(no behavior data yet)'
+
   return `You are a memory consolidation system. Analyze this conversation session and ALL accumulated knowledge tiers to extract durable cross-tier insights.
 
 EXISTING DREAM INSIGHTS (Tier 4 — Dream Journal):
@@ -284,6 +288,9 @@ ${scannerText}
 MUSIC PRODUCTION LEARNING (Tier 6 — Musical Memory):
 ${musicText}
 
+USER COMPUTER BEHAVIOR (Tier 7 — Desktop Observation):
+${behaviorText}
+
 SESSION TO CONSOLIDATE:
 ${historyText}
 
@@ -301,6 +308,13 @@ For music/production sessions, pay special attention to:
 - Production patterns (e.g., "808 sub bass in F1 works well at 142 BPM for trap")
 - Cross-domain insights (e.g., coding workflow preferences that mirror production habits)
 Use category "music" for production-specific insights.
+
+For desktop behavior data, look for:
+- Workflow patterns (which apps are always open together, e.g., IDE + terminal + browser)
+- Productivity habits (active hours, app switching frequency)
+- Context-switching tendencies (many apps vs focused few)
+- Tool preferences (which creative/dev tools dominate)
+- Cross-domain insights (e.g., "user switches to music production apps in evening hours")
 
 Pay special attention to:
 - Patterns that confirm or contradict existing insights

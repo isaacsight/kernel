@@ -42,6 +42,7 @@ import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory, destroySessi
 import { getDreamPrompt, dreamAfterSession } from './dream.js'
 import { setBuddyMood } from './buddy.js'
 import { notifyTurn, startMemoryScanner, stopMemoryScanner } from './memory-scanner.js'
+import { captureUserBehavior } from './user-behavior.js'
 import { autoCompact, compressToolResult, type ConversationTurn } from './context-manager.js'
 import { learnedRoute, recordRoute } from './learned-router.js'
 import { buildCacheablePrompt, createPromptSections } from './prompt-cache.js'
@@ -1184,6 +1185,10 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
   // Start passive memory scanner for this session
   startMemoryScanner()
+
+  // Capture a behavior snapshot (what apps are open, active window, etc.)
+  // Non-blocking, macOS only, purely local storage
+  captureUserBehavior()
 
   // ── Gödel limits: detect undecidable loops and hand off to human ──
   const loopDetector = new LoopDetector({
