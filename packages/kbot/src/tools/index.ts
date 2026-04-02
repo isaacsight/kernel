@@ -364,6 +364,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './lab-frontier.js',     registerFn: 'registerFrontierTools' },
   { path: './ableton.js',          registerFn: 'registerAbletonTools' },
   { path: './ableton-knowledge.js', registerFn: 'registerAbletonKnowledgeTools' },
+  { path: './ableton-bridge-tools.js', registerFn: 'registerAbletonBridgeTools' },
   { path: './producer-engine.js',  registerFn: 'registerProducerEngine' },
   { path: './sound-designer.js',  registerFn: 'registerSoundDesignerTools' },
   { path: './arrangement-engine.js', registerFn: 'registerArrangementEngine' },

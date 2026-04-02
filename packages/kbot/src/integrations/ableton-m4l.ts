@@ -372,7 +372,241 @@ export class AbletonM4L {
   }
 }
 
-// ── Convenience export ──────────────────────────────────────────────
+// ── Browser Bridge (KBotBridge Remote Script on port 9998) ──────────
+
+export interface BrowserSearchResult {
+  name: string
+  uri: string
+  is_loadable: boolean
+  is_device: boolean
+}
+
+export interface BrowserCategory {
+  name: string
+  display_name: string
+  child_count: number
+}
+
+/**
+ * Client for the KBotBridge Remote Script (TCP 9998).
+ *
+ * This is separate from the M4L bridge (9999) because the Browser API
+ * (browser.load_item) is ONLY available from Python Remote Scripts,
+ * not from Max for Live.
+ *
+ * Use this to programmatically load any native device (Saturator,
+ * EQ Eight, Compressor, etc.) onto any track.
+ */
+export class AbletonBrowserBridge {
+  private static instance: AbletonBrowserBridge | null = null
+
+  private socket: net.Socket | null = null
+  private connected = false
+  private pending = new Map<number, PendingRequest>()
+  private nextId = 1
+  private buffer = ''
+
+  static PORT = 9998
+  static HOST = '127.0.0.1'
+  static TIMEOUT = 15_000 // Browser operations can be slow
+
+  private constructor() {}
+
+  static getInstance(): AbletonBrowserBridge {
+    if (!AbletonBrowserBridge.instance) {
+      AbletonBrowserBridge.instance = new AbletonBrowserBridge()
+    }
+    return AbletonBrowserBridge.instance
+  }
+
+  /**
+   * Connect to the KBotBridge Remote Script on port 9998.
+   * Returns true if connected and the bridge responds to ping.
+   */
+  async connect(): Promise<boolean> {
+    if (this.connected && this.socket) {
+      try {
+        await this.send({ action: 'ping' })
+        return true
+      } catch {
+        this.disconnect()
+      }
+    }
+
+    return new Promise((resolve) => {
+      this.socket = new net.Socket()
+      this.buffer = ''
+
+      this.socket.on('data', (data: Buffer) => {
+        this.buffer += data.toString()
+        const lines = this.buffer.split('\n')
+        this.buffer = lines.pop() || ''
+
+        for (const line of lines) {
+          const trimmed = line.trim()
+          if (!trimmed) continue
+          try {
+            const response: M4LResponse = JSON.parse(trimmed)
+            this.handleResponse(response)
+          } catch {
+            // Malformed JSON — skip
+          }
+        }
+      })
+
+      this.socket.on('error', () => {
+        if (!this.connected) resolve(false)
+        this.handleDisconnect()
+      })
+
+      this.socket.on('close', () => {
+        this.handleDisconnect()
+      })
+
+      this.socket.connect(AbletonBrowserBridge.PORT, AbletonBrowserBridge.HOST, async () => {
+        this.connected = true
+        try {
+          const pong = await this.send({ action: 'ping' })
+          resolve(pong.ok)
+        } catch {
+          resolve(false)
+        }
+      })
+
+      setTimeout(() => {
+        if (!this.connected) {
+          this.socket?.destroy()
+          resolve(false)
+        }
+      }, 5000)
+    })
+  }
+
+  disconnect(): void {
+    this.connected = false
+    if (this.socket) {
+      this.socket.destroy()
+      this.socket = null
+    }
+    for (const [, req] of this.pending) {
+      clearTimeout(req.timer)
+      req.reject(new Error('Disconnected'))
+    }
+    this.pending.clear()
+    this.buffer = ''
+  }
+
+  async send(cmd: Omit<M4LCommand, 'id'> & { action: string }): Promise<M4LResponse> {
+    if (!this.connected || !this.socket) {
+      throw new Error(
+        'Not connected to KBotBridge Remote Script.\n' +
+        'Make sure KBotBridge is selected as a Control Surface in Ableton Preferences.'
+      )
+    }
+
+    const id = this.nextId++
+    const fullCmd: M4LCommand = { id, ...cmd }
+
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.pending.delete(id)
+        reject(new Error(`Timeout: ${cmd.action}`))
+      }, AbletonBrowserBridge.TIMEOUT)
+
+      this.pending.set(id, { resolve, reject, timer })
+      this.socket!.write(JSON.stringify(fullCmd) + '\n')
+    })
+  }
+
+  get isConnected(): boolean {
+    return this.connected
+  }
+
+  private handleResponse(response: M4LResponse): void {
+    if (response.id && this.pending.has(response.id)) {
+      const req = this.pending.get(response.id)!
+      this.pending.delete(response.id)
+      clearTimeout(req.timer)
+      req.resolve(response)
+    }
+  }
+
+  private handleDisconnect(): void {
+    if (!this.connected) return
+    this.connected = false
+    this.socket = null
+    for (const [, req] of this.pending) {
+      clearTimeout(req.timer)
+      req.reject(new Error('Connection lost'))
+    }
+    this.pending.clear()
+  }
+
+  // ── Browser convenience methods ─────────────────────────────────
+
+  async ping(): Promise<boolean> {
+    try {
+      const r = await this.send({ action: 'ping' })
+      return r.ok
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * Search Ableton's browser for items matching a query.
+   * @param query - Search string (case-insensitive)
+   * @param category - instruments/audio_effects/midi_effects/drums/samples/all
+   */
+  async browserSearch(query: string, category = 'all'): Promise<BrowserSearchResult[]> {
+    const r = await this.send({ action: 'browser_search', query, category })
+    if (!r.ok) throw new Error(r.error || 'Browser search failed')
+    return (r.results as BrowserSearchResult[]) || []
+  }
+
+  /**
+   * Load a browser item by URI onto a track.
+   * Use the URI from a browserSearch() result.
+   */
+  async browserLoad(track: number, uri: string): Promise<M4LResponse> {
+    return this.send({ action: 'browser_load', track, uri })
+  }
+
+  /**
+   * Search + load in one step. Finds first loadable match and loads it.
+   * @param track - 0-indexed track number
+   * @param name - Device name to search for (e.g., "Saturator", "EQ Eight")
+   * @param category - instruments/audio_effects/midi_effects/drums/samples/all
+   */
+  async browserLoadByName(track: number, name: string, category = 'all'): Promise<M4LResponse> {
+    return this.send({ action: 'browser_load_by_name', track, name, category })
+  }
+
+  /**
+   * List top-level browser categories with child counts.
+   */
+  async browserCategories(): Promise<BrowserCategory[]> {
+    const r = await this.send({ action: 'browser_categories' })
+    if (!r.ok) throw new Error(r.error || 'Failed to list categories')
+    return (r.categories as BrowserCategory[]) || []
+  }
+
+  /**
+   * List all tracks with names and device counts.
+   */
+  async listTracks(): Promise<M4LResponse> {
+    return this.send({ action: 'list_tracks' })
+  }
+
+  /**
+   * List devices on a track with full parameter details.
+   */
+  async listDevices(track: number): Promise<M4LResponse> {
+    return this.send({ action: 'list_devices', track })
+  }
+}
+
+// ── Convenience exports ─────────────────────────────────────────────
 
 /**
  * Get a connected M4L bridge instance.
@@ -396,6 +630,50 @@ export async function ensureM4L(): Promise<AbletonM4L> {
 }
 
 /**
+ * Get a connected Browser bridge instance (KBotBridge Remote Script on port 9998).
+ * Throws if not available.
+ */
+export async function ensureBrowserBridge(): Promise<AbletonBrowserBridge> {
+  const bridge = AbletonBrowserBridge.getInstance()
+  if (bridge.isConnected) return bridge
+
+  const ok = await bridge.connect()
+  if (!ok) {
+    throw new Error(
+      'Cannot connect to KBotBridge Remote Script.\n\n' +
+      'Make sure:\n' +
+      '1. Ableton Live is running\n' +
+      '2. KBotBridge is selected as a Control Surface in Preferences > Link, Tempo & MIDI\n' +
+      '3. Ableton status bar shows "KBotBridge: Listening on port 9998"\n\n' +
+      'To install: kbot ableton install-bridge\n'
+    )
+  }
+  return bridge
+}
+
+/**
+ * Connect to both M4L bridge (9999) and Browser bridge (9998).
+ * Returns whichever connections succeed. At least one must connect.
+ */
+export async function connectBrowser(): Promise<{
+  m4l: AbletonM4L | null
+  browser: AbletonBrowserBridge | null
+}> {
+  const m4l = AbletonM4L.getInstance()
+  const browser = AbletonBrowserBridge.getInstance()
+
+  const [m4lOk, browserOk] = await Promise.all([
+    m4l.connect().catch(() => false),
+    browser.connect().catch(() => false),
+  ])
+
+  return {
+    m4l: m4lOk ? m4l : null,
+    browser: browserOk ? browser : null,
+  }
+}
+
+/**
  * Format a friendly error message for M4L connection failures.
  */
 export function formatM4LError(): string {
@@ -408,5 +686,25 @@ export function formatM4LError(): string {
     '3. The device status should show "Connected"',
     '',
     'The M4L bridge gives kbot full control over Ableton — instruments, effects, clips, mixing, everything.',
+  ].join('\n')
+}
+
+/**
+ * Format a friendly error message for Browser bridge connection failures.
+ */
+export function formatBrowserBridgeError(): string {
+  return [
+    '**KBotBridge Remote Script not connected**',
+    '',
+    'The Browser API (for loading native devices) requires the KBotBridge Remote Script:',
+    '1. Install: `kbot ableton install-bridge`',
+    '2. Open Ableton Live Preferences (Cmd+,)',
+    '3. Go to Link, Tempo & MIDI',
+    '4. Set a Control Surface to "KBotBridge"',
+    '5. Close Preferences',
+    '',
+    'This runs alongside the M4L bridge — they use different ports:',
+    '- KBotBridge: TCP 9998 (Browser API, device loading)',
+    '- M4L Bridge: TCP 9999 (LOM access, clips, mixing)',
   ].join('\n')
 }
