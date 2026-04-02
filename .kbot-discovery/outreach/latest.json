@@ -1,53 +1,53 @@
 {
-  "timestamp": "2026-04-01T08:58:07.808Z",
+  "timestamp": "2026-04-01T21:09:34.617Z",
   "projects": [
     {
-      "name": "Enderfga/openclaw-claude-code",
-      "url": "https://github.com/Enderfga/openclaw-claude-code",
-      "stars": 89,
-      "description": "OpenClaw plugin — turn Claude Code CLI into a programmable, headless coding engine with 14 tools, agent teams, and multi-model proxy"
+      "name": "CopilotKit/CopilotKit",
+      "url": "https://github.com/CopilotKit/CopilotKit",
+      "stars": 29910,
+      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
     },
     {
-      "name": "tony1223/better-agent-terminal",
-      "url": "https://github.com/tony1223/better-agent-terminal",
-      "stars": 232,
-      "description": "Multi-workspace terminal aggregator with Claude Code AI integration"
+      "name": "inkeep/agents",
+      "url": "https://github.com/inkeep/agents",
+      "stars": 1041,
+      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
     },
     {
-      "name": "gorango/flowcraft",
-      "url": "https://github.com/gorango/flowcraft",
-      "stars": 164,
-      "description": "A lightweight workflow engine"
+      "name": "rcarmo/piclaw",
+      "url": "https://github.com/rcarmo/piclaw",
+      "stars": 428,
+      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
     },
     {
       "name": "mensfeld/code-on-incus",
       "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 361,
+      "stars": 363,
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "open-compress/claw-compactor",
-      "url": "https://github.com/open-compress/claw-compactor",
-      "stars": 2138,
-      "description": "14-stage Fusion Pipeline for LLM token compression — reversible compression, AST-aware code analysis, intelligent content routing. Zero LLM inference cost. MIT licensed."
+      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "stars": 163,
+      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
     },
     {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 658,
-      "description": "Agent Skills for Solopreneurs"
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 1988,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
     },
     {
-      "name": "hedgehog-finance/ciwei-ai-skill",
-      "url": "https://github.com/hedgehog-finance/ciwei-ai-skill",
-      "stars": 0,
-      "description": "ciwei ai plugin for openClaw"
+      "name": "weak-fox/openclaw-offline-seed",
+      "url": "https://github.com/weak-fox/openclaw-offline-seed",
+      "stars": 1,
+      "description": "Config-driven offline plugin and skill seeding for OpenClaw runtimes (Kubernetes, Helm, Docker)."
     },
     {
-      "name": "hanamizuki/obsidian-skill-graph",
-      "url": "https://github.com/hanamizuki/obsidian-skill-graph",
-      "stars": 0,
-      "description": "Obsidian plugin to visualize agent skill structures (OpenClaw / Claude Code) in graph view"
+      "name": "alirezarezvani/claude-skills",
+      "url": "https://github.com/alirezarezvani/claude-skills",
+      "stars": 8619,
+      "description": "220+ Claude Code skills & agent plugins for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory."
     },
     {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-01T18:28:08.897Z",
+  "timestamp": "2026-04-02T00:39:30.416Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -41,10 +41,10 @@
           "created_at_i": 1775058032,
           "num_comments": 1,
           "objectID": "47602373",
-          "points": 2,
+          "points": 3,
           "story_id": 47602373,
           "title": "Darce – AI coding agent for your terminal, any model, 14 kB",
-          "updated_at": "2026-04-01T15:55:00Z",
+          "updated_at": "2026-04-01T21:00:01Z",
           "url": "https://github.com/AmerSarhan/darce-cli"
         },
         {
@@ -85,19 +85,20 @@
           "children": [
             47602435,
             47602458,
+            47606660,
             47603897,
-            47603984,
-            47602546
+            47602546,
+            47603984
           ],
           "created_at": "2026-04-01T14:40:28Z",
           "created_at_i": 1775054428,
-          "num_comments": 5,
+          "num_comments": 6,
           "objectID": "47601608",
           "points": 5,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-01T18:04:44Z",
+          "updated_at": "2026-04-02T00:19:01Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
@@ -238,25 +239,26 @@
           "author": "tordrt",
           "children": [
             47601720,
+            47606545,
             47601026,
             47601039,
             47600979,
-            47604092,
             47600889,
             47601398,
+            47601578,
             47601726,
-            47602007,
             47600695,
+            47602007,
+            47601155,
             47602147,
             47602122,
             47602806,
-            47601155,
             47600943,
             47601058,
-            47601578,
+            47604092,
             47602329,
-            47601511,
             47600724,
+            47601511,
             47602374,
             47601678,
             47601471,
@@ -271,13 +273,13 @@
           ],
           "created_at": "2026-04-01T12:11:30Z",
           "created_at_i": 1775045490,
-          "num_comments": 47,
+          "num_comments": 49,
           "objectID": "47599771",
-          "points": 57,
+          "points": 59,
           "story_id": 47599771,
           "story_text": "Hi,<p>I built this because running multiple Claude Code agents across multiple IDE and terminal windows was getting messy. Like many, I went from working at one thing at the time, to multiple, and it was all changing quite fast.<p>I needed one place to see all my agents and worktrees, seamlessly switch between them, monitor their status and once their done, review their changes. I also wanted to quickly spin up new agents in isolated worktrees whenever an idea came to mind.<p>I&#x27;ve been building Baton from within Baton for a while now, which has been a pretty fun loop. Would love to hear what you think!",
           "title": "Show HN: Baton – A desktop app for developing with AI agents",
-          "updated_at": "2026-04-01T18:26:45Z",
+          "updated_at": "2026-04-01T22:41:59Z",
           "url": "https://getbaton.dev/"
         }
       ]
@@ -377,33 +379,39 @@
           "author": "piscator",
           "children": [
             47600438,
-            47602371,
             47599966,
+            47602371,
             47600025,
             47599758,
             47601468,
+            47608353,
             47600185,
             47600714,
             47602570,
+            47605481,
+            47605230,
             47599778,
             47600126,
             47601210,
-            47601763,
             47599763,
+            47601763,
             47599892,
+            47607627,
+            47606353,
             47602905,
+            47605704,
             47599316,
             47600031
           ],
           "created_at": "2026-04-01T11:09:03Z",
           "created_at_i": 1775041743,
-          "num_comments": 28,
+          "num_comments": 32,
           "objectID": "47599303",
-          "points": 40,
+          "points": 47,
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-01T18:17:32Z"
+          "updated_at": "2026-04-02T00:30:15Z"
         },
         {
           "_highlightResult": {
@@ -616,6 +624,56 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "desmonding"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS <em>learning</em> queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week's HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it's useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif/sans-serif, line spacing).<p>- On-device <em>AI</em> summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic/Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla's Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I'd love feedback — especially on the smart <em>collection</em> criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https://apps.apple.com/us/app/moji-reader/id6758530352\">https://apps.apple.com/us/app/moji-reader/id6758530352</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Moji – A read-it-later app with self-organizing smart collections"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://moji.pcding.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_desmonding",
+            "story_47269562",
+            "show_hn"
+          ],
+          "author": "desmonding",
+          "children": [
+            47274551,
+            47271615
+          ],
+          "created_at": "2026-03-06T01:18:48Z",
+          "created_at_i": 1772759928,
+          "num_comments": 4,
+          "objectID": "47269562",
+          "points": 12,
+          "story_id": 47269562,
+          "story_text": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS learning queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week&#x27;s HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it&#x27;s useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif&#x2F;sans-serif, line spacing).<p>- On-device AI summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic&#x2F;Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla&#x27;s Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I&#x27;d love feedback — especially on the smart collection criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352\">https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352</a>",
+          "title": "Show HN: Moji – A read-it-later app with self-organizing smart collections",
+          "updated_at": "2026-03-15T19:14:50Z",
+          "url": "https://moji.pcding.com"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "team_dale"
             },
             "story_text": {
@@ -718,7 +776,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "wingscape"
+              "value": "atomicrobokid"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -728,79 +786,36 @@
                 "learning",
                 "ai"
               ],
-              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
+              "value": "I built DayLeet because I’ve always felt that engineers should keep their logic and communication skills sharp, even when they aren't looking for a job.<p>I’m definitely not a competitive programmer, I’m a product person at heart, but I enjoy the puzzle-solving side of our field. Most platforms focus on the &quot;grind&quot; of interview prep (certainly important) but I wanted to build something that felt more like a daily habit (think Duolingo) for sharpening your technical logic and how you explain it.<p>The Concept: It’s a <em>collection</em> of 400+ whiteboard-style challenges. Instead of just checking if your code runs, I’m using Gemini 3 Flash to grade you against a rubric. It looks at your approach, edge cases, and how you communicate trade-offs. I also made some cool &quot;Peer Review&quot; scenarios where you chat with a peer reviewing their code.<p>The goal isn't just to &quot;solve it,&quot; but to keep that &quot;whiteboard muscle&quot; healthy. I also added some university-specific tracks (MIT 6.006, Stanford CS161) just because I thought they were a great way to revisit foundational logic.<p>The Tech: React 19, TanStack Router/Query, Supabase, and Tailwind.<p>I jumped on this now because Gemini 3 Flash is finally at a point where fast, cost-effective <em>AI</em> grading feels viable for a side project. Free accounts will come with ads to support (eventually).<p>Testing the waters: I’m still refining the <em>AI</em> feedback and the challenge difficulty, so I’m keeping the group small for now. I’ve opened spots for the HN community to skip the waitlist and get 6 months of premium for free as a thanks for trying it out, plus a cool HN Badge for your profile.<p>Link: <a href=\"https://dayleet.com\" rel=\"nofollow\">https://dayleet.com</a> Code: SHOWHN26\nSign up form: <a href=\"https://dayleet.com/signup?invite=SHOWHN26\" rel=\"nofollow\">https://dayleet.com/signup?invite=SHOWHN26</a><p>I’d love to hear your thoughts on the quality of the <em>AI</em> grading. Does it actually help you think through the problem, or does it feel like a gimmick? I'm building this to help myself get better at algorithmic thinking this year as <em>AI</em> can do more of the heavy lifting with code, so I'm interested in any feedback that makes it a better <em>learning</em> tool.<p>I'll be around to chat!"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Urban Pipeline for Citywide Insights"
+              "value": "Show HN: DayLeet – A daily habit for sharpening whiteboard logic"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://github.com/Wingscape/urban-pipeline"
+              "value": "https://dayleet.com/"
             }
           },
           "_tags": [
             "story",
-            "author_wingscape",
-            "story_44550988",
+            "author_atomicrobokid",
+            "story_46491112",
             "show_hn"
           ],
-          "author": "wingscape",
-          "created_at": "2025-07-13T15:11:34Z",
-          "created_at_i": 1752419494,
+          "author": "atomicrobokid",
+          "created_at": "2026-01-04T19:08:37Z",
+          "created_at_i": 1767553717,
           "num_comments": 0,
-          "objectID": "44550988",
-          "points": 3,
-          "story_id": 44550988,
-          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
-          "title": "Show HN: Urban Pipeline for Citywide Insights",
-          "updated_at": "2025-07-13T22:27:35Z",
-          "url": "https://github.com/Wingscape/urban-pipeline"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "cyberneticc"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Deepseek shows cognitive augmentation will be open source"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_cyberneticc",
-            "story_43019170",
-            "ask_hn"
-          ],
-          "author": "cyberneticc",
-          "children": [
-            43019203
-          ],
-          "created_at": "2025-02-11T22:26:27Z",
-          "created_at_i": 1739312787,
-          "num_comments": 2,
-          "objectID": "43019170",
-          "points": 4,
-          "story_id": 43019170,
-          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
-          "title": "Deepseek shows cognitive augmentation will be open source",
-          "updated_at": "2025-02-12T00:13:08Z"
+          "objectID": "46491112",
+          "points": 2,
+          "story_id": 46491112,
+          "story_text": "I built DayLeet because I’ve always felt that engineers should keep their logic and communication skills sharp, even when they aren&#x27;t looking for a job.<p>I’m definitely not a competitive programmer, I’m a product person at heart, but I enjoy the puzzle-solving side of our field. Most platforms focus on the &quot;grind&quot; of interview prep (certainly important) but I wanted to build something that felt more like a daily habit (think Duolingo) for sharpening your technical logic and how you explain it.<p>The Concept: It’s a collection of 400+ whiteboard-style challenges. Instead of just checking if your code runs, I’m using Gemini 3 Flash to grade you against a rubric. It looks at your approach, edge cases, and how you communicate trade-offs. I also made some cool &quot;Peer Review&quot; scenarios where you chat with a peer reviewing their code.<p>The goal isn&#x27;t just to &quot;solve it,&quot; but to keep that &quot;whiteboard muscle&quot; healthy. I also added some university-specific tracks (MIT 6.006, Stanford CS161) just because I thought they were a great way to revisit foundational logic.<p>The Tech: React 19, TanStack Router&#x2F;Query, Supabase, and Tailwind.<p>I jumped on this now because Gemini 3 Flash is finally at a point where fast, cost-effective AI grading feels viable for a side project. Free accounts will come with ads to support (eventually).<p>Testing the waters: I’m still refining the AI feedback and the challenge difficulty, so I’m keeping the group small for now. I’ve opened spots for the HN community to skip the waitlist and get 6 months of premium for free as a thanks for trying it out, plus a cool HN Badge for your profile.<p>Link: <a href=\"https:&#x2F;&#x2F;dayleet.com\" rel=\"nofollow\">https:&#x2F;&#x2F;dayleet.com</a> Code: SHOWHN26\nSign up form: <a href=\"https:&#x2F;&#x2F;dayleet.com&#x2F;signup?invite=SHOWHN26\" rel=\"nofollow\">https:&#x2F;&#x2F;dayleet.com&#x2F;signup?invite=SHOWHN26</a><p>I’d love to hear your thoughts on the quality of the AI grading. Does it actually help you think through the problem, or does it feel like a gimmick? I&#x27;m building this to help myself get better at algorithmic thinking this year as AI can do more of the heavy lifting with code, so I&#x27;m interested in any feedback that makes it a better learning tool.<p>I&#x27;ll be around to chat!",
+          "title": "Show HN: DayLeet – A daily habit for sharpening whiteboard logic",
+          "updated_at": "2026-03-05T23:19:29Z",
+          "url": "https://dayleet.com/"
         }
       ]
     },
@@ -812,7 +827,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "abbadadda"
+              "value": "easygenes"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -820,54 +835,48 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "ComputerPoker.ai is a website where users can play simulated poker tournaments against GTO <em>Bot</em>s to learn GTO poker strategy in a fun and low-risk environment.<p>My motivation for creating CompterPoker.ai was feeling a bit overwhelmed by some of the professional poker tools out there for learning GTO play. For some tools, learning how to simply operate the tool itself felt like a second job. With ComputerPoker.ai players can play against <em>bot</em>s themselves simulating GTO play to learn what it &quot;feels like&quot; to play GTO vs. GTO opponents without having to turn any knobs or dials (feedback is real-time as you play).<p>The Beta tester code for HN Users is: HackerNews2026. All feedback is welcome! Please send suggestions for improvement or bugs to contact@computerpoker.ai or alternatively leave a comment below. Any questions I will do my best to answer.<p>As for the product offering the website is designed to teach players how to play optimal poker strategy (GTO) in simulated Texas Hold 'Em poker tournaments. Our value proposition is that if you can consistently beat the <em>bot</em>s then you will fare well in live poker tournaments (of course adjusting for your opponents' play).<p>In addition to GTO pre-flop quizzes and pre-flop charts, users have the ability to simulate poker tournaments from start-to-finish and get feedback on their decisions _in real-time_ in a fun and low-risk environment.<p>For those interested the tech stack is Django deployed on AWS via Terraform and SaltStack, the database uses a Postgres RDS backend, and the frontend uses HTMX with WebSockets via Django Channels and Redis (Nginx serving as reverse proxy with CloudFlare DNS and SSL). During the project I used Claude Code to aid with various boilerplate aspects of the code base including building out the repos for Terraform and SaltSack and of course speeding up Django development.<p>Users are graded pre-flop based on the covered pre-flop scenarios (two-ways only for now). Post-flop users are graded on a residual MLP PyTorch model. We have built an in-house solver in Rust using the discontented CFR++ algorithm. The PyTorch model approximates GTO play post-flop (again only two-ways currently) based on training data with raises, EV, and realistic ranges for OOP and IP players. Because the post-flop decisions are based on a model that will always be a work in progress I refer to these decisions as GTOA (or &quot;GTO Approximate&quot;).<p>Version 8 of the PyTorch model is the first one that I am happy with and actually find it quite difficult to play against. If you manage to beat the <em>bot</em>s please do let me know how many tries it took! For those curious the PyTorch params for the most recent run are below (I trained on a gaming PC via Linux WSL2 using an AMD GPU):<p>```\n(venv_rocm_native) $   python3 pytorch_model.py\n      --data-dir unified_v8_raises/\n      --aggression-embed --predict-ev\n      --d-card 64 --d-model 256\n      --n-attn-layers 3 --n-trunk-layers 4\n      --dropout 0.2 --weight-decay 0.05\n      --epochs 30 --batch-size 4096 --lr 3e-4\n      --steps-per-epoch 10000 --output gto_model_v8.pt<p>Training on cuda\n… … … _30 epochs later_\n       Saved best model (val_loss=0.3865)\nTraining complete!\nBest model saved to gto_model_v8.pt\n```<p>The website is live in Beta mode as I gather feedback on how things are structured and work out any bugs/kinks. If you have any suggestions for improvements I’d love to hear them. Subscriptions are live so if anyone wanted to test the Stripe payment processing flow I certainly wouldn’t mind! ;-)<p>p.s. This is a side gig for me. I am currently looking for full-time work either fully remote or on-site based in London, UK (this LLC that runs ComputerPoker.ai operates out of USA but I am based full-time in the UK and authorized to work in <em>bot</em>h UK and USA). If you or someone you know is looking for a SRE with strong software engineering skills please let me know!"
+              "value": "As an April Fools' project, I've made this.<p>I (ironically, depending your penchant) used an AI judge to score every top HN post and its top comments all the way back to 2010 (over 300,000 individual judgments!), and created a nice interface with the historic charts.<p>The scoring is off of how much disgruntled AI pessimism the post and top comments show. You can use that score to either only show (in Doom Only mode) or hide (in calm mode) all the doom static.<p>This is part joke and partly to answer my own curiosity about how real my feeling that the comments and posts have grown increasingly overbearingly negative towards and focused on the worst of what results from AI in the past year.<p>The trends is stark. My intuition was reinforced by the analysis; disgruntled pessimism about AI is at an all time high in the last few weeks and on track to continue doubling annually since ChatGPT released.<p>Historic charts are at <em>bot</em>tom of the page."
             },
             "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Show HN: Computerpoker.ai – Learn GTO tournament poker strategy vs. GTO <em>bot</em>s"
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Sixteen year trends in AI doom on HN"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://computerpoker.ai"
+              "value": "https://hn.ai-doom.cc/"
             }
           },
           "_tags": [
             "story",
-            "author_abbadadda",
-            "story_47604325",
+            "author_easygenes",
+            "story_47608596",
             "show_hn"
           ],
-          "author": "abbadadda",
-          "created_at": "2026-04-01T18:03:39Z",
-          "created_at_i": 1775066619,
+          "author": "easygenes",
+          "created_at": "2026-04-02T00:38:21Z",
+          "created_at_i": 1775090301,
           "num_comments": 0,
-          "objectID": "47604325",
+          "objectID": "47608596",
           "points": 1,
-          "story_id": 47604325,
-          "story_text": "ComputerPoker.ai is a website where users can play simulated poker tournaments against GTO Bots to learn GTO poker strategy in a fun and low-risk environment.<p>My motivation for creating CompterPoker.ai was feeling a bit overwhelmed by some of the professional poker tools out there for learning GTO play. For some tools, learning how to simply operate the tool itself felt like a second job. With ComputerPoker.ai players can play against bots themselves simulating GTO play to learn what it &quot;feels like&quot; to play GTO vs. GTO opponents without having to turn any knobs or dials (feedback is real-time as you play).<p>The Beta tester code for HN Users is: HackerNews2026. All feedback is welcome! Please send suggestions for improvement or bugs to contact@computerpoker.ai or alternatively leave a comment below. Any questions I will do my best to answer.<p>As for the product offering the website is designed to teach players how to play optimal poker strategy (GTO) in simulated Texas Hold &#x27;Em poker tournaments. Our value proposition is that if you can consistently beat the bots then you will fare well in live poker tournaments (of course adjusting for your opponents&#x27; play).<p>In addition to GTO pre-flop quizzes and pre-flop charts, users have the ability to simulate poker tournaments from start-to-finish and get feedback on their decisions _in real-time_ in a fun and low-risk environment.<p>For those interested the tech stack is Django deployed on AWS via Terraform and SaltStack, the database uses a Postgres RDS backend, and the frontend uses HTMX with WebSockets via Django Channels and Redis (Nginx serving as reverse proxy with CloudFlare DNS and SSL). During the project I used Claude Code to aid with various boilerplate aspects of the code base including building out the repos for Terraform and SaltSack and of course speeding up Django development.<p>Users are graded pre-flop based on the covered pre-flop scenarios (two-ways only for now). Post-flop users are graded on a residual MLP PyTorch model. We have built an in-house solver in Rust using the discontented CFR++ algorithm. The PyTorch model approximates GTO play post-flop (again only two-ways currently) based on training data with raises, EV, and realistic ranges for OOP and IP players. Because the post-flop decisions are based on a model that will always be a work in progress I refer to these decisions as GTOA (or &quot;GTO Approximate&quot;).<p>Version 8 of the PyTorch model is the first one that I am happy with and actually find it quite difficult to play against. If you manage to beat the bots please do let me know how many tries it took! For those curious the PyTorch params for the most recent run are below (I trained on a gaming PC via Linux WSL2 using an AMD GPU):<p>```\n(venv_rocm_native) $   python3 pytorch_model.py\n      --data-dir unified_v8_raises&#x2F;\n      --aggression-embed --predict-ev\n      --d-card 64 --d-model 256\n      --n-attn-layers 3 --n-trunk-layers 4\n      --dropout 0.2 --weight-decay 0.05\n      --epochs 30 --batch-size 4096 --lr 3e-4\n      --steps-per-epoch 10000 --output gto_model_v8.pt<p>Training on cuda\n… … … _30 epochs later_\n       Saved best model (val_loss=0.3865)\nTraining complete!\nBest model saved to gto_model_v8.pt\n```<p>The website is live in Beta mode as I gather feedback on how things are structured and work out any bugs&#x2F;kinks. If you have any suggestions for improvements I’d love to hear them. Subscriptions are live so if anyone wanted to test the Stripe payment processing flow I certainly wouldn’t mind! ;-)<p>p.s. This is a side gig for me. I am currently looking for full-time work either fully remote or on-site based in London, UK (this LLC that runs ComputerPoker.ai operates out of USA but I am based full-time in the UK and authorized to work in both UK and USA). If you or someone you know is looking for a SRE with strong software engineering skills please let me know!",
-          "title": "Show HN: Computerpoker.ai – Learn GTO tournament poker strategy vs. GTO bots",
-          "updated_at": "2026-04-01T18:07:00Z",
-          "url": "https://computerpoker.ai"
+          "story_id": 47608596,
+          "story_text": "As an April Fools&#x27; project, I&#x27;ve made this.<p>I (ironically, depending your penchant) used an AI judge to score every top HN post and its top comments all the way back to 2010 (over 300,000 individual judgments!), and created a nice interface with the historic charts.<p>The scoring is off of how much disgruntled AI pessimism the post and top comments show. You can use that score to either only show (in Doom Only mode) or hide (in calm mode) all the doom static.<p>This is part joke and partly to answer my own curiosity about how real my feeling that the comments and posts have grown increasingly overbearingly negative towards and focused on the worst of what results from AI in the past year.<p>The trends is stark. My intuition was reinforced by the analysis; disgruntled pessimism about AI is at an all time high in the last few weeks and on track to continue doubling annually since ChatGPT released.<p>Historic charts are at bottom of the page.",
+          "title": "Show HN: Sixteen year trends in AI doom on HN",
+          "updated_at": "2026-04-02T00:39:16Z",
+          "url": "https://hn.ai-doom.cc/"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "bloder"
+              "value": "rglover"
             },
             "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Understanding CPUs by building one in <em>Kot</em>lin"
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Cline Kanban"
             },
             "url": {
               "fullyHighlighted": false,
@@ -875,71 +884,73 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://github.com/bloderxd/<em>kot</em>lin-cpu"
+              "value": "https://cline.<em>bot</em>/blog/announcing-kanban"
             }
           },
           "_tags": [
             "story",
-            "author_bloder",
-            "story_47603596"
+            "author_rglover",
+            "story_47606934"
           ],
-          "author": "bloder",
+          "author": "rglover",
+          "created_at": "2026-04-01T21:46:18Z",
+          "created_at_i": 1775079978,
+          "num_comments": 0,
+          "objectID": "47606934",
+          "points": 1,
+          "story_id": 47606934,
+          "title": "Cline Kanban",
+          "updated_at": "2026-04-01T21:47:01Z",
+          "url": "https://cline.bot/blog/announcing-kanban"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "iiTsEddy"
+            },
+            "story_text": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "I heard people describe Harvey as the cursor for lawyers. i never used it myself but i imagine it brings AI directly to where lawyers work to read, write and edit docx files similar to what Cursor does to code / text files in VSCode?<p>It seems like their product isn't like Cursor where you can just download and play. I also heard people say its hard to book a demo with Harvey if you're not a big law firm.<p>Why is this the case?<p>Was this a capability/cost constraint on LLM models around 2023? Which means today's startup can make a different set of choices? Does big law firms operate in a way that are completely different? Or is this founder's preference?"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Why did Harvey choose a top-down enterprise GTM while Cursor went <em>bot</em>tom-up?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_iiTsEddy",
+            "story_47605552",
+            "ask_hn"
+          ],
+          "author": "iiTsEddy",
           "children": [
-            47603597
+            47605853,
+            47605709
           ],
-          "created_at": "2026-04-01T17:07:12Z",
-          "created_at_i": 1775063232,
-          "num_comments": 1,
-          "objectID": "47603596",
-          "points": 2,
-          "story_id": 47603596,
-          "title": "Understanding CPUs by building one in Kotlin",
-          "updated_at": "2026-04-01T17:26:14Z",
-          "url": "https://github.com/bloderxd/kotlin-cpu"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "walterbell"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "An Invisible <em>Bot</em>tleneck: A Helium Shortage Threatens the Chip Industry"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.nytimes.com/2026/03/27/business/helium-chips-iran-war.html"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_walterbell",
-            "story_47603546"
-          ],
-          "author": "walterbell",
-          "created_at": "2026-04-01T17:03:05Z",
-          "created_at_i": 1775062985,
-          "num_comments": 0,
-          "objectID": "47603546",
+          "created_at": "2026-04-01T19:40:23Z",
+          "created_at_i": 1775072423,
+          "num_comments": 2,
+          "objectID": "47605552",
           "points": 4,
-          "story_id": 47603546,
-          "title": "An Invisible Bottleneck: A Helium Shortage Threatens the Chip Industry",
-          "updated_at": "2026-04-01T18:14:15Z",
-          "url": "https://www.nytimes.com/2026/03/27/business/helium-chips-iran-war.html"
+          "story_id": 47605552,
+          "story_text": "I heard people describe Harvey as the cursor for lawyers. i never used it myself but i imagine it brings AI directly to where lawyers work to read, write and edit docx files similar to what Cursor does to code &#x2F; text files in VSCode?<p>It seems like their product isn&#x27;t like Cursor where you can just download and play. I also heard people say its hard to book a demo with Harvey if you&#x27;re not a big law firm.<p>Why is this the case?<p>Was this a capability&#x2F;cost constraint on LLM models around 2023? Which means today&#x27;s startup can make a different set of choices? Does big law firms operate in a way that are completely different? Or is this founder&#x27;s preference?",
+          "title": "Why did Harvey choose a top-down enterprise GTM while Cursor went bottom-up?",
+          "updated_at": "2026-04-01T22:14:47Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "vulk"
+              "value": "sigildev"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -947,80 +958,71 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Hey everyone,<p>Long time lurker finally took the leap to share something with the community.<p>From a long time I wanted to build something and I had this idea about a job board but not just a simple aggregator or just a job board.\nBasically I don't like any of the existing websites for jobs and most of the job boards are just aggregators that you constantly get redirected to third party links not the best experience.\nI also don't have the best experience with recruiters been ghosted, conversation looping in meaningless question and so on.<p>And the current job market is kind of disheartening non existing entry level jobs pretty brutal stuff.<p>The idea of the platform is to an extent to be fully autonomous in terms of you as user not browsing jobs but you automatically get matched with opportunities. Also companies looking for talent will have the same ability to view the people who are best matches.\nOne of the main aspects is to basically to get a really good starter conversation between the company and you looking for new opportunity at leats that is how I see it.<p>What is different from other jobs boards is that you have a matching algorithm that finds the best candidates/opportunities based on the preferences from <em>bot</em>h sides it is weighted calculation between some different categories like salary preference, region, technologies used, work type, etc. <em>Bot</em>h sides can see a full breakdown and a gap analysis what is missing what is matching. The platform also has something like pipeline that tracks the stages of the conversation for example once <em>bot</em>h side match and start the conversation.<p>It is still work in progress some of the text and messages needs to be cleared visuals, colour palette but I decided to share it and maybe get some good feedback.<p>It is also quite empty basically I have zero users so without some listings it will be hard but I didn't want to scrape anything. BTW if any company wants to try this I can setup some free listing quotas the platform can be tried.<p>I used golang, htmx, plain css and as less as javascript as possible. I also used a lot of different llms to help me build it, it started as a learning project to help me learn golang but honestly I don't think I would manage to build everything like there is so much more to a web platform that is covered in books/courses/YouTube there is pretty big gap of what you need to learn to build something like that.<p>Anyway I will appreciate every feedback as brutal as it is."
+              "value": "We ran Sigil, our open-source security scanner, against 73 of the most-installed MCP servers on Smithery. Every finding was manually verified against the source code.<p>Results: 66 passed (90%). 5 had configuration warnings. 2 failed with real security-relevant patterns in their tool handlers.<p>The two failures are instructive:<p>telegram-mcp scored F with 12 findings. Its send_photo, send_video, and send_document tools accept a file_path parameter with zero path validation and no directory allowlist. An LLM could call send_photo(chat, &quot;/etc/passwd&quot;) and the server would attempt to send it. It also runs HTTP endpoints with verbose error output.<p>mcp-sqlite-server scored F with 9 findings. It passes user-provided SQL to conn.execute() with a startswith(&quot;select&quot;) guard. Python's sqlite3 blocks multi-statement execution, so DROP TABLE isn't possible — but single-statement bypasses work: UNION-based schema extraction, pragma metadata access, and potentially load_extension(). A guard that looks restrictive but isn't creates false confidence. It also runs SSE on 0.0.0.0:8000 over plain HTTP with debug logging enabled.<p><em>Bot</em>h are community-maintained projects doing useful things. But the patterns they contain — unrestricted file access, raw SQL execution with insufficient guards — are exactly the kind of thing that should get caught before deployment.<p>Sigil reads MCP server source code (TypeScript and Python), finds tool handler registrations, and detects dangerous patterns with 16 rules. It does pattern analysis with tool-handler scoping — it only flags code within actual MCP tool contexts, not build scripts or utilities.<p>We notified <em>bot</em>h maintainers before publishing.<p>npx @sigildev/sigil .<p>MIT licensed. No account. GitHub: https://github.com/sigildev/sigil"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: A platform to help you find the best tech jobs"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://thedream.work/"
+              "value": "We scanned 73 open-source MCP servers. Here's what source code analysis found"
             }
           },
           "_tags": [
             "story",
-            "author_vulk",
-            "story_47603529",
-            "show_hn"
+            "author_sigildev",
+            "story_47605063",
+            "ask_hn"
           ],
-          "author": "vulk",
-          "created_at": "2026-04-01T17:01:48Z",
-          "created_at_i": 1775062908,
+          "author": "sigildev",
+          "created_at": "2026-04-01T19:02:37Z",
+          "created_at_i": 1775070157,
           "num_comments": 0,
-          "objectID": "47603529",
-          "points": 2,
-          "story_id": 47603529,
-          "story_text": "Hey everyone,<p>Long time lurker finally took the leap to share something with the community.<p>From a long time I wanted to build something and I had this idea about a job board but not just a simple aggregator or just a job board.\nBasically I don&#x27;t like any of the existing websites for jobs and most of the job boards are just aggregators that you constantly get redirected to third party links not the best experience.\nI also don&#x27;t have the best experience with recruiters been ghosted, conversation looping in meaningless question and so on.<p>And the current job market is kind of disheartening non existing entry level jobs pretty brutal stuff.<p>The idea of the platform is to an extent to be fully autonomous in terms of you as user not browsing jobs but you automatically get matched with opportunities. Also companies looking for talent will have the same ability to view the people who are best matches.\nOne of the main aspects is to basically to get a really good starter conversation between the company and you looking for new opportunity at leats that is how I see it.<p>What is different from other jobs boards is that you have a matching algorithm that finds the best candidates&#x2F;opportunities based on the preferences from both sides it is weighted calculation between some different categories like salary preference, region, technologies used, work type, etc. Both sides can see a full breakdown and a gap analysis what is missing what is matching. The platform also has something like pipeline that tracks the stages of the conversation for example once both side match and start the conversation.<p>It is still work in progress some of the text and messages needs to be cleared visuals, colour palette but I decided to share it and maybe get some good feedback.<p>It is also quite empty basically I have zero users so without some listings it will be hard but I didn&#x27;t want to scrape anything. BTW if any company wants to try this I can setup some free listing quotas the platform can be tried.<p>I used golang, htmx, plain css and as less as javascript as possible. I also used a lot of different llms to help me build it, it started as a learning project to help me learn golang but honestly I don&#x27;t think I would manage to build everything like there is so much more to a web platform that is covered in books&#x2F;courses&#x2F;YouTube there is pretty big gap of what you need to learn to build something like that.<p>Anyway I will appreciate every feedback as brutal as it is.",
-          "title": "Show HN: A platform to help you find the best tech jobs",
-          "updated_at": "2026-04-01T17:27:03Z",
-          "url": "https://thedream.work/"
+          "objectID": "47605063",
+          "points": 1,
+          "story_id": 47605063,
+          "story_text": "We ran Sigil, our open-source security scanner, against 73 of the most-installed MCP servers on Smithery. Every finding was manually verified against the source code.<p>Results: 66 passed (90%). 5 had configuration warnings. 2 failed with real security-relevant patterns in their tool handlers.<p>The two failures are instructive:<p>telegram-mcp scored F with 12 findings. Its send_photo, send_video, and send_document tools accept a file_path parameter with zero path validation and no directory allowlist. An LLM could call send_photo(chat, &quot;&#x2F;etc&#x2F;passwd&quot;) and the server would attempt to send it. It also runs HTTP endpoints with verbose error output.<p>mcp-sqlite-server scored F with 9 findings. It passes user-provided SQL to conn.execute() with a startswith(&quot;select&quot;) guard. Python&#x27;s sqlite3 blocks multi-statement execution, so DROP TABLE isn&#x27;t possible — but single-statement bypasses work: UNION-based schema extraction, pragma metadata access, and potentially load_extension(). A guard that looks restrictive but isn&#x27;t creates false confidence. It also runs SSE on 0.0.0.0:8000 over plain HTTP with debug logging enabled.<p>Both are community-maintained projects doing useful things. But the patterns they contain — unrestricted file access, raw SQL execution with insufficient guards — are exactly the kind of thing that should get caught before deployment.<p>Sigil reads MCP server source code (TypeScript and Python), finds tool handler registrations, and detects dangerous patterns with 16 rules. It does pattern analysis with tool-handler scoping — it only flags code within actual MCP tool contexts, not build scripts or utilities.<p>We notified both maintainers before publishing.<p>npx @sigildev&#x2F;sigil .<p>MIT licensed. No account. GitHub: https:&#x2F;&#x2F;github.com&#x2F;sigildev&#x2F;sigil",
+          "title": "We scanned 73 open-source MCP servers. Here's what source code analysis found",
+          "updated_at": "2026-04-01T19:04:45Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "khurdula"
+              "value": "toomuchtodo"
             },
-            "story_text": {
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Electrical Transformer Manufacturing Is Throttling the Electrified Future"
+            },
+            "url": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Most AI products are built around the same idea.<p>Take a giant model. Add a prompt and hope it does the whole job. The AI equivalent of spray-n-pray.<p>That works great for chatbots for creative outputs like code generation, website design and email writing. BUT, It breaks down fast for developer work that requires highly deterministic output. Think of OCR for KYC at banks or Audio recognition for patient-doctor notes.<p>We have been training SLMs for specific tasks for a while now. During which we kept seeing the same pattern. A SOTA language model with great benchmarks, failing on the parts that actually matter: reading a dense PDF like Form-1040, pulling clean data from a highly protected website, transcribing a long call with speakers in seconds, or returning output in a format code can trust.<p>So we spent a year researching how we can solve determinism. As many of us thought, more data was the solution. But not really… While data is part of the problem, re-thinking the architecture is the key solution for fixing issues like context drift.<p>Check out our paper: <a href=\"https://arxiv.org/abs/2602.04101\" rel=\"nofollow\">https://arxiv.org/abs/2602.04101</a> (Accepted into IEEE CAI 2026)<p>Traditional AI/ML models in the past, like YOLO, EasyOCR, PaddleOCR were great for a single task that they’re usually trained for, bringing consistent outputs like confidence scores, however they quickly become outdated at scale, limited by the data used for training, while requiring a team of ML engineers to maintain the model driving costs higher. LLMs offer higher flexibility and the ability to interact with natural language, making them generalizable, but hallucinate on sensitive tasks which have no room for error.<p>We combined DNNs/CNNs with Transformers to achieve a state model that brings <em>bot</em>h the advantages of a traditional ML model: the determinism &amp; reliability, and the generalizability of an LLM.<p>Yoeven and I have over 14 years of combined research and development experience, and we’ve built a team of amazing researchers, software and infrastructure engineers engrossed in the fact that AI models can do a lot more work for developer tasks. Allowing us to make controllable AI available in every part of your stack."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: A new model architecture because transformers are not enough"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://interfaze.ai"
+              "value": "https://www.bloomberg.com/features/2025-<em>bot</em>tlenecks-transformers/"
             }
           },
           "_tags": [
             "story",
-            "author_khurdula",
-            "story_47603506",
-            "show_hn"
+            "author_toomuchtodo",
+            "story_47604887"
           ],
-          "author": "khurdula",
-          "created_at": "2026-04-01T17:00:07Z",
-          "created_at_i": 1775062807,
-          "num_comments": 0,
-          "objectID": "47603506",
-          "points": 3,
-          "story_id": 47603506,
-          "story_text": "Most AI products are built around the same idea.<p>Take a giant model. Add a prompt and hope it does the whole job. The AI equivalent of spray-n-pray.<p>That works great for chatbots for creative outputs like code generation, website design and email writing. BUT, It breaks down fast for developer work that requires highly deterministic output. Think of OCR for KYC at banks or Audio recognition for patient-doctor notes.<p>We have been training SLMs for specific tasks for a while now. During which we kept seeing the same pattern. A SOTA language model with great benchmarks, failing on the parts that actually matter: reading a dense PDF like Form-1040, pulling clean data from a highly protected website, transcribing a long call with speakers in seconds, or returning output in a format code can trust.<p>So we spent a year researching how we can solve determinism. As many of us thought, more data was the solution. But not really… While data is part of the problem, re-thinking the architecture is the key solution for fixing issues like context drift.<p>Check out our paper: <a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2602.04101\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2602.04101</a> (Accepted into IEEE CAI 2026)<p>Traditional AI&#x2F;ML models in the past, like YOLO, EasyOCR, PaddleOCR were great for a single task that they’re usually trained for, bringing consistent outputs like confidence scores, however they quickly become outdated at scale, limited by the data used for training, while requiring a team of ML engineers to maintain the model driving costs higher. LLMs offer higher flexibility and the ability to interact with natural language, making them generalizable, but hallucinate on sensitive tasks which have no room for error.<p>We combined DNNs&#x2F;CNNs with Transformers to achieve a state model that brings both the advantages of a traditional ML model: the determinism &amp; reliability, and the generalizability of an LLM.<p>Yoeven and I have over 14 years of combined research and development experience, and we’ve built a team of amazing researchers, software and infrastructure engineers engrossed in the fact that AI models can do a lot more work for developer tasks. Allowing us to make controllable AI available in every part of your stack.",
-          "title": "Show HN: A new model architecture because transformers are not enough",
-          "updated_at": "2026-04-01T17:27:03Z",
-          "url": "https://interfaze.ai"
+          "author": "toomuchtodo",
+          "children": [
+            47605369,
+            47604888
+          ],
+          "created_at": "2026-04-01T18:47:48Z",
+          "created_at_i": 1775069268,
+          "num_comments": 2,
+          "objectID": "47604887",
+          "points": 5,
+          "story_id": 47604887,
+          "title": "Electrical Transformer Manufacturing Is Throttling the Electrified Future",
+          "updated_at": "2026-04-01T20:36:15Z",
+          "url": "https://www.bloomberg.com/features/2025-bottlenecks-transformers/"
         }
       ]
     },
@@ -1280,7 +1282,7 @@
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Computerpoker.ai – Learn GTO tournament poker strategy vs. GTO bots"
+              "value": "Show HN: ComputerPoker.ai – Learn GTO tournament poker strategy vs. GTO bots"
             },
             "url": {
               "matchLevel": "none",
@@ -1302,8 +1304,8 @@
           "points": 1,
           "story_id": 47604325,
           "story_text": "ComputerPoker.ai is a website where users can play simulated poker tournaments against GTO Bots to learn GTO poker strategy in a fun and low-risk environment.<p>My motivation for creating CompterPoker.ai was feeling a bit overwhelmed by some of the professional poker tools out there for learning GTO play. For some tools, learning how to simply operate the tool itself felt like a second job. With ComputerPoker.ai players can play against bots themselves simulating GTO play to learn what it &quot;feels like&quot; to play GTO vs. GTO opponents without having to turn any knobs or dials (feedback is real-time as you play).<p>The Beta tester code for HN Users is: HackerNews2026. All feedback is welcome! Please send suggestions for improvement or bugs to contact@computerpoker.ai or alternatively leave a comment below. Any questions I will do my best to answer.<p>As for the product offering the website is designed to teach players how to play optimal poker strategy (GTO) in simulated Texas Hold &#x27;Em poker tournaments. Our value proposition is that if you can consistently beat the bots then you will fare well in live poker tournaments (of course adjusting for your opponents&#x27; play).<p>In addition to GTO pre-flop quizzes and pre-flop charts, users have the ability to simulate poker tournaments from start-to-finish and get feedback on their decisions _in real-time_ in a fun and low-risk environment.<p>For those interested the tech stack is Django deployed on AWS via Terraform and SaltStack, the database uses a Postgres RDS backend, and the frontend uses HTMX with WebSockets via Django Channels and Redis (Nginx serving as reverse proxy with CloudFlare DNS and SSL). During the project I used Claude Code to aid with various boilerplate aspects of the code base including building out the repos for Terraform and SaltSack and of course speeding up Django development.<p>Users are graded pre-flop based on the covered pre-flop scenarios (two-ways only for now). Post-flop users are graded on a residual MLP PyTorch model. We have built an in-house solver in Rust using the discontented CFR++ algorithm. The PyTorch model approximates GTO play post-flop (again only two-ways currently) based on training data with raises, EV, and realistic ranges for OOP and IP players. Because the post-flop decisions are based on a model that will always be a work in progress I refer to these decisions as GTOA (or &quot;GTO Approximate&quot;).<p>Version 8 of the PyTorch model is the first one that I am happy with and actually find it quite difficult to play against. If you manage to beat the bots please do let me know how many tries it took! For those curious the PyTorch params for the most recent run are below (I trained on a gaming PC via Linux WSL2 using an AMD GPU):<p>```\n(venv_rocm_native) $   python3 pytorch_model.py\n      --data-dir unified_v8_raises&#x2F;\n      --aggression-embed --predict-ev\n      --d-card 64 --d-model 256\n      --n-attn-layers 3 --n-trunk-layers 4\n      --dropout 0.2 --weight-decay 0.05\n      --epochs 30 --batch-size 4096 --lr 3e-4\n      --steps-per-epoch 10000 --output gto_model_v8.pt<p>Training on cuda\n… … … _30 epochs later_\n       Saved best model (val_loss=0.3865)\nTraining complete!\nBest model saved to gto_model_v8.pt\n```<p>The website is live in Beta mode as I gather feedback on how things are structured and work out any bugs&#x2F;kinks. If you have any suggestions for improvements I’d love to hear them. Subscriptions are live so if anyone wanted to test the Stripe payment processing flow I certainly wouldn’t mind! ;-)<p>p.s. This is a side gig for me. I am currently looking for full-time work either fully remote or on-site based in London, UK (this LLC that runs ComputerPoker.ai operates out of USA but I am based full-time in the UK and authorized to work in both UK and USA). If you or someone you know is looking for a SRE with strong software engineering skills please let me know!",
-          "title": "Show HN: Computerpoker.ai – Learn GTO tournament poker strategy vs. GTO bots",
-          "updated_at": "2026-04-01T18:07:00Z",
+          "title": "Show HN: ComputerPoker.ai – Learn GTO tournament poker strategy vs. GTO bots",
+          "updated_at": "2026-04-01T18:49:16Z",
           "url": "https://computerpoker.ai"
         },
         {
@@ -2044,6 +2046,148 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "allan_s"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Disclaimer: this is vibe-coded — (&lt;- I lost you there) the README, most of the code, and the binary format reverse-engineering were done with Claude. But the <em>tool</em> works and I use it everyday for some days now. As Baudelaire said &quot;qu'importe le flacon, pourvu qu'on ait l'ivresse.&quot;<p>~I~ Claude built a <em>tool</em> that decodes Figma's internal binary protocol (Kiwi format over WebSocket) to extract the full scenegraph — every node, vector path, and style — without hitting the REST API.<p>Why: Figma's REST API has aggressive rate limits. The official <em>MCP</em> <em>server</em> requires a paid Dev Mode plan. I needed to explore designs from my AI coding <em>tools</em> without constantly getting 429'd.<p>It helps me to:<p><pre><code>  1. extract the svg in a clean way (even the SVG export from figma likes to write the path as 12.0000001, even though the protocol does have 12 in it)  and images\n\n  2. Get mapping from what I see in figma &lt;-&gt; what i see in the exported html\n\n  3. It helps me help our designer to produce an actual &quot;resizable&quot; figma, so that they finally understand the pain of &quot;ok it works when you click play on the iphone 17 frame you put, but what about an iphone12 ?&quot; (I was always able to say that, but before I wasn't able to point out what was wrong, now I can)\n</code></pre>\nHow it works: When you open a Figma file in the browser, the editor loads the entire scenegraph via WebSocket as Kiwi-encoded binary frames. This <em>tool</em> captures those frames via Chrome DevTools Protocol, decodes the binary data (including two undocumented vector formats), and gives you structured JSON.<p>What Claude reverse-engineered:<p><pre><code>  - The fig-wire frame format (schema delivery over WebSocket)\n\n  - commandsBlob: Figma's pre-computed SVG path commands (MoveTo, LineTo, CubicBezier, ClosePath)\n\n  - vectorNetworkBlob: the editable path data (vertices, segments with Bezier tangent handles, regions with loops)\n\n  - All three are documented as Kaitai Struct specs (.ksy) so you can generate parsers in any language\n</code></pre>\nShips as: JS lib (zero deps), CLI, <em>MCP</em> <em>server</em> (Cursor/Windsurf/VS Code), and Claude Code plugin.<p>Binary format specs, sample fixtures, and everything else: <a href=\"https://github.com/allan-simon/figma-kiwi-protocol\" rel=\"nofollow\">https://github.com/allan-simon/figma-kiwi-protocol</a><p>I'm not a lawyer but my understanding is this is an interoperability <em>tool</em> under EU Directive 2009/24/EC Article 6. No Figma code is included: it only decodes the wire format of data transmitted to your own browser."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: I/Claude reverse-engineered Figma's binary WebSocket protocol"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/allan-simon/figma-kiwi-protocol"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_allan_s",
+            "story_47607324",
+            "show_hn"
+          ],
+          "author": "allan_s",
+          "children": [
+            47607400
+          ],
+          "created_at": "2026-04-01T22:25:09Z",
+          "created_at_i": 1775082309,
+          "num_comments": 2,
+          "objectID": "47607324",
+          "points": 3,
+          "story_id": 47607324,
+          "story_text": "Disclaimer: this is vibe-coded — (&lt;- I lost you there) the README, most of the code, and the binary format reverse-engineering were done with Claude. But the tool works and I use it everyday for some days now. As Baudelaire said &quot;qu&#x27;importe le flacon, pourvu qu&#x27;on ait l&#x27;ivresse.&quot;<p>~I~ Claude built a tool that decodes Figma&#x27;s internal binary protocol (Kiwi format over WebSocket) to extract the full scenegraph — every node, vector path, and style — without hitting the REST API.<p>Why: Figma&#x27;s REST API has aggressive rate limits. The official MCP server requires a paid Dev Mode plan. I needed to explore designs from my AI coding tools without constantly getting 429&#x27;d.<p>It helps me to:<p><pre><code>  1. extract the svg in a clean way (even the SVG export from figma likes to write the path as 12.0000001, even though the protocol does have 12 in it)  and images\n\n  2. Get mapping from what I see in figma &lt;-&gt; what i see in the exported html\n\n  3. It helps me help our designer to produce an actual &quot;resizable&quot; figma, so that they finally understand the pain of &quot;ok it works when you click play on the iphone 17 frame you put, but what about an iphone12 ?&quot; (I was always able to say that, but before I wasn&#x27;t able to point out what was wrong, now I can)\n</code></pre>\nHow it works: When you open a Figma file in the browser, the editor loads the entire scenegraph via WebSocket as Kiwi-encoded binary frames. This tool captures those frames via Chrome DevTools Protocol, decodes the binary data (including two undocumented vector formats), and gives you structured JSON.<p>What Claude reverse-engineered:<p><pre><code>  - The fig-wire frame format (schema delivery over WebSocket)\n\n  - commandsBlob: Figma&#x27;s pre-computed SVG path commands (MoveTo, LineTo, CubicBezier, ClosePath)\n\n  - vectorNetworkBlob: the editable path data (vertices, segments with Bezier tangent handles, regions with loops)\n\n  - All three are documented as Kaitai Struct specs (.ksy) so you can generate parsers in any language\n</code></pre>\nShips as: JS lib (zero deps), CLI, MCP server (Cursor&#x2F;Windsurf&#x2F;VS Code), and Claude Code plugin.<p>Binary format specs, sample fixtures, and everything else: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;allan-simon&#x2F;figma-kiwi-protocol\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;allan-simon&#x2F;figma-kiwi-protocol</a><p>I&#x27;m not a lawyer but my understanding is this is an interoperability tool under EU Directive 2009&#x2F;24&#x2F;EC Article 6. No Figma code is included: it only decodes the wire format of data transmitted to your own browser.",
+          "title": "Show HN: I/Claude reverse-engineered Figma's binary WebSocket protocol",
+          "updated_at": "2026-04-01T23:28:30Z",
+          "url": "https://github.com/allan-simon/figma-kiwi-protocol"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "nexdrew"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "# What?<p>Introducing mkdnsite (&quot;markdown site&quot;) - an open source Markdown-native web <em>server</em> that serves HTML to humans and raw Markdown to agents. No build step required. Runs on Bun/Node/Deno, as an OS-specific standalone executable, or as a Docker container. Possibly the easiest way to go from Markdown files to functional website in the new agentic era.<p>Features:<p>- Runtime-only, zero build<p>- Content negotiation means HTML for browsers and Markdown for agents<p>- Supports GitHub-Flavored Markdown rendering<p>- Mermaid diagrams, KaTeX math, embedded Chart.js charts, syntax highlighting all included<p>- Full-text search for humans, <em>MCP</em> <em>tools</em> for agents<p>- Customizable UI theming with auto-support for light/dark modes<p>- Pull Markdown files directly from a GitHub repo<p>See official docs at <a href=\"https://mkdn.site\" rel=\"nofollow\">https://mkdn.site</a><p># Why?<p>Back in February, I saw Cloudflare's announcement of &quot;Markdown for Agents&quot; (<a href=\"https://blog.cloudflare.com/markdown-for-agents/\" rel=\"nofollow\">https://blog.cloudflare.com/markdown-for-agents/</a>). At the time, I thought &quot;so I'm writing my API docs or blog in Markdown and converting it to HTML for a website, only to have Cloudflare turn it back into Markdown for AI/agent consumption&quot;. This seemed odd to me.<p>I'm a Node.js developer but had recently been building projects on Bun because of the &quot;batteries included&quot; features, like cross-compilation of standalone executables (similar to Go), that Node.js lacked natively (yes, I'm aware of Node SEA, but it's messy/complicated and `bun build --compile` is not).<p>Then, when I found `Bun.markdown`, something clicked for me - building a web <em>server</em> that converts Markdown to HTML at runtime should be super easy. And agents actually want Markdown, so why not combine the two ideas?<p>Humans like writing Markdown (well, at least, I do) and agents like reading Markdown (less verbose, easier to grok, fewer tokens). Add to this the fact that we can now use AI to write software, and my side project was born.<p>Is Markdown-to-HTML a new concept? Absolutely not. It's pretty old and well-established. But what I think is new is the ability to do everything at runtime (no build step required) and the built-in support for AI agents. mkdnsite has content negotiation, automated llms.txt, an <em>MCP</em> <em>server</em>, and support for agent headers.<p># How?<p>I worked with Claude to refine the idea and come up with basic requirements/specs and then had Claude build me a scaffolded project. I started the project on March 7.<p>The following Friday, I configured my first set of OpenClaw agents on my personal machine and set them up to use Slack. From that point on, I spent most evenings and every weekend building mkdnsite and a hosted service (at <a href=\"https://mkdn.io\" rel=\"nofollow\">https://mkdn.io</a>) by logging ideas as issues in GitHub and talking with my &quot;team lead&quot; agent on Slack to pick up the work and implement features.<p>mkdnsite v1.0.0 was released on March 16. The current version is v1.4.1 released March 28. Almost every line of code was written by AI, either via an autonomous OpenClaw agent or via individual Claude Code sessions.<p># So what?<p>Just looking for some honest feedback. Is this useful? Is it dumb? Is there another tool that offers the same combination of features (I looked and couldn't find one)?<p>I am not downplaying SSGs at all. I quite like Astro. And I love GitHub Pages. I just think there's room for an easier/simpler solution.<p>Please try it out and let me know what you think. Thanks."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "server"
+              ],
+              "value": "Show HN: Mkdnsite – Markdown-native web <em>server</em> for humans (HTML) and agents (md)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/mkdnsite/mkdnsite"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_nexdrew",
+            "story_47606946",
+            "show_hn"
+          ],
+          "author": "nexdrew",
+          "created_at": "2026-04-01T21:47:32Z",
+          "created_at_i": 1775080052,
+          "num_comments": 0,
+          "objectID": "47606946",
+          "points": 2,
+          "story_id": 47606946,
+          "story_text": "# What?<p>Introducing mkdnsite (&quot;markdown site&quot;) - an open source Markdown-native web server that serves HTML to humans and raw Markdown to agents. No build step required. Runs on Bun&#x2F;Node&#x2F;Deno, as an OS-specific standalone executable, or as a Docker container. Possibly the easiest way to go from Markdown files to functional website in the new agentic era.<p>Features:<p>- Runtime-only, zero build<p>- Content negotiation means HTML for browsers and Markdown for agents<p>- Supports GitHub-Flavored Markdown rendering<p>- Mermaid diagrams, KaTeX math, embedded Chart.js charts, syntax highlighting all included<p>- Full-text search for humans, MCP tools for agents<p>- Customizable UI theming with auto-support for light&#x2F;dark modes<p>- Pull Markdown files directly from a GitHub repo<p>See official docs at <a href=\"https:&#x2F;&#x2F;mkdn.site\" rel=\"nofollow\">https:&#x2F;&#x2F;mkdn.site</a><p># Why?<p>Back in February, I saw Cloudflare&#x27;s announcement of &quot;Markdown for Agents&quot; (<a href=\"https:&#x2F;&#x2F;blog.cloudflare.com&#x2F;markdown-for-agents&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;blog.cloudflare.com&#x2F;markdown-for-agents&#x2F;</a>). At the time, I thought &quot;so I&#x27;m writing my API docs or blog in Markdown and converting it to HTML for a website, only to have Cloudflare turn it back into Markdown for AI&#x2F;agent consumption&quot;. This seemed odd to me.<p>I&#x27;m a Node.js developer but had recently been building projects on Bun because of the &quot;batteries included&quot; features, like cross-compilation of standalone executables (similar to Go), that Node.js lacked natively (yes, I&#x27;m aware of Node SEA, but it&#x27;s messy&#x2F;complicated and `bun build --compile` is not).<p>Then, when I found `Bun.markdown`, something clicked for me - building a web server that converts Markdown to HTML at runtime should be super easy. And agents actually want Markdown, so why not combine the two ideas?<p>Humans like writing Markdown (well, at least, I do) and agents like reading Markdown (less verbose, easier to grok, fewer tokens). Add to this the fact that we can now use AI to write software, and my side project was born.<p>Is Markdown-to-HTML a new concept? Absolutely not. It&#x27;s pretty old and well-established. But what I think is new is the ability to do everything at runtime (no build step required) and the built-in support for AI agents. mkdnsite has content negotiation, automated llms.txt, an MCP server, and support for agent headers.<p># How?<p>I worked with Claude to refine the idea and come up with basic requirements&#x2F;specs and then had Claude build me a scaffolded project. I started the project on March 7.<p>The following Friday, I configured my first set of OpenClaw agents on my personal machine and set them up to use Slack. From that point on, I spent most evenings and every weekend building mkdnsite and a hosted service (at <a href=\"https:&#x2F;&#x2F;mkdn.io\" rel=\"nofollow\">https:&#x2F;&#x2F;mkdn.io</a>) by logging ideas as issues in GitHub and talking with my &quot;team lead&quot; agent on Slack to pick up the work and implement features.<p>mkdnsite v1.0.0 was released on March 16. The current version is v1.4.1 released March 28. Almost every line of code was written by AI, either via an autonomous OpenClaw agent or via individual Claude Code sessions.<p># So what?<p>Just looking for some honest feedback. Is this useful? Is it dumb? Is there another tool that offers the same combination of features (I looked and couldn&#x27;t find one)?<p>I am not downplaying SSGs at all. I quite like Astro. And I love GitHub Pages. I just think there&#x27;s room for an easier&#x2F;simpler solution.<p>Please try it out and let me know what you think. Thanks.",
+          "title": "Show HN: Mkdnsite – Markdown-native web server for humans (HTML) and agents (md)",
+          "updated_at": "2026-04-01T22:31:00Z",
+          "url": "https://github.com/mkdnsite/mkdnsite"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "sigildev"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "We ran Sigil, our open-source security scanner, against 73 of the most-installed <em>MCP</em> <em>servers</em> on Smithery. Every finding was manually verified against the source code.<p>Results: 66 passed (90%). 5 had configuration warnings. 2 failed with real security-relevant patterns in their <em>tool</em> handlers.<p>The two failures are instructive:<p>telegram-<em>mcp</em> scored F with 12 findings. Its send_photo, send_video, and send_document <em>tools</em> accept a file_path parameter with zero path validation and no directory allowlist. An LLM could call send_photo(chat, &quot;/etc/passwd&quot;) and the <em>server</em> would attempt to send it. It also runs HTTP endpoints with verbose error output.<p><em>mcp</em>-sqlite-<em>server</em> scored F with 9 findings. It passes user-provided SQL to conn.execute() with a startswith(&quot;select&quot;) guard. Python's sqlite3 blocks multi-statement execution, so DROP TABLE isn't possible — but single-statement bypasses work: UNION-based schema extraction, pragma metadata access, and potentially load_extension(). A guard that looks restrictive but isn't creates false confidence. It also runs SSE on 0.0.0.0:8000 over plain HTTP with debug logging enabled.<p>Both are community-maintained projects doing useful things. But the patterns they contain — unrestricted file access, raw SQL execution with insufficient guards — are exactly the kind of thing that should get caught before deployment.<p>Sigil reads <em>MCP</em> <em>server</em> source code (TypeScript and Python), finds <em>tool</em> handler registrations, and detects dangerous patterns with 16 rules. It does pattern analysis with <em>tool</em>-handler scoping — it only flags code within actual <em>MCP</em> <em>tool</em> contexts, not build scripts or utilities.<p>We notified both maintainers before publishing.<p>npx @sigildev/sigil .<p>MIT licensed. No account. GitHub: https://github.com/sigildev/sigil"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "We scanned 73 open-source <em>MCP</em> <em>servers</em>. Here's what source code analysis found"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_sigildev",
+            "story_47605063",
+            "ask_hn"
+          ],
+          "author": "sigildev",
+          "created_at": "2026-04-01T19:02:37Z",
+          "created_at_i": 1775070157,
+          "num_comments": 0,
+          "objectID": "47605063",
+          "points": 1,
+          "story_id": 47605063,
+          "story_text": "We ran Sigil, our open-source security scanner, against 73 of the most-installed MCP servers on Smithery. Every finding was manually verified against the source code.<p>Results: 66 passed (90%). 5 had configuration warnings. 2 failed with real security-relevant patterns in their tool handlers.<p>The two failures are instructive:<p>telegram-mcp scored F with 12 findings. Its send_photo, send_video, and send_document tools accept a file_path parameter with zero path validation and no directory allowlist. An LLM could call send_photo(chat, &quot;&#x2F;etc&#x2F;passwd&quot;) and the server would attempt to send it. It also runs HTTP endpoints with verbose error output.<p>mcp-sqlite-server scored F with 9 findings. It passes user-provided SQL to conn.execute() with a startswith(&quot;select&quot;) guard. Python&#x27;s sqlite3 blocks multi-statement execution, so DROP TABLE isn&#x27;t possible — but single-statement bypasses work: UNION-based schema extraction, pragma metadata access, and potentially load_extension(). A guard that looks restrictive but isn&#x27;t creates false confidence. It also runs SSE on 0.0.0.0:8000 over plain HTTP with debug logging enabled.<p>Both are community-maintained projects doing useful things. But the patterns they contain — unrestricted file access, raw SQL execution with insufficient guards — are exactly the kind of thing that should get caught before deployment.<p>Sigil reads MCP server source code (TypeScript and Python), finds tool handler registrations, and detects dangerous patterns with 16 rules. It does pattern analysis with tool-handler scoping — it only flags code within actual MCP tool contexts, not build scripts or utilities.<p>We notified both maintainers before publishing.<p>npx @sigildev&#x2F;sigil .<p>MIT licensed. No account. GitHub: https:&#x2F;&#x2F;github.com&#x2F;sigildev&#x2F;sigil",
+          "title": "We scanned 73 open-source MCP servers. Here's what source code analysis found",
+          "updated_at": "2026-04-01T19:04:45Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "gregnr"
             },
             "story_text": {
@@ -2078,11 +2222,11 @@
           "created_at_i": 1775065912,
           "num_comments": 0,
           "objectID": "47604176",
-          "points": 3,
+          "points": 6,
           "story_id": 47604176,
           "story_text": "Coding agents spend a lot of time in the shell. When exploring a codebase, they usually reach for the same handful of tools: grep, find, ls, cat. We built a public SSH server that hosts Supabase docs as markdown files so that agents can explore them the same way they explore code:<p>ssh supabase.sh grep -rl &#x27;RLS&#x27; docs<p>ssh supabase.sh cat docs&#x2F;guides&#x2F;database&#x2F;postgres&#x2F;row-level-security.md | head -10<p>Under the hood commands run inside Vercel&#x27;s just-bash [1] library - an emulated bash shell sandboxed within the JS runtime. It uses a VFS where the docs are mounted as markdown files. SSH is handled by ssh2 [2].<p>Next step is evals to confirm whether or not this truly performs better than other knowledge retrieval methods (like skills, web search, MCP tools), but we were too excited not to share something now.<p>[1] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;vercel-labs&#x2F;just-bash\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vercel-labs&#x2F;just-bash</a>\n[2] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mscdex&#x2F;ssh2\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mscdex&#x2F;ssh2</a>",
           "title": "Show HN: Docs over SSH for Agents",
-          "updated_at": "2026-04-01T18:14:15Z",
+          "updated_at": "2026-04-01T19:48:29Z",
           "url": "https://github.com/supabase-community/supabase-ssh"
         },
         {
@@ -2117,164 +2261,42 @@
             "story",
             "author_simple10",
             "story_47602986",
-            "show_hn",
-            "front_page"
+            "show_hn"
           ],
           "author": "simple10",
           "children": [
             47604127,
+            47604921,
             47603964,
+            47606242,
+            47606826,
+            47605971,
+            47603804,
             47604358,
             47604371,
-            47603804,
             47603040,
+            47605724,
+            47606068,
+            47605779,
+            47606126,
+            47604648,
+            47606110,
             47604527,
+            47604752,
             47604406,
             47603871,
             47603574
           ],
           "created_at": "2026-04-01T16:24:28Z",
           "created_at_i": 1775060668,
-          "num_comments": 14,
+          "num_comments": 23,
           "objectID": "47602986",
-          "points": 38,
+          "points": 68,
           "story_id": 47602986,
           "story_text": "This project (Agents Observe) started as an exploration into building automation harnesses around claude code. I needed a way to see exactly what teams of agents were doing in realtime and to filter and search their output.<p>A few interesting learnings from building and using this:<p>- Claude code hooks are blocking - performance degrades rapidly if you have a lot of plugins that use hooks<p>- Hooks provide a lot more useful info than OTEL data<p>- Claude&#x27;s jsonl files provide the full picture<p>- Lifecycle management of MCP processes started by plugins is a bit kludgy at best<p>The biggest takeaway is how much of a difference it made in claude performance when I switched to background (fire and forget) hooks and removed all other plugins. It&#x27;s easy to forget how many claude plugins I&#x27;ve installed and how they effect performance.<p>The Agents Observe plugin uses docker to start the API and dashboard service. This is a pattern I&#x27;d love to see used more often for security (think Axios hack) reasons. The tricky bit was handling process management across multiple claude instances - the solution was to have the server track active connections then auto shut itself down when not in use. Then the plugin spins it back up when a new session is started.<p>This tool has been incredibly useful for my own daily workflow. Enjoy!",
           "title": "Show HN: Real-time dashboard for Claude Code agent teams",
-          "updated_at": "2026-04-01T18:27:45Z",
+          "updated_at": "2026-04-02T00:19:31Z",
           "url": "https://github.com/simple10/agents-observe"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "thomasgeelens"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Hi HN, I'm Thomas. I built Cynical Sally as a solo developer using AI assistants as my team. I've got no employees and no funding besides my own bank account that's getting emptier by the day, lol.<p><a href=\"https://github.com/w1ckedxt/cynicalsally-cli\" rel=\"nofollow\">https://github.com/w1ckedxt/cynicalsally-cli</a><p>Sally is an AI code reviewer with a consistent personality.\nShe scores your code 0-10, finds real issues with evidence, and gives you actionable fixes. Her words, not mine:<p>&quot;Everyone has opinions. Mine just happen to be evidence-based.&quot;<p>What makes her different from &quot;paste into ChatGPT&quot;:<p>- 6 specialised <em>tools</em>: code review, explain, refactor,\n    PR review, brainstorm, frontend + marketing review\n- Works as CLI and <em>MCP</em> <em>server</em> (Claude Code, Cursor, Windsurf)\n- CI/CD ready with --fail-under flag for build gates\n- One consistent personality across all platforms<p>Try it right now, no account needed!<p>npm install -g @cynicalsally/cli<p>90 free roasts/month. Every premium tool has one free trial so you can see if her feedback and Full Suite is worth paying for.<p>She also reviews websites, CVs, and pretty much anything at cynicalsally.com, and as a Chrome/Safari extension, but the CLI is where developers live so that's where the code/project value resides.<p>Fun fact: Render offered somebody else a collab through a Reddit comment and I commented &quot;I'd like to do thatas well!&quot; or something to that effect. They hit me up and I've been building Sally from the ground up after the initial traction on Reddit via comments.<p>Built with: Node.js, Claude API (Anthropic), deployed on Render. \nHappy to answer questions about the architecture or how I built an entire multi-platform product solo."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Sally CLI Because \"You're right\" is probably wrong"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_thomasgeelens",
-            "story_47599825",
-            "show_hn"
-          ],
-          "author": "thomasgeelens",
-          "children": [
-            47604411
-          ],
-          "created_at": "2026-04-01T12:16:50Z",
-          "created_at_i": 1775045810,
-          "num_comments": 1,
-          "objectID": "47599825",
-          "points": 3,
-          "story_id": 47599825,
-          "story_text": "Hi HN, I&#x27;m Thomas. I built Cynical Sally as a solo developer using AI assistants as my team. I&#x27;ve got no employees and no funding besides my own bank account that&#x27;s getting emptier by the day, lol.<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;w1ckedxt&#x2F;cynicalsally-cli\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;w1ckedxt&#x2F;cynicalsally-cli</a><p>Sally is an AI code reviewer with a consistent personality.\nShe scores your code 0-10, finds real issues with evidence, and gives you actionable fixes. Her words, not mine:<p>&quot;Everyone has opinions. Mine just happen to be evidence-based.&quot;<p>What makes her different from &quot;paste into ChatGPT&quot;:<p>- 6 specialised tools: code review, explain, refactor,\n    PR review, brainstorm, frontend + marketing review\n- Works as CLI and MCP server (Claude Code, Cursor, Windsurf)\n- CI&#x2F;CD ready with --fail-under flag for build gates\n- One consistent personality across all platforms<p>Try it right now, no account needed!<p>npm install -g @cynicalsally&#x2F;cli<p>90 free roasts&#x2F;month. Every premium tool has one free trial so you can see if her feedback and Full Suite is worth paying for.<p>She also reviews websites, CVs, and pretty much anything at cynicalsally.com, and as a Chrome&#x2F;Safari extension, but the CLI is where developers live so that&#x27;s where the code&#x2F;project value resides.<p>Fun fact: Render offered somebody else a collab through a Reddit comment and I commented &quot;I&#x27;d like to do thatas well!&quot; or something to that effect. They hit me up and I&#x27;ve been building Sally from the ground up after the initial traction on Reddit via comments.<p>Built with: Node.js, Claude API (Anthropic), deployed on Render. \nHappy to answer questions about the architecture or how I built an entire multi-platform product solo.",
-          "title": "Show HN: Sally CLI Because \"You're right\" is probably wrong",
-          "updated_at": "2026-04-01T18:10:45Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "qzum"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Muscula started years ago when there weren't many error monitoring options on the market.<p>It's been running in production since then, tracking JS, PHP, C#, and Java errors. Nothing fancy - error grouping, stack traces, trends, uptime checks, alerts. The kind of stuff you actually look at.<p>Now there are dozens of monitoring <em>tools</em>, but most of them have grown into expensive, complex platforms. Muscula stayed small on purpose. It just does the job.<p>What's new: I've recently added a CLI and an <em>MCP</em> <em>server</em>. The CLI lets you browse errors from the terminal (`muscula errors &quot;MyProject&quot;`) and pipe output directly into Claude Code or any other tool:\nmuscula errors &quot;MyProject&quot; | claude &quot;anything critical here?&quot;<p>What <em>MCP</em> integration does probably you know, you can just ask AI &quot;fix all the problems&quot; and it's fixing.<p>This is for people who want to know what's broken in their app without paying too much per service or wading through a complex UI.<p>I'm using it all the time, hopefully you'll find that useful too.<p>Stack: .NET MongoDB, React, Mobx."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp"
-              ],
-              "value": "Show HN: Muscula – Lightweight error monitoring with CLI and <em>MCP</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.muscula.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_qzum",
-            "story_47599349",
-            "show_hn"
-          ],
-          "author": "qzum",
-          "created_at": "2026-04-01T11:15:55Z",
-          "created_at_i": 1775042155,
-          "num_comments": 0,
-          "objectID": "47599349",
-          "points": 3,
-          "story_id": 47599349,
-          "story_text": "Muscula started years ago when there weren&#x27;t many error monitoring options on the market.<p>It&#x27;s been running in production since then, tracking JS, PHP, C#, and Java errors. Nothing fancy - error grouping, stack traces, trends, uptime checks, alerts. The kind of stuff you actually look at.<p>Now there are dozens of monitoring tools, but most of them have grown into expensive, complex platforms. Muscula stayed small on purpose. It just does the job.<p>What&#x27;s new: I&#x27;ve recently added a CLI and an MCP server. The CLI lets you browse errors from the terminal (`muscula errors &quot;MyProject&quot;`) and pipe output directly into Claude Code or any other tool:\nmuscula errors &quot;MyProject&quot; | claude &quot;anything critical here?&quot;<p>What MCP integration does probably you know, you can just ask AI &quot;fix all the problems&quot; and it&#x27;s fixing.<p>This is for people who want to know what&#x27;s broken in their app without paying too much per service or wading through a complex UI.<p>I&#x27;m using it all the time, hopefully you&#x27;ll find that useful too.<p>Stack: .NET MongoDB, React, Mobx.",
-          "title": "Show HN: Muscula – Lightweight error monitoring with CLI and MCP",
-          "updated_at": "2026-04-01T13:13:58Z",
-          "url": "https://www.muscula.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "StanAngeloff"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "I started Flemma because I wanted to bring my AI workload into Neovim.<p>My workflow started with me living in developer portals - Claude Workbench, OpenAI Platform, Vertex (the horrors of <em>GCP</em>'s Console UI!) I would spend hours in these web UIs crafting prompts, iterating on system instructions, maintaining a carefully curated library of sessions. But the browser really wasn't optimised for this kind of interaction. Editing was clunky (muscle memory &lt;C-W&gt; would close the tab instead and wipe my work), going back and forth between the LLM and myself felt off. So I had an idea: what if I could turn a Markdown document into an LLM chat interface?<p>At first I thought that would be enough - just do what I was already doing in the browser... but in Neovim. And sure enough having been accustomed to my own setup for the last decade I immediately felt a productivity boost. Writing functional requirement documents, statements of work, deep research across different systems - all of it felt better in &quot;my&quot; editor.<p>I then had a taste of Aider... and Claude Code... and all the other <em>tools</em> that were coming out. And Flemma felt lacking. So I started building: tool support, better conversation organisation, a proper UI to tame the noise that tool calls introduce.<p>Today, Flemma is a fully evolved AI workspace. It runs autonomous agent loops, interacts with multiple LLMs (Anthropic, OpenAI, Vertex, Moonshot) and lets you switch providers mid-conversation - something I do occasionally during research, asking two or three different models for their take on a problem, then combining findings into a final document.<p>Under the hood, .chat files are just Markdown with role markers (@You:, @Assistant:), but Flemma treats them as a proper filetype with its own parser, AST, LSP <em>server</em>, template engine and sandboxed tool execution. The buffer *is* the state - no hidden database, no JSON history, no <em>server</em> process. Your conversations are portable, greppable and version-controllable (I backup mine in Git). You can close Neovim, reopen the file a week later and pick up exactly where you left off.<p>It's got prompt caching, extended thinking, 7 built-in <em>tools</em>, a layered config system that gets out of your way and a UI that keeps getting refined to bring the noise down and make long agent sessions pleasant to work in (not quite there yet).<p>Flemma is for anyone who'd rather stay in Neovim. If that's you, I'd love to hear what you think.<p>Repo: <a href=\"https://github.com/Flemma-Dev/flemma.nvim\" rel=\"nofollow\">https://github.com/Flemma-Dev/flemma.nvim</a><p>Demo: <a href=\"http://flemma.dev/flemma.nvim/blob/develop/README.md#-flemma\" rel=\"nofollow\">http://flemma.dev/flemma.nvim/blob/develop/README.md#-flemma</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: I built a full LLM chat client as a Neovim filetype"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_StanAngeloff",
-            "story_47599302",
-            "show_hn"
-          ],
-          "author": "StanAngeloff",
-          "created_at": "2026-04-01T11:08:59Z",
-          "created_at_i": 1775041739,
-          "num_comments": 0,
-          "objectID": "47599302",
-          "points": 3,
-          "story_id": 47599302,
-          "story_text": "I started Flemma because I wanted to bring my AI workload into Neovim.<p>My workflow started with me living in developer portals - Claude Workbench, OpenAI Platform, Vertex (the horrors of GCP&#x27;s Console UI!) I would spend hours in these web UIs crafting prompts, iterating on system instructions, maintaining a carefully curated library of sessions. But the browser really wasn&#x27;t optimised for this kind of interaction. Editing was clunky (muscle memory &lt;C-W&gt; would close the tab instead and wipe my work), going back and forth between the LLM and myself felt off. So I had an idea: what if I could turn a Markdown document into an LLM chat interface?<p>At first I thought that would be enough - just do what I was already doing in the browser... but in Neovim. And sure enough having been accustomed to my own setup for the last decade I immediately felt a productivity boost. Writing functional requirement documents, statements of work, deep research across different systems - all of it felt better in &quot;my&quot; editor.<p>I then had a taste of Aider... and Claude Code... and all the other tools that were coming out. And Flemma felt lacking. So I started building: tool support, better conversation organisation, a proper UI to tame the noise that tool calls introduce.<p>Today, Flemma is a fully evolved AI workspace. It runs autonomous agent loops, interacts with multiple LLMs (Anthropic, OpenAI, Vertex, Moonshot) and lets you switch providers mid-conversation - something I do occasionally during research, asking two or three different models for their take on a problem, then combining findings into a final document.<p>Under the hood, .chat files are just Markdown with role markers (@You:, @Assistant:), but Flemma treats them as a proper filetype with its own parser, AST, LSP server, template engine and sandboxed tool execution. The buffer *is* the state - no hidden database, no JSON history, no server process. Your conversations are portable, greppable and version-controllable (I backup mine in Git). You can close Neovim, reopen the file a week later and pick up exactly where you left off.<p>It&#x27;s got prompt caching, extended thinking, 7 built-in tools, a layered config system that gets out of your way and a UI that keeps getting refined to bring the noise down and make long agent sessions pleasant to work in (not quite there yet).<p>Flemma is for anyone who&#x27;d rather stay in Neovim. If that&#x27;s you, I&#x27;d love to hear what you think.<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Flemma-Dev&#x2F;flemma.nvim\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Flemma-Dev&#x2F;flemma.nvim</a><p>Demo: <a href=\"http:&#x2F;&#x2F;flemma.dev&#x2F;flemma.nvim&#x2F;blob&#x2F;develop&#x2F;README.md#-flemma\" rel=\"nofollow\">http:&#x2F;&#x2F;flemma.dev&#x2F;flemma.nvim&#x2F;blob&#x2F;develop&#x2F;README.md#-flemma</a>",
-          "title": "Show HN: I built a full LLM chat client as a Neovim filetype",
-          "updated_at": "2026-04-01T12:13:58Z"
         }
       ]
     },
@@ -2319,19 +2341,20 @@
           "children": [
             47602435,
             47602458,
+            47606660,
             47603897,
-            47603984,
-            47602546
+            47602546,
+            47603984
           ],
           "created_at": "2026-04-01T14:40:28Z",
           "created_at_i": 1775054428,
-          "num_comments": 5,
+          "num_comments": 6,
           "objectID": "47601608",
           "points": 5,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-01T18:04:44Z",
+          "updated_at": "2026-04-02T00:19:01Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
