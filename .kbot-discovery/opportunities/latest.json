@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T09:23:50.289Z",
+  "timestamp": "2026-04-02T09:40:48.913Z",
   "count": 30,
   "opportunities": [
     {
@@ -95,15 +95,15 @@
     },
     {
       "source": "github-issue",
-      "title": "[Auto-QA] npm audit: 0 critical, 1 high vulnerabilities",
-      "url": "https://github.com/kubestellar/console/issues/4207",
+      "title": "[Auto-QA] Swallowed errors and empty catch blocks",
+      "url": "https://github.com/kubestellar/console/issues/4211",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "docs: update core README with extended description",
-      "url": "https://github.com/cshein45/movement-core/pull/6",
+      "title": "[Auto-QA] Color contrast risks detected — WCAG AA compliance",
+      "url": "https://github.com/kubestellar/console/issues/4209",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
