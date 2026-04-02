@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-04-02T15:58:19.705Z",
+  "timestamp": "2026-04-02T16:13:15.058Z",
   "projects": [
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1058,
-      "description": "the easiest way to run natural language-described workflows automatically"
-    },
-    {
-      "name": "CherryHQ/cherry-studio",
-      "url": "https://github.com/CherryHQ/cherry-studio",
-      "stars": 42776,
-      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+      "name": "jackwener/opencli",
+      "url": "https://github.com/jackwener/opencli",
+      "stars": 11344,
+      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
     },
     {
       "name": "inkeep/agents",
       "url": "https://github.com/inkeep/agents",
       "stars": 1042,
       "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
+    },
+    {
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 42779,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
       "name": "Ruya-AI/cozempic",
@@ -34,7 +34,7 @@
     {
       "name": "Panniantong/Agent-Reach",
       "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 14549,
+      "stars": 14551,
       "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
