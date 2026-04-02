@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T14:46:05.216Z",
+  "timestamp": "2026-04-02T15:13:30.409Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(tasks): tighten task-flow CLI surface",
+      "url": "https://github.com/openclaw/openclaw/pull/59757",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "feat(openai-codex): add gpt-5.4-mini model support",
+      "url": "https://github.com/openclaw/openclaw/pull/59741",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "fix(exec): track background exec liveness with CLI tasks",
       "url": "https://github.com/openclaw/openclaw/pull/59719",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "refactor: finish moving stream-wrapper ownership into provider plugins",
-      "url": "https://github.com/openclaw/openclaw/pull/59699",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "🔍 CLI Discovery: 2026-04-02 — 20 candidates found",
-      "url": "https://github.com/RealZST/harnesskit-resources/issues/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },

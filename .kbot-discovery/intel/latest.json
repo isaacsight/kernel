@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T14:46:01.220Z",
+  "timestamp": "2026-04-02T15:13:27.795Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -361,18 +361,18 @@
             47599966,
             47600025,
             47614223,
-            47599758,
             47601468,
+            47599758,
             47612172,
+            47600714,
             47612850,
             47600185,
-            47600714,
             47602570,
             47605481,
-            47605230,
             47599778,
-            47600126,
+            47605230,
             47601210,
+            47600126,
             47599763,
             47601763,
             47599892,
@@ -394,7 +394,7 @@
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-02T14:43:18Z"
+          "updated_at": "2026-04-02T15:12:20Z"
         },
         {
           "_highlightResult": {
@@ -712,7 +712,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "wingscape"
+              "value": "kwojno"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -722,43 +722,43 @@
                 "learning",
                 "ai"
               ],
-              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
+              "value": "I just built a pattern-matching neural network with zero IEEE 754 floats. All arithmetic uses integer ratios (5/8 instead of 0.625), compared via cross-multiplication. No infinity anywhere.\nThe key feature: when confidence is below threshold, it returns &quot;I don't know&quot; instead of hallucinating an answer. Tested on medical diagnosis (1179 diseases) — 50% correct, 20% wrong-but-related, 30% honest &quot;I don't know&quot;.<p>Core ideas:<p>Every operation costs &quot;budget&quot; — network dies before seeing everything\nConfidence is Ratio(n,d), not float — division only for human display\nRare symptoms weighted higher (entropy from information theory)\n500 lines of Rust, formal spec in Coq (44 files)<p>Emerged from a critique of Pascal's Wager: what if observation itself has finite cost?<p>Oh, and it runs on CPU, not GPU. And it runs fast as hell. How? That's a bit of a mystery for me too...<p>However, what's most important is that it is inherently capable of saying &quot;well, I dunno...&quot;.<p>no binary dictate of YES or NO. there is always an option to chose UNCERTAINTY. and there is nothing more natural than uncertainty in real life.<p>well, in there repository, you will not only find the network but also a hefty <em>collection</em> of coq files that define the ontology of finitiary math I have written with <em>ai</em> during my long stay in hospital bed with cancer. cancer is receding, code is compiling, and the network is <em>learning</em>. try it out."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Urban Pipeline for Citywide Insights"
+              "value": "Show HN: CPU-based Neural Net. Zero floats. Returns \"I don't know\""
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://github.com/Wingscape/urban-pipeline"
+              "value": "https://github.com/probabilistic-minds-consortium/void-mathematics-fully-finite-coq-verified"
             }
           },
           "_tags": [
             "story",
-            "author_wingscape",
-            "story_44550988",
+            "author_kwojno",
+            "story_46852043",
             "show_hn"
           ],
-          "author": "wingscape",
-          "created_at": "2025-07-13T15:11:34Z",
-          "created_at_i": 1752419494,
+          "author": "kwojno",
+          "created_at": "2026-02-02T03:19:33Z",
+          "created_at_i": 1770002373,
           "num_comments": 0,
-          "objectID": "44550988",
-          "points": 3,
-          "story_id": 44550988,
-          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
-          "title": "Show HN: Urban Pipeline for Citywide Insights",
-          "updated_at": "2025-07-13T22:27:35Z",
-          "url": "https://github.com/Wingscape/urban-pipeline"
+          "objectID": "46852043",
+          "points": 1,
+          "story_id": 46852043,
+          "story_text": "I just built a pattern-matching neural network with zero IEEE 754 floats. All arithmetic uses integer ratios (5&#x2F;8 instead of 0.625), compared via cross-multiplication. No infinity anywhere.\nThe key feature: when confidence is below threshold, it returns &quot;I don&#x27;t know&quot; instead of hallucinating an answer. Tested on medical diagnosis (1179 diseases) — 50% correct, 20% wrong-but-related, 30% honest &quot;I don&#x27;t know&quot;.<p>Core ideas:<p>Every operation costs &quot;budget&quot; — network dies before seeing everything\nConfidence is Ratio(n,d), not float — division only for human display\nRare symptoms weighted higher (entropy from information theory)\n500 lines of Rust, formal spec in Coq (44 files)<p>Emerged from a critique of Pascal&#x27;s Wager: what if observation itself has finite cost?<p>Oh, and it runs on CPU, not GPU. And it runs fast as hell. How? That&#x27;s a bit of a mystery for me too...<p>However, what&#x27;s most important is that it is inherently capable of saying &quot;well, I dunno...&quot;.<p>no binary dictate of YES or NO. there is always an option to chose UNCERTAINTY. and there is nothing more natural than uncertainty in real life.<p>well, in there repository, you will not only find the network but also a hefty collection of coq files that define the ontology of finitiary math I have written with ai during my long stay in hospital bed with cancer. cancer is receding, code is compiling, and the network is learning. try it out.",
+          "title": "Show HN: CPU-based Neural Net. Zero floats. Returns \"I don't know\"",
+          "updated_at": "2026-03-05T23:28:59Z",
+          "url": "https://github.com/probabilistic-minds-consortium/void-mathematics-fully-finite-coq-verified"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "cyberneticc"
+              "value": "actfrench"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -768,39 +768,85 @@
                 "learning",
                 "ai"
               ],
-              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
+              "value": "Modulo is a place to find vetted homeschooling resources: curriculum, tutors, classes and connect with other tech-savvy families who are doing homeschooling, modular <em>learning</em>, unschooling or curating their children's education as a supplement or replacement to traditional school. We've curated a <em>collection</em> of over 2000 resources vetted by hundreds of homeschool parents to ensure they're accurate, secular, evidence-based and engaging for kids. Our <em>AI</em>-powered <em>learning</em> concierge can make specific recommendations based on children's <em>learning</em> profiles and special needs such as &quot;find me an engaging 6th grade science curriculum for a kid with ADHD who loves YouTube.&quot; or &quot;I need an amazing hands-on math program for a profoundly gifted 2nd grader flailing in private school.&quot;"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Deepseek shows cognitive augmentation will be open source"
+              "value": "Show HN: Modulo – homeschooling resources, community and expert support"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://joinmodulo.com/"
             }
           },
           "_tags": [
             "story",
-            "author_cyberneticc",
-            "story_43019170",
-            "ask_hn"
+            "author_actfrench",
+            "story_46745671",
+            "show_hn"
           ],
-          "author": "cyberneticc",
+          "author": "actfrench",
           "children": [
-            43019203
+            46745702
           ],
-          "created_at": "2025-02-11T22:26:27Z",
-          "created_at_i": 1739312787,
+          "created_at": "2026-01-24T17:41:51Z",
+          "created_at_i": 1769276511,
           "num_comments": 2,
-          "objectID": "43019170",
-          "points": 4,
-          "story_id": 43019170,
-          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
-          "title": "Deepseek shows cognitive augmentation will be open source",
-          "updated_at": "2025-02-12T00:13:08Z"
+          "objectID": "46745671",
+          "points": 3,
+          "story_id": 46745671,
+          "story_text": "Modulo is a place to find vetted homeschooling resources: curriculum, tutors, classes and connect with other tech-savvy families who are doing homeschooling, modular learning, unschooling or curating their children&#x27;s education as a supplement or replacement to traditional school. We&#x27;ve curated a collection of over 2000 resources vetted by hundreds of homeschool parents to ensure they&#x27;re accurate, secular, evidence-based and engaging for kids. Our AI-powered learning concierge can make specific recommendations based on children&#x27;s learning profiles and special needs such as &quot;find me an engaging 6th grade science curriculum for a kid with ADHD who loves YouTube.&quot; or &quot;I need an amazing hands-on math program for a profoundly gifted 2nd grader flailing in private school.&quot;",
+          "title": "Show HN: Modulo – homeschooling resources, community and expert support",
+          "updated_at": "2026-03-05T23:24:48Z",
+          "url": "https://joinmodulo.com/"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "mooreds"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "cla-<em>bot</em> Is a GitHub Application for Automation of Contributor Licence Agreements"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://colineberhardt.github.io/cla-<em>bot</em>/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_mooreds",
+            "story_47615229"
+          ],
+          "author": "mooreds",
+          "created_at": "2026-04-02T14:46:48Z",
+          "created_at_i": 1775141208,
+          "num_comments": 0,
+          "objectID": "47615229",
+          "points": 1,
+          "story_id": 47615229,
+          "title": "cla-bot Is a GitHub Application for Automation of Contributor Licence Agreements",
+          "updated_at": "2026-04-02T14:49:50Z",
+          "url": "https://colineberhardt.github.io/cla-bot/"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -976,46 +1022,6 @@
           "title": "The EU Killed Voluntary CSAM Scanning. West Virginia Is Trying to Compel It",
           "updated_at": "2026-04-02T13:10:03Z",
           "url": "https://www.techdirt.com/2026/04/01/the-eu-killed-voluntary-csam-scanning-west-virginia-is-trying-to-compel-it-both-cause-problems/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "thm"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "A conversation with the creator of TomWikiAssist, the <em>bot</em> that edited Wikipedia"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.niemanlab.org/2026/03/i-was-surprised-how-upset-some-people-got-a-conversation-with-the-creator-of-tomwikiassist-the-<em>bot</em>-that-edited-wikipedia/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_thm",
-            "story_47613682"
-          ],
-          "author": "thm",
-          "created_at": "2026-04-02T12:40:49Z",
-          "created_at_i": 1775133649,
-          "num_comments": 0,
-          "objectID": "47613682",
-          "points": 3,
-          "story_id": 47613682,
-          "title": "A conversation with the creator of TomWikiAssist, the bot that edited Wikipedia",
-          "updated_at": "2026-04-02T12:48:33Z",
-          "url": "https://www.niemanlab.org/2026/03/i-was-surprised-how-upset-some-people-got-a-conversation-with-the-creator-of-tomwikiassist-the-bot-that-edited-wikipedia/"
         }
       ]
     },
@@ -2071,11 +2077,11 @@
           "created_at_i": 1775138750,
           "num_comments": 0,
           "objectID": "47614678",
-          "points": 2,
+          "points": 3,
           "story_id": 47614678,
           "story_text": "I’ve been building Canine for about 2 years now, and have slowly grown it to about ~1000 developers using it for deploying all sorts of apps &#x2F; projects &#x2F; etc. Amazingly, the whole thing is still able to run on a single 48GB Hetzner VPS. Think of it basically like Coolify, for Kubernetes. I previously posted about it here: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103</a><p>Recently, we added MCP capabilities to canine, and I was shocked how well it worked. It basically is able to create services, cron jobs, databases, get the logs for these and redeploy. See it here: <a href=\"https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol\" rel=\"nofollow\">https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol</a>. The real killer feature has been an MCP tool to be able to download a temporary kubeconfig, which lets Claude then breakout and get the full Kubernetes API to automate pretty much anything. A little scary how competent Claude can be here.<p>When we paired this with Claude code running locally, you’re basically able to have a fully autonomous system vibe code, deploy, wait, and test in staging (by querying APIs, no browser skills yet), automatically fix bugs, repush, etc.<p>Best practices in this area haven’t quite been established and I know this community has a somewhat nervous relationship with AI tools. The way we have it set up is basically to only allow access on staging servers, and disable entirely on production, for fear of things going wrong. MCP is opt in on canine at the moment.<p>The implementation was pretty easy. We just took our API and basically wrapped an MCP OAuth authentication around it where all the GET endpoints became resources and all the POST &#x2F; PUT &#x2F; DELETE endpoints became tools. Digging through other MCP implementations, it seems the actual documentation is quite out of date. The MCP documentation recommends using Prompt objects to guide the LLM’s, but most implementations I’ve seen out there actually use skills, which have to be installed.<p>Anyways, happy to share whatever, it was a cool bit of project, just now seeing how people will use this. The code for the MCP implementation is here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;CanineHQ&#x2F;canine&#x2F;blob&#x2F;main&#x2F;app&#x2F;controllers&#x2F;mcp_controller.rb\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;CanineHQ&#x2F;canine&#x2F;blob&#x2F;main&#x2F;app&#x2F;controllers...</a>",
           "title": "Show HN: An MCP server for Devops automation",
-          "updated_at": "2026-04-02T14:11:37Z"
+          "updated_at": "2026-04-02T15:05:03Z"
         },
         {
           "_highlightResult": {
