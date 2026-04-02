@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T15:30:03.171Z",
+  "timestamp": "2026-04-02T15:45:57.966Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "Bump the android-deps group across 1 directory with 16 updates",
+      "url": "https://github.com/dhg575794223-lang/openclaw/pull/9",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Fix Google image generation behind env proxy",
+      "url": "https://github.com/openclaw/openclaw/pull/59766",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "fix(tasks): tighten task-flow CLI surface",
       "url": "https://github.com/openclaw/openclaw/pull/59757",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(openai-codex): add gpt-5.4-mini model support",
-      "url": "https://github.com/openclaw/openclaw/pull/59741",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(exec): track background exec liveness with CLI tasks",
-      "url": "https://github.com/openclaw/openclaw/pull/59719",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "AI Tools That Can’t Prove What They Did Will Hit a Wall",
+      "url": "https://reddit.com/r/artificial/comments/1sakjzg/ai_tools_that_cant_prove_what_they_did_will_hit_a/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Building an AI agent that finds repos and content relevant to my work",
       "url": "https://reddit.com/r/artificial/comments/1sa8xt3/building_an_ai_agent_that_finds_repos_and_content/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Combining the robot operating system with LLMs for natural-language control",
       "url": "https://reddit.com/r/artificial/comments/1s9p4tl/combining_the_robot_operating_system_with_llms/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "The Claude Code leak accidentally published the first complete blueprint for production AI agents. Here's what it tells us about where this is all going.",
-      "url": "https://reddit.com/r/artificial/comments/1s9jprb/the_claude_code_leak_accidentally_published_the/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
