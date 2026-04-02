@@ -1,25 +1,6 @@
 {
-  "timestamp": "2026-04-02T16:14:46.673Z",
-  "projects": [
-    {
-      "name": "jackwener/opencli",
-      "url": "https://github.com/jackwener/opencli",
-      "stars": 11345,
-      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
-    },
-    {
-      "name": "inkeep/agents",
-      "url": "https://github.com/inkeep/agents",
-      "stars": 1042,
-      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
-    },
-    {
-      "name": "CherryHQ/cherry-studio",
-      "url": "https://github.com/CherryHQ/cherry-studio",
-      "stars": 42779,
-      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
-    }
-  ],
+  "timestamp": "2026-04-02T16:14:49.608Z",
+  "projects": [],
   "latestPaper": {
     "title": "HippoCamp: Benchmarking Contextual Agents on Personal Computers",
     "summary": "We present HippoCamp, a new benchmark designed to evaluate agents' capabilities on multimodal file management. Unlike existing agent benchmarks that focus on tasks like web interaction, tool use, or software automation in generic settings, HippoCamp evaluates agents in user-centric environments to model individual user profiles and search massive personal files for context-aware reasoning. Our benchmark instantiates device-scale file systems over real-world profiles spanning diverse modalities, "

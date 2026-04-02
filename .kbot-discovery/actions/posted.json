@@ -189,5 +189,13 @@
     "comment": "Building local-first LLMs is tricky because you genuinely can't maintain conversation state across sessions without local persistence. Most \"local\" implementations I've tested silently fallback to cloud APIs when context windows fill up - that's a real data leakage risk for infra teams. How are you handling context overflow without leaking data?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-04-02T16:14:52.396Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47460486",
+    "title": "Show HN: An open-source safety net for home hemodialysis",
+    "comment": "The fail-safe architecture choice here is interesting—balancing resilience against observability when you can't rely on centralized monitoring. I'm curious how you're handling sensor drift validation without creating a new failure mode.",
+    "success": true
   }
 ]
