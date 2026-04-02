@@ -1,7 +1,28 @@
 {
-  "timestamp": "2026-04-02T11:27:34.632Z",
-  "count": 27,
+  "timestamp": "2026-04-02T11:44:07.419Z",
+  "count": 30,
   "opportunities": [
+    {
+      "source": "hn-comment",
+      "title": "Schedule tasks on the web",
+      "url": "https://news.ycombinator.com/item?id=47543679",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Show HN: An open-source safety net for home hemodialysis",
+      "url": "https://news.ycombinator.com/item?id=47460486",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Show HN: Soros – AI for geopolitical macro investing",
+      "url": "https://news.ycombinator.com/item?id=47418557",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
     {
       "source": "hn-comment",
       "title": "Jeriko – an AI agent that runs directly inside your OS",
@@ -109,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "refactor(plugins): tighten web fetch provider boundary",
+      "url": "https://github.com/openclaw/openclaw/pull/59646",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "ci: replace auto PR review with on-demand @claude review trigger",
+      "url": "https://github.com/getlarge/themoltnet/pull/603",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "feat(landing,docs): refresh collaboration onboarding and getting started flows",
       "url": "https://github.com/getlarge/themoltnet/pull/600",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(browser): sandbox browser bridge SSRF policy propagation",
-      "url": "https://github.com/openclaw/openclaw/pull/59631",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(community): add @tensorfold/openclaw-google-workspace plugin",
-      "url": "https://github.com/openclaw/openclaw/pull/59628",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
