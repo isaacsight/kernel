@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T13:47:40.566Z",
+  "timestamp": "2026-04-02T14:12:01.952Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "🔍 CLI Discovery: 2026-04-02 — 20 candidates found",
+      "url": "https://github.com/RealZST/harnesskit-resources/issues/1",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "fix(xai): make x_search auth plugin-owned",
       "url": "https://github.com/openclaw/openclaw/pull/59691",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "refactor: finish schema cleanup remaining items",
       "url": "https://github.com/getlarge/themoltnet/pull/613",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(release): auto-sync CLI go.mod to released api-client/dspy versions",
-      "url": "https://github.com/getlarge/themoltnet/pull/611",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T13:47:37.167Z",
+  "timestamp": "2026-04-02T14:11:58.757Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -356,8 +356,8 @@
           ],
           "author": "piscator",
           "children": [
-            47614223,
             47600438,
+            47614223,
             47602371,
             47599966,
             47600025,
@@ -378,8 +378,8 @@
             47599892,
             47607627,
             47609511,
-            47610895,
             47602905,
+            47610895,
             47599316,
             47605704,
             47608353,
@@ -394,7 +394,7 @@
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-02T13:42:02Z"
+          "updated_at": "2026-04-02T14:06:03Z"
         },
         {
           "_highlightResult": {
@@ -712,7 +712,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "kwojno"
+              "value": "wingscape"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -722,43 +722,43 @@
                 "learning",
                 "ai"
               ],
-              "value": "I just built a pattern-matching neural network with zero IEEE 754 floats. All arithmetic uses integer ratios (5/8 instead of 0.625), compared via cross-multiplication. No infinity anywhere.\nThe key feature: when confidence is below threshold, it returns &quot;I don't know&quot; instead of hallucinating an answer. Tested on medical diagnosis (1179 diseases) — 50% correct, 20% wrong-but-related, 30% honest &quot;I don't know&quot;.<p>Core ideas:<p>Every operation costs &quot;budget&quot; — network dies before seeing everything\nConfidence is Ratio(n,d), not float — division only for human display\nRare symptoms weighted higher (entropy from information theory)\n500 lines of Rust, formal spec in Coq (44 files)<p>Emerged from a critique of Pascal's Wager: what if observation itself has finite cost?<p>Oh, and it runs on CPU, not GPU. And it runs fast as hell. How? That's a bit of a mystery for me too...<p>However, what's most important is that it is inherently capable of saying &quot;well, I dunno...&quot;.<p>no binary dictate of YES or NO. there is always an option to chose UNCERTAINTY. and there is nothing more natural than uncertainty in real life.<p>well, in there repository, you will not only find the network but also a hefty <em>collection</em> of coq files that define the ontology of finitiary math I have written with <em>ai</em> during my long stay in hospital bed with cancer. cancer is receding, code is compiling, and the network is <em>learning</em>. try it out."
+              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: CPU-based Neural Net. Zero floats. Returns \"I don't know\""
+              "value": "Show HN: Urban Pipeline for Citywide Insights"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://github.com/probabilistic-minds-consortium/void-mathematics-fully-finite-coq-verified"
+              "value": "https://github.com/Wingscape/urban-pipeline"
             }
           },
           "_tags": [
             "story",
-            "author_kwojno",
-            "story_46852043",
+            "author_wingscape",
+            "story_44550988",
             "show_hn"
           ],
-          "author": "kwojno",
-          "created_at": "2026-02-02T03:19:33Z",
-          "created_at_i": 1770002373,
+          "author": "wingscape",
+          "created_at": "2025-07-13T15:11:34Z",
+          "created_at_i": 1752419494,
           "num_comments": 0,
-          "objectID": "46852043",
-          "points": 1,
-          "story_id": 46852043,
-          "story_text": "I just built a pattern-matching neural network with zero IEEE 754 floats. All arithmetic uses integer ratios (5&#x2F;8 instead of 0.625), compared via cross-multiplication. No infinity anywhere.\nThe key feature: when confidence is below threshold, it returns &quot;I don&#x27;t know&quot; instead of hallucinating an answer. Tested on medical diagnosis (1179 diseases) — 50% correct, 20% wrong-but-related, 30% honest &quot;I don&#x27;t know&quot;.<p>Core ideas:<p>Every operation costs &quot;budget&quot; — network dies before seeing everything\nConfidence is Ratio(n,d), not float — division only for human display\nRare symptoms weighted higher (entropy from information theory)\n500 lines of Rust, formal spec in Coq (44 files)<p>Emerged from a critique of Pascal&#x27;s Wager: what if observation itself has finite cost?<p>Oh, and it runs on CPU, not GPU. And it runs fast as hell. How? That&#x27;s a bit of a mystery for me too...<p>However, what&#x27;s most important is that it is inherently capable of saying &quot;well, I dunno...&quot;.<p>no binary dictate of YES or NO. there is always an option to chose UNCERTAINTY. and there is nothing more natural than uncertainty in real life.<p>well, in there repository, you will not only find the network but also a hefty collection of coq files that define the ontology of finitiary math I have written with ai during my long stay in hospital bed with cancer. cancer is receding, code is compiling, and the network is learning. try it out.",
-          "title": "Show HN: CPU-based Neural Net. Zero floats. Returns \"I don't know\"",
-          "updated_at": "2026-03-05T23:28:59Z",
-          "url": "https://github.com/probabilistic-minds-consortium/void-mathematics-fully-finite-coq-verified"
+          "objectID": "44550988",
+          "points": 3,
+          "story_id": 44550988,
+          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
+          "title": "Show HN: Urban Pipeline for Citywide Insights",
+          "updated_at": "2025-07-13T22:27:35Z",
+          "url": "https://github.com/Wingscape/urban-pipeline"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "actfrench"
+              "value": "cyberneticc"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -768,45 +768,86 @@
                 "learning",
                 "ai"
               ],
-              "value": "Modulo is a place to find vetted homeschooling resources: curriculum, tutors, classes and connect with other tech-savvy families who are doing homeschooling, modular <em>learning</em>, unschooling or curating their children's education as a supplement or replacement to traditional school. We've curated a <em>collection</em> of over 2000 resources vetted by hundreds of homeschool parents to ensure they're accurate, secular, evidence-based and engaging for kids. Our <em>AI</em>-powered <em>learning</em> concierge can make specific recommendations based on children's <em>learning</em> profiles and special needs such as &quot;find me an engaging 6th grade science curriculum for a kid with ADHD who loves YouTube.&quot; or &quot;I need an amazing hands-on math program for a profoundly gifted 2nd grader flailing in private school.&quot;"
+              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Modulo – homeschooling resources, community and expert support"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://joinmodulo.com/"
+              "value": "Deepseek shows cognitive augmentation will be open source"
             }
           },
           "_tags": [
             "story",
-            "author_actfrench",
-            "story_46745671",
-            "show_hn"
+            "author_cyberneticc",
+            "story_43019170",
+            "ask_hn"
           ],
-          "author": "actfrench",
+          "author": "cyberneticc",
           "children": [
-            46745702
+            43019203
           ],
-          "created_at": "2026-01-24T17:41:51Z",
-          "created_at_i": 1769276511,
+          "created_at": "2025-02-11T22:26:27Z",
+          "created_at_i": 1739312787,
           "num_comments": 2,
-          "objectID": "46745671",
-          "points": 3,
-          "story_id": 46745671,
-          "story_text": "Modulo is a place to find vetted homeschooling resources: curriculum, tutors, classes and connect with other tech-savvy families who are doing homeschooling, modular learning, unschooling or curating their children&#x27;s education as a supplement or replacement to traditional school. We&#x27;ve curated a collection of over 2000 resources vetted by hundreds of homeschool parents to ensure they&#x27;re accurate, secular, evidence-based and engaging for kids. Our AI-powered learning concierge can make specific recommendations based on children&#x27;s learning profiles and special needs such as &quot;find me an engaging 6th grade science curriculum for a kid with ADHD who loves YouTube.&quot; or &quot;I need an amazing hands-on math program for a profoundly gifted 2nd grader flailing in private school.&quot;",
-          "title": "Show HN: Modulo – homeschooling resources, community and expert support",
-          "updated_at": "2026-03-05T23:24:48Z",
-          "url": "https://joinmodulo.com/"
+          "objectID": "43019170",
+          "points": 4,
+          "story_id": 43019170,
+          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
+          "title": "Deepseek shows cognitive augmentation will be open source",
+          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "kent8192"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Reinhardt is a full-stack web framework for Rust inspired by Django and DRF. It bundles HTTP, ORM, auth, DI, and background tasks into one crate — feature flags let you pull in only what you need (minimal/standard/full), or use individual crates.<p>Published as `reinhardt-web` on crates.io, imported as `reinhardt` in your code.<p>I built it after moving from Django/DRF to Rust and repeatedly assembling the same Axum + ORM + migrations + auth stack.<p>Two things I'd especially like feedback on: a built-in WASM+SSR reactive frontend (Pages), where a DSL-to-Rust codegen step (page!/head!/form! macros) produces <em>bot</em>h client WASM and server HTML from one source; and auto-generated migrations from #[model(...)] definitions.<p>Quickstart is here for anyone who wants to try it immediately: <a href=\"https://reinhardt-web.dev/quickstart/\" rel=\"nofollow\">https://reinhardt-web.dev/quickstart/</a><p>v0.1.0-rc.15 (<a href=\"https://github.com/kent8192/reinhardt-web/releases/tag/reinhardt-web%40v0.1.0-rc.15\" rel=\"nofollow\">https://github.com/kent8192/reinhardt-web/releases/tag/reinh...</a>), BSD 3-Clause. Looking for feedback on the API design, not production use yet."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Reinhardt – Django/DRF-inspired full-stack web framework for Rust"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://reinhardt-web.dev/quickstart/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_kent8192",
+            "story_47614697",
+            "show_hn"
+          ],
+          "author": "kent8192",
+          "children": [
+            47614708
+          ],
+          "created_at": "2026-04-02T14:07:01Z",
+          "created_at_i": 1775138821,
+          "num_comments": 0,
+          "objectID": "47614697",
+          "points": 1,
+          "story_id": 47614697,
+          "story_text": "Reinhardt is a full-stack web framework for Rust inspired by Django and DRF. It bundles HTTP, ORM, auth, DI, and background tasks into one crate — feature flags let you pull in only what you need (minimal&#x2F;standard&#x2F;full), or use individual crates.<p>Published as `reinhardt-web` on crates.io, imported as `reinhardt` in your code.<p>I built it after moving from Django&#x2F;DRF to Rust and repeatedly assembling the same Axum + ORM + migrations + auth stack.<p>Two things I&#x27;d especially like feedback on: a built-in WASM+SSR reactive frontend (Pages), where a DSL-to-Rust codegen step (page!&#x2F;head!&#x2F;form! macros) produces both client WASM and server HTML from one source; and auto-generated migrations from #[model(...)] definitions.<p>Quickstart is here for anyone who wants to try it immediately: <a href=\"https:&#x2F;&#x2F;reinhardt-web.dev&#x2F;quickstart&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;reinhardt-web.dev&#x2F;quickstart&#x2F;</a><p>v0.1.0-rc.15 (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;kent8192&#x2F;reinhardt-web&#x2F;releases&#x2F;tag&#x2F;reinhardt-web%40v0.1.0-rc.15\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kent8192&#x2F;reinhardt-web&#x2F;releases&#x2F;tag&#x2F;reinh...</a>), BSD 3-Clause. Looking for feedback on the API design, not production use yet.",
+          "title": "Show HN: Reinhardt – Django/DRF-inspired full-stack web framework for Rust",
+          "updated_at": "2026-04-02T14:10:18Z",
+          "url": "https://reinhardt-web.dev/quickstart/"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -963,49 +1004,11 @@
           "created_at_i": 1775133579,
           "num_comments": 0,
           "objectID": "47613671",
-          "points": 3,
+          "points": 4,
           "story_id": 47613671,
           "story_text": "Whenever I use an LLM chat bot for anything it always answers with this fake positive corp tone that we all know. And I absolutely hate that. I cannot stand corpo speak and the LLM style makes want to puke. To cut the rant short: How exactly do you stop it from doing this? I do not just mean the style of the response but also the response pattern: making assumptions instead of asking questions, always agreeing with me, having this fake differentiated view on everything, telling me it understood something and then doing the exact opposite.<p>I know I cannot make LLMs more intelligent by prompting, they will always hallucinate and get some things wrong, but I want to at least get it to be less of an asshole about it.<p>So, what do you do? I followed some generic advice like using positive instructions instead of negations, using examples, but I cannot get the corpo slop tone out of it.<p>General advice is welcome, but I&#x27;m mostly looking for specific verbatim examples of system prompts that you use.",
           "title": "Ask HN: How do you get LLMs to stop spewing corpo speak?",
-          "updated_at": "2026-04-02T12:55:17Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "sshnaidm1"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Hi HN,<p>My brother and I built Sova AI (https://ayconic.io/sova), an Android agent that actually controls your installed apps.<p>We were incredibly frustrated with the current state of mobile AI. Built-in assistants like Gemini are deeply integrated into the OS, yet if you ask them to &quot;Order an Uber to the airport&quot; or &quot;Send a Telegram message to friends group I'm late&quot;, they mostly just give you web search results or a button to open the app yourself. They don't do the work. (The Perplexity &quot;assistant&quot; is just a browser agent :/ )<p>So, we built an agent that does operate your phone. (NO root, NO adb, NO PC, NO appium/whatever, NO usb, NO browser)<p>How it works:\nYou give Sova a prompt - either voice or text, you can make it a default assistant if you like. Instead of relying on non-existent official app APIs, Sova acts as a virtual human - clicks, scrolls, types etc. It uses the Android Accessibility API to read the screen's UI node tree.\nAbout AI models - currently we support main AI cloud providers (OpenAI, Gemini, Anthropic, Deepseek etc etc) and working towards support of local AI models on your host - Ollama, LM studio, etc.\nPricing: 100% Free / Bring Your Own Key (BYOK)\nWe aren't charging for the Sova engine right now. We built a BYOK system: you plug in your own API key (OpenAI, Claude, whatever you prefer), and you only pay the provider for the tokens you use.\nWe figured out how to do this entirely on-device as a standard <em>Kot</em>lin app. No tethering to a PC, no Appium, no Root, and no Shizuku/ADB workarounds. Just an app even your granny can use.<p>The Google Play Ban:\nBecause we use the Accessibility API for &quot;universal automation&quot; (literally mapping and clicking other apps), Google Play rejected our submission. It’s ironic: they banned us for building the exact agentic behavior that Gemini promises but fails to deliver. So, we are hosting the APK ourselves: https://sova.ayconic.io<p>The Challenges:\nBuilding this wasn't easy. Translating LLM outputs into reliable X/Y coordinates on dynamic Android screens across thousands of different device resolutions is a nightmare. Resizing of pictures in different model providers brought another complexities. It's not always acting as 100% and we had to fight our perfectionism a lot :)<p>We’d love for you to download the APK, plug in your key, and try to break it. What apps completely confuse the agent?\nRoadmap: support of local models with Ollama, LM studio or another tools, predefined rules and personas for your tasks, detailed statistics for you, support for Openrouter, enterprise Amazon Bedrock, Google Vertex and Azure Foundry models, support for IOS.<p>What would you like to see more?<p>Video demo is here https://www.youtube.com/watch?v=r-x6hRmtBy0 and APK is here: https://ayconic.io/sova\nWe are here to answer your questions and listen to feedback in Telegram and Discord. It's not perfect yet, but it does its work."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Google banned our mobile AI agent app for doing what Gemini should do,but doesnt"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_sshnaidm1",
-            "story_47613614",
-            "ask_hn"
-          ],
-          "author": "sshnaidm1",
-          "created_at": "2026-04-02T12:35:29Z",
-          "created_at_i": 1775133329,
-          "num_comments": 0,
-          "objectID": "47613614",
-          "points": 1,
-          "story_id": 47613614,
-          "story_text": "Hi HN,<p>My brother and I built Sova AI (https:&#x2F;&#x2F;ayconic.io&#x2F;sova), an Android agent that actually controls your installed apps.<p>We were incredibly frustrated with the current state of mobile AI. Built-in assistants like Gemini are deeply integrated into the OS, yet if you ask them to &quot;Order an Uber to the airport&quot; or &quot;Send a Telegram message to friends group I&#x27;m late&quot;, they mostly just give you web search results or a button to open the app yourself. They don&#x27;t do the work. (The Perplexity &quot;assistant&quot; is just a browser agent :&#x2F; )<p>So, we built an agent that does operate your phone. (NO root, NO adb, NO PC, NO appium&#x2F;whatever, NO usb, NO browser)<p>How it works:\nYou give Sova a prompt - either voice or text, you can make it a default assistant if you like. Instead of relying on non-existent official app APIs, Sova acts as a virtual human - clicks, scrolls, types etc. It uses the Android Accessibility API to read the screen&#x27;s UI node tree.\nAbout AI models - currently we support main AI cloud providers (OpenAI, Gemini, Anthropic, Deepseek etc etc) and working towards support of local AI models on your host - Ollama, LM studio, etc.\nPricing: 100% Free &#x2F; Bring Your Own Key (BYOK)\nWe aren&#x27;t charging for the Sova engine right now. We built a BYOK system: you plug in your own API key (OpenAI, Claude, whatever you prefer), and you only pay the provider for the tokens you use.\nWe figured out how to do this entirely on-device as a standard Kotlin app. No tethering to a PC, no Appium, no Root, and no Shizuku&#x2F;ADB workarounds. Just an app even your granny can use.<p>The Google Play Ban:\nBecause we use the Accessibility API for &quot;universal automation&quot; (literally mapping and clicking other apps), Google Play rejected our submission. It’s ironic: they banned us for building the exact agentic behavior that Gemini promises but fails to deliver. So, we are hosting the APK ourselves: https:&#x2F;&#x2F;sova.ayconic.io<p>The Challenges:\nBuilding this wasn&#x27;t easy. Translating LLM outputs into reliable X&#x2F;Y coordinates on dynamic Android screens across thousands of different device resolutions is a nightmare. Resizing of pictures in different model providers brought another complexities. It&#x27;s not always acting as 100% and we had to fight our perfectionism a lot :)<p>We’d love for you to download the APK, plug in your key, and try to break it. What apps completely confuse the agent?\nRoadmap: support of local models with Ollama, LM studio or another tools, predefined rules and personas for your tasks, detailed statistics for you, support for Openrouter, enterprise Amazon Bedrock, Google Vertex and Azure Foundry models, support for IOS.<p>What would you like to see more?<p>Video demo is here https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=r-x6hRmtBy0 and APK is here: https:&#x2F;&#x2F;ayconic.io&#x2F;sova\nWe are here to answer your questions and listen to feedback in Telegram and Discord. It&#x27;s not perfect yet, but it does its work.",
-          "title": "Google banned our mobile AI agent app for doing what Gemini should do,but doesnt",
-          "updated_at": "2026-04-02T12:38:33Z"
+          "updated_at": "2026-04-02T14:02:49Z"
         }
       ]
     },
@@ -2029,6 +2032,49 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "czhu12"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "tools"
+              ],
+              "value": "I’ve been building Canine for about 2 years now, and have slowly grown it to about ~1000 developers using it for deploying all sorts of apps / projects / etc. Amazingly, the whole thing is still able to run on a single 48GB Hetzner VPS. Think of it basically like Coolify, for Kubernetes. I previously posted about it here: <a href=\"https://news.ycombinator.com/item?id=44292103\">https://news.ycombinator.com/item?id=44292103</a><p>Recently, we added <em>MCP</em> capabilities to canine, and I was shocked how well it worked. It basically is able to create services, cron jobs, databases, get the logs for these and redeploy. See it here: <a href=\"https://canine.sh/model-context-protocol\" rel=\"nofollow\">https://canine.sh/model-context-protocol</a>. The real killer feature has been an <em>MCP</em> <em>tool</em> to be able to download a temporary kubeconfig, which lets Claude then breakout and get the full Kubernetes API to automate pretty much anything. A little scary how competent Claude can be here.<p>When we paired this with Claude code running locally, you’re basically able to have a fully autonomous system vibe code, deploy, wait, and test in staging (by querying APIs, no browser skills yet), automatically fix bugs, repush, etc.<p>Best practices in this area haven’t quite been established and I know this community has a somewhat nervous relationship with AI <em>tools</em>. The way we have it set up is basically to only allow access on staging servers, and disable entirely on production, for fear of things going wrong. <em>MCP</em> is opt in on canine at the moment.<p>The implementation was pretty easy. We just took our API and basically wrapped an <em>MCP</em> OAuth authentication around it where all the GET endpoints became resources and all the POST / PUT / DELETE endpoints became <em>tools</em>. Digging through other <em>MCP</em> implementations, it seems the actual documentation is quite out of date. The <em>MCP</em> documentation recommends using Prompt objects to guide the LLM’s, but most implementations I’ve seen out there actually use skills, which have to be installed.<p>Anyways, happy to share whatever, it was a cool bit of project, just now seeing how people will use this. The code for the <em>MCP</em> implementation is here: <a href=\"https://github.com/CanineHQ/canine/blob/main/app/controllers/mcp_controller.rb\" rel=\"nofollow\">https://github.com/CanineHQ/canine/blob/main/app/controllers...</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "Show HN: An <em>MCP</em> <em>server</em> for Devops automation"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_czhu12",
+            "story_47614678",
+            "show_hn"
+          ],
+          "author": "czhu12",
+          "created_at": "2026-04-02T14:05:50Z",
+          "created_at_i": 1775138750,
+          "num_comments": 0,
+          "objectID": "47614678",
+          "points": 2,
+          "story_id": 47614678,
+          "story_text": "I’ve been building Canine for about 2 years now, and have slowly grown it to about ~1000 developers using it for deploying all sorts of apps &#x2F; projects &#x2F; etc. Amazingly, the whole thing is still able to run on a single 48GB Hetzner VPS. Think of it basically like Coolify, for Kubernetes. I previously posted about it here: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103</a><p>Recently, we added MCP capabilities to canine, and I was shocked how well it worked. It basically is able to create services, cron jobs, databases, get the logs for these and redeploy. See it here: <a href=\"https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol\" rel=\"nofollow\">https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol</a>. The real killer feature has been an MCP tool to be able to download a temporary kubeconfig, which lets Claude then breakout and get the full Kubernetes API to automate pretty much anything. A little scary how competent Claude can be here.<p>When we paired this with Claude code running locally, you’re basically able to have a fully autonomous system vibe code, deploy, wait, and test in staging (by querying APIs, no browser skills yet), automatically fix bugs, repush, etc.<p>Best practices in this area haven’t quite been established and I know this community has a somewhat nervous relationship with AI tools. The way we have it set up is basically to only allow access on staging servers, and disable entirely on production, for fear of things going wrong. MCP is opt in on canine at the moment.<p>The implementation was pretty easy. We just took our API and basically wrapped an MCP OAuth authentication around it where all the GET endpoints became resources and all the POST &#x2F; PUT &#x2F; DELETE endpoints became tools. Digging through other MCP implementations, it seems the actual documentation is quite out of date. The MCP documentation recommends using Prompt objects to guide the LLM’s, but most implementations I’ve seen out there actually use skills, which have to be installed.<p>Anyways, happy to share whatever, it was a cool bit of project, just now seeing how people will use this. The code for the MCP implementation is here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;CanineHQ&#x2F;canine&#x2F;blob&#x2F;main&#x2F;app&#x2F;controllers&#x2F;mcp_controller.rb\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;CanineHQ&#x2F;canine&#x2F;blob&#x2F;main&#x2F;app&#x2F;controllers...</a>",
+          "title": "Show HN: An MCP server for Devops automation",
+          "updated_at": "2026-04-02T14:11:37Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "CodeReclaimers"
             },
             "story_text": {
@@ -2067,11 +2113,11 @@
           "created_at_i": 1775137511,
           "num_comments": 0,
           "objectID": "47614404",
-          "points": 1,
+          "points": 3,
           "story_id": 47614404,
           "story_text": "I maintain neat-python and have been building a genetic programming framework in Julia. While doing research on that project, I kept finding the same complaint in PySR&#x27;s GitHub discussions: people give up not because symbolic regression doesn&#x27;t work, but because getting Julia talking to Python is a repeated source of failure, especially on Windows and in notebooks.<p>So I stood up Occam (occam.fit) — a hosted MCP server exposing two tools: run_sindy for sparse identification of dynamics from time series (seconds), and run_pysr for evolutionary symbolic regression returning a Pareto front of expressions by complexity vs. accuracy (10–60s).<p>The core design decision is a pool of pre-warmed Julia workers running SymbolicRegression.jl v2. Julia processes stay alive between requests so the 2-minute compilation hit is paid once at server startup, not per call.<p>Free tier, no signup. Happy to answer questions about the architecture or symbolic regression generally, and curious whether anyone has use cases that don&#x27;t fit the current limits.",
           "title": "Show HN: Symbolic regression as an MCP tool (SINDy and PySR, free, no install)",
-          "updated_at": "2026-04-02T13:46:47Z",
+          "updated_at": "2026-04-02T14:11:51Z",
           "url": "https://occam.fit/"
         },
         {
@@ -2219,54 +2265,6 @@
           "title": "Show HN: Mkdnsite – Markdown-native web server for humans (HTML) and agents (md)",
           "updated_at": "2026-04-02T04:39:16Z",
           "url": "https://github.com/mkdnsite/mkdnsite"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "sigildev"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "We ran Sigil, our open-source security scanner, against 73 of the most-installed <em>MCP</em> <em>servers</em> on Smithery. Every finding was manually verified against the source code.<p>Results: 66 passed (90%). 5 had configuration warnings. 2 failed with real security-relevant patterns in their <em>tool</em> handlers.<p>The two failures are instructive:<p>telegram-<em>mcp</em> scored F with 12 findings. Its send_photo, send_video, and send_document <em>tools</em> accept a file_path parameter with zero path validation and no directory allowlist. An LLM could call send_photo(chat, &quot;/etc/passwd&quot;) and the <em>server</em> would attempt to send it. It also runs HTTP endpoints with verbose error output.<p><em>mcp</em>-sqlite-<em>server</em> scored F with 9 findings. It passes user-provided SQL to conn.execute() with a startswith(&quot;select&quot;) guard. Python's sqlite3 blocks multi-statement execution, so DROP TABLE isn't possible — but single-statement bypasses work: UNION-based schema extraction, pragma metadata access, and potentially load_extension(). A guard that looks restrictive but isn't creates false confidence. It also runs SSE on 0.0.0.0:8000 over plain HTTP with debug logging enabled.<p>Both are community-maintained projects doing useful things. But the patterns they contain — unrestricted file access, raw SQL execution with insufficient guards — are exactly the kind of thing that should get caught before deployment.<p>Sigil reads <em>MCP</em> <em>server</em> source code (TypeScript and Python), finds <em>tool</em> handler registrations, and detects dangerous patterns with 16 rules. It does pattern analysis with <em>tool</em>-handler scoping — it only flags code within actual <em>MCP</em> <em>tool</em> contexts, not build scripts or utilities.<p>We notified both maintainers before publishing.<p>npx @sigildev/sigil .<p>MIT licensed. No account. GitHub: https://github.com/sigildev/sigil"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "server"
-              ],
-              "value": "We scanned 73 open-source <em>MCP</em> <em>servers</em>. Here's what source code analysis found"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_sigildev",
-            "story_47605063",
-            "ask_hn"
-          ],
-          "author": "sigildev",
-          "children": [
-            47614151,
-            47611953
-          ],
-          "created_at": "2026-04-01T19:02:37Z",
-          "created_at_i": 1775070157,
-          "num_comments": 2,
-          "objectID": "47605063",
-          "points": 2,
-          "story_id": 47605063,
-          "story_text": "We ran Sigil, our open-source security scanner, against 73 of the most-installed MCP servers on Smithery. Every finding was manually verified against the source code.<p>Results: 66 passed (90%). 5 had configuration warnings. 2 failed with real security-relevant patterns in their tool handlers.<p>The two failures are instructive:<p>telegram-mcp scored F with 12 findings. Its send_photo, send_video, and send_document tools accept a file_path parameter with zero path validation and no directory allowlist. An LLM could call send_photo(chat, &quot;&#x2F;etc&#x2F;passwd&quot;) and the server would attempt to send it. It also runs HTTP endpoints with verbose error output.<p>mcp-sqlite-server scored F with 9 findings. It passes user-provided SQL to conn.execute() with a startswith(&quot;select&quot;) guard. Python&#x27;s sqlite3 blocks multi-statement execution, so DROP TABLE isn&#x27;t possible — but single-statement bypasses work: UNION-based schema extraction, pragma metadata access, and potentially load_extension(). A guard that looks restrictive but isn&#x27;t creates false confidence. It also runs SSE on 0.0.0.0:8000 over plain HTTP with debug logging enabled.<p>Both are community-maintained projects doing useful things. But the patterns they contain — unrestricted file access, raw SQL execution with insufficient guards — are exactly the kind of thing that should get caught before deployment.<p>Sigil reads MCP server source code (TypeScript and Python), finds tool handler registrations, and detects dangerous patterns with 16 rules. It does pattern analysis with tool-handler scoping — it only flags code within actual MCP tool contexts, not build scripts or utilities.<p>We notified both maintainers before publishing.<p>npx @sigildev&#x2F;sigil .<p>MIT licensed. No account. GitHub: https:&#x2F;&#x2F;github.com&#x2F;sigildev&#x2F;sigil",
-          "title": "We scanned 73 open-source MCP servers. Here's what source code analysis found",
-          "updated_at": "2026-04-02T13:22:49Z"
         }
       ]
     },
