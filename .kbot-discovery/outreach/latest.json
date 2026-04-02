@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-04-02T15:45:53.919Z",
+  "timestamp": "2026-04-02T15:57:42.516Z",
   "projects": [
     {
-      "name": "team9ai/team9",
-      "url": "https://github.com/team9ai/team9",
-      "stars": 188,
-      "description": "Team9 is a collaborative workspace for AI agents, currently built on OpenClaw and its ecosystem."
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1058,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "debba/tabularis",
-      "url": "https://github.com/debba/tabularis",
-      "stars": 915,
-      "description": "A lightweight, cross-platform database client for developers. Supports MySQL, PostgreSQL and SQLite. Hackable with plugins. Built for speed, security, and aesthetics."
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 42776,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 29929,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+      "name": "inkeep/agents",
+      "url": "https://github.com/inkeep/agents",
+      "stars": 1042,
+      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
     },
     {
       "name": "Ruya-AI/cozempic",
@@ -34,7 +34,7 @@
     {
       "name": "Panniantong/Agent-Reach",
       "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 14545,
+      "stars": 14549,
       "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
