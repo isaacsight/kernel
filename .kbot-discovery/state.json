@@ -1,14 +1,14 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-04-02T07:39:05.185Z",
-    "intel": "2026-04-02T07:39:09.667Z",
-    "outreach": "2026-04-02T16:15:12.715Z",
+    "pulse": "2026-04-02T13:47:33.064Z",
+    "intel": "2026-04-02T13:47:37.173Z",
+    "outreach": "2026-04-02T16:15:20.932Z",
     "writing": "2026-04-01T18:09:27.655Z",
-    "evolution": "2026-04-02T16:31:32.233Z",
-    "opportunities": "2026-04-02T07:39:15.119Z",
-    "actions": "2026-04-02T16:15:12.188Z",
-    "synthesis": "2026-04-02T07:39:05.815Z",
-    "obsidian": "2026-04-02T16:15:12.720Z"
+    "evolution": "2026-04-02T16:31:39.864Z",
+    "opportunities": "2026-04-02T13:47:44.392Z",
+    "actions": "2026-04-02T16:15:20.458Z",
+    "synthesis": "2026-04-02T13:47:34.100Z",
+    "obsidian": "2026-04-02T16:15:20.938Z"
   },
   "stats": {
     "totalRuns": 1439,
@@ -28,7 +28,7 @@
     "totalObsidianSyncs": 13
   },
   "knownStars": 10,
-  "knownDownloads": 343,
+  "knownDownloads": 1929,
   "hnScore": 1,
   "hnComments": 0,
   "feedback": [
