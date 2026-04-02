@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T00:39:34.153Z",
+  "timestamp": "2026-04-02T07:22:03.603Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "[Auto-QA] npm audit: 0 critical, 1 high vulnerabilities",
+      "url": "https://github.com/kubestellar/console/issues/4207",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "docs: update core README with extended description",
       "url": "https://github.com/cshein45/movement-core/pull/6",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -95,15 +102,8 @@
     },
     {
       "source": "github-issue",
-      "title": "fix: Extension causes high cpu load",
-      "url": "https://github.com/snakemake/snakemake-lang-vscode-plugin/pull/53",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] High-complexity components could be split",
-      "url": "https://github.com/kubestellar/console/issues/4061",
+      "title": "[Auto-QA] Components missing test coverage",
+      "url": "https://github.com/kubestellar/console/issues/4168",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-02",
-      "url": "https://github.com/duanyytop/agents-radar/issues/366",
+      "title": "docs: add cross-module contract guidance to proposal skills",
+      "url": "https://github.com/Chorus-AIDLC/Chorus/pull/79",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "📊 AI CLI Tools Digest 2026-04-02",
-      "url": "https://github.com/duanyytop/agents-radar/issues/365",
+      "title": "Add OpenClaw overlay: compose profiles, scripts, docs, and safe defaults",
+      "url": "https://github.com/ellisapotheosis/Project-Nyra/pull/224",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-02",
-      "url": "https://github.com/DenisZheng/agents-radar/issues/248",
+      "title": "Update openclaw to version v2026.4.1",
+      "url": "https://github.com/getumbrel/umbrel-apps/pull/5259",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Building an AI agent that finds repos and content relevant to my work",
+      "url": "https://reddit.com/r/artificial/comments/1sa8xt3/building_an_ai_agent_that_finds_repos_and_content/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Combining the robot operating system with LLMs for natural-language control",
       "url": "https://reddit.com/r/artificial/comments/1s9p4tl/combining_the_robot_operating_system_with_llms/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "The Claude Code leak accidentally published the first complete blueprint for production AI agents. Here's what it tells us about where this is all going.",
       "url": "https://reddit.com/r/artificial/comments/1s9jprb/the_claude_code_leak_accidentally_published_the/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Biggest Opportunity for Builders to monetise their agents",
-      "url": "https://reddit.com/r/artificial/comments/1s9e04v/biggest_opportunity_for_builders_to_monetise/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
