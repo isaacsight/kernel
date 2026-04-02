@@ -1,9 +1,10 @@
 // kbot Buddy Tools — Interact with your terminal companion
 //
-// Three tools:
+// Four tools:
 //   buddy_status       — Show buddy name, species, mood, and sprite
 //   buddy_rename       — Give your buddy a custom name (persisted to ~/.kbot/buddy.json)
 //   buddy_achievements — Show all achievements with unlock status and progress
+//   buddy_personality  — Show species personality traits, style, and strength
 
 import { registerTool } from './index.js'
 import {
@@ -15,10 +16,11 @@ import {
   renameBuddy,
   getAchievements,
   getAchievementProgress,
+  getSpeciesPersonality,
   type BuddyMood,
 } from '../buddy.js'
 
-const VALID_MOODS: BuddyMood[] = ['idle', 'thinking', 'success', 'error', 'learning']
+const VALID_MOODS: BuddyMood[] = ['idle', 'thinking', 'success', 'error', 'learning', 'alert', 'dance', 'curious', 'proud']
 
 export function registerBuddyTools(): void {
   registerTool({
@@ -27,7 +29,7 @@ export function registerBuddyTools(): void {
     parameters: {
       mood: {
         type: 'string',
-        description: 'Preview a specific mood: idle, thinking, success, error, learning. Defaults to current mood.',
+        description: 'Preview a specific mood: idle, thinking, success, error, learning, alert, dance, curious, proud. Defaults to current mood.',
       },
     },
     tier: 'free',
@@ -120,6 +122,29 @@ export function registerBuddyTools(): void {
       }
 
       return lines.join('\n')
+    },
+  })
+
+  registerTool({
+    name: 'buddy_personality',
+    description: 'Show your buddy\'s species personality — trait, communication style, and unique strength. Each species has a distinct personality that influences how your buddy responds.',
+    parameters: {},
+    tier: 'free',
+    async execute() {
+      const buddy = getBuddy()
+      const personality = getSpeciesPersonality()
+      const sprite = getBuddySprite().join('\n')
+
+      return [
+        `=== ${buddy.name}'s Personality ===`,
+        '',
+        sprite,
+        '',
+        `Species: ${personality.species}`,
+        `Trait: ${personality.trait}`,
+        `Style: ${personality.style}`,
+        `Strength: ${personality.strength}`,
+      ].join('\n')
     },
   })
 }

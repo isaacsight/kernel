@@ -40,7 +40,7 @@ import {
 } from './learning.js'
 import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory, destroySession } from './memory.js'
 import { getDreamPrompt, dreamAfterSession } from './dream.js'
-import { setBuddyMood, addBuddyXP, checkAchievements, formatAchievementUnlock } from './buddy.js'
+import { setBuddyMood, reactToToolOutput, addBuddyXP, checkAchievements, formatAchievementUnlock } from './buddy.js'
 import { notifyTurn, startMemoryScanner, stopMemoryScanner } from './memory-scanner.js'
 import { captureUserBehavior } from './user-behavior.js'
 import { autoCompact, compressToolResult, type ConversationTurn } from './context-manager.js'
@@ -1770,8 +1770,8 @@ Always quote file paths that contain spaces. Never reference internal system nam
         results.push(result)
         ui.onToolCallEnd(call.name, result.result, result.error ? result.result : undefined, result.duration_ms)
 
-        // Update buddy mood based on tool outcome
-        setBuddyMood(result.error ? 'error' : 'success')
+        // Update buddy mood based on tool outcome (content-aware reactions)
+        reactToToolOutput(call.name, !result.error)
 
         // ── Observer: record tool call for cross-session learning ──
         try {
@@ -1879,9 +1879,12 @@ Always quote file paths that contain spaces. Never reference internal system nam
 
   // ── Achievements: check for newly unlocked milestones ──
   const newAchievements = checkAchievements()
-  for (const achievement of newAchievements) {
-    // Print to stderr so it doesn't interfere with piped output
-    process.stderr.write('\n' + formatAchievementUnlock(achievement) + '\n\n')
+  if (newAchievements.length > 0) {
+    setBuddyMood('proud')
+    for (const achievement of newAchievements) {
+      // Print to stderr so it doesn't interfere with piped output
+      process.stderr.write('\n' + formatAchievementUnlock(achievement) + '\n\n')
+    }
   }
 
   // Session complete — buddy returns to idle

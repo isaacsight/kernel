@@ -20,7 +20,7 @@ import { getToolMetrics } from './tools/index.js'
 // ── Types ──
 
 export type BuddySpecies = 'fox' | 'owl' | 'cat' | 'robot' | 'ghost' | 'mushroom' | 'octopus' | 'dragon'
-export type BuddyMood = 'idle' | 'thinking' | 'success' | 'error' | 'learning'
+export type BuddyMood = 'idle' | 'thinking' | 'success' | 'error' | 'learning' | 'alert' | 'dance' | 'curious' | 'proud'
 export type BuddyLevel = 0 | 1 | 2 | 3
 
 export interface BuddyEvolution {
@@ -126,7 +126,7 @@ const LEVEL_TITLES: Record<BuddySpecies, Record<BuddyLevel, string>> = {
 // Each sprite is an array of strings (lines). Max 5 lines, max 15 chars wide.
 // Pure ASCII only — no unicode box drawing.
 
-const SPRITES: Record<BuddySpecies, Record<BuddyMood, string[]>> = {
+const SPRITES: Record<BuddySpecies, Partial<Record<BuddyMood, string[]>>> = {
   fox: {
     idle: [
       '  /\\   /\\  ',
@@ -430,7 +430,7 @@ const SPRITES: Record<BuddySpecies, Record<BuddyMood, string[]>> = {
 // Level 0 = base sprites. Levels 1-3 add sparkles, upgraded features, crowns.
 
 function applySpriteEvolution(species: BuddySpecies, mood: BuddyMood, level: BuddyLevel): string[] {
-  const base = SPRITES[species][mood].map(l => l)
+  const base = (SPRITES[species]?.[mood] ?? SPRITES[species]?.['idle'] ?? [' ', ' ', ' ', ' ', ' ']).map(l => l)
   if (level === 0) return base
 
   switch (species) {
@@ -521,7 +521,7 @@ const GREETINGS: Record<BuddySpecies, string[]> = {
 
 // ── Mood messages ──
 
-const MOOD_MESSAGES: Record<BuddyMood, string[]> = {
+const MOOD_MESSAGES: Partial<Record<BuddyMood, string[]>> = {
   idle: ['Just hanging out.', 'Waiting for action.', 'Idle but alert.'],
   thinking: ['Hmm, thinking...', 'Processing...', 'Working on it...'],
   success: ['Nailed it!', 'That worked!', 'Nice one!'],
@@ -980,11 +980,22 @@ export function setBuddyMood(mood: BuddyMood): void {
 
 /** Get the ASCII sprite for the buddy in the given mood (defaults to current).
  *  Applies evolution visual upgrades based on the buddy's current level. */
+/** Map extended moods to base sprite moods (until full sprites are added) */
+function resolveSpriteMood(mood: BuddyMood): 'idle' | 'thinking' | 'success' | 'error' | 'learning' {
+  switch (mood) {
+    case 'alert': return 'error'
+    case 'dance': return 'success'
+    case 'curious': return 'thinking'
+    case 'proud': return 'success'
+    default: return mood
+  }
+}
+
 export function getBuddySprite(mood?: BuddyMood): string[] {
   const m = mood ?? currentMood
   const species = resolveSpecies()
   const evo = resolveEvolution()
-  return applySpriteEvolution(species, m, evo.level)
+  return applySpriteEvolution(species, resolveSpriteMood(m), evo.level)
 }
 
 /** Get a random greeting for the buddy */
@@ -1067,7 +1078,7 @@ export function getBuddyLevel(): BuddyLevelInfo {
 
 /** Pick a random message for the current mood */
 function moodMessage(): string {
-  const msgs = MOOD_MESSAGES[currentMood]
+  const msgs = MOOD_MESSAGES[currentMood] ?? MOOD_MESSAGES['idle'] ?? ['...']
   return msgs[Math.floor(Math.random() * msgs.length)]
 }
 
@@ -1335,6 +1346,36 @@ function buildBuddyChatSystemPrompt(): string {
   )
 
   return parts.join('\n')
+}
+
+// ── Reactions: map tool outputs to moods ──
+
+const SECURITY_TOOLS = new Set(['repo_audit', 'secret_scan', 'pentest_start', 'pentest_vuln_scan', 'pentest_recon', 'redteam_scan', 'owasp_check', 'ssl_check', 'cors_check', 'headers_check', 'cve_lookup', 'exploit_search'])
+const DEPLOY_TOOLS = new Set(['deploy', 'deploy_all', 'git_push', 'npm_publish', 'build_run', 'test_run', 'run_tests'])
+const DREAM_TOOLS = new Set(['dream_now', 'dream_status', 'dream_journal'])
+
+export function reactToToolOutput(toolName: string, success: boolean): void {
+  if (!success) { setBuddyMood('error'); return }
+  if (SECURITY_TOOLS.has(toolName)) { setBuddyMood('alert'); return }
+  if (DEPLOY_TOOLS.has(toolName)) { setBuddyMood('dance'); return }
+  if (DREAM_TOOLS.has(toolName)) { setBuddyMood('curious'); return }
+  if (toolName === 'buddy_achievements') { setBuddyMood('proud'); return }
+  setBuddyMood('success')
+}
+
+export function getSpeciesPersonality(): { species: BuddySpecies; trait: string; style: string; strength: string } {
+  const buddy = getBuddy()
+  const traits: Record<BuddySpecies, { trait: string; style: string; strength: string }> = {
+    fox: { trait: 'clever', style: 'playful', strength: 'unexpected connections' },
+    owl: { trait: 'wise', style: 'measured', strength: 'pattern recognition' },
+    cat: { trait: 'independent', style: 'direct', strength: 'honest feedback' },
+    robot: { trait: 'systematic', style: 'efficient', strength: 'data-driven' },
+    ghost: { trait: 'mysterious', style: 'philosophical', strength: 'deep questions' },
+    mushroom: { trait: 'nurturing', style: 'patient', strength: 'growth mindset' },
+    octopus: { trait: 'versatile', style: 'creative', strength: 'multi-perspective' },
+    dragon: { trait: 'bold', style: 'ambitious', strength: 'big thinking' },
+  }
+  return { species: buddy.species, ...traits[buddy.species] }
 }
 
 export async function buddyChat(): Promise<void> {
