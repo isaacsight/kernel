@@ -1,6 +1,12 @@
 {
-  "timestamp": "2026-04-02T16:16:34.129Z",
+  "timestamp": "2026-04-02T16:16:39.940Z",
   "projects": [
+    {
+      "name": "openops-cloud/openops",
+      "url": "https://github.com/openops-cloud/openops",
+      "stars": 1012,
+      "description": "The batteries-included, No-Code FinOps automation platform, with the AI you trust."
+    },
     {
       "name": "clawwork-ai/ClawWork",
       "url": "https://github.com/clawwork-ai/ClawWork",
@@ -10,14 +16,8 @@
     {
       "name": "jackwener/opencli",
       "url": "https://github.com/jackwener/opencli",
-      "stars": 11349,
+      "stars": 11350,
       "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
-    },
-    {
-      "name": "inkeep/agents",
-      "url": "https://github.com/inkeep/agents",
-      "stars": 1042,
-      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
     },
     {
       "name": "Ruya-AI/cozempic",
