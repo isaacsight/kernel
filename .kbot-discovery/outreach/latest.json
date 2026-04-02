@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T16:13:28.567Z",
+  "timestamp": "2026-04-02T16:13:46.731Z",
   "projects": [
     {
       "name": "jackwener/opencli",
@@ -18,6 +18,42 @@
       "url": "https://github.com/CherryHQ/cherry-studio",
       "stars": 42779,
       "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+    },
+    {
+      "name": "Ruya-AI/cozempic",
+      "url": "https://github.com/Ruya-AI/cozempic",
+      "stars": 185,
+      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
+    },
+    {
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 363,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+    },
+    {
+      "name": "Panniantong/Agent-Reach",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "stars": 14551,
+      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
+    },
+    {
+      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
+      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
+      "stars": 0,
+      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+    },
+    {
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
+      "stars": 0,
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+    },
+    {
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "stars": 0,
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     }
   ],
   "latestPaper": {
