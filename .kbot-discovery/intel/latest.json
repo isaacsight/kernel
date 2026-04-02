@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T08:08:13.144Z",
+  "timestamp": "2026-04-02T08:26:27.780Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -95,11 +95,11 @@
           "created_at_i": 1775054428,
           "num_comments": 9,
           "objectID": "47601608",
-          "points": 6,
+          "points": 7,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-02T07:44:17Z",
+          "updated_at": "2026-04-02T08:16:17Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
@@ -239,6 +239,7 @@
           ],
           "author": "tordrt",
           "children": [
+            47611476,
             47601720,
             47601026,
             47601039,
@@ -274,13 +275,13 @@
           ],
           "created_at": "2026-04-01T12:11:30Z",
           "created_at_i": 1775045490,
-          "num_comments": 49,
+          "num_comments": 50,
           "objectID": "47599771",
           "points": 61,
           "story_id": 47599771,
           "story_text": "Hi,<p>I built this because running multiple Claude Code agents across multiple IDE and terminal windows was getting messy. Like many, I went from working at one thing at the time, to multiple, and it was all changing quite fast.<p>I needed one place to see all my agents and worktrees, seamlessly switch between them, monitor their status and once their done, review their changes. I also wanted to quickly spin up new agents in isolated worktrees whenever an idea came to mind.<p>I&#x27;ve been building Baton from within Baton for a while now, which has been a pretty fun loop. Would love to hear what you think!",
           "title": "Show HN: Baton – A desktop app for developing with AI agents",
-          "updated_at": "2026-04-02T08:04:16Z",
+          "updated_at": "2026-04-02T08:20:31Z",
           "url": "https://getbaton.dev/"
         }
       ]
@@ -630,56 +631,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "desmonding"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS <em>learning</em> queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week's HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it's useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif/sans-serif, line spacing).<p>- On-device <em>AI</em> summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic/Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla's Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I'd love feedback — especially on the smart <em>collection</em> criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https://apps.apple.com/us/app/moji-reader/id6758530352\">https://apps.apple.com/us/app/moji-reader/id6758530352</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Moji – A read-it-later app with self-organizing smart collections"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://moji.pcding.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_desmonding",
-            "story_47269562",
-            "show_hn"
-          ],
-          "author": "desmonding",
-          "children": [
-            47274551,
-            47271615
-          ],
-          "created_at": "2026-03-06T01:18:48Z",
-          "created_at_i": 1772759928,
-          "num_comments": 4,
-          "objectID": "47269562",
-          "points": 12,
-          "story_id": 47269562,
-          "story_text": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS learning queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week&#x27;s HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it&#x27;s useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif&#x2F;sans-serif, line spacing).<p>- On-device AI summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic&#x2F;Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla&#x27;s Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I&#x27;d love feedback — especially on the smart collection criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352\">https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352</a>",
-          "title": "Show HN: Moji – A read-it-later app with self-organizing smart collections",
-          "updated_at": "2026-03-15T19:14:50Z",
-          "url": "https://moji.pcding.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "team_dale"
             },
             "story_text": {
@@ -782,7 +733,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "atomicrobokid"
+              "value": "wingscape"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -792,36 +743,79 @@
                 "learning",
                 "ai"
               ],
-              "value": "I built DayLeet because I’ve always felt that engineers should keep their logic and communication skills sharp, even when they aren't looking for a job.<p>I’m definitely not a competitive programmer, I’m a product person at heart, but I enjoy the puzzle-solving side of our field. Most platforms focus on the &quot;grind&quot; of interview prep (certainly important) but I wanted to build something that felt more like a daily habit (think Duolingo) for sharpening your technical logic and how you explain it.<p>The Concept: It’s a <em>collection</em> of 400+ whiteboard-style challenges. Instead of just checking if your code runs, I’m using Gemini 3 Flash to grade you against a rubric. It looks at your approach, edge cases, and how you communicate trade-offs. I also made some cool &quot;Peer Review&quot; scenarios where you chat with a peer reviewing their code.<p>The goal isn't just to &quot;solve it,&quot; but to keep that &quot;whiteboard muscle&quot; healthy. I also added some university-specific tracks (MIT 6.006, Stanford CS161) just because I thought they were a great way to revisit foundational logic.<p>The Tech: React 19, TanStack Router/Query, Supabase, and Tailwind.<p>I jumped on this now because Gemini 3 Flash is finally at a point where fast, cost-effective <em>AI</em> grading feels viable for a side project. Free accounts will come with ads to support (eventually).<p>Testing the waters: I’m still refining the <em>AI</em> feedback and the challenge difficulty, so I’m keeping the group small for now. I’ve opened spots for the HN community to skip the waitlist and get 6 months of premium for free as a thanks for trying it out, plus a cool HN Badge for your profile.<p>Link: <a href=\"https://dayleet.com\" rel=\"nofollow\">https://dayleet.com</a> Code: SHOWHN26\nSign up form: <a href=\"https://dayleet.com/signup?invite=SHOWHN26\" rel=\"nofollow\">https://dayleet.com/signup?invite=SHOWHN26</a><p>I’d love to hear your thoughts on the quality of the <em>AI</em> grading. Does it actually help you think through the problem, or does it feel like a gimmick? I'm building this to help myself get better at algorithmic thinking this year as <em>AI</em> can do more of the heavy lifting with code, so I'm interested in any feedback that makes it a better <em>learning</em> tool.<p>I'll be around to chat!"
+              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: DayLeet – A daily habit for sharpening whiteboard logic"
+              "value": "Show HN: Urban Pipeline for Citywide Insights"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://dayleet.com/"
+              "value": "https://github.com/Wingscape/urban-pipeline"
             }
           },
           "_tags": [
             "story",
-            "author_atomicrobokid",
-            "story_46491112",
+            "author_wingscape",
+            "story_44550988",
             "show_hn"
           ],
-          "author": "atomicrobokid",
-          "created_at": "2026-01-04T19:08:37Z",
-          "created_at_i": 1767553717,
+          "author": "wingscape",
+          "created_at": "2025-07-13T15:11:34Z",
+          "created_at_i": 1752419494,
           "num_comments": 0,
-          "objectID": "46491112",
-          "points": 2,
-          "story_id": 46491112,
-          "story_text": "I built DayLeet because I’ve always felt that engineers should keep their logic and communication skills sharp, even when they aren&#x27;t looking for a job.<p>I’m definitely not a competitive programmer, I’m a product person at heart, but I enjoy the puzzle-solving side of our field. Most platforms focus on the &quot;grind&quot; of interview prep (certainly important) but I wanted to build something that felt more like a daily habit (think Duolingo) for sharpening your technical logic and how you explain it.<p>The Concept: It’s a collection of 400+ whiteboard-style challenges. Instead of just checking if your code runs, I’m using Gemini 3 Flash to grade you against a rubric. It looks at your approach, edge cases, and how you communicate trade-offs. I also made some cool &quot;Peer Review&quot; scenarios where you chat with a peer reviewing their code.<p>The goal isn&#x27;t just to &quot;solve it,&quot; but to keep that &quot;whiteboard muscle&quot; healthy. I also added some university-specific tracks (MIT 6.006, Stanford CS161) just because I thought they were a great way to revisit foundational logic.<p>The Tech: React 19, TanStack Router&#x2F;Query, Supabase, and Tailwind.<p>I jumped on this now because Gemini 3 Flash is finally at a point where fast, cost-effective AI grading feels viable for a side project. Free accounts will come with ads to support (eventually).<p>Testing the waters: I’m still refining the AI feedback and the challenge difficulty, so I’m keeping the group small for now. I’ve opened spots for the HN community to skip the waitlist and get 6 months of premium for free as a thanks for trying it out, plus a cool HN Badge for your profile.<p>Link: <a href=\"https:&#x2F;&#x2F;dayleet.com\" rel=\"nofollow\">https:&#x2F;&#x2F;dayleet.com</a> Code: SHOWHN26\nSign up form: <a href=\"https:&#x2F;&#x2F;dayleet.com&#x2F;signup?invite=SHOWHN26\" rel=\"nofollow\">https:&#x2F;&#x2F;dayleet.com&#x2F;signup?invite=SHOWHN26</a><p>I’d love to hear your thoughts on the quality of the AI grading. Does it actually help you think through the problem, or does it feel like a gimmick? I&#x27;m building this to help myself get better at algorithmic thinking this year as AI can do more of the heavy lifting with code, so I&#x27;m interested in any feedback that makes it a better learning tool.<p>I&#x27;ll be around to chat!",
-          "title": "Show HN: DayLeet – A daily habit for sharpening whiteboard logic",
-          "updated_at": "2026-03-05T23:19:29Z",
-          "url": "https://dayleet.com/"
+          "objectID": "44550988",
+          "points": 3,
+          "story_id": 44550988,
+          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
+          "title": "Show HN: Urban Pipeline for Citywide Insights",
+          "updated_at": "2025-07-13T22:27:35Z",
+          "url": "https://github.com/Wingscape/urban-pipeline"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "cyberneticc"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Deepseek shows cognitive augmentation will be open source"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_cyberneticc",
+            "story_43019170",
+            "ask_hn"
+          ],
+          "author": "cyberneticc",
+          "children": [
+            43019203
+          ],
+          "created_at": "2025-02-11T22:26:27Z",
+          "created_at_i": 1739312787,
+          "num_comments": 2,
+          "objectID": "43019170",
+          "points": 4,
+          "story_id": 43019170,
+          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
+          "title": "Deepseek shows cognitive augmentation will be open source",
+          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
@@ -1031,7 +1025,7 @@
           "story_id": 47605552,
           "story_text": "I heard people describe Harvey as the cursor for lawyers. i never used it myself but i imagine it brings AI directly to where lawyers work to read, write and edit docx files similar to what Cursor does to code &#x2F; text files in VSCode?<p>It seems like their product isn&#x27;t like Cursor where you can just download and play. I also heard people say its hard to book a demo with Harvey if you&#x27;re not a big law firm.<p>Why is this the case?<p>Was this a capability&#x2F;cost constraint on LLM models around 2023? Which means today&#x27;s startup can make a different set of choices? Does big law firms operate in a way that are completely different? Or is this founder&#x27;s preference?",
           "title": "Why did Harvey choose a top-down enterprise GTM while Cursor went bottom-up?",
-          "updated_at": "2026-04-02T02:49:01Z"
+          "updated_at": "2026-04-02T08:24:46Z"
         }
       ]
     },
@@ -2363,11 +2357,11 @@
           "created_at_i": 1775054428,
           "num_comments": 9,
           "objectID": "47601608",
-          "points": 6,
+          "points": 7,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-02T07:44:17Z",
+          "updated_at": "2026-04-02T08:16:17Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
