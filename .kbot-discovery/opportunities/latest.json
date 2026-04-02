@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T15:46:01.050Z",
+  "timestamp": "2026-04-02T16:13:20.824Z",
   "count": 30,
   "opportunities": [
     {
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "Terminal UI for exploring OpenCode/Claude/Codex/etc coding sessions",
+      "url": "https://reddit.com/r/commandline/comments/1salbl6/terminal_ui_for_exploring_opencodeclaudecodexetc/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "Sheets: a terminal based spreadsheet tool",
       "url": "https://reddit.com/r/commandline/comments/1sah35v/sheets_a_terminal_based_spreadsheet_tool/",
       "why": "Discussion in r/commandline about AI agents",
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "I created my own desktop terminal app — local, fast, multiplatform 😎",
       "url": "https://reddit.com/r/commandline/comments/1s9tld3/i_created_my_own_desktop_terminal_app_local_fast/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "So i tried Karis CLI",
-      "url": "https://reddit.com/r/commandline/comments/1s90ntr/so_i_tried_karis_cli/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
