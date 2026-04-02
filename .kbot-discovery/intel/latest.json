@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T15:45:57.035Z",
+  "timestamp": "2026-04-02T16:13:18.285Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -848,15 +848,18 @@
             "show_hn"
           ],
           "author": "akadhanu",
+          "children": [
+            47616202
+          ],
           "created_at": "2026-04-02T15:35:20Z",
           "created_at_i": 1775144120,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47615874",
           "points": 1,
           "story_id": 47615874,
           "story_text": "I got tired of LLM outputs silently failing in pipelines, so I built a small scoring layer around it.<p>It checks three things before your output moves forward: does it match the schema you expected is it consistent across runs\ndoes it actually align with the context you provided<p>Returns a confidence score and a risk level. That&#x27;s mostly it.<p>Works with OpenAI, Anthropic, Gemini, Ollama and a few others. Sync and async both supported.\nIt&#x27;s heuristic, not a guarantee. If your context is bad, the scores will be too. Hit a star, if you found this useful.<p>Try now: pip install hallx",
           "title": "Show HN: Hallx – Hallucination risk scoring for LLM outputs",
-          "updated_at": "2026-04-02T15:37:04Z",
+          "updated_at": "2026-04-02T15:57:50Z",
           "url": "https://github.com/dhanushk-offl/hallx"
         },
         {
@@ -896,11 +899,11 @@
           "created_at_i": 1775144107,
           "num_comments": 0,
           "objectID": "47615871",
-          "points": 1,
+          "points": 2,
           "story_id": 47615871,
           "story_text": "Apple&#x27;s Calendar app has had an API for adding video call links to events for years now, but it is a bit squirrelly, and Google&#x2F;Zoom can&#x27;t be bothered to integrate with it. So, instead of just trying to make all my work meetings use FaceTime, I made an app to provide plugins for Calendar.app and integrate against Meet&#x2F;Zoom APIs. I&#x27;ve taken a couple of looks at this previously, but actually built it this time and got it through Google and App Store review. Still waiting on Zoom review (that&#x27;ll be v1.1). Does exactly what it says on the tin and no more. Hoping there are still some other macOS Calendar.app users out there to appreciate this.",
           "title": "Show HN: I use macOS calendar and have calls. MeetLink adds vid links to events",
-          "updated_at": "2026-04-02T15:37:04Z",
+          "updated_at": "2026-04-02T16:06:34Z",
           "url": "https://meetlink.nicemohawk.com/"
         },
         {
@@ -940,11 +943,11 @@
           "created_at_i": 1775143965,
           "num_comments": 0,
           "objectID": "47615844",
-          "points": 2,
+          "points": 6,
           "story_id": 47615844,
           "story_text": "Hello HN,<p>I have been working on a desktop P2P messenger called Kiyeovo for the last ~8 months, and I just published its beta version.<p>Quick backstory: It started out as a CLI application for my Graduate Thesis, where I tried to make the most secure and private messenger application possible. Then, I transformed it into a desktop application, gave it &quot;clearnet&quot; support and added a bunch of features.<p>Short summary:<p>The app runs in 2 completely isolated modes:<p>- fast mode: relay&#x2F;DCUtR -&gt; lower latency, calls support<p>- anonymous mode: Tor message routing -&gt; slower, anonymous<p>These modes use different protocol IDs, DHT namespaces, pubsub topics and storage scopes so there’s no data crossover between them.<p>Messaging works peer-to-peer when both parties are online, but falls back to DHT &quot;offline buckets&quot; when one of them is not. To ensure robustness, messages are ACK-ed and deleted after being read.<p>Group chats use GossipSub for realtime messaging. Group messages are also saved to offline buckets in order for offline users to be able to read them upon logging in. Kick&#x2F;Join&#x2F;Leave events are also propagated using the DHT. Group metadata and all offline data is of course encrypted.<p>Other features: Chats are E2E, file sharing is supported, 1:1 audio&#x2F;video calls are supported (only in fast mode though, using WebRTC)<p>Tradeoffs: Tor has noticeable latency, offline delivery is not immediately guaranteed, but rather &quot;eventually consistent&quot;; beta version does not have group calls yet.<p>I’d appreciate feedback, that&#x27;s why I posted this as a beta version<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Realman78&#x2F;Kiyeovo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Realman78&#x2F;Kiyeovo</a>",
           "title": "Show HN: A P2P messenger with dual network modes (Fast and Tor)",
-          "updated_at": "2026-04-02T15:41:51Z",
+          "updated_at": "2026-04-02T16:09:18Z",
           "url": "https://github.com/Realman78/Kiyeovo/"
         },
         {
