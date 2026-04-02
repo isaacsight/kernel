@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T10:24:17.480Z",
+  "timestamp": "2026-04-02T10:52:47.245Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "feat(community): add @tensorfold/openclaw-google-workspace plugin",
+      "url": "https://github.com/openclaw/openclaw/pull/59628",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Daily Content Summary 2026-04-02",
       "url": "https://github.com/jhengy/content-aggregator/issues/444",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "fix(providers): centralize Google endpoint classification",
       "url": "https://github.com/openclaw/openclaw/pull/59556",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Compare to Release 2026.4.1",
-      "url": "https://github.com/Arry8/openclaw-edge/pull/23",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
