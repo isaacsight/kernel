@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-04-02T14:46:03.998Z",
+  "timestamp": "2026-04-02T14:46:17.434Z",
   "projects": [
-    {
-      "name": "activepieces/activepieces",
-      "url": "https://github.com/activepieces/activepieces",
-      "stars": 21523,
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
-    },
     {
       "name": "jackwener/opencli",
       "url": "https://github.com/jackwener/opencli",
-      "stars": 11256,
+      "stars": 11267,
       "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
     },
     {
-      "name": "saturndec/waoowaoo",
-      "url": "https://github.com/saturndec/waoowaoo",
-      "stars": 10755,
-      "description": "首家工业级全流程 AI 影视生产平台。Industry-first professional AI Agent platform for controllable film & video production. From shorts to live-action with Hollywood-standard workflows."
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1058,
+      "description": "the easiest way to run natural language-described workflows automatically"
+    },
+    {
+      "name": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": 20830,
+      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
     },
     {
       "name": "Ruya-AI/cozempic",
@@ -34,7 +34,7 @@
     {
       "name": "Panniantong/Agent-Reach",
       "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 14528,
+      "stars": 14532,
       "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
@@ -57,7 +57,7 @@
     }
   ],
   "latestPaper": {
-    "title": "unknown",
-    "summary": "unknown"
+    "title": "HippoCamp: Benchmarking Contextual Agents on Personal Computers",
+    "summary": "We present HippoCamp, a new benchmark designed to evaluate agents' capabilities on multimodal file management. Unlike existing agent benchmarks that focus on tasks like web interaction, tool use, or software automation in generic settings, HippoCamp evaluates agents in user-centric environments to model individual user profiles and search massive personal files for context-aware reasoning. Our benchmark instantiates device-scale file systems over real-world profiles spanning diverse modalities, "
   }
 }
