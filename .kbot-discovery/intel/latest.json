@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T14:11:58.757Z",
+  "timestamp": "2026-04-02T14:29:52.905Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -50,11 +50,11 @@
           "created_at_i": 1775132800,
           "num_comments": 0,
           "objectID": "47613527",
-          "points": 3,
+          "points": 4,
           "story_id": 47613527,
           "story_text": "Solo dev from Vienna. Skales is a local-first AI desktop agent for Windows, macOS, and Linux.<p>v9.0.0 just shipped with Agent Skills (SKILL.md import from Claude Code, Codex, Copilot), autonomous coding (Codework), multi-agent teams (Organization), Computer Use, and 15+ providers including Ollama offline.<p>No Docker, no terminal. Download, install, done. My 6-year-old built a Snake game with it.<p>BSL-1.1, free for personal use.<p>DevKit: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit</a>",
           "title": "Show HN: Skales – I built a desktop AI agent a 6-year-old can use",
-          "updated_at": "2026-04-02T12:47:48Z",
+          "updated_at": "2026-04-02T14:22:55Z",
           "url": "https://github.com/skalesapp/skales"
         },
         {
@@ -357,9 +357,9 @@
           "author": "piscator",
           "children": [
             47600438,
-            47614223,
             47602371,
             47599966,
+            47614223,
             47600025,
             47599758,
             47601468,
@@ -388,13 +388,13 @@
           ],
           "created_at": "2026-04-01T11:09:03Z",
           "created_at_i": 1775041743,
-          "num_comments": 34,
+          "num_comments": 35,
           "objectID": "47599303",
           "points": 52,
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-02T14:06:03Z"
+          "updated_at": "2026-04-02T14:27:48Z"
         },
         {
           "_highlightResult": {
@@ -806,6 +806,50 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "Doug_Bitterbot"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "We spent the last year architecting a 'Dream Engine' to solve agent statelessness. We used Claude to help refine the logic. We open-sourced the repo on March 28th. On March 31st, the Claude Code leak revealed an internal autoDream feature with the exact same 4-phase consolidation logic.<p>I'm looking for a technical audit of my memory decay logic in core/dream.ts. With 100 nodes already active, I want to ensure the consolidation won't <em>bot</em>tleneck at scale."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Local-first agent memory loop 48hrs before the Claude Code leak"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Bitterbot-AI/bitterbot-desktop"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_Doug_Bitterbot",
+            "story_47614844",
+            "show_hn"
+          ],
+          "author": "Doug_Bitterbot",
+          "created_at": "2026-04-02T14:17:32Z",
+          "created_at_i": 1775139452,
+          "num_comments": 0,
+          "objectID": "47614844",
+          "points": 1,
+          "story_id": 47614844,
+          "story_text": "We spent the last year architecting a &#x27;Dream Engine&#x27; to solve agent statelessness. We used Claude to help refine the logic. We open-sourced the repo on March 28th. On March 31st, the Claude Code leak revealed an internal autoDream feature with the exact same 4-phase consolidation logic.<p>I&#x27;m looking for a technical audit of my memory decay logic in core&#x2F;dream.ts. With 100 nodes already active, I want to ensure the consolidation won&#x27;t bottleneck at scale.",
+          "title": "Show HN: Local-first agent memory loop 48hrs before the Claude Code leak",
+          "updated_at": "2026-04-02T14:18:33Z",
+          "url": "https://github.com/Bitterbot-AI/bitterbot-desktop"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "kent8192"
             },
             "story_text": {
@@ -814,7 +858,7 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Reinhardt is a full-stack web framework for Rust inspired by Django and DRF. It bundles HTTP, ORM, auth, DI, and background tasks into one crate — feature flags let you pull in only what you need (minimal/standard/full), or use individual crates.<p>Published as `reinhardt-web` on crates.io, imported as `reinhardt` in your code.<p>I built it after moving from Django/DRF to Rust and repeatedly assembling the same Axum + ORM + migrations + auth stack.<p>Two things I'd especially like feedback on: a built-in WASM+SSR reactive frontend (Pages), where a DSL-to-Rust codegen step (page!/head!/form! macros) produces <em>bot</em>h client WASM and server HTML from one source; and auto-generated migrations from #[model(...)] definitions.<p>Quickstart is here for anyone who wants to try it immediately: <a href=\"https://reinhardt-web.dev/quickstart/\" rel=\"nofollow\">https://reinhardt-web.dev/quickstart/</a><p>v0.1.0-rc.15 (<a href=\"https://github.com/kent8192/reinhardt-web/releases/tag/reinhardt-web%40v0.1.0-rc.15\" rel=\"nofollow\">https://github.com/kent8192/reinhardt-web/releases/tag/reinh...</a>), BSD 3-Clause. Looking for feedback on the API design, not production use yet."
+              "value": "Reinhardt is a full-stack web framework for Rust inspired by Django and DRF. It bundles HTTP, ORM, auth, DI, and background tasks into one crate — feature flags let you pull in only what you need (minimal/standard/full), or use individual crates.<p>Published as `reinhardt-web` on crates.io, imported as `reinhardt` in your code.<p>I built it after moving from Django/DRF to Rust and repeatedly assembling the same Axum + ORM + migrations + auth stack.<p>Two things I'd especially like feedback on: a built-in WASM+SSR reactive frontend (Pages), where a DSL-to-Rust codegen step (page!/head!/form! macros) produces <em>bot</em>h client WASM and server HTML from one source; and auto-generated migrations from #[model(...)] definitions.<p>Quickstart is here for anyone who wants to try it immediately:\n- Website: <a href=\"https://reinhardt-web.dev\" rel=\"nofollow\">https://reinhardt-web.dev</a>\n- Crates.io: <a href=\"https://crates.io/crates/reinhardt-web\" rel=\"nofollow\">https://crates.io/crates/reinhardt-web</a><p>v0.1.0-rc.15 (<a href=\"https://github.com/kent8192/reinhardt-web/releases/tag/reinhardt-web%40v0.1.0-rc.15\" rel=\"nofollow\">https://github.com/kent8192/reinhardt-web/releases/tag/reinh...</a>), BSD 3-Clause. Looking for feedback on the API design, not production use yet."
             },
             "title": {
               "matchLevel": "none",
@@ -835,17 +879,18 @@
           ],
           "author": "kent8192",
           "children": [
+            47614806,
             47614708
           ],
           "created_at": "2026-04-02T14:07:01Z",
           "created_at_i": 1775138821,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47614697",
           "points": 1,
           "story_id": 47614697,
-          "story_text": "Reinhardt is a full-stack web framework for Rust inspired by Django and DRF. It bundles HTTP, ORM, auth, DI, and background tasks into one crate — feature flags let you pull in only what you need (minimal&#x2F;standard&#x2F;full), or use individual crates.<p>Published as `reinhardt-web` on crates.io, imported as `reinhardt` in your code.<p>I built it after moving from Django&#x2F;DRF to Rust and repeatedly assembling the same Axum + ORM + migrations + auth stack.<p>Two things I&#x27;d especially like feedback on: a built-in WASM+SSR reactive frontend (Pages), where a DSL-to-Rust codegen step (page!&#x2F;head!&#x2F;form! macros) produces both client WASM and server HTML from one source; and auto-generated migrations from #[model(...)] definitions.<p>Quickstart is here for anyone who wants to try it immediately: <a href=\"https:&#x2F;&#x2F;reinhardt-web.dev&#x2F;quickstart&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;reinhardt-web.dev&#x2F;quickstart&#x2F;</a><p>v0.1.0-rc.15 (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;kent8192&#x2F;reinhardt-web&#x2F;releases&#x2F;tag&#x2F;reinhardt-web%40v0.1.0-rc.15\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kent8192&#x2F;reinhardt-web&#x2F;releases&#x2F;tag&#x2F;reinh...</a>), BSD 3-Clause. Looking for feedback on the API design, not production use yet.",
+          "story_text": "Reinhardt is a full-stack web framework for Rust inspired by Django and DRF. It bundles HTTP, ORM, auth, DI, and background tasks into one crate — feature flags let you pull in only what you need (minimal&#x2F;standard&#x2F;full), or use individual crates.<p>Published as `reinhardt-web` on crates.io, imported as `reinhardt` in your code.<p>I built it after moving from Django&#x2F;DRF to Rust and repeatedly assembling the same Axum + ORM + migrations + auth stack.<p>Two things I&#x27;d especially like feedback on: a built-in WASM+SSR reactive frontend (Pages), where a DSL-to-Rust codegen step (page!&#x2F;head!&#x2F;form! macros) produces both client WASM and server HTML from one source; and auto-generated migrations from #[model(...)] definitions.<p>Quickstart is here for anyone who wants to try it immediately:\n- Website: <a href=\"https:&#x2F;&#x2F;reinhardt-web.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;reinhardt-web.dev</a>\n- Crates.io: <a href=\"https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;reinhardt-web\" rel=\"nofollow\">https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;reinhardt-web</a><p>v0.1.0-rc.15 (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;kent8192&#x2F;reinhardt-web&#x2F;releases&#x2F;tag&#x2F;reinhardt-web%40v0.1.0-rc.15\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kent8192&#x2F;reinhardt-web&#x2F;releases&#x2F;tag&#x2F;reinh...</a>), BSD 3-Clause. Looking for feedback on the API design, not production use yet.",
           "title": "Show HN: Reinhardt – Django/DRF-inspired full-stack web framework for Rust",
-          "updated_at": "2026-04-02T14:10:18Z",
+          "updated_at": "2026-04-02T14:20:03Z",
           "url": "https://reinhardt-web.dev/quickstart/"
         },
         {
@@ -968,47 +1013,6 @@
           "title": "A conversation with the creator of TomWikiAssist, the bot that edited Wikipedia",
           "updated_at": "2026-04-02T12:48:33Z",
           "url": "https://www.niemanlab.org/2026/03/i-was-surprised-how-upset-some-people-got-a-conversation-with-the-creator-of-tomwikiassist-the-bot-that-edited-wikipedia/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "basilikum"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Whenever I use an LLM chat <em>bot</em> for anything it always answers with this fake positive corp tone that we all know. And I absolutely hate that. I cannot stand corpo speak and the LLM style makes want to puke. To cut the rant short: How exactly do you stop it from doing this? I do not just mean the style of the response but also the response pattern: making assumptions instead of asking questions, always agreeing with me, having this fake differentiated view on everything, telling me it understood something and then doing the exact opposite.<p>I know I cannot make LLMs more intelligent by prompting, they will always hallucinate and get some things wrong, but I want to at least get it to be less of an asshole about it.<p>So, what do you do? I followed some generic advice like using positive instructions instead of negations, using examples, but I cannot get the corpo slop tone out of it.<p>General advice is welcome, but I'm mostly looking for specific verbatim examples of system prompts that you use."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: How do you get LLMs to stop spewing corpo speak?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_basilikum",
-            "story_47613671",
-            "ask_hn"
-          ],
-          "author": "basilikum",
-          "children": [
-            47613811
-          ],
-          "created_at": "2026-04-02T12:39:39Z",
-          "created_at_i": 1775133579,
-          "num_comments": 0,
-          "objectID": "47613671",
-          "points": 4,
-          "story_id": 47613671,
-          "story_text": "Whenever I use an LLM chat bot for anything it always answers with this fake positive corp tone that we all know. And I absolutely hate that. I cannot stand corpo speak and the LLM style makes want to puke. To cut the rant short: How exactly do you stop it from doing this? I do not just mean the style of the response but also the response pattern: making assumptions instead of asking questions, always agreeing with me, having this fake differentiated view on everything, telling me it understood something and then doing the exact opposite.<p>I know I cannot make LLMs more intelligent by prompting, they will always hallucinate and get some things wrong, but I want to at least get it to be less of an asshole about it.<p>So, what do you do? I followed some generic advice like using positive instructions instead of negations, using examples, but I cannot get the corpo slop tone out of it.<p>General advice is welcome, but I&#x27;m mostly looking for specific verbatim examples of system prompts that you use.",
-          "title": "Ask HN: How do you get LLMs to stop spewing corpo speak?",
-          "updated_at": "2026-04-02T14:02:49Z"
         }
       ]
     },
@@ -2117,7 +2121,7 @@
           "story_id": 47614404,
           "story_text": "I maintain neat-python and have been building a genetic programming framework in Julia. While doing research on that project, I kept finding the same complaint in PySR&#x27;s GitHub discussions: people give up not because symbolic regression doesn&#x27;t work, but because getting Julia talking to Python is a repeated source of failure, especially on Windows and in notebooks.<p>So I stood up Occam (occam.fit) — a hosted MCP server exposing two tools: run_sindy for sparse identification of dynamics from time series (seconds), and run_pysr for evolutionary symbolic regression returning a Pareto front of expressions by complexity vs. accuracy (10–60s).<p>The core design decision is a pool of pre-warmed Julia workers running SymbolicRegression.jl v2. Julia processes stay alive between requests so the 2-minute compilation hit is paid once at server startup, not per call.<p>Free tier, no signup. Happy to answer questions about the architecture or symbolic regression generally, and curious whether anyone has use cases that don&#x27;t fit the current limits.",
           "title": "Show HN: Symbolic regression as an MCP tool (SINDy and PySR, free, no install)",
-          "updated_at": "2026-04-02T14:11:51Z",
+          "updated_at": "2026-04-02T14:12:03Z",
           "url": "https://occam.fit/"
         },
         {
