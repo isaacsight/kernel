@@ -1,28 +1,7 @@
 {
-  "timestamp": "2026-04-02T11:27:26.469Z",
-  "count": 30,
+  "timestamp": "2026-04-02T11:27:34.632Z",
+  "count": 27,
   "opportunities": [
-    {
-      "source": "hn-comment",
-      "title": "Schedule tasks on the web",
-      "url": "https://news.ycombinator.com/item?id=47543679",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Show HN: An open-source safety net for home hemodialysis",
-      "url": "https://news.ycombinator.com/item?id=47460486",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Show HN: Soros – AI for geopolitical macro investing",
-      "url": "https://news.ycombinator.com/item?id=47418557",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
     {
       "source": "hn-comment",
       "title": "Jeriko – an AI agent that runs directly inside your OS",
