@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T11:44:03.688Z",
+  "timestamp": "2026-04-02T12:10:32.349Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -47,13 +47,13 @@
           ],
           "created_at": "2026-04-02T09:24:09Z",
           "created_at_i": 1775121849,
-          "num_comments": 1,
+          "num_comments": 2,
           "objectID": "47611994",
           "points": 9,
           "story_id": 47611994,
           "story_text": "I built Extra Platforms over the past 5 years because I kept writing the same detection boilerplate over and over. And also because Python&#x27;s original platform.linux_distribution() function has been removed in Python 3.8. Its replacement, Distro, only covers Linux.<p>It detects six traits (CPU architecture, OS&#x2F;distribution, shell, terminal, CI, agents), which are grouped into families (BSD, LINUX, UNIX, ...) for convenience.<p>You can try the library without installing anything:<p><pre><code>  $ uvx --with extra-platforms python\n  &gt;&gt;&gt; from extra_platforms import current_platform, BSD, is_linux\n  &gt;&gt;&gt; current_platform()\n  Platform(id=&#x27;macos&#x27;, name=&#x27;macOS&#x27;)\n  &gt;&gt;&gt; current_platform() in BSD\n  True\n  &gt;&gt;&gt; is_linux()\n  False\n</code></pre>\nIt also ships Pytest decorators (@skip_linux, @unless_macos) for platform-conditional tests.<p>The library has zero dependencies and is Apache-2.0 licensed.<p>I&#x27;m interested in collecting edge cases, which you can send me by performing an auto-detection with:<p><pre><code>  $ uvx extra-platforms</code></pre>",
           "title": "Show HN: Extra-Platforms, Python library to detect OS, arch, shell, CI, AI",
-          "updated_at": "2026-04-02T11:23:17Z",
+          "updated_at": "2026-04-02T12:03:32Z",
           "url": "https://github.com/kdeldycke/extra-platforms"
         },
         {
@@ -349,11 +349,11 @@
           "author": "piscator",
           "children": [
             47600438,
-            47612850,
             47602371,
             47599966,
-            47612172,
+            47612850,
             47600025,
+            47612172,
             47599758,
             47601468,
             47600185,
@@ -385,7 +385,7 @@
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-02T11:34:32Z"
+          "updated_at": "2026-04-02T12:00:33Z"
         },
         {
           "_highlightResult": {
@@ -811,49 +811,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "throwaw12"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Another post got flagged: https://news.ycombinator.com/item?id=47612053<p>@dang, everytime, new post comes in and shows technical content relevant to Israel's genocide or suffering in Gaza, content gets flagged, isn't it clear that <em>bot</em>s and pro-Israelis heavily skew the downvotes?<p>There are many non-sense show hn, AI for the sake of AI content or pages generated by AI with no meaningful input to the society, but they don't get flagged."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Please stop flagging everything going against Israel"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_throwaw12",
-            "story_47612289",
-            "ask_hn"
-          ],
-          "author": "throwaw12",
-          "children": [
-            47612431,
-            47612547,
-            47612315
-          ],
-          "created_at": "2026-04-02T10:03:02Z",
-          "created_at_i": 1775124182,
-          "num_comments": 4,
-          "objectID": "47612289",
-          "points": 13,
-          "story_id": 47612289,
-          "story_text": "Another post got flagged: https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47612053<p>@dang, everytime, new post comes in and shows technical content relevant to Israel&#x27;s genocide or suffering in Gaza, content gets flagged, isn&#x27;t it clear that bots and pro-Israelis heavily skew the downvotes?<p>There are many non-sense show hn, AI for the sake of AI content or pages generated by AI with no meaningful input to the society, but they don&#x27;t get flagged.",
-          "title": "Please stop flagging everything going against Israel",
-          "updated_at": "2026-04-02T11:42:02Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "shreedx"
             },
             "story_text": {
@@ -1017,6 +974,43 @@
           "title": "Show HN: Sixteen year trends in AI doom on HN",
           "updated_at": "2026-04-02T01:44:01Z",
           "url": "https://hn.ai-doom.cc/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "rglover"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Cline Kanban"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://cline.<em>bot</em>/blog/announcing-kanban"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_rglover",
+            "story_47606934"
+          ],
+          "author": "rglover",
+          "created_at": "2026-04-01T21:46:18Z",
+          "created_at_i": 1775079978,
+          "num_comments": 0,
+          "objectID": "47606934",
+          "points": 1,
+          "story_id": 47606934,
+          "title": "Cline Kanban",
+          "updated_at": "2026-04-01T21:47:01Z",
+          "url": "https://cline.bot/blog/announcing-kanban"
         }
       ]
     },
@@ -2040,6 +2034,53 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "hermanekt"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Show HN: Zabbix <em>MCP</em> <em>Server</em> – 225 <em>tools</em> to let AI agents manage Zabbix monitoring"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "https://github.com/initMAX/zabbix-<em>mcp</em>-<em>server</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_hermanekt",
+            "story_47613290",
+            "show_hn"
+          ],
+          "author": "hermanekt",
+          "children": [
+            47613291
+          ],
+          "created_at": "2026-04-02T12:03:44Z",
+          "created_at_i": 1775131424,
+          "num_comments": 0,
+          "objectID": "47613290",
+          "points": 2,
+          "story_id": 47613290,
+          "title": "Show HN: Zabbix MCP Server – 225 tools to let AI agents manage Zabbix monitoring",
+          "updated_at": "2026-04-02T12:09:02Z",
+          "url": "https://github.com/initMAX/zabbix-mcp-server"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "allan_s"
             },
             "story_text": {
@@ -2226,78 +2267,6 @@
           "title": "Show HN: Docs over SSH for Agents",
           "updated_at": "2026-04-02T09:46:17Z",
           "url": "https://github.com/supabase-community/supabase-ssh"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "simple10"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "This project (Agents Observe) started as an exploration into building automation harnesses around claude code. I needed a way to see exactly what teams of agents were doing in realtime and to filter and search their output.<p>A few interesting learnings from building and using this:<p>- Claude code hooks are blocking - performance degrades rapidly if you have a lot of plugins that use hooks<p>- Hooks provide a lot more useful info than OTEL data<p>- Claude's jsonl files provide the full picture<p>- Lifecycle management of <em>MCP</em> processes started by plugins is a bit kludgy at best<p>The biggest takeaway is how much of a difference it made in claude performance when I switched to background (fire and forget) hooks and removed all other plugins. It's easy to forget how many claude plugins I've installed and how they effect performance.<p>The Agents Observe plugin uses docker to start the API and dashboard service. This is a pattern I'd love to see used more often for security (think Axios hack) reasons. The tricky bit was handling process management across multiple claude instances - the solution was to have the <em>server</em> track active connections then auto shut itself down when not in use. Then the plugin spins it back up when a new session is started.<p>This <em>tool</em> has been incredibly useful for my own daily workflow. Enjoy!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Real-time dashboard for Claude Code agent teams"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/simple10/agents-observe"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_simple10",
-            "story_47602986",
-            "show_hn"
-          ],
-          "author": "simple10",
-          "children": [
-            47604127,
-            47603964,
-            47604921,
-            47606242,
-            47605971,
-            47606826,
-            47603804,
-            47604358,
-            47603040,
-            47612460,
-            47610671,
-            47609150,
-            47605724,
-            47605779,
-            47604648,
-            47606126,
-            47604527,
-            47606110,
-            47604752,
-            47604406,
-            47603871,
-            47604371,
-            47606068,
-            47603574
-          ],
-          "created_at": "2026-04-01T16:24:28Z",
-          "created_at_i": 1775060668,
-          "num_comments": 22,
-          "objectID": "47602986",
-          "points": 71,
-          "story_id": 47602986,
-          "story_text": "This project (Agents Observe) started as an exploration into building automation harnesses around claude code. I needed a way to see exactly what teams of agents were doing in realtime and to filter and search their output.<p>A few interesting learnings from building and using this:<p>- Claude code hooks are blocking - performance degrades rapidly if you have a lot of plugins that use hooks<p>- Hooks provide a lot more useful info than OTEL data<p>- Claude&#x27;s jsonl files provide the full picture<p>- Lifecycle management of MCP processes started by plugins is a bit kludgy at best<p>The biggest takeaway is how much of a difference it made in claude performance when I switched to background (fire and forget) hooks and removed all other plugins. It&#x27;s easy to forget how many claude plugins I&#x27;ve installed and how they effect performance.<p>The Agents Observe plugin uses docker to start the API and dashboard service. This is a pattern I&#x27;d love to see used more often for security (think Axios hack) reasons. The tricky bit was handling process management across multiple claude instances - the solution was to have the server track active connections then auto shut itself down when not in use. Then the plugin spins it back up when a new session is started.<p>This tool has been incredibly useful for my own daily workflow. Enjoy!",
-          "title": "Show HN: Real-time dashboard for Claude Code agent teams",
-          "updated_at": "2026-04-02T10:30:32Z",
-          "url": "https://github.com/simple10/agents-observe"
         }
       ]
     },
