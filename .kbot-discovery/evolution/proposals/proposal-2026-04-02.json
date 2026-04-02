@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T16:29:12.837Z",
+  "timestamp": "2026-04-02T16:29:40.445Z",
   "cycle": 18,
   "observations": {
     "pulsesCollected": 50,
@@ -8,8 +8,8 @@
     "hnComments": 0
   },
   "improvement": {
-    "description": "NEW TOOL: Discover and list available AI agents from online registries.",
-    "status": "NOT APPLIED"
+    "description": "NEW TOOL: Allows agents to solicit and incorporate user feedback.",
+    "status": "APPLIED — passed type-check + tests"
   },
   "feedback": {
     "totalSuccesses": 2,
