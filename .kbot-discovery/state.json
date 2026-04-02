@@ -1,14 +1,14 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-04-02T09:07:37.961Z",
-    "intel": "2026-04-02T09:07:42.308Z",
-    "outreach": "2026-04-02T16:14:53.793Z",
+    "pulse": "2026-04-02T09:23:42.209Z",
+    "intel": "2026-04-02T09:23:46.824Z",
+    "outreach": "2026-04-02T16:15:06.413Z",
     "writing": "2026-04-01T18:09:27.655Z",
-    "evolution": "2026-04-02T16:30:39.270Z",
-    "opportunities": "2026-04-02T09:07:50.334Z",
-    "actions": "2026-04-02T16:14:53.484Z",
-    "synthesis": "2026-04-02T09:07:38.558Z",
-    "obsidian": "2026-04-02T16:14:53.800Z"
+    "evolution": "2026-04-02T16:30:51.873Z",
+    "opportunities": "2026-04-02T09:23:51.447Z",
+    "actions": "2026-04-02T16:15:05.842Z",
+    "synthesis": "2026-04-02T09:23:42.903Z",
+    "obsidian": "2026-04-02T16:15:06.421Z"
   },
   "stats": {
     "totalRuns": 1439,
@@ -19,7 +19,7 @@
     "totalEvolution": 18,
     "errorsToday": 0,
     "lastErrorDate": "2026-04-02",
-    "postsAttempted": 2,
+    "postsAttempted": 1,
     "postsEngaged": 0,
     "postsFlagged": 0,
     "evolutionSuccesses": 2,
@@ -43,18 +43,6 @@
       "currentComments": 0,
       "repliesReceived": 0,
       "outcome": "ignored"
-    },
-    {
-      "postedAt": "2026-04-02T16:14:52.398Z",
-      "url": "https://news.ycombinator.com/item?id=47460486",
-      "title": "Show HN: An open-source safety net for home hemodialysis",
-      "scoreAtPost": 1,
-      "commentsAtPost": 0,
-      "lastCheckedAt": "2026-04-02T16:14:52.398Z",
-      "currentScore": 1,
-      "currentComments": 0,
-      "repliesReceived": 0,
-      "outcome": "pending"
     }
   ],
   "reachedMilestones": [
