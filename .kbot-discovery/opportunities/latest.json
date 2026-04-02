@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T12:28:15.239Z",
+  "timestamp": "2026-04-02T12:45:08.655Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(release): include api-client codegen commits in release-please",
+      "url": "https://github.com/getlarge/themoltnet/pull/608",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Fix browser gateway methods after deferred plugin reload",
+      "url": "https://github.com/openclaw/openclaw/pull/59667",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "refactor: deduplicate schemas and split by domain",
       "url": "https://github.com/getlarge/themoltnet/pull/607",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Bump the android-deps group across 1 directory with 16 updates",
-      "url": "https://github.com/manthan291999/openclaw/pull/12",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(plugins): surface imported runtime state in status tooling",
-      "url": "https://github.com/openclaw/openclaw/pull/59659",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
