@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T09:07:42.536Z",
+  "timestamp": "2026-04-02T09:23:47.640Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -734,7 +734,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "wingscape"
+              "value": "kwojno"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -744,43 +744,43 @@
                 "learning",
                 "ai"
               ],
-              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
+              "value": "I just built a pattern-matching neural network with zero IEEE 754 floats. All arithmetic uses integer ratios (5/8 instead of 0.625), compared via cross-multiplication. No infinity anywhere.\nThe key feature: when confidence is below threshold, it returns &quot;I don't know&quot; instead of hallucinating an answer. Tested on medical diagnosis (1179 diseases) — 50% correct, 20% wrong-but-related, 30% honest &quot;I don't know&quot;.<p>Core ideas:<p>Every operation costs &quot;budget&quot; — network dies before seeing everything\nConfidence is Ratio(n,d), not float — division only for human display\nRare symptoms weighted higher (entropy from information theory)\n500 lines of Rust, formal spec in Coq (44 files)<p>Emerged from a critique of Pascal's Wager: what if observation itself has finite cost?<p>Oh, and it runs on CPU, not GPU. And it runs fast as hell. How? That's a bit of a mystery for me too...<p>However, what's most important is that it is inherently capable of saying &quot;well, I dunno...&quot;.<p>no binary dictate of YES or NO. there is always an option to chose UNCERTAINTY. and there is nothing more natural than uncertainty in real life.<p>well, in there repository, you will not only find the network but also a hefty <em>collection</em> of coq files that define the ontology of finitiary math I have written with <em>ai</em> during my long stay in hospital bed with cancer. cancer is receding, code is compiling, and the network is <em>learning</em>. try it out."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Urban Pipeline for Citywide Insights"
+              "value": "Show HN: CPU-based Neural Net. Zero floats. Returns \"I don't know\""
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://github.com/Wingscape/urban-pipeline"
+              "value": "https://github.com/probabilistic-minds-consortium/void-mathematics-fully-finite-coq-verified"
             }
           },
           "_tags": [
             "story",
-            "author_wingscape",
-            "story_44550988",
+            "author_kwojno",
+            "story_46852043",
             "show_hn"
           ],
-          "author": "wingscape",
-          "created_at": "2025-07-13T15:11:34Z",
-          "created_at_i": 1752419494,
+          "author": "kwojno",
+          "created_at": "2026-02-02T03:19:33Z",
+          "created_at_i": 1770002373,
           "num_comments": 0,
-          "objectID": "44550988",
-          "points": 3,
-          "story_id": 44550988,
-          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
-          "title": "Show HN: Urban Pipeline for Citywide Insights",
-          "updated_at": "2025-07-13T22:27:35Z",
-          "url": "https://github.com/Wingscape/urban-pipeline"
+          "objectID": "46852043",
+          "points": 1,
+          "story_id": 46852043,
+          "story_text": "I just built a pattern-matching neural network with zero IEEE 754 floats. All arithmetic uses integer ratios (5&#x2F;8 instead of 0.625), compared via cross-multiplication. No infinity anywhere.\nThe key feature: when confidence is below threshold, it returns &quot;I don&#x27;t know&quot; instead of hallucinating an answer. Tested on medical diagnosis (1179 diseases) — 50% correct, 20% wrong-but-related, 30% honest &quot;I don&#x27;t know&quot;.<p>Core ideas:<p>Every operation costs &quot;budget&quot; — network dies before seeing everything\nConfidence is Ratio(n,d), not float — division only for human display\nRare symptoms weighted higher (entropy from information theory)\n500 lines of Rust, formal spec in Coq (44 files)<p>Emerged from a critique of Pascal&#x27;s Wager: what if observation itself has finite cost?<p>Oh, and it runs on CPU, not GPU. And it runs fast as hell. How? That&#x27;s a bit of a mystery for me too...<p>However, what&#x27;s most important is that it is inherently capable of saying &quot;well, I dunno...&quot;.<p>no binary dictate of YES or NO. there is always an option to chose UNCERTAINTY. and there is nothing more natural than uncertainty in real life.<p>well, in there repository, you will not only find the network but also a hefty collection of coq files that define the ontology of finitiary math I have written with ai during my long stay in hospital bed with cancer. cancer is receding, code is compiling, and the network is learning. try it out.",
+          "title": "Show HN: CPU-based Neural Net. Zero floats. Returns \"I don't know\"",
+          "updated_at": "2026-03-05T23:28:59Z",
+          "url": "https://github.com/probabilistic-minds-consortium/void-mathematics-fully-finite-coq-verified"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "cyberneticc"
+              "value": "actfrench"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -790,33 +790,39 @@
                 "learning",
                 "ai"
               ],
-              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
+              "value": "Modulo is a place to find vetted homeschooling resources: curriculum, tutors, classes and connect with other tech-savvy families who are doing homeschooling, modular <em>learning</em>, unschooling or curating their children's education as a supplement or replacement to traditional school. We've curated a <em>collection</em> of over 2000 resources vetted by hundreds of homeschool parents to ensure they're accurate, secular, evidence-based and engaging for kids. Our <em>AI</em>-powered <em>learning</em> concierge can make specific recommendations based on children's <em>learning</em> profiles and special needs such as &quot;find me an engaging 6th grade science curriculum for a kid with ADHD who loves YouTube.&quot; or &quot;I need an amazing hands-on math program for a profoundly gifted 2nd grader flailing in private school.&quot;"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Deepseek shows cognitive augmentation will be open source"
+              "value": "Show HN: Modulo – homeschooling resources, community and expert support"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://joinmodulo.com/"
             }
           },
           "_tags": [
             "story",
-            "author_cyberneticc",
-            "story_43019170",
-            "ask_hn"
+            "author_actfrench",
+            "story_46745671",
+            "show_hn"
           ],
-          "author": "cyberneticc",
+          "author": "actfrench",
           "children": [
-            43019203
+            46745702
           ],
-          "created_at": "2025-02-11T22:26:27Z",
-          "created_at_i": 1739312787,
+          "created_at": "2026-01-24T17:41:51Z",
+          "created_at_i": 1769276511,
           "num_comments": 2,
-          "objectID": "43019170",
-          "points": 4,
-          "story_id": 43019170,
-          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
-          "title": "Deepseek shows cognitive augmentation will be open source",
-          "updated_at": "2025-02-12T00:13:08Z"
+          "objectID": "46745671",
+          "points": 3,
+          "story_id": 46745671,
+          "story_text": "Modulo is a place to find vetted homeschooling resources: curriculum, tutors, classes and connect with other tech-savvy families who are doing homeschooling, modular learning, unschooling or curating their children&#x27;s education as a supplement or replacement to traditional school. We&#x27;ve curated a collection of over 2000 resources vetted by hundreds of homeschool parents to ensure they&#x27;re accurate, secular, evidence-based and engaging for kids. Our AI-powered learning concierge can make specific recommendations based on children&#x27;s learning profiles and special needs such as &quot;find me an engaging 6th grade science curriculum for a kid with ADHD who loves YouTube.&quot; or &quot;I need an amazing hands-on math program for a profoundly gifted 2nd grader flailing in private school.&quot;",
+          "title": "Show HN: Modulo – homeschooling resources, community and expert support",
+          "updated_at": "2026-03-05T23:24:48Z",
+          "url": "https://joinmodulo.com/"
         }
       ]
     },
@@ -836,7 +842,7 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "My friend and I built mesh3d.gallery as a side project.\nThe frustration that started it: most galleries that cover &quot;3D web&quot; will throw in anything no matter if it's pre-rendered video, image etc. We wanted something more deliberate — only the websites that are genuinely impressive in what they do with WebGL, Three.js, and real-time 3D in the browser.\nSo we started hand-picking them ourselves. Everything on the site has been reviewed by <em>bot</em>h of us before it goes up. We're adding sites regularly.\nHappy to hear feedback — especially from anyone who's built something they'd want listed, or has thoughts on what we're missing."
+              "value": "My friend and I built mesh3d.gallery as a side project. Anytime we were looking for inspiration in the 3D web world, nmost galleries that cover 3D web will throw in anything no matter if it's pre-rendered video, image etc.<p>We wanted something curated, where only the websites that are genuinely impressive in what they do with WebGL, Three.js, and real-time 3D in the browser are listed.<p>We handpicked about 150 websites, the rest was added via submissions by our users. Everything on the site has been reviewed by <em>bot</em>h of us before it goes up.<p>Happy to hear feedback - especially from anyone who's built something they'd want listed, or has thoughts on what we're missing."
             },
             "title": {
               "matchLevel": "none",
@@ -862,9 +868,9 @@
           "objectID": "47611828",
           "points": 1,
           "story_id": 47611828,
-          "story_text": "My friend and I built mesh3d.gallery as a side project.\nThe frustration that started it: most galleries that cover &quot;3D web&quot; will throw in anything no matter if it&#x27;s pre-rendered video, image etc. We wanted something more deliberate — only the websites that are genuinely impressive in what they do with WebGL, Three.js, and real-time 3D in the browser.\nSo we started hand-picking them ourselves. Everything on the site has been reviewed by both of us before it goes up. We&#x27;re adding sites regularly.\nHappy to hear feedback — especially from anyone who&#x27;s built something they&#x27;d want listed, or has thoughts on what we&#x27;re missing.",
+          "story_text": "My friend and I built mesh3d.gallery as a side project. Anytime we were looking for inspiration in the 3D web world, nmost galleries that cover 3D web will throw in anything no matter if it&#x27;s pre-rendered video, image etc.<p>We wanted something curated, where only the websites that are genuinely impressive in what they do with WebGL, Three.js, and real-time 3D in the browser are listed.<p>We handpicked about 150 websites, the rest was added via submissions by our users. Everything on the site has been reviewed by both of us before it goes up.<p>Happy to hear feedback - especially from anyone who&#x27;s built something they&#x27;d want listed, or has thoughts on what we&#x27;re missing.",
           "title": "Show HN: Mesh3d.gallery – a curated collection of 3D websites",
-          "updated_at": "2026-04-02T09:03:31Z",
+          "updated_at": "2026-04-02T09:11:46Z",
           "url": "https://mesh3d.gallery"
         },
         {
@@ -2179,15 +2185,18 @@
             "ask_hn"
           ],
           "author": "sigildev",
+          "children": [
+            47611953
+          ],
           "created_at": "2026-04-01T19:02:37Z",
           "created_at_i": 1775070157,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47605063",
           "points": 2,
           "story_id": 47605063,
           "story_text": "We ran Sigil, our open-source security scanner, against 73 of the most-installed MCP servers on Smithery. Every finding was manually verified against the source code.<p>Results: 66 passed (90%). 5 had configuration warnings. 2 failed with real security-relevant patterns in their tool handlers.<p>The two failures are instructive:<p>telegram-mcp scored F with 12 findings. Its send_photo, send_video, and send_document tools accept a file_path parameter with zero path validation and no directory allowlist. An LLM could call send_photo(chat, &quot;&#x2F;etc&#x2F;passwd&quot;) and the server would attempt to send it. It also runs HTTP endpoints with verbose error output.<p>mcp-sqlite-server scored F with 9 findings. It passes user-provided SQL to conn.execute() with a startswith(&quot;select&quot;) guard. Python&#x27;s sqlite3 blocks multi-statement execution, so DROP TABLE isn&#x27;t possible — but single-statement bypasses work: UNION-based schema extraction, pragma metadata access, and potentially load_extension(). A guard that looks restrictive but isn&#x27;t creates false confidence. It also runs SSE on 0.0.0.0:8000 over plain HTTP with debug logging enabled.<p>Both are community-maintained projects doing useful things. But the patterns they contain — unrestricted file access, raw SQL execution with insufficient guards — are exactly the kind of thing that should get caught before deployment.<p>Sigil reads MCP server source code (TypeScript and Python), finds tool handler registrations, and detects dangerous patterns with 16 rules. It does pattern analysis with tool-handler scoping — it only flags code within actual MCP tool contexts, not build scripts or utilities.<p>We notified both maintainers before publishing.<p>npx @sigildev&#x2F;sigil .<p>MIT licensed. No account. GitHub: https:&#x2F;&#x2F;github.com&#x2F;sigildev&#x2F;sigil",
           "title": "We scanned 73 open-source MCP servers. Here's what source code analysis found",
-          "updated_at": "2026-04-02T04:41:45Z"
+          "updated_at": "2026-04-02T09:19:31Z"
         },
         {
           "_highlightResult": {

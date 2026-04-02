@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T09:07:47.303Z",
+  "timestamp": "2026-04-02T09:23:50.289Z",
   "count": 30,
   "opportunities": [
     {
@@ -151,13 +151,6 @@
     },
     {
       "source": "reddit-programming",
-      "title": "Is there even a point to new frameworks in the era of AI Agents?",
-      "url": "https://reddit.com/r/programming/comments/1sac5vc/is_there_even_a_point_to_new_frameworks_in_the/",
-      "why": "Discussion in r/programming about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-programming",
       "title": "There is No Spoon, an ML Primer for Software Developers. I demystify the math and provide concrete analogies to help you build an actual instinct for machine learning.",
       "url": "https://reddit.com/r/programming/comments/1s78mrk/there_is_no_spoon_an_ml_primer_for_software/",
       "why": "Discussion in r/programming about AI agents",
@@ -167,6 +160,13 @@
       "source": "reddit-programming",
       "title": "AMD GAIA 0.16 introduces C++17 agent framework for building AI PC agents in pure C++",
       "url": "https://reddit.com/r/programming/comments/1rncnnk/amd_gaia_016_introduces_c17_agent_framework_for/",
+      "why": "Discussion in r/programming about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-programming",
+      "title": "Beyond the Vibes: A Rigorous Guide to AI Coding Assistants and Agents",
+      "url": "https://reddit.com/r/programming/comments/1ritjkj/beyond_the_vibes_a_rigorous_guide_to_ai_coding/",
       "why": "Discussion in r/programming about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
