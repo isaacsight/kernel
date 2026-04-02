@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T08:26:30.966Z",
+  "timestamp": "2026-04-02T08:45:41.677Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "r/programming bans all discussion of LLM programming",
+      "url": "https://news.ycombinator.com/item?id=47611633",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Ask HN: Who is hiring? (April 2026)",
       "url": "https://news.ycombinator.com/item?id=47606148",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -76,13 +83,6 @@
       "source": "hn-comment",
       "title": "CockroachDB has just dropped a bunch of AI-ready features",
       "url": "https://news.ycombinator.com/item?id=47601811",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Ask HN: Client took over development by vibe coding. What to do?",
-      "url": "https://news.ycombinator.com/item?id=47600126",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "feat(plugins): add outbound-whitelist plugin and wire message_sending hooks into WhatsApp and Discord delivery",
-      "url": "https://github.com/openclaw/openclaw/pull/59543",
+      "title": "fix(providers): centralize Google endpoint classification",
+      "url": "https://github.com/openclaw/openclaw/pull/59556",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Fix newline escape sequence in logger warning",
-      "url": "https://github.com/openclaw/openclaw/pull/59520",
+      "title": "Compare to Release 2026.4.1",
+      "url": "https://github.com/Arry8/openclaw-edge/pull/23",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "docs: add cross-module contract guidance to proposal skills",
-      "url": "https://github.com/Chorus-AIDLC/Chorus/pull/79",
+      "title": "WhatsApp: add group and direct system prompt support",
+      "url": "https://github.com/openclaw/openclaw/pull/59553",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
