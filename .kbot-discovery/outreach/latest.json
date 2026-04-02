@@ -1,23 +1,29 @@
 {
-  "timestamp": "2026-04-01T21:09:34.617Z",
+  "timestamp": "2026-04-02T14:46:03.998Z",
   "projects": [
     {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 29910,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+      "name": "activepieces/activepieces",
+      "url": "https://github.com/activepieces/activepieces",
+      "stars": 21523,
+      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
     },
     {
-      "name": "inkeep/agents",
-      "url": "https://github.com/inkeep/agents",
-      "stars": 1041,
-      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
+      "name": "jackwener/opencli",
+      "url": "https://github.com/jackwener/opencli",
+      "stars": 11256,
+      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
     },
     {
-      "name": "rcarmo/piclaw",
-      "url": "https://github.com/rcarmo/piclaw",
-      "stars": 428,
-      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
+      "name": "saturndec/waoowaoo",
+      "url": "https://github.com/saturndec/waoowaoo",
+      "stars": 10755,
+      "description": "首家工业级全流程 AI 影视生产平台。Industry-first professional AI Agent platform for controllable film & video production. From shorts to live-action with Hollywood-standard workflows."
+    },
+    {
+      "name": "Ruya-AI/cozempic",
+      "url": "https://github.com/Ruya-AI/cozempic",
+      "stars": 185,
+      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
     },
     {
       "name": "mensfeld/code-on-incus",
@@ -26,38 +32,32 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 163,
-      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
-    },
-    {
-      "name": "taylorwilsdon/google_workspace_mcp",
-      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
-      "stars": 1988,
-      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
-    },
-    {
-      "name": "weak-fox/openclaw-offline-seed",
-      "url": "https://github.com/weak-fox/openclaw-offline-seed",
-      "stars": 1,
-      "description": "Config-driven offline plugin and skill seeding for OpenClaw runtimes (Kubernetes, Helm, Docker)."
-    },
-    {
-      "name": "alirezarezvani/claude-skills",
-      "url": "https://github.com/alirezarezvani/claude-skills",
-      "stars": 8619,
-      "description": "220+ Claude Code skills & agent plugins for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory."
+      "name": "Panniantong/Agent-Reach",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "stars": 14528,
+      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
     },
     {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
       "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
       "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+    },
+    {
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
+      "stars": 0,
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+    },
+    {
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "stars": 0,
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     }
   ],
   "latestPaper": {
-    "title": "The Triadic Cognitive Architecture: Bounding Autonomous Action via Spatio-Temporal and Epistemic Friction",
-    "summary": "Current autonomous AI agents, driven primarily by Large Language Models (LLMs), operate in a state of cognitive weightlessness: they process information without an intrinsic sense of network topology, temporal pacing, or epistemic limits. Consequently, heuristic agentic loops (e.g., ReAct) can exhibit failure modes in interactive environments, including excessive tool use under congestion, prolonged deliberation under time decay, and brittle behavior under ambiguous evidence. In this paper, we p"
+    "title": "unknown",
+    "summary": "unknown"
   }
 }

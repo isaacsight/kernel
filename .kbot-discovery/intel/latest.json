@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T14:29:52.905Z",
+  "timestamp": "2026-04-02T14:46:01.220Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -359,8 +359,8 @@
             47600438,
             47602371,
             47599966,
-            47614223,
             47600025,
+            47614223,
             47599758,
             47601468,
             47612172,
@@ -394,7 +394,7 @@
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-02T14:27:48Z"
+          "updated_at": "2026-04-02T14:43:18Z"
         },
         {
           "_highlightResult": {
@@ -834,15 +834,18 @@
             "show_hn"
           ],
           "author": "Doug_Bitterbot",
+          "children": [
+            47615184
+          ],
           "created_at": "2026-04-02T14:17:32Z",
           "created_at_i": 1775139452,
           "num_comments": 0,
           "objectID": "47614844",
-          "points": 1,
+          "points": 2,
           "story_id": 47614844,
           "story_text": "We spent the last year architecting a &#x27;Dream Engine&#x27; to solve agent statelessness. We used Claude to help refine the logic. We open-sourced the repo on March 28th. On March 31st, the Claude Code leak revealed an internal autoDream feature with the exact same 4-phase consolidation logic.<p>I&#x27;m looking for a technical audit of my memory decay logic in core&#x2F;dream.ts. With 100 nodes already active, I want to ensure the consolidation won&#x27;t bottleneck at scale.",
           "title": "Show HN: Local-first agent memory loop 48hrs before the Claude Code leak",
-          "updated_at": "2026-04-02T14:18:33Z",
+          "updated_at": "2026-04-02T14:42:48Z",
           "url": "https://github.com/Bitterbot-AI/bitterbot-desktop"
         },
         {
