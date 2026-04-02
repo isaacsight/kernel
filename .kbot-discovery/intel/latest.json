@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T10:52:42.123Z",
+  "timestamp": "2026-04-02T11:27:22.436Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -42,17 +42,18 @@
           ],
           "author": "kdeldycke",
           "children": [
+            47612892,
             47612207
           ],
           "created_at": "2026-04-02T09:24:09Z",
           "created_at_i": 1775121849,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47611994",
-          "points": 8,
+          "points": 9,
           "story_id": 47611994,
           "story_text": "I built Extra Platforms over the past 5 years because I kept writing the same detection boilerplate over and over. And also because Python&#x27;s original platform.linux_distribution() function has been removed in Python 3.8. Its replacement, Distro, only covers Linux.<p>It detects six traits (CPU architecture, OS&#x2F;distribution, shell, terminal, CI, agents), which are grouped into families (BSD, LINUX, UNIX, ...) for convenience.<p>You can try the library without installing anything:<p><pre><code>  $ uvx --with extra-platforms python\n  &gt;&gt;&gt; from extra_platforms import current_platform, BSD, is_linux\n  &gt;&gt;&gt; current_platform()\n  Platform(id=&#x27;macos&#x27;, name=&#x27;macOS&#x27;)\n  &gt;&gt;&gt; current_platform() in BSD\n  True\n  &gt;&gt;&gt; is_linux()\n  False\n</code></pre>\nIt also ships Pytest decorators (@skip_linux, @unless_macos) for platform-conditional tests.<p>The library has zero dependencies and is Apache-2.0 licensed.<p>I&#x27;m interested in collecting edge cases, which you can send me by performing an auto-detection with:<p><pre><code>  $ uvx extra-platforms</code></pre>",
           "title": "Show HN: Extra-Platforms, Python library to detect OS, arch, shell, CI, AI",
-          "updated_at": "2026-04-02T10:03:47Z",
+          "updated_at": "2026-04-02T11:23:17Z",
           "url": "https://github.com/kdeldycke/extra-platforms"
         },
         {
@@ -348,12 +349,13 @@
           "author": "piscator",
           "children": [
             47600438,
-            47612172,
+            47612850,
             47602371,
             47599966,
+            47612172,
             47600025,
-            47601468,
             47599758,
+            47601468,
             47600185,
             47600714,
             47602570,
@@ -366,8 +368,8 @@
             47601763,
             47599892,
             47607627,
-            47610895,
             47609511,
+            47610895,
             47602905,
             47599316,
             47605704,
@@ -377,13 +379,13 @@
           ],
           "created_at": "2026-04-01T11:09:03Z",
           "created_at_i": 1775041743,
-          "num_comments": 32,
+          "num_comments": 33,
           "objectID": "47599303",
           "points": 52,
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-02T10:41:32Z"
+          "updated_at": "2026-04-02T11:27:02Z"
         },
         {
           "_highlightResult": {
@@ -820,18 +822,18 @@
           "author": "throwaw12",
           "children": [
             47612547,
-            47612315,
-            47612431
+            47612431,
+            47612315
           ],
           "created_at": "2026-04-02T10:03:02Z",
           "created_at_i": 1775124182,
-          "num_comments": 3,
+          "num_comments": 4,
           "objectID": "47612289",
-          "points": 5,
+          "points": 10,
           "story_id": 47612289,
           "story_text": "Another post got flagged: https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47612053<p>@dang, everytime, new post comes in and shows technical content relevant to Israel&#x27;s genocide or suffering in Gaza, content gets flagged, isn&#x27;t it clear that bots and pro-Israelis heavily skew the downvotes?<p>There are many non-sense show hn, AI for the sake of AI content or pages generated by AI with no meaningful input to the society, but they don&#x27;t get flagged.",
           "title": "Please stop flagging everything going against Israel",
-          "updated_at": "2026-04-02T10:41:32Z"
+          "updated_at": "2026-04-02T11:10:17Z"
         },
         {
           "_highlightResult": {
@@ -870,11 +872,11 @@
           "created_at_i": 1775120538,
           "num_comments": 0,
           "objectID": "47611828",
-          "points": 2,
+          "points": 3,
           "story_id": 47611828,
           "story_text": "My friend and I built mesh3d.gallery as a side project. Anytime we were looking for inspiration in the 3D web world, nmost galleries that cover 3D web will throw in anything no matter if it&#x27;s pre-rendered video, image etc.<p>We wanted something curated, where only the websites that are genuinely impressive in what they do with WebGL, Three.js, and real-time 3D in the browser are listed.<p>We handpicked about 150 websites, the rest was added via submissions by our users. Everything on the site has been reviewed by both of us before it goes up.<p>Happy to hear feedback - especially from anyone who&#x27;s built something they&#x27;d want listed, or has thoughts on what we&#x27;re missing.",
           "title": "Show HN: Mesh3d.gallery – a curated collection of 3D websites",
-          "updated_at": "2026-04-02T09:28:02Z",
+          "updated_at": "2026-04-02T11:26:32Z",
           "url": "https://mesh3d.gallery"
         },
         {
@@ -2287,8 +2289,242 @@
     },
     {
       "query": "self+improving+AI",
-      "hits": []
+      "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "amangsingh"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "I got tired of <em>AI</em> agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No <em>self</em>-<em>approving</em> code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Castra – Strip orchestration rights from your LLMs"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/amangsingh/castra"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_amangsingh",
+            "story_47601608",
+            "show_hn"
+          ],
+          "author": "amangsingh",
+          "children": [
+            47611202,
+            47602435,
+            47602458,
+            47606660,
+            47603897,
+            47602546,
+            47603984
+          ],
+          "created_at": "2026-04-01T14:40:28Z",
+          "created_at_i": 1775054428,
+          "num_comments": 9,
+          "objectID": "47601608",
+          "points": 7,
+          "story_id": 47601608,
+          "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
+          "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
+          "updated_at": "2026-04-02T08:16:17Z",
+          "url": "https://github.com/amangsingh/castra"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "grodriguez100"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Meta releases HyperAgents: <em>self</em>-<em>improving</em> <em>AI</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/facebookresearch/Hyperagents"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_grodriguez100",
+            "story_47528807"
+          ],
+          "author": "grodriguez100",
+          "children": [
+            47528849,
+            47529382
+          ],
+          "created_at": "2026-03-26T10:41:40Z",
+          "created_at_i": 1774521700,
+          "num_comments": 3,
+          "objectID": "47528807",
+          "points": 3,
+          "story_id": 47528807,
+          "title": "Meta releases HyperAgents: self-improving AI",
+          "updated_at": "2026-03-26T17:43:34Z",
+          "url": "https://github.com/facebookresearch/Hyperagents"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "isaacsight"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "I built kbot — a terminal <em>AI</em> agent that learns from every session and forges new tools when it hits problems it can't solve.<p>What makes it different: <em>Self</em>-<em>improving</em> (Bayesian skill routing gets smarter over time). Tool forging (encounters a gap, builds a tool, tool persists forever). <em>Self</em>-defense (HMAC memory integrity, prompt injection detection). 368 tools, 41 agents, 19 local models. Fully offline, $0. Dream mode (improves itself while idle). MIT licensed.<p>Demo of kbot forging a tool in 30 seconds: <a href=\"https://raw.githubusercontent.com/isaacsight/kernel/main/tools/video-assets/demo-forge-real.gif\" rel=\"nofollow\">https://raw.githubusercontent.com/isaacsight/kernel/main/too...</a><p>npm install -g @kernel.chat/kbot"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "Show HN: Kbot – <em>AI</em> agent that forges its own tools at runtime (MIT, $0)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/isaacsight/kernel"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_isaacsight",
+            "story_47526475",
+            "show_hn"
+          ],
+          "author": "isaacsight",
+          "created_at": "2026-03-26T03:54:19Z",
+          "created_at_i": 1774497259,
+          "num_comments": 0,
+          "objectID": "47526475",
+          "points": 2,
+          "story_id": 47526475,
+          "story_text": "I built kbot — a terminal AI agent that learns from every session and forges new tools when it hits problems it can&#x27;t solve.<p>What makes it different: Self-improving (Bayesian skill routing gets smarter over time). Tool forging (encounters a gap, builds a tool, tool persists forever). Self-defense (HMAC memory integrity, prompt injection detection). 368 tools, 41 agents, 19 local models. Fully offline, $0. Dream mode (improves itself while idle). MIT licensed.<p>Demo of kbot forging a tool in 30 seconds: <a href=\"https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;tools&#x2F;video-assets&#x2F;demo-forge-real.gif\" rel=\"nofollow\">https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;isaacsight&#x2F;kernel&#x2F;main&#x2F;too...</a><p>npm install -g @kernel.chat&#x2F;kbot",
+          "title": "Show HN: Kbot – AI agent that forges its own tools at runtime (MIT, $0)",
+          "updated_at": "2026-03-26T17:03:06Z",
+          "url": "https://github.com/isaacsight/kernel"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "BrainDAnderson"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.\nWith that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results. \nThe Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and <em>self</em>-<em>improving</em> platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.\nVulcanAMI — Transformer / Neuro-Symbolic Hybrid <em>AI</em> Platform\nVulcan is an <em>AI</em> system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.\nFEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.\nCurrent Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete\nWhat This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far\nThis is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution\nIf you find parts that are useful, interesting, or worth <em>improving</em>, you are free to build on them under the terms of the license.\nI know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: https://github.com/musicmonk42/The_Code_Factory_Working_V2.git\nVulcanAMI: https://github.com/musicmonk42/VulcanAMI_LLM.git\nFEMS: https://github.com/musicmonk42/FEMS.git"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "New Open Source from Non-Traditional Builder"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_BrainDAnderson",
+            "story_47477073",
+            "ask_hn"
+          ],
+          "author": "BrainDAnderson",
+          "children": [
+            47484545,
+            47478135
+          ],
+          "created_at": "2026-03-22T13:01:16Z",
+          "created_at_i": 1774184476,
+          "num_comments": 5,
+          "objectID": "47477073",
+          "points": 2,
+          "story_id": 47477073,
+          "story_text": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.\nWith that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results. \nThe Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and self-improving platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.\nVulcanAMI — Transformer &#x2F; Neuro-Symbolic Hybrid AI Platform\nVulcan is an AI system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.\nFEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.\nCurrent Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete\nWhat This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far\nThis is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution\nIf you find parts that are useful, interesting, or worth improving, you are free to build on them under the terms of the license.\nI know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;The_Code_Factory_Working_V2.git\nVulcanAMI: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;VulcanAMI_LLM.git\nFEMS: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;FEMS.git",
+          "title": "New Open Source from Non-Traditional Builder",
+          "updated_at": "2026-03-23T09:17:05Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "samurai48"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Autoskill – <em>self</em>-<em>improving</em> skills for <em>AI</em> agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Samurai412/autoskill"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_samurai48",
+            "story_47467265"
+          ],
+          "author": "samurai48",
+          "children": [
+            47467266
+          ],
+          "created_at": "2026-03-21T14:20:07Z",
+          "created_at_i": 1774102807,
+          "num_comments": 2,
+          "objectID": "47467265",
+          "points": 2,
+          "story_id": 47467265,
+          "title": "Autoskill – self-improving skills for AI agents",
+          "updated_at": "2026-03-21T20:36:45Z",
+          "url": "https://github.com/Samurai412/autoskill"
+        }
+      ]
     }
   ],
-  "totalHits": 45
+  "totalHits": 50
 }
