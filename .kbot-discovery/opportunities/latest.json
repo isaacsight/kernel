@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T07:22:03.603Z",
+  "timestamp": "2026-04-02T07:39:13.016Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "Fix newline escape sequence in logger warning",
+      "url": "https://github.com/openclaw/openclaw/pull/59520",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "docs: add cross-module contract guidance to proposal skills",
       "url": "https://github.com/Chorus-AIDLC/Chorus/pull/79",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "Add OpenClaw overlay: compose profiles, scripts, docs, and safe defaults",
       "url": "https://github.com/ellisapotheosis/Project-Nyra/pull/224",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Update openclaw to version v2026.4.1",
-      "url": "https://github.com/getumbrel/umbrel-apps/pull/5259",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
