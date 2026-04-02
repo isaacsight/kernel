@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T16:15:14.226Z",
+  "timestamp": "2026-04-02T16:15:21.053Z",
   "projects": [
     {
       "name": "clawwork-ai/ClawWork",
@@ -10,7 +10,7 @@
     {
       "name": "jackwener/opencli",
       "url": "https://github.com/jackwener/opencli",
-      "stars": 11346,
+      "stars": 11348,
       "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
     },
     {
