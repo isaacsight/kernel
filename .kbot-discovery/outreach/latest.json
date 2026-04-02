@@ -1,25 +1,6 @@
 {
-  "timestamp": "2026-04-02T16:17:03.298Z",
-  "projects": [
-    {
-      "name": "Ruya-AI/cozempic",
-      "url": "https://github.com/Ruya-AI/cozempic",
-      "stars": 185,
-      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
-    },
-    {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 363,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
-    },
-    {
-      "name": "Panniantong/Agent-Reach",
-      "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 14552,
-      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
-    }
-  ],
+  "timestamp": "2026-04-02T16:17:08.399Z",
+  "projects": [],
   "latestPaper": {
     "title": "HippoCamp: Benchmarking Contextual Agents on Personal Computers",
     "summary": "We present HippoCamp, a new benchmark designed to evaluate agents' capabilities on multimodal file management. Unlike existing agent benchmarks that focus on tasks like web interaction, tool use, or software automation in generic settings, HippoCamp evaluates agents in user-centric environments to model individual user profiles and search massive personal files for context-aware reasoning. Our benchmark instantiates device-scale file systems over real-world profiles spanning diverse modalities, "
