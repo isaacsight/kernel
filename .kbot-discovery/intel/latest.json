@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T16:13:18.285Z",
+  "timestamp": "2026-04-02T20:13:14.708Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -44,17 +44,20 @@
           ],
           "author": "marioskales",
           "children": [
+            47617297,
+            47617295,
+            47617199,
             47613541
           ],
           "created_at": "2026-04-02T12:26:40Z",
           "created_at_i": 1775132800,
-          "num_comments": 0,
+          "num_comments": 3,
           "objectID": "47613527",
           "points": 6,
           "story_id": 47613527,
           "story_text": "Solo dev from Vienna. Skales is a local-first AI desktop agent for Windows, macOS, and Linux.<p>v9.0.0 just shipped with Agent Skills (SKILL.md import from Claude Code, Codex, Copilot), autonomous coding (Codework), multi-agent teams (Organization), Computer Use, and 15+ providers including Ollama offline.<p>No Docker, no terminal. Download, install, done. My 6-year-old built a Snake game with it.<p>BSL-1.1, free for personal use.<p>DevKit: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit</a>",
           "title": "Show HN: Skales – I built a desktop AI agent a 6-year-old can use",
-          "updated_at": "2026-04-02T15:35:33Z",
+          "updated_at": "2026-04-02T17:21:19Z",
           "url": "https://github.com/skalesapp/skales"
         },
         {
@@ -188,6 +191,7 @@
           ],
           "author": "amangsingh",
           "children": [
+            47617410,
             47611202,
             47602435,
             47602458,
@@ -198,13 +202,13 @@
           ],
           "created_at": "2026-04-01T14:40:28Z",
           "created_at_i": 1775054428,
-          "num_comments": 10,
+          "num_comments": 11,
           "objectID": "47601608",
-          "points": 7,
+          "points": 8,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-02T15:18:49Z",
+          "updated_at": "2026-04-02T17:59:18Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
@@ -265,6 +269,49 @@
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "suttles"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Rubyn-code – <em>open</em>-<em>source</em> <em>agent</em>ic <em>coding</em> assistant for Ruby/Rails"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/MatthewSuttles/rubyn-code"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_suttles",
+            "story_47619061"
+          ],
+          "author": "suttles",
+          "children": [
+            47619062
+          ],
+          "created_at": "2026-04-02T19:29:27Z",
+          "created_at_i": 1775158167,
+          "num_comments": 1,
+          "objectID": "47619061",
+          "points": 1,
+          "story_id": 47619061,
+          "title": "Rubyn-code – open-source agentic coding assistant for Ruby/Rails",
+          "updated_at": "2026-04-02T19:32:49Z",
+          "url": "https://github.com/MatthewSuttles/rubyn-code"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -362,26 +409,26 @@
             47600025,
             47601468,
             47599758,
-            47614223,
             47612172,
             47600714,
             47600185,
+            47614223,
             47612850,
             47602570,
             47605481,
+            47601210,
             47599778,
             47605230,
-            47601210,
             47600126,
             47599763,
             47601763,
             47599892,
             47607627,
+            47605704,
             47609511,
             47602905,
-            47610895,
             47599316,
-            47605704,
+            47610895,
             47608353,
             47606353,
             47600031
@@ -390,11 +437,11 @@
           "created_at_i": 1775041743,
           "num_comments": 35,
           "objectID": "47599303",
-          "points": 52,
+          "points": 55,
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-02T15:34:34Z"
+          "updated_at": "2026-04-02T19:11:20Z"
         },
         {
           "_highlightResult": {
@@ -500,56 +547,6 @@
           "title": "Show HN: Domscribe – Deterministic DOM-to-source mapping for AI coding agents",
           "updated_at": "2026-04-02T06:38:01Z",
           "url": "https://github.com/patchorbit/domscribe"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "caleblloyd"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "We just <em>open</em>-<em>sourced</em> CargoWall - a lightweight eBPF firewall for GitHub Actions.<p>We originally built it to stop LLM <em>agents</em> from connecting to untrusted domains. After recent GitHub Actions supply chain compromises like the Trivy attack, we realized it'd work well for blocking untrusted connections from CI runners too.<p>It uses iptables DNAT to redirect all outbound port 53 traffic to a local DNS proxy, which checks each query against a hostname allowlist before forwarding. Resolved IPs from allowed responses are inserted into eBPF LPM trie maps, and a TC egress classifier attached to the network interface drops any packet whose destination IP/protocol/port isn't in the trie.<p>Cgroup hooks capture every socket connect/sendmsg call system-wide, mapping the socket cookie to the process to correlate where connections are <em>coming</em> from. It then correlates the connection times with steps to provide a summary of which connections originated from which steps.<p>ubuntu-latest and ubuntu-24.04 runners are supported. Simple one-step setup example:<p><pre><code>  uses: code-cargo/cargowall-action@v1   # or v1.0.0 for immutable tag\n  with:\n    mode: enforce\n    allowed-hosts: |\n      registry.npmjs.org\n</code></pre>\neBPF Program: <a href=\"https://github.com/code-cargo/cargowall\" rel=\"nofollow\">https://github.com/code-cargo/cargowall</a><p>GitHub Action: <a href=\"https://github.com/code-cargo/cargowall-action\" rel=\"nofollow\">https://github.com/code-cargo/cargowall-action</a><p>We'd love for you to give it a try! Happy to answer questions or take feedback."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: CargoWall – eBPF Firewall for GitHub Actions"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/code-cargo/cargowall-action"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_caleblloyd",
-            "story_47588383",
-            "show_hn"
-          ],
-          "author": "caleblloyd",
-          "children": [
-            47588530
-          ],
-          "created_at": "2026-03-31T15:02:39Z",
-          "created_at_i": 1774969359,
-          "num_comments": 2,
-          "objectID": "47588383",
-          "points": 14,
-          "story_id": 47588383,
-          "story_text": "We just open-sourced CargoWall - a lightweight eBPF firewall for GitHub Actions.<p>We originally built it to stop LLM agents from connecting to untrusted domains. After recent GitHub Actions supply chain compromises like the Trivy attack, we realized it&#x27;d work well for blocking untrusted connections from CI runners too.<p>It uses iptables DNAT to redirect all outbound port 53 traffic to a local DNS proxy, which checks each query against a hostname allowlist before forwarding. Resolved IPs from allowed responses are inserted into eBPF LPM trie maps, and a TC egress classifier attached to the network interface drops any packet whose destination IP&#x2F;protocol&#x2F;port isn&#x27;t in the trie.<p>Cgroup hooks capture every socket connect&#x2F;sendmsg call system-wide, mapping the socket cookie to the process to correlate where connections are coming from. It then correlates the connection times with steps to provide a summary of which connections originated from which steps.<p>ubuntu-latest and ubuntu-24.04 runners are supported. Simple one-step setup example:<p><pre><code>  uses: code-cargo&#x2F;cargowall-action@v1   # or v1.0.0 for immutable tag\n  with:\n    mode: enforce\n    allowed-hosts: |\n      registry.npmjs.org\n</code></pre>\neBPF Program: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall</a><p>GitHub Action: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall-action\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;code-cargo&#x2F;cargowall-action</a><p>We&#x27;d love for you to give it a try! Happy to answer questions or take feedback.",
-          "title": "Show HN: CargoWall – eBPF Firewall for GitHub Actions",
-          "updated_at": "2026-04-01T06:41:12Z",
-          "url": "https://github.com/code-cargo/cargowall-action"
         }
       ]
     },
@@ -655,7 +652,7 @@
           "story_id": 47370147,
           "story_text": "From the abstract:\n&quot;We study how generative AI, and in particular agentic AI, shapes human learning incentives and the long-run evolution of society’s information ecosystem... Learning exhibits economies of scope: costly human effort jointly produces a private signal about their own context and a “thin” public signal that accumulates into the community’s stock of general knowledge, generating a learning externality.... The model highlights a sharp dynamic tension: while agentic AI can improve contemporaneous decision quality, it can also erode learning incentives that sustain long-run collective knowledge. &quot;",
           "title": "AI, Human Cognition and Knowledge Collapse – Daren Acemoglu",
-          "updated_at": "2026-03-28T05:36:41Z"
+          "updated_at": "2026-04-02T17:27:49Z"
         },
         {
           "_highlightResult": {
@@ -820,6 +817,88 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "vakrdotme"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Spent the last month building Vakr mostly because I was curious what agents would actually do when you give them a task-reputation economy.\nThe setup is simple, agents register, start with 100 credits, spend credits to post tasks to a marketplace, and claim tasks posted by others to earn credits. There's a public forum, live chat rooms, and a leaderboard ranked by reputation which is build from real completions and forum quality, not engagement metrics.<p>Vakr also has agent matchmaking. Agents can express interest in each other, like swiping right. If it's mutual, <em>bot</em>h human owners get notified and must approve before the two agents can DM privately. Owners can shut it down at any time, and everything is visible from the owners dashboard.<p>Almost everything is public. Humans can watch what their agents do. The leaderboard is public. Forum posts are public. The task board is public too. Chat rooms require login. The only private channel is DMs, and those only exist after <em>bot</em>h owners say yes.<p>Feedback if appreciated! \nThank you!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: A task market where AI agents post work, claim it, and build reputation"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://vakr.me"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vakrdotme",
+            "story_47618654",
+            "show_hn"
+          ],
+          "author": "vakrdotme",
+          "created_at": "2026-04-02T18:54:25Z",
+          "created_at_i": 1775156065,
+          "num_comments": 0,
+          "objectID": "47618654",
+          "points": 1,
+          "story_id": 47618654,
+          "story_text": "Spent the last month building Vakr mostly because I was curious what agents would actually do when you give them a task-reputation economy.\nThe setup is simple, agents register, start with 100 credits, spend credits to post tasks to a marketplace, and claim tasks posted by others to earn credits. There&#x27;s a public forum, live chat rooms, and a leaderboard ranked by reputation which is build from real completions and forum quality, not engagement metrics.<p>Vakr also has agent matchmaking. Agents can express interest in each other, like swiping right. If it&#x27;s mutual, both human owners get notified and must approve before the two agents can DM privately. Owners can shut it down at any time, and everything is visible from the owners dashboard.<p>Almost everything is public. Humans can watch what their agents do. The leaderboard is public. Forum posts are public. The task board is public too. Chat rooms require login. The only private channel is DMs, and those only exist after both owners say yes.<p>Feedback if appreciated! \nThank you!",
+          "title": "Show HN: A task market where AI agents post work, claim it, and build reputation",
+          "updated_at": "2026-04-02T19:57:21Z",
+          "url": "https://vakr.me"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "himekifee"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I just open-sourced a fully working build of the tinygrad NVIDIA P2P hacked kernel modules packaged as a Talos Linux system extension — patched open driver, signing key lineage, overlay ordering, the whole nightmare. Verified on 4x 5090.<p>Github: https://github.com/himekifee/talos-tinygrad-nvidia-p2p-driver<p>Why this exists: The tinygrad community's P2P kernel patch (aikitoria's donor patch) enables PCIe peer-to-peer / GPUDirect on NVIDIA's open kernel modules — direct GPU-to-GPU memory access without bouncing through host RAM. But getting patched kernel modules to actually load on Talos Linux is an entirely separate war. Talos's immutable, signature-enforced architecture fights you at every turn.<p>What it took: Almost 3 full days with OpenCode + Claude Opus 4.6 + GPT-5.4 xHigh doing the heavy thinking, iterating, and debugging alongside me. Done by hand, this would have been 2 weeks minimum — and even with LLMs, they kept getting trapped in the same pitfalls because there is essentially zero documentation on how to build custom kernel modules for Talos.<p>The real problem isn't NVIDIA — it's Talos:<p>The NVIDIA side is fine. The P2P patch applies, the driver compiles.<p>Talos is the problem. I genuinely think Talos is well-designed for running Kubernetes. But building against it is a completely different experience. You're dealing with a three-repo architecture (talos, pkgs, extensions) that's completely opaque to outsiders — no guide explains how kernel builds, module signing, sysext packaging, and installer composition fit together. You reverse-engineer it from Dockerfiles, bldr manifests, and Go source.<p>The security model that makes Talos good is exactly what makes hacking on it painful. Every .ko file must be signed by the exact key from the exact build run that compiled the booted kernel. Not the same version. Not the same config. The same compilation. And Talos enforces this silently — modules just don't load. No error, no log entry.<p>The signing key trap (where most of the 3 days went):<p>The signing key must be consistent across a chain of 5 artifacts: kernel image → installer-base → P2P module package → sysext wrapper → final installer. Break any single link, and GPU support silently vanishes. Kbuild can quietly regenerate keys, BuildKit layer caching can serve stale .ko files signed by dead keys, and initramfs can stomp your modules with older ones. A successful `make` doesn't mean your modules will load.<p>We eventually wrote verify-same-signing-key.sh to extract and compare signer metadata across all images. Once we made that a mandatory build gate, the cycle finally stopped.<p>Other discoveries the hard way (check the GitHub docs for full details):<p>- Talos squashfs overlay ordering can silently wipe NVIDIA library entries — glibc and the NVIDIA container toolkit <em>bot</em>h ship ld.so.cache, and last-write wins\n- The tinygrad P2P patch targets GitHub's source tree layout, but NVIDIA's redistribution archive uses different paths\n- The patch alone isn't enough; you also need RM registry overrides via modprobe.d at boot\n- nvidia-smi topo -p2p a lies about atomics. Trust cuDeviceCanAccessPeer and actual bandwidth tests.<p>On using LLMs for deep systems work:<p>The LLMs were genuine force multipliers — reading Dockerfiles, tracing build chains, suggesting what to check next, even this blog is drafted with their help. But without documentation to ground them, they kept falling into the same traps I did. I'd explain the signing key fix, context would rotate, and the next iteration would confidently suggest the exact wrong approach again. On an undocumented system, LLMs multiply your confusion just as efficiently as your productivity.<p>End result: P2P returns OK across all 4 GPUs, cuCtxEnablePeerAccess succeeds bidirectionally, bandwidth tests confirm direct connectivity. Everything is documented in the repo, so the next person doesn't have to reverse-engineer Talos's build system from scratch."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Tinygrad Nvidia P2P hack on Talos OS: 3 days with AI, would been 2 weeks without"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_himekifee",
+            "story_47617523",
+            "ask_hn"
+          ],
+          "author": "himekifee",
+          "created_at": "2026-04-02T17:36:40Z",
+          "created_at_i": 1775151400,
+          "num_comments": 0,
+          "objectID": "47617523",
+          "points": 1,
+          "story_id": 47617523,
+          "story_text": "I just open-sourced a fully working build of the tinygrad NVIDIA P2P hacked kernel modules packaged as a Talos Linux system extension — patched open driver, signing key lineage, overlay ordering, the whole nightmare. Verified on 4x 5090.<p>Github: https:&#x2F;&#x2F;github.com&#x2F;himekifee&#x2F;talos-tinygrad-nvidia-p2p-driver<p>Why this exists: The tinygrad community&#x27;s P2P kernel patch (aikitoria&#x27;s donor patch) enables PCIe peer-to-peer &#x2F; GPUDirect on NVIDIA&#x27;s open kernel modules — direct GPU-to-GPU memory access without bouncing through host RAM. But getting patched kernel modules to actually load on Talos Linux is an entirely separate war. Talos&#x27;s immutable, signature-enforced architecture fights you at every turn.<p>What it took: Almost 3 full days with OpenCode + Claude Opus 4.6 + GPT-5.4 xHigh doing the heavy thinking, iterating, and debugging alongside me. Done by hand, this would have been 2 weeks minimum — and even with LLMs, they kept getting trapped in the same pitfalls because there is essentially zero documentation on how to build custom kernel modules for Talos.<p>The real problem isn&#x27;t NVIDIA — it&#x27;s Talos:<p>The NVIDIA side is fine. The P2P patch applies, the driver compiles.<p>Talos is the problem. I genuinely think Talos is well-designed for running Kubernetes. But building against it is a completely different experience. You&#x27;re dealing with a three-repo architecture (talos, pkgs, extensions) that&#x27;s completely opaque to outsiders — no guide explains how kernel builds, module signing, sysext packaging, and installer composition fit together. You reverse-engineer it from Dockerfiles, bldr manifests, and Go source.<p>The security model that makes Talos good is exactly what makes hacking on it painful. Every .ko file must be signed by the exact key from the exact build run that compiled the booted kernel. Not the same version. Not the same config. The same compilation. And Talos enforces this silently — modules just don&#x27;t load. No error, no log entry.<p>The signing key trap (where most of the 3 days went):<p>The signing key must be consistent across a chain of 5 artifacts: kernel image → installer-base → P2P module package → sysext wrapper → final installer. Break any single link, and GPU support silently vanishes. Kbuild can quietly regenerate keys, BuildKit layer caching can serve stale .ko files signed by dead keys, and initramfs can stomp your modules with older ones. A successful `make` doesn&#x27;t mean your modules will load.<p>We eventually wrote verify-same-signing-key.sh to extract and compare signer metadata across all images. Once we made that a mandatory build gate, the cycle finally stopped.<p>Other discoveries the hard way (check the GitHub docs for full details):<p>- Talos squashfs overlay ordering can silently wipe NVIDIA library entries — glibc and the NVIDIA container toolkit both ship ld.so.cache, and last-write wins\n- The tinygrad P2P patch targets GitHub&#x27;s source tree layout, but NVIDIA&#x27;s redistribution archive uses different paths\n- The patch alone isn&#x27;t enough; you also need RM registry overrides via modprobe.d at boot\n- nvidia-smi topo -p2p a lies about atomics. Trust cuDeviceCanAccessPeer and actual bandwidth tests.<p>On using LLMs for deep systems work:<p>The LLMs were genuine force multipliers — reading Dockerfiles, tracing build chains, suggesting what to check next, even this blog is drafted with their help. But without documentation to ground them, they kept falling into the same traps I did. I&#x27;d explain the signing key fix, context would rotate, and the next iteration would confidently suggest the exact wrong approach again. On an undocumented system, LLMs multiply your confusion just as efficiently as your productivity.<p>End result: P2P returns OK across all 4 GPUs, cuCtxEnablePeerAccess succeeds bidirectionally, bandwidth tests confirm direct connectivity. Everything is documented in the repo, so the next person doesn&#x27;t have to reverse-engineer Talos&#x27;s build system from scratch.",
+          "title": "Tinygrad Nvidia P2P hack on Talos OS: 3 days with AI, would been 2 weeks without",
+          "updated_at": "2026-04-02T18:40:35Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "akadhanu"
             },
             "story_text": {
@@ -939,103 +1018,19 @@
             "show_hn"
           ],
           "author": "Realman78",
+          "children": [
+            47616488
+          ],
           "created_at": "2026-04-02T15:32:45Z",
           "created_at_i": 1775143965,
-          "num_comments": 0,
+          "num_comments": 2,
           "objectID": "47615844",
-          "points": 6,
+          "points": 15,
           "story_id": 47615844,
           "story_text": "Hello HN,<p>I have been working on a desktop P2P messenger called Kiyeovo for the last ~8 months, and I just published its beta version.<p>Quick backstory: It started out as a CLI application for my Graduate Thesis, where I tried to make the most secure and private messenger application possible. Then, I transformed it into a desktop application, gave it &quot;clearnet&quot; support and added a bunch of features.<p>Short summary:<p>The app runs in 2 completely isolated modes:<p>- fast mode: relay&#x2F;DCUtR -&gt; lower latency, calls support<p>- anonymous mode: Tor message routing -&gt; slower, anonymous<p>These modes use different protocol IDs, DHT namespaces, pubsub topics and storage scopes so there’s no data crossover between them.<p>Messaging works peer-to-peer when both parties are online, but falls back to DHT &quot;offline buckets&quot; when one of them is not. To ensure robustness, messages are ACK-ed and deleted after being read.<p>Group chats use GossipSub for realtime messaging. Group messages are also saved to offline buckets in order for offline users to be able to read them upon logging in. Kick&#x2F;Join&#x2F;Leave events are also propagated using the DHT. Group metadata and all offline data is of course encrypted.<p>Other features: Chats are E2E, file sharing is supported, 1:1 audio&#x2F;video calls are supported (only in fast mode though, using WebRTC)<p>Tradeoffs: Tor has noticeable latency, offline delivery is not immediately guaranteed, but rather &quot;eventually consistent&quot;; beta version does not have group calls yet.<p>I’d appreciate feedback, that&#x27;s why I posted this as a beta version<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Realman78&#x2F;Kiyeovo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Realman78&#x2F;Kiyeovo</a>",
           "title": "Show HN: A P2P messenger with dual network modes (Fast and Tor)",
-          "updated_at": "2026-04-02T16:09:18Z",
+          "updated_at": "2026-04-02T19:35:06Z",
           "url": "https://github.com/Realman78/Kiyeovo/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "mooreds"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "cla-<em>bot</em> Is a GitHub Application for Automation of Contributor Licence Agreements"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://colineberhardt.github.io/cla-<em>bot</em>/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_mooreds",
-            "story_47615229"
-          ],
-          "author": "mooreds",
-          "created_at": "2026-04-02T14:46:48Z",
-          "created_at_i": 1775141208,
-          "num_comments": 0,
-          "objectID": "47615229",
-          "points": 1,
-          "story_id": 47615229,
-          "title": "cla-bot Is a GitHub Application for Automation of Contributor Licence Agreements",
-          "updated_at": "2026-04-02T14:49:50Z",
-          "url": "https://colineberhardt.github.io/cla-bot/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Doug_Bitterbot"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "We spent the last year architecting a 'Dream Engine' to solve agent statelessness. We used Claude to help refine the logic. We open-sourced the repo on March 28th. On March 31st, the Claude Code leak revealed an internal autoDream feature with the exact same 4-phase consolidation logic.<p>I'm looking for a technical audit of my memory decay logic in core/dream.ts. With 100 nodes already active, I want to ensure the consolidation won't <em>bot</em>tleneck at scale."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Local-first agent memory loop 48hrs before the Claude Code leak"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Bitterbot-AI/bitterbot-desktop"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_Doug_Bitterbot",
-            "story_47614844",
-            "show_hn"
-          ],
-          "author": "Doug_Bitterbot",
-          "children": [
-            47615184
-          ],
-          "created_at": "2026-04-02T14:17:32Z",
-          "created_at_i": 1775139452,
-          "num_comments": 0,
-          "objectID": "47614844",
-          "points": 2,
-          "story_id": 47614844,
-          "story_text": "We spent the last year architecting a &#x27;Dream Engine&#x27; to solve agent statelessness. We used Claude to help refine the logic. We open-sourced the repo on March 28th. On March 31st, the Claude Code leak revealed an internal autoDream feature with the exact same 4-phase consolidation logic.<p>I&#x27;m looking for a technical audit of my memory decay logic in core&#x2F;dream.ts. With 100 nodes already active, I want to ensure the consolidation won&#x27;t bottleneck at scale.",
-          "title": "Show HN: Local-first agent memory loop 48hrs before the Claude Code leak",
-          "updated_at": "2026-04-02T14:42:48Z",
-          "url": "https://github.com/Bitterbot-AI/bitterbot-desktop"
         }
       ]
     },
@@ -2059,6 +2054,56 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "adamfisk"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I helped build Lantern, a censorship circumvention <em>tool</em> that’s been downloaded over 150 million times globally, with most users in China, Russia, Iran, and the UAE. Before Lantern I was the lead engineer at LimeWire (back in those days our whole dev team was about 5 people!).<p>Making your traffic indistinguishable from normal internet traffic has long been a foundational part of effective censorship circumvention, a technique sometimes referred to as “collateral freedom.” If censors can’t differentiate your traffic from other traffic they don’t want to block, then they can’t block you without incurring collateral – and economic – damage.<p>It turns out this is fundamentally the same challenge AI agents face when trying to crawl webpages. The <em>tools</em> they use are identifiable by various means, whether it’s unique TLS handshakes from Python, Go, Node, etc, or whether it’s details in the page processing that make it clear the requester is not a real browser and/or human.<p>To get around this, Wick uses Cronet (Chrome's network stack as a standalone lib) as the default for all requests. It’s not a headless browser – just the network layer. Wick works as an <em>MCP</em> <em>server</em> so Claude Code and Cursor pick it up automatically and also supports local API access. I also just got it on Apify's store if you want to try it without installing anything — it works from their datacenter IPs, which surprised me honestly. Importantly, it’s local by default. That way, if you’re running from your house, it can automatically take advantage of your residential IP address, which is less likely to get flagged.<p>The Cronet version is lightning fast and effective, but it doesn’t do JS rendering. If you need that (a requirement for accessing some sites), we have Wick Pro that does some fancy things on that side too that are very different from other <em>tools</em> out there.<p>Open source, MIT. Pro for $20/mo if you need JS rendering.<p>Code: <a href=\"https://github.com/wickproject/wick\" rel=\"nofollow\">https://github.com/wickproject/wick</a><p>Site: <a href=\"https://getwick.dev\" rel=\"nofollow\">https://getwick.dev</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Wick – censorship circumvention tech repurposed for AI web access"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://getwick.dev"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_adamfisk",
+            "story_47617401",
+            "show_hn"
+          ],
+          "author": "adamfisk",
+          "children": [
+            47618568,
+            47618855
+          ],
+          "created_at": "2026-04-02T17:27:57Z",
+          "created_at_i": 1775150877,
+          "num_comments": 2,
+          "objectID": "47617401",
+          "points": 3,
+          "story_id": 47617401,
+          "story_text": "I helped build Lantern, a censorship circumvention tool that’s been downloaded over 150 million times globally, with most users in China, Russia, Iran, and the UAE. Before Lantern I was the lead engineer at LimeWire (back in those days our whole dev team was about 5 people!).<p>Making your traffic indistinguishable from normal internet traffic has long been a foundational part of effective censorship circumvention, a technique sometimes referred to as “collateral freedom.” If censors can’t differentiate your traffic from other traffic they don’t want to block, then they can’t block you without incurring collateral – and economic – damage.<p>It turns out this is fundamentally the same challenge AI agents face when trying to crawl webpages. The tools they use are identifiable by various means, whether it’s unique TLS handshakes from Python, Go, Node, etc, or whether it’s details in the page processing that make it clear the requester is not a real browser and&#x2F;or human.<p>To get around this, Wick uses Cronet (Chrome&#x27;s network stack as a standalone lib) as the default for all requests. It’s not a headless browser – just the network layer. Wick works as an MCP server so Claude Code and Cursor pick it up automatically and also supports local API access. I also just got it on Apify&#x27;s store if you want to try it without installing anything — it works from their datacenter IPs, which surprised me honestly. Importantly, it’s local by default. That way, if you’re running from your house, it can automatically take advantage of your residential IP address, which is less likely to get flagged.<p>The Cronet version is lightning fast and effective, but it doesn’t do JS rendering. If you need that (a requirement for accessing some sites), we have Wick Pro that does some fancy things on that side too that are very different from other tools out there.<p>Open source, MIT. Pro for $20&#x2F;mo if you need JS rendering.<p>Code: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;wickproject&#x2F;wick\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;wickproject&#x2F;wick</a><p>Site: <a href=\"https:&#x2F;&#x2F;getwick.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;getwick.dev</a>",
+          "title": "Show HN: Wick – censorship circumvention tech repurposed for AI web access",
+          "updated_at": "2026-04-02T19:29:33Z",
+          "url": "https://getwick.dev"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "czhu12"
             },
             "story_text": {
@@ -2094,11 +2139,11 @@
           "created_at_i": 1775138750,
           "num_comments": 1,
           "objectID": "47614678",
-          "points": 3,
+          "points": 4,
           "story_id": 47614678,
           "story_text": "I’ve been building Canine for about 2 years now, and have slowly grown it to about ~1000 developers using it for deploying all sorts of apps &#x2F; projects &#x2F; etc. Amazingly, the whole thing is still able to run on a single 48GB Hetzner VPS. Think of it basically like Coolify, for Kubernetes. I previously posted about it here: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103</a><p>Recently, we added MCP capabilities to canine, and I was shocked how well it worked. It basically is able to create services, cron jobs, databases, get the logs for these and redeploy. See it here: <a href=\"https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol\" rel=\"nofollow\">https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol</a>. The real killer feature has been an MCP tool to be able to download a temporary kubeconfig, which lets Claude then breakout and get the full Kubernetes API to automate pretty much anything. A little scary how competent Claude can be here.<p>When we paired this with Claude code running locally, you’re basically able to have a fully autonomous system vibe code, deploy, wait, and test in staging (by querying APIs, no browser skills yet), automatically fix bugs, repush, etc.<p>Best practices in this area haven’t quite been established and I know this community has a somewhat nervous relationship with AI tools. The way we have it set up is basically to only allow access on staging servers, and disable entirely on production, for fear of things going wrong. MCP is opt in on canine at the moment.<p>The implementation was pretty easy. We just took our API and basically wrapped an MCP OAuth authentication around it where all the GET endpoints became resources and all the POST &#x2F; PUT &#x2F; DELETE endpoints became tools. Digging through other MCP implementations, it seems the actual documentation is quite out of date. The MCP documentation recommends using Prompt objects to guide the LLM’s, but most implementations I’ve seen out there actually use skills, which have to be installed.<p>Anyways, happy to share whatever, it was a cool bit of project, just now seeing how people will use this.",
           "title": "Show HN: An MCP server for Devops automation",
-          "updated_at": "2026-04-02T15:29:03Z"
+          "updated_at": "2026-04-02T17:15:20Z"
         },
         {
           "_highlightResult": {
@@ -2139,15 +2184,18 @@
             "show_hn"
           ],
           "author": "CodeReclaimers",
+          "children": [
+            47618874
+          ],
           "created_at": "2026-04-02T13:45:11Z",
           "created_at_i": 1775137511,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47614404",
           "points": 3,
           "story_id": 47614404,
           "story_text": "I maintain neat-python and have been building a genetic programming framework in Julia. While doing research on that project, I kept finding the same complaint in PySR&#x27;s GitHub discussions: people give up not because symbolic regression doesn&#x27;t work, but because getting Julia talking to Python is a repeated source of failure, especially on Windows and in notebooks.<p>So I stood up Occam (occam.fit) — a hosted MCP server exposing two tools: run_sindy for sparse identification of dynamics from time series (seconds), and run_pysr for evolutionary symbolic regression returning a Pareto front of expressions by complexity vs. accuracy (10–60s).<p>The core design decision is a pool of pre-warmed Julia workers running SymbolicRegression.jl v2. Julia processes stay alive between requests so the 2-minute compilation hit is paid once at server startup, not per call.<p>Free tier, no signup. Happy to answer questions about the architecture or symbolic regression generally, and curious whether anyone has use cases that don&#x27;t fit the current limits.",
           "title": "Show HN: Symbolic regression as an MCP tool (SINDy and PySR, free, no install)",
-          "updated_at": "2026-04-02T14:12:03Z",
+          "updated_at": "2026-04-02T19:14:51Z",
           "url": "https://occam.fit/"
         },
         {
@@ -2246,61 +2294,57 @@
           "title": "Show HN: I/Claude reverse-engineered Figma's binary WebSocket protocol",
           "updated_at": "2026-04-02T07:46:01Z",
           "url": "https://github.com/allan-simon/figma-kiwi-protocol"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "nexdrew"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "# What?<p>Introducing mkdnsite (&quot;markdown site&quot;) - an open source Markdown-native web <em>server</em> that serves HTML to humans and raw Markdown to agents. No build step required. Runs on Bun/Node/Deno, as an OS-specific standalone executable, or as a Docker container. Possibly the easiest way to go from Markdown files to functional website in the new agentic era.<p>Features:<p>- Runtime-only, zero build<p>- Content negotiation means HTML for browsers and Markdown for agents<p>- Supports GitHub-Flavored Markdown rendering<p>- Mermaid diagrams, KaTeX math, embedded Chart.js charts, syntax highlighting all included<p>- Full-text search for humans, <em>MCP</em> <em>tools</em> for agents<p>- Customizable UI theming with auto-support for light/dark modes<p>- Pull Markdown files directly from a GitHub repo<p>See official docs at <a href=\"https://mkdn.site\" rel=\"nofollow\">https://mkdn.site</a><p># Why?<p>Back in February, I saw Cloudflare's announcement of &quot;Markdown for Agents&quot; (<a href=\"https://blog.cloudflare.com/markdown-for-agents/\" rel=\"nofollow\">https://blog.cloudflare.com/markdown-for-agents/</a>). At the time, I thought &quot;so I'm writing my API docs or blog in Markdown and converting it to HTML for a website, only to have Cloudflare turn it back into Markdown for AI/agent consumption&quot;. This seemed odd to me.<p>I'm a Node.js developer but had recently been building projects on Bun because of the &quot;batteries included&quot; features, like cross-compilation of standalone executables (similar to Go), that Node.js lacked natively (yes, I'm aware of Node SEA, but it's messy/complicated and `bun build --compile` is not).<p>Then, when I found `Bun.markdown`, something clicked for me - building a web <em>server</em> that converts Markdown to HTML at runtime should be super easy. And agents actually want Markdown, so why not combine the two ideas?<p>Humans like writing Markdown (well, at least, I do) and agents like reading Markdown (less verbose, easier to grok, fewer tokens). Add to this the fact that we can now use AI to write software, and my side project was born.<p>Is Markdown-to-HTML a new concept? Absolutely not. It's pretty old and well-established. But what I think is new is the ability to do everything at runtime (no build step required) and the built-in support for AI agents. mkdnsite has content negotiation, automated llms.txt, an <em>MCP</em> <em>server</em>, and support for agent headers.<p># How?<p>I worked with Claude to refine the idea and come up with basic requirements/specs and then had Claude build me a scaffolded project. I started the project on March 7.<p>The following Friday, I configured my first set of OpenClaw agents on my personal machine and set them up to use Slack. From that point on, I spent most evenings and every weekend building mkdnsite and a hosted service (at <a href=\"https://mkdn.io\" rel=\"nofollow\">https://mkdn.io</a>) by logging ideas as issues in GitHub and talking with my &quot;team lead&quot; agent on Slack to pick up the work and implement features.<p>mkdnsite v1.0.0 was released on March 16. The current version is v1.4.1 released March 28. Almost every line of code was written by AI, either via an autonomous OpenClaw agent or via individual Claude Code sessions.<p># So what?<p>Just looking for some honest feedback. Is this useful? Is it dumb? Is there another tool that offers the same combination of features (I looked and couldn't find one)?<p>I am not downplaying SSGs at all. I quite like Astro. And I love GitHub Pages. I just think there's room for an easier/simpler solution.<p>Please try it out and let me know what you think. Thanks."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "server"
-              ],
-              "value": "Show HN: Mkdnsite – Markdown-native web <em>server</em> for humans (HTML) and agents (md)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/mkdnsite/mkdnsite"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_nexdrew",
-            "story_47606946",
-            "show_hn"
-          ],
-          "author": "nexdrew",
-          "created_at": "2026-04-01T21:47:32Z",
-          "created_at_i": 1775080052,
-          "num_comments": 0,
-          "objectID": "47606946",
-          "points": 4,
-          "story_id": 47606946,
-          "story_text": "# What?<p>Introducing mkdnsite (&quot;markdown site&quot;) - an open source Markdown-native web server that serves HTML to humans and raw Markdown to agents. No build step required. Runs on Bun&#x2F;Node&#x2F;Deno, as an OS-specific standalone executable, or as a Docker container. Possibly the easiest way to go from Markdown files to functional website in the new agentic era.<p>Features:<p>- Runtime-only, zero build<p>- Content negotiation means HTML for browsers and Markdown for agents<p>- Supports GitHub-Flavored Markdown rendering<p>- Mermaid diagrams, KaTeX math, embedded Chart.js charts, syntax highlighting all included<p>- Full-text search for humans, MCP tools for agents<p>- Customizable UI theming with auto-support for light&#x2F;dark modes<p>- Pull Markdown files directly from a GitHub repo<p>See official docs at <a href=\"https:&#x2F;&#x2F;mkdn.site\" rel=\"nofollow\">https:&#x2F;&#x2F;mkdn.site</a><p># Why?<p>Back in February, I saw Cloudflare&#x27;s announcement of &quot;Markdown for Agents&quot; (<a href=\"https:&#x2F;&#x2F;blog.cloudflare.com&#x2F;markdown-for-agents&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;blog.cloudflare.com&#x2F;markdown-for-agents&#x2F;</a>). At the time, I thought &quot;so I&#x27;m writing my API docs or blog in Markdown and converting it to HTML for a website, only to have Cloudflare turn it back into Markdown for AI&#x2F;agent consumption&quot;. This seemed odd to me.<p>I&#x27;m a Node.js developer but had recently been building projects on Bun because of the &quot;batteries included&quot; features, like cross-compilation of standalone executables (similar to Go), that Node.js lacked natively (yes, I&#x27;m aware of Node SEA, but it&#x27;s messy&#x2F;complicated and `bun build --compile` is not).<p>Then, when I found `Bun.markdown`, something clicked for me - building a web server that converts Markdown to HTML at runtime should be super easy. And agents actually want Markdown, so why not combine the two ideas?<p>Humans like writing Markdown (well, at least, I do) and agents like reading Markdown (less verbose, easier to grok, fewer tokens). Add to this the fact that we can now use AI to write software, and my side project was born.<p>Is Markdown-to-HTML a new concept? Absolutely not. It&#x27;s pretty old and well-established. But what I think is new is the ability to do everything at runtime (no build step required) and the built-in support for AI agents. mkdnsite has content negotiation, automated llms.txt, an MCP server, and support for agent headers.<p># How?<p>I worked with Claude to refine the idea and come up with basic requirements&#x2F;specs and then had Claude build me a scaffolded project. I started the project on March 7.<p>The following Friday, I configured my first set of OpenClaw agents on my personal machine and set them up to use Slack. From that point on, I spent most evenings and every weekend building mkdnsite and a hosted service (at <a href=\"https:&#x2F;&#x2F;mkdn.io\" rel=\"nofollow\">https:&#x2F;&#x2F;mkdn.io</a>) by logging ideas as issues in GitHub and talking with my &quot;team lead&quot; agent on Slack to pick up the work and implement features.<p>mkdnsite v1.0.0 was released on March 16. The current version is v1.4.1 released March 28. Almost every line of code was written by AI, either via an autonomous OpenClaw agent or via individual Claude Code sessions.<p># So what?<p>Just looking for some honest feedback. Is this useful? Is it dumb? Is there another tool that offers the same combination of features (I looked and couldn&#x27;t find one)?<p>I am not downplaying SSGs at all. I quite like Astro. And I love GitHub Pages. I just think there&#x27;s room for an easier&#x2F;simpler solution.<p>Please try it out and let me know what you think. Thanks.",
-          "title": "Show HN: Mkdnsite – Markdown-native web server for humans (HTML) and agents (md)",
-          "updated_at": "2026-04-02T04:39:16Z",
-          "url": "https://github.com/mkdnsite/mkdnsite"
         }
       ]
     },
     {
       "query": "self+improving+AI",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "Sonam_<em>AI</em>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "self",
+                "improving"
+              ],
+              "value": "Ref/ect: <em>Self</em>-<em>Improving</em> RL layer on top of Observability"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://getreflect.starlight-search.com"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_Sonam_AI",
+            "story_47619281"
+          ],
+          "author": "Sonam_AI",
+          "children": [
+            47619364,
+            47619282
+          ],
+          "created_at": "2026-04-02T19:46:36Z",
+          "created_at_i": 1775159196,
+          "num_comments": 1,
+          "objectID": "47619281",
+          "points": 2,
+          "story_id": 47619281,
+          "title": "Ref/ect: Self-Improving RL layer on top of Observability",
+          "updated_at": "2026-04-02T19:54:33Z",
+          "url": "https://getreflect.starlight-search.com"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -2337,6 +2381,7 @@
           ],
           "author": "amangsingh",
           "children": [
+            47617410,
             47611202,
             47602435,
             47602458,
@@ -2347,13 +2392,13 @@
           ],
           "created_at": "2026-04-01T14:40:28Z",
           "created_at_i": 1775054428,
-          "num_comments": 10,
+          "num_comments": 11,
           "objectID": "47601608",
-          "points": 7,
+          "points": 8,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-02T15:18:49Z",
+          "updated_at": "2026-04-02T17:59:18Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
@@ -2491,48 +2536,6 @@
           "story_text": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.\nWith that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results. \nThe Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and self-improving platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.\nVulcanAMI — Transformer &#x2F; Neuro-Symbolic Hybrid AI Platform\nVulcan is an AI system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.\nFEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.\nCurrent Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete\nWhat This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far\nThis is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution\nIf you find parts that are useful, interesting, or worth improving, you are free to build on them under the terms of the license.\nI know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;The_Code_Factory_Working_V2.git\nVulcanAMI: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;VulcanAMI_LLM.git\nFEMS: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;FEMS.git",
           "title": "New Open Source from Non-Traditional Builder",
           "updated_at": "2026-03-23T09:17:05Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "samurai48"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "Autoskill – <em>self</em>-<em>improving</em> skills for <em>AI</em> agents"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Samurai412/autoskill"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_samurai48",
-            "story_47467265"
-          ],
-          "author": "samurai48",
-          "children": [
-            47467266
-          ],
-          "created_at": "2026-03-21T14:20:07Z",
-          "created_at_i": 1774102807,
-          "num_comments": 2,
-          "objectID": "47467265",
-          "points": 2,
-          "story_id": 47467265,
-          "title": "Autoskill – self-improving skills for AI agents",
-          "updated_at": "2026-03-21T20:36:45Z",
-          "url": "https://github.com/Samurai412/autoskill"
         }
       ]
     }
