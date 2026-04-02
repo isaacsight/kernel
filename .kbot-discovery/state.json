@@ -1,18 +1,18 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-04-02T16:28:11.257Z",
-    "intel": "2026-04-02T12:10:32.183Z",
-    "outreach": "2026-04-02T15:57:42.527Z",
+    "pulse": "2026-04-02T08:26:23.419Z",
+    "intel": "2026-04-02T08:26:27.784Z",
+    "outreach": "2026-04-02T16:14:22.365Z",
     "writing": "2026-04-01T18:09:27.655Z",
-    "evolution": "2026-04-02T16:27:40.493Z",
-    "opportunities": "2026-04-02T12:10:37.655Z",
-    "actions": "2026-04-02T15:57:39.455Z",
-    "synthesis": "2026-04-02T16:28:11.791Z",
-    "obsidian": "2026-04-02T15:57:42.608Z"
+    "evolution": "2026-04-02T16:28:42.285Z",
+    "opportunities": "2026-04-02T08:26:32.186Z",
+    "actions": "2026-04-02T16:14:22.016Z",
+    "synthesis": "2026-04-02T08:26:24.259Z",
+    "obsidian": "2026-04-02T16:14:22.372Z"
   },
   "stats": {
-    "totalRuns": 1440,
-    "totalPulses": 596,
+    "totalRuns": 1439,
+    "totalPulses": 595,
     "totalIntel": 69,
     "totalOutreach": 30,
     "totalWriting": 15,
@@ -22,9 +22,9 @@
     "postsAttempted": 1,
     "postsEngaged": 0,
     "postsFlagged": 0,
-    "evolutionSuccesses": 2,
-    "evolutionFailures": 9,
-    "totalSynthesis": 390,
+    "evolutionSuccesses": 3,
+    "evolutionFailures": 8,
+    "totalSynthesis": 389,
     "totalObsidianSyncs": 13
   },
   "knownStars": 10,
