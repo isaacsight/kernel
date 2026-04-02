@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T12:45:08.711Z",
+  "timestamp": "2026-04-02T13:12:16.118Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(release): auto-sync CLI go.mod to released api-client/dspy versions",
+      "url": "https://github.com/getlarge/themoltnet/pull/611",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "chore(main): release 2.13.0",
+      "url": "https://github.com/minhoyoo-iotrust/WAIaaS/pull/319",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "fix(release): include api-client codegen commits in release-please",
       "url": "https://github.com/getlarge/themoltnet/pull/608",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Fix browser gateway methods after deferred plugin reload",
-      "url": "https://github.com/openclaw/openclaw/pull/59667",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "refactor: deduplicate schemas and split by domain",
-      "url": "https://github.com/getlarge/themoltnet/pull/607",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
