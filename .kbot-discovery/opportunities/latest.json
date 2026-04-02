@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T13:12:19.484Z",
+  "timestamp": "2026-04-02T13:30:31.269Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "refactor: finish schema cleanup remaining items",
+      "url": "https://github.com/getlarge/themoltnet/pull/613",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "fix(release): auto-sync CLI go.mod to released api-client/dspy versions",
       "url": "https://github.com/getlarge/themoltnet/pull/611",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "chore(main): release 2.13.0",
       "url": "https://github.com/minhoyoo-iotrust/WAIaaS/pull/319",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(release): include api-client codegen commits in release-please",
-      "url": "https://github.com/getlarge/themoltnet/pull/608",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "Sheets: a terminal based spreadsheet tool",
+      "url": "https://reddit.com/r/commandline/comments/1sah35v/sheets_a_terminal_based_spreadsheet_tool/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "I created my own desktop terminal app — local, fast, multiplatform 😎",
       "url": "https://reddit.com/r/commandline/comments/1s9tld3/i_created_my_own_desktop_terminal_app_local_fast/",
       "why": "Discussion in r/commandline about AI agents",
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "So i tried Karis CLI",
       "url": "https://reddit.com/r/commandline/comments/1s90ntr/so_i_tried_karis_cli/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "syntropy - lua plugin powered launcher",
-      "url": "https://reddit.com/r/commandline/comments/1s8kqot/syntropy_lua_plugin_powered_launcher/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
