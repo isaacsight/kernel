@@ -1,25 +1,6 @@
 {
-  "timestamp": "2026-04-02T16:15:42.038Z",
-  "projects": [
-    {
-      "name": "clawwork-ai/ClawWork",
-      "url": "https://github.com/clawwork-ai/ClawWork",
-      "stars": 370,
-      "description": "Client for OpenClaw — Connect ClawWork to your own OpenClaw and unlock 10x multi-session productivity."
-    },
-    {
-      "name": "jackwener/opencli",
-      "url": "https://github.com/jackwener/opencli",
-      "stars": 11348,
-      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
-    },
-    {
-      "name": "inkeep/agents",
-      "url": "https://github.com/inkeep/agents",
-      "stars": 1042,
-      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
-    }
-  ],
+  "timestamp": "2026-04-02T16:15:48.158Z",
+  "projects": [],
   "latestPaper": {
     "title": "HippoCamp: Benchmarking Contextual Agents on Personal Computers",
     "summary": "We present HippoCamp, a new benchmark designed to evaluate agents' capabilities on multimodal file management. Unlike existing agent benchmarks that focus on tasks like web interaction, tool use, or software automation in generic settings, HippoCamp evaluates agents in user-centric environments to model individual user profiles and search massive personal files for context-aware reasoning. Our benchmark instantiates device-scale file systems over real-world profiles spanning diverse modalities, "
