@@ -13,6 +13,7 @@
 //   7. Daily digest         — once per day (summarize changes)
 //   8. Dream consolidation  — every 2 hours (memory consolidation via dream engine)
 //   9. Morning briefing     — once per day (email summary of overnight data)
+//  10. Collective sync      — every 4 hours (share + fetch anonymized patterns)
 //
 // Runs via macOS launchd every 15 minutes. Tasks self-schedule.
 // ═══════════════════════════════════════════════════════════════════════
@@ -53,6 +54,7 @@ const INTERVALS = {
   dailyDigest: 24 * 60 * 60_000,  // 24 hours
   dreamConsolidation: 2 * 60 * 60_000,  // 2 hours
   morningBriefing: 24 * 60 * 60_000,   // 24 hours
+  collectiveSync: 4 * 60 * 60_000,     // 4 hours
 } as const
 
 // i18n languages (from src/i18n.ts)
@@ -865,6 +867,24 @@ async function taskMorningBriefing(_state: DaemonState): Promise<number> {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// TASK 10: Collective Sync
+// Shares anonymized patterns with the collective and fetches new ones
+// ═══════════════════════════════════════════════════════════════════════
+
+async function taskCollectiveSync(_state: DaemonState): Promise<number> {
+  // Dynamic import — collective-learning.ts lives in the kbot package
+  const { runCollectiveSync } = await import('../packages/kbot/src/collective-learning.js') as {
+    runCollectiveSync: () => Promise<string>
+  }
+
+  const summary = await runCollectiveSync()
+  log(`[collectiveSync] ${summary}`)
+
+  // Token count is 0 — collective sync uses HTTP, not Ollama
+  return 0
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // MAIN ORCHESTRATOR
 // ═══════════════════════════════════════════════════════════════════════
 
@@ -903,6 +923,7 @@ async function main(): Promise<void> {
   await runTask('i18nSync', state, INTERVALS.i18nSync, () => taskI18nSync(state))
   await runTask('dreamConsolidation', state, INTERVALS.dreamConsolidation, () => taskDreamConsolidation(state))
   await runTask('morningBriefing', state, INTERVALS.morningBriefing, () => taskMorningBriefing(state))
+  await runTask('collectiveSync', state, INTERVALS.collectiveSync, () => taskCollectiveSync(state))
 
   saveState(state)
   log(`═══ Daemon run complete. Errors today: ${state.stats.errorsToday} ═══\n`)

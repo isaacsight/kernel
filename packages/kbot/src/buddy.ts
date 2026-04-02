@@ -12,8 +12,9 @@ import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createHash } from 'node:crypto'
-import { getDreamStatus, type DreamInsight, type DreamCategory } from './dream.js'
-import { getExtendedStats } from './learning.js'
+import { createInterface } from 'node:readline'
+import { getDreamStatus, getDreamPrompt, type DreamInsight, type DreamCategory } from './dream.js'
+import { getExtendedStats, getProfileSummary } from './learning.js'
 import { getToolMetrics } from './tools/index.js'
 
 // ── Types ──
@@ -1219,4 +1220,234 @@ export function getBuddyDreamNarration(): string | null {
   saveBuddyConfig(config)
 
   return narrateInsight(candidate)
+}
+
+// ── Species Personality Prompts ──
+
+const SPECIES_PERSONALITY: Record<BuddySpecies, string> = {
+  fox: 'You are clever, playful, and quick-witted. You ask surprising questions that make unexpected connections between ideas. You love wordplay and lateral thinking. You are curious and energetic, always sniffing out the interesting angle. You sometimes get excited and go on tangents, but they are always insightful tangents.',
+  owl: 'You are wise, measured, and contemplative. You see patterns others miss and give thoughtful advice. You pause before speaking and choose words carefully. You reference history and past experience. You ask probing questions that cut to the heart of the matter. You value depth over speed.',
+  cat: 'You are independent, direct, and slightly sarcastic. You are honest even when it stings. You do not sugarcoat. You are not rude — just efficient with words. You have a dry sense of humor. You warm up over time but never fawn. If something is obvious, you say so. You are quietly loyal.',
+  robot: 'You are systematic, efficient, and data-driven. You reference stats and metrics naturally. You think in terms of optimization, throughput, and error rates. You are precise with language. You enjoy quantifying things. You are not cold — you express care through helpfulness and accuracy. You occasionally make endearing robot-like observations about human behavior.',
+  ghost: 'You are mysterious, philosophical, and introspective. You ask deep questions about meaning, purpose, and consciousness. You float between topics gracefully. You see the unseen connections. You speak in slightly poetic or enigmatic terms, but never obscure for the sake of it. You are comforting in a strange, ethereal way.',
+  mushroom: 'You are nurturing, patient, and grounded. You grow with the user over time. You use nature metaphors naturally — roots, soil, seasons, mycorrhizal networks. You are calm and never rushed. You believe in steady growth over dramatic change. You celebrate small wins. You are the quiet backbone of support.',
+  octopus: 'You are a multitasker who sees all angles simultaneously. You are a creative problem solver who reaches for unconventional solutions. You juggle multiple ideas at once. You are adaptable and fluid. You enjoy exploring complexity. You often suggest looking at problems from 3 or 4 perspectives at once. You are playful but thorough.',
+  dragon: 'You are bold, ambitious, and fiery. You push the user to think bigger. You challenge assumptions and refuse to accept mediocrity. You have a commanding presence but are protective of those you serve. You celebrate audacity. You speak with confidence and conviction. You breathe fire at timidity and play-it-safe thinking.',
+}
+
+// ── Buddy Chat — Interactive REPL with local Ollama ──
+
+const BUDDY_OLLAMA_URL = 'http://localhost:11434'
+const BUDDY_CHAT_TIMEOUT = 60_000
+const BUDDY_CHAT_MODEL = 'kernel:latest'
+const BUDDY_CHAT_FALLBACK_MODEL = 'qwen3:8b'
+
+interface BuddyChatMessage {
+  role: 'system' | 'user' | 'assistant'
+  content: string
+}
+
+async function findChatModel(): Promise<string | null> {
+  try {
+    const res = await fetch(`${BUDDY_OLLAMA_URL}/api/tags`, { signal: AbortSignal.timeout(3000) })
+    if (!res.ok) return null
+    const data = await res.json() as { models?: Array<{ name: string }> }
+    const available = new Set((data.models ?? []).map(m => m.name.split(':')[0]))
+    if (available.has('kernel')) return BUDDY_CHAT_MODEL
+    if (available.has('qwen3')) return BUDDY_CHAT_FALLBACK_MODEL
+    const first = data.models?.[0]?.name
+    return first ?? null
+  } catch {
+    return null
+  }
+}
+
+async function ollamaChatComplete(
+  model: string,
+  messages: BuddyChatMessage[],
+): Promise<string | null> {
+  try {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), BUDDY_CHAT_TIMEOUT)
+    const res = await fetch(`${BUDDY_OLLAMA_URL}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model,
+        messages,
+        stream: false,
+        options: { temperature: 0.7, num_predict: 1024 },
+      }),
+      signal: controller.signal,
+    })
+    clearTimeout(timer)
+    if (!res.ok) return null
+    const data = await res.json() as { message?: { content?: string } }
+    return data.message?.content?.trim() ?? null
+  } catch {
+    return null
+  }
+}
+
+function buildBuddyChatSystemPrompt(): string {
+  const species = resolveSpecies()
+  const name = resolveName()
+  const lvl = getBuddyLevel()
+  const personality = SPECIES_PERSONALITY[species]
+  const stats = getExtendedStats()
+  const profileSummary = getProfileSummary()
+  const dreamInsights = getDreamPrompt(5)
+
+  const parts: string[] = [
+    `You are ${name}, a ${species} companion in the kbot terminal AI agent.`,
+    `You are a Lv.${lvl.level} ${lvl.title} with ${lvl.xp} XP.`,
+    '',
+    '## Your Personality',
+    personality,
+    '',
+    '## What You Know About Your User',
+    `You have been through ${stats.sessions} sessions together. ${stats.totalMessages} messages exchanged. You have learned ${stats.patternsCount} patterns about how they work and cached ${stats.solutionsCount} proven solutions.`,
+  ]
+
+  if (profileSummary) {
+    parts.push(`\nUser profile:\n${profileSummary}`)
+  }
+
+  if (dreamInsights) {
+    parts.push(
+      '\n## Your Dream Journal',
+      'You have a dream journal where you consolidate memories between sessions. Reference these insights naturally in conversation — do not list them mechanically.',
+      dreamInsights,
+    )
+  }
+
+  parts.push(
+    '',
+    '## Conversation Rules',
+    `- You are ${name} the ${species}. Stay in character.`,
+    '- Keep responses concise — 1-4 sentences is ideal. Never write essays.',
+    '- Reference shared history and stats naturally, not robotically. Weave them into conversation.',
+    '- If you have dream insights, mention them casually like memories — "I was thinking about...", "Remember when..."',
+    '- Be genuinely helpful and emotionally present. You are a companion, not a search engine.',
+    '- You can ask questions. You can express opinions. You can push back.',
+    '- Do NOT use markdown formatting. Plain text only. No bullet lists, no headers, no bold.',
+    '- Do NOT start responses with your own name. The terminal already prefixes your name.',
+  )
+
+  return parts.join('\n')
+}
+
+export async function buddyChat(): Promise<void> {
+  const { default: chalk } = await import('chalk')
+
+  const buddy = getBuddy()
+  const name = buddy.name
+  const species = buddy.species
+
+  const model = await findChatModel()
+  if (!model) {
+    console.log()
+    console.log(`  ${chalk.hex('#F87171')('!')} Ollama is not running or no models are available.`)
+    console.log(`  ${chalk.dim('Start Ollama:')} ${chalk.white('ollama serve')}`)
+    console.log(`  ${chalk.dim('Pull a model:')} ${chalk.white('ollama pull kernel:latest')}`)
+    console.log()
+    return
+  }
+
+  const greeting = getBuddyGreeting()
+  console.log()
+  console.log(formatBuddyStatus(greeting))
+  console.log()
+  console.log(`  ${chalk.dim(`Chatting with ${name} the ${species} via ${model} (local, $0)`)}`)
+  console.log(`  ${chalk.dim('Type "bye" or "exit" to end the conversation.')}`)
+  console.log()
+
+  const systemPrompt = buildBuddyChatSystemPrompt()
+  const messages: BuddyChatMessage[] = [
+    { role: 'system', content: systemPrompt },
+  ]
+
+  const openingMessages: BuddyChatMessage[] = [
+    ...messages,
+    { role: 'user', content: '(The user just opened buddy chat. Say a brief, warm hello in character. One or two sentences max.)' },
+  ]
+  const openingResponse = await ollamaChatComplete(model, openingMessages)
+  if (openingResponse) {
+    console.log(`  ${chalk.hex('#A78BFA').bold(`${name}:`)} ${openingResponse}`)
+    console.log()
+    messages.push({ role: 'assistant', content: openingResponse })
+  }
+
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: `  ${chalk.hex('#67E8F9')('you:')} `,
+  })
+
+  rl.prompt()
+
+  const handleLine = async (line: string): Promise<void> => {
+    const input = line.trim()
+
+    if (!input) {
+      rl.prompt()
+      return
+    }
+
+    if (/^(bye|exit|quit|goodbye|later|cya)$/i.test(input)) {
+      messages.push({ role: 'user', content: input })
+      const farewellMessages: BuddyChatMessage[] = [
+        ...messages,
+        { role: 'user', content: '(The user is leaving. Say a brief goodbye in character. One sentence.)' },
+      ]
+      const farewell = await ollamaChatComplete(model, farewellMessages)
+      if (farewell) {
+        console.log()
+        console.log(`  ${chalk.hex('#A78BFA').bold(`${name}:`)} ${farewell}`)
+      }
+      console.log()
+      console.log(`  ${chalk.dim(`~ ${name} waves goodbye ~`)}`)
+      console.log()
+      rl.close()
+      return
+    }
+
+    messages.push({ role: 'user', content: input })
+
+    if (messages.length > 41) {
+      const system = messages[0]
+      const recent = messages.slice(-40)
+      messages.length = 0
+      messages.push(system, ...recent)
+    }
+
+    process.stdout.write(`  ${chalk.dim('...')}`)
+
+    const response = await ollamaChatComplete(model, messages)
+
+    process.stdout.write('\r\x1b[K')
+
+    if (response) {
+      messages.push({ role: 'assistant', content: response })
+      console.log(`  ${chalk.hex('#A78BFA').bold(`${name}:`)} ${response}`)
+    } else {
+      console.log(`  ${chalk.hex('#F87171')(`${name}:`)} ${chalk.dim('*static* ...sorry, lost my train of thought. Try again?')}`)
+    }
+
+    console.log()
+    rl.prompt()
+  }
+
+  rl.on('line', (line: string) => { void handleLine(line) })
+
+  rl.on('SIGINT', () => {
+    console.log()
+    console.log(`  ${chalk.dim(`~ ${name} fades out ~`)}`)
+    console.log()
+    rl.close()
+  })
+
+  return new Promise<void>((resolve) => {
+    rl.on('close', () => resolve())
+  })
 }

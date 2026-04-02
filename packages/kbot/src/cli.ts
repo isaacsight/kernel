@@ -51,7 +51,7 @@ import {
 import { checkForUpdate, selfUpdate } from './updater.js'
 import { runTutorial } from './tutorial.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
-import { getBuddy, getBuddyGreeting, formatBuddyStatus, getBuddyDreamNarration } from './buddy.js'
+import { getBuddy, getBuddyGreeting, formatBuddyStatus, getBuddyDreamNarration, renameBuddy, buddyChat, getAchievements, getBuddyLevel } from './buddy.js'
 import chalk from 'chalk'
 
 import { createRequire } from 'node:module'
@@ -3764,6 +3764,62 @@ async function main(): Promise<void> {
       console.log(`  ${chalk.dim(`${insights.length} active insights · avg relevance ${avgRel}% · ${state.totalArchived} archived`)}`)
       console.log()
     })
+
+  // ── Buddy Commands ──
+
+  const buddyCmd = program
+    .command('buddy')
+    .description('Your terminal companion — chat, rename, view status')
+
+  buddyCmd
+    .command('chat')
+    .description('Chat with your buddy companion (local Ollama, $0)')
+    .action(async () => {
+      await buddyChat()
+      process.exit(0)
+    })
+
+  buddyCmd
+    .command('status')
+    .description('Show your buddy, level, and achievements')
+    .action(() => {
+      const buddy = getBuddy()
+      const lvl = getBuddyLevel()
+      const achievements = getAchievements()
+      const unlocked = achievements.filter(a => a.unlockedAt !== null)
+      const locked = achievements.filter(a => a.unlockedAt === null)
+
+      console.log()
+      console.log(formatBuddyStatus())
+      console.log()
+      console.log(`  ${chalk.bold('Achievements')} ${chalk.dim(`(${unlocked.length}/${achievements.length})`)}`)
+      console.log(`  ${chalk.dim('─'.repeat(40))}`)
+      for (const a of unlocked) {
+        console.log(`  ${chalk.hex('#4ADE80')(a.icon)} ${a.name} ${chalk.dim('— ' + a.description)}`)
+      }
+      for (const a of locked) {
+        console.log(`  ${chalk.dim(a.icon + ' ' + a.name + ' — ' + a.description + ' [locked]')}`)
+      }
+      console.log()
+      process.exit(0)
+    })
+
+  buddyCmd
+    .command('rename <name>')
+    .description('Rename your buddy')
+    .action((name: string) => {
+      const buddy = getBuddy()
+      const oldName = buddy.name
+      renameBuddy(name)
+      console.log()
+      console.log(formatBuddyStatus(`${oldName} is now ${name}!`))
+      console.log()
+      process.exit(0)
+    })
+
+  buddyCmd.action(() => {
+    buddyCmd.commands.find(c => c.name() === 'status')?.parse(['', '', 'status'])
+  })
 
   program.parse(process.argv)
 
