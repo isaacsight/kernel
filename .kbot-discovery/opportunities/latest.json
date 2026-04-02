@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T12:10:36.452Z",
+  "timestamp": "2026-04-02T12:28:15.239Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(agent): close remaining internal-context leak paths",
-      "url": "https://github.com/openclaw/openclaw/pull/59649",
+      "title": "refactor: deduplicate schemas and split by domain",
+      "url": "https://github.com/getlarge/themoltnet/pull/607",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "chore(go): add dspy-adapters to release pipeline and drop all replace directives",
-      "url": "https://github.com/getlarge/themoltnet/pull/604",
+      "title": "Bump the android-deps group across 1 directory with 16 updates",
+      "url": "https://github.com/manthan291999/openclaw/pull/12",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "refactor(plugins): tighten web fetch provider boundary",
-      "url": "https://github.com/openclaw/openclaw/pull/59646",
+      "title": "feat(plugins): surface imported runtime state in status tooling",
+      "url": "https://github.com/openclaw/openclaw/pull/59659",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
