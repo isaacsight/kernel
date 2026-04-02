@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-04-02T16:27:39.003Z",
+  "timestamp": "2026-04-02T16:28:30.845Z",
   "cycle": 18,
   "observations": {
-    "pulsesCollected": 48,
+    "pulsesCollected": 50,
     "starsDelta": 0,
     "hnScore": 1,
     "hnComments": 0
   },
   "improvement": {
-    "description": "NEW TOOL: Implements a hierarchical scheduler for agent tasks.",
-    "status": "NOT APPLIED"
+    "description": "NEW TOOL: Discover and list available AI agents from public registries.",
+    "status": "APPLIED — passed type-check + tests"
   },
   "feedback": {
     "totalSuccesses": 2,
