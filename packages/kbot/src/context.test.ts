@@ -53,6 +53,7 @@ function makeMachineProfile(overrides: Partial<MachineProfile> = {}): MachinePro
     canRunLocalModels: true,
     gpuAcceleration: 'metal' as const,
     recommendedModelSize: '70B',
+    mlxAvailable: false,
     probedAt: new Date().toISOString(),
     ...overrides,
   }

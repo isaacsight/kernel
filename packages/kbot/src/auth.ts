@@ -119,12 +119,12 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     name: 'DeepSeek',
     apiUrl: 'https://api.deepseek.com/chat/completions',
     apiStyle: 'openai',
-    defaultModel: 'deepseek-v4',
+    defaultModel: 'deepseek-v4',        // ~1T MoE (37B active), 1M context
     fastModel: 'deepseek-chat',
-    inputCost: 0.27,
-    outputCost: 1.10,
+    inputCost: 0.50,                     // V4 pricing (cache hit: $0.10)
+    outputCost: 2.0,
     authHeader: 'bearer',
-    models: ['deepseek-v4', 'deepseek-chat', 'deepseek-reasoner'],
+    models: ['deepseek-v4', 'deepseek-v4-reasoner', 'deepseek-chat', 'deepseek-reasoner'],
   },
   groq: {
     name: 'Groq',
@@ -729,6 +729,44 @@ export async function listOllamaModels(): Promise<string[]> {
     return (data.models || []).map((m: any) => m.name)
   } catch {
     return []
+  }
+}
+
+/** Fetch the Ollama server version string (e.g. "0.19.0"), or null if unreachable */
+export async function getOllamaVersion(): Promise<string | null> {
+  try {
+    const res = await fetch(`${OLLAMA_HOST}/api/version`, { signal: AbortSignal.timeout(2000) })
+    if (!res.ok) return null
+    const data = await res.json() as { version?: string }
+    return data.version ?? null
+  } catch {
+    return null
+  }
+}
+
+/** Detect whether Ollama is using the MLX backend (Ollama 0.19+ on Apple Silicon) */
+export async function isOllamaMLXBackend(): Promise<boolean> {
+  try {
+    // Ollama 0.19+ exposes backend info in /api/ps (running models list)
+    // If the response contains "mlx" in the backend or accelerator field, MLX is active.
+    // Fallback: check Ollama version >= 0.19 on Apple Silicon (MLX is the default).
+    const res = await fetch(`${OLLAMA_HOST}/api/ps`, { signal: AbortSignal.timeout(2000) })
+    if (res.ok) {
+      const text = await res.text()
+      if (/mlx/i.test(text)) return true
+    }
+
+    // Heuristic: Ollama 0.19+ on arm64 darwin defaults to MLX
+    const version = await getOllamaVersion()
+    if (version && process.arch === 'arm64' && process.platform === 'darwin') {
+      const parts = version.split('.').map(Number)
+      const [major = 0, minor = 0] = parts
+      if (major > 0 || minor >= 19) return true
+    }
+
+    return false
+  } catch {
+    return false
   }
 }
 

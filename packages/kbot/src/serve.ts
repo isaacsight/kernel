@@ -269,8 +269,9 @@ export async function startServe(options: ServeOptions): Promise<void> {
     printInfo(`  GET  /metrics               — Execution metrics`)
     printInfo(`  GET  /apps                  — List MCP App-capable tools`)
     printInfo(`  GET  /.well-known/agent.json — A2A Agent Card`)
-    printInfo(`  POST /a2a/tasks             — A2A submit task`)
-    printInfo(`  GET  /a2a/tasks/:id         — A2A task status`)
+    printInfo(`  POST /a2a                   — A2A JSON-RPC endpoint`)
+    printInfo(`  POST /a2a/tasks             — A2A submit task (REST)`)
+    printInfo(`  GET  /a2a/tasks/:id         — A2A task status (REST)`)
     if (options.token) {
       printInfo(`  Auth: Bearer token required`)
     }

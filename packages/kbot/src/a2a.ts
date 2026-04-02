@@ -122,79 +122,147 @@ function pruneTasks(): void {
 
 // ── Skill mapping ──
 
+/** Tag map for all agents — specialists, preset agents, and domain experts.
+ *  Used to populate A2A skill tags for discovery by external agents. */
+const AGENT_TAG_MAP: Record<string, string[]> = {
+  // Core specialists
+  kernel: ['general', 'assistant', 'coordination'],
+  researcher: ['research', 'fact-checking', 'synthesis'],
+  coder: ['programming', 'code-generation', 'debugging', 'refactoring'],
+  writer: ['writing', 'documentation', 'content-creation'],
+  analyst: ['analysis', 'strategy', 'evaluation'],
+  // Extended specialists
+  aesthete: ['design', 'ui-ux', 'css', 'accessibility'],
+  guardian: ['security', 'vulnerability-scanning', 'owasp'],
+  curator: ['knowledge-management', 'documentation', 'indexing'],
+  strategist: ['business-strategy', 'roadmapping', 'competitive-analysis'],
+  // Domain specialists
+  infrastructure: ['devops', 'ci-cd', 'containers', 'cloud'],
+  quant: ['data-science', 'statistics', 'quantitative-analysis'],
+  investigator: ['deep-research', 'root-cause-analysis', 'forensics'],
+  oracle: ['predictions', 'trend-analysis', 'forecasting'],
+  chronist: ['history', 'timelines', 'changelog'],
+  sage: ['philosophy', 'wisdom', 'mental-models'],
+  communicator: ['communication', 'messaging', 'presentations'],
+  adapter: ['translation', 'format-conversion', 'migration'],
+  producer: ['music-production', 'ableton', 'daw', 'audio', 'midi'],
+  scientist: ['science', 'biology', 'chemistry', 'physics', 'earth-science', 'mathematics'],
+  immune: ['self-audit', 'bug-finding', 'security-hardening', 'code-quality'],
+  neuroscientist: ['neuroscience', 'brain', 'eeg', 'cognitive-science', 'neuroimaging'],
+  social_scientist: ['social-science', 'psychometrics', 'game-theory', 'econometrics', 'survey-design'],
+  philosopher: ['philosophy', 'logic', 'ethics', 'argumentation'],
+  epidemiologist: ['epidemiology', 'public-health', 'disease-modeling', 'surveillance'],
+  linguist: ['linguistics', 'phonetics', 'typology', 'corpus-analysis', 'nlp'],
+  historian: ['history', 'archival-research', 'digital-humanities', 'timelines'],
+  // Preset agents
+  hacker: ['offensive-security', 'penetration-testing', 'ctf', 'red-team'],
+  operator: ['automation', 'orchestration', 'task-execution', 'planning'],
+  dreamer: ['creative', 'worldbuilding', 'imagination', 'dream-interpretation'],
+  creative: ['generative-art', 'creative-coding', 'shaders', 'music', 'procedural-generation'],
+  developer: ['kbot', 'self-improvement', 'typescript', 'tooling'],
+  replit: ['replit', 'deployment', 'ai-integration', 'rapid-prototyping'],
+  gamedev: ['game-development', 'game-design', 'godot', 'unity', 'game-feel'],
+  playtester: ['game-testing', 'qa', 'game-feel', 'ux-testing', 'difficulty-analysis'],
+  trader: ['trading', 'markets', 'technical-analysis', 'portfolio', 'defi'],
+}
+
 /** Map specialist definitions to A2A skills */
 function specialistToSkill(id: string, def: SpecialistDef): AgentSkill {
-  const tagMap: Record<string, string[]> = {
-    kernel: ['general', 'assistant', 'coordination'],
-    researcher: ['research', 'fact-checking', 'synthesis'],
-    coder: ['programming', 'code-generation', 'debugging', 'refactoring'],
-    writer: ['writing', 'documentation', 'content-creation'],
-    analyst: ['analysis', 'strategy', 'evaluation'],
-    aesthete: ['design', 'ui-ux', 'css', 'accessibility'],
-    guardian: ['security', 'vulnerability-scanning', 'owasp'],
-    curator: ['knowledge-management', 'documentation', 'indexing'],
-    strategist: ['business-strategy', 'roadmapping', 'competitive-analysis'],
-    infrastructure: ['devops', 'ci-cd', 'containers', 'cloud'],
-    quant: ['data-science', 'statistics', 'quantitative-analysis'],
-    investigator: ['deep-research', 'root-cause-analysis', 'forensics'],
-    oracle: ['predictions', 'trend-analysis', 'forecasting'],
-    chronist: ['history', 'timelines', 'changelog'],
-    sage: ['philosophy', 'wisdom', 'mental-models'],
-    communicator: ['communication', 'messaging', 'presentations'],
-    adapter: ['translation', 'format-conversion', 'migration'],
-  }
-
   return {
     id,
     name: def.name,
     description: def.prompt.split('\n')[0].replace(/^You are (?:an? )?/, ''),
-    tags: tagMap[id] || [id],
+    tags: AGENT_TAG_MAP[id] || [id],
   }
 }
 
-/** Additional built-in agent skills (preset agents beyond the 17 specialists) */
-const EXTRA_SKILLS: AgentSkill[] = [
+/** Skill descriptions for preset agents not in SPECIALISTS.
+ *  These come from matrix.ts BUILTIN_AGENTS and PRESETS. */
+const PRESET_AGENT_SKILLS: AgentSkill[] = [
   {
     id: 'hacker',
     name: 'Hacker',
-    description: 'Offensive security specialist and CTF solver — red team analysis',
-    tags: ['offensive-security', 'penetration-testing', 'ctf'],
+    description: 'Offensive security specialist and CTF solver — red team analysis, exploit chains, and remediation',
+    tags: AGENT_TAG_MAP['hacker'],
+    examples: ['Find auth bypass in this API', 'Solve this CTF challenge', 'Red team our deployment'],
   },
   {
     id: 'operator',
     name: 'Operator',
-    description: 'Autonomous executor — plans, executes, verifies, and reports',
-    tags: ['automation', 'orchestration', 'task-execution'],
+    description: 'Autonomous executor — plans, decomposes, executes, verifies, and reports multi-step tasks',
+    tags: AGENT_TAG_MAP['operator'],
+    examples: ['Refactor this module and update all tests', 'Set up CI/CD for this repo'],
   },
   {
     id: 'dreamer',
     name: 'Dreamer',
-    description: 'Liminal space explorer — dream interpretation, worldbuilding, vision engineering',
-    tags: ['creative', 'worldbuilding', 'imagination'],
+    description: 'Liminal space explorer — dream interpretation, worldbuilding, and vision engineering',
+    tags: AGENT_TAG_MAP['dreamer'],
+    examples: ['Interpret this dream', 'Build a world with these constraints'],
   },
   {
     id: 'creative',
     name: 'Creative',
-    description: 'Generative art, creative coding, shaders, procedural generation',
-    tags: ['generative-art', 'creative-coding', 'shaders', 'music'],
+    description: 'Generative art, creative coding, shaders, procedural generation, and computational aesthetics',
+    tags: AGENT_TAG_MAP['creative'],
+    examples: ['Generate a p5.js particle system', 'Write a GLSL shader for this effect'],
   },
   {
     id: 'developer',
     name: 'Developer',
-    description: 'kbot self-improvement specialist — builds and extends kbot itself',
-    tags: ['kbot', 'self-improvement', 'typescript', 'tooling'],
+    description: 'kbot self-improvement specialist — builds, extends, and optimizes kbot itself',
+    tags: AGENT_TAG_MAP['developer'],
+    examples: ['Add a new tool to kbot', 'Optimize the agent routing system'],
+  },
+  {
+    id: 'replit',
+    name: 'Replit',
+    description: 'Replit specialist — builds, integrates, and deploys AI-powered systems on Replit',
+    tags: AGENT_TAG_MAP['replit'],
+    examples: ['Deploy this app on Replit', 'Set up Replit AI integration'],
+  },
+  {
+    id: 'gamedev',
+    name: 'Game Developer',
+    description: 'Game development specialist — game design, Godot/Unity, game feel, systems design, and rapid prototyping',
+    tags: AGENT_TAG_MAP['gamedev'],
+    examples: ['Design a combat system', 'Build a Godot platformer prototype'],
+  },
+  {
+    id: 'playtester',
+    name: 'Playtester',
+    description: 'Game QA and playtesting specialist — difficulty analysis, UX evaluation, game feel critique',
+    tags: AGENT_TAG_MAP['playtester'],
+    examples: ['Evaluate this game design', 'Test the difficulty curve'],
+  },
+  {
+    id: 'trader',
+    name: 'Trader',
+    description: 'Trading and market analysis specialist — technical analysis, portfolio management, DeFi, and quantitative strategies',
+    tags: AGENT_TAG_MAP['trader'],
+    examples: ['Analyze this stock chart', 'Build a portfolio rebalancing strategy'],
   },
 ]
 
 // ── Agent Card ──
 
-/** Build the Agent Card for this kbot instance */
+/** Build the Agent Card for this kbot instance.
+ *
+ *  Exposes all 35 kbot agents as A2A skills — 26 specialists from
+ *  the SPECIALISTS registry plus 9 preset agents from the matrix system.
+ *  Each skill includes tags for capability-based discovery and optional
+ *  example prompts.
+ */
 export function buildAgentCard(endpointUrl?: string): AgentCard {
   const url = endpointUrl || `http://localhost:${DEFAULT_PORT}`
 
+  // Deduplicate: PRESET_AGENT_SKILLS may overlap with SPECIALISTS keys
+  const specialistIds = new Set(Object.keys(SPECIALISTS))
+  const deduplicatedPresets = PRESET_AGENT_SKILLS.filter(s => !specialistIds.has(s.id))
+
   const skills: AgentSkill[] = [
     ...Object.entries(SPECIALISTS).map(([id, def]) => specialistToSkill(id, def)),
-    ...EXTRA_SKILLS,
+    ...deduplicatedPresets,
   ]
 
   return {
@@ -332,23 +400,248 @@ export interface A2ARouteOptions {
   token?: string
 }
 
+// ── Server status tracking ──
+
+/** Tracks A2A server runtime state for the a2a_status tool */
+interface A2AServerState {
+  running: boolean
+  startedAt: string | null
+  endpointUrl: string | null
+  tasksReceived: number
+  tasksCompleted: number
+  tasksFailed: number
+  activeConnections: Set<string>
+}
+
+const serverState: A2AServerState = {
+  running: false,
+  startedAt: null,
+  endpointUrl: null,
+  tasksReceived: 0,
+  tasksCompleted: 0,
+  tasksFailed: 0,
+  activeConnections: new Set(),
+}
+
+/** Record an incoming connection (caller agent URL or IP) */
+function trackConnection(req: IncomingMessage): void {
+  const forwarded = req.headers['x-forwarded-for']
+  const ip = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : req.socket.remoteAddress || 'unknown'
+  const userAgent = req.headers['user-agent'] || 'unknown'
+  serverState.activeConnections.add(`${ip} (${userAgent})`)
+}
+
+/** Get a snapshot of the A2A server status for the a2a_status tool */
+export function getA2AStatus(): {
+  server: {
+    running: boolean
+    startedAt: string | null
+    endpointUrl: string | null
+    uptime: string | null
+  }
+  tasks: {
+    received: number
+    completed: number
+    failed: number
+    active: number
+    stored: number
+  }
+  capabilities: {
+    totalSkills: number
+    skills: Array<{ id: string; name: string; tags: string[] }>
+  }
+  connections: {
+    uniqueClients: number
+    clients: string[]
+  }
+  registry: {
+    remoteAgents: number
+    agents: Array<{ url: string; name: string; skills: number; lastContact: string | null }>
+  }
+} {
+  const card = buildAgentCard(serverState.endpointUrl || undefined)
+  const registry = loadRegistry()
+  const activeTasks = [...tasks.values()].filter(t => t.status.state === 'working' || t.status.state === 'submitted')
+
+  let uptime: string | null = null
+  if (serverState.startedAt) {
+    const ms = Date.now() - new Date(serverState.startedAt).getTime()
+    const hours = Math.floor(ms / 3_600_000)
+    const minutes = Math.floor((ms % 3_600_000) / 60_000)
+    const seconds = Math.floor((ms % 60_000) / 1_000)
+    uptime = `${hours}h ${minutes}m ${seconds}s`
+  }
+
+  return {
+    server: {
+      running: serverState.running,
+      startedAt: serverState.startedAt,
+      endpointUrl: serverState.endpointUrl,
+      uptime,
+    },
+    tasks: {
+      received: serverState.tasksReceived,
+      completed: serverState.tasksCompleted,
+      failed: serverState.tasksFailed,
+      active: activeTasks.length,
+      stored: tasks.size,
+    },
+    capabilities: {
+      totalSkills: card.skills.length,
+      skills: card.skills.map(s => ({ id: s.id, name: s.name, tags: s.tags })),
+    },
+    connections: {
+      uniqueClients: serverState.activeConnections.size,
+      clients: [...serverState.activeConnections],
+    },
+    registry: {
+      remoteAgents: Object.keys(registry).length,
+      agents: Object.values(registry).map(r => ({
+        url: r.url,
+        name: r.card.name,
+        skills: r.card.skills.length,
+        lastContact: r.lastContactedAt || null,
+      })),
+    },
+  }
+}
+
+// ── JSON-RPC types for A2A protocol compliance ──
+
+interface JsonRpcRequest {
+  jsonrpc: '2.0'
+  id: string | number
+  method: string
+  params?: Record<string, unknown>
+}
+
+interface JsonRpcResponse {
+  jsonrpc: '2.0'
+  id: string | number | null
+  result?: unknown
+  error?: { code: number; message: string; data?: unknown }
+}
+
+/** JSON-RPC error codes per the spec */
+const JSONRPC_PARSE_ERROR = -32700
+const JSONRPC_INVALID_REQUEST = -32600
+const JSONRPC_METHOD_NOT_FOUND = -32601
+const JSONRPC_INVALID_PARAMS = -32602
+const JSONRPC_INTERNAL_ERROR = -32603
+const JSONRPC_TASK_NOT_FOUND = -32001
+const JSONRPC_TASK_NOT_CANCELABLE = -32002
+
+function jsonRpcSuccess(id: string | number | null, result: unknown): JsonRpcResponse {
+  return { jsonrpc: '2.0', id, result }
+}
+
+function jsonRpcError(id: string | number | null, code: number, message: string, data?: unknown): JsonRpcResponse {
+  return { jsonrpc: '2.0', id, error: { code, message, ...(data !== undefined ? { data } : {}) } }
+}
+
 /**
- * Mount A2A protocol routes onto an existing HTTP server's request handler.
+ * Handle a JSON-RPC request per the A2A protocol spec.
  *
- * Returns a request handler that should be called from the server's main
- * request listener. Returns `true` if the request was handled by A2A routes,
- * `false` if it should be passed to the next handler.
+ * Supported methods:
+ *   - tasks/send       — submit a task (sync execution)
+ *   - tasks/get        — get task status and result
+ *   - tasks/cancel     — cancel a running task
+ *   - tasks/sendSubscribe — submit a task (async, returns immediately)
+ */
+async function handleJsonRpc(rpcReq: JsonRpcRequest): Promise<JsonRpcResponse> {
+  const { id, method, params } = rpcReq
+
+  switch (method) {
+    case 'tasks/send': {
+      const message = params?.message as A2AMessage | undefined
+      if (!message?.parts || !message?.role) {
+        return jsonRpcError(id, JSONRPC_INVALID_PARAMS, 'Invalid params: expected { message: { role, parts } }')
+      }
+      const metadata = params?.metadata as Record<string, unknown> | undefined
+      const task = createTask(message, metadata)
+      serverState.tasksReceived++
+      const completed = await executeTask(task)
+      if (completed.status.state === 'completed') serverState.tasksCompleted++
+      if (completed.status.state === 'failed') serverState.tasksFailed++
+      return jsonRpcSuccess(id, taskToResponse(completed))
+    }
+
+    case 'tasks/sendSubscribe': {
+      const message = params?.message as A2AMessage | undefined
+      if (!message?.parts || !message?.role) {
+        return jsonRpcError(id, JSONRPC_INVALID_PARAMS, 'Invalid params: expected { message: { role, parts } }')
+      }
+      const metadata = params?.metadata as Record<string, unknown> | undefined
+      const task = createTask(message, metadata)
+      serverState.tasksReceived++
+      // Async: return immediately, execute in background
+      executeTask(task).then(() => {
+        if (task.status.state === 'completed') serverState.tasksCompleted++
+        if (task.status.state === 'failed') serverState.tasksFailed++
+      }).catch(() => {
+        task.status = { state: 'failed', message: 'Background execution failed', timestamp: new Date().toISOString() }
+        serverState.tasksFailed++
+      })
+      return jsonRpcSuccess(id, taskToResponse(task))
+    }
+
+    case 'tasks/get': {
+      const taskId = params?.id as string | undefined
+      if (!taskId) {
+        return jsonRpcError(id, JSONRPC_INVALID_PARAMS, 'Invalid params: expected { id: string }')
+      }
+      const task = tasks.get(taskId)
+      if (!task) {
+        return jsonRpcError(id, JSONRPC_TASK_NOT_FOUND, `Task ${taskId} not found`)
+      }
+      return jsonRpcSuccess(id, taskToResponse(task))
+    }
+
+    case 'tasks/cancel': {
+      const taskId = params?.id as string | undefined
+      if (!taskId) {
+        return jsonRpcError(id, JSONRPC_INVALID_PARAMS, 'Invalid params: expected { id: string }')
+      }
+      const task = tasks.get(taskId)
+      if (!task) {
+        return jsonRpcError(id, JSONRPC_TASK_NOT_FOUND, `Task ${taskId} not found`)
+      }
+      if (task.status.state === 'completed' || task.status.state === 'failed') {
+        return jsonRpcError(id, JSONRPC_TASK_NOT_CANCELABLE, `Cannot cancel task in '${task.status.state}' state`)
+      }
+      task.status = { state: 'canceled', timestamp: new Date().toISOString() }
+      return jsonRpcSuccess(id, taskToResponse(task))
+    }
+
+    default:
+      return jsonRpcError(id, JSONRPC_METHOD_NOT_FOUND, `Unknown method: ${method}`)
+  }
+}
+
+/**
+ * Create the A2A request handler.
+ *
+ * Supports two interfaces:
+ *   1. **JSON-RPC** (A2A spec) — POST to `/a2a` with JSON-RPC envelope
+ *   2. **REST** (backward-compatible) — GET/POST to `/a2a/tasks`, `/a2a/tasks/:id`, etc.
+ *
+ * Agent Card discovery is always at `GET /.well-known/agent.json`.
  */
 export function createA2AHandler(options: A2ARouteOptions = {}): (req: IncomingMessage, res: ServerResponse) => Promise<boolean> {
   const baseUrl = options.endpointUrl || `http://localhost:${options.port || DEFAULT_PORT}`
   const card = buildAgentCard(baseUrl)
+
+  // Mark server as running
+  serverState.running = true
+  serverState.startedAt = new Date().toISOString()
+  serverState.endpointUrl = baseUrl
 
   return async (req: IncomingMessage, res: ServerResponse): Promise<boolean> => {
     const url = new URL(req.url || '/', `http://localhost`)
     const path = url.pathname
 
     // CORS preflight for A2A routes
-    if (req.method === 'OPTIONS' && (path === '/.well-known/agent.json' || path.startsWith('/a2a/'))) {
+    if (req.method === 'OPTIONS' && (path === '/.well-known/agent.json' || path.startsWith('/a2a'))) {
       res.setHeader('Access-Control-Allow-Origin', '*')
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
@@ -358,7 +651,7 @@ export function createA2AHandler(options: A2ARouteOptions = {}): (req: IncomingM
     }
 
     // Auth check for task endpoints
-    if (options.token && path.startsWith('/a2a/')) {
+    if (options.token && path.startsWith('/a2a')) {
       const auth = req.headers.authorization
       const bearerToken = auth?.startsWith('Bearer ') ? auth.slice(7) : null
       const tokenBuf = Buffer.from(options.token)
@@ -371,12 +664,44 @@ export function createA2AHandler(options: A2ARouteOptions = {}): (req: IncomingM
 
     // GET /.well-known/agent.json — Agent Card discovery
     if (path === '/.well-known/agent.json' && req.method === 'GET') {
+      trackConnection(req)
       sendJson(res, 200, card)
       return true
     }
 
-    // POST /a2a/tasks — Submit a new task
+    // POST /a2a — JSON-RPC endpoint (A2A protocol spec)
+    if (path === '/a2a' && req.method === 'POST') {
+      trackConnection(req)
+      try {
+        const rawBody = await readBody(req)
+        const parsed = JSON.parse(rawBody) as unknown
+
+        // Validate JSON-RPC envelope
+        if (
+          typeof parsed !== 'object' || parsed === null ||
+          (parsed as Record<string, unknown>).jsonrpc !== '2.0' ||
+          typeof (parsed as Record<string, unknown>).method !== 'string'
+        ) {
+          sendJson(res, 200, jsonRpcError(
+            (parsed as Record<string, unknown>)?.id as string | number | null ?? null,
+            JSONRPC_INVALID_REQUEST,
+            'Invalid JSON-RPC request: expected { jsonrpc: "2.0", method: string, id: string|number }',
+          ))
+          return true
+        }
+
+        const rpcReq = parsed as JsonRpcRequest
+        const rpcRes = await handleJsonRpc(rpcReq)
+        sendJson(res, 200, rpcRes)
+      } catch (err) {
+        sendJson(res, 200, jsonRpcError(null, JSONRPC_PARSE_ERROR, 'Parse error: ' + (err instanceof Error ? err.message : 'invalid JSON')))
+      }
+      return true
+    }
+
+    // POST /a2a/tasks — Submit a new task (REST, backward-compatible)
     if (path === '/a2a/tasks' && req.method === 'POST') {
+      trackConnection(req)
       try {
         const body = JSON.parse(await readBody(req)) as {
           message?: A2AMessage
@@ -389,6 +714,7 @@ export function createA2AHandler(options: A2ARouteOptions = {}): (req: IncomingM
         }
 
         const task = createTask(body.message, body.metadata)
+        serverState.tasksReceived++
 
         // Check if caller wants synchronous execution
         const sync = url.searchParams.get('sync') === 'true'
@@ -396,13 +722,19 @@ export function createA2AHandler(options: A2ARouteOptions = {}): (req: IncomingM
         if (sync) {
           // Synchronous: execute and return completed task
           const completed = await executeTask(task)
+          if (completed.status.state === 'completed') serverState.tasksCompleted++
+          if (completed.status.state === 'failed') serverState.tasksFailed++
           sendJson(res, 200, taskToResponse(completed))
         } else {
           // Asynchronous: return immediately with submitted status, execute in background
           sendJson(res, 202, taskToResponse(task))
           // Fire and forget — task will be updated in the store
-          executeTask(task).catch(() => {
+          executeTask(task).then(() => {
+            if (task.status.state === 'completed') serverState.tasksCompleted++
+            if (task.status.state === 'failed') serverState.tasksFailed++
+          }).catch(() => {
             task.status = { state: 'failed', message: 'Background execution failed', timestamp: new Date().toISOString() }
+            serverState.tasksFailed++
           })
         }
       } catch (err) {
@@ -411,7 +743,7 @@ export function createA2AHandler(options: A2ARouteOptions = {}): (req: IncomingM
       return true
     }
 
-    // GET /a2a/tasks/:id — Get task status and result
+    // GET /a2a/tasks/:id — Get task status and result (REST)
     const taskStatusMatch = path.match(/^\/a2a\/tasks\/([a-f0-9-]+)$/)
     if (taskStatusMatch && req.method === 'GET') {
       const taskId = taskStatusMatch[1]
@@ -424,7 +756,7 @@ export function createA2AHandler(options: A2ARouteOptions = {}): (req: IncomingM
       return true
     }
 
-    // POST /a2a/tasks/:id/cancel — Cancel a task
+    // POST /a2a/tasks/:id/cancel — Cancel a task (REST)
     const taskCancelMatch = path.match(/^\/a2a\/tasks\/([a-f0-9-]+)\/cancel$/)
     if (taskCancelMatch && req.method === 'POST') {
       const taskId = taskCancelMatch[1]

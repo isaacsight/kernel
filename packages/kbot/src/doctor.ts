@@ -18,6 +18,8 @@ import {
   PROVIDERS,
   KBOT_DIR,
   ENV_KEYS,
+  getOllamaVersion,
+  isOllamaMLXBackend,
   type ByokProvider,
 } from './auth.js'
 import { getExtendedStats } from './learning.js'
@@ -212,15 +214,27 @@ async function checkLocalProviderReachable(
       return { name: providerConfig.name, status: 'fail', message: `returned ${res.status}` }
     }
 
-    // For Ollama, report model count
+    // For Ollama, report model count, version, and MLX backend
     if (providerId === 'ollama') {
       try {
         const data = await res.json() as { models?: Array<{ name: string }> }
         const models = data.models ?? []
-        const modelInfo = models.length > 0
-          ? `running (${models.length} model${models.length !== 1 ? 's' : ''})`
-          : 'running (no models pulled)'
-        return { name: providerConfig.name, status: 'pass', message: modelInfo }
+        const parts: string[] = []
+
+        // Model count
+        parts.push(models.length > 0
+          ? `${models.length} model${models.length !== 1 ? 's' : ''}`
+          : 'no models pulled')
+
+        // Version
+        const version = await getOllamaVersion()
+        if (version) parts.push(`v${version}`)
+
+        // MLX backend detection
+        const mlxActive = await isOllamaMLXBackend()
+        if (mlxActive) parts.push('MLX backend')
+
+        return { name: providerConfig.name, status: 'pass', message: `running (${parts.join(', ')})` }
       } catch {
         return { name: providerConfig.name, status: 'pass', message: 'running' }
       }
@@ -413,6 +427,42 @@ function checkShell(): CheckResult {
   return { name: 'Shell', status: 'pass', message: `${shellName}${completionStatus}` }
 }
 
+// ── Ollama MLX check (0.19+ on Apple Silicon) ──
+
+async function checkOllamaMLX(): Promise<CheckResult | null> {
+  // Only relevant on Apple Silicon
+  if (process.platform !== 'darwin' || process.arch !== 'arm64') return null
+
+  const version = await getOllamaVersion()
+  if (!version) return null  // Ollama not running — already reported by provider check
+
+  const parts = version.split('.').map(Number)
+  const [major = 0, minor = 0] = parts
+
+  if (major > 0 || minor >= 19) {
+    const mlxActive = await isOllamaMLXBackend()
+    if (mlxActive) {
+      return {
+        name: 'Ollama MLX',
+        status: 'pass',
+        message: `Ollama ${version} — MLX backend available for 2x faster inference on Apple Silicon`,
+      }
+    }
+    return {
+      name: 'Ollama MLX',
+      status: 'pass',
+      message: `Ollama ${version} — MLX supported (57% faster prefill, 93% faster decode on Apple Silicon)`,
+    }
+  }
+
+  // Ollama is running but older than 0.19
+  return {
+    name: 'Ollama MLX',
+    status: 'warn',
+    message: `Ollama ${version} — upgrade to 0.19+ for MLX backend (2x faster on Apple Silicon)`,
+  }
+}
+
 // ── Hardware checks (uses machine.ts) ──
 
 async function checkHardware(): Promise<CheckResult[]> {
@@ -497,17 +547,21 @@ export async function runDoctor(): Promise<DoctorReport> {
   checks.push(checkApiKey())
 
   // Async checks — run in parallel for speed
-  const [providerResults, hardwareResults] = await Promise.all([
+  const [providerResults, hardwareResults, ollamaMLXResult] = await Promise.all([
     checkAllProviders().catch((): CheckResult[] => [
       { name: 'Providers', status: 'warn', message: 'check failed unexpectedly' },
     ]),
     checkHardware().catch((): CheckResult[] => [
       { name: 'Hardware', status: 'warn', message: 'check failed unexpectedly' },
     ]),
+    checkOllamaMLX().catch((): CheckResult | null => null),
   ])
 
   // Provider checks (one line per provider)
   checks.push(...providerResults)
+
+  // Ollama MLX check (Apple Silicon only)
+  if (ollamaMLXResult) checks.push(ollamaMLXResult)
 
   // Hardware checks
   checks.push(...hardwareResults)

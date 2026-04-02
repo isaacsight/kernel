@@ -381,6 +381,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './pentest.js',          registerFn: 'registerPentestTools' },
   { path: './redblue.js',          registerFn: 'registerRedBlueTools' },
   { path: './hacker-toolkit.js',   registerFn: 'registerHackerToolkitTools' },
+  { path: './threat-intel.js',     registerFn: 'registerThreatIntelTools' },
   { path: './dj-set-builder.js',  registerFn: 'registerDjSetBuilderTools' },
   { path: './serum2-preset.js',  registerFn: 'registerSerum2PresetTools' },
   { path: './dream-tools.js',   registerFn: 'registerDreamTools' },
@@ -390,6 +391,10 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './voice-input-tools.js', registerFn: 'registerVoiceInputTools' },
   { path: './watchdog.js',         registerFn: 'registerWatchdogTools' },
   { path: './behavior-tools.js',   registerFn: 'registerBehaviorTools' },
+  { path: './a2a.js',              registerFn: 'registerA2ATools' },
+  { path: './financial-analysis.js', registerFn: 'registerFinancialAnalysisTools' },
+  { path: './ai-analysis.js',        registerFn: 'registerAIAnalysisTools' },
+  { path: './music-gen.js',          registerFn: 'registerMusicGenTools' },
 ]
 
 /** Track whether lazy tools have been registered */
