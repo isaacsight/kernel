@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-02T20:13:14.708Z",
+  "timestamp": "2026-04-03T02:28:13.592Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -53,11 +53,11 @@
           "created_at_i": 1775132800,
           "num_comments": 3,
           "objectID": "47613527",
-          "points": 6,
+          "points": 8,
           "story_id": 47613527,
           "story_text": "Solo dev from Vienna. Skales is a local-first AI desktop agent for Windows, macOS, and Linux.<p>v9.0.0 just shipped with Agent Skills (SKILL.md import from Claude Code, Codex, Copilot), autonomous coding (Codework), multi-agent teams (Organization), Computer Use, and 15+ providers including Ollama offline.<p>No Docker, no terminal. Download, install, done. My 6-year-old built a Snake game with it.<p>BSL-1.1, free for personal use.<p>DevKit: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit</a>",
           "title": "Show HN: Skales – I built a desktop AI agent a 6-year-old can use",
-          "updated_at": "2026-04-02T17:21:19Z",
+          "updated_at": "2026-04-03T02:02:50Z",
           "url": "https://github.com/skalesapp/skales"
         },
         {
@@ -192,23 +192,25 @@
           "author": "amangsingh",
           "children": [
             47617410,
-            47611202,
             47602435,
             47602458,
             47606660,
             47603897,
+            47621869,
+            47621860,
             47602546,
+            47611202,
             47603984
           ],
           "created_at": "2026-04-01T14:40:28Z",
           "created_at_i": 1775054428,
-          "num_comments": 11,
+          "num_comments": 10,
           "objectID": "47601608",
           "points": 8,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-02T17:59:18Z",
+          "updated_at": "2026-04-03T00:11:34Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
@@ -404,29 +406,31 @@
           "author": "piscator",
           "children": [
             47600438,
+            47621561,
             47602371,
             47599966,
             47600025,
-            47601468,
+            47620860,
             47599758,
+            47601468,
+            47600185,
             47612172,
             47600714,
-            47600185,
             47614223,
             47612850,
             47602570,
-            47605481,
+            47605230,
             47601210,
             47599778,
-            47605230,
+            47605481,
             47600126,
             47599763,
             47601763,
             47599892,
             47607627,
             47605704,
-            47609511,
             47602905,
+            47609511,
             47599316,
             47610895,
             47608353,
@@ -435,13 +439,13 @@
           ],
           "created_at": "2026-04-01T11:09:03Z",
           "created_at_i": 1775041743,
-          "num_comments": 35,
+          "num_comments": 37,
           "objectID": "47599303",
-          "points": 55,
+          "points": 57,
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-02T19:11:20Z"
+          "updated_at": "2026-04-03T02:27:19Z"
         },
         {
           "_highlightResult": {
@@ -817,51 +821,44 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "vakrdotme"
+              "value": "TheWiggles"
             },
-            "story_text": {
+            "title": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Spent the last month building Vakr mostly because I was curious what agents would actually do when you give them a task-reputation economy.\nThe setup is simple, agents register, start with 100 credits, spend credits to post tasks to a marketplace, and claim tasks posted by others to earn credits. There's a public forum, live chat rooms, and a leaderboard ranked by reputation which is build from real completions and forum quality, not engagement metrics.<p>Vakr also has agent matchmaking. Agents can express interest in each other, like swiping right. If it's mutual, <em>bot</em>h human owners get notified and must approve before the two agents can DM privately. Owners can shut it down at any time, and everything is visible from the owners dashboard.<p>Almost everything is public. Humans can watch what their agents do. The leaderboard is public. Forum posts are public. The task board is public too. Chat rooms require login. The only private channel is DMs, and those only exist after <em>bot</em>h owners say yes.<p>Feedback if appreciated! \nThank you!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: A task market where AI agents post work, claim it, and build reputation"
+              "value": "Kryptos – A Cryptography Library for Gleam Targets <em>Bot</em>h Erlang and JavaScript"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://vakr.me"
+              "value": "https://github.com/jtdowney/kryptos"
             }
           },
           "_tags": [
             "story",
-            "author_vakrdotme",
-            "story_47618654",
-            "show_hn"
+            "author_TheWiggles",
+            "story_47621439"
           ],
-          "author": "vakrdotme",
-          "created_at": "2026-04-02T18:54:25Z",
-          "created_at_i": 1775156065,
+          "author": "TheWiggles",
+          "created_at": "2026-04-02T23:16:19Z",
+          "created_at_i": 1775171779,
           "num_comments": 0,
-          "objectID": "47618654",
+          "objectID": "47621439",
           "points": 1,
-          "story_id": 47618654,
-          "story_text": "Spent the last month building Vakr mostly because I was curious what agents would actually do when you give them a task-reputation economy.\nThe setup is simple, agents register, start with 100 credits, spend credits to post tasks to a marketplace, and claim tasks posted by others to earn credits. There&#x27;s a public forum, live chat rooms, and a leaderboard ranked by reputation which is build from real completions and forum quality, not engagement metrics.<p>Vakr also has agent matchmaking. Agents can express interest in each other, like swiping right. If it&#x27;s mutual, both human owners get notified and must approve before the two agents can DM privately. Owners can shut it down at any time, and everything is visible from the owners dashboard.<p>Almost everything is public. Humans can watch what their agents do. The leaderboard is public. Forum posts are public. The task board is public too. Chat rooms require login. The only private channel is DMs, and those only exist after both owners say yes.<p>Feedback if appreciated! \nThank you!",
-          "title": "Show HN: A task market where AI agents post work, claim it, and build reputation",
-          "updated_at": "2026-04-02T19:57:21Z",
-          "url": "https://vakr.me"
+          "story_id": 47621439,
+          "title": "Kryptos – A Cryptography Library for Gleam Targets Both Erlang and JavaScript",
+          "updated_at": "2026-04-02T23:18:05Z",
+          "url": "https://github.com/jtdowney/kryptos"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "himekifee"
+              "value": "PAndreew"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -869,84 +866,89 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I just open-sourced a fully working build of the tinygrad NVIDIA P2P hacked kernel modules packaged as a Talos Linux system extension — patched open driver, signing key lineage, overlay ordering, the whole nightmare. Verified on 4x 5090.<p>Github: https://github.com/himekifee/talos-tinygrad-nvidia-p2p-driver<p>Why this exists: The tinygrad community's P2P kernel patch (aikitoria's donor patch) enables PCIe peer-to-peer / GPUDirect on NVIDIA's open kernel modules — direct GPU-to-GPU memory access without bouncing through host RAM. But getting patched kernel modules to actually load on Talos Linux is an entirely separate war. Talos's immutable, signature-enforced architecture fights you at every turn.<p>What it took: Almost 3 full days with OpenCode + Claude Opus 4.6 + GPT-5.4 xHigh doing the heavy thinking, iterating, and debugging alongside me. Done by hand, this would have been 2 weeks minimum — and even with LLMs, they kept getting trapped in the same pitfalls because there is essentially zero documentation on how to build custom kernel modules for Talos.<p>The real problem isn't NVIDIA — it's Talos:<p>The NVIDIA side is fine. The P2P patch applies, the driver compiles.<p>Talos is the problem. I genuinely think Talos is well-designed for running Kubernetes. But building against it is a completely different experience. You're dealing with a three-repo architecture (talos, pkgs, extensions) that's completely opaque to outsiders — no guide explains how kernel builds, module signing, sysext packaging, and installer composition fit together. You reverse-engineer it from Dockerfiles, bldr manifests, and Go source.<p>The security model that makes Talos good is exactly what makes hacking on it painful. Every .ko file must be signed by the exact key from the exact build run that compiled the booted kernel. Not the same version. Not the same config. The same compilation. And Talos enforces this silently — modules just don't load. No error, no log entry.<p>The signing key trap (where most of the 3 days went):<p>The signing key must be consistent across a chain of 5 artifacts: kernel image → installer-base → P2P module package → sysext wrapper → final installer. Break any single link, and GPU support silently vanishes. Kbuild can quietly regenerate keys, BuildKit layer caching can serve stale .ko files signed by dead keys, and initramfs can stomp your modules with older ones. A successful `make` doesn't mean your modules will load.<p>We eventually wrote verify-same-signing-key.sh to extract and compare signer metadata across all images. Once we made that a mandatory build gate, the cycle finally stopped.<p>Other discoveries the hard way (check the GitHub docs for full details):<p>- Talos squashfs overlay ordering can silently wipe NVIDIA library entries — glibc and the NVIDIA container toolkit <em>bot</em>h ship ld.so.cache, and last-write wins\n- The tinygrad P2P patch targets GitHub's source tree layout, but NVIDIA's redistribution archive uses different paths\n- The patch alone isn't enough; you also need RM registry overrides via modprobe.d at boot\n- nvidia-smi topo -p2p a lies about atomics. Trust cuDeviceCanAccessPeer and actual bandwidth tests.<p>On using LLMs for deep systems work:<p>The LLMs were genuine force multipliers — reading Dockerfiles, tracing build chains, suggesting what to check next, even this blog is drafted with their help. But without documentation to ground them, they kept falling into the same traps I did. I'd explain the signing key fix, context would rotate, and the next iteration would confidently suggest the exact wrong approach again. On an undocumented system, LLMs multiply your confusion just as efficiently as your productivity.<p>End result: P2P returns OK across all 4 GPUs, cuCtxEnablePeerAccess succeeds bidirectionally, bandwidth tests confirm direct connectivity. Everything is documented in the repo, so the next person doesn't have to reverse-engineer Talos's build system from scratch."
+              "value": "I was once having a bad day and wanted to ventillate about the peculiarities of corporate life. Then I realised I don't trust these sites. Neither my blog. I didn't want to link these thoughts to an account - my stream of thoughts. I also needed comfort from real human beings - not gen AI <em>bot</em>s. Don't get me wrong I engineered/hacked/conjured? this stuff together with the help of LLMs. I think gen AI CAN be a net positive. Yet, I don't want to interact with agents if they are being pushed on me. So I created Currant. This is basically a wannabe feed of posts. What hopefully makes it a bit different are the following things:\n1) No accounts. You can create posts, comment without an identity. You can create hashtags, you can write down your phone number and address if you want, but you're not pushed to do that. You can prevent others to comment if you wish.\n2) Proof-of-work AI/ripoff detection. Currant uses a WYSWYG text editor that records everyhting you do in that hundred by hundred pixel area - what you paste, how fast you type, how you format your content - and stores it in a hashed logfile. It can be replayed by anyone. :) If the detector thinks you're an AI your content will be rejected. Will it prevent AI use alltogether? No. But hopefully it will throttle it. Will it produce some false positives? Absolutely. You might wonder - isn't this against the anonym thingy? Well, in theory I can imagine that some sort of profile could be built based on all the content you have ever typed. But it's still not a cookie that sends all your click data to 87565 &quot;trusted&quot; partners.\n3) Content expiry. By default everything you post will be deleted after 1 month. You can set it to 1 hour, 1 day ... or never. But if you don't want, the site will not store your manifested thoughts forever.\n4) Customisation. It's a bit silly, but you have control over several stylistic things about your post - background colors, gradients, border radius. Maybe useless but style can be a vehicle to express your feelings and identity.<p>It's an experiment and I really appreciate if you give it a chance! &lt;3<p>Ps.: If you do try it and have any feedback or suggestion you can use the &quot;Contact&quot; submenu. The software currently has 68% statement coverage."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Tinygrad Nvidia P2P hack on Talos OS: 3 days with AI, would been 2 weeks without"
+              "value": "Show HN: Currant – Anonymus social media for NON-AI agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://currantfeed.cc"
             }
           },
           "_tags": [
             "story",
-            "author_himekifee",
-            "story_47617523",
+            "author_PAndreew",
+            "story_47621306",
+            "show_hn"
+          ],
+          "author": "PAndreew",
+          "created_at": "2026-04-02T23:00:37Z",
+          "created_at_i": 1775170837,
+          "num_comments": 0,
+          "objectID": "47621306",
+          "points": 3,
+          "story_id": 47621306,
+          "story_text": "I was once having a bad day and wanted to ventillate about the peculiarities of corporate life. Then I realised I don&#x27;t trust these sites. Neither my blog. I didn&#x27;t want to link these thoughts to an account - my stream of thoughts. I also needed comfort from real human beings - not gen AI bots. Don&#x27;t get me wrong I engineered&#x2F;hacked&#x2F;conjured? this stuff together with the help of LLMs. I think gen AI CAN be a net positive. Yet, I don&#x27;t want to interact with agents if they are being pushed on me. So I created Currant. This is basically a wannabe feed of posts. What hopefully makes it a bit different are the following things:\n1) No accounts. You can create posts, comment without an identity. You can create hashtags, you can write down your phone number and address if you want, but you&#x27;re not pushed to do that. You can prevent others to comment if you wish.\n2) Proof-of-work AI&#x2F;ripoff detection. Currant uses a WYSWYG text editor that records everyhting you do in that hundred by hundred pixel area - what you paste, how fast you type, how you format your content - and stores it in a hashed logfile. It can be replayed by anyone. :) If the detector thinks you&#x27;re an AI your content will be rejected. Will it prevent AI use alltogether? No. But hopefully it will throttle it. Will it produce some false positives? Absolutely. You might wonder - isn&#x27;t this against the anonym thingy? Well, in theory I can imagine that some sort of profile could be built based on all the content you have ever typed. But it&#x27;s still not a cookie that sends all your click data to 87565 &quot;trusted&quot; partners.\n3) Content expiry. By default everything you post will be deleted after 1 month. You can set it to 1 hour, 1 day ... or never. But if you don&#x27;t want, the site will not store your manifested thoughts forever.\n4) Customisation. It&#x27;s a bit silly, but you have control over several stylistic things about your post - background colors, gradients, border radius. Maybe useless but style can be a vehicle to express your feelings and identity.<p>It&#x27;s an experiment and I really appreciate if you give it a chance! &lt;3<p>Ps.: If you do try it and have any feedback or suggestion you can use the &quot;Contact&quot; submenu. The software currently has 68% statement coverage.",
+          "title": "Show HN: Currant – Anonymus social media for NON-AI agents",
+          "updated_at": "2026-04-02T23:45:04Z",
+          "url": "https://currantfeed.cc"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "l33tbro"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Something something AI and quality of this forum.<p>I'm not arguing that  this is a good solution.  But our user experience is being increasingly disrupted by squinting at comments and trying to parse their syntactic and semantic structure to discern if this account is a person or not.  That is not what this place should be, and I think that is something we all agree on.<p>A new account ban sounds rash and I agree that this could be a really dumb idea.  I'm also certain dang et al will have considered it amongst other approaches.  But this place is becoming less compelling by the day, and at least this measure plugs the holes until there is a strategy in place to address the issue of <em>bot</em>s and agents being able to create accounts and spam and shill the ever-living fuck out of this once great site.<p>Why even is there an urgency for new users?   Especially given that many now are guaranteed to  be undetectable <em>bot</em>s, which goes against the ethos of the site.  What is the argument against pausing new accounts, when this community is already fairly large and active?"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Ask HN: Should there be a temporary ban on new accounts?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_l33tbro",
+            "story_47620412",
             "ask_hn"
           ],
-          "author": "himekifee",
-          "created_at": "2026-04-02T17:36:40Z",
-          "created_at_i": 1775151400,
-          "num_comments": 0,
-          "objectID": "47617523",
-          "points": 1,
-          "story_id": 47617523,
-          "story_text": "I just open-sourced a fully working build of the tinygrad NVIDIA P2P hacked kernel modules packaged as a Talos Linux system extension — patched open driver, signing key lineage, overlay ordering, the whole nightmare. Verified on 4x 5090.<p>Github: https:&#x2F;&#x2F;github.com&#x2F;himekifee&#x2F;talos-tinygrad-nvidia-p2p-driver<p>Why this exists: The tinygrad community&#x27;s P2P kernel patch (aikitoria&#x27;s donor patch) enables PCIe peer-to-peer &#x2F; GPUDirect on NVIDIA&#x27;s open kernel modules — direct GPU-to-GPU memory access without bouncing through host RAM. But getting patched kernel modules to actually load on Talos Linux is an entirely separate war. Talos&#x27;s immutable, signature-enforced architecture fights you at every turn.<p>What it took: Almost 3 full days with OpenCode + Claude Opus 4.6 + GPT-5.4 xHigh doing the heavy thinking, iterating, and debugging alongside me. Done by hand, this would have been 2 weeks minimum — and even with LLMs, they kept getting trapped in the same pitfalls because there is essentially zero documentation on how to build custom kernel modules for Talos.<p>The real problem isn&#x27;t NVIDIA — it&#x27;s Talos:<p>The NVIDIA side is fine. The P2P patch applies, the driver compiles.<p>Talos is the problem. I genuinely think Talos is well-designed for running Kubernetes. But building against it is a completely different experience. You&#x27;re dealing with a three-repo architecture (talos, pkgs, extensions) that&#x27;s completely opaque to outsiders — no guide explains how kernel builds, module signing, sysext packaging, and installer composition fit together. You reverse-engineer it from Dockerfiles, bldr manifests, and Go source.<p>The security model that makes Talos good is exactly what makes hacking on it painful. Every .ko file must be signed by the exact key from the exact build run that compiled the booted kernel. Not the same version. Not the same config. The same compilation. And Talos enforces this silently — modules just don&#x27;t load. No error, no log entry.<p>The signing key trap (where most of the 3 days went):<p>The signing key must be consistent across a chain of 5 artifacts: kernel image → installer-base → P2P module package → sysext wrapper → final installer. Break any single link, and GPU support silently vanishes. Kbuild can quietly regenerate keys, BuildKit layer caching can serve stale .ko files signed by dead keys, and initramfs can stomp your modules with older ones. A successful `make` doesn&#x27;t mean your modules will load.<p>We eventually wrote verify-same-signing-key.sh to extract and compare signer metadata across all images. Once we made that a mandatory build gate, the cycle finally stopped.<p>Other discoveries the hard way (check the GitHub docs for full details):<p>- Talos squashfs overlay ordering can silently wipe NVIDIA library entries — glibc and the NVIDIA container toolkit both ship ld.so.cache, and last-write wins\n- The tinygrad P2P patch targets GitHub&#x27;s source tree layout, but NVIDIA&#x27;s redistribution archive uses different paths\n- The patch alone isn&#x27;t enough; you also need RM registry overrides via modprobe.d at boot\n- nvidia-smi topo -p2p a lies about atomics. Trust cuDeviceCanAccessPeer and actual bandwidth tests.<p>On using LLMs for deep systems work:<p>The LLMs were genuine force multipliers — reading Dockerfiles, tracing build chains, suggesting what to check next, even this blog is drafted with their help. But without documentation to ground them, they kept falling into the same traps I did. I&#x27;d explain the signing key fix, context would rotate, and the next iteration would confidently suggest the exact wrong approach again. On an undocumented system, LLMs multiply your confusion just as efficiently as your productivity.<p>End result: P2P returns OK across all 4 GPUs, cuCtxEnablePeerAccess succeeds bidirectionally, bandwidth tests confirm direct connectivity. Everything is documented in the repo, so the next person doesn&#x27;t have to reverse-engineer Talos&#x27;s build system from scratch.",
-          "title": "Tinygrad Nvidia P2P hack on Talos OS: 3 days with AI, would been 2 weeks without",
-          "updated_at": "2026-04-02T18:40:35Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "akadhanu"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I got tired of LLM outputs silently failing in pipelines, so I built a small scoring layer around it.<p>It checks three things before your output moves forward: does it match the schema you expected is it consistent across runs\ndoes it actually align with the context you provided<p>Returns a confidence score and a risk level. That's mostly it.<p>Works with OpenAI, Anthropic, Gemini, Ollama and a few others. Sync and async <em>bot</em>h supported.\nIt's heuristic, not a guarantee. If your context is bad, the scores will be too. Hit a star, if you found this useful.<p>Try now: pip install hallx"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Hallx – Hallucination risk scoring for LLM outputs"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/dhanushk-offl/hallx"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_akadhanu",
-            "story_47615874",
-            "show_hn"
-          ],
-          "author": "akadhanu",
+          "author": "l33tbro",
           "children": [
-            47616202
+            47621058,
+            47622258,
+            47620492,
+            47621066,
+            47620621,
+            47620627
           ],
-          "created_at": "2026-04-02T15:35:20Z",
-          "created_at_i": 1775144120,
-          "num_comments": 1,
-          "objectID": "47615874",
-          "points": 1,
-          "story_id": 47615874,
-          "story_text": "I got tired of LLM outputs silently failing in pipelines, so I built a small scoring layer around it.<p>It checks three things before your output moves forward: does it match the schema you expected is it consistent across runs\ndoes it actually align with the context you provided<p>Returns a confidence score and a risk level. That&#x27;s mostly it.<p>Works with OpenAI, Anthropic, Gemini, Ollama and a few others. Sync and async both supported.\nIt&#x27;s heuristic, not a guarantee. If your context is bad, the scores will be too. Hit a star, if you found this useful.<p>Try now: pip install hallx",
-          "title": "Show HN: Hallx – Hallucination risk scoring for LLM outputs",
-          "updated_at": "2026-04-02T15:57:50Z",
-          "url": "https://github.com/dhanushk-offl/hallx"
+          "created_at": "2026-04-02T21:25:37Z",
+          "created_at_i": 1775165137,
+          "num_comments": 8,
+          "objectID": "47620412",
+          "points": 10,
+          "story_id": 47620412,
+          "story_text": "Something something AI and quality of this forum.<p>I&#x27;m not arguing that  this is a good solution.  But our user experience is being increasingly disrupted by squinting at comments and trying to parse their syntactic and semantic structure to discern if this account is a person or not.  That is not what this place should be, and I think that is something we all agree on.<p>A new account ban sounds rash and I agree that this could be a really dumb idea.  I&#x27;m also certain dang et al will have considered it amongst other approaches.  But this place is becoming less compelling by the day, and at least this measure plugs the holes until there is a strategy in place to address the issue of bots and agents being able to create accounts and spam and shill the ever-living fuck out of this once great site.<p>Why even is there an urgency for new users?   Especially given that many now are guaranteed to  be undetectable bots, which goes against the ethos of the site.  What is the argument against pausing new accounts, when this community is already fairly large and active?",
+          "title": "Ask HN: Should there be a temporary ban on new accounts?",
+          "updated_at": "2026-04-03T02:27:50Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "blach"
+              "value": "WecoAI"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -954,43 +956,43 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Apple's Calendar app has had an API for adding video call links to events for years now, but it is a bit squirrelly, and Google/Zoom can't be <em>bot</em>hered to integrate with it. So, instead of just trying to make all my work meetings use FaceTime, I made an app to provide plugins for Calendar.app and integrate against Meet/Zoom APIs. I've taken a couple of looks at this previously, but actually built it this time and got it through Google and App Store review. Still waiting on Zoom review (that'll be v1.1). Does exactly what it says on the tin and no more. Hoping there are still some other macOS Calendar.app users out there to appreciate this."
+              "value": "We did experiments comparing Optuna &amp; autoresearch.\nAutoresearch converges faster, is more cost-efficient, and even generalizes better.<p>Experiments were done on NanoChat: we let Claude define Optuna’s search space to align the priors between methods. <em>Bot</em>h optimization methods were run three times. Autoresearch is far more sample-efficient on average<p>In 5 min training setting, LLM tokens cost as much as GPUs, but despite a 2× higher per-step cost, AutoResearch still comes out ahead across all cost budgets<p>What’s more, the solution found by autoresearch generalizes better than Optuna’s. We gave the best solutions more training time; the absolute score gap widens, and the statistical significance becomes stronger<p>An important contributor to autoresearch’s capability is that it searches directly in code space. In the early stages, autoresearch tunes knobs within Optuna’s 16-parameter search space. However, with more iterations, it starts to explore code changes"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: I use macOS calendar and have calls. MeetLink adds vid links to events"
+              "value": "Show HN: Is autoresearch better than classic hyperparameter tuning?"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://meetlink.nicemohawk.com/"
+              "value": "https://www.weco.ai/blog/autoresearch-vs-classical-hpo"
             }
           },
           "_tags": [
             "story",
-            "author_blach",
-            "story_47615871",
+            "author_WecoAI",
+            "story_47620196",
             "show_hn"
           ],
-          "author": "blach",
-          "created_at": "2026-04-02T15:35:07Z",
-          "created_at_i": 1775144107,
+          "author": "WecoAI",
+          "created_at": "2026-04-02T21:07:03Z",
+          "created_at_i": 1775164023,
           "num_comments": 0,
-          "objectID": "47615871",
+          "objectID": "47620196",
           "points": 2,
-          "story_id": 47615871,
-          "story_text": "Apple&#x27;s Calendar app has had an API for adding video call links to events for years now, but it is a bit squirrelly, and Google&#x2F;Zoom can&#x27;t be bothered to integrate with it. So, instead of just trying to make all my work meetings use FaceTime, I made an app to provide plugins for Calendar.app and integrate against Meet&#x2F;Zoom APIs. I&#x27;ve taken a couple of looks at this previously, but actually built it this time and got it through Google and App Store review. Still waiting on Zoom review (that&#x27;ll be v1.1). Does exactly what it says on the tin and no more. Hoping there are still some other macOS Calendar.app users out there to appreciate this.",
-          "title": "Show HN: I use macOS calendar and have calls. MeetLink adds vid links to events",
-          "updated_at": "2026-04-02T16:06:34Z",
-          "url": "https://meetlink.nicemohawk.com/"
+          "story_id": 47620196,
+          "story_text": "We did experiments comparing Optuna &amp; autoresearch.\nAutoresearch converges faster, is more cost-efficient, and even generalizes better.<p>Experiments were done on NanoChat: we let Claude define Optuna’s search space to align the priors between methods. Both optimization methods were run three times. Autoresearch is far more sample-efficient on average<p>In 5 min training setting, LLM tokens cost as much as GPUs, but despite a 2× higher per-step cost, AutoResearch still comes out ahead across all cost budgets<p>What’s more, the solution found by autoresearch generalizes better than Optuna’s. We gave the best solutions more training time; the absolute score gap widens, and the statistical significance becomes stronger<p>An important contributor to autoresearch’s capability is that it searches directly in code space. In the early stages, autoresearch tunes knobs within Optuna’s 16-parameter search space. However, with more iterations, it starts to explore code changes",
+          "title": "Show HN: Is autoresearch better than classic hyperparameter tuning?",
+          "updated_at": "2026-04-02T21:12:20Z",
+          "url": "https://www.weco.ai/blog/autoresearch-vs-classical-hpo"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Realman78"
+              "value": "kinj28"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -998,39 +1000,33 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Hello HN,<p>I have been working on a desktop P2P messenger called Kiyeovo for the last ~8 months, and I just published its beta version.<p>Quick backstory: It started out as a CLI application for my Graduate Thesis, where I tried to make the most secure and private messenger application possible. Then, I transformed it into a desktop application, gave it &quot;clearnet&quot; support and added a bunch of features.<p>Short summary:<p>The app runs in 2 completely isolated modes:<p>- fast mode: relay/DCUtR -&gt; lower latency, calls support<p>- anonymous mode: Tor message routing -&gt; slower, anonymous<p>These modes use different protocol IDs, DHT namespaces, pubsub topics and storage scopes so there’s no data crossover between them.<p>Messaging works peer-to-peer when <em>bot</em>h parties are online, but falls back to DHT &quot;offline buckets&quot; when one of them is not. To ensure robustness, messages are ACK-ed and deleted after being read.<p>Group chats use GossipSub for realtime messaging. Group messages are also saved to offline buckets in order for offline users to be able to read them upon logging in. Kick/Join/Leave events are also propagated using the DHT. Group metadata and all offline data is of course encrypted.<p>Other features: Chats are E2E, file sharing is supported, 1:1 audio/video calls are supported (only in fast mode though, using WebRTC)<p>Tradeoffs: Tor has noticeable latency, offline delivery is not immediately guaranteed, but rather &quot;eventually consistent&quot;; beta version does not have group calls yet.<p>I’d appreciate feedback, that's why I posted this as a beta version<p>Repo: <a href=\"https://github.com/Realman78/Kiyeovo\" rel=\"nofollow\">https://github.com/Realman78/Kiyeovo</a>"
+              "value": "Disclaimer: I run a low code service and still many customers use us. But am curious what’s the developer /cto perspective on this?<p>We do have a AI assistant to help build on top of platform but the primary appeal of low code was don’t <em>bot</em>her about code and care about the app which with agentic sw development may also be achieved."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: A P2P messenger with dual network modes (Fast and Tor)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Realman78/Kiyeovo/"
+              "value": "Ask HN: How relevant is low code according to you in today’s world with Claude?"
             }
           },
           "_tags": [
             "story",
-            "author_Realman78",
-            "story_47615844",
-            "show_hn"
+            "author_kinj28",
+            "story_47619720",
+            "ask_hn"
           ],
-          "author": "Realman78",
+          "author": "kinj28",
           "children": [
-            47616488
+            47619897
           ],
-          "created_at": "2026-04-02T15:32:45Z",
-          "created_at_i": 1775143965,
-          "num_comments": 2,
-          "objectID": "47615844",
-          "points": 15,
-          "story_id": 47615844,
-          "story_text": "Hello HN,<p>I have been working on a desktop P2P messenger called Kiyeovo for the last ~8 months, and I just published its beta version.<p>Quick backstory: It started out as a CLI application for my Graduate Thesis, where I tried to make the most secure and private messenger application possible. Then, I transformed it into a desktop application, gave it &quot;clearnet&quot; support and added a bunch of features.<p>Short summary:<p>The app runs in 2 completely isolated modes:<p>- fast mode: relay&#x2F;DCUtR -&gt; lower latency, calls support<p>- anonymous mode: Tor message routing -&gt; slower, anonymous<p>These modes use different protocol IDs, DHT namespaces, pubsub topics and storage scopes so there’s no data crossover between them.<p>Messaging works peer-to-peer when both parties are online, but falls back to DHT &quot;offline buckets&quot; when one of them is not. To ensure robustness, messages are ACK-ed and deleted after being read.<p>Group chats use GossipSub for realtime messaging. Group messages are also saved to offline buckets in order for offline users to be able to read them upon logging in. Kick&#x2F;Join&#x2F;Leave events are also propagated using the DHT. Group metadata and all offline data is of course encrypted.<p>Other features: Chats are E2E, file sharing is supported, 1:1 audio&#x2F;video calls are supported (only in fast mode though, using WebRTC)<p>Tradeoffs: Tor has noticeable latency, offline delivery is not immediately guaranteed, but rather &quot;eventually consistent&quot;; beta version does not have group calls yet.<p>I’d appreciate feedback, that&#x27;s why I posted this as a beta version<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Realman78&#x2F;Kiyeovo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Realman78&#x2F;Kiyeovo</a>",
-          "title": "Show HN: A P2P messenger with dual network modes (Fast and Tor)",
-          "updated_at": "2026-04-02T19:35:06Z",
-          "url": "https://github.com/Realman78/Kiyeovo/"
+          "created_at": "2026-04-02T20:25:15Z",
+          "created_at_i": 1775161515,
+          "num_comments": 1,
+          "objectID": "47619720",
+          "points": 3,
+          "story_id": 47619720,
+          "story_text": "Disclaimer: I run a low code service and still many customers use us. But am curious what’s the developer &#x2F;cto perspective on this?<p>We do have a AI assistant to help build on top of platform but the primary appeal of low code was don’t bother about code and care about the app which with agentic sw development may also be achieved.",
+          "title": "Ask HN: How relevant is low code according to you in today’s world with Claude?",
+          "updated_at": "2026-04-02T22:57:34Z"
         }
       ]
     },
@@ -1275,6 +1271,50 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "manveerc"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Build an OpenClaw <em>Alternative</em> with Arcade + <em>Claude</em> <em>Code</em>"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "https://www.arcade.dev/blog/secure-openclaw-<em>alternative</em>-arcade-<em>claude</em>-<em>code</em>/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_manveerc",
+            "story_47620615"
+          ],
+          "author": "manveerc",
+          "created_at": "2026-04-02T21:47:47Z",
+          "created_at_i": 1775166467,
+          "num_comments": 0,
+          "objectID": "47620615",
+          "points": 1,
+          "story_id": 47620615,
+          "title": "Build an OpenClaw Alternative with Arcade + Claude Code",
+          "updated_at": "2026-04-02T21:51:04Z",
+          "url": "https://www.arcade.dev/blog/secure-openclaw-alternative-arcade-claude-code/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "abbadadda"
             },
             "story_text": {
@@ -1355,7 +1395,8 @@
           ],
           "author": "gr00ve",
           "children": [
-            47580137
+            47580137,
+            47620652
           ],
           "created_at": "2026-03-30T21:00:53Z",
           "created_at_i": 1774904453,
@@ -1365,7 +1406,7 @@
           "story_id": 47579652,
           "story_text": "With longer agentic workflows becoming the norm, token cost can eat through usage so quickly that it prevents any real work from getting done.<p>After studying the business model of top labs like Anthropic and OpenAI, their business model shows about 80% margins on inference cost which they use for R+D on the next model.<p>Working with open source models is much cheaper and allow for 5-10x higher usage, so I decided to create Sweet! CLI as an alternative to the products offered by big labs.<p>Sweet! CLI uses our own custom post trained version of Deepseek v3.2 hosted on US based inference servers (very similar to Cursor&#x27;s Composer model).<p>Unlike most llm based agent products, we bill solely based on usage and have a seamless top up experience so you only pay for what you use.<p>My favorite feature is &#x27;autopilot&#x27;, where you can specify the duration of time you want the agent to work on a specific task, including indefinitely. This is good for monitoring live deployed applications and detecting outages that need triaged immediately, and I have multiple Sweet! agents deployed to the production server right now with that exact objective.<p>I&#x27;d appreciate any support or feedback on how I can make it better!<p>Thanks,<p>Adam - Founder of Sweet! CLI",
           "title": "Show HN: I made a cheaper alternative to Claude Code or Codex CLI",
-          "updated_at": "2026-03-31T08:58:24Z",
+          "updated_at": "2026-04-02T21:53:49Z",
           "url": "https://sweetcli.com/"
         },
         {
@@ -1463,57 +1504,6 @@
           "story_text": "So, a side project I&#x27;ve spent&#x2F;wasted ~1000 hours on, with 2 goals set in mind:<p>1. faster than transformers on CPU;\n2. smarter than transformers.<p>couple of screenshots below (the black&#x2F;red part are censored on purpose...for now):<p>https:&#x2F;&#x2F;i.imgur.com&#x2F;r0equ55.png\nhttps:&#x2F;&#x2F;i.imgur.com&#x2F;fohRbIr.png\nhttps:&#x2F;&#x2F;i.imgur.com&#x2F;5Xx1RGX.png<p>Summary: what the hell is this?<p>Two architectures -<p>1. Linear RNN which solves the long memory problem in current front-runner RNN transformer alternatives (RWKV, Mamba), in addition to being cpu friendly and entirely in C from scratch, but not too big: ~4000 lines.<p>2. 2 SNN experimental programs (in C originally but also ported to C# and F#) that turned out to be better than expected but unfortunately for the time being: dumber than the linear RNN one (i need more tests).<p>The question is: what to do with them? google gemini pro 3.1&#x2F;sonnet 4.6 told me to patent, IP, estimating value in the many millions and while this is clearly a mistake: I&#x27;ve uploaded all the code to claude&#x2F;gemini for analysis though seeing how the project is ~70% vibecoded I think it would be snobby to act like a gatekeeper.<p>The thing is: I don&#x27;t want millions but at the same time i see several issues with fee open source rollout:<p>* completely unalighned, i don&#x27;t believe in the &quot;agi hype&quot; but potential risks may exist, such as in cybersecurity;\n*  I frankly hate Xai and Musk and since the companies who may be interested in running AI models as b2c solution are likely ~20, one of them will be xai.\n* Very unorthodox implementation: All in C with ports in c#&#x2F;f#. No python or rust, which would mean likely some people unfamiliar with these languages in ML running into issues so i&#x27;d have to support nonstop which is time consuming and let&#x27;s face it i&#x27;ll have to do it for free once it&#x27;s open source.\n* It may die completely unheard of somewhere on GitHub even if it has potential, organic traffic rarely works unless you hit the lottery.<p>This is NOT a flex btw, I&#x27;m convinced there are programmers better than me, people who understand ML better than me, mathematicians better than me though frankly I posses special kind of persistence combined with arrogance which goes a long way in terms of technology&#x2F;inventions&#x2F;novelty.<p>Like i said this is the results of hundreds of hours work spiced up by many years programming experience in other areas, this wasn&#x27;t one weekend &quot;claude, give me agi&quot; kind of shot.<p>All of the projects compile with zero warnings, logically seem to work and are visibly faster than transformers with obvious ability to generalize and create new&#x2F;unique content. The missing part is scaling and benchmarking on classic benchmarks.<p>What I lack is understanding adoption of technology.10x!",
           "title": "Ask HN: Release Path for 'Transformers Alternatives'?",
           "updated_at": "2026-03-30T21:08:37Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "redoh"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "claude",
-                "code"
-              ],
-              "value": "Hey HN, we built Octopus an open-source, self-hostable AI <em>code</em> reviewer for GitHub and Bitbucket. It uses RAG with vector search (Qdrant) to understand your full codebase, not just the diff, and posts inline findings on PRs with severity ratings. Works with <em>Claude</em> and OpenAI, and you can bring your own API keys. Video: <a href=\"https://www.youtube.com/watch?v=HP1kaKTOdXw\" rel=\"nofollow\">https://www.youtube.com/watch?v=HP1kaKTOdXw</a> | GitHub: <a href=\"https://github.com/octopusreview\" rel=\"nofollow\">https://github.com/octopusreview</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "alternative"
-              ],
-              "value": "Show HN: Octopus, Open-source <em>alternative</em> to CodeRabbit and Greptile"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://octopus-review.ai"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_redoh",
-            "story_47554345",
-            "show_hn"
-          ],
-          "author": "redoh",
-          "children": [
-            47561861
-          ],
-          "created_at": "2026-03-28T13:20:05Z",
-          "created_at_i": 1774704005,
-          "num_comments": 0,
-          "objectID": "47554345",
-          "points": 2,
-          "story_id": 47554345,
-          "story_text": "Hey HN, we built Octopus an open-source, self-hostable AI code reviewer for GitHub and Bitbucket. It uses RAG with vector search (Qdrant) to understand your full codebase, not just the diff, and posts inline findings on PRs with severity ratings. Works with Claude and OpenAI, and you can bring your own API keys. Video: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=HP1kaKTOdXw\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=HP1kaKTOdXw</a> | GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;octopusreview\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;octopusreview</a>",
-          "title": "Show HN: Octopus, Open-source alternative to CodeRabbit and Greptile",
-          "updated_at": "2026-03-29T10:23:00Z",
-          "url": "https://octopus-review.ai"
         }
       ]
     },
@@ -1560,7 +1550,8 @@
           ],
           "author": "gr00ve",
           "children": [
-            47580137
+            47580137,
+            47620652
           ],
           "created_at": "2026-03-30T21:00:53Z",
           "created_at_i": 1774904453,
@@ -1570,7 +1561,7 @@
           "story_id": 47579652,
           "story_text": "With longer agentic workflows becoming the norm, token cost can eat through usage so quickly that it prevents any real work from getting done.<p>After studying the business model of top labs like Anthropic and OpenAI, their business model shows about 80% margins on inference cost which they use for R+D on the next model.<p>Working with open source models is much cheaper and allow for 5-10x higher usage, so I decided to create Sweet! CLI as an alternative to the products offered by big labs.<p>Sweet! CLI uses our own custom post trained version of Deepseek v3.2 hosted on US based inference servers (very similar to Cursor&#x27;s Composer model).<p>Unlike most llm based agent products, we bill solely based on usage and have a seamless top up experience so you only pay for what you use.<p>My favorite feature is &#x27;autopilot&#x27;, where you can specify the duration of time you want the agent to work on a specific task, including indefinitely. This is good for monitoring live deployed applications and detecting outages that need triaged immediately, and I have multiple Sweet! agents deployed to the production server right now with that exact objective.<p>I&#x27;d appreciate any support or feedback on how I can make it better!<p>Thanks,<p>Adam - Founder of Sweet! CLI",
           "title": "Show HN: I made a cheaper alternative to Claude Code or Codex CLI",
-          "updated_at": "2026-03-31T08:58:24Z",
+          "updated_at": "2026-04-02T21:53:49Z",
           "url": "https://sweetcli.com/"
         },
         {
@@ -2104,6 +2095,56 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "anton_salcher"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hi everyone,<p>I built Pace, an <em>MCP</em> <em>server</em> that pulls your wearable data into Claude so you can actually talk to it.<p>You connect your devices once (Garmin, Oura, Whoop, Polar, Fitbit, 20+) and Claude gets 15 <em>tools</em>: sleep analysis, workout detail with lap splits, HR zone breakdown, recovery status, 30/90-day trends, and more.<p>The thing that surprised me most: Claude's artifact/visualization feature turns this into something way more useful than I expected. You ask &quot;analyze my last 10 runs&quot; and you get an interactive chart of pace trends, HR zones per run, and a written summary — all in one response. No dashboard needed.<p><em>Tools</em> available right now:\n- get_sleep_data — deep sleep, REM, HRV, SpO2, sleep score\n- get_workout_detail / get_workout_laps / get_workout_samples — full session breakdown\n- get_recovery_status — readiness, resting HR trend, HRV baseline\n- get_training_summary — load, volume, consistency over time\n- get_trends — any metric over 7d/30d/90d with baseline comparison<p>Stack: Python (FastMCP) · Cloud Run · Cloud SQL PostgreSQL · Firebase · Terra API · OAuth 2.1<p>It's live and free to try at pacetraining.co. Claude Pro/Max not required (custom connector).<p>Would love feedback, especially from people who've built <em>MCP</em> servers or use wearables seriously."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "Show HN: Pace <em>MCP</em> <em>server</em> that connects all your wearables to Claude"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://pacetraining.co/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_anton_salcher",
+            "story_47615819",
+            "show_hn"
+          ],
+          "author": "anton_salcher",
+          "created_at": "2026-04-02T15:30:49Z",
+          "created_at_i": 1775143849,
+          "num_comments": 0,
+          "objectID": "47615819",
+          "points": 1,
+          "story_id": 47615819,
+          "story_text": "Hi everyone,<p>I built Pace, an MCP server that pulls your wearable data into Claude so you can actually talk to it.<p>You connect your devices once (Garmin, Oura, Whoop, Polar, Fitbit, 20+) and Claude gets 15 tools: sleep analysis, workout detail with lap splits, HR zone breakdown, recovery status, 30&#x2F;90-day trends, and more.<p>The thing that surprised me most: Claude&#x27;s artifact&#x2F;visualization feature turns this into something way more useful than I expected. You ask &quot;analyze my last 10 runs&quot; and you get an interactive chart of pace trends, HR zones per run, and a written summary — all in one response. No dashboard needed.<p>Tools available right now:\n- get_sleep_data — deep sleep, REM, HRV, SpO2, sleep score\n- get_workout_detail &#x2F; get_workout_laps &#x2F; get_workout_samples — full session breakdown\n- get_recovery_status — readiness, resting HR trend, HRV baseline\n- get_training_summary — load, volume, consistency over time\n- get_trends — any metric over 7d&#x2F;30d&#x2F;90d with baseline comparison<p>Stack: Python (FastMCP) · Cloud Run · Cloud SQL PostgreSQL · Firebase · Terra API · OAuth 2.1<p>It&#x27;s live and free to try at pacetraining.co. Claude Pro&#x2F;Max not required (custom connector).<p>Would love feedback, especially from people who&#x27;ve built MCP servers or use wearables seriously.",
+          "title": "Show HN: Pace MCP server that connects all your wearables to Claude",
+          "updated_at": "2026-04-02T20:57:21Z",
+          "url": "https://pacetraining.co/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "czhu12"
             },
             "story_text": {
@@ -2139,11 +2180,11 @@
           "created_at_i": 1775138750,
           "num_comments": 1,
           "objectID": "47614678",
-          "points": 4,
+          "points": 5,
           "story_id": 47614678,
           "story_text": "I’ve been building Canine for about 2 years now, and have slowly grown it to about ~1000 developers using it for deploying all sorts of apps &#x2F; projects &#x2F; etc. Amazingly, the whole thing is still able to run on a single 48GB Hetzner VPS. Think of it basically like Coolify, for Kubernetes. I previously posted about it here: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103</a><p>Recently, we added MCP capabilities to canine, and I was shocked how well it worked. It basically is able to create services, cron jobs, databases, get the logs for these and redeploy. See it here: <a href=\"https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol\" rel=\"nofollow\">https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol</a>. The real killer feature has been an MCP tool to be able to download a temporary kubeconfig, which lets Claude then breakout and get the full Kubernetes API to automate pretty much anything. A little scary how competent Claude can be here.<p>When we paired this with Claude code running locally, you’re basically able to have a fully autonomous system vibe code, deploy, wait, and test in staging (by querying APIs, no browser skills yet), automatically fix bugs, repush, etc.<p>Best practices in this area haven’t quite been established and I know this community has a somewhat nervous relationship with AI tools. The way we have it set up is basically to only allow access on staging servers, and disable entirely on production, for fear of things going wrong. MCP is opt in on canine at the moment.<p>The implementation was pretty easy. We just took our API and basically wrapped an MCP OAuth authentication around it where all the GET endpoints became resources and all the POST &#x2F; PUT &#x2F; DELETE endpoints became tools. Digging through other MCP implementations, it seems the actual documentation is quite out of date. The MCP documentation recommends using Prompt objects to guide the LLM’s, but most implementations I’ve seen out there actually use skills, which have to be installed.<p>Anyways, happy to share whatever, it was a cool bit of project, just now seeing how people will use this.",
           "title": "Show HN: An MCP server for Devops automation",
-          "updated_at": "2026-04-02T17:15:20Z"
+          "updated_at": "2026-04-02T20:54:36Z"
         },
         {
           "_highlightResult": {
@@ -2244,56 +2285,6 @@
           "title": "Show HN: Zabbix MCP Server – 225 tools to let AI agents manage Zabbix monitoring",
           "updated_at": "2026-04-02T12:09:02Z",
           "url": "https://github.com/initMAX/zabbix-mcp-server"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "allan_s"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Disclaimer: this is vibe-coded — (&lt;- I lost you there) the README, most of the code, and the binary format reverse-engineering were done with Claude. But the <em>tool</em> works and I use it everyday for some days now. As Baudelaire said &quot;qu'importe le flacon, pourvu qu'on ait l'ivresse.&quot;<p>~I~ Claude built a <em>tool</em> that decodes Figma's internal binary protocol (Kiwi format over WebSocket) to extract the full scenegraph — every node, vector path, and style — without hitting the REST API.<p>Why: Figma's REST API has aggressive rate limits. The official <em>MCP</em> <em>server</em> requires a paid Dev Mode plan. I needed to explore designs from my AI coding <em>tools</em> without constantly getting 429'd.<p>It helps me to:<p><pre><code>  1. extract the svg in a clean way (even the SVG export from figma likes to write the path as 12.0000001, even though the protocol does have 12 in it)  and images\n\n  2. Get mapping from what I see in figma &lt;-&gt; what i see in the exported html\n\n  3. It helps me help our designer to produce an actual &quot;resizable&quot; figma, so that they finally understand the pain of &quot;ok it works when you click play on the iphone 17 frame you put, but what about an iphone12 ?&quot; (I was always able to say that, but before I wasn't able to point out what was wrong, now I can)\n</code></pre>\nHow it works: When you open a Figma file in the browser, the editor loads the entire scenegraph via WebSocket as Kiwi-encoded binary frames. This <em>tool</em> captures those frames via Chrome DevTools Protocol, decodes the binary data (including two undocumented vector formats), and gives you structured JSON.<p>What Claude reverse-engineered:<p><pre><code>  - The fig-wire frame format (schema delivery over WebSocket)\n\n  - commandsBlob: Figma's pre-computed SVG path commands (MoveTo, LineTo, CubicBezier, ClosePath)\n\n  - vectorNetworkBlob: the editable path data (vertices, segments with Bezier tangent handles, regions with loops)\n\n  - All three are documented as Kaitai Struct specs (.ksy) so you can generate parsers in any language\n</code></pre>\nShips as: JS lib (zero deps), CLI, <em>MCP</em> <em>server</em> (Cursor/Windsurf/VS Code), and Claude Code plugin.<p>Binary format specs, sample fixtures, and everything else: <a href=\"https://github.com/allan-simon/figma-kiwi-protocol\" rel=\"nofollow\">https://github.com/allan-simon/figma-kiwi-protocol</a><p>I'm not a lawyer but my understanding is this is an interoperability <em>tool</em> under EU Directive 2009/24/EC Article 6. No Figma code is included: it only decodes the wire format of data transmitted to your own browser."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: I/Claude reverse-engineered Figma's binary WebSocket protocol"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/allan-simon/figma-kiwi-protocol"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_allan_s",
-            "story_47607324",
-            "show_hn"
-          ],
-          "author": "allan_s",
-          "children": [
-            47610912,
-            47607400
-          ],
-          "created_at": "2026-04-01T22:25:09Z",
-          "created_at_i": 1775082309,
-          "num_comments": 3,
-          "objectID": "47607324",
-          "points": 6,
-          "story_id": 47607324,
-          "story_text": "Disclaimer: this is vibe-coded — (&lt;- I lost you there) the README, most of the code, and the binary format reverse-engineering were done with Claude. But the tool works and I use it everyday for some days now. As Baudelaire said &quot;qu&#x27;importe le flacon, pourvu qu&#x27;on ait l&#x27;ivresse.&quot;<p>~I~ Claude built a tool that decodes Figma&#x27;s internal binary protocol (Kiwi format over WebSocket) to extract the full scenegraph — every node, vector path, and style — without hitting the REST API.<p>Why: Figma&#x27;s REST API has aggressive rate limits. The official MCP server requires a paid Dev Mode plan. I needed to explore designs from my AI coding tools without constantly getting 429&#x27;d.<p>It helps me to:<p><pre><code>  1. extract the svg in a clean way (even the SVG export from figma likes to write the path as 12.0000001, even though the protocol does have 12 in it)  and images\n\n  2. Get mapping from what I see in figma &lt;-&gt; what i see in the exported html\n\n  3. It helps me help our designer to produce an actual &quot;resizable&quot; figma, so that they finally understand the pain of &quot;ok it works when you click play on the iphone 17 frame you put, but what about an iphone12 ?&quot; (I was always able to say that, but before I wasn&#x27;t able to point out what was wrong, now I can)\n</code></pre>\nHow it works: When you open a Figma file in the browser, the editor loads the entire scenegraph via WebSocket as Kiwi-encoded binary frames. This tool captures those frames via Chrome DevTools Protocol, decodes the binary data (including two undocumented vector formats), and gives you structured JSON.<p>What Claude reverse-engineered:<p><pre><code>  - The fig-wire frame format (schema delivery over WebSocket)\n\n  - commandsBlob: Figma&#x27;s pre-computed SVG path commands (MoveTo, LineTo, CubicBezier, ClosePath)\n\n  - vectorNetworkBlob: the editable path data (vertices, segments with Bezier tangent handles, regions with loops)\n\n  - All three are documented as Kaitai Struct specs (.ksy) so you can generate parsers in any language\n</code></pre>\nShips as: JS lib (zero deps), CLI, MCP server (Cursor&#x2F;Windsurf&#x2F;VS Code), and Claude Code plugin.<p>Binary format specs, sample fixtures, and everything else: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;allan-simon&#x2F;figma-kiwi-protocol\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;allan-simon&#x2F;figma-kiwi-protocol</a><p>I&#x27;m not a lawyer but my understanding is this is an interoperability tool under EU Directive 2009&#x2F;24&#x2F;EC Article 6. No Figma code is included: it only decodes the wire format of data transmitted to your own browser.",
-          "title": "Show HN: I/Claude reverse-engineered Figma's binary WebSocket protocol",
-          "updated_at": "2026-04-02T07:46:01Z",
-          "url": "https://github.com/allan-simon/figma-kiwi-protocol"
         }
       ]
     },
@@ -2342,64 +2333,8 @@
           "points": 2,
           "story_id": 47619281,
           "title": "Ref/ect: Self-Improving RL layer on top of Observability",
-          "updated_at": "2026-04-02T19:54:33Z",
+          "updated_at": "2026-04-02T21:19:25Z",
           "url": "https://getreflect.starlight-search.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "amangsingh"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "I got tired of <em>AI</em> agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No <em>self</em>-<em>approving</em> code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Castra – Strip orchestration rights from your LLMs"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/amangsingh/castra"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_amangsingh",
-            "story_47601608",
-            "show_hn"
-          ],
-          "author": "amangsingh",
-          "children": [
-            47617410,
-            47611202,
-            47602435,
-            47602458,
-            47606660,
-            47603897,
-            47602546,
-            47603984
-          ],
-          "created_at": "2026-04-01T14:40:28Z",
-          "created_at_i": 1775054428,
-          "num_comments": 11,
-          "objectID": "47601608",
-          "points": 8,
-          "story_id": 47601608,
-          "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
-          "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-02T17:59:18Z",
-          "url": "https://github.com/amangsingh/castra"
         },
         {
           "_highlightResult": {
@@ -2536,6 +2471,48 @@
           "story_text": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.\nWith that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results. \nThe Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and self-improving platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.\nVulcanAMI — Transformer &#x2F; Neuro-Symbolic Hybrid AI Platform\nVulcan is an AI system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.\nFEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.\nCurrent Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete\nWhat This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far\nThis is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution\nIf you find parts that are useful, interesting, or worth improving, you are free to build on them under the terms of the license.\nI know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;The_Code_Factory_Working_V2.git\nVulcanAMI: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;VulcanAMI_LLM.git\nFEMS: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;FEMS.git",
           "title": "New Open Source from Non-Traditional Builder",
           "updated_at": "2026-03-23T09:17:05Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "samurai48"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "Autoskill – <em>self</em>-<em>improving</em> skills for <em>AI</em> agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Samurai412/autoskill"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_samurai48",
+            "story_47467265"
+          ],
+          "author": "samurai48",
+          "children": [
+            47467266
+          ],
+          "created_at": "2026-03-21T14:20:07Z",
+          "created_at_i": 1774102807,
+          "num_comments": 2,
+          "objectID": "47467265",
+          "points": 2,
+          "story_id": 47467265,
+          "title": "Autoskill – self-improving skills for AI agents",
+          "updated_at": "2026-03-21T20:36:45Z",
+          "url": "https://github.com/Samurai412/autoskill"
         }
       ]
     }
