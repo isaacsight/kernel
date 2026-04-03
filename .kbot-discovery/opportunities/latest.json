@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-03T02:28:16.776Z",
+  "timestamp": "2026-04-03T08:28:21.849Z",
   "count": 30,
   "opportunities": [
     {
@@ -81,8 +81,8 @@
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN: Who is hiring? (April 2026)",
-      "url": "https://news.ycombinator.com/item?id=47606148",
+      "title": "r/programming bans all discussion of LLM programming",
+      "url": "https://news.ycombinator.com/item?id=47611633",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "chore(main): release 0.13.0",
-      "url": "https://github.com/trvon/yams/pull/17",
+      "title": "feat: full core v0.5.1 adoption + fetchSiblings helper",
+      "url": "https://github.com/karmaniverous/jeeves-watcher/pull/177",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-03",
-      "url": "https://github.com/yinwm/agents-radar/issues/146",
+      "title": "Use owning npm prefix for global updates",
+      "url": "https://github.com/openclaw/openclaw/pull/60153",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "📊 AI CLI Tools Digest 2026-04-03",
-      "url": "https://github.com/yinwm/agents-radar/issues/145",
+      "title": "chore(master): release 1.0.0",
+      "url": "https://github.com/avallete/rtk/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -179,16 +179,23 @@
     },
     {
       "source": "reddit-commandline",
-      "title": "Terminal UI for exploring OpenCode/Claude/Codex/etc coding sessions",
-      "url": "https://reddit.com/r/commandline/comments/1salbl6/terminal_ui_for_exploring_opencodeclaudecodexetc/",
+      "title": "Sheets: a terminal based spreadsheet tool",
+      "url": "https://reddit.com/r/commandline/comments/1sah35v/sheets_a_terminal_based_spreadsheet_tool/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-commandline",
-      "title": "Sheets: a terminal based spreadsheet tool",
-      "url": "https://reddit.com/r/commandline/comments/1sah35v/sheets_a_terminal_based_spreadsheet_tool/",
+      "title": "I created my own desktop terminal app — local, fast, multiplatform 😎",
+      "url": "https://reddit.com/r/commandline/comments/1s9tld3/i_created_my_own_desktop_terminal_app_local_fast/",
       "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Built an AI “project brain” to run and manage engineering projects solo, how can I make this more efficient?",
+      "url": "https://reddit.com/r/artificial/comments/1sb4eu8/built_an_ai_project_brain_to_run_and_manage/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "I built a Star Trek LCARS terminal that reads your entire AI coding setup",
       "url": "https://reddit.com/r/artificial/comments/1sat7og/i_built_a_star_trek_lcars_terminal_that_reads/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "AI Tools That Can’t Prove What They Did Will Hit a Wall",
-      "url": "https://reddit.com/r/artificial/comments/1sakjzg/ai_tools_that_cant_prove_what_they_did_will_hit_a/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

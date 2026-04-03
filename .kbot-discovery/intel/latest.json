@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-03T02:28:13.592Z",
+  "timestamp": "2026-04-03T08:28:18.590Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -47,6 +47,7 @@
             47617297,
             47617295,
             47617199,
+            47623376,
             47613541
           ],
           "created_at": "2026-04-02T12:26:40Z",
@@ -57,7 +58,7 @@
           "story_id": 47613527,
           "story_text": "Solo dev from Vienna. Skales is a local-first AI desktop agent for Windows, macOS, and Linux.<p>v9.0.0 just shipped with Agent Skills (SKILL.md import from Claude Code, Codex, Copilot), autonomous coding (Codework), multi-agent teams (Organization), Computer Use, and 15+ providers including Ollama offline.<p>No Docker, no terminal. Download, install, done. My 6-year-old built a Snake game with it.<p>BSL-1.1, free for personal use.<p>DevKit: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit</a>",
           "title": "Show HN: Skales – I built a desktop AI agent a 6-year-old can use",
-          "updated_at": "2026-04-03T02:02:50Z",
+          "updated_at": "2026-04-03T06:49:50Z",
           "url": "https://github.com/skalesapp/skales"
         },
         {
@@ -197,10 +198,10 @@
             47606660,
             47603897,
             47621869,
-            47621860,
             47602546,
             47611202,
-            47603984
+            47603984,
+            47621860
           ],
           "created_at": "2026-04-01T14:40:28Z",
           "created_at_i": 1775054428,
@@ -210,7 +211,7 @@
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-03T00:11:34Z",
+          "updated_at": "2026-04-03T04:03:50Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
@@ -406,19 +407,20 @@
           "author": "piscator",
           "children": [
             47600438,
-            47621561,
-            47602371,
             47599966,
+            47602371,
+            47621561,
             47600025,
-            47620860,
             47599758,
             47601468,
             47600185,
-            47612172,
+            47620860,
             47600714,
+            47612172,
             47614223,
             47612850,
             47602570,
+            47623817,
             47605230,
             47601210,
             47599778,
@@ -427,6 +429,7 @@
             47599763,
             47601763,
             47599892,
+            47624268,
             47607627,
             47605704,
             47602905,
@@ -439,13 +442,13 @@
           ],
           "created_at": "2026-04-01T11:09:03Z",
           "created_at_i": 1775041743,
-          "num_comments": 37,
+          "num_comments": 38,
           "objectID": "47599303",
-          "points": 57,
+          "points": 58,
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-03T02:27:19Z"
+          "updated_at": "2026-04-03T08:22:21Z"
         },
         {
           "_highlightResult": {
@@ -539,6 +542,7 @@
           ],
           "author": "NarratorTD",
           "children": [
+            47624116,
             47610731
           ],
           "created_at": "2026-03-31T18:26:14Z",
@@ -549,7 +553,7 @@
           "story_id": 47591487,
           "story_text": "Hey HN! I built Domscribe to solve a problem that was eating my productivity.<p>I spend a lot of my time working with AI coding agents. The thing that kept eating at my productivity though was that every time I asked an agent to fix something on the frontend, the actual edit took maybe 200 tokens. But before that happened, the agent would go on this whole journey, grepping through the codebase and at times having to backtrack. That search loop could burn 5,000-10,000 tokens before a single line of code changed.<p>The agent has zero awareness of what&#x27;s actually rendering in the browser because the rendered DOM and the source tree are two completely different topologies. So I started thinking about this differently; what if we could optimize a solution to the search problem by giving the agents the right context? What if every DOM element already knew exactly where it came from in source?<p>That&#x27;s the core idea behind Domscribe. At build time, an AST transform walks your JSX and Vue templates, assigns every element a deterministic ID via xxhash64 content hashing, and writes a manifest mapping each ID to its exact file, line, and column. The IDs are stable across HMR; same file content and element position always produces the same ID. At runtime, framework adapters walk the React fiber tree or inspect Vue VNodes to capture live props, state, and component metadata. A local relay daemon connects the browser and your agent via MCP.<p>The result is two workflows that didn&#x27;t exist before. Your agent can query any source location and get back only what&#x27;s actually rendering there; live DOM snapshot, props, state, the works. And from the other direction, you can click any element in the browser overlay, type &quot;make this button use the primary color&quot; in plain English, and Domscribe resolves the exact file:line:col so your agent edits the right file on the first try.<p>(I should mention that the overlay runs as Lit web components inside shadow DOM, specifically so it can&#x27;t mess with your app&#x27;s styles.)<p>One thing I&#x27;m genuinely proud of is the architecture. I spent a LOT of time making sure this wasn&#x27;t just a tool that works for React-and-Vite-and-nothing-else. The transform layer has a ParserInterface that the injector consumes without knowing which parser produced the AST (the Acorn, Babel, and Vue SFC parsers are all implementations of the same interface), and the ID injection logic is completely abstracted away. Adding a new template syntax (Lit, Svelte, Stencil) means implementing one interface. On the runtime side, a FrameworkAdapter interface defines methods such as captureProps, captureState, and getComponentInstance; and the React and Vue adapters are built on the same public interface that any community contributor would use. No internal escape hatches.<p>I took the same approach with bundler support (Vite, Webpack, Turbopack) and agent support (Claude Code, Cursor, GitHub Copilot CLI, Gemini CLI - all via first-party plugins that bundle the MCP config and a skill file). But the MCP layer means any compatible agent works out of the box.<p>PII redaction is built in and on by default. All captured data passes through pattern matching for emails, phone numbers, API keys, JWTs etc. before it leaves the browser.<p>Everything is stripped in production builds; zero data-ds attributes and zero overlay scripts. It&#x27;s enforced by CI tests that run against every real fixture. (Speaking of tests: the entire integration and e2e suite runs against real published packages via a local Verdaccio registry. )<p>Anyway, MIT licensed, fully open source, the whole codebase is right there on GitHub. I&#x27;d genuinely love feedback on the architecture and the approach. And I&#x27;m especially curious if anyone has thoughts on extending the ParserInterface to other template syntaxes; that&#x27;s the piece I&#x27;m most excited about people contributing to.",
           "title": "Show HN: Domscribe – Deterministic DOM-to-source mapping for AI coding agents",
-          "updated_at": "2026-04-02T06:38:01Z",
+          "updated_at": "2026-04-03T07:36:50Z",
           "url": "https://github.com/patchorbit/domscribe"
         }
       ]
@@ -821,6 +825,91 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "emmanol"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Traffic on internet-facing systems is rarely stable, as legitimate demand shifts with product launches, user growth, and media attention, while DoS attacks, automated abuse, and protocol misuse can arrive at the same scale and intensity. Reliably distinguishing one from the other without introducing latency or friction for legitimate users is the core problem.<p>Trafficmind treats inbound traffic as a system to be classified and controlled at ingress, with detection being based on behavioral analysis rather than payload inspection or user-facing challenges. Enforcement operates at a separate layer, applying DDoS mitigation through packet and header-level filtering upstream at the network edge, so hostile traffic is dropped before it reaches the application, with no impact on legitimate users.<p>How payload inspection and user challenges became common\nMost security and observability systems are positioned at the application runtime layer: WAFs, abuse detection, and access controls engage after requests have already been accepted, decrypted, and parsed, and any connection overhead, including TLS termination, has already been absorbed. At that point in the lifecycle, payload inspection and user-facing challenges are the primary tools for distinguishing legitimate traffic from abuse.<p>Payload inspection works by interpreting request contents to infer intent, while user challenges take a different approach, establishing legitimacy through client interaction. <em>Bot</em>h can be effective signals at the application layer, but by the time either method runs, connection handling, TLS termination, and request parsing have already consumed infrastructure resources.<p>At high traffic volumes that sequencing becomes a liability, since the security decision is made too late in the request lifecycle to prevent resource contention. When that contention builds, the effect is felt directly by legitimate users in the form of latency, errors, and degraded service.<p>User experience as a system consideration\nIn high-traffic conditions, security mechanisms and user experience are not separate concerns. Delays, client validation, and interactive challenges all shape how the system behaves under load, and that behavior is what legitimate users encounter directly.<p>Trafficmind evaluates inbound traffic continuously and inline, classifying it before requests are routed to application runtimes. No client-side actions are required, no additional round trips are introduced, and no interactive challenges are presented. Protection operates at the infrastructure layer, so mitigation remains invisible to legitimate users even under peak demand.<p>Protection is applied before application resources are engaged, and legitimate users encounter no friction regardless of what is happening upstream.<p>Layered traffic analysis: Layer 7 detection, Layer 4 enforcement\nBefore a request has semantic meaning to an application, it already exhibits measurable behavior. Connection establishment, timing regularity, retry patterns, and protocol usage are all visible at the network edge the moment traffic arrives. All of these signals are observable and actionable without decryption or application-specific context.<p>Trafficmind.com uses pre-execution behavior as its primary detection surface, analyzing HTTP packets at Layer 7 through machine learning models that make decisions based on metadata and user actions.<p>Enforcement is handled at Layer 4, where decisions are applied through packet and header-level filtering at the network interface, before traffic enters the kernel or user space. Separating detection from enforcement means detection can remain expressive and adaptive while enforcement stays fast, deterministic, and low overhead."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Trafficmind Approach to Attack Detection Without CAPTCHAs"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_emmanol",
+            "story_47623602",
+            "ask_hn"
+          ],
+          "author": "emmanol",
+          "children": [
+            47624046
+          ],
+          "created_at": "2026-04-03T05:57:45Z",
+          "created_at_i": 1775195865,
+          "num_comments": 0,
+          "objectID": "47623602",
+          "points": 1,
+          "story_id": 47623602,
+          "story_text": "Traffic on internet-facing systems is rarely stable, as legitimate demand shifts with product launches, user growth, and media attention, while DoS attacks, automated abuse, and protocol misuse can arrive at the same scale and intensity. Reliably distinguishing one from the other without introducing latency or friction for legitimate users is the core problem.<p>Trafficmind treats inbound traffic as a system to be classified and controlled at ingress, with detection being based on behavioral analysis rather than payload inspection or user-facing challenges. Enforcement operates at a separate layer, applying DDoS mitigation through packet and header-level filtering upstream at the network edge, so hostile traffic is dropped before it reaches the application, with no impact on legitimate users.<p>How payload inspection and user challenges became common\nMost security and observability systems are positioned at the application runtime layer: WAFs, abuse detection, and access controls engage after requests have already been accepted, decrypted, and parsed, and any connection overhead, including TLS termination, has already been absorbed. At that point in the lifecycle, payload inspection and user-facing challenges are the primary tools for distinguishing legitimate traffic from abuse.<p>Payload inspection works by interpreting request contents to infer intent, while user challenges take a different approach, establishing legitimacy through client interaction. Both can be effective signals at the application layer, but by the time either method runs, connection handling, TLS termination, and request parsing have already consumed infrastructure resources.<p>At high traffic volumes that sequencing becomes a liability, since the security decision is made too late in the request lifecycle to prevent resource contention. When that contention builds, the effect is felt directly by legitimate users in the form of latency, errors, and degraded service.<p>User experience as a system consideration\nIn high-traffic conditions, security mechanisms and user experience are not separate concerns. Delays, client validation, and interactive challenges all shape how the system behaves under load, and that behavior is what legitimate users encounter directly.<p>Trafficmind evaluates inbound traffic continuously and inline, classifying it before requests are routed to application runtimes. No client-side actions are required, no additional round trips are introduced, and no interactive challenges are presented. Protection operates at the infrastructure layer, so mitigation remains invisible to legitimate users even under peak demand.<p>Protection is applied before application resources are engaged, and legitimate users encounter no friction regardless of what is happening upstream.<p>Layered traffic analysis: Layer 7 detection, Layer 4 enforcement\nBefore a request has semantic meaning to an application, it already exhibits measurable behavior. Connection establishment, timing regularity, retry patterns, and protocol usage are all visible at the network edge the moment traffic arrives. All of these signals are observable and actionable without decryption or application-specific context.<p>Trafficmind.com uses pre-execution behavior as its primary detection surface, analyzing HTTP packets at Layer 7 through machine learning models that make decisions based on metadata and user actions.<p>Enforcement is handled at Layer 4, where decisions are applied through packet and header-level filtering at the network interface, before traffic enters the kernel or user space. Separating detection from enforcement means detection can remain expressive and adaptive while enforcement stays fast, deterministic, and low overhead.",
+          "title": "Trafficmind Approach to Attack Detection Without CAPTCHAs",
+          "updated_at": "2026-04-03T07:33:05Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "ieuanking"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "We built Ubik Studio because professional knowledge workers and researchers are experiencing a crisis with unreliable AI tools. Models hallucinate citations with total confidence. Multi-hop tasks degrade in quality. Context engines fail on file-based work. And without step-by-step approval flows, professionals spend more time verifying AI work than doing the work itself, decreasing <em>bot</em>h productivity and hurting the critical thinking skills humans need to use AI tools effectively.<p>Two years of failed AI integrations have killed blind trust. Enterprises are moving toward workflows that require human judgment and verification. Professional researchers would rather work slower with certainty than fast and wrong.<p>Since inception, we've focused on assistive, human-in-the-loop design. We're model-agnostic and built-ready for the near future where local models run effectively on personal computers. We've spent all our research effort on the hard problems: multi-hop reasoning across complex tasks that require gathering sources, maintaining file context, and generating text with accurate evidence attribution. We've built a context engine and citation engine that our agents use to cite accurately and cross-analyze documents without hallucination across models.<p>Our HITL-AI design gives you control, transparency, and capabilities that mainstream AI tools lack. Our users are professionals, researchers, and grad students doing work where accuracy and attribution are non-negotiable. Ubik Studio delivers a Cursor-like experience for professional researchers who struggle to integrate tools like Claude, ChatGPT, or NotebookLM into their high-level workflows, and we are very proud to hear praise from our users like:<p>&quot;I can check all citations for every sentences. Your software is the same as NotebookLm, even better because I can see some parts in PDF which link to the results from AI models. NotebookLM cannot open locations of PDF where the citations appear, just text. I don't care about text, I need precision, accurateness in every sentence.&quot;<p>We would love and appreciate your feedback, everything is public we have some paying users (super proud), but ofc we are always learning &lt;3<p>If a model-agnostic AI workspace that centralizes writing, searching, document analysis, and LLM-assistance locally sounds helpful for you, please give it a try!<p><a href=\"https://www.ubik.studio/download\" rel=\"nofollow\">https://www.ubik.studio/download</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Ubik – Analyze local files like NotebookLM, with Cursor-like power"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.ubik.studio/features"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_ieuanking",
+            "story_47622878",
+            "show_hn"
+          ],
+          "author": "ieuanking",
+          "created_at": "2026-04-03T03:27:16Z",
+          "created_at_i": 1775186836,
+          "num_comments": 0,
+          "objectID": "47622878",
+          "points": 1,
+          "story_id": 47622878,
+          "story_text": "We built Ubik Studio because professional knowledge workers and researchers are experiencing a crisis with unreliable AI tools. Models hallucinate citations with total confidence. Multi-hop tasks degrade in quality. Context engines fail on file-based work. And without step-by-step approval flows, professionals spend more time verifying AI work than doing the work itself, decreasing both productivity and hurting the critical thinking skills humans need to use AI tools effectively.<p>Two years of failed AI integrations have killed blind trust. Enterprises are moving toward workflows that require human judgment and verification. Professional researchers would rather work slower with certainty than fast and wrong.<p>Since inception, we&#x27;ve focused on assistive, human-in-the-loop design. We&#x27;re model-agnostic and built-ready for the near future where local models run effectively on personal computers. We&#x27;ve spent all our research effort on the hard problems: multi-hop reasoning across complex tasks that require gathering sources, maintaining file context, and generating text with accurate evidence attribution. We&#x27;ve built a context engine and citation engine that our agents use to cite accurately and cross-analyze documents without hallucination across models.<p>Our HITL-AI design gives you control, transparency, and capabilities that mainstream AI tools lack. Our users are professionals, researchers, and grad students doing work where accuracy and attribution are non-negotiable. Ubik Studio delivers a Cursor-like experience for professional researchers who struggle to integrate tools like Claude, ChatGPT, or NotebookLM into their high-level workflows, and we are very proud to hear praise from our users like:<p>&quot;I can check all citations for every sentences. Your software is the same as NotebookLm, even better because I can see some parts in PDF which link to the results from AI models. NotebookLM cannot open locations of PDF where the citations appear, just text. I don&#x27;t care about text, I need precision, accurateness in every sentence.&quot;<p>We would love and appreciate your feedback, everything is public we have some paying users (super proud), but ofc we are always learning &lt;3<p>If a model-agnostic AI workspace that centralizes writing, searching, document analysis, and LLM-assistance locally sounds helpful for you, please give it a try!<p><a href=\"https:&#x2F;&#x2F;www.ubik.studio&#x2F;download\" rel=\"nofollow\">https:&#x2F;&#x2F;www.ubik.studio&#x2F;download</a>",
+          "title": "Show HN: Ubik – Analyze local files like NotebookLM, with Cursor-like power",
+          "updated_at": "2026-04-03T03:30:04Z",
+          "url": "https://www.ubik.studio/features"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "TheWiggles"
             },
             "title": {
@@ -847,10 +936,10 @@
           "created_at_i": 1775171779,
           "num_comments": 0,
           "objectID": "47621439",
-          "points": 1,
+          "points": 2,
           "story_id": 47621439,
           "title": "Kryptos – A Cryptography Library for Gleam Targets Both Erlang and JavaScript",
-          "updated_at": "2026-04-02T23:18:05Z",
+          "updated_at": "2026-04-03T03:03:20Z",
           "url": "https://github.com/jtdowney/kryptos"
         },
         {
@@ -890,11 +979,11 @@
           "created_at_i": 1775170837,
           "num_comments": 0,
           "objectID": "47621306",
-          "points": 3,
+          "points": 4,
           "story_id": 47621306,
           "story_text": "I was once having a bad day and wanted to ventillate about the peculiarities of corporate life. Then I realised I don&#x27;t trust these sites. Neither my blog. I didn&#x27;t want to link these thoughts to an account - my stream of thoughts. I also needed comfort from real human beings - not gen AI bots. Don&#x27;t get me wrong I engineered&#x2F;hacked&#x2F;conjured? this stuff together with the help of LLMs. I think gen AI CAN be a net positive. Yet, I don&#x27;t want to interact with agents if they are being pushed on me. So I created Currant. This is basically a wannabe feed of posts. What hopefully makes it a bit different are the following things:\n1) No accounts. You can create posts, comment without an identity. You can create hashtags, you can write down your phone number and address if you want, but you&#x27;re not pushed to do that. You can prevent others to comment if you wish.\n2) Proof-of-work AI&#x2F;ripoff detection. Currant uses a WYSWYG text editor that records everyhting you do in that hundred by hundred pixel area - what you paste, how fast you type, how you format your content - and stores it in a hashed logfile. It can be replayed by anyone. :) If the detector thinks you&#x27;re an AI your content will be rejected. Will it prevent AI use alltogether? No. But hopefully it will throttle it. Will it produce some false positives? Absolutely. You might wonder - isn&#x27;t this against the anonym thingy? Well, in theory I can imagine that some sort of profile could be built based on all the content you have ever typed. But it&#x27;s still not a cookie that sends all your click data to 87565 &quot;trusted&quot; partners.\n3) Content expiry. By default everything you post will be deleted after 1 month. You can set it to 1 hour, 1 day ... or never. But if you don&#x27;t want, the site will not store your manifested thoughts forever.\n4) Customisation. It&#x27;s a bit silly, but you have control over several stylistic things about your post - background colors, gradients, border radius. Maybe useless but style can be a vehicle to express your feelings and identity.<p>It&#x27;s an experiment and I really appreciate if you give it a chance! &lt;3<p>Ps.: If you do try it and have any feedback or suggestion you can use the &quot;Contact&quot; submenu. The software currently has 68% statement coverage.",
           "title": "Show HN: Currant – Anonymus social media for NON-AI agents",
-          "updated_at": "2026-04-02T23:45:04Z",
+          "updated_at": "2026-04-03T03:04:19Z",
           "url": "https://currantfeed.cc"
         },
         {
@@ -926,107 +1015,27 @@
           ],
           "author": "l33tbro",
           "children": [
-            47621058,
-            47622258,
+            47622801,
+            47624260,
             47620492,
+            47621058,
+            47622738,
+            47622258,
             47621066,
             47620621,
+            47623111,
+            47623050,
             47620627
           ],
           "created_at": "2026-04-02T21:25:37Z",
           "created_at_i": 1775165137,
-          "num_comments": 8,
+          "num_comments": 16,
           "objectID": "47620412",
           "points": 10,
           "story_id": 47620412,
           "story_text": "Something something AI and quality of this forum.<p>I&#x27;m not arguing that  this is a good solution.  But our user experience is being increasingly disrupted by squinting at comments and trying to parse their syntactic and semantic structure to discern if this account is a person or not.  That is not what this place should be, and I think that is something we all agree on.<p>A new account ban sounds rash and I agree that this could be a really dumb idea.  I&#x27;m also certain dang et al will have considered it amongst other approaches.  But this place is becoming less compelling by the day, and at least this measure plugs the holes until there is a strategy in place to address the issue of bots and agents being able to create accounts and spam and shill the ever-living fuck out of this once great site.<p>Why even is there an urgency for new users?   Especially given that many now are guaranteed to  be undetectable bots, which goes against the ethos of the site.  What is the argument against pausing new accounts, when this community is already fairly large and active?",
           "title": "Ask HN: Should there be a temporary ban on new accounts?",
-          "updated_at": "2026-04-03T02:27:50Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "WecoAI"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "We did experiments comparing Optuna &amp; autoresearch.\nAutoresearch converges faster, is more cost-efficient, and even generalizes better.<p>Experiments were done on NanoChat: we let Claude define Optuna’s search space to align the priors between methods. <em>Bot</em>h optimization methods were run three times. Autoresearch is far more sample-efficient on average<p>In 5 min training setting, LLM tokens cost as much as GPUs, but despite a 2× higher per-step cost, AutoResearch still comes out ahead across all cost budgets<p>What’s more, the solution found by autoresearch generalizes better than Optuna’s. We gave the best solutions more training time; the absolute score gap widens, and the statistical significance becomes stronger<p>An important contributor to autoresearch’s capability is that it searches directly in code space. In the early stages, autoresearch tunes knobs within Optuna’s 16-parameter search space. However, with more iterations, it starts to explore code changes"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Is autoresearch better than classic hyperparameter tuning?"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.weco.ai/blog/autoresearch-vs-classical-hpo"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_WecoAI",
-            "story_47620196",
-            "show_hn"
-          ],
-          "author": "WecoAI",
-          "created_at": "2026-04-02T21:07:03Z",
-          "created_at_i": 1775164023,
-          "num_comments": 0,
-          "objectID": "47620196",
-          "points": 2,
-          "story_id": 47620196,
-          "story_text": "We did experiments comparing Optuna &amp; autoresearch.\nAutoresearch converges faster, is more cost-efficient, and even generalizes better.<p>Experiments were done on NanoChat: we let Claude define Optuna’s search space to align the priors between methods. Both optimization methods were run three times. Autoresearch is far more sample-efficient on average<p>In 5 min training setting, LLM tokens cost as much as GPUs, but despite a 2× higher per-step cost, AutoResearch still comes out ahead across all cost budgets<p>What’s more, the solution found by autoresearch generalizes better than Optuna’s. We gave the best solutions more training time; the absolute score gap widens, and the statistical significance becomes stronger<p>An important contributor to autoresearch’s capability is that it searches directly in code space. In the early stages, autoresearch tunes knobs within Optuna’s 16-parameter search space. However, with more iterations, it starts to explore code changes",
-          "title": "Show HN: Is autoresearch better than classic hyperparameter tuning?",
-          "updated_at": "2026-04-02T21:12:20Z",
-          "url": "https://www.weco.ai/blog/autoresearch-vs-classical-hpo"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kinj28"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Disclaimer: I run a low code service and still many customers use us. But am curious what’s the developer /cto perspective on this?<p>We do have a AI assistant to help build on top of platform but the primary appeal of low code was don’t <em>bot</em>her about code and care about the app which with agentic sw development may also be achieved."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: How relevant is low code according to you in today’s world with Claude?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kinj28",
-            "story_47619720",
-            "ask_hn"
-          ],
-          "author": "kinj28",
-          "children": [
-            47619897
-          ],
-          "created_at": "2026-04-02T20:25:15Z",
-          "created_at_i": 1775161515,
-          "num_comments": 1,
-          "objectID": "47619720",
-          "points": 3,
-          "story_id": 47619720,
-          "story_text": "Disclaimer: I run a low code service and still many customers use us. But am curious what’s the developer &#x2F;cto perspective on this?<p>We do have a AI assistant to help build on top of platform but the primary appeal of low code was don’t bother about code and care about the app which with agentic sw development may also be achieved.",
-          "title": "Ask HN: How relevant is low code according to you in today’s world with Claude?",
-          "updated_at": "2026-04-02T22:57:34Z"
+          "updated_at": "2026-04-03T08:14:20Z"
         }
       ]
     },
@@ -1304,10 +1313,10 @@
           "created_at_i": 1775166467,
           "num_comments": 0,
           "objectID": "47620615",
-          "points": 1,
+          "points": 2,
           "story_id": 47620615,
           "title": "Build an OpenClaw Alternative with Arcade + Claude Code",
-          "updated_at": "2026-04-02T21:51:04Z",
+          "updated_at": "2026-04-03T03:14:05Z",
           "url": "https://www.arcade.dev/blog/secure-openclaw-alternative-arcade-claude-code/"
         },
         {
@@ -2232,11 +2241,11 @@
           "created_at_i": 1775137511,
           "num_comments": 1,
           "objectID": "47614404",
-          "points": 3,
+          "points": 5,
           "story_id": 47614404,
           "story_text": "I maintain neat-python and have been building a genetic programming framework in Julia. While doing research on that project, I kept finding the same complaint in PySR&#x27;s GitHub discussions: people give up not because symbolic regression doesn&#x27;t work, but because getting Julia talking to Python is a repeated source of failure, especially on Windows and in notebooks.<p>So I stood up Occam (occam.fit) — a hosted MCP server exposing two tools: run_sindy for sparse identification of dynamics from time series (seconds), and run_pysr for evolutionary symbolic regression returning a Pareto front of expressions by complexity vs. accuracy (10–60s).<p>The core design decision is a pool of pre-warmed Julia workers running SymbolicRegression.jl v2. Julia processes stay alive between requests so the 2-minute compilation hit is paid once at server startup, not per call.<p>Free tier, no signup. Happy to answer questions about the architecture or symbolic regression generally, and curious whether anyone has use cases that don&#x27;t fit the current limits.",
           "title": "Show HN: Symbolic regression as an MCP tool (SINDy and PySR, free, no install)",
-          "updated_at": "2026-04-02T19:14:51Z",
+          "updated_at": "2026-04-03T05:36:05Z",
           "url": "https://occam.fit/"
         },
         {
@@ -2335,6 +2344,64 @@
           "title": "Ref/ect: Self-Improving RL layer on top of Observability",
           "updated_at": "2026-04-02T21:19:25Z",
           "url": "https://getreflect.starlight-search.com"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "amangsingh"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "I got tired of <em>AI</em> agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No <em>self</em>-<em>approving</em> code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Castra – Strip orchestration rights from your LLMs"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/amangsingh/castra"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_amangsingh",
+            "story_47601608",
+            "show_hn"
+          ],
+          "author": "amangsingh",
+          "children": [
+            47617410,
+            47602435,
+            47602458,
+            47606660,
+            47603897,
+            47621869,
+            47602546,
+            47611202,
+            47603984,
+            47621860
+          ],
+          "created_at": "2026-04-01T14:40:28Z",
+          "created_at_i": 1775054428,
+          "num_comments": 10,
+          "objectID": "47601608",
+          "points": 8,
+          "story_id": 47601608,
+          "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
+          "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
+          "updated_at": "2026-04-03T04:03:50Z",
+          "url": "https://github.com/amangsingh/castra"
         },
         {
           "_highlightResult": {
@@ -2471,48 +2538,6 @@
           "story_text": "Let me begin by saying that I am not a traditional builder with a traditional background. From the onset of this endeavor until today it has just been me, my laptop, and my ideas I learned how systems work through trial and error, and I built these platforms because after an exhaustive search I discovered a need. I am fully aware that a 54 year old fantasy novelist with no formal training creating one experimental platform, let alone three, in his kitchen, on a commercial grade Dell stretches credulity to the limits (or beyond). But I am hoping that my work speaks for itself. Although admittedly, it might speak to my insane bullheadedness and unwillingness to give up on an idea. So, if you are thinking I am delusional, I allow for that possibility. But I sure as hell hope not.\nWith that said\nI have released three large software systems that I have been developing privately. These projects were built as a solo effort, outside institutional or commercial backing, and are now being made available, partly in the interest of transparency, preservation, and possible collaboration. But mostly because someone like me struggles to find the funding needed to bring projects of this scale to production.\nAll three platforms are real, open-source, deployable systems. They install via Docker, Helm, or Kubernetes, start successfully, and produce observable results. \nThe Platforms\nASE — Autonomous Software Engineering System\nASE is a closed-loop code creation, monitoring, and self-improving platform intended to automate and standardize parts of the software development lifecycle.\nIt attempts to:\n• produce software artifacts from high-level tasks\n• monitor the results of what it creates\n• evaluate outcomes\n• feed corrections back into the process\n• iterate over time\nASE runs today, but the agents still require tuning, some features remain incomplete, and output quality varies depending on configuration.\nVulcanAMI — Transformer &#x2F; Neuro-Symbolic Hybrid AI Platform\nVulcan is an AI system built around a hybrid architecture combining transformer-based language modeling with structured reasoning and control mechanisms.\nIts purpose is to address limitations of purely statistical language models by incorporating symbolic components, orchestration logic, and system-level governance.\nThe system deploys and operates, but reliable transformer integration remains a major engineering challenge, and significant work is still required before it could be considered robust.\nFEMS — Finite Enormity Engine\nPractical Multiverse Simulation Platform\nFEMS is a computational platform for large-scale scenario exploration through multiverse simulation, counterfactual analysis, and causal modeling.\nIt is intended as a practical implementation of techniques that are often confined to research environments.\nCurrent Status\nAll three systems are:\n• deployable\n• operational\n• complex\n• incomplete\nWhat This Release Is — and Is Not\nThis is:\n• a set of deployable foundations\n• a snapshot of ongoing independent work\n• an invitation for exploration, critique, and contribution\n• a record of what has been built so far\nThis is not:\n• a finished product suite\n• a turnkey solution for any domain\n• a claim of breakthrough performance\n• a guarantee of support, polish, or roadmap execution\nIf you find parts that are useful, interesting, or worth improving, you are free to build on them under the terms of the license.\nI know the story sounds unlikely. That is why I am not asking anyone to accept it on faith.\nYou can judge for yourself\n— Brian D. Anderson\nASE: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;The_Code_Factory_Working_V2.git\nVulcanAMI: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;VulcanAMI_LLM.git\nFEMS: https:&#x2F;&#x2F;github.com&#x2F;musicmonk42&#x2F;FEMS.git",
           "title": "New Open Source from Non-Traditional Builder",
           "updated_at": "2026-03-23T09:17:05Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "samurai48"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "Autoskill – <em>self</em>-<em>improving</em> skills for <em>AI</em> agents"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Samurai412/autoskill"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_samurai48",
-            "story_47467265"
-          ],
-          "author": "samurai48",
-          "children": [
-            47467266
-          ],
-          "created_at": "2026-03-21T14:20:07Z",
-          "created_at_i": 1774102807,
-          "num_comments": 2,
-          "objectID": "47467265",
-          "points": 2,
-          "story_id": 47467265,
-          "title": "Autoskill – self-improving skills for AI agents",
-          "updated_at": "2026-03-21T20:36:45Z",
-          "url": "https://github.com/Samurai412/autoskill"
         }
       ]
     }
