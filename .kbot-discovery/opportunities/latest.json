@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-03T14:43:22.997Z",
+  "timestamp": "2026-04-03T20:50:43.485Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "We replaced RAG with a virtual filesystem for our AI documentation assistant",
+      "url": "https://news.ycombinator.com/item?id=47631890",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Built a small SaaS with just Claude and $20/month, is this viable?",
       "url": "https://news.ycombinator.com/item?id=47627170",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -80,30 +87,23 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Cursor 3",
-      "url": "https://news.ycombinator.com/item?id=47621344",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "[Feature]: Formal accuracy declaration mechanism alongside SLIs",
+      "url": "https://github.com/microsoft/agent-governance-toolkit/issues/759",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "[Feature]: Transparency interceptor for AI disclosure enforcement",
+      "url": "https://github.com/microsoft/agent-governance-toolkit/issues/758",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
       "title": "docs(ai): add first-party spry-docs skill",
       "url": "https://github.com/medz/spry/pull/192",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Auto-QA] Code centralization opportunities found",
-      "url": "https://github.com/kubestellar/console/issues/4367",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Automated PR-closed MCP-powered verification and researched follow-ups",
-      "url": "https://github.com/kubestellar/console/issues/4276",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix: adding login and fixing the plugin to follow the openclaw plugin standards",
-      "url": "https://github.com/mem0ai/mem0/pull/4686",
+      "title": "feat: add setup-validator and plugin-integration skills",
+      "url": "https://github.com/openclaw/openclaw/pull/60526",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "debug(ci): enable show_full_output on claude-review job",
-      "url": "https://github.com/getlarge/themoltnet/pull/627",
+      "title": "Add VSS skills and OpenClaw plugin",
+      "url": "https://github.com/NVIDIA-AI-Blueprints/video-search-and-summarization/pull/78",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(eval): add retry/backoff to Harbor agent and judge adapters",
-      "url": "https://github.com/getlarge/themoltnet/pull/626",
+      "title": "Integrate legacy openclaw installer/apps/scripts into openclaw-copyxyz",
+      "url": "https://github.com/openclaw/openclaw/pull/60511",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "A browser-accessible tmux setup that surfaces terminals waiting on input instead of making me hunt for them",
+      "url": "https://reddit.com/r/commandline/comments/1sblvxv/a_browseraccessible_tmux_setup_that_surfaces/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "NetWatch: real-time network diagnostics in the terminal Release 0.9.0",
       "url": "https://reddit.com/r/commandline/comments/1savu2l/netwatch_realtime_network_diagnostics_in_the/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,30 +192,23 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "I created my own desktop terminal app — local, fast, multiplatform 😎",
-      "url": "https://reddit.com/r/commandline/comments/1s9tld3/i_created_my_own_desktop_terminal_app_local_fast/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
       "source": "reddit-artificial",
-      "title": "Microsoft's newest open-source project: Runtime security for AI agents",
-      "url": "https://reddit.com/r/artificial/comments/1sbatl3/microsofts_newest_opensource_project_runtime/",
+      "title": "What happens when you let AI agents run a sitcom 24/7 with zero human involvement",
+      "url": "https://reddit.com/r/artificial/comments/1sbk7me/what_happens_when_you_let_ai_agents_run_a_sitcom/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "Built an AI “project brain” to run and manage engineering projects solo, how can I make this more efficient?",
-      "url": "https://reddit.com/r/artificial/comments/1sb4eu8/built_an_ai_project_brain_to_run_and_manage/",
+      "title": "After building automation for barbers, therapists, law firms, and game devs/creators I found the setup looks different for each. here's what I got.",
+      "url": "https://reddit.com/r/artificial/comments/1sbk3lr/after_building_automation_for_barbers_therapists/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "I Dont use MCP Prove me Wrong",
-      "url": "https://reddit.com/r/artificial/comments/1sav9qv/i_dont_use_mcp_prove_me_wrong/",
+      "title": "Oracle slashes 30k jobs, Slop is not necessarily the future, Coding agents could make free software matter again and many other AI links from Hacker News",
+      "url": "https://reddit.com/r/artificial/comments/1sbj1tx/oracle_slashes_30k_jobs_slop_is_not_necessarily/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
