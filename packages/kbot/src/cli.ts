@@ -3896,6 +3896,208 @@ async function main(): Promise<void> {
     buddyCmd.commands.find(c => c.name() === 'status')?.parse(['', '', 'status'])
   })
 
+  // ── Ghost Commands ──
+
+  const pikaCmd = program
+    .command('ghost')
+    .description('Ghost — AI video meeting bots, avatars, voice cloning')
+
+  pikaCmd
+    .command('install')
+    .description('Install Ghost (clones repo, installs Python dependencies)')
+    .option('-f, --force', 'Force re-clone even if already installed')
+    .action(async (opts: { force?: boolean }) => {
+      const { registerGhostTools } = await import('./tools/ghost.js')
+      const { executeTool: execTool } = await import('./tools/index.js')
+      registerGhostTools()
+      printInfo('Installing Ghost...')
+      const result = await execTool({ id: 'cli', name: 'pika_install', arguments: { force: opts.force ?? false } })
+      try {
+        const data = JSON.parse(result.result)
+        if (data.success) {
+          printSuccess('Ghost installed successfully!')
+          printInfo(`  Path:     ${data.installed_at}`)
+          printInfo(`  Python:   ${data.python?.version || 'unknown'} (${data.python?.path || 'unknown'})`)
+          printInfo(`  API Key:  ${data.pika_dev_key}`)
+          printInfo(`  Deps:     ${data.pip_dependencies}`)
+          printInfo(`  ffmpeg:   ${data.ffmpeg}`)
+          printInfo(`  Skills:   ${data.skills_found} found`)
+          if (data.skills?.length > 0) {
+            for (const s of data.skills) {
+              printInfo(`    - ${s.name}: ${s.description || '(no description)'}`)
+            }
+          }
+        } else {
+          printError(`Installation failed: ${data.error}`)
+          if (data.fix) printInfo(`  Fix: ${data.fix}`)
+        }
+      } catch {
+        console.log(result.result)
+      }
+      process.exit(result.error ? 1 : 0)
+    })
+
+  pikaCmd
+    .command('join <meet-url>')
+    .description('Join a Google Meet call with an AI avatar bot')
+    .option('-n, --name <name>', 'Bot name (default: "kbot Assistant")')
+    .option('-a, --avatar <path>', 'Avatar image path')
+    .option('-v, --voice <voice-id>', 'Voice ID from ghost voice clone')
+    .option('-p, --prompt <text>', 'System prompt for bot behavior')
+    .action(async (meetUrl: string, opts: { name?: string; avatar?: string; voice?: string; prompt?: string }) => {
+      const { registerGhostTools } = await import('./tools/ghost.js')
+      const { executeTool: execTool } = await import('./tools/index.js')
+      registerGhostTools()
+      printInfo(`Joining meeting: ${meetUrl}`)
+      const result = await execTool({
+        id: 'cli',
+        name: 'pika_meeting_join',
+        arguments: {
+          meet_url: meetUrl,
+          bot_name: opts.name,
+          avatar: opts.avatar,
+          voice_id: opts.voice,
+          system_prompt: opts.prompt,
+        },
+      })
+      try {
+        const data = JSON.parse(result.result)
+        if (data.success) {
+          printSuccess(`Bot "${data.bot_name}" joining ${data.meet_url}`)
+          printInfo(`  Session ID: ${data.session_id}`)
+          printInfo(`  To leave:   kbot ghost leave ${data.session_id}`)
+        } else {
+          printError(`Failed to join: ${data.error}`)
+        }
+      } catch {
+        console.log(result.result)
+      }
+      process.exit(result.error ? 1 : 0)
+    })
+
+  pikaCmd
+    .command('leave <session-id>')
+    .description('Leave an active Pika meeting session')
+    .action(async (sessionId: string) => {
+      const { registerGhostTools } = await import('./tools/ghost.js')
+      const { executeTool: execTool } = await import('./tools/index.js')
+      registerGhostTools()
+      printInfo(`Leaving session: ${sessionId}`)
+      const result = await execTool({
+        id: 'cli',
+        name: 'pika_meeting_leave',
+        arguments: { session_id: sessionId },
+      })
+      try {
+        const data = JSON.parse(result.result)
+        if (data.success) {
+          printSuccess(data.message)
+        } else {
+          printError(`Failed to leave: ${data.error}`)
+        }
+      } catch {
+        console.log(result.result)
+      }
+      process.exit(result.error ? 1 : 0)
+    })
+
+  pikaCmd
+    .command('avatar <prompt>')
+    .description('Generate an AI avatar image for meetings')
+    .option('-o, --output <path>', 'Output file path')
+    .action(async (prompt: string, opts: { output?: string }) => {
+      const { registerGhostTools } = await import('./tools/ghost.js')
+      const { executeTool: execTool } = await import('./tools/index.js')
+      registerGhostTools()
+      printInfo(`Generating avatar: "${prompt}"`)
+      const result = await execTool({
+        id: 'cli',
+        name: 'pika_generate_avatar',
+        arguments: { prompt, output_path: opts.output },
+      })
+      try {
+        const data = JSON.parse(result.result)
+        if (data.success) {
+          printSuccess('Avatar generated!')
+          printInfo(`  Path: ${data.avatar_path}`)
+          printInfo(`  Use with: kbot ghost join <meet-url> --avatar ${data.avatar_path}`)
+        } else {
+          printError(`Avatar generation failed: ${data.error}`)
+        }
+      } catch {
+        console.log(result.result)
+      }
+      process.exit(result.error ? 1 : 0)
+    })
+
+  pikaCmd
+    .command('voice <audio-file>')
+    .description('Clone a voice from an audio file')
+    .option('--noise-reduction', 'Apply noise reduction (requires ffmpeg)')
+    .action(async (audioFile: string, opts: { noiseReduction?: boolean }) => {
+      const { registerGhostTools } = await import('./tools/ghost.js')
+      const { executeTool: execTool } = await import('./tools/index.js')
+      registerGhostTools()
+      printInfo(`Cloning voice from: ${audioFile}`)
+      const result = await execTool({
+        id: 'cli',
+        name: 'pika_clone_voice',
+        arguments: { audio_path: audioFile, noise_reduction: opts.noiseReduction ?? false },
+      })
+      try {
+        const data = JSON.parse(result.result)
+        if (data.success) {
+          printSuccess('Voice cloned!')
+          printInfo(`  Voice ID: ${data.voice_id}`)
+          printInfo(`  Use with: kbot ghost join <meet-url> --voice ${data.voice_id}`)
+        } else {
+          printError(`Voice cloning failed: ${data.error}`)
+        }
+      } catch {
+        console.log(result.result)
+      }
+      process.exit(result.error ? 1 : 0)
+    })
+
+  pikaCmd
+    .command('status')
+    .description('Check Ghost installation status')
+    .action(async () => {
+      const { registerGhostTools } = await import('./tools/ghost.js')
+      const { executeTool: execTool } = await import('./tools/index.js')
+      registerGhostTools()
+      const result = await execTool({ id: 'cli', name: 'pika_status', arguments: {} })
+      try {
+        const data = JSON.parse(result.result)
+        console.log()
+        console.log(`  ${chalk.bold('Ghost Status')}`)
+        console.log(`  ${chalk.dim('─'.repeat(40))}`)
+        console.log(`  Installed:     ${data.installed ? chalk.green('yes') : chalk.red('no')}`)
+        console.log(`  Path:          ${data.install_path}`)
+        console.log(`  Python:        ${data.python?.status === 'ok' ? chalk.green(`${data.python.version}`) : chalk.red(data.python?.fix || 'not found')}`)
+        console.log(`  PIKA_DEV_KEY:  ${data.pika_dev_key?.status === 'configured' ? chalk.green(`${data.pika_dev_key.preview}`) : chalk.red(data.pika_dev_key?.fix || 'not set')}`)
+        console.log(`  ffmpeg:        ${data.ffmpeg === 'available' ? chalk.green('available') : chalk.yellow(data.ffmpeg)}`)
+        console.log(`  Meeting Skill: ${data.meeting_skill === 'ready' ? chalk.green('ready') : chalk.yellow(data.meeting_skill)}`)
+        console.log(`  Skills:        ${data.skills_count}`)
+        if (data.active_sessions?.length > 0) {
+          console.log()
+          console.log(`  ${chalk.bold('Active Sessions')}`)
+          console.log(`  ${chalk.dim('─'.repeat(40))}`)
+          for (const s of data.active_sessions) {
+            console.log(`  ${s.id} — ${s.meetUrl} (started ${s.startedAt})`)
+          }
+        }
+        console.log()
+      } catch {
+        console.log(result.result)
+      }
+      process.exit(0)
+    })
+
+  pikaCmd.action(() => {
+    pikaCmd.commands.find(c => c.name() === 'status')?.parse(['', '', 'status'])
+  })
+
   program.parse(process.argv)
 
   const opts = program.opts()
@@ -3905,7 +4107,7 @@ async function main(): Promise<void> {
   if (opts.quiet) setQuiet(true)
 
   // If a sub-command was run, we're done
-  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions', 'admin', 'monitor', 'analytics', 'deploy', 'env', 'db', 'dream'].includes(program.args[0])) return
+  if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions', 'admin', 'monitor', 'analytics', 'deploy', 'env', 'db', 'dream', 'ghost'].includes(program.args[0])) return
 
   // ── Ollama Launch Integration ──
   // Detect when kbot is started via `ollama launch kbot` or `kbot --ollama-launch`
