@@ -2148,9 +2148,7 @@ async function main(): Promise<void> {
         port: parseInt(opts.port, 10),
         token: opts.token,
         computerUse: opts.computerUse,
-        https: opts.https,
-        cert: opts.cert,
-        key: opts.key,
+        ...(opts.https ? { https: true, cert: opts.cert, key: opts.key } : {}),
       })
     })
 
