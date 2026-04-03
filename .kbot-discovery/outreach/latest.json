@@ -1,8 +1,63 @@
 {
-  "timestamp": "2026-04-02T16:17:08.399Z",
-  "projects": [],
+  "timestamp": "2026-04-03T04:28:11.861Z",
+  "projects": [
+    {
+      "name": "jackwener/opencli",
+      "url": "https://github.com/jackwener/opencli",
+      "stars": 11730,
+      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
+    },
+    {
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1058,
+      "description": "the easiest way to run natural language-described workflows automatically"
+    },
+    {
+      "name": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": 20871,
+      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+    },
+    {
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 2004,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
+    },
+    {
+      "name": "ArcadeAI/arcade-mcp",
+      "url": "https://github.com/ArcadeAI/arcade-mcp",
+      "stars": 842,
+      "description": "The best way to create, deploy, and share MCP Servers"
+    },
+    {
+      "name": "Mirascope/mirascope",
+      "url": "https://github.com/Mirascope/mirascope",
+      "stars": 1445,
+      "description": "The LLM Anti-Framework"
+    },
+    {
+      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
+      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
+      "stars": 0,
+      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+    },
+    {
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
+      "stars": 0,
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+    },
+    {
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "stars": 0,
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    }
+  ],
   "latestPaper": {
-    "title": "HippoCamp: Benchmarking Contextual Agents on Personal Computers",
-    "summary": "We present HippoCamp, a new benchmark designed to evaluate agents' capabilities on multimodal file management. Unlike existing agent benchmarks that focus on tasks like web interaction, tool use, or software automation in generic settings, HippoCamp evaluates agents in user-centric environments to model individual user profiles and search massive personal files for context-aware reasoning. Our benchmark instantiates device-scale file systems over real-world profiles spanning diverse modalities, "
+    "title": "ActionParty: Multi-Subject Action Binding in Generative Video Games",
+    "summary": "Recent advances in video diffusion have enabled the development of \"world models\" capable of simulating interactive environments. However, these models are largely restricted to single-agent settings, failing to control multiple agents simultaneously in a scene. In this work, we tackle a fundamental issue of action binding in existing video diffusion models, which struggle to associate specific actions with their corresponding subjects. For this purpose, we propose ActionParty, an action control"
   }
 }
