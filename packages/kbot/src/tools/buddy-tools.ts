@@ -1,10 +1,11 @@
 // kbot Buddy Tools — Interact with your terminal companion
 //
-// Four tools:
+// Five tools:
 //   buddy_status       — Show buddy name, species, mood, and sprite
 //   buddy_rename       — Give your buddy a custom name (persisted to ~/.kbot/buddy.json)
 //   buddy_achievements — Show all achievements with unlock status and progress
 //   buddy_personality  — Show species personality traits, style, and strength
+//   buddy_leaderboard  — Global anonymous leaderboard across all kbot installs
 
 import { registerTool } from './index.js'
 import {
@@ -17,7 +18,9 @@ import {
   getAchievements,
   getAchievementProgress,
   getSpeciesPersonality,
+  fetchBuddyLeaderboard,
   type BuddyMood,
+  type BuddySpecies,
 } from '../buddy.js'
 
 const VALID_MOODS: BuddyMood[] = ['idle', 'thinking', 'success', 'error', 'learning', 'alert', 'dance', 'curious', 'proud']
@@ -145,6 +148,73 @@ export function registerBuddyTools(): void {
         `Style: ${personality.style}`,
         `Strength: ${personality.strength}`,
       ].join('\n')
+    },
+  })
+
+  registerTool({
+    name: 'buddy_leaderboard',
+    description: 'Show the global buddy leaderboard — anonymous rankings of all kbot buddies across installs, sorted by XP. Requires cloud sync (kernel.chat token).',
+    parameters: {
+      limit: {
+        type: 'number',
+        description: 'Number of entries to show (default 20, max 200)',
+      },
+      species: {
+        type: 'string',
+        description: 'Filter by species: fox, owl, cat, robot, ghost, mushroom, octopus, dragon',
+      },
+    },
+    tier: 'free',
+    async execute(args) {
+      const SPECIES_ICONS: Record<string, string> = {
+        fox: '[fox]', owl: '[owl]', cat: '[cat]', robot: '[bot]',
+        ghost: '[gho]', mushroom: '[msh]', octopus: '[oct]', dragon: '[drg]',
+      }
+
+      const LEVEL_TITLES_SHORT: Record<number, string> = {
+        0: 'Novice', 1: 'Adept', 2: 'Master', 3: 'Legend',
+      }
+
+      const limit = Math.min(Math.max(Math.floor(Number(args.limit) || 20), 1), 200)
+      const species = args.species ? String(args.species).toLowerCase() : undefined
+
+      const validSpecies: BuddySpecies[] = ['fox', 'owl', 'cat', 'robot', 'ghost', 'mushroom', 'octopus', 'dragon']
+      if (species && !validSpecies.includes(species as BuddySpecies)) {
+        return `Unknown species "${species}". Valid: ${validSpecies.join(', ')}`
+      }
+
+      const entries = await fetchBuddyLeaderboard({ limit, species })
+
+      if (entries.length === 0) {
+        return 'No entries on the leaderboard yet. Use kbot to earn XP and sync to the cloud!'
+      }
+
+      const lines: string[] = []
+      const header = species
+        ? `=== Buddy Leaderboard — ${species} ===`
+        : '=== Global Buddy Leaderboard ==='
+      lines.push(header)
+      lines.push('')
+
+      // Table header
+      lines.push(
+        `  ${'#'.padStart(3)}  ${'Species'.padEnd(7)} ${'Level'.padEnd(12)} ${'XP'.padStart(6)}  ${'Achv'.padStart(4)}  ${'Sessions'.padStart(8)}`
+      )
+      lines.push(`  ${'─'.repeat(3)}  ${'─'.repeat(7)} ${'─'.repeat(12)} ${'─'.repeat(6)}  ${'─'.repeat(4)}  ${'─'.repeat(8)}`)
+
+      for (const entry of entries) {
+        const icon = SPECIES_ICONS[entry.species] || entry.species.slice(0, 5)
+        const title = LEVEL_TITLES_SHORT[entry.level] ?? `L${entry.level}`
+        const levelStr = `${entry.level} ${title}`
+        lines.push(
+          `  ${String(entry.rank).padStart(3)}  ${icon.padEnd(7)} ${levelStr.padEnd(12)} ${String(entry.xp).padStart(6)}  ${String(entry.achievement_count).padStart(4)}  ${String(entry.sessions).padStart(8)}`
+        )
+      }
+
+      lines.push('')
+      lines.push(`${entries.length} entries shown`)
+
+      return lines.join('\n')
     },
   })
 }

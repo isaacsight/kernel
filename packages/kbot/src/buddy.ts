@@ -8,7 +8,7 @@
 //
 // Persists buddy name + achievements to ~/.kbot/buddy.json
 
-import { homedir } from 'node:os'
+import { homedir, hostname } from 'node:os'
 import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createHash } from 'node:crypto'
@@ -16,6 +16,7 @@ import { createInterface } from 'node:readline'
 import { getDreamStatus, getDreamPrompt, type DreamInsight, type DreamCategory } from './dream.js'
 import { getExtendedStats, getProfileSummary } from './learning.js'
 import { getToolMetrics } from './tools/index.js'
+import { getCloudToken } from './cloud-sync.js'
 
 // ── Types ──
 
@@ -1043,6 +1044,9 @@ export function addBuddyXP(amount: number): { levelInfo: BuddyLevelInfo; leveled
   saveBuddyConfig(config)
   cachedEvolution = evo
 
+  // Debounced cloud sync — leaderboard update
+  scheduleBuddySync()
+
   const species = resolveSpecies()
   const nextLevel = (newLevel < 3 ? (newLevel + 1) as BuddyLevel : null)
   const xpToNext = nextLevel !== null ? LEVEL_THRESHOLDS[nextLevel] - evo.xp : null
@@ -1055,6 +1059,106 @@ export function addBuddyXP(amount: number): { levelInfo: BuddyLevelInfo; leveled
       title: LEVEL_TITLES[species][evo.level],
     },
     leveledUp,
+  }
+}
+
+// ── Cloud Sync — Buddy Leaderboard ──
+
+const ENGINE_URL = 'https://eoxxpyixdieprsxlpwcs.supabase.co/functions/v1/kbot-engine'
+const BUDDY_SYNC_DEBOUNCE_MS = 5 * 60 * 1000 // max once per 5 minutes
+let buddySyncTimer: NodeJS.Timeout | null = null
+let lastBuddySync = 0
+
+/** Generate an anonymous device hash from hostname + homedir */
+function getDeviceHash(): string {
+  return createHash('sha256')
+    .update(`${hostname()}:${homedir()}`)
+    .digest('hex')
+}
+
+/**
+ * Sync buddy stats to the cloud leaderboard.
+ * Anonymous — uses a SHA-256 hash of hostname+homedir, not user identity.
+ * Requires a kernel.chat token (cloud sync enabled).
+ */
+export async function syncBuddyToCloud(): Promise<boolean> {
+  const token = getCloudToken()
+  if (!token) return false
+
+  try {
+    const buddy = getBuddy()
+    const lvl = getBuddyLevel()
+    const achievements = getAchievements()
+    const stats = getExtendedStats()
+    const unlockedCount = achievements.filter(a => a.unlockedAt !== null).length
+
+    const res = await fetch(`${ENGINE_URL}/sync`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        action: 'buddy_sync',
+        device_hash: getDeviceHash(),
+        species: buddy.species,
+        level: lvl.level,
+        xp: lvl.xp,
+        achievement_count: unlockedCount,
+        sessions: stats.sessions,
+      }),
+      signal: AbortSignal.timeout(10_000),
+    })
+
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
+/** Debounced buddy sync — called from addBuddyXP, max once per 5 minutes */
+function scheduleBuddySync(): void {
+  const now = Date.now()
+  if (now - lastBuddySync < BUDDY_SYNC_DEBOUNCE_MS) return
+  if (buddySyncTimer) return
+
+  buddySyncTimer = setTimeout(() => {
+    buddySyncTimer = null
+    lastBuddySync = Date.now()
+    syncBuddyToCloud().catch(() => {}) // fire and forget
+  }, 1000) // short delay to batch rapid XP gains
+}
+
+/**
+ * Fetch the buddy leaderboard from the cloud.
+ * Returns ranked entries sorted by XP descending.
+ */
+export async function fetchBuddyLeaderboard(opts?: { limit?: number; species?: string }): Promise<
+  Array<{ species: string; level: number; xp: number; achievement_count: number; sessions: number; rank: number }>
+> {
+  const token = getCloudToken()
+  if (!token) return []
+
+  try {
+    const res = await fetch(`${ENGINE_URL}/sync`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        action: 'buddy_leaderboard',
+        limit: opts?.limit ?? 50,
+        ...(opts?.species ? { species: opts.species } : {}),
+      }),
+      signal: AbortSignal.timeout(10_000),
+    })
+
+    if (!res.ok) return []
+    const data = await res.json()
+    return data.leaderboard ?? []
+  } catch {
+    return []
   }
 }
 

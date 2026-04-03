@@ -1,0 +1,578 @@
+/* Buddy Leaderboard */
+
+.ka-leaderboard {
+  min-height: 100vh;
+  background: #0d0d0d;
+  color: #e8e6e3;
+  font-family: 'EB Garamond', Georgia, serif;
+  overflow-x: hidden;
+}
+
+/* Hero */
+.ka-lb-hero {
+  text-align: center;
+  padding: 100px 24px 64px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ka-lb-badge {
+  display: inline-block;
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6B5B95;
+  border: 1px solid #6B5B9540;
+  border-radius: 20px;
+  padding: 4px 16px;
+  margin-bottom: 24px;
+}
+
+.ka-lb-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: clamp(32px, 7vw, 56px);
+  font-weight: 700;
+  color: #FAF9F6;
+  margin: 0 0 12px;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.ka-lb-subtitle {
+  font-size: clamp(16px, 3vw, 20px);
+  color: #aaa;
+  margin: 0 0 40px;
+  line-height: 1.5;
+}
+
+/* Summary stats */
+.ka-lb-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 520px;
+  margin: 0 auto 16px;
+}
+
+.ka-lb-summary-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 12px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 10px;
+  transition: border-color 0.2s;
+}
+
+.ka-lb-summary-card:hover {
+  border-color: #6B5B9540;
+}
+
+.ka-lb-summary-value {
+  font-family: 'Courier Prime', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: #6B5B95;
+  line-height: 1;
+}
+
+.ka-lb-summary-label {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Refresh */
+.ka-lb-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 16px;
+}
+
+.ka-lb-refresh:hover {
+  border-color: #6B5B95;
+  color: #FAF9F6;
+}
+
+.ka-lb-refresh:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ka-lb-refresh-icon {
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.ka-lb-refresh:hover .ka-lb-refresh-icon {
+  transform: rotate(180deg);
+}
+
+/* Divider */
+.ka-lb-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #333, transparent);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Species filter tabs */
+.ka-lb-filters {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 720px;
+  margin: 0 auto 32px;
+  padding: 0 24px;
+}
+
+.ka-lb-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.ka-lb-filter:hover {
+  border-color: #6B5B9560;
+  color: #ccc;
+}
+
+.ka-lb-filter--active {
+  background: #6B5B9520;
+  border-color: #6B5B95;
+  color: #FAF9F6;
+}
+
+.ka-lb-filter-emoji {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Main table section */
+.ka-lb-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* Table */
+.ka-lb-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #222;
+  border-radius: 10px;
+  background: #111;
+}
+
+.ka-lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.ka-lb-table thead {
+  background: #161616;
+  border-bottom: 1px solid #222;
+}
+
+.ka-lb-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #666;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.ka-lb-table th:first-child {
+  width: 48px;
+  text-align: center;
+}
+
+.ka-lb-table tbody tr {
+  border-bottom: 1px solid #1a1a1a;
+  transition: background 0.15s;
+}
+
+.ka-lb-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.ka-lb-table tbody tr:hover {
+  background: #1a1a1a;
+}
+
+.ka-lb-table td {
+  padding: 12px 16px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  color: #ccc;
+  white-space: nowrap;
+}
+
+/* Rank column */
+.ka-lb-rank {
+  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: #888;
+}
+
+.ka-lb-rank--gold {
+  color: #FFD700;
+}
+
+.ka-lb-rank--silver {
+  color: #C0C0C0;
+}
+
+.ka-lb-rank--bronze {
+  color: #CD7F32;
+}
+
+/* Species cell */
+.ka-lb-species {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ka-lb-species-emoji {
+  font-size: 24px;
+  line-height: 1;
+  width: 32px;
+  text-align: center;
+}
+
+.ka-lb-species-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ka-lb-species-name {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  color: #FAF9F6;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.ka-lb-species-level {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #6B5B95;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* XP bar */
+.ka-lb-xp {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.ka-lb-xp-label {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #888;
+}
+
+.ka-lb-xp-track {
+  height: 8px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #222;
+}
+
+.ka-lb-xp-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #6B5B95, #8B7BB5);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Achievement */
+.ka-lb-achievements {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.ka-lb-trophy {
+  font-size: 14px;
+  color: #FFD700;
+}
+
+/* Sessions */
+.ka-lb-sessions {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  color: #888;
+}
+
+/* Empty state */
+.ka-lb-empty {
+  text-align: center;
+  padding: 80px 24px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.ka-lb-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.ka-lb-empty-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 20px;
+  color: #FAF9F6;
+  margin: 0 0 8px;
+}
+
+.ka-lb-empty-desc {
+  font-size: 15px;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Loading skeleton */
+.ka-lb-skeleton-row {
+  display: grid;
+  grid-template-columns: 48px 200px 1fr 80px 80px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.ka-lb-skeleton-cell {
+  height: 14px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  animation: ka-lb-pulse 1.5s ease-in-out infinite;
+}
+
+.ka-lb-skeleton-cell--short { width: 32px; }
+.ka-lb-skeleton-cell--medium { width: 120px; }
+.ka-lb-skeleton-cell--wide { width: 100%; }
+
+@keyframes ka-lb-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* Error state */
+.ka-lb-error {
+  text-align: center;
+  padding: 60px 24px;
+}
+
+.ka-lb-error-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 18px;
+  color: #FAF9F6;
+  margin: 0 0 8px;
+}
+
+.ka-lb-error-desc {
+  font-size: 14px;
+  color: #888;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.ka-lb-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #6B5B95;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #FAF9F6;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ka-lb-retry:hover {
+  background: #7B6BA5;
+}
+
+/* CTA */
+.ka-lb-cta {
+  text-align: center;
+  padding: 48px 24px 80px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.ka-lb-cta-text {
+  font-size: 16px;
+  color: #888;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.ka-lb-install {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.ka-lb-install:hover {
+  border-color: #6B5B95;
+}
+
+.ka-lb-install code {
+  font-family: 'Courier Prime', monospace;
+  font-size: 15px;
+  color: #6B5B95;
+}
+
+.ka-lb-copy {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #666;
+  border-left: 1px solid #333;
+  padding-left: 16px;
+}
+
+/* Back link */
+.ka-lb-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  z-index: 10;
+  transition: color 0.2s;
+}
+
+.ka-lb-back:hover {
+  color: #6B5B95;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .ka-lb-hero {
+    padding: 80px 20px 48px;
+  }
+
+  .ka-lb-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .ka-lb-summary-card {
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .ka-lb-summary-value {
+    font-size: 22px;
+  }
+
+  .ka-lb-filters {
+    gap: 6px;
+    padding: 0 16px;
+  }
+
+  .ka-lb-filter {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+
+  .ka-lb-section {
+    padding: 0 16px 40px;
+  }
+
+  .ka-lb-install {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ka-lb-copy {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .ka-lb-back {
+    position: static;
+    margin: 20px 0 0 20px;
+    display: block;
+  }
+
+  .ka-lb-skeleton-row {
+    grid-template-columns: 32px 1fr 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ka-lb-table {
+    font-size: 12px;
+  }
+
+  .ka-lb-table th,
+  .ka-lb-table td {
+    padding: 8px 10px;
+  }
+
+  .ka-lb-species-emoji {
+    font-size: 18px;
+    width: 24px;
+  }
+}

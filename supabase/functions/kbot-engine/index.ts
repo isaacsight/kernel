@@ -291,6 +291,64 @@ async function handleSync(auth: AuthResult, body: Record<string, unknown>): Prom
     })
   }
 
+  if (action === 'buddy_sync') {
+    // Upsert buddy stats to leaderboard (anonymous — uses device_hash, not user_id)
+    const deviceHash = String(body.device_hash || '').slice(0, 128)
+    const species = String(body.species || '').slice(0, 20)
+    const level = Math.min(Math.max(Math.floor(Number(body.level) || 0), 0), 3)
+    const xp = Math.min(Math.max(Math.floor(Number(body.xp) || 0), 0), 999999)
+    const achievementCount = Math.min(Math.max(Math.floor(Number(body.achievement_count) || 0), 0), 1000)
+    const sessions = Math.min(Math.max(Math.floor(Number(body.sessions) || 0), 0), 999999)
+
+    if (!deviceHash || !species) {
+      return new Response(JSON.stringify({ error: 'Missing device_hash or species' }), {
+        status: 400, headers: { 'Content-Type': 'application/json', ...CORS },
+      })
+    }
+
+    const { error } = await auth.svc.rpc('upsert_buddy_entry', {
+      p_device_hash: deviceHash,
+      p_species: species,
+      p_level: level,
+      p_xp: xp,
+      p_achievement_count: achievementCount,
+      p_sessions: sessions,
+    })
+
+    if (error) {
+      return new Response(JSON.stringify({ error: 'Failed to sync buddy' }), {
+        status: 500, headers: { 'Content-Type': 'application/json', ...CORS },
+      })
+    }
+
+    return new Response(JSON.stringify({ synced: true }), {
+      status: 200, headers: { 'Content-Type': 'application/json', ...CORS },
+    })
+  }
+
+  if (action === 'buddy_leaderboard') {
+    // Fetch leaderboard — public read, no auth technically required but we're inside handleSync
+    const limit = Math.min(Math.max(Math.floor(Number(body.limit) || 50), 1), 200)
+    const species = body.species ? String(body.species).slice(0, 20) : null
+
+    const rpcName = species ? 'get_buddy_leaderboard_by_species' : 'get_buddy_leaderboard'
+    const rpcArgs = species
+      ? { p_species: species, p_limit: limit }
+      : { p_limit: limit }
+
+    const { data, error } = await auth.svc.rpc(rpcName, rpcArgs)
+
+    if (error) {
+      return new Response(JSON.stringify({ error: 'Failed to fetch leaderboard' }), {
+        status: 500, headers: { 'Content-Type': 'application/json', ...CORS },
+      })
+    }
+
+    return new Response(JSON.stringify({ leaderboard: data || [] }), {
+      status: 200, headers: { 'Content-Type': 'application/json', ...CORS },
+    })
+  }
+
   return new Response(JSON.stringify({ error: `Unknown sync action: ${action}` }), {
     status: 400, headers: { 'Content-Type': 'application/json', ...CORS },
   })

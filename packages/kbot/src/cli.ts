@@ -51,7 +51,7 @@ import {
 import { checkForUpdate, selfUpdate } from './updater.js'
 import { runTutorial } from './tutorial.js'
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js'
-import { getBuddy, getBuddyGreeting, formatBuddyStatus, getBuddyDreamNarration, renameBuddy, buddyChat, getAchievements, getBuddyLevel } from './buddy.js'
+import { getBuddy, getBuddyGreeting, formatBuddyStatus, getBuddyDreamNarration, renameBuddy, buddyChat, getAchievements, getBuddyLevel, fetchBuddyLeaderboard } from './buddy.js'
 import chalk from 'chalk'
 
 import { createRequire } from 'node:module'
@@ -2135,16 +2135,22 @@ async function main(): Promise<void> {
 
   program
     .command('serve')
-    .description('Start HTTP server — expose all 223 tools for kernel.chat or any client')
+    .description('Start HTTP/HTTPS server — expose all tools for kernel.chat, Claude Cowork, or any client')
     .option('-p, --port <port>', 'Port to listen on', '7437')
     .option('--token <token>', 'Require auth token for all requests')
     .option('--computer-use', 'Enable computer use tools')
-    .action(async (opts: { port: string; token?: string; computerUse?: boolean }) => {
+    .option('--https', 'Enable HTTPS with auto-generated self-signed cert (~/.kbot/certs/)')
+    .option('--cert <path>', 'Path to TLS certificate file (implies HTTPS)')
+    .option('--key <path>', 'Path to TLS private key file (implies HTTPS)')
+    .action(async (opts: { port: string; token?: string; computerUse?: boolean; https?: boolean; cert?: string; key?: string }) => {
       const { startServe } = await import('./serve.js')
       await startServe({
         port: parseInt(opts.port, 10),
         token: opts.token,
         computerUse: opts.computerUse,
+        https: opts.https,
+        cert: opts.cert,
+        key: opts.key,
       })
     })
 
@@ -3813,6 +3819,77 @@ async function main(): Promise<void> {
       renameBuddy(name)
       console.log()
       console.log(formatBuddyStatus(`${oldName} is now ${name}!`))
+      console.log()
+      process.exit(0)
+    })
+
+  buddyCmd
+    .command('leaderboard')
+    .description('Show the global buddy leaderboard — anonymous rankings across all kbot installs')
+    .option('-l, --limit <n>', 'Number of entries to show', '20')
+    .option('-s, --species <species>', 'Filter by species (fox, owl, cat, robot, ghost, mushroom, octopus, dragon)')
+    .action(async (opts: { limit: string; species?: string }) => {
+      const limit = Math.min(Math.max(parseInt(opts.limit, 10) || 20, 1), 200)
+      const species = opts.species?.toLowerCase()
+
+      const validSpecies = ['fox', 'owl', 'cat', 'robot', 'ghost', 'mushroom', 'octopus', 'dragon']
+      if (species && !validSpecies.includes(species)) {
+        printError(`Unknown species "${species}". Valid: ${validSpecies.join(', ')}`)
+        process.exit(1)
+      }
+
+      printInfo('Fetching leaderboard...')
+      const entries = await fetchBuddyLeaderboard({ limit, species })
+
+      if (entries.length === 0) {
+        console.log()
+        printWarn('No entries on the leaderboard yet.')
+        printInfo('Use kbot to earn XP and enable cloud sync to appear on the leaderboard.')
+        console.log()
+        process.exit(0)
+      }
+
+      const SPECIES_ICONS: Record<string, string> = {
+        fox: '[fox]', owl: '[owl]', cat: '[cat]', robot: '[bot]',
+        ghost: '[gho]', mushroom: '[msh]', octopus: '[oct]', dragon: '[drg]',
+      }
+      const LEVEL_TITLES_SHORT: Record<number, string> = {
+        0: 'Novice', 1: 'Adept', 2: 'Master', 3: 'Legend',
+      }
+
+      const header = species
+        ? `Buddy Leaderboard — ${species}`
+        : 'Global Buddy Leaderboard'
+
+      console.log()
+      console.log(`  ${chalk.bold(header)}`)
+      console.log(`  ${chalk.dim('─'.repeat(56))}`)
+      console.log(
+        `  ${chalk.dim('#'.padStart(3))}  ${chalk.dim('Species'.padEnd(7))} ${chalk.dim('Level'.padEnd(12))} ${chalk.dim('XP'.padStart(6))}  ${chalk.dim('Achv'.padStart(4))}  ${chalk.dim('Sessions'.padStart(8))}`
+      )
+      console.log(`  ${chalk.dim('─'.repeat(56))}`)
+
+      for (const entry of entries) {
+        const icon = SPECIES_ICONS[entry.species] || entry.species.slice(0, 5)
+        const title = LEVEL_TITLES_SHORT[entry.level] ?? `L${entry.level}`
+        const levelStr = `${entry.level} ${title}`
+        const rankStr = String(entry.rank).padStart(3)
+        const xpStr = String(entry.xp).padStart(6)
+        const achvStr = String(entry.achievement_count).padStart(4)
+        const sessStr = String(entry.sessions).padStart(8)
+
+        // Highlight top 3
+        const rankColor = entry.rank === 1 ? chalk.hex('#FFD700') :
+                          entry.rank === 2 ? chalk.hex('#C0C0C0') :
+                          entry.rank === 3 ? chalk.hex('#CD7F32') : chalk.white
+
+        console.log(
+          `  ${rankColor(rankStr)}  ${chalk.hex('#A78BFA')(icon.padEnd(7))} ${levelStr.padEnd(12)} ${chalk.hex('#4ADE80')(xpStr)}  ${achvStr}  ${chalk.dim(sessStr)}`
+        )
+      }
+
+      console.log()
+      console.log(`  ${chalk.dim(`${entries.length} entries shown`)}`)
       console.log()
       process.exit(0)
     })
