@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <img src="tools/video-assets/demo.gif" alt="kbot demo" width="700">
+  <img src="https://raw.githubusercontent.com/isaacsight/kernel/main/tools/video-assets/demo.gif" alt="kbot demo" width="700">
 </p>
 
 <p align="center">
