@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>kbot</strong><br>
-  Open-source terminal AI agent. 693+ tools. 35 agents. 20 providers. Dreams, learns, watches your system. $0 local.
+  Open-source terminal AI agent. 764+ tools. 35 agents. 20 providers. Dreams, learns, watches your system, controls your phone. $0 local.
 </p>
 
 <p align="center">
@@ -30,7 +30,7 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **Runs fully offline** — Embedded llama.cpp, Ollama, LM Studio, or Jan. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster over time.
 - **35 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, quant, and 30 more).
-- **693+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, and more.
+- **764+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, music production, iPhone control, and more.
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
 
@@ -65,6 +65,66 @@ kbot dream status         # What kbot learned about you
 - **Companion memory** — email agent remembers every user's preferences, goals, and conversation history
 - **Proactive follow-ups** — checks in with users who go quiet, referencing their specific context
 
+### Your Buddy — Terminal Companion
+
+Every kbot user gets a unique ASCII buddy that evolves with them:
+
+```
+  [=====]       /\  /\       {o,o}       /\_/\
+  |[o o]|      (  ..  )      |)__)      ( o.o )
+  |  _  |       )    (       -"-"-       > ^ <
+  |_____|      (______)\     -|-|-      (_/|\_)
+   || ||         || ||      _// \\_       | |
+  Robot          Fox          Owl         Cat
+```
+
+- **8 species** — deterministic based on your machine. Same user = same buddy always.
+- **4 evolution levels** — levels up with XP from sessions, dreams, tool usage
+- **18 achievements** — First Dream, Centurion, Tool Master, Night Owl, and more
+- **Dream narration** — buddy tells you what it dreamed on startup
+- **Chat mode** — `kbot buddy chat` to talk directly to your buddy via local Ollama ($0)
+- **Leaderboard** — [kernel.chat/#/leaderboard](https://kernel.chat/#/leaderboard)
+
+### iPhone Control
+
+Control your iPhone from the terminal:
+
+```
+kbot phone_message --to "mom" --message "on my way"   # Send iMessage
+kbot phone_notify                                       # Read notifications
+kbot phone_shortcut --name "Morning Routine"            # Run Shortcuts
+kbot phone_call --number "555-1234"                      # FaceTime call
+kbot phone_clipboard --action write --text "hello"      # Universal Clipboard
+```
+
+### Music Production — Ableton Live Integration
+
+```
+kbot produce_beat --genre trap --instruments roland     # Full beat in Ableton
+kbot generate_drum_pattern --genre house --bpm 124      # MIDI drum pattern
+kbot music_idea "late night drive through Tokyo"        # Creative blueprint
+kbot ableton_load_effect --track 2 --name "Saturator"   # Load any plugin
+```
+
+Programmatic control of Ableton Live 12 — create tracks, load plugins (including Roland Cloud, Serum 2), write MIDI, set device parameters, fire clips. All from the terminal.
+
+### Financial Analysis
+
+```
+kbot market_analysis --ticker AAPL         # 5-perspective coordinated analysis
+kbot portfolio_review --holdings '[...]'   # MAGI impact, risk scoring
+kbot market_briefing                       # Morning market summary
+```
+
+### Cyber Threat Intelligence
+
+```
+kbot threat_feed                           # Latest CVEs matched to your stack
+kbot ioc_check --indicator "1.2.3.4"      # Check IPs/domains/hashes
+kbot attack_surface_scan --domain x.com    # Passive recon + security headers
+kbot incident_response --type ransomware   # Generate IR playbook
+```
+
 ### Audit Any Repo in One Command
 
 ```
@@ -81,12 +141,18 @@ Checks security, documentation, code quality, CI/CD, community health, and DevOp
 |---|---|---|---|---|---|
 | AI providers | 20 | 1 | 1 | 6 | 75+ |
 | Specialist agents | 35 | 0 | 0 | 0 | 0 |
-| Built-in tools | 693+ | ~20 | ~15 | ~10 | ~15 |
+| Built-in tools | 764+ | ~20 | ~15 | ~10 | ~15 |
 | Science tools | 114 | 0 | 0 | 0 | 0 |
 | Memory system | 7-tier bidirectional | File-based | No | No | No |
 | Dream engine | Yes ($0 local) | Cloud API | No | No | No |
 | Service watchdog | Yes | No | No | No | No |
 | Behavior learning | Yes | No | No | No | No |
+| Buddy companion | Yes (8 species) | No | No | No | No |
+| iPhone control | Yes | No | No | No | No |
+| Music production | Ableton Live | No | No | No | No |
+| Financial analysis | Multi-agent | No | No | No | No |
+| Threat intelligence | Yes | No | No | No | No |
+| Buddy leaderboard | kernel.chat | No | No | No | No |
 | Offline mode | Embedded + Ollama | No | No | Ollama | Ollama |
 | SDK | Yes | No | Yes | No | No |
 | MCP server | Yes | N/A | No | No | No |
