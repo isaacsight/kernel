@@ -399,6 +399,9 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './mobile-automation.js',  registerFn: 'registerMobileAutomationTools' },
   { path: './iphone.js',             registerFn: 'registerIPhoneTools' },
   { path: './ghost.js',        registerFn: 'registerGhostTools' },
+  { path: './streaming.js',    registerFn: 'registerStreamingTools' },
+  { path: './stream-character.js', registerFn: 'registerStreamCharacterTools' },
+  { path: './stream-renderer.js', registerFn: 'registerStreamRendererTools' },
 ]
 
 /** Track whether lazy tools have been registered */

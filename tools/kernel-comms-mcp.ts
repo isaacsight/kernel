@@ -1,6 +1,10 @@
 #!/usr/bin/env npx tsx
 // Kernel Comms MCP Server — email announcements, user management, notifications
 // Wraps Resend API + Supabase auth admin for direct use from Claude Code.
+//
+// SECURITY: Requires SUPABASE_SERVICE_KEY and RESEND_API_KEY. The send_announcement
+// tool sends to ALL users — use dry_run first. HTML body content is passed through
+// to the email template without sanitization; callers must ensure safe HTML.
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
@@ -17,6 +21,17 @@ const SUPABASE_URL = process.env.VITE_SUPABASE_URL || ''
 const SUPABASE_KEY = process.env.VITE_SUPABASE_KEY || ''
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || ''
 const RESEND_API_KEY = process.env.RESEND_API_KEY || ''
+
+function sanitizeError(err: unknown): string {
+    if (err instanceof Error) {
+        return err.message
+            .replace(/Bearer\s+\S+/gi, 'Bearer [REDACTED]')
+            .replace(/apikey\s+\S+/gi, 'apikey [REDACTED]')
+            .replace(/re_\S+/gi, '[REDACTED]')
+            .replace(/https?:\/\/[^\s]+/g, '[URL]')
+    }
+    return 'An unexpected error occurred'
+}
 
 function ok(text: string) {
     return { content: [{ type: 'text' as const, text }] }
@@ -108,7 +123,7 @@ const server = new McpServer({ name: 'kernel-comms', version: '1.0.0' })
 
 server.tool(
     'list_users',
-    'List all registered Kernel users (email, id, created_at, last_sign_in).',
+    'List all registered Kernel platform users with their email, UUID, creation date, and last sign-in timestamp. Fetched from Supabase Auth admin API. Read-only operation with no side effects. Use this before send_announcement to verify the recipient list.',
     {},
     async () => {
         try {
@@ -123,7 +138,7 @@ server.tool(
                 `- ${u.email} (joined ${u.created_at?.split('T')[0]}, last seen ${u.last_sign_in?.split('T')[0] || 'never'})`
             ).join('\n')}`)
         } catch (err) {
-            return fail(`Failed to list users: ${err}`)
+            return fail(`Failed to list users: ${sanitizeError(err)}`)
         }
     }
 )
@@ -134,13 +149,13 @@ server.tool(
 
 server.tool(
     'send_email',
-    'Send a styled Kernel email to a specific email address.',
+    'Send a Kernel-branded email to a single recipient via the Resend API. The email uses the Kernel template with EB Garamond typography, ivory background, and amethyst accent. Side effects: delivers an email to the recipient. Requires RESEND_API_KEY to be configured. Sender is "Kernel <noreply@kernel.chat>". Use preview_email first to verify the rendered HTML before sending.',
     {
-        to: z.string().email().describe('Recipient email address'),
-        subject: z.string().describe('Email subject line'),
-        title: z.string().describe('Header title displayed in the email body'),
-        subtitle: z.string().optional().describe('Subtitle below the title'),
-        body_html: z.string().describe('Inner HTML body content (paragraphs, lists, etc.)'),
+        to: z.string().email().max(255).describe('Recipient email address — must be valid email format'),
+        subject: z.string().min(1).max(200).describe('Email subject line'),
+        title: z.string().min(1).max(200).describe('Header title displayed prominently in the email body'),
+        subtitle: z.string().max(300).optional().describe('Subtitle text shown below the title in lighter weight'),
+        body_html: z.string().min(1).max(50000).describe('Inner HTML body content — supports paragraphs, lists, links, and inline styles. Wrapped in the Kernel email template.'),
     },
     async ({ to, subject, title, subtitle, body_html }) => {
         try {
@@ -153,7 +168,7 @@ server.tool(
             })
             return ok(`Email sent to ${to}\nResult: ${JSON.stringify(result)}`)
         } catch (err) {
-            return fail(`Failed to send email: ${err}`)
+            return fail(`Failed to send email: ${sanitizeError(err)}`)
         }
     }
 )
@@ -164,13 +179,13 @@ server.tool(
 
 server.tool(
     'send_announcement',
-    'Send a styled Kernel email to ALL registered users. Use for product updates, new features, domain changes, etc.',
+    'Send a Kernel-branded email to ALL registered users via Resend batch API. Side effects: delivers an email to every user with a registered email address. ALWAYS use dry_run=true first to review the recipient list before sending. Use for product updates, new features, service changes, or important announcements. Requires both RESEND_API_KEY and SUPABASE_SERVICE_KEY. Sender is "Kernel <noreply@kernel.chat>". Cannot be undone once sent.',
     {
-        subject: z.string().describe('Email subject line'),
-        title: z.string().describe('Header title displayed in the email body'),
-        subtitle: z.string().optional().describe('Subtitle below the title'),
-        body_html: z.string().describe('Inner HTML body content (paragraphs, lists, etc.)'),
-        dry_run: z.boolean().optional().describe('If true, list recipients without sending'),
+        subject: z.string().min(1).max(200).describe('Email subject line — be clear and concise'),
+        title: z.string().min(1).max(200).describe('Header title displayed in the email body'),
+        subtitle: z.string().max(300).optional().describe('Subtitle text below the title'),
+        body_html: z.string().min(1).max(50000).describe('Inner HTML body content wrapped in the Kernel email template'),
+        dry_run: z.boolean().optional().describe('If true, lists all recipients WITHOUT sending. ALWAYS use dry_run=true first to verify recipients.'),
     },
     async ({ subject, title, subtitle, body_html, dry_run }) => {
         try {
@@ -196,7 +211,7 @@ server.tool(
             const result = await resendBatch(batch)
             return ok(`Announcement sent to ${emails.length} users!\n\nRecipients:\n${emails.map((e: string) => `  - ${e}`).join('\n')}\n\nResult: ${JSON.stringify(result)}`)
         } catch (err) {
-            return fail(`Failed to send announcement: ${err}`)
+            return fail(`Failed to send announcement: ${sanitizeError(err)}`)
         }
     }
 )
@@ -207,11 +222,11 @@ server.tool(
 
 server.tool(
     'preview_email',
-    'Generate a preview of a Kernel-styled email. Returns the full HTML for inspection.',
+    'Generate a preview of the Kernel email template with the provided content. Returns the full rendered HTML string for inspection before sending. No side effects — no email is sent. Use this to verify formatting, layout, and content before calling send_email or send_announcement.',
     {
-        title: z.string().describe('Header title'),
-        subtitle: z.string().optional().describe('Subtitle'),
-        body_html: z.string().describe('Inner HTML body content'),
+        title: z.string().min(1).max(200).describe('Header title to render in the preview'),
+        subtitle: z.string().max(300).optional().describe('Subtitle text below the title'),
+        body_html: z.string().min(1).max(50000).describe('Inner HTML body content to render'),
     },
     async ({ title, subtitle, body_html }) => {
         const html = kernelEmailTemplate(title, subtitle || '', body_html)
@@ -225,12 +240,12 @@ server.tool(
 
 server.tool(
     'send_notification',
-    'Send an in-app notification to a specific user (appears in their notification bell).',
+    'Send an in-app notification to a specific user that appears in their notification bell on kernel.chat. Side effects: inserts a row into the notifications table in Supabase. The notification persists until the user reads it. Use this for user-specific alerts, not broadcast messages — use broadcast_notification for those.',
     {
-        user_id: z.string().describe('Target user UUID'),
-        title: z.string().describe('Notification title'),
-        body: z.string().optional().describe('Notification body text'),
-        type: z.enum(['info', 'success', 'warning', 'error']).optional().describe('Notification type'),
+        user_id: z.string().uuid().describe('Target user UUID — must be a valid UUID'),
+        title: z.string().min(1).max(200).describe('Notification title shown in the bell dropdown'),
+        body: z.string().max(1000).optional().describe('Notification body text with additional details'),
+        type: z.enum(['info', 'success', 'warning', 'error']).optional().describe('Visual style: "info" (default/blue), "success" (green), "warning" (yellow), "error" (red)'),
     },
     async ({ user_id, title, body, type }) => {
         try {
@@ -246,7 +261,7 @@ server.tool(
             })
             return ok(`Notification sent to ${user_id}: "${title}"`)
         } catch (err) {
-            return fail(`Failed to send notification: ${err}`)
+            return fail(`Failed to send notification: ${sanitizeError(err)}`)
         }
     }
 )
@@ -257,11 +272,11 @@ server.tool(
 
 server.tool(
     'broadcast_notification',
-    'Send an in-app notification to ALL users.',
+    'Send an in-app notification to ALL registered users at once. Side effects: inserts one notification row per user into the Supabase notifications table. Each user will see it in their notification bell. Use sparingly for important platform-wide announcements. Consider send_notification for user-specific alerts instead.',
     {
-        title: z.string().describe('Notification title'),
-        body: z.string().optional().describe('Notification body text'),
-        type: z.enum(['info', 'success', 'warning', 'error']).optional().describe('Notification type'),
+        title: z.string().min(1).max(200).describe('Notification title — keep it clear and concise for all users'),
+        body: z.string().max(1000).optional().describe('Notification body text with additional details'),
+        type: z.enum(['info', 'success', 'warning', 'error']).optional().describe('Visual style: "info" (default/blue), "success" (green), "warning" (yellow), "error" (red)'),
     },
     async ({ title, body, type }) => {
         try {
@@ -283,7 +298,7 @@ server.tool(
 
             return ok(`Broadcast sent to ${users.length} users: "${title}"`)
         } catch (err) {
-            return fail(`Failed to broadcast: ${err}`)
+            return fail(`Failed to broadcast: ${sanitizeError(err)}`)
         }
     }
 )
@@ -294,7 +309,7 @@ server.tool(
 
 server.tool(
     'check_email_setup',
-    'Check if Resend API key is configured and list verified domains.',
+    'Verify the Resend API key is configured and list verified sending domains. Use this to diagnose email delivery issues or confirm the kernel.chat domain is properly verified. Read-only operation with no side effects. Returns API key status (configured/missing) and domain verification status.',
     {},
     async () => {
         if (!RESEND_API_KEY) {
@@ -323,7 +338,7 @@ server.tool(
 
             return ok(lines.join('\n'))
         } catch (err) {
-            return fail(`Resend API check failed: ${err}`)
+            return fail(`Resend API check failed: ${sanitizeError(err)}`)
         }
     }
 )

@@ -1,13 +1,16 @@
 #!/usr/bin/env npx tsx
 // Kernel Agents MCP Server — team coordination, memory, handoffs, tool creation
 // The "nervous system" for the autonomous agent team
+//
+// SECURITY: Writes are scoped to .claude/agents/memory/ and tools/generated/ only.
+// All file paths are validated to prevent path traversal attacks.
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
 import { config } from 'dotenv'
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs'
-import { join } from 'path'
+import { join, normalize } from 'path'
 
 config()
 
@@ -56,6 +59,25 @@ function fail(text: string) {
     return { content: [{ type: 'text' as const, text }], isError: true as const }
 }
 
+function sanitizeError(err: unknown): string {
+    if (err instanceof Error) {
+        return err.message
+            .replace(/Bearer\s+\S+/gi, 'Bearer [REDACTED]')
+            .replace(/apikey\s+\S+/gi, 'apikey [REDACTED]')
+            .replace(/https?:\/\/[^\s]+/g, '[URL]')
+    }
+    return 'An unexpected error occurred'
+}
+
+/** Validate that a resolved path stays within allowed directories */
+function assertSafePath(resolvedPath: string, allowedBase: string): void {
+    const normalized = normalize(resolvedPath)
+    const normalizedBase = normalize(allowedBase)
+    if (!normalized.startsWith(normalizedBase)) {
+        throw new Error('Path traversal detected: path must stay within allowed directory')
+    }
+}
+
 function timestamp(): string {
     return new Date().toISOString().split('T')[0]
 }
@@ -78,9 +100,9 @@ const server = new McpServer({ name: 'kernel-agents', version: '1.0.0' })
 
 server.tool(
     'agent_memory_read',
-    "Read an agent's persistent memory file. Call this before starting any agent work.",
+    "Read the persistent memory file for a specific agent from .claude/agents/memory/<agent>.md. Call this at the start of any agent session to load previous findings, patterns, and context. Returns the full markdown content of the memory file. Read-only operation with no side effects. Returns an error if the memory file does not exist.",
     {
-        agent: z.enum(VALID_AGENTS).describe('Agent whose memory to read'),
+        agent: z.enum(VALID_AGENTS).describe('Agent whose memory to read (qa, designer, performance, security, devops, product, admin)'),
     },
     async ({ agent }) => {
         ensureDirs()
@@ -93,13 +115,13 @@ server.tool(
 
 server.tool(
     'agent_memory_write',
-    "Append a timestamped, categorized entry to an agent's memory file. Call this after completing agent work.",
+    "Append a timestamped entry to an agent's persistent memory file under a specific section. Side effects: modifies the agent's markdown memory file on disk. The entry is auto-prefixed with today's date in [YYYY-MM-DD] format. If the section exists, the entry is appended within it. If not, a new section is created at the end of the file. Call this after completing agent work to persist findings for future sessions.",
     {
         agent: z.enum([...VALID_AGENTS, 'shared-knowledge', 'tool-effectiveness'] as const).describe(
-            'Agent whose memory to update'
+            'Agent whose memory to update. Use "shared-knowledge" for cross-agent insights or "tool-effectiveness" for tool usage logs.'
         ),
-        section: z.string().describe('Section header to append under (e.g., "Regressions Found", "Bundle Size History")'),
-        entry: z.string().describe('The entry content to append (will be auto-timestamped)'),
+        section: z.string().min(1).max(200).describe('Markdown section header to append under (e.g., "Regressions Found", "Bundle Size History"). Created if it does not exist.'),
+        entry: z.string().min(1).max(5000).describe('The entry content to append. Will be auto-prefixed with today\'s date.'),
     },
     async ({ agent, section, entry }) => {
         ensureDirs()
@@ -140,9 +162,9 @@ server.tool(
 
 server.tool(
     'agent_memory_search',
-    'Search across all agent memory files for a pattern. Useful for finding related issues across agents.',
+    'Search across all agent memory markdown files in .claude/agents/memory/ for a case-insensitive substring match. Returns matching lines with file name and line number context. Use this to find related issues, patterns, or decisions across agents. Read-only operation with no side effects.',
     {
-        query: z.string().describe('Search term or pattern to look for'),
+        query: z.string().min(1).max(200).describe('Case-insensitive search term to look for across all agent memory files'),
     },
     async ({ query }) => {
         ensureDirs()
@@ -175,7 +197,7 @@ server.tool(
 
 server.tool(
     'team_status',
-    'Summary of all agent memory states — last update timestamp, entry count, recent activity.',
+    'Generate a summary table of all agent memory states showing entry count, last update timestamp, and file size for each agent. Use this to check which agents have recent findings and which may need re-running. Read-only operation with no side effects.',
     {},
     async () => {
         ensureDirs()
@@ -204,13 +226,13 @@ server.tool(
 
 server.tool(
     'team_handoff',
-    'Structured handoff from one agent to another. Creates a coordination entry in both memories.',
+    'Create a structured handoff entry from one agent to another for cross-cutting issues. Side effects: appends a timestamped, prioritized entry to the shared-knowledge.md memory file. Use this when one agent discovers an issue that falls under another agent\'s domain (e.g., QA finds a security issue, designer finds a performance problem). The receiving agent should read shared-knowledge.md before its next run.',
     {
         from_agent: z.enum(VALID_AGENTS).describe('Agent creating the handoff'),
-        to_agent: z.enum(VALID_AGENTS).describe('Agent receiving the handoff'),
-        issue: z.string().describe('Description of the cross-cutting issue'),
-        context: z.string().describe('Relevant context, file paths, or reproduction steps'),
-        priority: z.enum(['P0', 'P1', 'P2']).describe('Priority of the handoff'),
+        to_agent: z.enum(VALID_AGENTS).describe('Agent receiving the handoff — should read shared-knowledge before next run'),
+        issue: z.string().min(1).max(1000).describe('Description of the cross-cutting issue being handed off'),
+        context: z.string().min(1).max(5000).describe('Relevant context: file paths, reproduction steps, error messages, or other details'),
+        priority: z.enum(['P0', 'P1', 'P2']).describe('P0: blocker/ship-stopper, P1: should fix soon, P2: nice-to-have improvement'),
     },
     async ({ from_agent, to_agent, issue, context, priority }) => {
         ensureDirs()
@@ -246,12 +268,13 @@ server.tool(
 
 server.tool(
     'team_report',
-    'Synthesize findings across all agents into a unified report via claude-proxy.',
+    'Synthesize all agent findings into a unified team report by reading all memory files and sending them to Claude Sonnet for analysis. Returns a structured report with: Blockers, Warnings, Suggestions, Cross-cutting themes, and Recommended next actions. Costs one Sonnet API call. Use this before shipping to get a holistic view of project health. Optionally focus on a specific area like "ship readiness" or "security posture".',
     {
         focus: z
             .string()
+            .max(200)
             .optional()
-            .describe('Optional focus area (e.g., "ship readiness", "security posture", "UX quality")'),
+            .describe('Optional focus area to narrow the synthesis (e.g., "ship readiness", "security posture", "UX quality")'),
     },
     async ({ focus }) => {
         ensureDirs()
@@ -299,7 +322,7 @@ server.tool(
             )
             return ok(synthesis)
         } catch (err) {
-            return fail(`Team report error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Team report error: ${sanitizeError(err)}`)
         }
     }
 )
@@ -310,16 +333,18 @@ server.tool(
 
 server.tool(
     'create_tool',
-    'Stage a new tool in tools/generated/ for human review. Agents propose tools when they identify capability gaps.',
+    'Stage a new tool proposal in tools/generated/<name>.ts for human review. Side effects: writes a TypeScript file and updates tools/generated/manifest.json. The tool is NOT active until a human promotes it to an MCP server. Use this when an agent identifies a capability gap during its work. The implementation should be a valid TypeScript function body. Do not use for trivial one-off scripts — only for reusable tools that fill genuine gaps.',
     {
         name: z
             .string()
+            .min(2)
+            .max(50)
             .regex(/^[a-z_]+$/)
-            .describe('Tool name in snake_case (e.g., "lighthouse_audit")'),
-        description: z.string().describe('What the tool does'),
-        implementation: z.string().describe('TypeScript implementation (the tool handler function body)'),
-        agent: z.enum(VALID_AGENTS).describe('Agent proposing this tool'),
-        rationale: z.string().describe('Why this tool is needed — what gap does it fill?'),
+            .describe('Tool name in snake_case (e.g., "lighthouse_audit"). Only lowercase letters and underscores.'),
+        description: z.string().min(10).max(500).describe('Clear description of what the tool does, when to use it, and what it returns'),
+        implementation: z.string().min(10).max(50000).describe('TypeScript implementation — the tool handler function body'),
+        agent: z.enum(VALID_AGENTS).describe('Which agent is proposing this tool'),
+        rationale: z.string().min(10).max(1000).describe('Why this tool is needed — what specific capability gap does it fill?'),
     },
     async ({ name, description, implementation, agent, rationale }) => {
         ensureDirs()
@@ -376,12 +401,12 @@ ${implementation}
 
 server.tool(
     'tool_effectiveness',
-    'Log tool usage outcomes. Tracks which tools work well and which need improvement.',
+    'Log the outcome of a tool usage to the tool-effectiveness.md memory file. Side effects: appends a timestamped entry with tool name, agent, outcome, and optional notes. Use this after every significant tool invocation to track which tools work reliably and which need improvement. Over time, this data helps prioritize tool maintenance and identify patterns in failures.',
     {
-        tool_name: z.string().describe('Name of the tool used'),
-        agent: z.enum(VALID_AGENTS).describe('Agent that used the tool'),
-        outcome: z.enum(['success', 'partial', 'fail']).describe('Outcome of the tool usage'),
-        notes: z.string().optional().describe('Additional context about what happened'),
+        tool_name: z.string().min(1).max(100).describe('Name of the tool that was used'),
+        agent: z.enum(VALID_AGENTS).describe('Which agent used the tool'),
+        outcome: z.enum(['success', 'partial', 'fail']).describe('"success" = worked as expected, "partial" = partially worked, "fail" = did not work'),
+        notes: z.string().max(1000).optional().describe('Additional context: error messages, workarounds used, or suggestions for improvement'),
     },
     async ({ tool_name, agent, outcome, notes }) => {
         ensureDirs()

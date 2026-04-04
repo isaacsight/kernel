@@ -2134,6 +2134,39 @@ async function main(): Promise<void> {
     })
 
   program
+    .command('stream [action]')
+    .description('Multi-platform livestream to Twitch, Rumble, and Kick simultaneously')
+    .option('-p, --platforms <list>', 'Comma-separated: twitch,rumble,kick or "all"', 'all')
+    .option('-s, --source <src>', 'Video source: screen, webcam, test, or file path', 'screen')
+    .option('-r, --resolution <res>', 'Output resolution', '1920x1080')
+    .option('-b, --bitrate <kbps>', 'Video bitrate in kbps', '4500')
+    .action(async (action?: string, opts?: { platforms: string; source: string; resolution: string; bitrate: string }) => {
+      const { ensureLazyToolsLoaded, executeTool: execTool } = await import('./tools/index.js')
+      await ensureLazyToolsLoaded()
+
+      const cmd = (action || 'status').toLowerCase()
+
+      if (cmd === 'start' || cmd === 'go' || cmd === 'live') {
+        const result = await execTool({
+          id: `stream_${Date.now()}`, name: 'stream_start',
+          arguments: { platforms: opts?.platforms, source: opts?.source, resolution: opts?.resolution, bitrate: opts?.bitrate },
+        })
+        process.stderr.write(result.result + '\n')
+      } else if (cmd === 'stop' || cmd === 'end') {
+        const result = await execTool({ id: `stream_${Date.now()}`, name: 'stream_stop', arguments: {} })
+        process.stderr.write(result.result + '\n')
+      } else if (cmd === 'status') {
+        const result = await execTool({ id: `stream_${Date.now()}`, name: 'stream_status', arguments: {} })
+        process.stderr.write(result.result + '\n')
+      } else if (cmd === 'setup') {
+        const result = await execTool({ id: `stream_${Date.now()}`, name: 'stream_setup', arguments: { platform: 'all' } })
+        process.stderr.write(result.result + '\n')
+      } else {
+        process.stderr.write(`Unknown stream action: ${cmd}\nUsage: kbot stream [start|stop|status|setup]\n`)
+      }
+    })
+
+  program
     .command('serve')
     .description('Start HTTP/HTTPS server — expose all tools for kernel.chat, Claude Cowork, or any client')
     .option('-p, --port <port>', 'Port to listen on', '7437')

@@ -2,5 +2,10 @@
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "maintainers": [
     "isaacsight"
-  ]
+  ],
+  "name": "kbot",
+  "description": "Open-source terminal AI agent with 600+ tools, 35 specialist agents, and 20 AI providers. Plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as an MCP tool provider.",
+  "license": "MIT",
+  "repository": "https://github.com/isaacsight/kernel",
+  "homepage": "https://kernel.chat"
 }

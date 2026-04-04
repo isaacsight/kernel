@@ -665,11 +665,11 @@ async function callKbot(
 
 server.tool(
   'local_kbot',
-  'Send a message to K:BOT agent. Routes to the best specialist (coder, researcher, writer, analyst, hacker, etc.) or specify one. Uses local Ollama models — $0 cost. Great for getting a second opinion, delegating subtasks, or accessing K:BOT specialist knowledge.',
+  'Send a message to the K:BOT agent running locally via the kbot CLI. Routes to the best specialist agent or you can specify one. Uses local Ollama models at $0 cost. Use this for getting a second opinion, delegating subtasks, or accessing K:BOT\'s specialist knowledge without any API charges. Each call spawns a kbot process with a 2-minute timeout. Does not retain conversation history between calls.',
   {
-    message: z.string().describe('The message or task for K:BOT'),
-    agent: z.string().optional().describe('Force a specific agent: kernel, researcher, coder, writer, analyst, hacker, operator, dreamer (default: auto-route)'),
-    model: z.string().optional().describe('Override model (default: auto-selects best local model)'),
+    message: z.string().min(1).max(50000).describe('The message or task for K:BOT'),
+    agent: z.string().max(50).regex(/^[a-zA-Z0-9_-]*$/).optional().describe('Force a specific agent: kernel, researcher, coder, writer, analyst, hacker, operator, dreamer (default: auto-route based on message content)'),
+    model: z.string().max(50).regex(/^[a-zA-Z0-9._:-]*$/).optional().describe('Override model name (default: auto-selects best local Ollama model for the task)'),
   },
   safeHandler(async ({ message, agent, model }) => {
     const result = await callKbot(message, { agent, model })
@@ -684,7 +684,7 @@ server.tool(
 
 server.tool(
   'local_kbot_agents',
-  'List all available K:BOT specialist agents with descriptions.',
+  'List all available K:BOT specialist agents with their IDs and descriptions. Runs the kbot CLI agents command locally. Read-only operation with no side effects. Use this to discover which agents are available before calling local_kbot with a specific agent.',
   {},
   safeHandler(async () => {
     const { stdout } = await execFileAsync('kbot', ['agents'], {

@@ -1,6 +1,9 @@
 #!/usr/bin/env npx tsx
 // Kernel Extended MCP Server — testing, security, docs, creative, AI ops tools
 // Third MCP server for Claude Code
+//
+// SECURITY: Shell commands are executed via safeExec with 30s timeout.
+// File operations are scoped to PROJECT_ROOT. API keys are never logged.
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
@@ -8,7 +11,7 @@ import { z } from 'zod'
 import { config } from 'dotenv'
 import { execSync } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
-import { join, basename, resolve, dirname } from 'path'
+import { join, basename, resolve, dirname, normalize } from 'path'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -61,6 +64,25 @@ function fail(text: string) {
     return { content: [{ type: 'text' as const, text }], isError: true as const }
 }
 
+function sanitizeError(err: unknown): string {
+    if (err instanceof Error) {
+        return err.message
+            .replace(/Bearer\s+\S+/gi, 'Bearer [REDACTED]')
+            .replace(/apikey\s+\S+/gi, 'apikey [REDACTED]')
+            .replace(/https?:\/\/[^\s]+/g, '[URL]')
+    }
+    return 'An unexpected error occurred'
+}
+
+/** Validate a file path is within the project root to prevent path traversal */
+function assertProjectPath(filePath: string): string {
+    const absPath = normalize(join(PROJECT_ROOT, filePath))
+    if (!absPath.startsWith(normalize(PROJECT_ROOT))) {
+        throw new Error('Path traversal detected: file must be within the project directory')
+    }
+    return absPath
+}
+
 // ── MCP Server ───────────────────────────────────────────────
 const server = new McpServer({ name: 'kernel-extended', version: '1.0.0' })
 
@@ -70,17 +92,17 @@ const server = new McpServer({ name: 'kernel-extended', version: '1.0.0' })
 
 server.tool(
     'kernel_test_gen',
-    'Generate a Vitest test file for a given component or module. Reads the source and produces comprehensive tests with mocked dependencies.',
+    'Generate a Vitest test file for a TypeScript/React source file by reading the source and sending it to Claude Sonnet for test generation. Returns test code with mocked dependencies, happy path, edge cases, and error scenarios. Does NOT write the file — only returns the generated code for review. Costs one Sonnet API call. Use for scaffolding tests when coverage is needed.',
     {
-        file_path: z.string().describe('Relative path to the source file (e.g., src/components/Chat.tsx)'),
+        file_path: z.string().min(1).max(500).describe('Relative path to the source file from project root (e.g., "src/components/Chat.tsx")'),
         focus: z
             .enum(['unit', 'integration', 'snapshot'])
             .optional()
-            .describe('Test focus. Default: unit'),
+            .describe('Test strategy: "unit" (default, isolated functions), "integration" (component interactions), "snapshot" (rendered output)'),
     },
     async ({ file_path, focus }) => {
         try {
-            const absPath = join(PROJECT_ROOT, file_path)
+            const absPath = assertProjectPath(file_path)
             if (!existsSync(absPath)) return fail(`File not found: ${file_path}`)
             const source = readFileSync(absPath, 'utf-8')
             const truncated = source.length > 6000 ? source.slice(0, 6000) + '\n// [truncated]' : source
@@ -94,17 +116,17 @@ server.tool(
             const testPath = file_path.replace(/\.(tsx?)$/, '.test.$1')
             return ok(`Generated tests for ${file_path}:\n\nSuggested path: ${testPath}\n\n${testCode}`)
         } catch (err) {
-            return fail(`Test gen error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Test gen error: ${sanitizeError(err)}`)
         }
     }
 )
 
 server.tool(
     'kernel_snapshot',
-    'Take a screenshot of the live site and compare against a baseline. Flags visual regressions. First run saves the baseline.',
+    'Fetch a web page and capture metrics (status code, load time, content length, script/style/image counts) to compare against a saved baseline. On first run, saves the baseline to .snapshots/<name>.json. On subsequent runs, detects regressions: content size changes, script count changes, load time doubling, or title changes. Side effects: writes/updates baseline JSON file. Does NOT take a visual screenshot — uses HTTP fetch metrics only.',
     {
-        url: z.string().optional().describe('URL to screenshot. Default: live Kernel site'),
-        name: z.string().optional().describe('Snapshot name for the baseline. Default: "homepage"'),
+        url: z.string().url().max(2048).optional().describe('URL to fetch and analyze. Default: "https://kernel.chat"'),
+        name: z.string().max(50).regex(/^[a-zA-Z0-9_-]+$/).optional().describe('Baseline name for storage/comparison (alphanumeric, dashes, underscores). Default: "homepage"'),
     },
     async ({ url, name }) => {
         try {
@@ -158,7 +180,7 @@ server.tool(
             writeFileSync(baselinePath, JSON.stringify(currentData, null, 2))
             return ok(`📸 Baseline saved for "${snapName}"\n${JSON.stringify(currentData, null, 2)}`)
         } catch (err) {
-            return fail(`Snapshot error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Snapshot error: ${sanitizeError(err)}`)
         }
     }
 )
@@ -169,26 +191,30 @@ server.tool(
 
 server.tool(
     'kernel_logs',
-    'Fetch recent Supabase edge function logs. Filter by function name or time range.',
+    'Fetch the 30 most recent Supabase edge function log lines via the Supabase CLI. Optionally filter by function name. Read-only operation. Requires the Supabase CLI to be installed and authenticated. Returns raw log output.',
     {
-        function_name: z.string().optional().describe('Edge function name to filter (e.g., "claude-proxy"). Default: all'),
+        function_name: z.string().max(100).regex(/^[a-zA-Z0-9_-]*$/).optional().describe('Edge function name to filter (e.g., "claude-proxy"). Only alphanumeric, dashes, underscores. Default: all functions'),
     },
     async ({ function_name }) => {
         try {
+            // Validate function_name to prevent shell injection
+            if (function_name && !/^[a-zA-Z0-9_-]+$/.test(function_name)) {
+                return fail('Invalid function name: only alphanumeric characters, dashes, and underscores are allowed')
+            }
             const cmd = function_name
                 ? `npx supabase functions logs ${function_name} --project-ref kqsixkorzaulmeuynfkp 2>&1 | tail -30`
                 : `npx supabase functions logs --project-ref kqsixkorzaulmeuynfkp 2>&1 | tail -30`
             const logs = exec(cmd)
             return ok(logs || 'No logs found.')
         } catch (err) {
-            return fail(`Logs error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Logs error: ${sanitizeError(err)}`)
         }
     }
 )
 
 server.tool(
     'kernel_uptime',
-    'Ping all critical endpoints and report their status, response time, and health.',
+    'Ping critical Kernel platform endpoints (GitHub Pages site, Supabase REST API, Claude Proxy edge function) and report HTTP status, response time in milliseconds, and health status. Read-only operation with no side effects. Each endpoint has a 10-second timeout. Use this for quick health checks before deploys or when diagnosing issues.',
     {},
     async () => {
         const endpoints = [
@@ -217,9 +243,9 @@ server.tool(
 
 server.tool(
     'kernel_db_schema',
-    'Dump the current Supabase database schema — tables, columns, types, and relationships.',
+    'Inspect the Supabase database schema by querying known tables for their row counts and availability. Optionally inspect a specific table. Read-only operation with no side effects. Useful for verifying database health, checking migration status, or understanding data distribution.',
     {
-        table: z.string().optional().describe('Specific table name. Default: all tables'),
+        table: z.string().max(100).regex(/^[a-zA-Z_][a-zA-Z0-9_]*$/).optional().describe('Specific table name to inspect (alphanumeric + underscores only). Default: checks all known tables.'),
     },
     async ({ table }) => {
         try {
@@ -262,7 +288,7 @@ server.tool(
             const output = results.map((r) => `${r.status} ${r.table}: ${r.rows} rows`).join('\n')
             return ok(`Database Schema:\n\n${output}`)
         } catch (err) {
-            return fail(`Schema error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Schema error: ${sanitizeError(err)}`)
         }
     }
 )
@@ -273,7 +299,7 @@ server.tool(
 
 server.tool(
     'kernel_audit',
-    'Run a security audit: npm audit for vulnerabilities + scan for hardcoded secrets in the codebase.',
+    'Run a security audit combining npm vulnerability scan and hardcoded secrets detection. Checks for: npm package vulnerabilities (via npm audit), hardcoded API keys/tokens in source files (Stripe, AWS, GitHub, Slack, PEM keys), and direct process.env usage in client-side code. Read-only operation with no side effects. Returns a structured report with findings by category.',
     {},
     async () => {
         try {
@@ -304,16 +330,16 @@ server.tool(
 
             return ok(report)
         } catch (err) {
-            return fail(`Audit error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Audit error: ${sanitizeError(err)}`)
         }
     }
 )
 
 server.tool(
     'kernel_deps',
-    'Check for outdated or vulnerable npm dependencies. Shows current vs latest version for each package.',
+    'Check for outdated npm dependencies by running npm outdated. Shows current version, wanted version, and latest version for each package. Major version bumps are flagged in red, minor in yellow. Read-only operation with no side effects. Use this before upgrades to identify what needs updating.',
     {
-        production_only: z.boolean().optional().describe('Only check production deps. Default: false'),
+        production_only: z.boolean().optional().describe('If true, only check production dependencies (--prod). Default: false (all deps including devDependencies)'),
     },
     async ({ production_only }) => {
         try {
@@ -334,7 +360,7 @@ server.tool(
                 return ok(raw.slice(0, 2000))
             }
         } catch (err) {
-            return fail(`Deps error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Deps error: ${sanitizeError(err)}`)
         }
     }
 )
@@ -345,13 +371,13 @@ server.tool(
 
 server.tool(
     'kernel_docs_gen',
-    'Auto-generate documentation for a source file. Reads the code and produces JSDoc/TSDoc comments for all exports.',
+    'Generate JSDoc/TSDoc documentation for all exported functions, types, and classes in a TypeScript source file. Reads the file, sends it to Claude Sonnet, and returns the full file content with documentation comments added. Does NOT write the file — returns the documented version for review. Costs one Sonnet API call.',
     {
-        file_path: z.string().describe('Relative path to the source file'),
+        file_path: z.string().min(1).max(500).describe('Relative path from project root to the source file (e.g., "src/engine/AIEngine.ts")'),
     },
     async ({ file_path }) => {
         try {
-            const absPath = join(PROJECT_ROOT, file_path)
+            const absPath = assertProjectPath(file_path)
             if (!existsSync(absPath)) return fail(`File not found: ${file_path}`)
             const source = readFileSync(absPath, 'utf-8')
             const truncated = source.length > 6000 ? source.slice(0, 6000) + '\n// [truncated]' : source
@@ -363,14 +389,14 @@ server.tool(
 
             return ok(`Documented version of ${file_path}:\n\n${docs}`)
         } catch (err) {
-            return fail(`Docs gen error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Docs gen error: ${sanitizeError(err)}`)
         }
     }
 )
 
 server.tool(
     'kernel_readme',
-    'Generate or update the project README based on current codebase state — structure, scripts, tech stack, and features.',
+    'Generate a professional README.md by analyzing the current package.json, project structure, npm scripts, and edge functions. Returns the generated markdown text — does NOT write the file. Costs one Sonnet API call. Use this when the README needs updating after significant changes.',
     {},
     async () => {
         try {
@@ -386,17 +412,17 @@ server.tool(
 
             return ok(readme)
         } catch (err) {
-            return fail(`README error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`README error: ${sanitizeError(err)}`)
         }
     }
 )
 
 server.tool(
     'kernel_changelog',
-    'Generate a changelog from git history. Groups commits by type (feat, fix, refactor, etc.) between two refs.',
+    'Generate a structured changelog from git commit history, grouped by type (Features, Fixes, Refactors, Other). Optionally specify a commit range. Uses Claude Haiku to parse and format the commits. Read-only operation (reads git log, does not write files). Costs one Haiku API call.',
     {
-        from: z.string().optional().describe('Start ref (tag or commit). Default: last 20 commits'),
-        to: z.string().optional().describe('End ref. Default: HEAD'),
+        from: z.string().max(100).regex(/^[a-zA-Z0-9._/^~-]*$/).optional().describe('Start git ref (tag, branch, or commit SHA). Default: shows last 20 commits'),
+        to: z.string().max(100).regex(/^[a-zA-Z0-9._/^~-]*$/).optional().describe('End git ref. Default: HEAD'),
     },
     async ({ from, to }) => {
         try {
@@ -415,7 +441,7 @@ server.tool(
 
             return ok(changelog)
         } catch (err) {
-            return fail(`Changelog error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Changelog error: ${sanitizeError(err)}`)
         }
     }
 )
@@ -426,10 +452,10 @@ server.tool(
 
 server.tool(
     'kernel_social',
-    'Generate social media posts (Twitter/X, LinkedIn, or both) from a topic, blog post, or feature announcement.',
+    'Generate social media post copy for Twitter/X and/or LinkedIn from provided content. Returns draft text only — does NOT post anything. Twitter posts are formatted for 280 chars with hashtags. LinkedIn posts use professional tone with 2-3 paragraphs. Costs one Sonnet API call. Review and edit the output before posting manually or via the social posting tools.',
     {
-        content: z.string().describe('The topic, blog post content, or feature to promote'),
-        platform: z.enum(['twitter', 'linkedin', 'both']).optional().describe('Target platform. Default: both'),
+        content: z.string().min(1).max(50000).describe('The topic, blog post content, feature description, or announcement to generate posts from'),
+        platform: z.enum(['twitter', 'linkedin', 'both']).optional().describe('Target platform(s). "both" (default) generates for both Twitter/X and LinkedIn.'),
     },
     async ({ content, platform }) => {
         try {
@@ -443,17 +469,17 @@ server.tool(
 
             return ok(posts)
         } catch (err) {
-            return fail(`Social error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Social error: ${sanitizeError(err)}`)
         }
     }
 )
 
 server.tool(
     'kernel_newsletter',
-    'Generate an email newsletter from recent blog posts, commits, or custom content.',
+    'Generate an email newsletter draft including subject line, preview text, body sections, and CTA. Incorporates recent git activity for development context. Returns text only — does NOT send the email. Use send_announcement from kernel-comms to actually send. Costs one Sonnet API call.',
     {
-        topic: z.string().describe('Newsletter topic or content to include'),
-        style: z.enum(['casual', 'professional', 'technical']).optional().describe('Writing style. Default: casual'),
+        topic: z.string().min(1).max(5000).describe('Newsletter topic, theme, or specific content to feature'),
+        style: z.enum(['casual', 'professional', 'technical']).optional().describe('Writing voice: "casual" (friendly, conversational), "professional" (polished), "technical" (developer-focused). Default: casual'),
     },
     async ({ topic, style }) => {
         try {
@@ -467,7 +493,7 @@ server.tool(
 
             return ok(newsletter)
         } catch (err) {
-            return fail(`Newsletter error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Newsletter error: ${sanitizeError(err)}`)
         }
     }
 )
@@ -478,9 +504,9 @@ server.tool(
 
 server.tool(
     'kernel_token_count',
-    'Estimate token count for a text string. Useful for budgeting API calls and staying within context limits.',
+    'Estimate the token count and API cost for a text string using the ~4 chars/token heuristic. Returns character count, word count, estimated tokens, and estimated cost at Haiku and Sonnet pricing. No API calls made — computation is local and instant. Use this to budget API calls or check if content fits within context limits.',
     {
-        text: z.string().describe('Text to count tokens for'),
+        text: z.string().min(1).describe('Text to estimate token count for'),
     },
     async ({ text }) => {
         // Rough estimation: ~4 chars per token for English
@@ -503,12 +529,12 @@ server.tool(
 
 server.tool(
     'kernel_prompt_version',
-    'Save, load, or compare system prompt versions. Stores prompts as JSON files in .prompts/ directory.',
+    'Version-control system prompts in .prompts/<name>.json. Supports four actions: "save" appends a new version, "load" retrieves the latest version, "list" shows all saved prompts, "compare" uses Haiku to diff two prompts. Side effects: "save" writes to disk. Other actions are read-only. Each prompt file stores all versions as a JSON array with timestamps.',
     {
-        action: z.enum(['save', 'load', 'list', 'compare']).describe('Action to perform'),
-        name: z.string().optional().describe('Prompt name (for save/load)'),
-        content: z.string().optional().describe('Prompt content (for save)'),
-        compare_with: z.string().optional().describe('Second prompt name to compare against (for compare)'),
+        action: z.enum(['save', 'load', 'list', 'compare']).describe('"save" requires name + content. "load" requires name. "list" needs no params. "compare" requires name + compare_with.'),
+        name: z.string().max(100).regex(/^[a-zA-Z0-9_-]+$/).optional().describe('Prompt name (alphanumeric, dashes, underscores). Required for save/load/compare.'),
+        content: z.string().max(100000).optional().describe('Prompt content to save. Required for "save" action.'),
+        compare_with: z.string().max(100).regex(/^[a-zA-Z0-9_-]+$/).optional().describe('Second prompt name for comparison. Required for "compare" action.'),
     },
     async ({ action, name, content, compare_with }) => {
         const promptDir = join(PROJECT_ROOT, '.prompts')
@@ -553,17 +579,17 @@ server.tool(
 
             return fail('Invalid action or missing parameters')
         } catch (err) {
-            return fail(`Prompt version error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Prompt version error: ${sanitizeError(err)}`)
         }
     }
 )
 
 server.tool(
     'kernel_model_compare',
-    'Run the same prompt through Haiku and Sonnet side-by-side. Compares response quality, speed, and token efficiency.',
+    'Run the same prompt through both Haiku and Sonnet models in sequence and compare results side-by-side. Returns response text, latency, character count, and throughput for each model. Costs two API calls (one Haiku + one Sonnet). Use this to evaluate model suitability for a specific task or to justify model selection decisions.',
     {
-        prompt: z.string().describe('The prompt to test'),
-        system: z.string().optional().describe('System prompt to use'),
+        prompt: z.string().min(1).max(50000).describe('The prompt to test against both models'),
+        system: z.string().max(10000).optional().describe('Optional system prompt applied to both models for consistent comparison'),
     },
     async ({ prompt, system }) => {
         try {
@@ -598,16 +624,16 @@ server.tool(
 
             return ok(output)
         } catch (err) {
-            return fail(`Compare error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Compare error: ${sanitizeError(err)}`)
         }
     }
 )
 
 server.tool(
     'kernel_cost_tracker',
-    'Track and estimate API costs. Reads edge function usage and estimates spend based on token approximations.',
+    'Estimate API costs by counting assistant messages in the database over a time period and applying token cost approximations. Returns total AI responses, estimated tokens, and cost estimates at Haiku, Sonnet, and mixed (80/20) pricing. Read-only operation. Uses ~800 tokens/call average for estimation. Actual costs may vary based on real token usage.',
     {
-        days: z.number().optional().describe('Days to look back. Default: 7'),
+        days: z.number().int().min(1).max(365).optional().describe('Number of days to look back. Default: 7. Max: 365'),
     },
     async ({ days }) => {
         try {
@@ -639,7 +665,7 @@ server.tool(
                 `| Mixed (80/20) | $${(haikuCost * 0.8 + sonnetCost * 0.2).toFixed(4)} |`
             )
         } catch (err) {
-            return fail(`Cost tracker error: ${err instanceof Error ? err.message : String(err)}`)
+            return fail(`Cost tracker error: ${sanitizeError(err)}`)
         }
     }
 )

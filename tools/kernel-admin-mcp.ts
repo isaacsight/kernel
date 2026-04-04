@@ -3,19 +3,51 @@
 //
 // This MCP server gives the admin agent real Supabase + Stripe superpowers.
 // Run: npx tsx tools/kernel-admin-mcp.ts
+//
+// SECURITY: Requires SUPABASE_SERVICE_KEY. Never expose this server publicly.
+// All operations are admin-only and require authenticated service-role access.
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
 import { config } from 'dotenv'
-import { readFileSync } from 'fs'
-import { join } from 'path'
+import { readFileSync, existsSync } from 'fs'
+import { join, resolve, normalize } from 'path'
 
 config()
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || ''
 const SUPABASE_KEY = process.env.VITE_SUPABASE_KEY || ''
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || ''
+
+// ── Input validation helpers ───────────────────────────────
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+/** Validate a UUID string to prevent injection */
+function assertUUID(value: string, label: string): void {
+  if (!UUID_REGEX.test(value)) {
+    throw new Error(`Invalid ${label}: must be a valid UUID`)
+  }
+}
+
+/** Sanitize a string for safe use in Supabase REST query parameters */
+function sanitizeQueryParam(value: string): string {
+  // Remove characters that could be used for injection in PostgREST queries
+  return value.replace(/[;'"\\`$(){}[\]|&<>]/g, '')
+}
+
+/** Sanitize error messages to prevent leaking internal details */
+function sanitizeError(err: unknown): string {
+  if (err instanceof Error) {
+    // Strip potentially sensitive information from error messages
+    const msg = err.message
+      .replace(/Bearer\s+\S+/gi, 'Bearer [REDACTED]')
+      .replace(/apikey\s+\S+/gi, 'apikey [REDACTED]')
+      .replace(/https?:\/\/[^\s]+/g, '[URL]')
+    return msg
+  }
+  return 'An unexpected error occurred'
+}
 
 function ok(text: string) {
   return { content: [{ type: 'text' as const, text }] }
@@ -75,7 +107,7 @@ const server = new McpServer({
 // ── Tool: Platform Stats ──
 server.tool(
   'admin_stats',
-  'Get platform-wide stats: users, subscribers, messages, MRR, storage, scores',
+  'Retrieve platform-wide aggregate statistics including total users, active subscribers, message counts, conversation counts, client scores, and knowledge graph entities. Use this for dashboards, health monitoring, or business intelligence. Read-only operation with no side effects. Requires SUPABASE_SERVICE_KEY to be configured.',
   {},
   async () => {
     try {
@@ -97,7 +129,7 @@ server.tool(
       }
       return ok(JSON.stringify(stats, null, 2))
     } catch (err) {
-      return fail(`Stats error: ${err}`)
+      return fail(`Stats error: ${sanitizeError(err)}`)
     }
   },
 )
@@ -105,16 +137,25 @@ server.tool(
 // ── Tool: List Users ──
 server.tool(
   'admin_list_users',
-  'List users with subscription status and message counts. Optional search by email.',
-  { email_search: z.string().optional().describe('Filter users by email (partial match)'), limit: z.number().default(20) },
+  'List registered users with their subscription status and activity metadata, ordered by creation date (newest first). Optionally filter by email substring. Use this for user lookup, support, or audit purposes. Read-only operation. Do not use for bulk data export — use the Supabase dashboard instead.',
+  {
+    email_search: z.string().max(255).optional().describe('Filter users by email address (partial match, case-insensitive). Must not contain special characters.'),
+    limit: z.number().int().min(1).max(100).default(20).describe('Maximum number of users to return (1-100). Default: 20'),
+  },
   async ({ email_search, limit }) => {
     try {
-      let query = `select=id,email,created_at,raw_app_meta_data&limit=${limit}&order=created_at.desc`
-      if (email_search) query += `&email=ilike.*${email_search}*`
+      const safeLimit = Math.min(Math.max(1, limit), 100)
+      let query = `select=id,email,created_at,raw_app_meta_data&limit=${safeLimit}&order=created_at.desc`
+      if (email_search) {
+        const sanitized = sanitizeQueryParam(email_search)
+        if (sanitized.length > 0) {
+          query += `&email=ilike.*${sanitized}*`
+        }
+      }
       const result = await supabaseQuery('auth_users_view', query) as any
       return ok(JSON.stringify(result.data, null, 2))
     } catch (err) {
-      return fail(`User list error: ${err}`)
+      return fail(`User list error: ${sanitizeError(err)}`)
     }
   },
 )
@@ -122,7 +163,7 @@ server.tool(
 // ── Tool: Client Scores ──
 server.tool(
   'admin_client_scores',
-  'Get all client scores with pricing breakdowns for invoicing decisions',
+  'Retrieve all client engagement scores with pricing tier breakdowns. Used for invoicing decisions and client health assessment. Returns score summaries and individual entries from Supabase RPC functions. Read-only operation with no side effects.',
   {},
   async () => {
     try {
@@ -132,7 +173,7 @@ server.tool(
       ])
       return ok(JSON.stringify({ summaries, entries }, null, 2))
     } catch (err) {
-      return fail(`Scores error: ${err}`)
+      return fail(`Scores error: ${sanitizeError(err)}`)
     }
   },
 )
@@ -140,14 +181,20 @@ server.tool(
 // ── Tool: Send File ──
 server.tool(
   'admin_send_file',
-  'Send a file from a local path into a user\'s Inbox folder',
+  'Upload a local file to a specific user\'s Inbox folder in Supabase Storage. The file is read from the local filesystem, base64-encoded, and sent via the admin-send-file edge function. Side effects: creates a file entry in the target user\'s storage bucket. Supported formats: PDF, PNG, JPG, GIF, SVG, MP4, TXT, HTML, CSS, JS, JSON, ZIP, DOC, XLSX. Maximum file size is determined by the edge function limits. Do not use for sensitive files — content is transmitted via HTTPS but stored in Supabase Storage.',
   {
-    target_user_id: z.string().describe('UUID of the target user'),
-    file_path: z.string().describe('Local path to the file to send'),
+    target_user_id: z.string().uuid().describe('UUID of the target user who will receive the file'),
+    file_path: z.string().min(1).max(1024).describe('Local filesystem path to the file to send. Can be absolute or relative to cwd.'),
   },
   async ({ target_user_id, file_path }) => {
     try {
-      const fullPath = file_path.startsWith('/') ? file_path : join(process.cwd(), file_path)
+      assertUUID(target_user_id, 'target_user_id')
+      // Resolve and normalize the path to prevent path traversal
+      const fullPath = normalize(resolve(process.cwd(), file_path))
+      // Verify the file exists before reading
+      if (!existsSync(fullPath)) {
+        return fail(`File not found: ${file_path}`)
+      }
       const content = readFileSync(fullPath)
       const base64 = content.toString('base64')
       const filename = file_path.split('/').pop() || 'file'
@@ -168,7 +215,7 @@ server.tool(
       })
       return ok(JSON.stringify(result, null, 2))
     } catch (err) {
-      return fail(`Send file error: ${err}`)
+      return fail(`Send file error: ${sanitizeError(err)}`)
     }
   },
 )
@@ -176,14 +223,14 @@ server.tool(
 // ── Tool: Create Invoice ──
 server.tool(
   'admin_create_invoice',
-  'Create and send a Stripe invoice to a client based on their score',
+  'Create and send a Stripe invoice to a client via the admin-invoice edge function. Side effects: creates a Stripe invoice and sends it to the client email. The amount is converted from dollars to cents internally. Use admin_client_scores first to determine the appropriate amount and tier. Do not call multiple times for the same client without verifying the previous invoice status.',
   {
-    email: z.string().describe('Client email address'),
-    amount_dollars: z.number().describe('Total invoice amount in dollars'),
-    tier: z.string().default('Standard').describe('Pricing tier (Starter/Standard/Premium/Elite)'),
-    description: z.string().optional().describe('Invoice description'),
-    subtotal: z.number().optional().describe('Subtotal before tax (dollars)'),
-    tax: z.number().optional().describe('Tax amount (dollars)'),
+    email: z.string().email().max(255).describe('Client email address — must be a valid email format'),
+    amount_dollars: z.number().positive().max(100000).describe('Total invoice amount in US dollars (e.g., 99.99). Must be positive. Converted to cents internally.'),
+    tier: z.enum(['Starter', 'Standard', 'Premium', 'Elite']).default('Standard').describe('Pricing tier that determines service level. Default: Standard'),
+    description: z.string().max(500).optional().describe('Custom invoice description. Default: auto-generated from tier name.'),
+    subtotal: z.number().min(0).max(100000).optional().describe('Subtotal before tax in dollars. Default: same as amount_dollars'),
+    tax: z.number().min(0).max(100000).optional().describe('Tax amount in dollars. Default: 0'),
   },
   async ({ email, amount_dollars, tier, description, subtotal, tax }) => {
     try {
@@ -199,7 +246,7 @@ server.tool(
       })
       return ok(JSON.stringify(result, null, 2))
     } catch (err) {
-      return fail(`Invoice error: ${err}`)
+      return fail(`Invoice error: ${sanitizeError(err)}`)
     }
   },
 )
@@ -207,13 +254,14 @@ server.tool(
 // ── Tool: Grant/Revoke Pro ──
 server.tool(
   'admin_manage_subscription',
-  'Grant or revoke Pro subscription for a user',
+  'Grant or revoke Pro subscription access for a specific user. Side effects: when granting, creates a 30-day active subscription record in the subscriptions table. When revoking, sets the subscription status to "canceled". Use admin_user_detail first to verify user identity. This does NOT interact with Stripe billing directly — it only modifies the local subscription record.',
   {
-    user_id: z.string().describe('UUID of the target user'),
-    action: z.enum(['grant', 'revoke']).describe('Grant or revoke Pro access'),
+    user_id: z.string().uuid().describe('UUID of the target user — must be a valid UUID format'),
+    action: z.enum(['grant', 'revoke']).describe('"grant" creates a 30-day Pro subscription. "revoke" cancels any active subscription.'),
   },
   async ({ user_id, action }) => {
     try {
+      assertUUID(user_id, 'user_id')
       if (action === 'grant') {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/subscriptions`, {
           method: 'POST',
@@ -252,7 +300,7 @@ server.tool(
         return ok(`Pro revoked for ${user_id}`)
       }
     } catch (err) {
-      return fail(`Subscription error: ${err}`)
+      return fail(`Subscription error: ${sanitizeError(err)}`)
     }
   },
 )
@@ -260,10 +308,11 @@ server.tool(
 // ── Tool: User Detail ──
 server.tool(
   'admin_user_detail',
-  'Get detailed info about a specific user: messages, files, scores, memory',
-  { user_id: z.string().describe('UUID of the user') },
+  'Retrieve comprehensive details about a specific user including message count, uploaded files, engagement scores, memory profile, and top knowledge graph entities. Use this for support inquiries, user auditing, or understanding engagement patterns. Read-only operation with no side effects.',
+  { user_id: z.string().uuid().describe('UUID of the user to look up — must be a valid UUID format') },
   async ({ user_id }) => {
     try {
+      assertUUID(user_id, 'user_id')
       const [msgs, files, scores, memory, entities] = await Promise.all([
         supabaseQuery('messages', `select=id&user_id=eq.${user_id}&limit=1`),
         supabaseQuery('user_files', `select=id,filename,size_bytes&user_id=eq.${user_id}&limit=20&order=created_at.desc`),
@@ -279,7 +328,7 @@ server.tool(
         topEntities: (entities as any).data,
       }, null, 2))
     } catch (err) {
-      return fail(`User detail error: ${err}`)
+      return fail(`User detail error: ${sanitizeError(err)}`)
     }
   },
 )
@@ -287,7 +336,7 @@ server.tool(
 // ── Tool: Moderation Queue ──
 server.tool(
   'admin_moderation_queue',
-  'View pending content moderation items',
+  'View the content moderation queue showing items with "pending" or "flagged" status, ordered by creation date (newest first, max 20 items). Use this to review flagged user content before taking moderation action. Read-only operation with no side effects.',
   {},
   async () => {
     try {
@@ -297,7 +346,7 @@ server.tool(
       )
       return ok(JSON.stringify(result, null, 2))
     } catch (err) {
-      return fail(`Moderation error: ${err}`)
+      return fail(`Moderation error: ${sanitizeError(err)}`)
     }
   },
 )

@@ -1,6 +1,9 @@
 #!/usr/bin/env npx tsx
 // Kernel Tools MCP Server — dev workflow utilities for Claude Code
 // Provides: notify, stripe, deploy_status, design_lint, diff_review, seo, debate, journal, agent_create, codemod
+//
+// SECURITY: Shell commands run via safeExec with 30s timeout. File operations
+// scoped to PROJECT_ROOT. No user input is interpolated into shell commands.
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
@@ -8,7 +11,7 @@ import { z } from 'zod'
 import { config } from 'dotenv'
 import { execSync } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'fs'
-import { join, resolve, dirname } from 'path'
+import { join, resolve, dirname, normalize } from 'path'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -68,6 +71,25 @@ function safeExec(cmd: string, cwd?: string): string {
     }
 }
 
+function sanitizeError(err: unknown): string {
+    if (err instanceof Error) {
+        return err.message
+            .replace(/Bearer\s+\S+/gi, 'Bearer [REDACTED]')
+            .replace(/apikey\s+\S+/gi, 'apikey [REDACTED]')
+            .replace(/https?:\/\/[^\s]+/g, '[URL]')
+    }
+    return 'An unexpected error occurred'
+}
+
+/** Validate a file path is within the project root to prevent path traversal */
+function assertProjectPath(filePath: string): string {
+    const absPath = normalize(join(PROJECT_ROOT, filePath))
+    if (!absPath.startsWith(normalize(PROJECT_ROOT))) {
+        throw new Error('Path traversal detected: file must be within the project directory')
+    }
+    return absPath
+}
+
 // ── MCP Server ───────────────────────────────────────────────
 const server = new McpServer({
     name: 'kernel-tools',
@@ -77,11 +99,11 @@ const server = new McpServer({
 // ─── Tool: kernel_notify ─────────────────────────────────────
 server.tool(
     'kernel_notify',
-    'Send a notification to yourself via Discord webhook or email. Use this to alert when long tasks complete, deploys finish, or errors occur.',
+    'Send a notification via Discord webhook or email. Side effects: delivers a message to the configured channel. Use this for alerting when long-running tasks complete, deploys finish, or errors are detected. Discord requires DISCORD_WEBHOOK_URL in .env. Email uses the send-inquiry-email edge function. Do not use for user-facing notifications — use kernel-comms send_notification instead.',
     {
-        channel: z.enum(['discord', 'email']).describe('Notification channel'),
-        message: z.string().describe('The notification message'),
-        subject: z.string().optional().describe('Email subject (email channel only)'),
+        channel: z.enum(['discord', 'email']).describe('"discord" sends to the configured webhook. "email" sends via the Supabase edge function.'),
+        message: z.string().min(1).max(4000).describe('The notification message content'),
+        subject: z.string().max(200).optional().describe('Email subject line. Only used when channel is "email". Default: "Claude Code Notification"'),
     },
     async ({ channel, message, subject }) => {
         try {
@@ -129,7 +151,7 @@ server.tool(
             return { content: [{ type: 'text' as const, text: 'Unknown channel' }], isError: true }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Notify error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Notify error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -139,13 +161,13 @@ server.tool(
 // ─── Tool: kernel_stripe ─────────────────────────────────────
 server.tool(
     'kernel_stripe',
-    'Query Stripe payment data: active subscriptions, recent charges, revenue summary, or customer list. Uses the Supabase edge functions for Stripe operations.',
+    'Query Stripe payment data or create coupons via Supabase edge functions. Read actions (revenue_summary, active_subscriptions, recent_charges) have no side effects. The create_coupon action creates a Stripe coupon — use carefully. All requests are authenticated via SUPABASE_SERVICE_KEY.',
     {
         action: z
             .enum(['revenue_summary', 'active_subscriptions', 'recent_charges', 'create_coupon'])
-            .describe('What to query or do'),
-        coupon_percent: z.number().optional().describe('Discount percentage for create_coupon action'),
-        coupon_name: z.string().optional().describe('Coupon name for create_coupon action'),
+            .describe('"revenue_summary", "active_subscriptions", "recent_charges" are read-only. "create_coupon" creates a Stripe coupon (side effect).'),
+        coupon_percent: z.number().min(1).max(100).optional().describe('Discount percentage for create_coupon action (1-100). Default: 20'),
+        coupon_name: z.string().max(200).optional().describe('Human-readable coupon name for create_coupon action. Default: "Claude Code Coupon"'),
     },
     async ({ action, coupon_percent, coupon_name }) => {
         try {
@@ -182,7 +204,7 @@ server.tool(
             return { content: [{ type: 'text' as const, text: JSON.stringify(data, null, 2) }] }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Stripe error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Stripe error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -192,7 +214,7 @@ server.tool(
 // ─── Tool: kernel_deploy_status ──────────────────────────────
 server.tool(
     'kernel_deploy_status',
-    'Check the health and status of the deployed GitHub Pages site. Returns HTTP status, response time, page title, and last deploy info.',
+    'Check the health of the live kernel.chat site deployed on GitHub Pages. Fetches the URL and reports HTTP status, response time, page title, meta description, content length, and last git deploy commit. Read-only operation with no side effects. Use after deployments to verify the site is up and rendering correctly.',
     {},
     async () => {
         try {
@@ -222,7 +244,7 @@ server.tool(
             return { content: [{ type: 'text' as const, text: JSON.stringify(status, null, 2) }] }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Deploy status error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Deploy status error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -232,9 +254,9 @@ server.tool(
 // ─── Tool: kernel_design_lint ────────────────────────────────
 server.tool(
     'kernel_design_lint',
-    'Check if code follows the Kernel Rubin design system. Scans for: EB Garamond usage, ivory/warm palette, correct design tokens, semantic HTML, and accessibility. Returns violations.',
+    'Lint source files against the Kernel Rubin design system rules. Checks for: non-Rubin fonts (should use EB Garamond), pure white/black colors (should use ivory/warm dark), aggressive border-radius, uppercase text, and cold box-shadows. Either lint a specific file or all recently changed files (git diff). Read-only operation with no side effects.',
     {
-        file_path: z.string().optional().describe('Specific file to lint (relative path). If omitted, lints recent git changes.'),
+        file_path: z.string().max(500).optional().describe('Specific file to lint (relative path from project root). If omitted, lints all .ts/.tsx/.css/.html files in the current git diff.'),
     },
     async ({ file_path }) => {
         try {
@@ -293,7 +315,7 @@ server.tool(
             }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Design lint error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Design lint error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -303,9 +325,9 @@ server.tool(
 // ─── Tool: kernel_diff_review ────────────────────────────────
 server.tool(
     'kernel_diff_review',
-    'AI-powered code review of the current git diff. Feeds your changes to the Coder specialist for analysis. Returns quality rating, issues, and suggestions.',
+    'Get an AI-powered code review of the current git diff using Claude Sonnet. Checks for type safety, error handling, security (XSS, exposed keys, injection), performance (re-renders, missing memo), design system compliance, and dead code. Returns a quality rating (Ship/Minor Fixes/Needs Rework) with specific issues and suggestions. Costs one Sonnet API call. Large diffs are truncated to 8KB.',
     {
-        staged_only: z.boolean().optional().describe('Review only staged changes. Default: false (all changes)'),
+        staged_only: z.boolean().optional().describe('If true, reviews only staged (git add) changes. Default: false (reviews all unstaged + staged changes)'),
     },
     async ({ staged_only }) => {
         try {
@@ -331,7 +353,7 @@ server.tool(
             return { content: [{ type: 'text' as const, text: review }] }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Review error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Review error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -341,9 +363,9 @@ server.tool(
 // ─── Tool: kernel_seo ────────────────────────────────────────
 server.tool(
     'kernel_seo',
-    'Audit the SEO of the live Kernel site or any URL. Checks meta tags, Open Graph, headings, structured data, mobile viewport, and canonical URLs.',
+    'Audit the SEO of any public web page by fetching it and analyzing the HTML for meta tags, Open Graph tags, Twitter Card, headings structure, viewport, canonical URL, structured data (JSON-LD), and HTML lang attribute. Returns a structured report with a 0-10 SEO score and specific issues. Read-only operation with no side effects.',
     {
-        url: z.string().optional().describe('URL to audit. Default: the live Kernel site'),
+        url: z.string().url().max(2048).optional().describe('URL to audit. Default: "https://kernel.chat"'),
     },
     async ({ url }) => {
         try {
@@ -396,7 +418,7 @@ server.tool(
             return { content: [{ type: 'text' as const, text: JSON.stringify(audit, null, 2) }] }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `SEO audit error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `SEO audit error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -406,15 +428,15 @@ server.tool(
 // ─── Tool: kernel_debate ─────────────────────────────────────
 server.tool(
     'kernel_debate',
-    'Pit two specialist agents against each other on a topic. One argues FOR, one argues AGAINST. Produces a structured debate with conclusion. Great for evaluating tradeoffs and design decisions.',
+    'Run a structured debate between two specialist agents on a topic. One argues FOR, one argues AGAINST, then Sonnet delivers a verdict. Costs 3 API calls (2 Haiku for arguments + 1 Sonnet for verdict). Use for evaluating tradeoffs, architectural decisions, or contentious design choices where seeing both sides is valuable. Returns a formatted debate transcript with conclusion.',
     {
-        topic: z.string().describe('The topic or question to debate'),
+        topic: z.string().min(1).max(2000).describe('The topic, question, or proposal to debate (e.g., "Should we migrate from REST to GraphQL?")'),
         agent_for: z
             .enum(['kernel', 'researcher', 'coder', 'writer', 'analyst'])
-            .describe('Agent arguing FOR'),
+            .describe('Agent perspective arguing IN FAVOR of the topic'),
         agent_against: z
             .enum(['kernel', 'researcher', 'coder', 'writer', 'analyst'])
-            .describe('Agent arguing AGAINST'),
+            .describe('Agent perspective arguing AGAINST the topic'),
     },
     async ({ topic, agent_for, agent_against }) => {
         try {
@@ -449,7 +471,7 @@ server.tool(
             return { content: [{ type: 'text' as const, text: output }] }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Debate error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Debate error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -459,13 +481,13 @@ server.tool(
 // ─── Tool: kernel_journal ────────────────────────────────────
 server.tool(
     'kernel_journal',
-    'Log a development journal entry. Auto-appends to a daily markdown file with timestamps. Tracks commits, deploys, decisions, and notes. Creates a running dev log.',
+    'Append a timestamped development journal entry to .journal/<YYYY-MM-DD>.md. Side effects: creates the journal directory if missing and appends to the daily file. Each entry includes the current time (HH:MM), category icon, and the latest git commit for context. Use this to maintain a running dev log of commits, deploys, decisions, bugs found, ideas, and general notes.',
     {
-        entry: z.string().describe('The journal entry to log'),
+        entry: z.string().min(1).max(5000).describe('The journal entry text to log'),
         category: z
             .enum(['commit', 'deploy', 'decision', 'bug', 'idea', 'note'])
             .optional()
-            .describe('Entry category. Default: note'),
+            .describe('Entry category with icon. Default: "note"'),
     },
     async ({ entry, category }) => {
         try {
@@ -511,7 +533,7 @@ server.tool(
             }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Journal error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Journal error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -521,12 +543,12 @@ server.tool(
 // ─── Tool: kernel_agent_create ───────────────────────────────
 server.tool(
     'kernel_agent_create',
-    'Create a new specialist agent on-the-fly with a custom system prompt. The agent is temporary and exists only for this session. Useful for task-specific expertise.',
+    'Create a temporary specialist agent with a custom system prompt and immediately ask it a question. The agent exists only for this single call — no state is persisted. Costs one API call. Use this for task-specific expertise that does not fit existing agents (e.g., "UX Critic", "Security Auditor", "API Design Reviewer"). For persistent agents, use the agent definition files in .claude/agents/ instead.',
     {
-        name: z.string().describe('Agent name (e.g., "Security Auditor", "UX Critic")'),
-        system_prompt: z.string().describe('The system prompt defining this agent\'s personality and expertise'),
-        question: z.string().describe('The first question to ask this agent'),
-        model: z.enum(['sonnet', 'haiku']).optional().describe('Model to use. Default: haiku'),
+        name: z.string().min(1).max(100).describe('Human-readable agent name displayed in the response header (e.g., "Security Auditor")'),
+        system_prompt: z.string().min(10).max(10000).describe('System prompt defining this agent\'s personality, expertise, and response style'),
+        question: z.string().min(1).max(50000).describe('The question or task to ask this agent'),
+        model: z.enum(['sonnet', 'haiku']).optional().describe('AI model: "sonnet" (more capable, 12x cost) or "haiku" (fast, cheap). Default: haiku'),
     },
     async ({ name, system_prompt, question, model }) => {
         try {
@@ -541,7 +563,7 @@ server.tool(
             }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Agent error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Agent error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
@@ -551,13 +573,13 @@ server.tool(
 // ─── Tool: kernel_codemod ────────────────────────────────────
 server.tool(
     'kernel_codemod',
-    'Run automated code transformations across the project. Supports find-and-replace with regex, rename patterns, or AI-powered refactoring. Preview mode shows changes without applying.',
+    'Run automated code transformations across TypeScript/React source files. Three modes: "find_replace" applies regex substitution, "rename_symbol" renames a specific identifier using word boundaries, "ai_refactor" sends matching code to Sonnet for refactoring suggestions (no automatic apply). Side effects: "find_replace" and "rename_symbol" modify files on disk when preview=false. ALWAYS use preview=true first to review changes before applying. Scoped to src/ directory only.',
     {
-        action: z.enum(['find_replace', 'rename_symbol', 'ai_refactor']).describe('Type of transformation'),
-        pattern: z.string().describe('Search pattern (regex for find_replace, symbol name for rename, description for ai_refactor)'),
-        replacement: z.string().optional().describe('Replacement string (for find_replace and rename_symbol)'),
-        file_glob: z.string().optional().describe('File glob filter (e.g., "src/**/*.tsx"). Default: "src/**/*.{ts,tsx}"'),
-        preview: z.boolean().optional().describe('Preview changes without applying. Default: true'),
+        action: z.enum(['find_replace', 'rename_symbol', 'ai_refactor']).describe('"find_replace" uses regex. "rename_symbol" uses word-boundary matching. "ai_refactor" generates suggestions only (never auto-applies).'),
+        pattern: z.string().min(1).max(1000).describe('For find_replace: regex pattern. For rename_symbol: current symbol name. For ai_refactor: natural language description of the refactoring.'),
+        replacement: z.string().max(1000).optional().describe('Replacement string. Required for find_replace and rename_symbol. Not used for ai_refactor.'),
+        file_glob: z.string().max(200).optional().describe('File glob filter. Currently fixed to src/**/*.{ts,tsx} regardless of value.'),
+        preview: z.boolean().optional().describe('If true (default), shows matching lines without applying changes. Set to false to actually modify files. ALWAYS preview first.'),
     },
     async ({ action, pattern, replacement, file_glob, preview }) => {
         const dryRun = preview !== false
@@ -692,7 +714,7 @@ server.tool(
             return { content: [{ type: 'text' as const, text: 'Unknown action' }], isError: true }
         } catch (err) {
             return {
-                content: [{ type: 'text' as const, text: `Codemod error: ${err instanceof Error ? err.message : String(err)}` }],
+                content: [{ type: 'text' as const, text: `Codemod error: ${sanitizeError(err)}` }],
                 isError: true,
             }
         }
