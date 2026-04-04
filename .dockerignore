@@ -1,0 +1,9 @@
+node_modules
+.git
+.claude
+.env
+*.pem
+*.key
+tools/daemon-reports
+.kbot-discovery
+dist

@@ -16,6 +16,7 @@
   <a href="https://github.com/isaacsight/kernel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/isaacsight/kernel?color=6B5B95" alt="MIT License"></a>
   <a href="https://kernel.chat"><img src="https://img.shields.io/badge/web-kernel.chat-6B5B95" alt="kernel.chat"></a>
   <a href="https://discord.gg/kdMauM9abG"><img src="https://img.shields.io/badge/discord-join-6B5B95?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://glama.ai/mcp/servers/isaacsight/kernel"><img src="https://glama.ai/mcp/servers/isaacsight/kernel/badges/score.svg" alt="kbot MCP server"></a>
 </p>
 
 ```bash
@@ -305,6 +306,8 @@ graph TD
 
 ## MCP Server
 
+[![kbot MCP server](https://glama.ai/mcp/servers/isaacsight/kernel/badges/card.svg)](https://glama.ai/mcp/servers/isaacsight/kernel)
+
 Use kbot as a tool provider inside any MCP-compatible IDE:
 
 ```json
@@ -315,6 +318,12 @@ Use kbot as a tool provider inside any MCP-compatible IDE:
     }
   }
 }
+```
+
+Or run the MCP server via Docker:
+
+```bash
+docker run -i --rm kernelchat/kbot ide mcp
 ```
 
 Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim.
