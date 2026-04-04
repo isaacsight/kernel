@@ -1,9 +1,55 @@
 {
-  "timestamp": "2026-04-03T20:50:38.879Z",
+  "timestamp": "2026-04-04T03:05:39.569Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "marcel-felix"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "We built Centel, a workspace where PMs, devs, and <em>AI</em> <em>agents</em> plan and ship together!<p>In the past years, product workflows scattered over multiple tools. Thanks to <em>AI</em>, it's time to merge them back into a single workspace with background <em>agents</em> in every step. We handle the infrastructure and <em>agents</em>, so you can focus on your product.<p>key features:\n- collaborative, async feature planner for teams\n- background coding <em>agents</em> that implement simple tasks. Devs pull more complicated ones via MCP into their <em>terminal</em>\n- review environments spin up automatically per feature branch<p>We are giving everyone $50 in free credits to try it out. Curious what you think!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Plan with Centel – ship like Anthropic"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://usecentel.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_marcel-felix",
+            "story_47632572",
+            "show_hn"
+          ],
+          "author": "marcel-felix",
+          "created_at": "2026-04-03T21:32:46Z",
+          "created_at_i": 1775251966,
+          "num_comments": 0,
+          "objectID": "47632572",
+          "points": 1,
+          "story_id": 47632572,
+          "story_text": "We built Centel, a workspace where PMs, devs, and AI agents plan and ship together!<p>In the past years, product workflows scattered over multiple tools. Thanks to AI, it&#x27;s time to merge them back into a single workspace with background agents in every step. We handle the infrastructure and agents, so you can focus on your product.<p>key features:\n- collaborative, async feature planner for teams\n- background coding agents that implement simple tasks. Devs pull more complicated ones via MCP into their terminal\n- review environments spin up automatically per feature branch<p>We are giving everyone $50 in free credits to try it out. Curious what you think!",
+          "title": "Show HN: Plan with Centel – ship like Anthropic",
+          "updated_at": "2026-04-03T21:36:24Z",
+          "url": "https://usecentel.com/"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -44,8 +90,8 @@
           ],
           "author": "marioskales",
           "children": [
-            47626575,
             47625598,
+            47626575,
             47626683,
             47617297,
             47617295,
@@ -61,7 +107,7 @@
           "story_id": 47613527,
           "story_text": "Solo dev from Vienna. Skales is a local-first AI desktop agent for Windows, macOS, and Linux.<p>v9.0.0 just shipped with Agent Skills (SKILL.md import from Claude Code, Codex, Copilot), autonomous coding (Codework), multi-agent teams (Organization), Computer Use, and 15+ providers including Ollama offline.<p>No Docker, no terminal. Download, install, done. My 6-year-old built a Snake game with it.<p>BSL-1.1, free for personal use.<p>DevKit: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;skalesapp&#x2F;devkit</a>",
           "title": "Show HN: Skales – I built a desktop AI agent a 6-year-old can use",
-          "updated_at": "2026-04-03T14:56:52Z",
+          "updated_at": "2026-04-03T23:57:10Z",
           "url": "https://github.com/skalesapp/skales"
         },
         {
@@ -195,11 +241,11 @@
           ],
           "author": "amangsingh",
           "children": [
-            47617410,
             47602435,
             47602458,
             47606660,
             47603897,
+            47617410,
             47621869,
             47602546,
             47611202,
@@ -208,114 +254,20 @@
           ],
           "created_at": "2026-04-01T14:40:28Z",
           "created_at_i": 1775054428,
-          "num_comments": 10,
+          "num_comments": 9,
           "objectID": "47601608",
           "points": 8,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-03T04:03:50Z",
+          "updated_at": "2026-04-04T00:06:54Z",
           "url": "https://github.com/amangsingh/castra"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "wangzhijie"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Hi HN,<p>I built OpenHarness , an open-source <em>terminal</em> coding <em>agent</em> that works with any LLM: Ollama (free, local), OpenAI, Anthropic, Deepseek, Qwen or any OpenAI-compatible API.<p><pre><code>  Install and run:\n\n    npm install -g @zhijiewang/openharness\n    oh                                    # auto-detect local model\n    oh --model ollama/qwen2.5:7b          # specific model\n\n  What it does:\n  - 17 tools (file read/edit/write, bash, grep, glob, web search, task management, notebooks)\n  - 16 slash commands (/diff, /undo, /commit, /cost, /compact, /plan, /review...)\n  - Git integration: every <em>AI</em> edit auto-committed, /undo reverts instantly\n  - Headless mode for CI/CD: oh run &quot;fix the tests&quot; --json\n  - Permission gates: ask/trust/deny modes so the <em>agent</em> can't rm -rf without approval\n  - React+Ink <em>terminal</em> UI with markdown rendering and shimmer spinner\n</code></pre>\nDemo: <a href=\"https://github.com/zhijiewong/openharness\" rel=\"nofollow\">https://github.com/zhijiewong/openharness</a><p>Source: <a href=\"https://github.com/zhijiewong/openharness\" rel=\"nofollow\">https://github.com/zhijiewong/openharness</a><p>npm: npm install -g @zhijiewang/openharness<p>openharness is ready to collborate<p>Everyone is welcome to join and build it together."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent",
-                "terminal"
-              ],
-              "value": "Show HN: OpenHarness Open-source <em>terminal</em> coding <em>agent</em> for any LLM"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/zhijiewong/openharness"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_wangzhijie",
-            "story_47600371",
-            "show_hn"
-          ],
-          "author": "wangzhijie",
-          "children": [
-            47602467
-          ],
-          "created_at": "2026-04-01T13:09:37Z",
-          "created_at_i": 1775048977,
-          "num_comments": 1,
-          "objectID": "47600371",
-          "points": 6,
-          "story_id": 47600371,
-          "story_text": "Hi HN,<p>I built OpenHarness , an open-source terminal coding agent that works with any LLM: Ollama (free, local), OpenAI, Anthropic, Deepseek, Qwen or any OpenAI-compatible API.<p><pre><code>  Install and run:\n\n    npm install -g @zhijiewang&#x2F;openharness\n    oh                                    # auto-detect local model\n    oh --model ollama&#x2F;qwen2.5:7b          # specific model\n\n  What it does:\n  - 17 tools (file read&#x2F;edit&#x2F;write, bash, grep, glob, web search, task management, notebooks)\n  - 16 slash commands (&#x2F;diff, &#x2F;undo, &#x2F;commit, &#x2F;cost, &#x2F;compact, &#x2F;plan, &#x2F;review...)\n  - Git integration: every AI edit auto-committed, &#x2F;undo reverts instantly\n  - Headless mode for CI&#x2F;CD: oh run &quot;fix the tests&quot; --json\n  - Permission gates: ask&#x2F;trust&#x2F;deny modes so the agent can&#x27;t rm -rf without approval\n  - React+Ink terminal UI with markdown rendering and shimmer spinner\n</code></pre>\nDemo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;zhijiewong&#x2F;openharness\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;zhijiewong&#x2F;openharness</a><p>Source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;zhijiewong&#x2F;openharness\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;zhijiewong&#x2F;openharness</a><p>npm: npm install -g @zhijiewang&#x2F;openharness<p>openharness is ready to collborate<p>Everyone is welcome to join and build it together.",
-          "title": "Show HN: OpenHarness Open-source terminal coding agent for any LLM",
-          "updated_at": "2026-04-01T15:48:29Z",
-          "url": "https://github.com/zhijiewong/openharness"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "iridione"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Random fan-fiction thought: <i>Claude Code should split in two</i><p><i>Fork one</i>: just <em>open</em>-<em>source</em> the leaked runtime properly and let the community turn it into a self-improving <em>coding</em> <em>agent</em>. Bugs and feature requests become structured work. Agents generate patches/tests/repros. Humans review for bloat, regressions, safety and taste.<p>Ofcourse, the <em>open</em>-<em>source</em> fork should not evolve randomly. It should compound the existing governance layer at Anthropic: rules learned from breakage, user demand, token waste and safety, enforced through evals, Red/Green TDD, hooks, thresholds, human review and more.<p><i>Fork two</i>: build a new product line above it, maybe a “Claude Code Suite”, that owns the whole SDLC.<p>Goes from user saying “write this code” to spec → branch → sandbox → parallel runs → verification → PR → merge → retrospect and loop, if needed.<p>We already know what people love across the <em>coding</em> <em>agent</em> category: Aider-style repo maps. Continue-style repo-defined checks. OpenCode-style agents + AGENTS.md. Cursor/Warp-style worktrees, parallel agents or cloud runs. OpenAI Symphony-style isolated implementation runs. Gas Town-style multi-<em>agent</em> orchestration for the whole product.<p>So this <i>new product line is re-built with absorbing the best ideas that users love and enjoy in the <em>coding</em> <em>agent</em> space</i>. Yes, this probably kills a lot of wrapper startups overnight but this should also be a warning for founders. They should question whether they’re building a real wedge or are they standing exactly where the incumbent is about to land?<p>Curious where people disagree:\n- should Claude Code actually fork like this?\n- where should they draw the line between core features vs things the community should build?\n- What’s the new moat that the next 50 features will give Claude Code an edge over other competitors?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Re-imagining the path forward for Claude Code"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_iridione",
-            "story_47632038",
-            "ask_hn"
-          ],
-          "author": "iridione",
-          "created_at": "2026-04-03T20:46:35Z",
-          "created_at_i": 1775249195,
-          "num_comments": 0,
-          "objectID": "47632038",
-          "points": 2,
-          "story_id": 47632038,
-          "story_text": "Random fan-fiction thought: <i>Claude Code should split in two</i><p><i>Fork one</i>: just open-source the leaked runtime properly and let the community turn it into a self-improving coding agent. Bugs and feature requests become structured work. Agents generate patches&#x2F;tests&#x2F;repros. Humans review for bloat, regressions, safety and taste.<p>Ofcourse, the open-source fork should not evolve randomly. It should compound the existing governance layer at Anthropic: rules learned from breakage, user demand, token waste and safety, enforced through evals, Red&#x2F;Green TDD, hooks, thresholds, human review and more.<p><i>Fork two</i>: build a new product line above it, maybe a “Claude Code Suite”, that owns the whole SDLC.<p>Goes from user saying “write this code” to spec → branch → sandbox → parallel runs → verification → PR → merge → retrospect and loop, if needed.<p>We already know what people love across the coding agent category: Aider-style repo maps. Continue-style repo-defined checks. OpenCode-style agents + AGENTS.md. Cursor&#x2F;Warp-style worktrees, parallel agents or cloud runs. OpenAI Symphony-style isolated implementation runs. Gas Town-style multi-agent orchestration for the whole product.<p>So this <i>new product line is re-built with absorbing the best ideas that users love and enjoy in the coding agent space</i>. Yes, this probably kills a lot of wrapper startups overnight but this should also be a warning for founders. They should question whether they’re building a real wedge or are they standing exactly where the incumbent is about to land?<p>Curious where people disagree:\n- should Claude Code actually fork like this?\n- where should they draw the line between core features vs things the community should build?\n- What’s the new moat that the next 50 features will give Claude Code an edge over other competitors?",
-          "title": "Re-imagining the path forward for Claude Code",
-          "updated_at": "2026-04-03T20:49:23Z"
-        },
         {
           "_highlightResult": {
             "author": {
@@ -455,8 +407,8 @@
             47602371,
             47599966,
             47600025,
-            47601468,
             47599758,
+            47601468,
             47600185,
             47600714,
             47612172,
@@ -465,13 +417,13 @@
             47602570,
             47612850,
             47601763,
-            47605230,
             47601210,
+            47605230,
             47599778,
-            47605481,
             47600126,
-            47623817,
+            47605481,
             47599763,
+            47623817,
             47599892,
             47624268,
             47624475,
@@ -493,7 +445,7 @@
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-03T20:49:23Z"
+          "updated_at": "2026-04-04T02:04:39Z"
         },
         {
           "_highlightResult": {
@@ -544,6 +496,62 @@
           "title": "Show HN: UX Quest",
           "updated_at": "2026-04-01T12:16:44Z",
           "url": "https://marmelab.com/ux-quest/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "NarratorTD"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Hey HN! I built Domscribe to solve a problem that was eating my productivity.<p>I spend a lot of my time working with AI <em>coding</em> <em>agents</em>. The thing that kept eating at my productivity though was that every time I asked an <em>agent</em> to fix something on the frontend, the actual edit took maybe 200 tokens. But before that happened, the <em>agent</em> would go on this whole journey, grepping through the codebase and at times having to backtrack. That search loop could burn 5,000-10,000 tokens before a single line of code changed.<p>The <em>agent</em> has zero awareness of what's actually rendering in the browser because the rendered DOM and the <em>source</em> tree are two completely different topologies. So I started thinking about this differently; what if we could optimize a solution to the search problem by giving the <em>agents</em> the right context? What if every DOM element already knew exactly where it came from in <em>source</em>?<p>That's the core idea behind Domscribe. At build time, an AST transform walks your JSX and Vue templates, assigns every element a deterministic ID via xxhash64 content hashing, and writes a manifest mapping each ID to its exact file, line, and column. The IDs are stable across HMR; same file content and element position always produces the same ID. At runtime, framework adapters walk the React fiber tree or inspect Vue VNodes to capture live props, state, and component metadata. A local relay daemon connects the browser and your <em>agent</em> via MCP.<p>The result is two workflows that didn't exist before. Your <em>agent</em> can query any <em>source</em> location and get back only what's actually rendering there; live DOM snapshot, props, state, the works. And from the other direction, you can click any element in the browser overlay, type &quot;make this button use the primary color&quot; in plain English, and Domscribe resolves the exact file:line:col so your <em>agent</em> edits the right file on the first try.<p>(I should mention that the overlay runs as Lit web components inside shadow DOM, specifically so it can't mess with your app's styles.)<p>One thing I'm genuinely proud of is the architecture. I spent a LOT of time making sure this wasn't just a tool that works for React-and-Vite-and-nothing-else. The transform layer has a ParserInterface that the injector consumes without knowing which parser produced the AST (the Acorn, Babel, and Vue SFC parsers are all implementations of the same interface), and the ID injection logic is completely abstracted away. Adding a new template syntax (Lit, Svelte, Stencil) means implementing one interface. On the runtime side, a FrameworkAdapter interface defines methods such as captureProps, captureState, and getComponentInstance; and the React and Vue adapters are built on the same public interface that any community contributor would use. No internal escape hatches.<p>I took the same approach with bundler support (Vite, Webpack, Turbopack) and <em>agent</em> support (Claude Code, Cursor, GitHub Copilot CLI, Gemini CLI - all via first-party plugins that bundle the MCP config and a skill file). But the MCP layer means any compatible <em>agent</em> works out of the box.<p>PII redaction is built in and on by default. All captured data passes through pattern matching for emails, phone numbers, API keys, JWTs etc. before it leaves the browser.<p>Everything is stripped in production builds; zero data-ds attributes and zero overlay scripts. It's enforced by CI tests that run against every real fixture. (Speaking of tests: the entire integration and e2e suite runs against real published packages via a local Verdaccio registry. )<p>Anyway, MIT licensed, fully <em>open</em> <em>source</em>, the whole codebase is right there on GitHub. I'd genuinely love feedback on the architecture and the approach. And I'm especially curious if anyone has thoughts on extending the ParserInterface to other template syntaxes; that's the piece I'm most excited about people contributing to."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Show HN: Domscribe – Deterministic DOM-to-<em>source</em> mapping for AI <em>coding</em> <em>agents</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/patchorbit/domscribe"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_NarratorTD",
+            "story_47591487",
+            "show_hn"
+          ],
+          "author": "NarratorTD",
+          "children": [
+            47624116,
+            47610731
+          ],
+          "created_at": "2026-03-31T18:26:14Z",
+          "created_at_i": 1774981574,
+          "num_comments": 0,
+          "objectID": "47591487",
+          "points": 2,
+          "story_id": 47591487,
+          "story_text": "Hey HN! I built Domscribe to solve a problem that was eating my productivity.<p>I spend a lot of my time working with AI coding agents. The thing that kept eating at my productivity though was that every time I asked an agent to fix something on the frontend, the actual edit took maybe 200 tokens. But before that happened, the agent would go on this whole journey, grepping through the codebase and at times having to backtrack. That search loop could burn 5,000-10,000 tokens before a single line of code changed.<p>The agent has zero awareness of what&#x27;s actually rendering in the browser because the rendered DOM and the source tree are two completely different topologies. So I started thinking about this differently; what if we could optimize a solution to the search problem by giving the agents the right context? What if every DOM element already knew exactly where it came from in source?<p>That&#x27;s the core idea behind Domscribe. At build time, an AST transform walks your JSX and Vue templates, assigns every element a deterministic ID via xxhash64 content hashing, and writes a manifest mapping each ID to its exact file, line, and column. The IDs are stable across HMR; same file content and element position always produces the same ID. At runtime, framework adapters walk the React fiber tree or inspect Vue VNodes to capture live props, state, and component metadata. A local relay daemon connects the browser and your agent via MCP.<p>The result is two workflows that didn&#x27;t exist before. Your agent can query any source location and get back only what&#x27;s actually rendering there; live DOM snapshot, props, state, the works. And from the other direction, you can click any element in the browser overlay, type &quot;make this button use the primary color&quot; in plain English, and Domscribe resolves the exact file:line:col so your agent edits the right file on the first try.<p>(I should mention that the overlay runs as Lit web components inside shadow DOM, specifically so it can&#x27;t mess with your app&#x27;s styles.)<p>One thing I&#x27;m genuinely proud of is the architecture. I spent a LOT of time making sure this wasn&#x27;t just a tool that works for React-and-Vite-and-nothing-else. The transform layer has a ParserInterface that the injector consumes without knowing which parser produced the AST (the Acorn, Babel, and Vue SFC parsers are all implementations of the same interface), and the ID injection logic is completely abstracted away. Adding a new template syntax (Lit, Svelte, Stencil) means implementing one interface. On the runtime side, a FrameworkAdapter interface defines methods such as captureProps, captureState, and getComponentInstance; and the React and Vue adapters are built on the same public interface that any community contributor would use. No internal escape hatches.<p>I took the same approach with bundler support (Vite, Webpack, Turbopack) and agent support (Claude Code, Cursor, GitHub Copilot CLI, Gemini CLI - all via first-party plugins that bundle the MCP config and a skill file). But the MCP layer means any compatible agent works out of the box.<p>PII redaction is built in and on by default. All captured data passes through pattern matching for emails, phone numbers, API keys, JWTs etc. before it leaves the browser.<p>Everything is stripped in production builds; zero data-ds attributes and zero overlay scripts. It&#x27;s enforced by CI tests that run against every real fixture. (Speaking of tests: the entire integration and e2e suite runs against real published packages via a local Verdaccio registry. )<p>Anyway, MIT licensed, fully open source, the whole codebase is right there on GitHub. I&#x27;d genuinely love feedback on the architecture and the approach. And I&#x27;m especially curious if anyone has thoughts on extending the ParserInterface to other template syntaxes; that&#x27;s the piece I&#x27;m most excited about people contributing to.",
+          "title": "Show HN: Domscribe – Deterministic DOM-to-source mapping for AI coding agents",
+          "updated_at": "2026-04-03T07:36:50Z",
+          "url": "https://github.com/patchorbit/domscribe"
         }
       ]
     },
@@ -814,6 +822,90 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "geox"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Silicon Valley Is in a Frenzy over <em>Bot</em>s That Build Themselves"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.theatlantic.com/technology/2026/04/ai-industry-self-improving-<em>bot</em>s/686686/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_geox",
+            "story_47634234"
+          ],
+          "author": "geox",
+          "created_at": "2026-04-04T00:34:01Z",
+          "created_at_i": 1775262841,
+          "num_comments": 0,
+          "objectID": "47634234",
+          "points": 5,
+          "story_id": 47634234,
+          "title": "Silicon Valley Is in a Frenzy over Bots That Build Themselves",
+          "updated_at": "2026-04-04T02:46:24Z",
+          "url": "https://www.theatlantic.com/technology/2026/04/ai-industry-self-improving-bots/686686/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "agastalver"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey HN,<p>I built a small Cursor extension that tracks LLM cache timers so you can see when your context cache is about to expire.<p>While working at Ploid AI (ploid.ai), I noticed that most cache rewrites, <em>bot</em>h mine and my teammates', came down to two things: forgetting to continue the right chat, or forgetting to review plans before the cache dropped off. Basically, money and context lost to simple timing mistakes.<p>So I built this extension to give that extra information. It won't magically make you a better coder or promise cost savings, but it gives you a bit more visibility into what's happening under the hood.<p>GitHub: <a href=\"https://github.com/agastalver/cache-timer-extension\" rel=\"nofollow\">https://github.com/agastalver/cache-timer-extension</a><p>Extension: <a href=\"https://open-vsx.org/extension/agastalver/cache-timer-extension/1.0.1\" rel=\"nofollow\">https://open-vsx.org/extension/agastalver/cache-timer-extens...</a><p>Would love feedback or suggestions."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Cursor extension to track LLM cache TTL"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/agastalver/cache-timer-extension"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_agastalver",
+            "story_47632209",
+            "show_hn"
+          ],
+          "author": "agastalver",
+          "created_at": "2026-04-03T21:00:49Z",
+          "created_at_i": 1775250049,
+          "num_comments": 0,
+          "objectID": "47632209",
+          "points": 2,
+          "story_id": 47632209,
+          "story_text": "Hey HN,<p>I built a small Cursor extension that tracks LLM cache timers so you can see when your context cache is about to expire.<p>While working at Ploid AI (ploid.ai), I noticed that most cache rewrites, both mine and my teammates&#x27;, came down to two things: forgetting to continue the right chat, or forgetting to review plans before the cache dropped off. Basically, money and context lost to simple timing mistakes.<p>So I built this extension to give that extra information. It won&#x27;t magically make you a better coder or promise cost savings, but it gives you a bit more visibility into what&#x27;s happening under the hood.<p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;agastalver&#x2F;cache-timer-extension\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;agastalver&#x2F;cache-timer-extension</a><p>Extension: <a href=\"https:&#x2F;&#x2F;open-vsx.org&#x2F;extension&#x2F;agastalver&#x2F;cache-timer-extension&#x2F;1.0.1\" rel=\"nofollow\">https:&#x2F;&#x2F;open-vsx.org&#x2F;extension&#x2F;agastalver&#x2F;cache-timer-extens...</a><p>Would love feedback or suggestions.",
+          "title": "Show HN: Cursor extension to track LLM cache TTL",
+          "updated_at": "2026-04-03T21:29:10Z",
+          "url": "https://github.com/agastalver/cache-timer-extension"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "edward"
             },
             "title": {
@@ -877,10 +969,10 @@
           "created_at_i": 1775236058,
           "num_comments": 0,
           "objectID": "47629271",
-          "points": 2,
+          "points": 3,
           "story_id": 47629271,
           "title": "AI-Generated Interview with One Piece Actor Published by Esquire",
-          "updated_at": "2026-04-03T17:14:52Z",
+          "updated_at": "2026-04-04T01:27:24Z",
           "url": "https://kotaku.com/one-piece-netflix-live-action-mackenyu-interview-esquire-ai-singapore-2000684648"
         },
         {
@@ -929,94 +1021,6 @@
           "title": "Show HN: Locki – AI sandboxing for real-world projects",
           "updated_at": "2026-04-03T18:01:12Z",
           "url": "https://github.com/janpokorny/locki"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "caminanteblanco"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I've been trying to make a super simple tracker for Artemis 2 the last few nights, after I noticed that the NASA livestream has very high quality, human-trabscribed subtitles. My goal is to build a simple html page, with nothing but the live-updated transcript of all communications between mission control and Orion.<p>I've seen a lot of tracker apps, but they're a bit too much for what I'm looking for.<p>Unfortunately YouTube makes grabbing the subtitles from my VPS nearly impossible because of their anti-<em>bot</em>ting procedures.<p>I don't want to be a bad actor, and I would totally go somewhere else, like an official NASA stream for these subtitles, but NASA has explicitly said that YouTube is the only place they will host the 24 hour livestream.<p>I'm a little bit lost, and I'd really appreciate any advice."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: How do I grab the subtitles from the Artemis 2 livestream?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_caminanteblanco",
-            "story_47627691",
-            "ask_hn"
-          ],
-          "author": "caminanteblanco",
-          "children": [
-            47627913
-          ],
-          "created_at": "2026-04-03T15:19:02Z",
-          "created_at_i": 1775229542,
-          "num_comments": 2,
-          "objectID": "47627691",
-          "points": 1,
-          "story_id": 47627691,
-          "story_text": "I&#x27;ve been trying to make a super simple tracker for Artemis 2 the last few nights, after I noticed that the NASA livestream has very high quality, human-trabscribed subtitles. My goal is to build a simple html page, with nothing but the live-updated transcript of all communications between mission control and Orion.<p>I&#x27;ve seen a lot of tracker apps, but they&#x27;re a bit too much for what I&#x27;m looking for.<p>Unfortunately YouTube makes grabbing the subtitles from my VPS nearly impossible because of their anti-botting procedures.<p>I don&#x27;t want to be a bad actor, and I would totally go somewhere else, like an official NASA stream for these subtitles, but NASA has explicitly said that YouTube is the only place they will host the 24 hour livestream.<p>I&#x27;m a little bit lost, and I&#x27;d really appreciate any advice.",
-          "title": "Ask HN: How do I grab the subtitles from the Artemis 2 livestream?",
-          "updated_at": "2026-04-03T15:43:54Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "npongratz"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Systemd BirthDate Merge: Conflicts of Interest"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://<em>tbot</em>eproject.com/systemdfindings/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_npongratz",
-            "story_47626445"
-          ],
-          "author": "npongratz",
-          "children": [
-            47626944,
-            47626940,
-            47627214,
-            47627181,
-            47626967,
-            47627142,
-            47626922,
-            47627025
-          ],
-          "created_at": "2026-04-03T13:26:32Z",
-          "created_at_i": 1775222792,
-          "num_comments": 20,
-          "objectID": "47626445",
-          "points": 21,
-          "story_id": 47626445,
-          "title": "Systemd BirthDate Merge: Conflicts of Interest",
-          "updated_at": "2026-04-03T20:37:24Z",
-          "url": "https://tboteproject.com/systemdfindings/"
         }
       ]
     },
@@ -2035,6 +2039,59 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "borski"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "I use points and miles for most of my travel. Every booking comes down to the same decision: use points or pay cash? To answer that, you need award availability across multiple programs, cash prices, your current balances, transfer partner ratios, and the math to compare them. I got tired of doing it manually across a dozen tabs.<p>This toolkit teaches Claude Code and OpenCode how to do it. 7 skills (markdown files with API docs and curl examples) and 6 <em>MCP</em> <em>servers</em> (real-time <em>tools</em> the AI calls directly).<p>It searches award flights across 25+ mileage programs (Seats.aero), compares cash prices (Google Flights, Skiplagged, Kiwi.com, Duffel), pulls your loyalty balances (AwardWallet), searches hotels (Trivago, LiteAPI, Airbnb, Booking.com), finds ferry routes across 33 countries, and looks up weird hidden gems near your destination (Atlas Obscura).<p>Reference data is included: transfer partner ratios for Chase UR, Amex MR, Bilt, Capital One, and Citi TY. Point valuations sourced from TPG, Upgraded Points, OMAAT, and View From The Wing. Alliance membership, sweet spot redemptions, booking windows, hotel chain brand lookups.<p>5 of the 6 <em>MCP</em> <em>servers</em> need zero API keys. Clone, run setup.sh, start \nsearching.<p>Skills are, as usual, plain markdown. They work in OpenCode and Claude Code automatically (I added a tiny setup script), and they'll work in anything else that supports skills.<p>PRs welcome! Help me expand the toolkit! :)<p><a href=\"https://github.com/borski/travel-hacking-toolkit\" rel=\"nofollow\">https://github.com/borski/travel-hacking-toolkit</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Travel Hacking Toolkit – Points search and trip planning with AI"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/borski/travel-hacking-toolkit"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_borski",
+            "story_47635033",
+            "show_hn",
+            "front_page"
+          ],
+          "author": "borski",
+          "children": [
+            47635208,
+            47635155,
+            47635122,
+            47635220
+          ],
+          "created_at": "2026-04-04T02:26:42Z",
+          "created_at_i": 1775269602,
+          "num_comments": 4,
+          "objectID": "47635033",
+          "points": 15,
+          "story_id": 47635033,
+          "story_text": "I use points and miles for most of my travel. Every booking comes down to the same decision: use points or pay cash? To answer that, you need award availability across multiple programs, cash prices, your current balances, transfer partner ratios, and the math to compare them. I got tired of doing it manually across a dozen tabs.<p>This toolkit teaches Claude Code and OpenCode how to do it. 7 skills (markdown files with API docs and curl examples) and 6 MCP servers (real-time tools the AI calls directly).<p>It searches award flights across 25+ mileage programs (Seats.aero), compares cash prices (Google Flights, Skiplagged, Kiwi.com, Duffel), pulls your loyalty balances (AwardWallet), searches hotels (Trivago, LiteAPI, Airbnb, Booking.com), finds ferry routes across 33 countries, and looks up weird hidden gems near your destination (Atlas Obscura).<p>Reference data is included: transfer partner ratios for Chase UR, Amex MR, Bilt, Capital One, and Citi TY. Point valuations sourced from TPG, Upgraded Points, OMAAT, and View From The Wing. Alliance membership, sweet spot redemptions, booking windows, hotel chain brand lookups.<p>5 of the 6 MCP servers need zero API keys. Clone, run setup.sh, start \nsearching.<p>Skills are, as usual, plain markdown. They work in OpenCode and Claude Code automatically (I added a tiny setup script), and they&#x27;ll work in anything else that supports skills.<p>PRs welcome! Help me expand the toolkit! :)<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit</a>",
+          "title": "Show HN: Travel Hacking Toolkit – Points search and trip planning with AI",
+          "updated_at": "2026-04-04T03:04:39Z",
+          "url": "https://github.com/borski/travel-hacking-toolkit"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "deltaops"
             },
             "title": {
@@ -2063,6 +2120,9 @@
             "show_hn"
           ],
           "author": "deltaops",
+          "children": [
+            47633299
+          ],
           "created_at": "2026-04-03T20:31:28Z",
           "created_at_i": 1775248288,
           "num_comments": 0,
@@ -2070,7 +2130,7 @@
           "points": 1,
           "story_id": 47631865,
           "title": "Show HN: Lustre – MCP server giving AI tools premium Flutter components",
-          "updated_at": "2026-04-03T20:33:24Z",
+          "updated_at": "2026-04-03T22:43:24Z",
           "url": "https://www.npmjs.com/package/lustre-mcp"
         },
         {
@@ -2219,52 +2279,6 @@
           "title": "Show HN: Pace MCP server that connects all your wearables to Claude",
           "updated_at": "2026-04-02T20:57:21Z",
           "url": "https://pacetraining.co/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "czhu12"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "tools"
-              ],
-              "value": "I’ve been building Canine for about 2 years now, and have slowly grown it to about ~1000 developers using it for deploying all sorts of apps / projects / etc. Amazingly, the whole thing is still able to run on a single 48GB Hetzner VPS. Think of it basically like Coolify, for Kubernetes. I previously posted about it here: <a href=\"https://news.ycombinator.com/item?id=44292103\">https://news.ycombinator.com/item?id=44292103</a><p>Recently, we added <em>MCP</em> capabilities to canine, and I was shocked how well it worked. It basically is able to create services, cron jobs, databases, get the logs for these and redeploy. See it here: <a href=\"https://canine.sh/model-context-protocol\" rel=\"nofollow\">https://canine.sh/model-context-protocol</a>. The real killer feature has been an <em>MCP</em> <em>tool</em> to be able to download a temporary kubeconfig, which lets Claude then breakout and get the full Kubernetes API to automate pretty much anything. A little scary how competent Claude can be here.<p>When we paired this with Claude code running locally, you’re basically able to have a fully autonomous system vibe code, deploy, wait, and test in staging (by querying APIs, no browser skills yet), automatically fix bugs, repush, etc.<p>Best practices in this area haven’t quite been established and I know this community has a somewhat nervous relationship with AI <em>tools</em>. The way we have it set up is basically to only allow access on staging servers, and disable entirely on production, for fear of things going wrong. <em>MCP</em> is opt in on canine at the moment.<p>The implementation was pretty easy. We just took our API and basically wrapped an <em>MCP</em> OAuth authentication around it where all the GET endpoints became resources and all the POST / PUT / DELETE endpoints became <em>tools</em>. Digging through other <em>MCP</em> implementations, it seems the actual documentation is quite out of date. The <em>MCP</em> documentation recommends using Prompt objects to guide the LLM’s, but most implementations I’ve seen out there actually use skills, which have to be installed.<p>Anyways, happy to share whatever, it was a cool bit of project, just now seeing how people will use this."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "server"
-              ],
-              "value": "Show HN: An <em>MCP</em> <em>server</em> for Devops automation"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_czhu12",
-            "story_47614678",
-            "show_hn"
-          ],
-          "author": "czhu12",
-          "children": [
-            47615782
-          ],
-          "created_at": "2026-04-02T14:05:50Z",
-          "created_at_i": 1775138750,
-          "num_comments": 1,
-          "objectID": "47614678",
-          "points": 5,
-          "story_id": 47614678,
-          "story_text": "I’ve been building Canine for about 2 years now, and have slowly grown it to about ~1000 developers using it for deploying all sorts of apps &#x2F; projects &#x2F; etc. Amazingly, the whole thing is still able to run on a single 48GB Hetzner VPS. Think of it basically like Coolify, for Kubernetes. I previously posted about it here: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44292103</a><p>Recently, we added MCP capabilities to canine, and I was shocked how well it worked. It basically is able to create services, cron jobs, databases, get the logs for these and redeploy. See it here: <a href=\"https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol\" rel=\"nofollow\">https:&#x2F;&#x2F;canine.sh&#x2F;model-context-protocol</a>. The real killer feature has been an MCP tool to be able to download a temporary kubeconfig, which lets Claude then breakout and get the full Kubernetes API to automate pretty much anything. A little scary how competent Claude can be here.<p>When we paired this with Claude code running locally, you’re basically able to have a fully autonomous system vibe code, deploy, wait, and test in staging (by querying APIs, no browser skills yet), automatically fix bugs, repush, etc.<p>Best practices in this area haven’t quite been established and I know this community has a somewhat nervous relationship with AI tools. The way we have it set up is basically to only allow access on staging servers, and disable entirely on production, for fear of things going wrong. MCP is opt in on canine at the moment.<p>The implementation was pretty easy. We just took our API and basically wrapped an MCP OAuth authentication around it where all the GET endpoints became resources and all the POST &#x2F; PUT &#x2F; DELETE endpoints became tools. Digging through other MCP implementations, it seems the actual documentation is quite out of date. The MCP documentation recommends using Prompt objects to guide the LLM’s, but most implementations I’ve seen out there actually use skills, which have to be installed.<p>Anyways, happy to share whatever, it was a cool bit of project, just now seeing how people will use this.",
-          "title": "Show HN: An MCP server for Devops automation",
-          "updated_at": "2026-04-02T20:54:36Z"
         }
       ]
     },
@@ -2276,9 +2290,14 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "iridione"
+              "value": "geox"
             },
-            "story_text": {
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Silicon Valley Is in a Frenzy over Bots That Build Themselves"
+            },
+            "url": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
@@ -2286,30 +2305,24 @@
                 "improving",
                 "ai"
               ],
-              "value": "Random fan-fiction thought: <i>Claude Code should split in two</i><p><i>Fork one</i>: just open-source the leaked runtime properly and let the community turn it into a <em>self</em>-<em>improving</em> coding agent. Bugs and feature requests become structured work. Agents generate patches/tests/repros. Humans review for bloat, regressions, safety and taste.<p>Ofcourse, the open-source fork should not evolve randomly. It should compound the existing governance layer at Anthropic: rules learned from breakage, user demand, token waste and safety, enforced through evals, Red/Green TDD, hooks, thresholds, human review and more.<p><i>Fork two</i>: build a new product line above it, maybe a “Claude Code Suite”, that owns the whole SDLC.<p>Goes from user saying “write this code” to spec → branch → sandbox → parallel runs → verification → PR → merge → retrospect and loop, if needed.<p>We already know what people love across the coding agent category: <em>Ai</em>der-style repo maps. Continue-style repo-defined checks. OpenCode-style agents + AGENTS.md. Cursor/Warp-style worktrees, parallel agents or cloud runs. OpenAI Symphony-style isolated implementation runs. Gas Town-style multi-agent orchestration for the whole product.<p>So this <i>new product line is re-built with absorbing the best ideas that users love and enjoy in the coding agent space</i>. Yes, this probably kills a lot of wrapper startups overnight but this should also be a warning for founders. They should question whether they’re building a real wedge or are they standing exactly where the incumbent is about to land?<p>Curious where people disagree:\n- should Claude Code actually fork like this?\n- where should they draw the line between core features vs things the community should build?\n- What’s the new moat that the next 50 features will give Claude Code an edge over other competitors?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Re-imagining the path forward for Claude Code"
+              "value": "https://www.theatlantic.com/technology/2026/04/<em>ai</em>-industry-<em>self</em>-<em>improving</em>-bots/686686/"
             }
           },
           "_tags": [
             "story",
-            "author_iridione",
-            "story_47632038",
-            "ask_hn"
+            "author_geox",
+            "story_47634234"
           ],
-          "author": "iridione",
-          "created_at": "2026-04-03T20:46:35Z",
-          "created_at_i": 1775249195,
+          "author": "geox",
+          "created_at": "2026-04-04T00:34:01Z",
+          "created_at_i": 1775262841,
           "num_comments": 0,
-          "objectID": "47632038",
-          "points": 2,
-          "story_id": 47632038,
-          "story_text": "Random fan-fiction thought: <i>Claude Code should split in two</i><p><i>Fork one</i>: just open-source the leaked runtime properly and let the community turn it into a self-improving coding agent. Bugs and feature requests become structured work. Agents generate patches&#x2F;tests&#x2F;repros. Humans review for bloat, regressions, safety and taste.<p>Ofcourse, the open-source fork should not evolve randomly. It should compound the existing governance layer at Anthropic: rules learned from breakage, user demand, token waste and safety, enforced through evals, Red&#x2F;Green TDD, hooks, thresholds, human review and more.<p><i>Fork two</i>: build a new product line above it, maybe a “Claude Code Suite”, that owns the whole SDLC.<p>Goes from user saying “write this code” to spec → branch → sandbox → parallel runs → verification → PR → merge → retrospect and loop, if needed.<p>We already know what people love across the coding agent category: Aider-style repo maps. Continue-style repo-defined checks. OpenCode-style agents + AGENTS.md. Cursor&#x2F;Warp-style worktrees, parallel agents or cloud runs. OpenAI Symphony-style isolated implementation runs. Gas Town-style multi-agent orchestration for the whole product.<p>So this <i>new product line is re-built with absorbing the best ideas that users love and enjoy in the coding agent space</i>. Yes, this probably kills a lot of wrapper startups overnight but this should also be a warning for founders. They should question whether they’re building a real wedge or are they standing exactly where the incumbent is about to land?<p>Curious where people disagree:\n- should Claude Code actually fork like this?\n- where should they draw the line between core features vs things the community should build?\n- What’s the new moat that the next 50 features will give Claude Code an edge over other competitors?",
-          "title": "Re-imagining the path forward for Claude Code",
-          "updated_at": "2026-04-03T20:49:23Z"
+          "objectID": "47634234",
+          "points": 5,
+          "story_id": 47634234,
+          "title": "Silicon Valley Is in a Frenzy over Bots That Build Themselves",
+          "updated_at": "2026-04-04T02:46:24Z",
+          "url": "https://www.theatlantic.com/technology/2026/04/ai-industry-self-improving-bots/686686/"
         },
         {
           "_highlightResult": {
@@ -2392,11 +2405,11 @@
           ],
           "author": "amangsingh",
           "children": [
-            47617410,
             47602435,
             47602458,
             47606660,
             47603897,
+            47617410,
             47621869,
             47602546,
             47611202,
@@ -2405,13 +2418,13 @@
           ],
           "created_at": "2026-04-01T14:40:28Z",
           "created_at_i": 1775054428,
-          "num_comments": 10,
+          "num_comments": 9,
           "objectID": "47601608",
           "points": 8,
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-03T04:03:50Z",
+          "updated_at": "2026-04-04T00:06:54Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
