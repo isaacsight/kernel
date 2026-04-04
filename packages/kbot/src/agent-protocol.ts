@@ -219,6 +219,44 @@ export function blackboardGetDecisions(): BlackboardEntry[] {
   return blackboardQuery('decision')
 }
 
+// ── Blackboard Broadcast Bus (Change 2: Global signal routing) ──
+// Type-based pub/sub that allows cognitive modules to subscribe to
+// specific blackboard entry types (or '*' for all). This turns the
+// blackboard into a Global Workspace a la Baars (1988).
+
+type BlackboardTypeSubscriber = (entry: BlackboardEntry) => void
+const typeSubscribers = new Map<string, BlackboardTypeSubscriber[]>()
+
+/** Subscribe to blackboard entries by type. Use '*' for wildcard (all types). */
+export function subscribeToBlackboard(type: string, callback: BlackboardTypeSubscriber): void {
+  if (!typeSubscribers.has(type)) typeSubscribers.set(type, [])
+  typeSubscribers.get(type)!.push(callback)
+}
+
+/**
+ * Write an entry to the blackboard AND broadcast to all type-based subscribers.
+ * This is the preferred write path when cognitive modules should be notified.
+ */
+export function broadcastToBlackboard(
+  key: string,
+  value: unknown,
+  author: string,
+  type: BlackboardEntry['type'],
+  confidence: number = 1.0,
+): BlackboardEntry {
+  // Write to blackboard (this already notifies key-based subscribers)
+  const entry = blackboardWrite(key, value, author, type, confidence)
+
+  // Broadcast to type-based subscribers
+  const typeSubs = typeSubscribers.get(type) || []
+  const wildcardSubs = typeSubscribers.get('*') || []
+  for (const sub of [...typeSubs, ...wildcardSubs]) {
+    try { sub(entry) } catch { /* subscriber errors don't break the bus */ }
+  }
+
+  return entry
+}
+
 /** Clear the entire blackboard for a new task */
 export function blackboardClear(): void {
   blackboard.entries.clear()

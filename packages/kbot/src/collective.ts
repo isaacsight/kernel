@@ -266,21 +266,71 @@ function loadCachedPatterns(): CollectivePattern[] {
   return []
 }
 
+// ── Temporal Decay + Positive Feedback (Change 6) ──
+
+/**
+ * Apply temporal decay to collective patterns.
+ * Confidence halves every 30 days without reinforcement (exponential decay).
+ * Dead patterns below 0.05 confidence are pruned.
+ */
+export function decayPatterns(patterns: CollectivePattern[]): CollectivePattern[] {
+  const now = Date.now()
+  return patterns.map(p => {
+    const lastSeen = p.last_updated ? new Date(p.last_updated).getTime() : now
+    const ageMs = now - lastSeen
+    const ageDays = ageMs / (1000 * 60 * 60 * 24)
+    // Exponential decay: halve confidence every 30 days
+    // ln(2)/30 ≈ 0.023
+    const decayFactor = Math.exp(-0.023 * ageDays)
+    return {
+      ...p,
+      confidence: p.confidence * decayFactor,
+      // sample_count is preserved — it records historical evidence, not current relevance
+    }
+  }).filter(p => p.confidence > 0.05)
+}
+
+/**
+ * Reinforce a pattern when a new instance confirms it.
+ * 15% confidence boost per confirmation, capped at 1.0.
+ */
+export function reinforcePattern(pattern: CollectivePattern): CollectivePattern {
+  return {
+    ...pattern,
+    confidence: Math.min(1.0, pattern.confidence * 1.15),
+    sample_count: pattern.sample_count + 1,
+    last_updated: new Date().toISOString(),
+  }
+}
+
 // ── Integration Helpers ──
 
-/** Get the best agent for a task category based on collective wisdom */
+/** Get the best agent for a task category based on collective wisdom (with decay applied) */
 export function getCollectiveRecommendation(category: string): { agent: string; confidence: number } | null {
   const hints = loadCachedHints()
-  const match = hints.find(h => h.category === category && h.confidence > 0.7 && h.sample_count > 50)
+  // Apply temporal decay to routing hints by mapping to CollectivePattern shape
+  const hintPatterns: CollectivePattern[] = hints.map(h => ({
+    type: 'routing_rule' as const,
+    pattern: { category: h.category, best_agent: h.best_agent },
+    confidence: h.confidence,
+    sample_count: h.sample_count,
+    last_updated: new Date().toISOString(), // Cached hints don't track last_updated individually
+  }))
+  const decayed = decayPatterns(hintPatterns)
+  const match = decayed.find(p =>
+    (p.pattern as any).category === category &&
+    p.confidence > 0.7 &&
+    p.sample_count > 50,
+  )
   if (match) {
-    return { agent: match.best_agent, confidence: match.confidence }
+    return { agent: (match.pattern as any).best_agent, confidence: match.confidence }
   }
   return null
 }
 
-/** Get the best tool sequence for a task category based on collective wisdom */
+/** Get the best tool sequence for a task category based on collective wisdom (with decay applied) */
 export function getCollectiveToolSequence(category: string): string[] | null {
-  const patterns = loadCachedPatterns()
+  const patterns = decayPatterns(loadCachedPatterns())
   const match = patterns.find(p =>
     p.type === 'tool_sequence' &&
     (p.pattern as any).category === category &&
