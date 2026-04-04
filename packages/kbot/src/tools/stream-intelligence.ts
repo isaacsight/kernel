@@ -1479,6 +1479,9 @@ export interface StreamIntelligence {
   evolution: SelfEvolution
   brain: BrainState
   collab: CollabProject
+  miniGame: MiniGame
+  progression: Progression
+  randomEvent: RandomEvent
 }
 
 export function initIntelligence(memory: any): StreamIntelligence {
@@ -1486,6 +1489,9 @@ export function initIntelligence(memory: any): StreamIntelligence {
     evolution: initSelfEvolution(),
     brain: initBrain(memory),
     collab: initCollab(),
+    miniGame: initMiniGame(),
+    progression: initProgression(),
+    randomEvent: initRandomEvent(),
   }
 }
 
@@ -1500,9 +1506,27 @@ export function handleIntelligenceCommand(text: string, username: string, intel:
   const evoResult = handleEvolutionCommand(text, username, intel.evolution)
   if (evoResult) return evoResult
 
+  // Check mini-game commands
+  const gameResult = handleMiniGameCommand(text, username, intel.miniGame, 0)
+  if (gameResult) {
+    updateQuestProgress(intel.progression, 'games')
+    return gameResult
+  }
+
+  // Check random event commands
+  const eventResult = handleRandomEventCommand(text, username, intel.randomEvent)
+  if (eventResult) return eventResult
+
   // Check collab commands
   const collabResult = handleCollabCommand(text, username, intel.collab)
   if (collabResult) return collabResult
+
+  // Track quest progress for commands
+  if (text.toLowerCase().trim().startsWith('!')) {
+    updateQuestProgress(intel.progression, 'commands')
+  }
+  // Track messages for quests
+  updateQuestProgress(intel.progression, 'messages')
 
   // Update brain on every message (not a command handler, just learning)
   updateBrain(intel.brain, username, text)
@@ -1531,4 +1555,719 @@ export function getIntelligenceOverlay(intel: StreamIntelligence): string[] {
   }
 
   return lines
+}
+
+
+// ─── PRIORITY 5: Mini-Game System ────────────────────────────
+
+export interface MiniGame {
+  active: boolean
+  type: 'dodge' | 'boss' | 'quiz'
+  state: any
+  startFrame: number
+  scores: Record<string, number>
+}
+
+interface DodgeState {
+  obstacles: Array<{ x: number; y: number; speed: number; width: number; height: number }>
+  playerY: 'standing' | 'jumping' | 'ducking'
+  hits: number
+  survived: number // frames survived
+  lastSpawn: number
+  difficulty: number
+}
+
+interface BossState {
+  hp: number
+  maxHp: number
+  x: number
+  y: number
+  attackTimer: number
+  lastAttack: number
+  participants: Set<string>
+  phase: 'fighting' | 'victory' | 'defeat'
+  bossFrame: number
+}
+
+interface QuizState {
+  currentQuestion: number
+  totalQuestions: number
+  questions: Array<{ question: string; answer: string; options?: string[] }>
+  answered: boolean
+  questionStartFrame: number
+  correctUser: string
+  roundScores: Record<string, number>
+}
+
+const QUIZ_QUESTIONS: Array<{ question: string; answer: string }> = [
+  { question: 'What does CSS stand for?', answer: 'cascading style sheets' },
+  { question: 'What language is the Linux kernel written in?', answer: 'c' },
+  { question: 'What year was JavaScript created?', answer: '1995' },
+  { question: 'What does HTML stand for?', answer: 'hypertext markup language' },
+  { question: 'What port does HTTP use by default?', answer: '80' },
+  { question: 'What does SQL stand for?', answer: 'structured query language' },
+  { question: 'What does API stand for?', answer: 'application programming interface' },
+  { question: 'What year was TypeScript first released?', answer: '2012' },
+  { question: 'What does SSH stand for?', answer: 'secure shell' },
+  { question: 'What port does HTTPS use by default?', answer: '443' },
+  { question: 'What does JSON stand for?', answer: 'javascript object notation' },
+  { question: 'What is the time complexity of binary search?', answer: 'o(log n)' },
+  { question: 'What does DNS stand for?', answer: 'domain name system' },
+  { question: 'What does TCP stand for?', answer: 'transmission control protocol' },
+  { question: 'What does URL stand for?', answer: 'uniform resource locator' },
+  { question: 'What does CLI stand for?', answer: 'command line interface' },
+  { question: 'What year was Python created?', answer: '1991' },
+  { question: 'What does CORS stand for?', answer: 'cross-origin resource sharing' },
+  { question: 'Who created Git?', answer: 'linus torvalds' },
+  { question: 'What does npm stand for?', answer: 'node package manager' },
+  { question: 'What year was Node.js first released?', answer: '2009' },
+  { question: 'What does REST stand for?', answer: 'representational state transfer' },
+  { question: 'What is the default branch name in Git?', answer: 'main' },
+  { question: 'What does ORM stand for?', answer: 'object relational mapping' },
+]
+
+export function initMiniGame(): MiniGame {
+  return {
+    active: false,
+    type: 'dodge',
+    state: null,
+    startFrame: 0,
+    scores: {},
+  }
+}
+
+export function handleMiniGameCommand(text: string, username: string, game: MiniGame, frame: number): string | null {
+  const t = text.toLowerCase().trim()
+
+  // Start games
+  if (t === '!game dodge') {
+    if (game.active) return 'A game is already in progress! Wait for it to end.'
+    game.active = true
+    game.type = 'dodge'
+    game.startFrame = frame
+    game.scores = {}
+    const state: DodgeState = {
+      obstacles: [],
+      playerY: 'standing',
+      hits: 0,
+      survived: 0,
+      lastSpawn: frame,
+      difficulty: 1,
+    }
+    game.state = state
+    return 'DODGE GAME STARTED! Type !jump or !duck to avoid obstacles. 3 hits and you are out!'
+  }
+
+  if (t === '!game boss') {
+    if (game.active) return 'A game is already in progress!'
+    game.active = true
+    game.type = 'boss'
+    game.startFrame = frame
+    game.scores = {}
+    const state: BossState = {
+      hp: 100,
+      maxHp: 100,
+      x: 450,
+      y: 200,
+      attackTimer: 0,
+      lastAttack: frame,
+      participants: new Set(),
+      phase: 'fighting',
+      bossFrame: 0,
+    }
+    game.state = state
+    return 'BOSS FIGHT! A giant enemy appeared! Type !attack to deal damage. Work together to defeat it!'
+  }
+
+  if (t === '!game quiz') {
+    if (game.active) return 'A game is already in progress!'
+    game.active = true
+    game.type = 'quiz'
+    game.startFrame = frame
+    game.scores = {}
+    // Shuffle and pick 10 questions
+    const shuffled = [...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 10)
+    const state: QuizState = {
+      currentQuestion: 0,
+      totalQuestions: 10,
+      questions: shuffled,
+      answered: false,
+      questionStartFrame: frame,
+      correctUser: '',
+      roundScores: {},
+    }
+    game.state = state
+    const q = state.questions[0]
+    return `QUIZ TIME! Question 1/10: ${q.question}`
+  }
+
+  // In-game commands
+  if (!game.active) return null
+
+  if (game.type === 'dodge') {
+    const state = game.state as DodgeState
+    if (t === '!jump') {
+      state.playerY = 'jumping'
+      setTimeout(() => { if (state) state.playerY = 'standing' }, 1500)
+      return null // silent
+    }
+    if (t === '!duck') {
+      state.playerY = 'ducking'
+      setTimeout(() => { if (state) state.playerY = 'standing' }, 1500)
+      return null
+    }
+  }
+
+  if (game.type === 'boss') {
+    const state = game.state as BossState
+    if (t === '!attack') {
+      if (state.phase !== 'fighting') return null
+      const damage = Math.floor(Math.random() * 5) + 1
+      state.hp = Math.max(0, state.hp - damage)
+      state.participants.add(username)
+      game.scores[username] = (game.scores[username] || 0) + damage
+      if (state.hp <= 0) {
+        state.phase = 'victory'
+        const totalParticipants = state.participants.size
+        return `BOSS DEFEATED! ${totalParticipants} heroes took it down! ${username} dealt the final blow for ${damage} damage!`
+      }
+      return `${username} dealt ${damage} damage! Boss HP: ${state.hp}/${state.maxHp}`
+    }
+  }
+
+  if (game.type === 'quiz') {
+    const state = game.state as QuizState
+    if (!state.answered && state.currentQuestion < state.totalQuestions) {
+      const q = state.questions[state.currentQuestion]
+      if (t.includes(q.answer.toLowerCase())) {
+        state.answered = true
+        state.correctUser = username
+        game.scores[username] = (game.scores[username] || 0) + 10
+        state.roundScores[username] = (state.roundScores[username] || 0) + 10
+        // Move to next question after short delay
+        return `CORRECT! ${username} gets 10 XP! The answer was "${q.answer}".`
+      }
+    }
+  }
+
+  return null
+}
+
+export function tickMiniGame(game: MiniGame, frame: number): { screenShake?: number; floatingText?: { text: string; x: number; y: number; color: string }; endGame?: boolean; speech?: string } | null {
+  if (!game.active) return null
+
+  if (game.type === 'dodge') {
+    const state = game.state as DodgeState
+    state.survived++
+    state.difficulty = 1 + Math.floor(state.survived / 60) * 0.3
+
+    // Spawn obstacles every 18-30 frames (speeds up over time)
+    const spawnInterval = Math.max(12, 30 - Math.floor(state.difficulty * 3))
+    if (frame - state.lastSpawn >= spawnInterval) {
+      const isHigh = Math.random() > 0.5
+      state.obstacles.push({
+        x: 560,
+        y: isHigh ? 350 : 430,
+        speed: 4 + state.difficulty * 2,
+        width: 20 + Math.random() * 15,
+        height: isHigh ? 30 : 20,
+      })
+      state.lastSpawn = frame
+    }
+
+    // Move obstacles
+    for (const obs of state.obstacles) {
+      obs.x -= obs.speed
+    }
+
+    // Check collisions with robot (approx at x=120-280, y=350-450)
+    const robotX = 160
+    const robotY = state.playerY === 'jumping' ? 300 : state.playerY === 'ducking' ? 420 : 370
+    const robotW = 80
+    const robotH = state.playerY === 'ducking' ? 30 : 60
+    for (const obs of state.obstacles) {
+      if (obs.x < robotX + robotW && obs.x + obs.width > robotX && obs.y < robotY + robotH && obs.y + obs.height > robotY) {
+        state.hits++
+        obs.x = -100 // remove
+        if (state.hits >= 3) {
+          const survived = Math.floor(state.survived / 6)
+          game.active = false
+          return { endGame: true, screenShake: 8, speech: `GAME OVER! Survived ${survived} seconds. 3 hits taken.` }
+        }
+        return { screenShake: 4, floatingText: { text: `HIT! ${3 - state.hits} lives left`, x: 200, y: 300, color: '#f85149' } }
+      }
+    }
+
+    // Remove off-screen obstacles
+    state.obstacles = state.obstacles.filter(o => o.x > -50)
+
+    // End after 360 frames (60 seconds)
+    if (state.survived >= 360) {
+      game.active = false
+      return { endGame: true, speech: `DODGE COMPLETE! Survived the full 60 seconds with ${3 - state.hits} lives remaining!` }
+    }
+  }
+
+  if (game.type === 'boss') {
+    const state = game.state as BossState
+    state.bossFrame++
+
+    // Boss attacks every 60 frames (10 seconds)
+    if (state.phase === 'fighting' && frame - state.lastAttack >= 60) {
+      state.lastAttack = frame
+      state.attackTimer = 6 // 6 frames of attack animation
+      return { screenShake: 5, floatingText: { text: 'BOSS ATTACKS!', x: 300, y: 200, color: '#f85149' } }
+    }
+
+    if (state.attackTimer > 0) state.attackTimer--
+
+    // Victory
+    if (state.phase === 'victory') {
+      game.active = false
+      return { endGame: true, screenShake: 6, floatingText: { text: 'VICTORY!', x: 250, y: 250, color: '#f0c040' } }
+    }
+  }
+
+  if (game.type === 'quiz') {
+    const state = game.state as QuizState
+
+    // Auto-advance to next question if answered or 30 seconds elapsed
+    if (state.answered || (frame - state.questionStartFrame >= 180)) {
+      if (state.currentQuestion < state.totalQuestions - 1) {
+        state.currentQuestion++
+        state.answered = false
+        state.questionStartFrame = frame
+        state.correctUser = ''
+        const q = state.questions[state.currentQuestion]
+        return { speech: `Question ${state.currentQuestion + 1}/${state.totalQuestions}: ${q.question}` }
+      } else {
+        game.active = false
+        const topScorer = Object.entries(game.scores).sort((a, b) => b[1] - a[1])[0]
+        const winner = topScorer ? `${topScorer[0]} wins with ${topScorer[1]} points!` : 'No winners this round.'
+        return { endGame: true, speech: `QUIZ COMPLETE! ${winner}` }
+      }
+    }
+  }
+
+  return null
+}
+
+export function drawMiniGameOverlay(
+  ctx: CanvasRenderingContext2D,
+  game: MiniGame,
+  frame: number,
+): void {
+  if (!game.active) return
+
+  if (game.type === 'dodge') {
+    const state = game.state as DodgeState
+    // Draw obstacles as red rectangles
+    ctx.fillStyle = '#f85149'
+    for (const obs of state.obstacles) {
+      ctx.fillRect(obs.x, obs.y, obs.width, obs.height)
+      // Warning stripes
+      ctx.fillStyle = '#a82020'
+      ctx.fillRect(obs.x + 2, obs.y + 2, obs.width - 4, 3)
+      ctx.fillStyle = '#f85149'
+    }
+
+    // Lives display
+    ctx.fillStyle = '#f85149'
+    ctx.font = 'bold 16px "Courier New", monospace'
+    ctx.fillText(`DODGE! Lives: ${'<3 '.repeat(3 - state.hits)}`, 20, 480)
+    ctx.fillText(`Survived: ${Math.floor(state.survived / 6)}s`, 20, 500)
+  }
+
+  if (game.type === 'boss') {
+    const state = game.state as BossState
+    if (state.phase === 'fighting') {
+      // Boss body (large geometric shape)
+      const bx = state.x
+      const by = state.y
+      const bob = Math.round(Math.sin(state.bossFrame * 0.15) * 5)
+
+      // Body
+      ctx.fillStyle = '#8b2500'
+      ctx.fillRect(bx - 30, by + bob - 30, 60, 60)
+      ctx.fillStyle = '#a82020'
+      ctx.fillRect(bx - 25, by + bob - 25, 50, 50)
+
+      // Eyes (angry)
+      ctx.fillStyle = '#f0c040'
+      ctx.fillRect(bx - 18, by + bob - 15, 12, 8)
+      ctx.fillRect(bx + 6, by + bob - 15, 12, 8)
+      // Pupils
+      ctx.fillStyle = '#1a1a2e'
+      ctx.fillRect(bx - 14, by + bob - 12, 6, 5)
+      ctx.fillRect(bx + 10, by + bob - 12, 6, 5)
+
+      // Mouth
+      ctx.fillStyle = '#1a1a2e'
+      ctx.fillRect(bx - 15, by + bob + 5, 30, 8)
+      // Teeth
+      ctx.fillStyle = '#ffffff'
+      for (let i = 0; i < 5; i++) {
+        ctx.fillRect(bx - 13 + i * 6, by + bob + 5, 4, 4)
+      }
+
+      // Arms
+      ctx.fillStyle = '#8b2500'
+      if (state.attackTimer > 0) {
+        // Arms extended forward during attack
+        ctx.fillRect(bx - 50, by + bob - 10, 20, 15)
+        ctx.fillRect(bx + 30, by + bob - 10, 20, 15)
+      } else {
+        ctx.fillRect(bx - 45, by + bob + 5, 15, 30)
+        ctx.fillRect(bx + 30, by + bob + 5, 15, 30)
+      }
+
+      // HP bar
+      ctx.fillStyle = 'rgba(0,0,0,0.7)'
+      ctx.fillRect(200, 75, 180, 18)
+      const hpPct = state.hp / state.maxHp
+      ctx.fillStyle = hpPct > 0.5 ? '#3fb950' : hpPct > 0.25 ? '#f0c040' : '#f85149'
+      ctx.fillRect(201, 76, 178 * hpPct, 16)
+      ctx.fillStyle = '#e6edf3'
+      ctx.font = 'bold 12px "Courier New", monospace'
+      ctx.fillText(`BOSS HP: ${state.hp}/${state.maxHp}`, 210, 89)
+    }
+  }
+
+  if (game.type === 'quiz') {
+    const state = game.state as QuizState
+    if (state.currentQuestion < state.totalQuestions) {
+      const q = state.questions[state.currentQuestion]
+      // Question panel
+      ctx.fillStyle = 'rgba(13, 17, 23, 0.9)'
+      ctx.fillRect(20, 450, 540, 40)
+      ctx.strokeStyle = '#f0c040'
+      ctx.lineWidth = 1
+      ctx.strokeRect(20, 450, 540, 40)
+
+      ctx.fillStyle = '#f0c040'
+      ctx.font = 'bold 14px "Courier New", monospace'
+      ctx.fillText(`Q${state.currentQuestion + 1}: ${q.question}`, 30, 475)
+
+      if (state.answered) {
+        ctx.fillStyle = '#3fb950'
+        ctx.font = 'bold 12px "Courier New", monospace'
+        ctx.fillText(`${state.correctUser} got it!`, 30, 500)
+      }
+    }
+  }
+}
+
+
+// ─── PRIORITY 7: Progression System ─────────────────────────
+
+export interface Quest {
+  id: string
+  description: string
+  target: number
+  progress: number
+  reward: number  // XP
+  type: 'messages' | 'commands' | 'games' | 'weather'
+}
+
+export interface Progression {
+  globalLevel: number
+  globalXP: number
+  questsCompleted: number
+  currentQuests: Quest[]
+  lastQuestGenTime: number
+}
+
+export function initProgression(): Progression {
+  return {
+    globalLevel: 1,
+    globalXP: 0,
+    questsCompleted: 0,
+    currentQuests: generateDailyQuests(),
+    lastQuestGenTime: Date.now(),
+  }
+}
+
+function generateDailyQuests(): Quest[] {
+  return [
+    { id: 'q_msgs', description: 'Get 50 chat messages', target: 50, progress: 0, reward: 25, type: 'messages' },
+    { id: 'q_weather', description: 'Trigger 5 weather changes', target: 5, progress: 0, reward: 25, type: 'weather' },
+    { id: 'q_games', description: 'Play 2 mini-games', target: 2, progress: 0, reward: 25, type: 'games' },
+    { id: 'q_cmds', description: 'Use 20 commands', target: 20, progress: 0, reward: 20, type: 'commands' },
+  ]
+}
+
+export function tickProgression(prog: Progression, _frame: number): { completed?: Quest; levelUp?: boolean } | null {
+  // Check for completed quests
+  for (const quest of prog.currentQuests) {
+    if (quest.progress >= quest.target) {
+      prog.questsCompleted++
+      prog.globalXP += quest.reward
+      const oldLevel = prog.globalLevel
+      prog.globalLevel = Math.floor(prog.globalXP / 100) + 1
+      // Remove completed quest
+      prog.currentQuests = prog.currentQuests.filter(q => q.id !== quest.id)
+      return { completed: quest, levelUp: prog.globalLevel > oldLevel }
+    }
+  }
+
+  // Regenerate quests daily (check every tick but only generate once per day)
+  const oneDayMs = 86400000
+  if (Date.now() - prog.lastQuestGenTime > oneDayMs && prog.currentQuests.length === 0) {
+    prog.currentQuests = generateDailyQuests()
+    prog.lastQuestGenTime = Date.now()
+  }
+
+  return null
+}
+
+export function updateQuestProgress(prog: Progression, type: 'messages' | 'commands' | 'games' | 'weather', amount: number = 1): void {
+  for (const quest of prog.currentQuests) {
+    if (quest.type === type) {
+      quest.progress = Math.min(quest.target, quest.progress + amount)
+    }
+  }
+}
+
+export function drawQuestPanel(
+  ctx: CanvasRenderingContext2D,
+  prog: Progression,
+  x: number,
+  y: number,
+): void {
+  if (prog.currentQuests.length === 0) return
+
+  const panelW = 200
+  const panelH = 14 + prog.currentQuests.length * 16 + 18
+  ctx.fillStyle = 'rgba(22, 27, 34, 0.85)'
+  ctx.fillRect(x, y, panelW, panelH)
+  ctx.strokeStyle = '#f0c040'
+  ctx.lineWidth = 1
+  ctx.strokeRect(x, y, panelW, panelH)
+
+  // Title
+  ctx.fillStyle = '#f0c040'
+  ctx.font = 'bold 10px "Courier New", monospace'
+  ctx.fillText(`QUESTS  Lv.${prog.globalLevel} (${prog.globalXP} XP)`, x + 4, y + 11)
+
+  // Quest list
+  let qy = y + 24
+  for (const quest of prog.currentQuests) {
+    const pct = Math.floor((quest.progress / quest.target) * 100)
+    const barW = 50
+    const filled = Math.floor((quest.progress / quest.target) * barW)
+    ctx.fillStyle = '#8b949e'
+    ctx.font = '9px "Courier New", monospace'
+    ctx.fillText(quest.description.slice(0, 22), x + 4, qy)
+    // Progress bar
+    ctx.fillStyle = '#30363d'
+    ctx.fillRect(x + panelW - barW - 30, qy - 7, barW, 6)
+    ctx.fillStyle = pct >= 100 ? '#3fb950' : '#f0c040'
+    ctx.fillRect(x + panelW - barW - 30, qy - 7, filled, 6)
+    ctx.fillStyle = '#e6edf3'
+    ctx.fillText(`${quest.progress}/${quest.target}`, x + panelW - 28, qy)
+    qy += 16
+  }
+}
+
+
+// ─── PRIORITY 8: Random Events ───────────────────────────────
+
+export interface RandomEvent {
+  type: 'meteor' | 'alien' | 'glitch' | 'treasure' | 'earthquake'
+  active: boolean
+  startFrame: number
+  duration: number  // frames
+}
+
+export function initRandomEvent(): RandomEvent {
+  return {
+    type: 'meteor',
+    active: false,
+    startFrame: 0,
+    duration: 0,
+  }
+}
+
+export function tickRandomEvent(event: RandomEvent, frame: number): { screenShake?: number; speech?: string; floatingText?: { text: string; x: number; y: number; color: string } } | null {
+  // End event if duration expired
+  if (event.active) {
+    const elapsed = frame - event.startFrame
+    if (elapsed >= event.duration) {
+      event.active = false
+      return null
+    }
+  }
+
+  // Check every 360 frames (1 minute), 10% chance
+  if (!event.active && frame % 360 === 0 && frame > 60 && Math.random() < 0.10) {
+    const types: RandomEvent['type'][] = ['meteor', 'alien', 'glitch', 'treasure', 'earthquake']
+    event.type = types[Math.floor(Math.random() * types.length)]
+    event.active = true
+    event.startFrame = frame
+    event.duration = event.type === 'glitch' ? 30 : event.type === 'earthquake' ? 60 : 90
+
+    const speeches: Record<string, string> = {
+      meteor: 'METEOR SHOWER! Look at the sky!',
+      alien: 'An alien visitor has appeared! +5 XP for everyone!',
+      glitch: 'G-G-GLITCH DETECTED! Sys33m un$table...',
+      treasure: 'A golden treasure chest appeared! Type !open to claim it!',
+      earthquake: 'EARTHQUAKE! The ground is shaking!',
+    }
+    return {
+      speech: speeches[event.type],
+      screenShake: event.type === 'earthquake' ? 8 : event.type === 'meteor' ? 4 : 0,
+      floatingText: { text: speeches[event.type].slice(0, 20), x: 200, y: 200, color: '#f0c040' },
+    }
+  }
+
+  return null
+}
+
+export function handleRandomEventCommand(text: string, username: string, event: RandomEvent): string | null {
+  const t = text.toLowerCase().trim()
+  if (t === '!open' && event.active && event.type === 'treasure') {
+    event.active = false
+    return `${username} opened the treasure chest and found 50 XP!`
+  }
+  return null
+}
+
+export function drawRandomEvent(
+  ctx: CanvasRenderingContext2D,
+  event: RandomEvent,
+  frame: number,
+  canvasWidth: number,
+  canvasHeight: number,
+): void {
+  if (!event.active) return
+  const elapsed = frame - event.startFrame
+
+  if (event.type === 'meteor') {
+    // Many orange particles falling from top-right
+    for (let i = 0; i < 8; i++) {
+      const seed = (elapsed * 7 + i * 137) % 1000
+      const mx = canvasWidth - (seed % canvasWidth) - elapsed * 3
+      const my = 60 + (seed * 3 % 300) + elapsed * 5
+      if (mx > 0 && my < canvasHeight - 100) {
+        ctx.fillStyle = '#e8820c'
+        ctx.fillRect(mx, my, 4, 4)
+        // Trail
+        ctx.fillStyle = 'rgba(240, 192, 64, 0.5)'
+        ctx.fillRect(mx + 4, my - 3, 8, 2)
+        ctx.fillStyle = 'rgba(248, 81, 73, 0.3)'
+        ctx.fillRect(mx + 10, my - 5, 6, 2)
+      }
+    }
+  }
+
+  if (event.type === 'alien') {
+    // Small green alien sprite that appears, waves, gives bonus XP
+    const ax = 300 + Math.round(Math.sin(elapsed * 0.1) * 20)
+    const ay = 300 + Math.round(Math.sin(elapsed * 0.15) * 10)
+    // Body
+    ctx.fillStyle = '#3fb950'
+    ctx.fillRect(ax - 10, ay - 5, 20, 15)
+    // Head (dome)
+    ctx.fillStyle = '#4dff7a'
+    ctx.fillRect(ax - 8, ay - 15, 16, 12)
+    ctx.fillRect(ax - 6, ay - 18, 12, 5)
+    // Eyes
+    ctx.fillStyle = '#1a1a2e'
+    ctx.fillRect(ax - 5, ay - 12, 5, 4)
+    ctx.fillRect(ax + 2, ay - 12, 5, 4)
+    // Wave arm
+    if (elapsed % 12 < 6) {
+      ctx.fillStyle = '#3fb950'
+      ctx.fillRect(ax + 10, ay - 15, 4, 10)
+    } else {
+      ctx.fillStyle = '#3fb950'
+      ctx.fillRect(ax + 10, ay - 10, 4, 10)
+    }
+    // Speech
+    ctx.fillStyle = '#4dff7a'
+    ctx.font = '12px "Courier New", monospace'
+    ctx.fillText('*alien noises*', ax - 30, ay - 25)
+  }
+
+  if (event.type === 'glitch') {
+    // RGB split + scanlines
+    const intensity = Math.min(1, elapsed / 10)
+    // RGB split overlay
+    ctx.fillStyle = `rgba(255, 0, 0, ${0.05 * intensity})`
+    ctx.fillRect(-3, 0, canvasWidth, canvasHeight)
+    ctx.fillStyle = `rgba(0, 255, 0, ${0.03 * intensity})`
+    ctx.fillRect(3, 0, canvasWidth, canvasHeight)
+    ctx.fillStyle = `rgba(0, 0, 255, ${0.04 * intensity})`
+    ctx.fillRect(0, -2, canvasWidth, canvasHeight)
+    // Heavy scanlines
+    ctx.fillStyle = `rgba(0, 0, 0, ${0.2 * intensity})`
+    for (let y = 0; y < canvasHeight; y += 2) {
+      ctx.fillRect(0, y, canvasWidth, 1)
+    }
+    // Random glitch blocks
+    for (let i = 0; i < 3; i++) {
+      const gx = ((elapsed * 37 + i * 97) % canvasWidth)
+      const gy = ((elapsed * 53 + i * 71) % (canvasHeight - 100)) + 60
+      ctx.fillStyle = `rgba(${elapsed * i % 255}, ${255 - elapsed * i % 255}, ${128}, 0.3)`
+      ctx.fillRect(gx, gy, 40 + i * 10, 4)
+    }
+    // Corrupted text
+    if (elapsed % 6 < 3) {
+      ctx.fillStyle = '#f85149'
+      ctx.font = 'bold 20px "Courier New", monospace'
+      ctx.fillText('ERR0R: REAL1TY.SYS', 100 + (elapsed % 5) * 2, 400)
+    }
+  }
+
+  if (event.type === 'treasure') {
+    // Golden chest
+    const tx = 280
+    const ty = 420
+    const pulse = (Math.sin(elapsed * 0.3) + 1) / 2
+    // Glow
+    ctx.fillStyle = `rgba(240, 192, 64, ${0.2 + pulse * 0.2})`
+    ctx.beginPath()
+    ctx.arc(tx + 15, ty + 10, 25 + pulse * 5, 0, Math.PI * 2)
+    ctx.fill()
+    // Chest body
+    ctx.fillStyle = '#8b6914'
+    ctx.fillRect(tx, ty, 30, 20)
+    ctx.fillStyle = '#cd9b1d'
+    ctx.fillRect(tx + 2, ty + 2, 26, 16)
+    // Lid
+    ctx.fillStyle = '#8b6914'
+    ctx.fillRect(tx - 2, ty - 5, 34, 8)
+    ctx.fillStyle = '#cd9b1d'
+    ctx.fillRect(tx, ty - 3, 30, 4)
+    // Lock
+    ctx.fillStyle = '#f0c040'
+    ctx.fillRect(tx + 12, ty + 6, 6, 6)
+    // Sparkles
+    if (elapsed % 4 < 2) {
+      ctx.fillStyle = '#ffffaa'
+      ctx.fillRect(tx - 5, ty - 8, 2, 2)
+      ctx.fillRect(tx + 33, ty - 3, 2, 2)
+      ctx.fillRect(tx + 15, ty - 12, 2, 2)
+    }
+    // Label
+    ctx.fillStyle = '#f0c040'
+    ctx.font = 'bold 12px "Courier New", monospace'
+    ctx.fillText('Type !open', tx - 5, ty + 35)
+  }
+
+  if (event.type === 'earthquake') {
+    // Rumble lines on ground
+    ctx.fillStyle = `rgba(139, 37, 0, ${0.3 + Math.random() * 0.2})`
+    for (let i = 0; i < 5; i++) {
+      const rx = Math.random() * canvasWidth
+      ctx.fillRect(rx, 488 + Math.random() * 4, 30 + Math.random() * 40, 2)
+    }
+    // Dust particles
+    for (let i = 0; i < 6; i++) {
+      const dx = ((elapsed * 11 + i * 89) % 570)
+      const dy = 480 - (elapsed * 2 + i * 5) % 40
+      ctx.fillStyle = `rgba(200, 180, 160, ${0.4 - (elapsed % 40) * 0.01})`
+      ctx.fillRect(dx, dy, 3, 3)
+    }
+  }
 }

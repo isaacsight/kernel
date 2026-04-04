@@ -1229,3 +1229,293 @@ function drawDreamParticles(
     px(ctx, 22, -3, 2, 2, mutedColor, s, ox, oy)
   }
 }
+
+// ─── Hat Drawing ──────────────────────────────────────────────
+
+export type HatType = 'none' | 'crown' | 'antenna' | 'sunglasses' | 'tophat' | 'hardhat' | 'party'
+
+/**
+ * Draw a hat on top of the robot's head.
+ * Call AFTER drawRobot() so it layers on top.
+ */
+export function drawHat(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number,
+  scale: number,
+  hat: HatType,
+  frame: number,
+): void {
+  if (hat === 'none') return
+  const s = scale
+  // Head top-left is approximately at pixel (9, 5) in sprite coords
+  // Hats sit on top of the head at y=4 (just above head top)
+  const headCenterX = 16 // center of 34px sprite width
+  const headTopY = 4
+
+  if (hat === 'crown') {
+    // Golden crown with 3 points and gems
+    const cx = headCenterX - 5
+    const cy = headTopY - 5
+    // Crown base
+    px(ctx, cx, cy + 3, 10, 2, '#f0c040', s, x, y)
+    // Three points
+    px(ctx, cx + 1, cy, 2, 3, '#f0c040', s, x, y)
+    px(ctx, cx + 4, cy - 1, 2, 4, '#f0c040', s, x, y)
+    px(ctx, cx + 7, cy, 2, 3, '#f0c040', s, x, y)
+    // Gems (colored dots at each point)
+    px(ctx, cx + 1, cy + 1, 1, 1, '#f85149', s, x, y) // red gem left
+    px(ctx, cx + 4, cy, 1, 1, '#58a6ff', s, x, y) // blue gem center
+    px(ctx, cx + 8, cy + 1, 1, 1, '#3fb950', s, x, y) // green gem right
+    // Gold shimmer on frame
+    if (frame % 4 < 2) {
+      px(ctx, cx + 2, cy + 3, 1, 1, '#ffffaa', s, x, y)
+    }
+  } else if (hat === 'sunglasses') {
+    // Dark rectangle across eyes area
+    const sx = 10
+    const sy = 9 // eye level
+    // Frame
+    px(ctx, sx, sy, 14, 3, '#1a1a2e', s, x, y)
+    // Bridge
+    px(ctx, sx + 5, sy, 4, 1, '#2d2d2d', s, x, y)
+    // Lens shine
+    if (frame % 6 < 3) {
+      px(ctx, sx + 1, sy, 1, 1, '#ffffff', s, x, y)
+      px(ctx, sx + 9, sy, 1, 1, '#ffffff', s, x, y)
+    }
+    // Earpieces
+    px(ctx, sx - 1, sy + 1, 1, 2, '#1a1a2e', s, x, y)
+    px(ctx, sx + 14, sy + 1, 1, 2, '#1a1a2e', s, x, y)
+  } else if (hat === 'tophat') {
+    // Black tall rectangle above head, 1px brim
+    const tx = headCenterX - 5
+    const ty = headTopY - 9
+    // Hat body
+    px(ctx, tx + 1, ty, 8, 7, '#1a1a2e', s, x, y)
+    // Highlight stripe
+    px(ctx, tx + 1, ty + 4, 8, 1, '#6B5B95', s, x, y)
+    // Brim (wider)
+    px(ctx, tx - 1, ty + 7, 12, 2, '#1a1a2e', s, x, y)
+    // Top highlight
+    px(ctx, tx + 2, ty, 6, 1, '#2d2d2d', s, x, y)
+  } else if (hat === 'hardhat') {
+    // Yellow dome on top of head
+    const hx = headCenterX - 6
+    const hy = headTopY - 4
+    // Dome shape
+    px(ctx, hx + 2, hy, 8, 1, '#d29922', s, x, y)
+    px(ctx, hx + 1, hy + 1, 10, 1, '#f0c040', s, x, y)
+    px(ctx, hx, hy + 2, 12, 2, '#f0c040', s, x, y)
+    // Brim
+    px(ctx, hx - 1, hy + 4, 14, 1, '#d29922', s, x, y)
+    // Highlight
+    px(ctx, hx + 3, hy, 4, 1, '#ffffaa', s, x, y)
+  } else if (hat === 'party') {
+    // Triangular cone with stripes and pom-pom
+    const px0 = headCenterX
+    const py0 = headTopY - 8
+    // Cone (triangle approximation, narrow at top)
+    px(ctx, px0, py0, 1, 1, '#f85149', s, x, y) // tip
+    px(ctx, px0 - 1, py0 + 1, 3, 1, '#58a6ff', s, x, y)
+    px(ctx, px0 - 2, py0 + 2, 5, 1, '#f85149', s, x, y)
+    px(ctx, px0 - 2, py0 + 3, 5, 1, '#f0c040', s, x, y)
+    px(ctx, px0 - 3, py0 + 4, 7, 1, '#58a6ff', s, x, y)
+    px(ctx, px0 - 3, py0 + 5, 7, 1, '#f85149', s, x, y)
+    px(ctx, px0 - 4, py0 + 6, 9, 2, '#3fb950', s, x, y)
+    // Pom-pom on top
+    const pomColor = ['#f85149', '#f0c040', '#58a6ff', '#3fb950'][frame % 4]
+    px(ctx, px0 - 1, py0 - 2, 3, 2, pomColor, s, x, y)
+  } else if (hat === 'antenna') {
+    // Taller antenna with double ball
+    const ax = headCenterX
+    const ay = headTopY - 12
+    // Pole
+    px(ctx, ax, ay + 4, 1, 8, PAL.bodyDark, s, x, y)
+    // Bottom ball
+    px(ctx, ax - 1, ay + 3, 3, 2, '#58a6ff', s, x, y)
+    // Top ball (pulsing)
+    const pulse = (Math.sin(frame * 1.5) + 1) / 2
+    const ballColor = dimColor('#f85149', 0.5 + pulse * 0.5)
+    px(ctx, ax - 2, ay, 5, 3, ballColor, s, x, y)
+    // Specular
+    px(ctx, ax - 1, ay, 1, 1, '#ffffaa', s, x, y)
+  }
+}
+
+// ─── Pet Drawing ──────────────────────────────────────────────
+
+export type PetType = 'drone' | 'cat' | 'ghost' | 'orb'
+
+export interface PetState {
+  type: PetType
+  x: number
+  y: number
+  targetX: number
+  targetY: number
+  frame: number
+  mood: string
+}
+
+/**
+ * Draw a pet companion sprite (8x8 pixel art).
+ * Call AFTER drawRobot() and drawHat().
+ */
+export function drawPet(
+  ctx: CanvasRenderingContext2D,
+  pet: PetState,
+  scale: number,
+  frame: number,
+): void {
+  const s = Math.max(1, Math.floor(scale * 0.6))
+  const ox = Math.round(pet.x)
+  const oy = Math.round(pet.y)
+
+  if (pet.type === 'drone') {
+    drawDronePet(ctx, s, ox, oy, frame, pet.mood)
+  } else if (pet.type === 'cat') {
+    drawCatPet(ctx, s, ox, oy, frame, pet.mood)
+  } else if (pet.type === 'ghost') {
+    drawGhostPet(ctx, s, ox, oy, frame, pet.mood)
+  } else if (pet.type === 'orb') {
+    drawOrbPet(ctx, s, ox, oy, frame, pet.mood)
+  }
+}
+
+function drawDronePet(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, mood: string,
+): void {
+  // Small square body with propeller on top, single LED eye
+  const bob = Math.round(Math.sin(frame * 0.8) * 1)
+  const dy = bob
+
+  // Propeller (2px spinning line, alternates orientation)
+  if (frame % 2 === 0) {
+    px(ctx, 1, dy - 1, 6, 1, '#8b949e', s, ox, oy)
+  } else {
+    px(ctx, 3, dy - 2, 2, 2, '#8b949e', s, ox, oy)
+  }
+
+  // Body (6x4 square)
+  px(ctx, 1, dy + 0, 6, 4, '#30363d', s, ox, oy)
+  px(ctx, 2, dy + 1, 4, 2, '#161b22', s, ox, oy)
+
+  // LED eye (pulses)
+  const ledColor = mood === 'excited' ? '#f0c040' : '#3fb950'
+  const pulse = (Math.sin(frame * 1.2) + 1) / 2
+  px(ctx, 3, dy + 1, 2, 2, dimColor(ledColor, 0.5 + pulse * 0.5), s, ox, oy)
+
+  // Landing skids
+  px(ctx, 1, dy + 4, 2, 1, '#8b949e', s, ox, oy)
+  px(ctx, 5, dy + 4, 2, 1, '#8b949e', s, ox, oy)
+}
+
+function drawCatPet(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, mood: string,
+): void {
+  // Tiny cat face with ears and tail
+  const bob = mood === 'excited' ? Math.round(Math.sin(frame * 1.5) * 1) : 0
+  const dy = bob
+
+  // Ears (triangles)
+  px(ctx, 0, dy + 0, 2, 1, '#cd7f32', s, ox, oy) // left ear
+  px(ctx, 6, dy + 0, 2, 1, '#cd7f32', s, ox, oy) // right ear
+  px(ctx, 0, dy + 1, 1, 1, '#e8a050', s, ox, oy) // inner left
+  px(ctx, 7, dy + 1, 1, 1, '#e8a050', s, ox, oy) // inner right
+
+  // Head (6x4)
+  px(ctx, 1, dy + 1, 6, 4, '#cd7f32', s, ox, oy)
+  px(ctx, 2, dy + 2, 4, 2, '#e8a050', s, ox, oy) // face inner
+
+  // Eyes (blink occasionally)
+  const blink = frame % 20 === 0
+  if (!blink) {
+    px(ctx, 2, dy + 2, 1, 1, '#1a1a2e', s, ox, oy) // left eye
+    px(ctx, 5, dy + 2, 1, 1, '#1a1a2e', s, ox, oy) // right eye
+  } else {
+    px(ctx, 2, dy + 2, 1, 1, '#cd7f32', s, ox, oy)
+    px(ctx, 5, dy + 2, 1, 1, '#cd7f32', s, ox, oy)
+  }
+
+  // Nose
+  px(ctx, 3, dy + 3, 2, 1, '#f85149', s, ox, oy)
+
+  // Body (small)
+  px(ctx, 2, dy + 5, 4, 2, '#cd7f32', s, ox, oy)
+
+  // Tail (animated wave)
+  const tailSwing = Math.round(Math.sin(frame * 0.5) * 1)
+  px(ctx, 6 + tailSwing, dy + 4, 1, 1, '#cd7f32', s, ox, oy)
+  px(ctx, 7 + tailSwing, dy + 3, 1, 1, '#cd7f32', s, ox, oy)
+}
+
+function drawGhostPet(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, mood: string,
+): void {
+  // Small floating blob with eyes, bobs up and down
+  const bob = Math.round(Math.sin(frame * 0.6) * 2)
+  const dy = bob
+
+  // Ghost body (rounded blob)
+  px(ctx, 2, dy + 0, 4, 1, 'rgba(200,200,255,0.7)', s, ox, oy) // top
+  px(ctx, 1, dy + 1, 6, 4, 'rgba(200,200,255,0.6)', s, ox, oy) // body
+  // Wavy bottom
+  const wave = frame % 4
+  px(ctx, 1, dy + 5, 2, 1, 'rgba(200,200,255,0.5)', s, ox, oy)
+  if (wave < 2) px(ctx, 3, dy + 6, 2, 1, 'rgba(200,200,255,0.4)', s, ox, oy)
+  px(ctx, 5, dy + 5, 2, 1, 'rgba(200,200,255,0.5)', s, ox, oy)
+  if (wave >= 2) px(ctx, 3, dy + 5, 2, 1, 'rgba(200,200,255,0.4)', s, ox, oy)
+
+  // Eyes
+  px(ctx, 2, dy + 2, 1, 1, '#1a1a2e', s, ox, oy) // left
+  px(ctx, 5, dy + 2, 1, 1, '#1a1a2e', s, ox, oy) // right
+
+  // Mood: hides behind robot during storm → smaller/transparent
+  if (mood === 'hiding') {
+    ctx.globalAlpha = 0.4
+    px(ctx, 2, dy + 3, 4, 2, 'rgba(200,200,255,0.3)', s, ox, oy)
+    ctx.globalAlpha = 1
+  }
+}
+
+function drawOrbPet(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, _mood: string,
+): void {
+  // Glowing circle that pulses, leaves a trail
+  const pulse = (Math.sin(frame * 0.8) + 1) / 2
+  const colors = ['#bc8cff', '#58a6ff', '#3fb950', '#f0c040']
+  const color = colors[Math.floor(frame / 6) % colors.length]
+
+  // Trail (3 fading dots behind)
+  for (let i = 1; i <= 3; i++) {
+    const trailX = -i * 3
+    const alpha = 0.3 - i * 0.08
+    ctx.fillStyle = `rgba(188, 140, 255, ${alpha})`
+    ctx.beginPath()
+    ctx.arc(ox + trailX * s / 2, oy + 3 * s, (3 - i) * s / 2, 0, Math.PI * 2)
+    ctx.fill()
+  }
+
+  // Core orb
+  const radius = (3 + pulse) * s / 2
+  ctx.fillStyle = color
+  ctx.beginPath()
+  ctx.arc(ox + 3 * s, oy + 3 * s, radius, 0, Math.PI * 2)
+  ctx.fill()
+
+  // Inner glow
+  ctx.fillStyle = dimColor(color, 1.3) || '#ffffff'
+  ctx.beginPath()
+  ctx.arc(ox + 3 * s, oy + 3 * s, radius * 0.5, 0, Math.PI * 2)
+  ctx.fill()
+
+  // Outer glow ring
+  ctx.strokeStyle = `rgba(188, 140, 255, ${0.2 + pulse * 0.3})`
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.arc(ox + 3 * s, oy + 3 * s, radius + 2 * s / 2, 0, Math.PI * 2)
+  ctx.stroke()
+}

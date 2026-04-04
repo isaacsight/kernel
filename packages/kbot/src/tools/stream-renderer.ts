@@ -12,8 +12,8 @@ import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createCanvas } from 'canvas'
 import WebSocket from 'ws'
-import { drawRobot, drawMoodParticles } from './sprite-engine.js'
-import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
+import { drawRobot, drawMoodParticles, drawHat, drawPet, type HatType, type PetType, type PetState } from './sprite-engine.js'
+import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -721,7 +721,7 @@ function getProactiveLine(): string | null {
 
 interface WorldState {
   weather: 'clear' | 'rain' | 'snow' | 'storm' | 'stars' | 'sunrise'
-  items: Array<{ name: string; x: number; y: number; emoji: string }>
+  items: PhysicsItem[]
   visitors: string[]           // names floating around
   bgColor: string              // custom background override
   ground: string               // ground type: 'grass', 'space', 'ocean', 'city', 'lava'
@@ -739,6 +739,37 @@ let world: WorldState = {
   timeOfDay: 'night',
   particles: [],
   events: [],
+}
+
+// ─── PRIORITY 3: Physics System ───────────────────────────────
+
+const GROUND_LEVEL = 470
+
+function tickPhysics(): void {
+  for (const item of world.items) {
+    if (!item.grounded) {
+      // Gravity
+      item.vy += 0.5
+      // Apply velocity
+      item.x += item.vx
+      item.y += item.vy
+      // Ground collision
+      if (item.y > GROUND_LEVEL) {
+        item.y = GROUND_LEVEL
+        if (Math.abs(item.vy) < 1.5) {
+          item.vy = 0
+          item.grounded = true
+        } else {
+          item.vy = -item.vy * 0.3 // bounce
+        }
+      }
+      // Friction
+      item.vx *= 0.95
+    }
+    // Bounds
+    if (item.x < 10) { item.x = 10; item.vx = Math.abs(item.vx) * 0.5 }
+    if (item.x > 550) { item.x = 550; item.vx = -Math.abs(item.vx) * 0.5 }
+  }
 }
 
 function getWorldBg(): string {
@@ -762,6 +793,265 @@ function getGroundColor(): string {
   }
 }
 
+// ─── PRIORITY 1: Environment Art (Background Scenes) ────────
+
+function drawBackground(ctx: any, frame: number): void {
+  const dividerX = 580
+
+  if (world.ground === 'grass') {
+    // Dark green gradient sky (darker at top)
+    const skyGrad = ctx.createLinearGradient(0, 60, 0, 490)
+    skyGrad.addColorStop(0, world.timeOfDay === 'night' ? '#0a1a0a' : '#1a3a1a')
+    skyGrad.addColorStop(1, world.timeOfDay === 'night' ? '#122e12' : '#2a5a2a')
+    ctx.fillStyle = skyGrad
+    ctx.fillRect(0, 60, dividerX, 430)
+
+    // Rolling hill silhouettes (2-3 overlapping sine waves)
+    const hillColors = ['#0d2d0d', '#153a15', '#1a4d1a']
+    for (let h = 0; h < 3; h++) {
+      ctx.fillStyle = hillColors[h]
+      ctx.beginPath()
+      ctx.moveTo(0, 490)
+      for (let x = 0; x <= dividerX; x += 2) {
+        const y1 = Math.sin((x + h * 80) * 0.008 + h * 1.2) * (20 + h * 10)
+        const y2 = Math.sin((x + h * 40) * 0.015 + h * 0.5) * (10 + h * 5)
+        const y = 460 - h * 15 + y1 + y2
+        ctx.lineTo(x, y)
+      }
+      ctx.lineTo(dividerX, 490)
+      ctx.closePath()
+      ctx.fill()
+    }
+
+    // Tiny pixel flowers (seeded by frame div to avoid flicker)
+    const flowerSeed = Math.floor(frame / 60) // change every 10 seconds
+    for (let i = 0; i < 12; i++) {
+      const seed = (flowerSeed * 7 + i * 137) % 1000
+      const fx = (seed * 3) % dividerX
+      const fy = 470 + (seed * 7) % 20
+      const colors = ['#ff6ec7', '#f0c040', '#f85149', '#58a6ff']
+      ctx.fillStyle = colors[i % colors.length]
+      ctx.fillRect(fx, fy, 3, 3)
+      ctx.fillStyle = '#3fb950'
+      ctx.fillRect(fx + 1, fy + 3, 1, 2) // stem
+    }
+
+    // Floating dust motes
+    for (let i = 0; i < 8; i++) {
+      const dx = (frame * 0.3 + i * 70) % dividerX
+      const dy = 100 + Math.sin(frame * 0.05 + i * 2) * 150 + i * 30
+      ctx.fillStyle = `rgba(200, 220, 180, ${0.15 + Math.sin(frame * 0.1 + i) * 0.1})`
+      ctx.fillRect(dx, dy, 2, 2)
+    }
+  } else if (world.ground === 'space') {
+    // Deep dark blue-black gradient
+    const spaceGrad = ctx.createLinearGradient(0, 60, 0, 490)
+    spaceGrad.addColorStop(0, '#020210')
+    spaceGrad.addColorStop(0.5, '#050520')
+    spaceGrad.addColorStop(1, '#0a0a30')
+    ctx.fillStyle = spaceGrad
+    ctx.fillRect(0, 60, dividerX, 430)
+
+    // Twinkling stars (30+ dots with sine-based brightness)
+    for (let i = 0; i < 40; i++) {
+      const seed = (i * 97 + 31) % 1000
+      const sx = (seed * 3) % dividerX
+      const sy = 70 + (seed * 7) % 380
+      const brightness = 0.3 + Math.sin(frame * (0.1 + (i % 5) * 0.05) + i * 1.3) * 0.4 + 0.3
+      const size = i < 5 ? 3 : i < 15 ? 2 : 1
+      ctx.fillStyle = `rgba(255, 255, ${200 + (i % 55)}, ${brightness})`
+      ctx.fillRect(sx, sy, size, size)
+    }
+
+    // Distant planet / moon
+    const moonX = 120
+    const moonY = 180
+    ctx.fillStyle = '#2a2a6e'
+    ctx.beginPath()
+    ctx.arc(moonX, moonY, 20, 0, Math.PI * 2)
+    ctx.fill()
+    // Shading (crescent)
+    ctx.fillStyle = '#1a1a4e'
+    ctx.beginPath()
+    ctx.arc(moonX + 5, moonY - 2, 18, 0, Math.PI * 2)
+    ctx.fill()
+    // Crater
+    ctx.fillStyle = '#222260'
+    ctx.beginPath()
+    ctx.arc(moonX - 5, moonY + 3, 4, 0, Math.PI * 2)
+    ctx.fill()
+
+    // Nebula effect (large semi-transparent colored blobs)
+    const nebulaPhase = frame * 0.005
+    ctx.fillStyle = `rgba(100, 50, 150, ${0.04 + Math.sin(nebulaPhase) * 0.02})`
+    ctx.beginPath()
+    ctx.arc(350 + Math.sin(nebulaPhase) * 20, 250, 80, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = `rgba(50, 100, 150, ${0.03 + Math.cos(nebulaPhase * 0.7) * 0.02})`
+    ctx.beginPath()
+    ctx.arc(200 + Math.cos(nebulaPhase * 0.5) * 15, 350, 60, 0, Math.PI * 2)
+    ctx.fill()
+  } else if (world.ground === 'ocean') {
+    // Deep blue gradient
+    const oceanGrad = ctx.createLinearGradient(0, 60, 0, 490)
+    oceanGrad.addColorStop(0, '#0a1a3e')
+    oceanGrad.addColorStop(0.6, '#0a2d5e')
+    oceanGrad.addColorStop(1, '#0a3d6e')
+    ctx.fillStyle = oceanGrad
+    ctx.fillRect(0, 60, dividerX, 430)
+
+    // Animated wave pattern at bottom
+    ctx.fillStyle = '#0d4a7a'
+    ctx.beginPath()
+    ctx.moveTo(0, 490)
+    for (let x = 0; x <= dividerX; x += 2) {
+      const y = 460 + Math.sin((x + frame * 3) * 0.02) * 8 + Math.sin((x + frame * 5) * 0.04) * 4
+      ctx.lineTo(x, y)
+    }
+    ctx.lineTo(dividerX, 490)
+    ctx.closePath()
+    ctx.fill()
+
+    // Second wave layer
+    ctx.fillStyle = '#0a5a8e'
+    ctx.beginPath()
+    ctx.moveTo(0, 490)
+    for (let x = 0; x <= dividerX; x += 2) {
+      const y = 470 + Math.sin((x + frame * 4) * 0.025 + 2) * 6 + Math.sin((x + frame * 2) * 0.05) * 3
+      ctx.lineTo(x, y)
+    }
+    ctx.lineTo(dividerX, 490)
+    ctx.closePath()
+    ctx.fill()
+
+    // Bubbles rising from bottom
+    for (let i = 0; i < 6; i++) {
+      const bx = (i * 90 + 30) % dividerX
+      const by = 490 - ((frame * 1.5 + i * 60) % 400)
+      const bsize = 2 + (i % 3)
+      ctx.strokeStyle = `rgba(100, 180, 255, ${0.3 + Math.sin(frame * 0.1 + i) * 0.15})`
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.arc(bx, by, bsize, 0, Math.PI * 2)
+      ctx.stroke()
+    }
+
+    // Distant rocks silhouetted on horizon
+    ctx.fillStyle = '#061e3a'
+    ctx.fillRect(50, 440, 15, 25)
+    ctx.fillRect(45, 448, 25, 17)
+    ctx.fillRect(400, 435, 20, 30)
+    ctx.fillRect(395, 445, 30, 20)
+  } else if (world.ground === 'city') {
+    // Dark sky with warm glow at horizon
+    const cityGrad = ctx.createLinearGradient(0, 60, 0, 490)
+    cityGrad.addColorStop(0, '#0a0a15')
+    cityGrad.addColorStop(0.7, '#1a1520')
+    cityGrad.addColorStop(1, '#3d2520')
+    ctx.fillStyle = cityGrad
+    ctx.fillRect(0, 60, dividerX, 430)
+
+    // Distant city glow at horizon
+    const glowGrad = ctx.createLinearGradient(0, 420, 0, 490)
+    glowGrad.addColorStop(0, 'rgba(200, 120, 40, 0.15)')
+    glowGrad.addColorStop(1, 'rgba(200, 120, 40, 0)')
+    ctx.fillStyle = glowGrad
+    ctx.fillRect(0, 420, dividerX, 70)
+
+    // Buildings silhouetted in background
+    const buildings = [
+      { x: 20, w: 40, h: 120 }, { x: 70, w: 30, h: 80 }, { x: 110, w: 50, h: 150 },
+      { x: 170, w: 35, h: 100 }, { x: 220, w: 45, h: 130 }, { x: 280, w: 30, h: 90 },
+      { x: 320, w: 55, h: 170 }, { x: 390, w: 40, h: 110 }, { x: 440, w: 35, h: 85 },
+      { x: 490, w: 50, h: 140 },
+    ]
+    for (const b of buildings) {
+      ctx.fillStyle = '#1a1a25'
+      ctx.fillRect(b.x, 490 - b.h, b.w, b.h)
+      // Lit windows (small yellow/white dots)
+      const windowSeed = Math.floor(frame / 30) // change every 5 seconds
+      for (let wy = 490 - b.h + 8; wy < 485; wy += 12) {
+        for (let wx = b.x + 4; wx < b.x + b.w - 4; wx += 8) {
+          const lit = ((wx * 7 + wy * 13 + windowSeed) % 5) < 2
+          if (lit) {
+            ctx.fillStyle = Math.random() > 0.3 ? '#f0c040' : '#ffffff'
+            ctx.fillRect(wx, wy, 4, 4)
+          }
+        }
+      }
+    }
+
+    // Occasional car headlights moving across bottom
+    const carX = (frame * 3) % (dividerX + 100) - 50
+    ctx.fillStyle = '#f0c040'
+    ctx.fillRect(carX, 482, 6, 3)
+    ctx.fillRect(carX + 20, 482, 6, 3)
+    // Second car going other way
+    const car2X = dividerX - ((frame * 2 + 200) % (dividerX + 100)) + 50
+    ctx.fillStyle = '#f85149'
+    ctx.fillRect(car2X, 485, 5, 2)
+  } else if (world.ground === 'lava') {
+    // Dark red/orange gradient sky
+    const lavaGrad = ctx.createLinearGradient(0, 60, 0, 490)
+    lavaGrad.addColorStop(0, '#1a0800')
+    lavaGrad.addColorStop(0.5, '#3d1500')
+    lavaGrad.addColorStop(1, '#5a2000')
+    ctx.fillStyle = lavaGrad
+    ctx.fillRect(0, 60, dividerX, 430)
+
+    // Lava flow at bottom (animated flowing pattern)
+    for (let layer = 0; layer < 3; layer++) {
+      const layerY = 455 + layer * 12
+      ctx.beginPath()
+      ctx.moveTo(0, 490)
+      for (let x = 0; x <= dividerX; x += 2) {
+        const y = layerY + Math.sin((x + frame * (4 - layer)) * 0.03 + layer * 1.5) * 5
+        ctx.lineTo(x, y)
+      }
+      ctx.lineTo(dividerX, 490)
+      ctx.closePath()
+      const lavaColors = ['#ff4400', '#ff6600', '#f0c040']
+      ctx.fillStyle = lavaColors[layer]
+      ctx.fill()
+    }
+
+    // Ember particles rising from bottom
+    for (let i = 0; i < 10; i++) {
+      const ex = (i * 55 + 20) % dividerX
+      const ey = 490 - ((frame * 2 + i * 40) % 350)
+      const drift = Math.sin(frame * 0.05 + i * 1.7) * 15
+      ctx.fillStyle = `rgba(255, ${130 + (i % 3) * 40}, 0, ${0.6 - ((frame * 2 + i * 40) % 350) / 700})`
+      ctx.fillRect(ex + drift, ey, 2 + (i % 2), 2 + (i % 2))
+    }
+
+    // Rock formations silhouetted
+    ctx.fillStyle = '#1a0800'
+    // Left rock formation
+    ctx.beginPath()
+    ctx.moveTo(30, 490)
+    ctx.lineTo(40, 420)
+    ctx.lineTo(50, 430)
+    ctx.lineTo(65, 400)
+    ctx.lineTo(80, 490)
+    ctx.closePath()
+    ctx.fill()
+    // Right rock formation
+    ctx.beginPath()
+    ctx.moveTo(450, 490)
+    ctx.lineTo(460, 410)
+    ctx.lineTo(475, 425)
+    ctx.lineTo(490, 395)
+    ctx.lineTo(510, 430)
+    ctx.lineTo(520, 490)
+    ctx.closePath()
+    ctx.fill()
+  }
+
+  // Ground floor fill (on top of biome art)
+  ctx.fillStyle = getGroundColor()
+  ctx.fillRect(0, 490, dividerX, HEIGHT - 490)
+}
+
 function updateParticles(): void {
   // Generate weather particles
   if (world.weather === 'rain') {
@@ -783,6 +1073,7 @@ function updateParticles(): void {
     // Lightning flash (random)
     if (Math.random() < 0.02) {
       world.events.push('lightning')
+      charState.screenShake = Math.max(charState.screenShake, 4)
       setTimeout(() => { world.events = world.events.filter(e => e !== 'lightning') }, 200)
     }
   }
@@ -800,12 +1091,12 @@ function parseWorldCommand(text: string): string | null {
   const t = text.toLowerCase().trim()
 
   // Weather
-  if (t.includes('make it rain') || t === '!rain') { world.weather = 'rain'; world.particles = []; return 'Rain started!' }
-  if (t.includes('make it snow') || t === '!snow') { world.weather = 'snow'; world.particles = []; return 'Snow falling!' }
-  if (t.includes('storm') || t === '!storm') { world.weather = 'storm'; world.particles = []; return 'Storm incoming!' }
-  if (t.includes('clear sky') || t.includes('stop rain') || t === '!clear') { world.weather = 'clear'; world.particles = []; return 'Skies cleared!' }
-  if (t.includes('stars') || t === '!stars') { world.weather = 'stars'; world.particles = []; return 'Stars appeared!' }
-  if (t.includes('sunrise') || t === '!sunrise') { world.weather = 'sunrise'; world.timeOfDay = 'dawn'; world.particles = []; return 'The sun is rising!' }
+  if (t.includes('make it rain') || t === '!rain') { world.weather = 'rain'; world.particles = []; updateQuestProgress(intelligence.progression, 'weather'); return 'Rain started!' }
+  if (t.includes('make it snow') || t === '!snow') { world.weather = 'snow'; world.particles = []; updateQuestProgress(intelligence.progression, 'weather'); return 'Snow falling!' }
+  if (t.includes('storm') || t === '!storm') { world.weather = 'storm'; world.particles = []; updateQuestProgress(intelligence.progression, 'weather'); return 'Storm incoming!' }
+  if (t.includes('clear sky') || t.includes('stop rain') || t === '!clear') { world.weather = 'clear'; world.particles = []; updateQuestProgress(intelligence.progression, 'weather'); return 'Skies cleared!' }
+  if (t.includes('stars') || t === '!stars') { world.weather = 'stars'; world.particles = []; updateQuestProgress(intelligence.progression, 'weather'); return 'Stars appeared!' }
+  if (t.includes('sunrise') || t === '!sunrise') { world.weather = 'sunrise'; world.timeOfDay = 'dawn'; world.particles = []; updateQuestProgress(intelligence.progression, 'weather'); return 'The sun is rising!' }
 
   // Time of day
   if (t === '!night' || t.includes('make it night')) { world.timeOfDay = 'night'; return 'Nighttime!' }
@@ -866,8 +1157,16 @@ function parseWorldCommand(text: string): string | null {
     const winner = roll1 >= roll2 ? 'challenger' : opponent
     charState.mood = 'excited'
     setTimeout(() => { charState.mood = 'idle' }, 8000)
-    if (roll1 === roll2) return `DRAW! Both rolled ${roll1}! The universe refuses to pick a side.`
-    if (roll1 > roll2) return `Challenger rolls ${roll1} vs ${opponent}'s ${roll2}. Victory! The crowd goes wild!`
+    charState.screenShake = 5
+    if (roll1 === roll2) {
+      spawnFloatingText('DRAW!', 200, 300, '#f0c040')
+      return `DRAW! Both rolled ${roll1}! The universe refuses to pick a side.`
+    }
+    if (roll1 > roll2) {
+      spawnFloatingText('VICTORY!', 200, 300, '#3fb950')
+      return `Challenger rolls ${roll1} vs ${opponent}'s ${roll2}. Victory! The crowd goes wild!`
+    }
+    spawnFloatingText(`${opponent} WINS!`, 200, 300, '#f85149')
     return `Challenger rolls ${roll1} vs ${opponent}'s ${roll2}. ${opponent} wins! Better luck next time.`
   }
 
@@ -889,7 +1188,7 @@ function parseWorldCommand(text: string): string | null {
     return `TRIVIA TIME! ${trivia.q} (First correct answer gets 10 XP!)`
   }
 
-  // Items
+  // Items (now physics-enabled)
   if (t.startsWith('!add ') || t.startsWith('!place ') || t.startsWith('!spawn ')) {
     const itemName = t.replace(/^!(add|place|spawn)\s+/, '').trim()
     if (itemName) {
@@ -904,12 +1203,83 @@ function parseWorldCommand(text: string): string | null {
       world.items.push({
         name: itemName,
         x: 60 + Math.random() * 400,
-        y: 420 + Math.random() * 60,
+        y: 100 + Math.random() * 50, // spawn from above (will fall)
         emoji: icon,
+        vx: (Math.random() - 0.5) * 2,
+        vy: 0,
+        grounded: false,
+        mass: 1,
       })
       if (world.items.length > 15) world.items.shift()
       return `Spawned a ${itemName}!`
     }
+  }
+
+  // !kick — kick nearest item
+  if (t === '!kick') {
+    if (world.items.length === 0) return 'Nothing to kick!'
+    const robotCenterX = charState.robotX + 160
+    let nearest: PhysicsItem | null = null
+    let nearestDist = Infinity
+    for (const item of world.items) {
+      const dist = Math.abs(item.x - robotCenterX)
+      if (dist < nearestDist) {
+        nearestDist = dist
+        nearest = item
+      }
+    }
+    if (nearest && nearestDist < 200) {
+      const dir = charState.robotDirection === 'left' ? -1 : 1
+      nearest.vx = 8 * dir
+      nearest.vy = -4
+      nearest.grounded = false
+      charState.mood = 'excited'
+      setTimeout(() => { charState.mood = 'idle' }, 3000)
+      return `Kicked the ${nearest.name}!`
+    }
+    return 'Nothing close enough to kick!'
+  }
+
+  // PRIORITY 6: Hat commands
+  if (t.startsWith('!hat ')) {
+    const hatName = t.slice(5).trim()
+    const validHats: HatType[] = ['none', 'crown', 'antenna', 'sunglasses', 'tophat', 'hardhat', 'party']
+    if (hatName === 'off') {
+      charState.hat = 'none'
+      return 'Hat removed!'
+    }
+    if (validHats.includes(hatName as HatType)) {
+      charState.hat = hatName as HatType
+      spawnFloatingText(`HAT: ${hatName}!`, 200, 150, '#f0c040')
+      return `Wearing ${hatName}!`
+    }
+    return `Unknown hat. Try: ${validHats.filter(h => h !== 'none').join(', ')}`
+  }
+
+  // PRIORITY 4: Pet commands
+  if (t.startsWith('!pet ')) {
+    const petArg = t.slice(5).trim()
+    if (petArg === 'off') {
+      charState.pet = null
+      return 'Pet dismissed!'
+    }
+    const validPets: PetType[] = ['drone', 'cat', 'ghost', 'orb']
+    if (validPets.includes(petArg as PetType)) {
+      const robotCX = charState.robotX + 160
+      const robotCY = 200
+      charState.pet = {
+        type: petArg as PetType,
+        x: robotCX + 60,
+        y: robotCY - 40,
+        targetX: robotCX + 60,
+        targetY: robotCY - 40,
+        frame: 0,
+        mood: 'idle',
+      }
+      spawnFloatingText(`PET: ${petArg}!`, 200, 150, '#bc8cff')
+      return `A ${petArg} companion appears!`
+    }
+    return `Unknown pet. Try: ${validPets.join(', ')}, or "off"`
   }
 
   // Clear items
@@ -972,6 +1342,16 @@ function learnFromMessage(mem: StreamMemory, username: string, text: string, pla
   const t = text.toLowerCase().trim()
   if (t.startsWith('!') && !t.startsWith('!help')) xpGain += 2  // command bonus (total 3 with base 1)
   mem.users[username].xp += xpGain
+  // Floating text for XP gains > 1
+  if (xpGain > 1) {
+    spawnFloatingText(`+${xpGain} XP`, 420 + Math.random() * 100, 100 + Math.random() * 50, '#f0c040', 24)
+  }
+  // Level milestones
+  const totalXp = mem.users[username].xp
+  if (totalXp > 0 && totalXp % 50 === 0) {
+    spawnFloatingText('LEVEL UP!', 300, 200, '#bc8cff', 48)
+    charState.screenShake = 3
+  }
 
   // Extract topics (simple keyword extraction)
   const keywords = ['music', 'code', 'coding', 'ai', 'game', 'gaming', 'art', 'crypto', 'bitcoin',
@@ -998,6 +1378,30 @@ function learnFromMessage(mem: StreamMemory, username: string, text: string, pla
 
 // ─── Shared State ──────────────────────────────────────────────
 
+// ─── Floating Text Particles ──────────────────────────────────
+
+interface FloatingText {
+  text: string
+  x: number
+  y: number
+  color: string
+  frame: number
+  maxFrames: number
+}
+
+// ─── Physics Items ────────────────────────────────────────────
+
+interface PhysicsItem {
+  name: string
+  emoji: string
+  x: number
+  y: number
+  vx: number
+  vy: number
+  grounded: boolean
+  mass: number
+}
+
 interface StreamCharState {
   mood: string
   speech: string
@@ -1016,6 +1420,17 @@ interface StreamCharState {
   robotTargetX: number         // target X to walk toward
   robotDirection: 'left' | 'right' | 'idle'
   walkPhase: number            // walking animation phase counter
+  // PRIORITY 2: Post-Processing
+  screenShake: number          // frames remaining
+  floatingTexts: FloatingText[]
+  // PRIORITY 4: Pet
+  pet: PetState | null
+  // PRIORITY 6: Hat
+  hat: HatType
+}
+
+function spawnFloatingText(text: string, x: number, y: number, color: string, maxFrames: number = 36): void {
+  charState.floatingTexts.push({ text, x, y, color, frame: 0, maxFrames })
 }
 
 let charState: StreamCharState = {
@@ -1035,6 +1450,10 @@ let charState: StreamCharState = {
   robotTargetX: 120,
   robotDirection: 'idle',
   walkPhase: 0,
+  screenShake: 0,
+  floatingTexts: [],
+  pet: null,
+  hat: 'none',
 }
 
 let ffmpegProc: ChildProcess | null = null
@@ -1153,16 +1572,71 @@ function renderFrame(): Buffer {
   // Tick intelligence systems
   tickIntelligence(intelligence, animFrame)
 
+  // Tick mini-game
+  const gameTickResult = tickMiniGame(intelligence.miniGame, animFrame)
+  if (gameTickResult) {
+    if (gameTickResult.screenShake) charState.screenShake = Math.max(charState.screenShake, gameTickResult.screenShake)
+    if (gameTickResult.floatingText) {
+      const ft = gameTickResult.floatingText
+      spawnFloatingText(ft.text, ft.x, ft.y, ft.color)
+    }
+    if (gameTickResult.speech) {
+      charState.speech = gameTickResult.speech
+      charState.mood = 'talking'
+      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+    }
+  }
+
+  // Tick progression
+  const progResult = tickProgression(intelligence.progression, animFrame)
+  if (progResult) {
+    if (progResult.completed) {
+      spawnFloatingText(`QUEST COMPLETE! +${progResult.completed.reward} XP`, 200, 300, '#f0c040', 48)
+      charState.screenShake = 4
+      charState.mood = 'excited'
+      setTimeout(() => { charState.mood = 'idle' }, 5000)
+    }
+    if (progResult.levelUp) {
+      spawnFloatingText('LEVEL UP!', 250, 250, '#bc8cff', 60)
+      charState.screenShake = 6
+    }
+  }
+
+  // Tick random events
+  const eventResult = tickRandomEvent(intelligence.randomEvent, animFrame)
+  if (eventResult) {
+    if (eventResult.screenShake) charState.screenShake = Math.max(charState.screenShake, eventResult.screenShake)
+    if (eventResult.floatingText) {
+      const ft = eventResult.floatingText
+      spawnFloatingText(ft.text, ft.x, ft.y, ft.color)
+    }
+    if (eventResult.speech) {
+      charState.speech = eventResult.speech
+      charState.mood = 'talking'
+      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+    }
+  }
+
   // Update world
   updateParticles()
+  tickPhysics()
 
-  // Background (world-aware)
+  // PRIORITY 2: Screen shake offset
+  let shakeOffX = 0, shakeOffY = 0
+  if (charState.screenShake > 0) {
+    shakeOffX = Math.round((Math.random() - 0.5) * 6)
+    shakeOffY = Math.round((Math.random() - 0.5) * 4)
+    charState.screenShake--
+  }
+  ctx.save()
+  ctx.translate(shakeOffX, shakeOffY)
+
+  // Background (world-aware) — PRIORITY 1: Full scene art
   ctx.fillStyle = world.events.includes('lightning') ? '#ffffff' : getWorldBg()
   ctx.fillRect(0, 0, WIDTH, HEIGHT)
 
-  // Ground
-  ctx.fillStyle = getGroundColor()
-  ctx.fillRect(0, 490, 570, HEIGHT - 490)
+  // Draw full animated background scene
+  drawBackground(ctx as any, animFrame)
 
   // (#17) Weather particles as rectangles
   for (const p of world.particles) {
@@ -1184,7 +1658,7 @@ function renderFrame(): Buffer {
     }
   }
 
-  // World items
+  // World items (physics-enabled)
   ctx.fillStyle = COLORS.text
   ctx.font = '18px "Courier New", monospace'
   for (const item of world.items) {
@@ -1302,6 +1776,33 @@ function renderFrame(): Buffer {
   drawRobot(ctx, robotX, robotY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase)
   drawMoodParticles(ctx, robotX, robotY, robotScale, charState.mood, animFrame)
 
+  // PRIORITY 6: Draw hat AFTER robot so it layers on top
+  if (charState.hat !== 'none') {
+    drawHat(ctx, robotX, robotY, robotScale, charState.hat, animFrame)
+  }
+
+  // PRIORITY 4: Update and draw pet
+  if (charState.pet) {
+    const pet = charState.pet
+    pet.frame = animFrame
+    // Pet follows robot with slight delay (lerp toward robot position + offset)
+    pet.targetX = robotX + 16 * robotScale + 60
+    pet.targetY = robotY + 10 * robotScale - 40
+    pet.x += (pet.targetX - pet.x) * 0.12
+    pet.y += (pet.targetY - pet.y) * 0.12
+    // Pet mood matches some robot states
+    if (charState.mood === 'dancing') pet.mood = 'excited'
+    else if (world.weather === 'storm') pet.mood = 'hiding'
+    else pet.mood = 'idle'
+    drawPet(ctx, pet, robotScale, animFrame)
+  }
+
+  // PRIORITY 5: Mini-game overlay
+  drawMiniGameOverlay(ctx as any, intelligence.miniGame, animFrame)
+
+  // PRIORITY 8: Random event overlay
+  drawRandomEvent(ctx as any, intelligence.randomEvent, animFrame, dividerX, HEIGHT)
+
   // (#10) Stats overlay on right side of robot area
   ctx.fillStyle = COLORS.textDim
   ctx.font = '14px "Courier New", monospace'
@@ -1335,6 +1836,9 @@ function renderFrame(): Buffer {
   const brainPanelW = 170
   const brainPanelH = 110
   drawBrainPanel(ctx as any, intelligence.brain, brainPanelX, brainPanelY, brainPanelW, brainPanelH)
+
+  // ── PRIORITY 7: Quest Panel (below brain panel) ──
+  drawQuestPanel(ctx as any, intelligence.progression, brainPanelX - 10, brainPanelY + brainPanelH + 8)
 
   // ── Evolution Code Overlay (when actively building) ──
   if (intelligence.evolution.active && intelligence.evolution.activeProposal && intelligence.evolution.buildPhase !== 'idle') {
@@ -1527,11 +2031,33 @@ function renderFrame(): Buffer {
   ctx.font = 'bold 14px "Courier New", monospace'
   ctx.fillText('kernel.chat', WIDTH - 140, tickerY - 4)
 
+  // ── PRIORITY 2: Floating text particles ──
+  charState.floatingTexts = charState.floatingTexts.filter(ft => {
+    ft.frame++
+    if (ft.frame >= ft.maxFrames) return false
+    // Move upward, fade out
+    ft.y -= 1
+    const alpha = Math.max(0, 1 - ft.frame / ft.maxFrames)
+    ctx.fillStyle = ft.color
+    ctx.globalAlpha = alpha
+    ctx.font = 'bold 16px "Courier New", monospace'
+    ctx.fillText(ft.text, ft.x, ft.y)
+    ctx.globalAlpha = 1
+    return true
+  })
+
   // ── Scanline CRT effect ──
   ctx.fillStyle = 'rgba(0, 0, 0, 0.12)'
   for (let y = 0; y < HEIGHT; y += 3) {
     ctx.fillRect(0, y, WIDTH, 1)
   }
+
+  // ── PRIORITY 2: Vignette effect ──
+  const vignetteGrad = ctx.createRadialGradient(WIDTH / 2, HEIGHT / 2, WIDTH * 0.35, WIDTH / 2, HEIGHT / 2, WIDTH * 0.75)
+  vignetteGrad.addColorStop(0, 'rgba(0,0,0,0)')
+  vignetteGrad.addColorStop(1, 'rgba(0,0,0,0.3)')
+  ctx.fillStyle = vignetteGrad
+  ctx.fillRect(0, 0, WIDTH, HEIGHT)
 
   // ── (#16) Segment transition overlay ──
   if (charState.segmentTransition > 0) {
@@ -1552,6 +2078,9 @@ function renderFrame(): Buffer {
     ctx.fillText(progText, (WIDTH - progW) / 2, HEIGHT / 2 + 30)
     charState.segmentTransition--
   }
+
+  // Restore from screen shake translate
+  ctx.restore()
 
   // ── (#11) Mood-color border — 4px around entire frame ──
   const borderColor = charState.mood === 'dancing'
@@ -1886,7 +2415,7 @@ function generateFallbackResponse(
 
   // ── Stream commands / help ──
   if (t.includes('command') || t.includes('help') || t.includes('what can i do') || t === '!help') {
-    return `Try these: !rain !snow !storm !stars !space !lava !city !ocean !dance !add <item> !clear items. You control the world!`
+    return `Commands: !rain !snow !storm !space !lava !city !ocean !dance !add <item> !kick !hat <type> !pet <type> !game dodge|boss|quiz !attack !jump !duck. You control the world!`
   }
 
   // ── Crypto / Stocks / Finance ──
@@ -1968,12 +2497,10 @@ function generateFallbackResponse(
 
 let _ttsProc: ChildProcess | null = null
 
-function speakTTS(text: string): void {
-  if (_ttsProc && !_ttsProc.killed) _ttsProc.kill()
-  const clean = text.replace(/["`$\\]/g, '').replace(/\n/g, ' ').slice(0, 300)
-  if (osPlatform() === 'darwin') {
-    _ttsProc = spawn('say', ['-v', 'Zarvox', '-r', '180', clean], { stdio: 'ignore' })
-  }
+function speakTTS(_text: string): void {
+  // TTS disabled — was playing through local speakers, not stream audio.
+  // Stream uses anullsrc (silent audio track) so TTS was never heard by viewers,
+  // only annoying the streamer locally. Speech bubble text is the output instead.
 }
 
 // ─── Start Stream ──────────────────────────────────────────────
@@ -2058,6 +2585,7 @@ export function registerStreamRendererTools(): void {
         bootFrame: 0, segmentTransition: 0, segmentTransitionName: '', segmentTransitionIndex: '',
         tickerOffset: WIDTH, tickerIndex: 0, tickerChangeTime: Date.now() + 30000,
         robotX: 120, robotTargetX: 120, robotDirection: 'idle', walkPhase: 0,
+        screenShake: 0, floatingTexts: [], pet: null, hat: 'none',
       }
       animFrame = 0
       lastChatCount = 0
