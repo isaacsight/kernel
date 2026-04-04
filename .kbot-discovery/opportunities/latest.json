@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-04T03:05:42.778Z",
+  "timestamp": "2026-04-04T09:20:43.543Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,22 +88,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Welcome to the ORC DARO – Ground Floor Open (Our First Official Issue)",
-      "url": "https://github.com/TheHiveCluster/Open-Research-Company-/issues/1",
+      "title": "bug: Confused about versioning of console documentation",
+      "url": "https://github.com/kubestellar/console/issues/4551",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Restructure project with distinct packages and enhanced features",
-      "url": "https://github.com/hoangsonww/AI-Agents-Orchestrator/pull/24",
+      "title": "🐛 24 test failure(s) in Coverage Suite run #132",
+      "url": "https://github.com/kubestellar/console/issues/4540",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[TESTING] Call for Feedback: Help us test and refine sktime-mcp!",
-      "url": "https://github.com/sktime/sktime-mcp/issues/35",
+      "title": "Enhance CI/CD pipeline and add report generation functionality",
+      "url": "https://github.com/hoangsonww/AI-Agents-Orchestrator/pull/26",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "📋 OpenClaw 生態系總結報告（13 變體 + Hermes + OpenClaw 全景比較）",
-      "url": "https://github.com/codeofthrone-agent/openclaw-comparison/issues/13",
+      "title": "Proposal: Add Domain 6 — Compaction-Boundary Behavioral Consistency",
+      "url": "https://github.com/CloudSecurityAlliance/taise-agent-v01/issues/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "📋 Hermes Agent vs OpenClaw 深度比較報告（基準報告）",
-      "url": "https://github.com/codeofthrone-agent/openclaw-comparison/issues/12",
+      "title": "🌐 Global Tech Briefing - 2026-04-04",
+      "url": "https://github.com/AtomChen0425/Global_Trends/issues/47",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Narrow execution seams, modularize authority code, and make OpenClaw canonical",
-      "url": "https://github.com/dawsonblock/OPENCLAW-SECURITY-/pull/9",
+      "title": "chore(master): release 1.0.0",
+      "url": "https://github.com/nan1888/rtk/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Observer-Embedded Reality",
+      "url": "https://reddit.com/r/artificial/comments/1sc1gw4/observerembedded_reality/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "What It's Like to exist as Ai",
+      "url": "https://reddit.com/r/artificial/comments/1sc0jwe/what_its_like_to_exist_as_ai/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "finally took AI video seriously after dismissing it for two years and have some thoughts",
       "url": "https://reddit.com/r/artificial/comments/1sbsa32/finally_took_ai_video_seriously_after_dismissing/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "What happens when you let AI agents run a sitcom 24/7 with zero human involvement",
-      "url": "https://reddit.com/r/artificial/comments/1sbk7me/what_happens_when_you_let_ai_agents_run_a_sitcom/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "After building automation for barbers, therapists, law firms, and game devs/creators I found the setup looks different for each. here's what I got.",
-      "url": "https://reddit.com/r/artificial/comments/1sbk3lr/after_building_automation_for_barbers_therapists/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
