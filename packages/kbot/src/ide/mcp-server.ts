@@ -40,6 +40,23 @@ import {
 } from './bridge.js'
 import { ResponseStream, type ResponseStreamEvent } from '../streaming.js'
 import { formatDiagnostics } from './lsp-bridge.js'
+import { createRequire } from 'node:module'
+
+const __require = createRequire(import.meta.url)
+const PKG_VERSION: string = (__require('../../package.json') as { version: string }).version
+
+/** Sanitize error messages to prevent leaking internal paths, keys, or URLs */
+function sanitizeError(err: unknown): string {
+  if (err instanceof Error) {
+    return err.message
+      .replace(/Bearer\s+\S+/gi, 'Bearer [REDACTED]')
+      .replace(/apikey\s+\S+/gi, 'apikey [REDACTED]')
+      .replace(/https?:\/\/[^\s]+/g, '[URL]')
+      .replace(/\/Users\/[^\s]+/g, '[PATH]')
+      .replace(/\/home\/[^\s]+/g, '[PATH]')
+  }
+  return 'An unexpected error occurred'
+}
 
 /**
  * Start the MCP server on stdio.
@@ -52,7 +69,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
   const server = new Server(
     {
       name: 'kbot',
-      version: '2.0.0',
+      version: PKG_VERSION,
     },
     {
       capabilities: {
@@ -70,90 +87,90 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
     const staticTools = [
       {
         name: 'kbot_chat',
-        description: 'Send a message to kbot and get an agent response. Supports 22 specialist agents with automatic routing.',
+        description: 'Send a message to kbot and receive a specialist agent response. Automatically routes to the best agent (kernel, researcher, coder, writer, analyst, etc.) based on message content, or you can force a specific agent. Use this for general queries, code help, research, writing, or analysis. Each call is stateless. Returns the agent response with optional thinking and tool-use traces.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            message: { type: 'string', description: 'The message to send to kbot' },
-            agent: { type: 'string', description: 'Force a specific agent (kernel, researcher, coder, writer, analyst, etc.). Defaults to auto-routing.' },
+            message: { type: 'string', description: 'The message or task for kbot. Non-empty string.' },
+            agent: { type: 'string', description: 'Force a specific specialist agent by ID (e.g., "researcher", "coder", "writer", "analyst"). Omit for automatic routing based on message content.' },
           },
           required: ['message'],
         },
       },
       {
         name: 'kbot_edit_file',
-        description: 'Edit a file using search/replace. Finds old_string and replaces with new_string.',
+        description: 'Edit a file by replacing a specific text occurrence with new text. Finds the first match of old_string in the file and replaces it with new_string. Side effects: modifies the file on disk. Use kbot_read_file first to verify the exact text to replace. Fails if old_string is not found in the file.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            path: { type: 'string', description: 'File path to edit' },
-            old_string: { type: 'string', description: 'Text to find' },
-            new_string: { type: 'string', description: 'Replacement text' },
+            path: { type: 'string', description: 'Absolute or relative file path to edit' },
+            old_string: { type: 'string', description: 'Exact text to find in the file. Must match precisely including whitespace.' },
+            new_string: { type: 'string', description: 'Replacement text. Can be empty string to delete the matched text.' },
           },
           required: ['path', 'old_string', 'new_string'],
         },
       },
       {
         name: 'kbot_write_file',
-        description: 'Create or overwrite a file with content.',
+        description: 'Create a new file or overwrite an existing file with the provided content. Side effects: writes to disk, creating parent directories if needed. Use kbot_read_file first if updating an existing file to avoid data loss. For targeted edits, prefer kbot_edit_file instead.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            path: { type: 'string', description: 'File path' },
-            content: { type: 'string', description: 'File content' },
+            path: { type: 'string', description: 'Absolute or relative file path to write' },
+            content: { type: 'string', description: 'Complete file content to write' },
           },
           required: ['path', 'content'],
         },
       },
       {
         name: 'kbot_read_file',
-        description: 'Read the contents of a file.',
+        description: 'Read and return the full contents of a file from the local filesystem. Read-only operation with no side effects. Use this to inspect source code, config files, or data before editing. Returns an error if the file does not exist or is not readable.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            path: { type: 'string', description: 'File path to read' },
+            path: { type: 'string', description: 'Absolute or relative file path to read' },
           },
           required: ['path'],
         },
       },
       {
         name: 'kbot_bash',
-        description: 'Run a shell command and return the output.',
+        description: 'Execute a shell command in the project directory and return stdout/stderr. Side effects: depends on the command executed. Destructive commands (rm, git reset) require confirmation when --safe mode is enabled. Use for build commands, git operations, package management, or system checks. Commands that exceed the timeout are terminated.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            command: { type: 'string', description: 'Shell command to execute' },
-            timeout: { type: 'number', description: 'Timeout in milliseconds (default: 30000)' },
+            command: { type: 'string', description: 'Shell command to execute. Avoid commands requiring interactive input.' },
+            timeout: { type: 'number', description: 'Timeout in milliseconds. Default: 30000 (30 seconds). Maximum: 300000 (5 minutes).' },
           },
           required: ['command'],
         },
       },
       {
         name: 'kbot_search',
-        description: 'Search the web for information.',
+        description: 'Search the web for current information, documentation, or answers. Returns summarized search results. Use this for real-time data, recent events, or when local knowledge is insufficient. Read-only operation with no side effects. Requires a configured search provider.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            query: { type: 'string', description: 'Search query' },
+            query: { type: 'string', description: 'Search query string. Be specific for better results.' },
           },
           required: ['query'],
         },
       },
       {
         name: 'kbot_github',
-        description: 'Search GitHub repositories and code.',
+        description: 'Search GitHub for repositories, code snippets, or issues matching a query. Read-only operation with no side effects. Use this to find libraries, reference implementations, or open issues. Returns structured results with repo names, descriptions, and URLs.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            query: { type: 'string', description: 'GitHub search query' },
-            type: { type: 'string', description: 'Search type: repositories, code, issues' },
+            query: { type: 'string', description: 'GitHub search query. Supports GitHub search syntax (e.g., "language:typescript stars:>100").' },
+            type: { type: 'string', description: 'Search scope: "repositories" for repos, "code" for file contents, "issues" for issues/PRs. Default: "repositories".' },
           },
           required: ['query'],
         },
       },
       {
         name: 'kbot_status',
-        description: 'Get kbot status including agent info, learning stats, and session count.',
+        description: 'Retrieve kbot runtime status including active agent, learning statistics, session count, and tool registry size. Read-only operation with no side effects. Use this to check system health or verify configuration before performing tasks.',
         inputSchema: {
           type: 'object' as const,
           properties: {},
@@ -161,68 +178,68 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
       },
       {
         name: 'kbot_agent',
-        description: 'Switch the active kbot agent or list available agents.',
+        description: 'Switch the active specialist agent or list all available agents. When called with an agent ID, switches routing for subsequent kbot_chat calls. When called without arguments, returns a list of all available agents with IDs and descriptions. Side effects: changes the active agent for the session when agent is provided.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            agent: { type: 'string', description: 'Agent ID to switch to. Omit to list available agents.' },
+            agent: { type: 'string', description: 'Agent ID to activate (e.g., "researcher", "coder"). Omit to list all available agents.' },
           },
         },
       },
       {
         name: 'kbot_remember',
-        description: 'Teach kbot a fact that persists across sessions.',
+        description: 'Store a fact in kbot persistent memory that survives across sessions. Side effects: writes to the learning database on disk. Use this to teach kbot project-specific patterns, preferences, or conventions. Facts are used by the agent for future context.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            fact: { type: 'string', description: 'The fact to remember' },
+            fact: { type: 'string', description: 'The fact or knowledge to persist (e.g., "This project uses Vitest for testing").' },
           },
           required: ['fact'],
         },
       },
       {
         name: 'kbot_diagnostics',
-        description: 'Get LSP diagnostics (type errors, warnings) for a file.',
+        description: 'Retrieve LSP diagnostics (type errors, warnings, lint issues) for a specific file via the kbot LSP bridge. Read-only operation with no side effects. Use this to check for type errors before committing or to verify fixes. Returns formatted diagnostic messages with line numbers and severity.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            path: { type: 'string', description: 'File path to check' },
+            path: { type: 'string', description: 'Absolute or relative file path to check for diagnostics' },
           },
           required: ['path'],
         },
       },
       {
         name: 'kbot_plan',
-        description: 'Generate and execute an autonomous plan for a complex task.',
+        description: 'Generate and optionally execute an autonomous multi-step plan for a complex task. The planner breaks the task into subtasks, executes tools sequentially, and self-corrects on failure. Side effects: depends on the plan steps (may read/write files, run commands). Set auto_approve=false (default) to review the plan before execution. Use this for multi-file refactors, complex builds, or research tasks.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            task: { type: 'string', description: 'The complex task to plan and execute' },
-            auto_approve: { type: 'boolean', description: 'Auto-approve (default: false)' },
+            task: { type: 'string', description: 'Description of the complex task to plan and execute' },
+            auto_approve: { type: 'boolean', description: 'If true, execute all plan steps without confirmation. Default: false (review plan first).' },
           },
           required: ['task'],
         },
       },
       {
         name: 'kbot_glob',
-        description: 'Find files matching a glob pattern.',
+        description: 'Find files matching a glob pattern in the project directory. Read-only operation with no side effects. Use this to discover files before reading or editing them. Returns a list of matching file paths sorted by modification time.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            pattern: { type: 'string', description: 'Glob pattern (e.g., "**/*.ts")' },
-            path: { type: 'string', description: 'Base directory (default: cwd)' },
+            pattern: { type: 'string', description: 'Glob pattern to match (e.g., "**/*.ts", "src/**/*.test.tsx")' },
+            path: { type: 'string', description: 'Base directory to search from. Default: current working directory.' },
           },
           required: ['pattern'],
         },
       },
       {
         name: 'kbot_grep',
-        description: 'Search file contents with regex.',
+        description: 'Search file contents using a regular expression pattern. Read-only operation with no side effects. Use this to find code patterns, function definitions, or string references across the project. Returns matching lines with file paths and line numbers.',
         inputSchema: {
           type: 'object' as const,
           properties: {
-            pattern: { type: 'string', description: 'Regex pattern' },
-            path: { type: 'string', description: 'File or directory to search' },
+            pattern: { type: 'string', description: 'Regular expression pattern to search for (e.g., "function\\s+\\w+", "TODO|FIXME")' },
+            path: { type: 'string', description: 'File or directory to search in. Default: current working directory.' },
           },
           required: ['pattern'],
         },
@@ -430,7 +447,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
       return {
         content: [{
           type: 'text' as const,
-          text: `Error: ${err instanceof Error ? err.message : String(err)}`,
+          text: `Error: ${sanitizeError(err)}`,
         }],
         isError: true,
       }

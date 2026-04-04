@@ -148,8 +148,11 @@ function safeHandler(fn: (...args: any[]) => Promise<any>) {
     try {
       return await fn(...args)
     } catch (err) {
+      const msg = err instanceof Error
+        ? err.message.replace(/https?:\/\/[^\s]+/g, '[URL]').replace(/\/Users\/[^\s]+/g, '[PATH]').replace(/\/home\/[^\s]+/g, '[PATH]')
+        : 'An unexpected error occurred'
       return {
-        content: [{ type: 'text' as const, text: `K:BOT Local error: ${err instanceof Error ? err.message : String(err)}` }],
+        content: [{ type: 'text' as const, text: `K:BOT Local error: ${msg}` }],
         isError: true,
       }
     }
@@ -168,11 +171,11 @@ const server = new McpServer({
 
 server.tool(
   'local_ask',
-  'Ask a question to a local AI model running on Ollama. Free, private, instant. Use for quick research, explanations, brainstorming, or getting a second opinion. Auto-selects the best model for the task.',
+  'Send a question or task to a local Ollama AI model and receive a text response. Runs entirely on localhost at zero cost with no data leaving your machine. Auto-selects the best available model based on task type (code, reasoning, or general). Use this for quick research, brainstorming, explanations, or second opinions when you do not need cloud AI quality. Each call is stateless with no conversation history. Returns the response with model name and token count.',
   {
-    prompt: z.string().describe('The question or task for the local model'),
-    model: z.string().optional().describe('Specific model to use (default: auto-selects best model for task)'),
-    system: z.string().optional().describe('Optional system prompt to set context'),
+    prompt: z.string().min(1).max(50000).describe('The question or task for the local model. Non-empty string.'),
+    model: z.string().max(100).regex(/^[a-zA-Z0-9._:\-]*$/).optional().describe('Specific Ollama model name (e.g., "gemma2:9b", "qwen2.5-coder:7b"). Default: auto-selects best model for the task type.'),
+    system: z.string().max(10000).optional().describe('System prompt to set behavioral context for the model (e.g., "You are a Python expert")'),
   },
   safeHandler(async ({ prompt, model, system }) => {
     const result = await callOllama(prompt, { model, system })
@@ -184,11 +187,11 @@ server.tool(
 
 server.tool(
   'local_review',
-  'Get a free code review from a local AI model. Pass code or a diff and get feedback on quality, bugs, security, and style. Uses a code-specialized model.',
+  'Get a code review from a local AI model specialized for code analysis. Pass source code or a git diff and receive feedback on bugs, security issues, performance, and style. Runs on localhost at zero cost. Use this for pre-commit review, PR prep, or quick quality checks. Does not modify any files. Returns a rating (SHIP / MINOR FIXES / NEEDS REWORK) with specific line references. Code is truncated to 6000 characters if longer.',
   {
-    code: z.string().describe('The code or diff to review'),
-    language: z.string().optional().describe('Programming language (default: auto-detect)'),
-    focus: z.string().optional().describe('What to focus on: bugs, security, performance, style, all (default: all)'),
+    code: z.string().min(1).max(50000).describe('The source code or git diff to review'),
+    language: z.string().max(50).optional().describe('Programming language for syntax-aware review (e.g., "typescript", "python"). Default: auto-detect from code content.'),
+    focus: z.string().max(100).optional().describe('Review focus area: "bugs", "security", "performance", "style", or "all". Default: "all".'),
   },
   safeHandler(async ({ code, language, focus }) => {
     const lang = language || 'auto-detect'
@@ -207,11 +210,11 @@ server.tool(
 
 server.tool(
   'local_generate',
-  'Generate code using a local AI model. Free code generation for boilerplate, utilities, tests, and prototypes. Uses a code-specialized model.',
+  'Generate code from a natural language description using a local code-specialized AI model. Runs on localhost at zero cost. Use this for scaffolding boilerplate, utilities, tests, or prototypes. Does not write files — returns the generated code as text for review. Provide existing types or API signatures as context for more accurate output.',
   {
-    task: z.string().describe('What code to generate'),
-    language: z.string().optional().describe('Target language (default: TypeScript)'),
-    context: z.string().optional().describe('Additional context like existing types or API signatures'),
+    task: z.string().min(1).max(10000).describe('Natural language description of the code to generate (e.g., "a function that validates email addresses")'),
+    language: z.string().max(50).optional().describe('Target programming language (e.g., "TypeScript", "Python", "Rust"). Default: TypeScript.'),
+    context: z.string().max(10000).optional().describe('Additional context such as existing type definitions, API signatures, or framework conventions'),
   },
   safeHandler(async ({ task, language, context }) => {
     const lang = language || 'TypeScript'
@@ -228,7 +231,7 @@ server.tool(
 
 server.tool(
   'local_models',
-  'List all locally available Ollama models and check if Ollama is running.',
+  'List all locally available Ollama models and verify Ollama is running. Read-only operation with no side effects. Use this to check which models are available before calling other local_* tools, or to diagnose connectivity issues. Returns model names or an error if Ollama is not running.',
   {},
   safeHandler(async () => {
     const models = await listModels()
@@ -243,10 +246,10 @@ server.tool(
 
 server.tool(
   'local_explain',
-  'Get a free explanation of code, concepts, or errors from a local AI model. Great for understanding stack traces, library APIs, or complex logic.',
+  'Get a plain-language explanation of code, concepts, error messages, or stack traces from a local AI model. Runs on localhost at zero cost. Use this when you need to understand unfamiliar code, debug cryptic errors, or learn about library APIs. Does not modify any files or state. Returns a structured explanation at the requested depth.',
   {
-    topic: z.string().describe('What to explain — code snippet, error message, concept, etc.'),
-    depth: z.enum(['brief', 'detailed']).optional().describe('How deep the explanation should go (default: brief)'),
+    topic: z.string().min(1).max(20000).describe('What to explain — a code snippet, error message, stack trace, concept name, or library API'),
+    depth: z.enum(['brief', 'detailed']).optional().describe('"brief" returns 2-4 paragraphs. "detailed" includes examples and deeper context. Default: "brief".'),
   },
   safeHandler(async ({ topic, depth }) => {
     const depthStr = depth === 'detailed' ? 'Give a thorough explanation with examples.' : 'Explain concisely in 2-4 paragraphs.'
@@ -266,10 +269,10 @@ server.tool(
 
 server.tool(
   'local_vision',
-  'Analyze an image using a local vision model (llava). Describe screenshots, read diagrams, identify UI elements, extract text from images. Pass base64-encoded image data.',
+  'Analyze an image using a local vision model (e.g., llava) running on Ollama. Processes base64-encoded images to describe content, read diagrams, identify UI elements, or extract text. Runs on localhost at zero cost with no data leaving your machine. Requires a vision-capable model to be installed (e.g., llava:13b). Use this for screenshot analysis, diagram reading, or OCR-like tasks. Does not modify any files.',
   {
-    image: z.string().describe('Base64-encoded image data (PNG, JPG, WebP)'),
-    prompt: z.string().optional().describe('What to look for or analyze (default: "Describe this image in detail")'),
+    image: z.string().min(1).describe('Base64-encoded image data. Supports PNG, JPG, and WebP formats. Data URL prefix (data:image/...) is automatically stripped if present.'),
+    prompt: z.string().max(5000).optional().describe('Specific question about the image (e.g., "What text is visible?" or "Describe the UI layout"). Default: "Describe this image in detail."'),
   },
   safeHandler(async ({ image, prompt }) => {
     const question = prompt || 'Describe this image in detail.'
@@ -288,10 +291,10 @@ server.tool(
 
 server.tool(
   'local_commit_message',
-  'Generate a conventional commit message from a git diff. Pass the diff output and get back a well-formatted commit message with type, scope, and description.',
+  'Generate a git commit message from a diff using a local AI model. Analyzes the changes and produces a well-formatted message. Runs on localhost at zero cost. Use this after staging changes to generate a commit message before committing. Does not execute git commands or modify any files — returns text only. Diffs longer than 8000 characters are truncated.',
   {
-    diff: z.string().describe('The git diff output to generate a commit message for'),
-    style: z.enum(['conventional', 'simple', 'detailed']).optional().describe('Commit message style (default: conventional)'),
+    diff: z.string().min(1).max(50000).describe('Git diff output (e.g., from "git diff --staged") to generate a commit message for'),
+    style: z.enum(['conventional', 'simple', 'detailed']).optional().describe('"conventional" uses type(scope): format. "simple" produces a one-liner. "detailed" includes a body with bullet points. Default: "conventional".'),
   },
   safeHandler(async ({ diff, style }) => {
     const styleGuide = style === 'simple'
@@ -317,11 +320,11 @@ server.tool(
 
 server.tool(
   'local_test_gen',
-  'Generate unit tests for code. Pass a function, class, or module and get back test scaffolding. Uses code-specialized models.',
+  'Generate unit test scaffolding for a function, class, or module using a local code-specialized AI model. Runs on localhost at zero cost. Use this when you need to quickly scaffold tests with happy path, edge cases, and error scenarios. Does not write files — returns the generated test code for review. Code is truncated to 6000 characters if longer.',
   {
-    code: z.string().describe('The code to generate tests for'),
-    framework: z.string().optional().describe('Test framework: vitest, jest, pytest, go, rust (default: auto-detect)'),
-    language: z.string().optional().describe('Programming language (default: auto-detect from code)'),
+    code: z.string().min(1).max(50000).describe('The source code (function, class, or module) to generate tests for'),
+    framework: z.string().max(50).optional().describe('Test framework to use: "vitest", "jest", "pytest", "go", "rust". Default: auto-detect from language.'),
+    language: z.string().max(50).optional().describe('Programming language of the source code. Default: auto-detect from code content.'),
   },
   safeHandler(async ({ code, framework, language }) => {
     const fw = framework || 'auto-detect'
@@ -343,11 +346,11 @@ server.tool(
 
 server.tool(
   'local_refactor',
-  'Refactor code with a specific goal. Pass code and an intent like "extract function", "simplify", "add error handling". Returns refactored version with explanation.',
+  'Refactor code toward a specific goal using a local code-specialized AI model. Preserves behavior while improving structure. Runs on localhost at zero cost. Use this for extracting functions, simplifying logic, adding error handling, or reducing duplication. Does not write files — returns the refactored code with an explanation of changes. Code is truncated to 6000 characters if longer.',
   {
-    code: z.string().describe('The code to refactor'),
-    intent: z.string().describe('What to improve: "simplify", "extract function", "add types", "reduce duplication", "improve readability"'),
-    language: z.string().optional().describe('Programming language (default: auto-detect)'),
+    code: z.string().min(1).max(50000).describe('The source code to refactor'),
+    intent: z.string().min(1).max(500).describe('Refactoring goal: "simplify", "extract function", "add types", "reduce duplication", "improve readability", "add error handling"'),
+    language: z.string().max(50).optional().describe('Programming language of the source code. Default: auto-detect from code content.'),
   },
   safeHandler(async ({ code, intent, language }) => {
     const lang = language || 'auto-detect'
@@ -368,11 +371,11 @@ server.tool(
 
 server.tool(
   'local_regex',
-  'Generate and explain regex patterns. Describe what you want to match and get back a tested regex with explanation.',
+  'Generate a regular expression pattern from a natural language description, with an explanation of each component. Runs on localhost at zero cost. Use this when you need a regex for validation, parsing, or extraction and want to understand the pattern. Does not execute the regex — returns the pattern, explanation, and example matches for review.',
   {
-    description: z.string().describe('What the regex should match, e.g. "email addresses" or "ISO dates"'),
-    flavor: z.enum(['javascript', 'python', 'go', 'rust', 'pcre']).optional().describe('Regex flavor (default: javascript)'),
-    test_strings: z.string().optional().describe('Sample strings to test against (one per line)'),
+    description: z.string().min(1).max(2000).describe('What the regex should match (e.g., "email addresses", "ISO 8601 dates", "URLs with query params")'),
+    flavor: z.enum(['javascript', 'python', 'go', 'rust', 'pcre']).optional().describe('Regex flavor/dialect for syntax compatibility. Default: "javascript".'),
+    test_strings: z.string().max(5000).optional().describe('Sample strings to test against, one per line. The model will show which match and which do not.'),
   },
   safeHandler(async ({ description, flavor, test_strings }) => {
     const flav = flavor || 'javascript'
@@ -397,10 +400,10 @@ server.tool(
 
 server.tool(
   'local_diff',
-  'Analyze a code diff and explain what changed, potential issues, and side effects. Great for PR review prep.',
+  'Analyze a code diff and explain what changed, flag potential bugs, and identify side effects using a local AI model. Runs on localhost at zero cost. Use this for PR review preparation, post-merge audits, or understanding unfamiliar changes. Does not modify any files. Diffs longer than 8000 characters are truncated. Returns a structured analysis with summary, issues, side effects, and suggestions.',
   {
-    diff: z.string().describe('The diff to analyze (git diff output or before/after code)'),
-    context: z.string().optional().describe('Additional context about the codebase or change intent'),
+    diff: z.string().min(1).max(50000).describe('The diff to analyze — git diff output or before/after code comparison'),
+    context: z.string().max(5000).optional().describe('Additional context about the codebase, change intent, or related components to improve analysis accuracy'),
   },
   safeHandler(async ({ diff, context }) => {
     const contextStr = context ? `\nContext: ${context}` : ''
@@ -421,11 +424,11 @@ server.tool(
 
 server.tool(
   'local_docs',
-  'Generate documentation from code. Pass a function, class, or module and get JSDoc, docstrings, or README sections.',
+  'Generate documentation for code using a local AI model. Produces JSDoc comments, Python docstrings, README sections, or API reference depending on the format. Runs on localhost at zero cost. Use this to add documentation to undocumented functions, classes, or modules. Does not write files — returns generated documentation text for review. Code is truncated to 6000 characters if longer.',
   {
-    code: z.string().describe('The code to document'),
-    format: z.enum(['jsdoc', 'docstring', 'readme', 'api']).optional().describe('Documentation format (default: jsdoc)'),
-    language: z.string().optional().describe('Programming language (default: auto-detect)'),
+    code: z.string().min(1).max(50000).describe('The source code to generate documentation for'),
+    format: z.enum(['jsdoc', 'docstring', 'readme', 'api']).optional().describe('"jsdoc" for JSDoc comments, "docstring" for Python docstrings, "readme" for README sections, "api" for API reference. Default: "jsdoc".'),
+    language: z.string().max(50).optional().describe('Programming language of the source code. Default: auto-detect from code content.'),
   },
   safeHandler(async ({ code, format, language }) => {
     const fmt = format || 'jsdoc'
@@ -453,11 +456,11 @@ server.tool(
 
 server.tool(
   'local_convert',
-  'Convert data between formats: JSON, YAML, TOML, CSV, XML, TypeScript interfaces. Also infers schemas from data.',
+  'Convert data between formats (JSON, YAML, TOML, CSV, XML) or infer TypeScript interfaces, Zod schemas, and JSON Schema from data. Runs on localhost at zero cost. Use this for config format migration, type generation from API responses, or data transformation. Does not write files — returns the converted data as text. Input is truncated to 6000 characters if longer.',
   {
-    input: z.string().describe('The data to convert'),
-    from: z.string().describe('Source format: json, yaml, toml, csv, xml, or "auto"'),
-    to: z.string().describe('Target format: json, yaml, toml, csv, xml, typescript, zod, jsonschema'),
+    input: z.string().min(1).max(50000).describe('The data to convert in the source format'),
+    from: z.string().min(1).max(20).describe('Source format: "json", "yaml", "toml", "csv", "xml", or "auto" for auto-detection'),
+    to: z.string().min(1).max(20).describe('Target format: "json", "yaml", "toml", "csv", "xml", "typescript", "zod", or "jsonschema"'),
   },
   safeHandler(async ({ input, from, to }) => {
     const truncated = input.length > 6000 ? input.slice(0, 6000) + '\n\n[... truncated]' : input
@@ -477,11 +480,11 @@ server.tool(
 
 server.tool(
   'local_sql',
-  'Generate SQL queries from natural language. Optionally provide a schema for accurate table/column references.',
+  'Generate SQL queries from natural language descriptions using a local AI model. Optionally provide a database schema for accurate table and column references. Runs on localhost at zero cost. Use this when you need to write a query but are unsure of the syntax, or to translate business requirements into SQL. Does not execute the query — returns SQL text with parameterized placeholders for review.',
   {
-    question: z.string().describe('What you want to query, e.g. "all users who signed up last week"'),
-    schema: z.string().optional().describe('Database schema (CREATE TABLE statements or table descriptions)'),
-    dialect: z.enum(['postgresql', 'mysql', 'sqlite', 'mssql']).optional().describe('SQL dialect (default: postgresql)'),
+    question: z.string().min(1).max(5000).describe('Natural language description of the query (e.g., "all users who signed up last week with more than 3 orders")'),
+    schema: z.string().max(20000).optional().describe('Database schema context — CREATE TABLE statements or table/column descriptions for accurate references'),
+    dialect: z.enum(['postgresql', 'mysql', 'sqlite', 'mssql']).optional().describe('SQL dialect for syntax compatibility. Default: "postgresql".'),
   },
   safeHandler(async ({ question, schema, dialect }) => {
     const d = dialect || 'postgresql'
@@ -502,12 +505,12 @@ server.tool(
 
 server.tool(
   'local_translate',
-  'Translate text between natural languages. Great for i18n strings, documentation, or user-facing copy.',
+  'Translate text between natural languages using a local AI model. Preserves formatting (markdown, HTML tags, placeholders). Runs on localhost at zero cost with no data leaving your machine. Use this for i18n string localization, documentation translation, or user-facing copy. Does not write files — returns translated text only. Provide context for idiomatic translation of short phrases.',
   {
-    text: z.string().describe('The text to translate'),
-    to: z.string().describe('Target language (e.g. "Spanish", "Japanese", "French", "zh-CN")'),
-    from: z.string().optional().describe('Source language (default: auto-detect)'),
-    context: z.string().optional().describe('Context for better translation (e.g. "UI button label", "error message", "marketing copy")'),
+    text: z.string().min(1).max(20000).describe('The text to translate. Formatting (markdown, HTML, placeholders like {{name}}) is preserved.'),
+    to: z.string().min(1).max(50).describe('Target language name or code (e.g., "Spanish", "Japanese", "zh-CN", "de")'),
+    from: z.string().max(50).optional().describe('Source language. Default: auto-detect from text content.'),
+    context: z.string().max(500).optional().describe('Usage context for better idiomatic translation (e.g., "UI button label", "error message", "marketing copy", "legal text")'),
   },
   safeHandler(async ({ text, to, from, context }) => {
     const fromStr = from ? ` from ${from}` : ''
@@ -532,11 +535,11 @@ server.tool(
 
 server.tool(
   'local_summarize',
-  'Summarize long text, logs, docs, or articles. Handles large inputs by chunking.',
+  'Summarize long text, logs, documentation, or articles using a local AI model. Handles large inputs by truncating to the first 6000 characters. Runs on localhost at zero cost. Use this to quickly understand long documents, review logs, or create executive summaries. Does not modify any files. Never fabricates information not present in the source text.',
   {
-    text: z.string().describe('The text to summarize'),
-    style: z.enum(['bullets', 'paragraph', 'tldr', 'technical']).optional().describe('Summary style (default: bullets)'),
-    max_length: z.number().optional().describe('Approximate max words for the summary (default: 200)'),
+    text: z.string().min(1).max(100000).describe('The text to summarize — articles, logs, documentation, or any long-form content'),
+    style: z.enum(['bullets', 'paragraph', 'tldr', 'technical']).optional().describe('"bullets" for key points list, "paragraph" for prose, "tldr" for 1-2 sentences, "technical" for implementation details. Default: "bullets".'),
+    max_length: z.number().int().min(10).max(2000).optional().describe('Approximate maximum word count for the summary. Default: 200.'),
   },
   safeHandler(async ({ text, style, max_length }) => {
     const s = style || 'bullets'
@@ -566,9 +569,9 @@ server.tool(
 
 server.tool(
   'local_shell_explain',
-  'Explain what a shell command does. Break down flags, pipes, and redirections. Never executes — only explains.',
+  'Explain what a shell command does by breaking down each component: commands, flags, pipes, redirections, and subshells. Runs on localhost at zero cost. Use this to understand unfamiliar or complex shell commands before running them. Does not execute the command — purely explanatory with no side effects. Warns about dangerous patterns (rm -rf, sudo, etc.).',
   {
-    command: z.string().describe('The shell command to explain'),
+    command: z.string().min(1).max(5000).describe('The shell command or pipeline to explain (e.g., "find . -name *.log -mtime +7 -exec rm {} \\;")'),
   },
   safeHandler(async ({ command }) => {
     const result = await callOllama(
@@ -587,11 +590,11 @@ server.tool(
 
 server.tool(
   'local_diagram',
-  'Generate Mermaid or PlantUML diagrams from natural language descriptions. Outputs diagram code you can render anywhere.',
+  'Generate Mermaid or PlantUML diagram code from a natural language description using a local AI model. Runs on localhost at zero cost. Use this to create architecture diagrams, sequence flows, ER diagrams, or state machines from descriptions. Does not render the diagram — returns the diagram source code in a code block for pasting into any Mermaid/PlantUML renderer.',
   {
-    description: z.string().describe('What to diagram, e.g. "OAuth login flow" or "database schema for a blog"'),
-    type: z.enum(['flowchart', 'sequence', 'class', 'er', 'state', 'gantt']).optional().describe('Diagram type (default: auto-detect)'),
-    format: z.enum(['mermaid', 'plantuml']).optional().describe('Output format (default: mermaid)'),
+    description: z.string().min(1).max(5000).describe('What to diagram (e.g., "OAuth 2.0 login flow", "database schema for a blog with users, posts, and comments")'),
+    type: z.enum(['flowchart', 'sequence', 'class', 'er', 'state', 'gantt']).optional().describe('Diagram type. Default: auto-detect from description.'),
+    format: z.enum(['mermaid', 'plantuml']).optional().describe('Output syntax format. Default: "mermaid".'),
   },
   safeHandler(async ({ description, type, format }) => {
     const fmt = format || 'mermaid'
@@ -612,10 +615,10 @@ server.tool(
 
 server.tool(
   'local_embeddings',
-  'Generate text embeddings using a local embedding model (nomic-embed-text). Returns a vector for semantic search, clustering, or similarity comparison.',
+  'Generate a dense vector embedding for text using a local embedding model (default: nomic-embed-text). Runs on localhost at zero cost. Use this for semantic search, document clustering, similarity comparison, or building RAG pipelines. Does not store the embedding — returns the vector as an array of floats. Requires the embedding model to be installed in Ollama.',
   {
-    text: z.string().describe('The text to embed'),
-    model: z.string().optional().describe('Embedding model (default: nomic-embed-text)'),
+    text: z.string().min(1).max(20000).describe('The text to generate an embedding vector for'),
+    model: z.string().max(100).regex(/^[a-zA-Z0-9._:\-]*$/).optional().describe('Ollama embedding model name. Default: "nomic-embed-text".'),
   },
   safeHandler(async ({ text, model }) => {
     const m = model || 'nomic-embed-text'

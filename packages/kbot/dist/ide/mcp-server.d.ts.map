@@ -1,1 +1,1 @@
-{"version":3,"file":"mcp-server.d.ts","sourceRoot":"","sources":["../../src/ide/mcp-server.ts"],"names":[],"mappings":"AAwBA,OAAO,EAcL,KAAK,YAAY,EAClB,MAAM,aAAa,CAAA;AAIpB;;;GAGG;AACH,wBAAsB,cAAc,CAAC,MAAM,GAAE,YAAiB,GAAG,OAAO,CAAC,IAAI,CAAC,CA6f7E"}
+{"version":3,"file":"mcp-server.d.ts","sourceRoot":"","sources":["../../src/ide/mcp-server.ts"],"names":[],"mappings":"AAwBA,OAAO,EAcL,KAAK,YAAY,EAClB,MAAM,aAAa,CAAA;AAqBpB;;;GAGG;AACH,wBAAsB,cAAc,CAAC,MAAM,GAAE,YAAiB,GAAG,OAAO,CAAC,IAAI,CAAC,CA6f7E"}
