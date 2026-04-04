@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-04T15:35:45.621Z",
+  "timestamp": "2026-04-04T21:50:44.649Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,22 +88,22 @@
     },
     {
       "source": "github-issue",
-      "title": "🤖 Cross-Engine Agent Team — Orchestrate Multi-Engine Collaborative Workflows",
-      "url": "https://github.com/realDuang/codemux/issues/90",
+      "title": "Enhance agentic infrastructure with specialized agents, tools, and UI",
+      "url": "https://github.com/hoangsonww/AI-Agents-Orchestrator/pull/28",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(ops/docs): add monitoring stack configs, fix quantitative engine fallbacks, document LGD semantics, and expand copilot-instructions",
-      "url": "https://github.com/Arisofia/loans-analytics/pull/408",
+      "title": "Issue #2: Discovering Other DeSci Projects – How They Compare to ORC and Where We Can Collaborate",
+      "url": "https://github.com/TheHiveCluster/Open-Research-Company-/issues/2",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Update README with comprehensive usage instructions for GitHub Copilot CLI",
-      "url": "https://github.com/nisarllc206-sys/GitHub.com-copilot-cli-/pull/2",
+      "title": "🐛 119 test failure(s) in Coverage Suite run #134",
+      "url": "https://github.com/kubestellar/console/issues/4586",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "[codex] add copy-ready starter packs",
-      "url": "https://github.com/xiaojiou176-open/Switchyard/pull/86",
+      "title": "Plugin should work standalone, enhance when monorepo is present",
+      "url": "https://github.com/romgenie/openclaw-extension/issues/29",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(agents): derive fallbacks from configured model catalog",
-      "url": "https://github.com/openclaw/openclaw/pull/60922",
+      "title": "refactor(plugins): harden extension package boundaries",
+      "url": "https://github.com/openclaw/openclaw/pull/61023",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Slim repo history and reference surfaces",
-      "url": "https://github.com/foryourhealth111-pixel/Vibe-Skills/pull/106",
+      "title": "fix(ci): pin npm@10.9.8 for CLI npm publish",
+      "url": "https://github.com/getlarge/themoltnet/pull/651",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "essh: a Rust SSH client with a real TUI",
+      "url": "https://reddit.com/r/commandline/comments/1sck6ly/essh_a_rust_ssh_client_with_a_real_tui/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "NetWatch: real-time network diagnostics in the terminal Release 0.9.0",
       "url": "https://reddit.com/r/commandline/comments/1savu2l/netwatch_realtime_network_diagnostics_in_the/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,30 +192,23 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "I created my own desktop terminal app — local, fast, multiplatform 😎",
-      "url": "https://reddit.com/r/commandline/comments/1s9tld3/i_created_my_own_desktop_terminal_app_local_fast/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "we just hit 555 stars on our open source AI agent config tool and i'm honestly still in shock",
+      "url": "https://reddit.com/r/artificial/comments/1sckxf1/we_just_hit_555_stars_on_our_open_source_ai_agent/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Nvidia goes all-in on AI agents while Anthropic pulls the plug",
+      "url": "https://reddit.com/r/artificial/comments/1scccs1/nvidia_goes_allin_on_ai_agents_while_anthropic/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
       "title": "What It's Like to exist as Ai",
       "url": "https://reddit.com/r/artificial/comments/1sc0jwe/what_its_like_to_exist_as_ai/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "finally took AI video seriously after dismissing it for two years and have some thoughts",
-      "url": "https://reddit.com/r/artificial/comments/1sbsa32/finally_took_ai_video_seriously_after_dismissing/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "What happens when you let AI agents run a sitcom 24/7 with zero human involvement",
-      "url": "https://reddit.com/r/artificial/comments/1sbk7me/what_happens_when_you_let_ai_agents_run_a_sitcom/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

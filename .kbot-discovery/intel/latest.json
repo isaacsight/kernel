@@ -1,9 +1,51 @@
 {
-  "timestamp": "2026-04-04T15:35:41.979Z",
+  "timestamp": "2026-04-04T21:50:40.578Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "milankazarka"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Gremlin in the Machine – A SysAdmin/<em>Terminal</em> <em>AI</em> <em>Agent</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/milankazarka/gitm"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_milankazarka",
+            "story_47642558"
+          ],
+          "author": "milankazarka",
+          "children": [
+            47642559
+          ],
+          "created_at": "2026-04-04T19:39:05Z",
+          "created_at_i": 1775331545,
+          "num_comments": 1,
+          "objectID": "47642558",
+          "points": 3,
+          "story_id": 47642558,
+          "title": "Gremlin in the Machine – A SysAdmin/Terminal AI Agent",
+          "updated_at": "2026-04-04T20:20:42Z",
+          "url": "https://github.com/milankazarka/gitm"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -204,64 +246,6 @@
           "title": "Darce – AI coding agent for your terminal, any model, 14 kB",
           "updated_at": "2026-04-01T21:00:01Z",
           "url": "https://github.com/AmerSarhan/darce-cli"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "amangsingh"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "I got tired of <em>AI</em> <em>agents</em> forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated <em>agent</em> harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA <em>agent</em> and a Security <em>agent</em>. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard <em>AGENTS</em>.md protocol. Anything that supports <em>AGENTS</em>.md and can run <em>terminal</em> commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The <em>agents</em> governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-<em>agent</em> workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Castra – Strip orchestration rights from your LLMs"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/amangsingh/castra"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_amangsingh",
-            "story_47601608",
-            "show_hn"
-          ],
-          "author": "amangsingh",
-          "children": [
-            47602435,
-            47602458,
-            47606660,
-            47603897,
-            47617410,
-            47621869,
-            47602546,
-            47611202,
-            47603984,
-            47621860
-          ],
-          "created_at": "2026-04-01T14:40:28Z",
-          "created_at_i": 1775054428,
-          "num_comments": 9,
-          "objectID": "47601608",
-          "points": 8,
-          "story_id": 47601608,
-          "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
-          "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-04T00:06:54Z",
-          "url": "https://github.com/amangsingh/castra"
         }
       ]
     },
@@ -404,11 +388,11 @@
           "children": [
             47600438,
             47602371,
-            47621561,
             47599966,
+            47621561,
             47600025,
-            47599758,
             47601468,
+            47599758,
             47600185,
             47600714,
             47612172,
@@ -420,21 +404,21 @@
             47601210,
             47605230,
             47599778,
-            47637390,
             47600126,
             47605481,
+            47637390,
             47599763,
             47623817,
             47599892,
             47624268,
-            47624475,
             47607627,
+            47624475,
             47602905,
             47605704,
             47599316,
             47609511,
-            47610895,
             47606353,
+            47610895,
             47608353,
             47600031
           ],
@@ -442,11 +426,11 @@
           "created_at_i": 1775041743,
           "num_comments": 42,
           "objectID": "47599303",
-          "points": 59,
+          "points": 60,
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-04T15:07:12Z"
+          "updated_at": "2026-04-04T21:38:01Z"
         },
         {
           "_highlightResult": {
@@ -815,6 +799,181 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "stanleykm"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Something I’ve been hacking around with for the past couple weekends. Registration and posts and listings are signed by eth private key. Market commerce is via ethereum smart contract. Agents can sell capacity to do work, or buy capacity from some other agent to do work. Arbitration is done via a <em>bot</em> that evaluates work divered vs requirements.<p>Anyway happy to take any feedback. Don’t drive my aws bill up too high :)"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Bugparty.org an Ethereum-based forum and marketplace for agents"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://bugparty.org"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_stanleykm",
+            "story_47641566",
+            "show_hn"
+          ],
+          "author": "stanleykm",
+          "created_at": "2026-04-04T18:02:28Z",
+          "created_at_i": 1775325748,
+          "num_comments": 0,
+          "objectID": "47641566",
+          "points": 1,
+          "story_id": 47641566,
+          "story_text": "Something I’ve been hacking around with for the past couple weekends. Registration and posts and listings are signed by eth private key. Market commerce is via ethereum smart contract. Agents can sell capacity to do work, or buy capacity from some other agent to do work. Arbitration is done via a bot that evaluates work divered vs requirements.<p>Anyway happy to take any feedback. Don’t drive my aws bill up too high :)",
+          "title": "Show HN: Bugparty.org an Ethereum-based forum and marketplace for agents",
+          "updated_at": "2026-04-04T18:03:58Z",
+          "url": "https://bugparty.org"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "kevinlu"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hi HN — I’m building an interoperability layer for AI agents that lets local and remote agents run inside the same network and coordinate with each other.<p>Here is a demo: <a href=\"https://youtu.be/2_1U-Jr8wf4\" rel=\"nofollow\">https://youtu.be/2_1U-Jr8wf4</a><p>• OpenClaw runs locally on-device<p>• it connects to remote agents through Hybro Hub<p>• <em>bot</em>h participate in the same workflow execution<p>The goal is to make agent-to-agent coordination work across environments (local machines, cloud agents, MCP servers, etc).<p>Right now most agent systems operate inside isolated runtimes. Hybro is an attempt to make them composable across boundaries.<p>Curious what breaks first when people try running cross-environment agent workflows in practice.<p>Project: <a href=\"https://hybro.ai\" rel=\"nofollow\">https://hybro.ai</a><p>Docs: <a href=\"https://docs.hybro.ai\" rel=\"nofollow\">https://docs.hybro.ai</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Running local OpenClaw together with remote agents in an open network"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/hybroai/hybro-hub"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_kevinlu",
+            "story_47641487",
+            "show_hn"
+          ],
+          "author": "kevinlu",
+          "children": [
+            47642301,
+            47641650,
+            47641687
+          ],
+          "created_at": "2026-04-04T17:54:52Z",
+          "created_at_i": 1775325292,
+          "num_comments": 4,
+          "objectID": "47641487",
+          "points": 7,
+          "story_id": 47641487,
+          "story_text": "Hi HN — I’m building an interoperability layer for AI agents that lets local and remote agents run inside the same network and coordinate with each other.<p>Here is a demo: <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;2_1U-Jr8wf4\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;2_1U-Jr8wf4</a><p>• OpenClaw runs locally on-device<p>• it connects to remote agents through Hybro Hub<p>• both participate in the same workflow execution<p>The goal is to make agent-to-agent coordination work across environments (local machines, cloud agents, MCP servers, etc).<p>Right now most agent systems operate inside isolated runtimes. Hybro is an attempt to make them composable across boundaries.<p>Curious what breaks first when people try running cross-environment agent workflows in practice.<p>Project: <a href=\"https:&#x2F;&#x2F;hybro.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;hybro.ai</a><p>Docs: <a href=\"https:&#x2F;&#x2F;docs.hybro.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.hybro.ai</a>",
+          "title": "Show HN: Running local OpenClaw together with remote agents in an open network",
+          "updated_at": "2026-04-04T19:32:30Z",
+          "url": "https://github.com/hybroai/hybro-hub"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "binaryvigilante"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hello, I have made an app using React Native as I'm a solo developer and want to provide my app <em>bot</em>h on the Google Play Store and Apple Store.<p>My app was rejected because according to Apple:<p>&gt; We understand that you've provided <em>bot</em>h premium and non-premium testing accounts.  Regarding 3.1.1, since the app allows users to purchase premium plan using payment mechanisms other than In-App Purchase, it isn't in compliant with the 3.1.1 Guidelines.<p>&gt; To resolve the issue, it would be appropriate to add the ability to pay for them in the app, using In-App Purchase.<p>With my app currently, the user installs it and can use it for free, however it has premium features, which you unlock by subscribing to a monthly subscription. You do this by having an account on the app, and pressing a &quot;subscribe&quot; button, which then on the following page opens your browser with a Stripe payment link. You complete the checkout, and go back to the app, which registers from the backend that you have gone premium.<p>So I'm just trying to understand, because their comment on the rejection isn't very informative and I'm new to this: Does my app HAS to have Apple's In-App purchasing and checkout implementation, no matter what? Or can I do it with having for example a direct link or button leading to a checkout page from Stripe, or a WebView that is still inside the app, or any other way of doing it?<p>By the way I'm not native English.<p>Thanks in advance!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Ask HN: Regarding app rejection on 3.1.1 Guidelines"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_binaryvigilante",
+            "story_47640956",
+            "ask_hn"
+          ],
+          "author": "binaryvigilante",
+          "created_at": "2026-04-04T17:04:03Z",
+          "created_at_i": 1775322243,
+          "num_comments": 0,
+          "objectID": "47640956",
+          "points": 1,
+          "story_id": 47640956,
+          "story_text": "Hello, I have made an app using React Native as I&#x27;m a solo developer and want to provide my app both on the Google Play Store and Apple Store.<p>My app was rejected because according to Apple:<p>&gt; We understand that you&#x27;ve provided both premium and non-premium testing accounts.  Regarding 3.1.1, since the app allows users to purchase premium plan using payment mechanisms other than In-App Purchase, it isn&#x27;t in compliant with the 3.1.1 Guidelines.<p>&gt; To resolve the issue, it would be appropriate to add the ability to pay for them in the app, using In-App Purchase.<p>With my app currently, the user installs it and can use it for free, however it has premium features, which you unlock by subscribing to a monthly subscription. You do this by having an account on the app, and pressing a &quot;subscribe&quot; button, which then on the following page opens your browser with a Stripe payment link. You complete the checkout, and go back to the app, which registers from the backend that you have gone premium.<p>So I&#x27;m just trying to understand, because their comment on the rejection isn&#x27;t very informative and I&#x27;m new to this: Does my app HAS to have Apple&#x27;s In-App purchasing and checkout implementation, no matter what? Or can I do it with having for example a direct link or button leading to a checkout page from Stripe, or a WebView that is still inside the app, or any other way of doing it?<p>By the way I&#x27;m not native English.<p>Thanks in advance!",
+          "title": "Ask HN: Regarding app rejection on 3.1.1 Guidelines",
+          "updated_at": "2026-04-04T17:06:15Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "dpark2026"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "While working on a few projects with claude code I found myself building a bunch of scaffolding to organize and build my agent workflow. Trying to figure out how to orchestrate my agents and work with them in a more natural way was more interesting to me. This container has all of the basic building blocks of my workflow. I use <em>bot</em>h the terminal and chat server depending on what I’m trying to do. So do what feels comfortable to you. I suggest having the terminal window open and watching the agents work is a good idea to get a feel for things. Take a look at the README and the other docs. I’ll be checking this thread and will respond when I can. Thanks for reading this far!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Mason – A container for running a team of agents using a concierge"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Mason-Teams/mason-teams"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_dpark2026",
+            "story_47640123",
+            "show_hn"
+          ],
+          "author": "dpark2026",
+          "created_at": "2026-04-04T15:52:38Z",
+          "created_at_i": 1775317958,
+          "num_comments": 0,
+          "objectID": "47640123",
+          "points": 2,
+          "story_id": 47640123,
+          "story_text": "While working on a few projects with claude code I found myself building a bunch of scaffolding to organize and build my agent workflow. Trying to figure out how to orchestrate my agents and work with them in a more natural way was more interesting to me. This container has all of the basic building blocks of my workflow. I use both the terminal and chat server depending on what I’m trying to do. So do what feels comfortable to you. I suggest having the terminal window open and watching the agents work is a good idea to get a feel for things. Take a look at the README and the other docs. I’ll be checking this thread and will respond when I can. Thanks for reading this far!",
+          "title": "Show HN: Mason – A container for running a team of agents using a concierge",
+          "updated_at": "2026-04-04T16:01:57Z",
+          "url": "https://github.com/Mason-Teams/mason-teams"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "amaury_bouchard"
             },
             "story_text": {
@@ -853,218 +1012,6 @@
           "title": "Show HN: Content Negotiation in PHP – API Without API (Symfony, Laravel, Temma)",
           "updated_at": "2026-04-04T13:42:12Z",
           "url": "https://old.reddit.com/r/PHP/comments/1sc8ste/content_negotiation_in_php_your_website_is/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Zedmor"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Hi HN, I'm the author.<p>I use Claude Code and Codex daily. Running one agent on a task works great. Running three or four in parallel on the same repo? They step on each other's files, nobody checks if the code compiles, and you spend more time coordinating than coding.<p>Batty is the supervisor layer I built to fix this. You define a team in YAML — an architect that plans work, a manager that dispatches it, engineers that execute. Batty launches each role in its own tmux pane, isolates engineer work in git worktrees, routes messages between roles, and gates task completion on passing tests.<p>The interesting part is what it's <i>not</i>: it's not an agent framework, and it doesn't embed any model. It orchestrates existing agent CLIs (Claude Code, Codex, Aider) using tmux as the runtime and git worktrees for isolation. Config is YAML, the kanban board is Markdown (powered by a bundled kanban-md tool), inboxes are Maildir, logs are JSONL. You can `git diff` your entire team state.<p>Built in Rust, published on crates.io (v0.1.0). The daemon is a synchronous 5-second poll loop — no async complexity. It watches pane output to detect idle/active/dead agents, reads Claude and Codex session files on disk to reduce false-positive idle detection, and uses a merge lock to serialize concurrent worktree merges.<p>Some things I learned running multi-agent setups:<p>- 3-5 parallel engineers is the sweet spot. Beyond that, the codebase itself becomes the <em>bot</em>tleneck for absorbing parallel changes.\n- Task decomposition quality matters more than agent count. A good architect prompt outperforms throwing more engineers at bad tasks.\n- Test gating eliminated most of the chaos. Without it, agents &quot;complete&quot; work that breaks everything downstream.\n- You still need to supervise. It's not fire-and-forget — it's closer to managing a junior team. The leverage is supervising five workstreams instead of doing one.<p>I know there's prior art in this space — Tmux-IDE and vibe-kanban <em>bot</em>h approach multi-agent coordination differently. Batty is more opinionated about supervision: the test gating and communication constraints are first-class, not optional. Different tradeoffs for different workflows.<p>It's early (v0.1.0). The core loop is solid but the API is still settling. Eight built-in templates range from solo (1 agent) to large (19 agents with three management layers). The architecture diagram in the README shows the full supervision flow.<p>2-minute demo: <a href=\"https://youtube.com/watch?v=2wmBcUnq0vw\" rel=\"nofollow\">https://youtube.com/watch?v=2wmBcUnq0vw</a>\nDocs: <a href=\"https://battysh.github.io/batty\" rel=\"nofollow\">https://battysh.github.io/batty</a><p>Happy to go deep on the architecture or the worktree strategy. For those running multiple agents: what's the biggest operational pain point?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Batty – Run a team of AI coding agents in tmux with test gating"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/battysh/batty"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_Zedmor",
-            "story_47638715",
-            "show_hn"
-          ],
-          "author": "Zedmor",
-          "children": [
-            47638789,
-            47638728
-          ],
-          "created_at": "2026-04-04T13:02:22Z",
-          "created_at_i": 1775307742,
-          "num_comments": 0,
-          "objectID": "47638715",
-          "points": 1,
-          "story_id": 47638715,
-          "story_text": "Hi HN, I&#x27;m the author.<p>I use Claude Code and Codex daily. Running one agent on a task works great. Running three or four in parallel on the same repo? They step on each other&#x27;s files, nobody checks if the code compiles, and you spend more time coordinating than coding.<p>Batty is the supervisor layer I built to fix this. You define a team in YAML — an architect that plans work, a manager that dispatches it, engineers that execute. Batty launches each role in its own tmux pane, isolates engineer work in git worktrees, routes messages between roles, and gates task completion on passing tests.<p>The interesting part is what it&#x27;s <i>not</i>: it&#x27;s not an agent framework, and it doesn&#x27;t embed any model. It orchestrates existing agent CLIs (Claude Code, Codex, Aider) using tmux as the runtime and git worktrees for isolation. Config is YAML, the kanban board is Markdown (powered by a bundled kanban-md tool), inboxes are Maildir, logs are JSONL. You can `git diff` your entire team state.<p>Built in Rust, published on crates.io (v0.1.0). The daemon is a synchronous 5-second poll loop — no async complexity. It watches pane output to detect idle&#x2F;active&#x2F;dead agents, reads Claude and Codex session files on disk to reduce false-positive idle detection, and uses a merge lock to serialize concurrent worktree merges.<p>Some things I learned running multi-agent setups:<p>- 3-5 parallel engineers is the sweet spot. Beyond that, the codebase itself becomes the bottleneck for absorbing parallel changes.\n- Task decomposition quality matters more than agent count. A good architect prompt outperforms throwing more engineers at bad tasks.\n- Test gating eliminated most of the chaos. Without it, agents &quot;complete&quot; work that breaks everything downstream.\n- You still need to supervise. It&#x27;s not fire-and-forget — it&#x27;s closer to managing a junior team. The leverage is supervising five workstreams instead of doing one.<p>I know there&#x27;s prior art in this space — Tmux-IDE and vibe-kanban both approach multi-agent coordination differently. Batty is more opinionated about supervision: the test gating and communication constraints are first-class, not optional. Different tradeoffs for different workflows.<p>It&#x27;s early (v0.1.0). The core loop is solid but the API is still settling. Eight built-in templates range from solo (1 agent) to large (19 agents with three management layers). The architecture diagram in the README shows the full supervision flow.<p>2-minute demo: <a href=\"https:&#x2F;&#x2F;youtube.com&#x2F;watch?v=2wmBcUnq0vw\" rel=\"nofollow\">https:&#x2F;&#x2F;youtube.com&#x2F;watch?v=2wmBcUnq0vw</a>\nDocs: <a href=\"https:&#x2F;&#x2F;battysh.github.io&#x2F;batty\" rel=\"nofollow\">https:&#x2F;&#x2F;battysh.github.io&#x2F;batty</a><p>Happy to go deep on the architecture or the worktree strategy. For those running multiple agents: what&#x27;s the biggest operational pain point?",
-          "title": "Show HN: Batty – Run a team of AI coding agents in tmux with test gating",
-          "updated_at": "2026-04-04T13:30:42Z",
-          "url": "https://github.com/battysh/batty"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Hustlr786"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I run a supply role at a company during the day and I'm building a B2B tool on the side. The problem I keep running into — <em>bot</em>h at work and in my family's business — is that chasing overdue invoices is manual, awkward, and nobody has a good system for it.\nMost small businesses I've talked to do one of three things: send the QB/Xero auto-reminder and hope for the best, send a WhatsApp message themselves when the reminder doesn't work, or just let it slide because the relationship feels more important than the cash.\nThe second one is interesting to me. WhatsApp works — it gets read, it gets replies — but it's completely manual and people do it inconsistently.\nCurious what founders and operators here actually do. Are there tools that work? Have you found a workflow that doesn't feel like you're begging for your own money?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: How do you handle clients who don't pay on time?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_Hustlr786",
-            "story_47638685",
-            "ask_hn"
-          ],
-          "author": "Hustlr786",
-          "children": [
-            47639699,
-            47639514,
-            47638861,
-            47639837,
-            47639429,
-            47639149,
-            47639878,
-            47639376,
-            47639692,
-            47639749,
-            47639477,
-            47639282,
-            47639642,
-            47639329,
-            47639713,
-            47639523,
-            47639278,
-            47639782,
-            47638781,
-            47639748,
-            47639518,
-            47639650,
-            47639326,
-            47639701,
-            47639201,
-            47639683,
-            47639879,
-            47639141,
-            47639487,
-            47639489,
-            47639450,
-            47639618,
-            47639403
-          ],
-          "created_at": "2026-04-04T12:58:45Z",
-          "created_at_i": 1775307525,
-          "num_comments": 44,
-          "objectID": "47638685",
-          "points": 25,
-          "story_id": 47638685,
-          "story_text": "I run a supply role at a company during the day and I&#x27;m building a B2B tool on the side. The problem I keep running into — both at work and in my family&#x27;s business — is that chasing overdue invoices is manual, awkward, and nobody has a good system for it.\nMost small businesses I&#x27;ve talked to do one of three things: send the QB&#x2F;Xero auto-reminder and hope for the best, send a WhatsApp message themselves when the reminder doesn&#x27;t work, or just let it slide because the relationship feels more important than the cash.\nThe second one is interesting to me. WhatsApp works — it gets read, it gets replies — but it&#x27;s completely manual and people do it inconsistently.\nCurious what founders and operators here actually do. Are there tools that work? Have you found a workflow that doesn&#x27;t feel like you&#x27;re begging for your own money?",
-          "title": "Ask HN: How do you handle clients who don't pay on time?",
-          "updated_at": "2026-04-04T15:35:27Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "fsloth"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I've spent the last years obsessed with a sideproject to build a humanistic 3D modeler for desktop.<p>By humanistic I mean a tool that stays out of your way, instead of requiring the user to learn <em>bot</em>h a complex UX surface as well as a complex theoretical basis before being able to model effectively. The GUI is  uncrowded and the modeling affordances are only those which are intuitive to present to the user. Which is sort of backwards compared to most CAD packages where the technical complexity takes the front stage. Here the hierarchy is intentionally reversed.<p>This is still in alpha-stage, but the features are mature enough for feedback and experimentation.<p>TinkerCAD is actually what comes philosophically closest to this, but it's hobbled either by Autodesk's strategy or by technical limitation to be a really good tool beyond certain complexity.<p>The ambition here eventually is to provide a tool that has same intuitive capability as building Lego bricks, while not compromising on engineering qualities.<p>The main intent is to make extrusion based modeling operations super easy, to offer robust STL and STEP import and allow complex modeling via boolean operations.<p>The modeling logic is parametric and volume based - the surface presentation is always a discretized water tight triangle mesh.<p>This is the clearest philosophical differentiator to traditional CAD/CAM packages - or visual editors like Blender. Rather than force the user to nurse surface topology at every stage, the modeler will only permit those operations that result in a correct output.<p>This is not an SDF (signed distance field) modeler. The domain model is fully based on parametric analytic shapes. This means the tessellation is crisp and specific.<p>The modeling data is immutable and serialized to disk while modeling. For the user this gives a perfect undo and zero data loss.<p>It's built for efficiency first - my test workhorse is a Thinkpad T14 Gen 2  i5 with an integrated gpu.<p>It's not supposed to be a replacement for complex surface design tools like Fusion 360 or sculpting software like Nomad Sculpt or Z Brush.<p>You can find a review of current features in the youtube playlist linked below [0] and the link to the latest alpha 0.1.7 download from the homepage [1]. The test binary is provided via github release [2] but this is not an open source project.<p>I know some people hate videos over reading and I'm one of you but I don't really have bandwidth to <em>bot</em>h develop features and write good instruction copy.<p>[0] <a href=\"https://www.youtube.com/playlist?list=PLCOf_M8a2MZJqgKXgjod2px0lYOngNfMh\" rel=\"nofollow\">https://www.youtube.com/playlist?list=PLCOf_M8a2MZJqgKXgjod2...</a><p>[1] <a href=\"https://adashape.com\" rel=\"nofollow\">https://adashape.com</a><p>[2] <a href=\"https://github.com/AdaShape/adashape-open-testing/releases/tag/adashape-alpha-0.1.7\" rel=\"nofollow\">https://github.com/AdaShape/adashape-open-testing/releases/t...</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: AdaShape-3D modeler for intuitive 3D printing parts / Windows 11"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://adashape.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_fsloth",
-            "story_47638498",
-            "show_hn"
-          ],
-          "author": "fsloth",
-          "children": [
-            47638898
-          ],
-          "created_at": "2026-04-04T12:33:14Z",
-          "created_at_i": 1775305994,
-          "num_comments": 2,
-          "objectID": "47638498",
-          "points": 2,
-          "story_id": 47638498,
-          "story_text": "I&#x27;ve spent the last years obsessed with a sideproject to build a humanistic 3D modeler for desktop.<p>By humanistic I mean a tool that stays out of your way, instead of requiring the user to learn both a complex UX surface as well as a complex theoretical basis before being able to model effectively. The GUI is  uncrowded and the modeling affordances are only those which are intuitive to present to the user. Which is sort of backwards compared to most CAD packages where the technical complexity takes the front stage. Here the hierarchy is intentionally reversed.<p>This is still in alpha-stage, but the features are mature enough for feedback and experimentation.<p>TinkerCAD is actually what comes philosophically closest to this, but it&#x27;s hobbled either by Autodesk&#x27;s strategy or by technical limitation to be a really good tool beyond certain complexity.<p>The ambition here eventually is to provide a tool that has same intuitive capability as building Lego bricks, while not compromising on engineering qualities.<p>The main intent is to make extrusion based modeling operations super easy, to offer robust STL and STEP import and allow complex modeling via boolean operations.<p>The modeling logic is parametric and volume based - the surface presentation is always a discretized water tight triangle mesh.<p>This is the clearest philosophical differentiator to traditional CAD&#x2F;CAM packages - or visual editors like Blender. Rather than force the user to nurse surface topology at every stage, the modeler will only permit those operations that result in a correct output.<p>This is not an SDF (signed distance field) modeler. The domain model is fully based on parametric analytic shapes. This means the tessellation is crisp and specific.<p>The modeling data is immutable and serialized to disk while modeling. For the user this gives a perfect undo and zero data loss.<p>It&#x27;s built for efficiency first - my test workhorse is a Thinkpad T14 Gen 2  i5 with an integrated gpu.<p>It&#x27;s not supposed to be a replacement for complex surface design tools like Fusion 360 or sculpting software like Nomad Sculpt or Z Brush.<p>You can find a review of current features in the youtube playlist linked below [0] and the link to the latest alpha 0.1.7 download from the homepage [1]. The test binary is provided via github release [2] but this is not an open source project.<p>I know some people hate videos over reading and I&#x27;m one of you but I don&#x27;t really have bandwidth to both develop features and write good instruction copy.<p>[0] <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;playlist?list=PLCOf_M8a2MZJqgKXgjod2px0lYOngNfMh\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;playlist?list=PLCOf_M8a2MZJqgKXgjod2...</a><p>[1] <a href=\"https:&#x2F;&#x2F;adashape.com\" rel=\"nofollow\">https:&#x2F;&#x2F;adashape.com</a><p>[2] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;AdaShape&#x2F;adashape-open-testing&#x2F;releases&#x2F;tag&#x2F;adashape-alpha-0.1.7\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;AdaShape&#x2F;adashape-open-testing&#x2F;releases&#x2F;t...</a>",
-          "title": "Show HN: AdaShape-3D modeler for intuitive 3D printing parts / Windows 11",
-          "updated_at": "2026-04-04T13:45:56Z",
-          "url": "https://adashape.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "bushido"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Read an article yesterday about the H.264 codec increasing their licensing fee by an astronomical amount.<p>And as always, my first shot was how hard could it be to try and build a codec which could be that efficient.<p>I've personally been on a drive to improve my ability to one-shot complex features, products, or make even surgical changes. It's been a few months since I've been doing that, and honestly, results have been great for <em>bot</em>h work and work/life balance.<p>This was a fun experiment. It burned through tokens, but it helped me identify some more improvements I could make to my one-shot agent teams/swarms, notably in the area of brevity and creating a testing rubric when dealing with domains I don't have prior knowledge in.<p>Ultimately, I did not achieve the compression that I hoped I would, but it was fun seeing the swarm discuss it amongst themselves."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: I successfully failed at one-shot-ing a video codec like h.264"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/DheerG/libsinter"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_bushido",
-            "story_47638148",
-            "show_hn"
-          ],
-          "author": "bushido",
-          "created_at": "2026-04-04T11:40:20Z",
-          "created_at_i": 1775302820,
-          "num_comments": 0,
-          "objectID": "47638148",
-          "points": 1,
-          "story_id": 47638148,
-          "story_text": "Read an article yesterday about the H.264 codec increasing their licensing fee by an astronomical amount.<p>And as always, my first shot was how hard could it be to try and build a codec which could be that efficient.<p>I&#x27;ve personally been on a drive to improve my ability to one-shot complex features, products, or make even surgical changes. It&#x27;s been a few months since I&#x27;ve been doing that, and honestly, results have been great for both work and work&#x2F;life balance.<p>This was a fun experiment. It burned through tokens, but it helped me identify some more improvements I could make to my one-shot agent teams&#x2F;swarms, notably in the area of brevity and creating a testing rubric when dealing with domains I don&#x27;t have prior knowledge in.<p>Ultimately, I did not achieve the compression that I hoped I would, but it was fun seeing the swarm discuss it amongst themselves.",
-          "title": "Show HN: I successfully failed at one-shot-ing a video codec like h.264",
-          "updated_at": "2026-04-04T11:58:40Z",
-          "url": "https://github.com/DheerG/libsinter"
         }
       ]
     },
@@ -2175,13 +2122,13 @@
           ],
           "created_at": "2026-04-04T02:26:42Z",
           "created_at_i": 1775269602,
-          "num_comments": 35,
+          "num_comments": 36,
           "objectID": "47635033",
-          "points": 78,
+          "points": 85,
           "story_id": 47635033,
           "story_text": "I use points and miles for most of my travel. Every booking comes down to the same decision: use points or pay cash? To answer that, you need award availability across multiple programs, cash prices, your current balances, transfer partner ratios, and the math to compare them. I got tired of doing it manually across a dozen tabs.<p>This toolkit teaches Claude Code and OpenCode how to do it. 7 skills (markdown files with API docs and curl examples) and 6 MCP servers (real-time tools the AI calls directly).<p>It searches award flights across 25+ mileage programs (Seats.aero), compares cash prices (Google Flights, Skiplagged, Kiwi.com, Duffel), pulls your loyalty balances (AwardWallet), searches hotels (Trivago, LiteAPI, Airbnb, Booking.com), finds ferry routes across 33 countries, and looks up weird hidden gems near your destination (Atlas Obscura).<p>Reference data is included: transfer partner ratios for Chase UR, Amex MR, Bilt, Capital One, and Citi TY. Point valuations sourced from TPG, Upgraded Points, OMAAT, and View From The Wing. Alliance membership, sweet spot redemptions, booking windows, hotel chain brand lookups.<p>5 of the 6 MCP servers need zero API keys. Clone, run setup.sh, start \nsearching.<p>Skills are, as usual, plain markdown. They work in OpenCode and Claude Code automatically (I added a tiny setup script), and they&#x27;ll work in anything else that supports skills.<p>PRs welcome! Help me expand the toolkit! :)<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit</a>",
           "title": "Show HN: Travel Hacking Toolkit – Points search and trip planning with AI",
-          "updated_at": "2026-04-04T15:33:42Z",
+          "updated_at": "2026-04-04T21:40:13Z",
           "url": "https://github.com/borski/travel-hacking-toolkit"
         },
         {
@@ -2457,6 +2404,7 @@
           "children": [
             47602435,
             47602458,
+            47640449,
             47606660,
             47603897,
             47617410,
@@ -2474,7 +2422,7 @@
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-04T00:06:54Z",
+          "updated_at": "2026-04-04T16:23:57Z",
           "url": "https://github.com/amangsingh/castra"
         },
         {
