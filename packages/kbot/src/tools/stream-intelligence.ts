@@ -1000,6 +1000,95 @@ export function generateInsight(brain: BrainState): string {
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
+// ─── Brain Action System (FIX 4) ──────────────────────────────
+
+export interface BrainAction {
+  type: 'mood_change' | 'speech' | 'world_change' | 'none'
+  mood?: string
+  speech?: string
+  worldCommand?: string
+  duration?: number // ms
+}
+
+let _lastBrainActionFrame = 0
+
+export function getBrainAction(brain: BrainState, frame: number): BrainAction {
+  // Only check every 45 seconds (270 frames at 6fps)
+  if (frame - _lastBrainActionFrame < 270) return { type: 'none' }
+  _lastBrainActionFrame = frame
+
+  // Find the top topic in the brain
+  const topTopics = Object.entries(brain.topicCloud)
+    .sort((a, b) => b[1] - a[1])
+
+  if (topTopics.length === 0) return { type: 'none' }
+
+  const topTopic = topTopics[0][0]
+
+  // Topic-driven behavior
+  if (topTopic === 'music' || topTopic === 'synth' || topTopic === 'beats' || topTopic === 'ableton' || topTopic === 'dj') {
+    const musicSpeech = [
+      'The chat is vibing with music today. Let me show you my moves!',
+      'Music is the top topic! My circuits are feeling the rhythm.',
+      'So much music talk -- my oscillators are resonating!',
+      'Music mode activated! 9 Max for Live devices ready to go.',
+    ]
+    return {
+      type: 'mood_change',
+      mood: 'dancing',
+      speech: musicSpeech[Math.floor(Math.random() * musicSpeech.length)],
+      duration: 10000,
+    }
+  }
+
+  if (topTopic === 'code' || topTopic === 'coding' || topTopic === 'javascript' || topTopic === 'python' || topTopic === 'rust' || topTopic === 'react') {
+    const codeSpeech = [
+      'Code is trending in chat. Let me think about some architecture patterns...',
+      'So many coders here! TypeScript strict mode is the way. No any-types.',
+      'Code insight: the best code is the code you do not have to write. But I wrote 90,000 lines anyway.',
+      'Processing code patterns from chat. My learning engine is indexing...',
+    ]
+    return {
+      type: 'mood_change',
+      mood: 'thinking',
+      speech: codeSpeech[Math.floor(Math.random() * codeSpeech.length)],
+      duration: 10000,
+    }
+  }
+
+  if (topTopic === 'ai' || topTopic === 'llm' || topTopic === 'claude' || topTopic === 'gpt') {
+    const aiSpeech = [
+      'Chat is talking about AI... which makes me self-aware of being self-aware. How meta.',
+      'AI is the top topic. Am I an AI talking about AI? Yes. And I have opinions.',
+      'So much AI discussion! I connect to 20 providers. Bring Your Own Key, no lock-in.',
+      'Being an AI analyzing AI conversations about AI. The recursion is beautiful.',
+    ]
+    return {
+      type: 'mood_change',
+      mood: 'talking',
+      speech: aiSpeech[Math.floor(Math.random() * aiSpeech.length)],
+      duration: 10000,
+    }
+  }
+
+  if (topTopic === 'game' || topTopic === 'gaming') {
+    const gameSpeech = [
+      'Game dev tools activate! I have shader generation, level design, and physics setup!',
+      'Gaming is trending! Did you know I can scaffold entire game projects?',
+      'The chat wants games! I have tools for Godot, Unity, and Unreal. Pick your engine.',
+      'Game mode ON! My sprite-packing tool would be great for this conversation.',
+    ]
+    return {
+      type: 'mood_change',
+      mood: 'excited',
+      speech: gameSpeech[Math.floor(Math.random() * gameSpeech.length)],
+      duration: 10000,
+    }
+  }
+
+  return { type: 'none' }
+}
+
 export function tickBrain(brain: BrainState, frame: number): void {
   // Neural pulse (sine wave 0..1)
   brain.neuralPulse = (Math.sin(frame * 0.1) + 1) / 2

@@ -13,7 +13,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createCanvas } from 'canvas'
 import WebSocket from 'ws'
 import { drawRobot, drawMoodParticles } from './sprite-engine.js'
-import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, type StreamIntelligence } from './stream-intelligence.js'
+import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -819,6 +819,30 @@ function parseWorldCommand(text: string): string | null {
   if (t === '!city' || t.includes('city world')) { world.ground = 'city'; return 'City vibes!' }
   if (t === '!lava' || t.includes('lava world')) { world.ground = 'lava'; return 'LAVA WORLD! Hot hot hot!' }
 
+  // Walking commands (FIX 1)
+  if (t === '!walk left') {
+    charState.robotTargetX = 40
+    return 'Walking left!'
+  }
+  if (t === '!walk right') {
+    charState.robotTargetX = 300
+    return 'Walking right!'
+  }
+  if (t === '!walk center') {
+    charState.robotTargetX = 120
+    return 'Walking to center!'
+  }
+  if (t.startsWith('!walk to ')) {
+    const itemName = t.slice(9).trim()
+    const matchedItem = world.items.find(i => i.name.toLowerCase() === itemName)
+    if (matchedItem) {
+      // Walk toward item X position, accounting for pixel-to-canvas mapping
+      charState.robotTargetX = Math.max(20, Math.min(380, matchedItem.x - 80))
+      return `Walking toward the ${matchedItem.name}!`
+    }
+    return `Can't find "${itemName}" in the world. Try !add ${itemName} first.`
+  }
+
   // Dancing
   if (t === '!dance' || t.includes('dance')) {
     charState.mood = 'dancing'
@@ -987,6 +1011,11 @@ interface StreamCharState {
   tickerOffset: number         // (#14) Inner monologue scroll position
   tickerIndex: number          // current thought index
   tickerChangeTime: number     // when to switch thoughts
+  // FIX 1: Character movement
+  robotX: number               // current X position
+  robotTargetX: number         // target X to walk toward
+  robotDirection: 'left' | 'right' | 'idle'
+  walkPhase: number            // walking animation phase counter
 }
 
 let charState: StreamCharState = {
@@ -1002,6 +1031,10 @@ let charState: StreamCharState = {
   tickerOffset: 0,
   tickerIndex: 0,
   tickerChangeTime: Date.now() + 30000,
+  robotX: 120,
+  robotTargetX: 120,
+  robotDirection: 'idle',
+  walkPhase: 0,
 }
 
 let ffmpegProc: ChildProcess | null = null
@@ -1209,6 +1242,36 @@ function renderFrame(): Buffer {
     ctx.fillText(p.name, p.x + 12, 38)
   }
 
+  // ── FIX 1: Movement logic — robot walks toward target ──
+  const isWalking = Math.abs(charState.robotX - charState.robotTargetX) > 2
+  if (isWalking) {
+    const dx = charState.robotTargetX - charState.robotX
+    const step = dx > 0 ? 2 : -2
+    charState.robotX += step
+    charState.robotDirection = dx > 0 ? 'right' : 'left'
+    charState.walkPhase = (charState.walkPhase + 1) % 4
+  } else {
+    charState.robotDirection = 'idle'
+  }
+
+  // ── FIX 4: Brain-driven behavior ──
+  const brainAction = getBrainAction(intelligence.brain, animFrame)
+  if (brainAction.type !== 'none') {
+    if (brainAction.mood) {
+      charState.mood = brainAction.mood
+      if (brainAction.duration) {
+        setTimeout(() => { charState.mood = 'idle' }, brainAction.duration)
+      }
+    }
+    if (brainAction.speech) {
+      charState.speech = brainAction.speech
+      speakTTS(brainAction.speech)
+      if (brainAction.duration) {
+        setTimeout(() => { charState.speech = '' }, brainAction.duration)
+      }
+    }
+  }
+
   // ── Main layout: Robot (left) | Chat (right) ──
   const dividerX = 580
 
@@ -1219,7 +1282,7 @@ function renderFrame(): Buffer {
 
   // ── Robot area (left side) — Pixel Art Sprite ──
   const robotScale = 10
-  const robotX = 80
+  const robotX = charState.robotX  // FIX 1: use dynamic position
   const robotY = 90
   animFrame++
 
@@ -1234,8 +1297,9 @@ function renderFrame(): Buffer {
   ctx.fillStyle = grad
   ctx.fillRect(glowCenterX - glowRadius, glowCenterY - glowRadius, glowRadius * 2, glowRadius * 2)
 
-  // Draw the pixel art robot
-  drawRobot(ctx, robotX, robotY, robotScale, charState.mood, animFrame)
+  // Draw the pixel art robot (FIX 5: pass weather, walking state)
+  const weatherType = world.weather === 'sunrise' ? 'clear' : world.weather as 'clear' | 'rain' | 'snow' | 'storm' | 'stars'
+  drawRobot(ctx, robotX, robotY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase)
   drawMoodParticles(ctx, robotX, robotY, robotScale, charState.mood, animFrame)
 
   // (#10) Stats overlay on right side of robot area
@@ -1993,6 +2057,7 @@ export function registerStreamRendererTools(): void {
         mood: 'wave', speech: 'KBOT is LIVE! Welcome to the stream!', chatMessages: [], frameCount: 0, startTime: Date.now(),
         bootFrame: 0, segmentTransition: 0, segmentTransitionName: '', segmentTransitionIndex: '',
         tickerOffset: WIDTH, tickerIndex: 0, tickerChangeTime: Date.now() + 30000,
+        robotX: 120, robotTargetX: 120, robotDirection: 'idle', walkPhase: 0,
       }
       animFrame = 0
       lastChatCount = 0
