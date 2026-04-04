@@ -15,6 +15,7 @@ import WebSocket from 'ws'
 import { drawRobot, drawMoodParticles, drawHat, drawPet, drawBuddyCompanion, type HatType, type PetType, type PetState } from './sprite-engine.js'
 import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings, unlockableHats, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
+import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderParticles, tickParticles as tickRenderParticles, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, triggerDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, renderAnimatedWater, renderLavaFlow, buildParallaxLayers, renderParallaxLayers, tickGrowingPlants, renderGrowingPlants, type Particle as RenderParticle, type GrowingPlant, type ParallaxLayer, type PostProcessOptions } from './render-engine.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -794,6 +795,26 @@ function getGroundColor(): string {
   }
 }
 
+// ─── AAA: Growing Plants Init ────────────────────────────────
+
+function initGrowingPlants(): GrowingPlant[] {
+  const plants: GrowingPlant[] = []
+  const colors = ['#2a7a2a', '#ff6ec7', '#f0c040', '#58a6ff', '#bc8cff']
+  const types: GrowingPlant['type'][] = ['tree', 'flower', 'mushroom', 'crystal', 'flower']
+  for (let i = 0; i < 8; i++) {
+    const seed = (i * 137 + 42) % 1000
+    plants.push({
+      x: 40 + (seed * 3) % 500,
+      y: 485,
+      type: types[i % types.length],
+      growthStage: 0,
+      maxHeight: 15 + (seed % 20),
+      color: colors[i % colors.length],
+    })
+  }
+  return plants
+}
+
 // ─── PRIORITY 1: Environment Art (Background Scenes) ────────
 
 function drawBackground(ctx: any, frame: number): void {
@@ -1075,6 +1096,8 @@ function updateParticles(): void {
     if (Math.random() < 0.02) {
       world.events.push('lightning')
       charState.screenShake = Math.max(charState.screenShake, 4)
+      // AAA: Spawn electricity particles during lightning
+      charState.renderParticles.push(...createParticleEmitter('electricity', 200 + Math.random() * 200, 100, 3))
       setTimeout(() => { world.events = world.events.filter(e => e !== 'lightning') }, 200)
     }
   }
@@ -1105,11 +1128,11 @@ function parseWorldCommand(text: string): string | null {
   if (t === '!sunset') { world.timeOfDay = 'sunset'; return 'Beautiful sunset!' }
 
   // Ground/biome
-  if (t === '!grass' || t.includes('grass world')) { world.ground = 'grass'; return 'Grassy plains!' }
-  if (t === '!space' || t.includes('outer space')) { world.ground = 'space'; world.timeOfDay = 'night'; world.weather = 'stars'; world.particles = []; return 'We are in SPACE!' }
-  if (t === '!ocean' || t.includes('ocean world')) { world.ground = 'ocean'; return 'Ocean world!' }
-  if (t === '!city' || t.includes('city world')) { world.ground = 'city'; return 'City vibes!' }
-  if (t === '!lava' || t.includes('lava world')) { world.ground = 'lava'; return 'LAVA WORLD! Hot hot hot!' }
+  if (t === '!grass' || t.includes('grass world')) { world.ground = 'grass'; charState.parallaxLayers = buildParallaxLayers('grass', 580); charState.growingPlants = initGrowingPlants(); return 'Grassy plains!' }
+  if (t === '!space' || t.includes('outer space')) { world.ground = 'space'; world.timeOfDay = 'night'; world.weather = 'stars'; world.particles = []; charState.parallaxLayers = buildParallaxLayers('space', 580); return 'We are in SPACE!' }
+  if (t === '!ocean' || t.includes('ocean world')) { world.ground = 'ocean'; charState.parallaxLayers = buildParallaxLayers('ocean', 580); return 'Ocean world!' }
+  if (t === '!city' || t.includes('city world')) { world.ground = 'city'; charState.parallaxLayers = buildParallaxLayers('city', 580); return 'City vibes!' }
+  if (t === '!lava' || t.includes('lava world')) { world.ground = 'lava'; charState.parallaxLayers = buildParallaxLayers('lava', 580); return 'LAVA WORLD! Hot hot hot!' }
 
   // Walking commands (FIX 1)
   if (t === '!walk left') {
@@ -1138,6 +1161,9 @@ function parseWorldCommand(text: string): string | null {
   // Dancing
   if (t === '!dance' || t.includes('dance')) {
     charState.mood = 'dancing'
+    // AAA: Magic circle particles for dance
+    charState.renderParticles.push(...createParticleEmitter('magic', charState.robotX + 160, 300, 8))
+    charState.renderParticles.push(...createParticleEmitter('aura', charState.robotX + 160, 280, 1))
     setTimeout(() => { charState.mood = 'idle' }, 15000)
     return 'You got it! *busts out the robot dance*'
   }
@@ -1145,6 +1171,9 @@ function parseWorldCommand(text: string): string | null {
   // (#18) !pet — happy animation + 1 XP
   if (t === '!pet') {
     charState.mood = 'excited'
+    // AAA: Aura burst on pet
+    charState.renderParticles.push(...createParticleEmitter('aura', charState.robotX + 160, 280, 1))
+    charState.renderParticles.push(...createParticleEmitter('spark', charState.robotX + 160, 200, 6))
     setTimeout(() => { charState.mood = 'idle' }, 5000)
     return '*beep boop* That tickles! My antenna is vibrating with happiness!'
   }
@@ -1164,6 +1193,8 @@ function parseWorldCommand(text: string): string | null {
     charState.mood = 'excited'
     setTimeout(() => { charState.mood = 'idle' }, 8000)
     charState.screenShake = crit1 || crit2 ? 8 : 5
+    // AAA: Spark particles for battle
+    charState.renderParticles.push(...createParticleEmitter('spark', 250, 300, crit1 || crit2 ? 20 : 10))
     if (crit1) spawnFloatingText('CRITICAL HIT! 2x!', 150, 250, '#ff6ec7', 48)
     if (crit2) spawnFloatingText(`${opponent} CRIT!`, 250, 250, '#ff6ec7', 48)
     if (roll1 === roll2) {
@@ -1474,6 +1505,11 @@ interface StreamCharState {
   dreamInsightIndex: number
   dreamInsightTime: number
   isDreamingWithOllama: boolean
+  // AAA Rendering Engine
+  renderParticles: RenderParticle[]
+  growingPlants: GrowingPlant[]
+  parallaxLayers: ParallaxLayer[]
+  isExecutingTool: boolean
 }
 
 function spawnFloatingText(text: string, x: number, y: number, color: string, maxFrames: number = 36): void {
@@ -1507,6 +1543,10 @@ let charState: StreamCharState = {
   dreamInsightIndex: 0,
   dreamInsightTime: 0,
   isDreamingWithOllama: false,
+  renderParticles: [],
+  growingPlants: [],
+  parallaxLayers: [],
+  isExecutingTool: false,
 }
 
 // ─── Phase 1: Buddy Speech Pools ─────────────────────────────
@@ -2194,6 +2234,23 @@ function renderFrame(): Buffer {
   updateParticles()
   tickPhysics()
 
+  // AAA: Continuous particle effects for biomes
+  if (world.ground === 'lava' && animFrame % 4 === 0) {
+    charState.renderParticles.push(...createParticleEmitter('fire', 50 + Math.random() * 480, 485, 1))
+  }
+  if (world.ground === 'space' && animFrame % 12 === 0) {
+    charState.renderParticles.push(...createParticleEmitter('aura', charState.robotX + 160, 280, 1))
+  }
+
+  // AAA: Tick render particles (cap at 150 to prevent performance issues)
+  if (charState.renderParticles.length > 150) {
+    charState.renderParticles = charState.renderParticles.slice(-150)
+  }
+  charState.renderParticles = tickRenderParticles(charState.renderParticles)
+
+  // AAA: Tick growing plants
+  tickGrowingPlants(charState.growingPlants)
+
   // PRIORITY 2: Screen shake offset
   let shakeOffX = 0, shakeOffY = 0
   if (charState.screenShake > 0) {
@@ -2204,12 +2261,31 @@ function renderFrame(): Buffer {
   ctx.save()
   ctx.translate(shakeOffX, shakeOffY)
 
-  // Background (world-aware) — PRIORITY 1: Full scene art
+  // Background — AAA: base fill + procedural sky
   ctx.fillStyle = world.events.includes('lightning') ? '#ffffff' : getWorldBg()
   ctx.fillRect(0, 0, WIDTH, HEIGHT)
 
-  // Draw full animated background scene
+  // AAA: Procedural sky rendering (replaces flat gradient for sky area)
+  renderSky(ctx as any, WIDTH, HEIGHT, world.timeOfDay, world.weather, animFrame, 580)
+
+  // AAA: Parallax layers (rebuild if biome changed)
+  if (charState.parallaxLayers.length === 0) {
+    charState.parallaxLayers = buildParallaxLayers(world.ground, 580)
+  }
+  renderParallaxLayers(ctx as any, charState.parallaxLayers, charState.robotX, animFrame)
+
+  // Draw full animated background scene (biome-specific details on top of parallax)
   drawBackground(ctx as any, animFrame)
+
+  // AAA: Advanced water/lava rendering for specific biomes
+  if (world.ground === 'ocean') {
+    renderAnimatedWater(ctx as any, 580, animFrame)
+  } else if (world.ground === 'lava') {
+    renderLavaFlow(ctx as any, 580, animFrame)
+  }
+
+  // AAA: Growing vegetation
+  renderGrowingPlants(ctx as any, charState.growingPlants)
 
   // (#17) Weather particles as rectangles
   for (const p of world.particles) {
@@ -2390,10 +2466,34 @@ function renderFrame(): Buffer {
   // FIX 1: Music visualization behind robot (if shipped)
   drawMusicVisualization(ctx, robotX, robotY)
 
+  // AAA: Character effects — eye glow bleed, mood aura (BEFORE robot for under-glow)
+  drawCharacterEffects(ctx as any, robotX, robotY, robotScale, charState.mood, animFrame, charState.isExecutingTool, isWalking ? 2 : 0, moodColorHex)
+
   // Draw the pixel art robot (FIX 5: pass weather, walking state)
   const weatherType = world.weather === 'sunrise' ? 'clear' : world.weather as 'clear' | 'rain' | 'snow' | 'storm' | 'stars'
+
+  // AAA: Chromatic aberration on mood transition
+  const moodTransition = checkMoodTransition(charState.mood, moodColorHex)
+  if (moodTransition.active && moodTransition.framesLeft > 0) {
+    const offset = Math.ceil(moodTransition.framesLeft / 2)
+    // Red channel offset
+    ctx.save()
+    ctx.globalAlpha = 0.3
+    ctx.globalCompositeOperation = 'lighter'
+    drawRobot(ctx, robotX - offset, robotY, robotScale, charState.mood, animFrame, [255, 50, 50], weatherType, isWalking, charState.walkPhase)
+    // Blue channel offset
+    drawRobot(ctx, robotX + offset, robotY, robotScale, charState.mood, animFrame, [50, 50, 255], weatherType, isWalking, charState.walkPhase)
+    ctx.restore()
+  }
+
+  // AAA: Damage flash check
+  renderDamageFlash(ctx as any, robotX, robotY, robotScale)
+
   drawRobot(ctx, robotX, robotY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase)
   drawMoodParticles(ctx, robotX, robotY, robotScale, charState.mood, animFrame)
+
+  // AAA: Render advanced particles
+  renderParticles(ctx as any, charState.renderParticles)
 
   // PRIORITY 6: Draw hat AFTER robot so it layers on top
   if (charState.hat !== 'none') {
@@ -2515,6 +2615,13 @@ function renderFrame(): Buffer {
   drawBrainActivity(ctx as any, streamBrain, radarX, radarY, radarW, radarH)
 
   // ── Tool Action Overlay (when brain is executing) ──
+  // AAA: Track tool execution state for character effects
+  charState.isExecutingTool = !!(streamBrain.pendingAction && streamBrain.pendingAction.status === 'executing')
+  // AAA: Spawn sparks during tool execution
+  if (charState.isExecutingTool && animFrame % 6 === 0) {
+    charState.renderParticles.push(...createParticleEmitter('spark', charState.robotX + 160, 250, 3))
+    charState.renderParticles.push(...createParticleEmitter('electricity', charState.robotX + 150, 90 - 30, 1))
+  }
   if (streamBrain.pendingAction && streamBrain.pendingAction.status !== 'pending') {
     const action = streamBrain.pendingAction
     const overlayX = 20
@@ -2773,18 +2880,32 @@ function renderFrame(): Buffer {
     return true
   })
 
-  // ── Scanline CRT effect ──
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.12)'
-  for (let y = 0; y < HEIGHT; y += 3) {
-    ctx.fillRect(0, y, WIDTH, 1)
+  // ── AAA: Dynamic Lighting Engine ──
+  {
+    const robotScale = 10
+    const hasLightning = world.events.includes('lightning')
+    const ambientLevel = getAmbientForTime(world.timeOfDay)
+    const lights = buildCharacterLights(
+      charState.robotX, 90, robotScale, moodColorHex, animFrame,
+      hasLightning, world.items.map(i => ({ x: i.x, y: i.y, emoji: i.emoji, name: i.name })),
+    )
+    renderLighting(ctx as any, lights, WIDTH, HEIGHT, ambientLevel)
   }
 
-  // ── PRIORITY 2: Vignette effect ──
-  const vignetteGrad = ctx.createRadialGradient(WIDTH / 2, HEIGHT / 2, WIDTH * 0.35, WIDTH / 2, HEIGHT / 2, WIDTH * 0.75)
-  vignetteGrad.addColorStop(0, 'rgba(0,0,0,0)')
-  vignetteGrad.addColorStop(1, 'rgba(0,0,0,0.3)')
-  ctx.fillStyle = vignetteGrad
-  ctx.fillRect(0, 0, WIDTH, HEIGHT)
+  // ── AAA: Bloom Effect ──
+  {
+    const robotScale = 10
+    const bloomSpots = buildCharacterBloom(charState.robotX, 90, robotScale, moodColorHex, animFrame)
+    renderBloom(ctx as any, bloomSpots)
+  }
+
+  // ── AAA: Post-processing (replaces old scanlines + vignette) ──
+  renderPostProcessing(ctx as any, WIDTH, HEIGHT, animFrame, {
+    bloom: true,
+    filmGrain: true,
+    vignette: true,
+    scanlines: true,
+  })
 
   // ── (#16) Segment transition overlay ──
   if (charState.segmentTransition > 0) {
@@ -3453,6 +3574,7 @@ export function registerStreamRendererTools(): void {
         autonomy: initAutonomy(),
         buddy: initBuddyForStream(),
         dreamInsights: [], dreamInsightIndex: 0, dreamInsightTime: 0, isDreamingWithOllama: false,
+        renderParticles: [], growingPlants: initGrowingPlants(), parallaxLayers: buildParallaxLayers(world.ground, 580), isExecutingTool: false,
       }
       animFrame = 0
       lastChatCount = 0
