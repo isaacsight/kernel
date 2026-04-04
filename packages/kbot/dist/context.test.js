@@ -44,6 +44,7 @@ function makeMachineProfile(overrides = {}) {
         canRunLocalModels: true,
         gpuAcceleration: 'metal',
         recommendedModelSize: '70B',
+        mlxAvailable: false,
         probedAt: new Date().toISOString(),
         ...overrides,
     };

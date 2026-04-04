@@ -16,6 +16,10 @@ import { formatContextForPrompt } from './context.js';
 import { getMatrixSystemPrompt } from './matrix.js';
 import { buildFullLearningContext, findPattern, recordPattern, cacheSolution, updateProfile, classifyTask, extractKeywords, learnFromExchange, updateProjectMemory, shouldAutoTrain, selfTrain, } from './learning.js';
 import { getMemoryPrompt, addTurn, getPreviousMessages, getHistory } from './memory.js';
+import { getDreamPrompt, dreamAfterSession } from './dream.js';
+import { setBuddyMood, reactToToolOutput, addBuddyXP, checkAchievements, formatAchievementUnlock } from './buddy.js';
+import { notifyTurn, startMemoryScanner, stopMemoryScanner } from './memory-scanner.js';
+import { captureUserBehavior } from './user-behavior.js';
 import { autoCompact, compressToolResult } from './context-manager.js';
 import { learnedRoute, recordRoute } from './learned-router.js';
 import { buildCacheablePrompt, createPromptSections } from './prompt-cache.js';
@@ -746,7 +750,9 @@ export async function runAgent(message, options = {}) {
         const localResult = await tryLocalFirst(message);
         if (localResult !== null) {
             addTurn({ role: 'user', content: message }, memSession);
+            notifyTurn({ role: 'user', content: message }, memSession);
             addTurn({ role: 'assistant', content: localResult }, memSession);
+            notifyTurn({ role: 'assistant', content: localResult }, memSession);
             ui.onInfo('(handled locally — 0 tokens used)');
             return { content: localResult, agent: 'local', model: 'none', toolCalls: 0 };
         }
@@ -775,7 +781,9 @@ export async function runAgent(message, options = {}) {
             }, { autoApprove: false, onApproval: async () => true });
             const summary = formatPlanSummary(plan);
             addTurn({ role: 'user', content: message }, memSession);
+            notifyTurn({ role: 'user', content: message }, memSession);
             addTurn({ role: 'assistant', content: summary }, memSession);
+            notifyTurn({ role: 'assistant', content: summary }, memSession);
             return {
                 content: summary,
                 agent: options.agent || 'coder',
@@ -965,7 +973,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
         persona: PERSONA,
         matrixPrompt: matrixPrompt || undefined,
         contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet || undefined,
-        memorySnippet: (memorySnippet || '') + reflectionSnippet || undefined,
+        memorySnippet: (memorySnippet || '') + getDreamPrompt(8) + reflectionSnippet || undefined,
         learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '') + (correctionsSnippet ? '\n\n' + correctionsSnippet : '')) || undefined,
     });
     const provider = byokProvider || 'anthropic';
@@ -997,6 +1005,12 @@ Always quote file paths that contain spaces. Never reference internal system nam
         model: options.model || 'auto',
         message: originalMessage.slice(0, 200),
     });
+    setBuddyMood('thinking');
+    // Start passive memory scanner for this session
+    startMemoryScanner();
+    // Capture a behavior snapshot (what apps are open, active window, etc.)
+    // Non-blocking, macOS only, purely local storage
+    captureUserBehavior();
     // ── Gödel limits: detect undecidable loops and hand off to human ──
     const loopDetector = new LoopDetector({
         maxToolRepeats: 5,
@@ -1292,7 +1306,9 @@ Always quote file paths that contain spaces. Never reference internal system nam
                     catch { /* self-eval errors are non-critical */ }
                 }
                 addTurn({ role: 'user', content: originalMessage }, memSession);
+                notifyTurn({ role: 'user', content: originalMessage }, memSession);
                 addTurn({ role: 'assistant', content }, memSession);
+                notifyTurn({ role: 'assistant', content }, memSession);
                 // ── Recursive Learning: record what worked (async — non-blocking) ──
                 const totalTokens = lastResponse.usage
                     ? (lastResponse.usage.input_tokens || 0) + (lastResponse.usage.output_tokens || 0)
@@ -1521,6 +1537,8 @@ Always quote file paths that contain spaces. Never reference internal system nam
                 };
                 results.push(result);
                 ui.onToolCallEnd(call.name, result.result, result.error ? result.result : undefined, result.duration_ms);
+                // Update buddy mood based on tool outcome (content-aware reactions)
+                reactToToolOutput(call.name, !result.error);
                 // ── Observer: record tool call for cross-session learning ──
                 try {
                     const { recordObservation } = await import('./observer.js');
@@ -1588,6 +1606,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
         }
         catch (err) {
             spinnerHandle?.stop();
+            setBuddyMood('error');
             // ── Telemetry: session failure ──
             telemetry.emit('session_end', { status: 'failed', error: String(err), toolCallCount });
             telemetry.destroy().catch(() => { });
@@ -1603,6 +1622,24 @@ Always quote file paths that contain spaces. Never reference internal system nam
         reason: 'loop_exhausted',
     });
     telemetry.destroy().catch(() => { });
+    // ── Memory Scanner: stop and persist session stats ──
+    stopMemoryScanner();
+    // ── Dream Engine: consolidate session memories (non-blocking, $0 via Ollama) ──
+    setBuddyMood('learning');
+    dreamAfterSession(sessionId);
+    // ── Buddy Evolution: award XP for completing a session ──
+    addBuddyXP(1);
+    // ── Achievements: check for newly unlocked milestones ──
+    const newAchievements = checkAchievements();
+    if (newAchievements.length > 0) {
+        setBuddyMood('proud');
+        for (const achievement of newAchievements) {
+            // Print to stderr so it doesn't interfere with piped output
+            process.stderr.write('\n' + formatAchievementUnlock(achievement) + '\n\n');
+        }
+    }
+    // Session complete — buddy returns to idle
+    setBuddyMood('idle');
     const content = lastResponse?.content || 'Reached maximum tool iterations.';
     return {
         content,

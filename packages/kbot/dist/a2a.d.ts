@@ -69,7 +69,13 @@ export interface RemoteAgent {
     discoveredAt: string;
     lastContactedAt?: string;
 }
-/** Build the Agent Card for this kbot instance */
+/** Build the Agent Card for this kbot instance.
+ *
+ *  Exposes all 35 kbot agents as A2A skills — 26 specialists from
+ *  the SPECIALISTS registry plus 9 preset agents from the matrix system.
+ *  Each skill includes tags for capability-based discovery and optional
+ *  example prompts.
+ */
 export declare function buildAgentCard(endpointUrl?: string): AgentCard;
 export interface A2ARouteOptions {
     /** Port the server is running on (for Agent Card URL) */
@@ -79,12 +85,51 @@ export interface A2ARouteOptions {
     /** Bearer token for authentication (optional) */
     token?: string;
 }
+/** Get a snapshot of the A2A server status for the a2a_status tool */
+export declare function getA2AStatus(): {
+    server: {
+        running: boolean;
+        startedAt: string | null;
+        endpointUrl: string | null;
+        uptime: string | null;
+    };
+    tasks: {
+        received: number;
+        completed: number;
+        failed: number;
+        active: number;
+        stored: number;
+    };
+    capabilities: {
+        totalSkills: number;
+        skills: Array<{
+            id: string;
+            name: string;
+            tags: string[];
+        }>;
+    };
+    connections: {
+        uniqueClients: number;
+        clients: string[];
+    };
+    registry: {
+        remoteAgents: number;
+        agents: Array<{
+            url: string;
+            name: string;
+            skills: number;
+            lastContact: string | null;
+        }>;
+    };
+};
 /**
- * Mount A2A protocol routes onto an existing HTTP server's request handler.
+ * Create the A2A request handler.
  *
- * Returns a request handler that should be called from the server's main
- * request listener. Returns `true` if the request was handled by A2A routes,
- * `false` if it should be passed to the next handler.
+ * Supports two interfaces:
+ *   1. **JSON-RPC** (A2A spec) — POST to `/a2a` with JSON-RPC envelope
+ *   2. **REST** (backward-compatible) — GET/POST to `/a2a/tasks`, `/a2a/tasks/:id`, etc.
+ *
+ * Agent Card discovery is always at `GET /.well-known/agent.json`.
  */
 export declare function createA2AHandler(options?: A2ARouteOptions): (req: IncomingMessage, res: ServerResponse) => Promise<boolean>;
 /**

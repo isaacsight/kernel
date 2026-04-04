@@ -15,6 +15,7 @@ interface AuditSection {
 }
 declare function auditRepo(repo: string): Promise<AuditResult>;
 declare function formatAuditReport(result: AuditResult): string;
+declare function formatAuditTerminal(result: AuditResult): string;
 export declare function registerAuditTools(): void;
-export { auditRepo, formatAuditReport };
+export { auditRepo, formatAuditReport, formatAuditTerminal };
 //# sourceMappingURL=audit.d.ts.map

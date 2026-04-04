@@ -73,6 +73,7 @@ export interface MachineProfile {
     canRunLocalModels: boolean;
     gpuAcceleration: 'metal' | 'cuda' | 'vulkan' | 'cpu-only';
     recommendedModelSize: string;
+    mlxAvailable: boolean;
     probedAt: string;
 }
 export declare function probeMachine(): Promise<MachineProfile>;

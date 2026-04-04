@@ -11,6 +11,7 @@
 import { createInterface } from 'node:readline';
 import { existsSync } from 'node:fs';
 import { join, basename } from 'node:path';
+import { homedir } from 'node:os';
 import { Command } from 'commander';
 import { loadConfig, setupByok, setupEmbedded, isByokEnabled, isLocalProvider, disableByok, detectProvider, getByokProvider, PROVIDERS, setupOllama, setupKbotLocal, isOllamaRunning, listOllamaModels, warmOllamaModelCache } from './auth.js';
 import { runAndPrint, runAgent, runAgentFromCheckpoint } from './agent.js';
@@ -26,6 +27,7 @@ import { banner, bannerCompact, bannerAuth, prompt as kbotPrompt, printError, pr
 import { checkForUpdate, selfUpdate } from './updater.js';
 import { runTutorial } from './tutorial.js';
 import { syncOnStartup, schedulePush, flushCloudSync, isCloudSyncEnabled, setCloudToken, getCloudToken } from './cloud-sync.js';
+import { getBuddy, getBuddyGreeting, formatBuddyStatus, getBuddyDreamNarration, renameBuddy, buddyChat, getAchievements, getBuddyLevel, fetchBuddyLeaderboard } from './buddy.js';
 import chalk from 'chalk';
 import { createRequire } from 'node:module';
 const __require = createRequire(import.meta.url);
@@ -1003,6 +1005,113 @@ async function main() {
             process.stderr.write(formatMachineProfile(profile));
         }
     });
+    // ── Watchdog — Service & System Status Dashboard ──
+    program
+        .command('watchdog')
+        .alias('wd')
+        .description('Service watchdog — live status of all kbot background services and system health')
+        .option('--json', 'Output as JSON')
+        .option('--restart <service>', 'Restart a specific service (email-agent, discovery, serve, discord, mlx, collective-sync, daemon, kbot-local)')
+        .action(async (opts) => {
+        const { getSystemHealth, getServiceStatus, restartService } = await import('./tools/watchdog.js');
+        // ── Restart mode ──
+        if (opts.restart) {
+            const result = restartService(opts.restart);
+            if (result.success) {
+                console.log();
+                console.log(`  ${chalk.hex('#4ADE80')('✓')} ${result.message}`);
+                console.log();
+            }
+            else {
+                console.log();
+                console.log(`  ${chalk.hex('#F87171')('✗')} ${result.message}`);
+                console.log();
+            }
+            return;
+        }
+        const h = getSystemHealth();
+        // ── JSON mode ──
+        if (opts.json) {
+            console.log(JSON.stringify(h, null, 2));
+            return;
+        }
+        // ── Dashboard rendering ──
+        const ACCENT = chalk.hex('#A78BFA');
+        const GREEN = chalk.hex('#4ADE80');
+        const YELLOW = chalk.hex('#FBBF24');
+        const RED = chalk.hex('#F87171');
+        const DIM = chalk.dim;
+        const running = h.services.filter(s => s.status === 'running').length;
+        const total = h.services.length;
+        const allUp = running === total;
+        // Box drawing
+        const W = 42;
+        const box = {
+            tl: '\u256D', tr: '\u256E', bl: '\u2570', br: '\u256F', h: '\u2500', v: '\u2502',
+            pad: (s, w) => {
+                const visible = s.replace(/\x1b\[[0-9;]*m/g, '');
+                const diff = w - visible.length;
+                return diff > 0 ? s + ' '.repeat(diff) : s;
+            },
+        };
+        const row = (content) => {
+            return ACCENT(box.v) + ' ' + box.pad(content, W - 2) + ' ' + ACCENT(box.v);
+        };
+        console.log();
+        console.log('  ' + ACCENT(`${box.tl}${box.h.repeat(W)}${box.tr}`));
+        console.log('  ' + row(`${ACCENT.bold('\u25C6 KBOT SYSTEM STATUS')}`));
+        console.log('  ' + ACCENT(`${box.tl}${box.h.repeat(W)}${box.tr}`.replace(box.tl, '\u251C').replace(box.tr, '\u2524')));
+        // Service count
+        const svcColor = allUp ? GREEN : running > 0 ? YELLOW : RED;
+        console.log('  ' + row(`Services:  ${svcColor(`${running}/${total} running`)}`));
+        // CPU
+        console.log('  ' + row(`CPU Load:  ${chalk.white(h.loadAvg)}`));
+        // RAM
+        console.log('  ' + row(`RAM:       ${chalk.white(h.memUsed)} / ${DIM(h.memTotal)}`));
+        // Disk
+        console.log('  ' + row(`Disk:      ${chalk.white(h.diskFree)} free ${DIM(`/ ${h.diskTotal}`)}`));
+        // Ollama
+        const ollamaColor = h.ollamaStatus === 'online' ? GREEN : RED;
+        const ollamaInfo = h.ollamaModels.length > 0 ? ` ${DIM(`(${h.ollamaModels.length} models)`)}` : '';
+        console.log('  ' + row(`Ollama:    ${ollamaColor(h.ollamaStatus)}${ollamaInfo}`));
+        // Dreams
+        console.log('  ' + row(`Dreams:    ${ACCENT(`${h.dreamCycles}`)} cycles, ${ACCENT(`${h.dreamInsights}`)} insights`));
+        // Memory
+        console.log('  ' + row(`Memory:    ${chalk.white(h.kbotMemorySize)}`));
+        console.log('  ' + ACCENT(`${box.bl}${box.h.repeat(W)}${box.br}`));
+        console.log();
+        // ── Services table ──
+        console.log(`  ${chalk.bold('SERVICES')}`);
+        console.log(`  ${DIM('\u2500'.repeat(64))}`);
+        for (const s of h.services) {
+            const icon = s.status === 'running' ? GREEN('\u2713')
+                : s.status === 'dead' ? RED('\u2717')
+                    : DIM('\u2500');
+            const nameStr = chalk.bold(s.shortName.padEnd(18));
+            const pidStr = s.pid ? DIM(`PID ${String(s.pid).padEnd(8)}`) : DIM('PID -'.padEnd(12));
+            let statusStr;
+            if (s.status === 'running') {
+                statusStr = `CPU ${chalk.white(s.cpu.padEnd(7))} MEM ${chalk.white(s.mem.padEnd(7))} up ${GREEN(s.uptime)}`;
+            }
+            else if (s.status === 'dead') {
+                statusStr = RED('dead — restart with: kbot wd --restart ' + s.shortName);
+            }
+            else {
+                statusStr = DIM('not loaded');
+            }
+            console.log(`  ${icon} ${nameStr} ${pidStr} ${statusStr}`);
+        }
+        console.log();
+        // Ollama model list
+        if (h.ollamaModels.length > 0) {
+            console.log(`  ${chalk.bold('OLLAMA MODELS')}`);
+            console.log(`  ${DIM('\u2500'.repeat(64))}`);
+            for (const m of h.ollamaModels) {
+                console.log(`  ${ACCENT('\u25B8')} ${chalk.white(m)}`);
+            }
+            console.log();
+        }
+    });
     program
         .command('hardware')
         .description('Detect your hardware tier and get personalized model recommendations for local AI')
@@ -1852,17 +1961,55 @@ async function main() {
         }
     });
     program
+        .command('stream [action]')
+        .description('Multi-platform livestream to Twitch, Rumble, and Kick simultaneously')
+        .option('-p, --platforms <list>', 'Comma-separated: twitch,rumble,kick or "all"', 'all')
+        .option('-s, --source <src>', 'Video source: screen, webcam, test, or file path', 'screen')
+        .option('-r, --resolution <res>', 'Output resolution', '1920x1080')
+        .option('-b, --bitrate <kbps>', 'Video bitrate in kbps', '4500')
+        .action(async (action, opts) => {
+        const { ensureLazyToolsLoaded, executeTool: execTool } = await import('./tools/index.js');
+        await ensureLazyToolsLoaded();
+        const cmd = (action || 'status').toLowerCase();
+        if (cmd === 'start' || cmd === 'go' || cmd === 'live') {
+            const result = await execTool({
+                id: `stream_${Date.now()}`, name: 'stream_start',
+                arguments: { platforms: opts?.platforms, source: opts?.source, resolution: opts?.resolution, bitrate: opts?.bitrate },
+            });
+            process.stderr.write(result.result + '\n');
+        }
+        else if (cmd === 'stop' || cmd === 'end') {
+            const result = await execTool({ id: `stream_${Date.now()}`, name: 'stream_stop', arguments: {} });
+            process.stderr.write(result.result + '\n');
+        }
+        else if (cmd === 'status') {
+            const result = await execTool({ id: `stream_${Date.now()}`, name: 'stream_status', arguments: {} });
+            process.stderr.write(result.result + '\n');
+        }
+        else if (cmd === 'setup') {
+            const result = await execTool({ id: `stream_${Date.now()}`, name: 'stream_setup', arguments: { platform: 'all' } });
+            process.stderr.write(result.result + '\n');
+        }
+        else {
+            process.stderr.write(`Unknown stream action: ${cmd}\nUsage: kbot stream [start|stop|status|setup]\n`);
+        }
+    });
+    program
         .command('serve')
-        .description('Start HTTP server — expose all 223 tools for kernel.chat or any client')
+        .description('Start HTTP/HTTPS server — expose all tools for kernel.chat, Claude Cowork, or any client')
         .option('-p, --port <port>', 'Port to listen on', '7437')
         .option('--token <token>', 'Require auth token for all requests')
         .option('--computer-use', 'Enable computer use tools')
+        .option('--https', 'Enable HTTPS with auto-generated self-signed cert (~/.kbot/certs/)')
+        .option('--cert <path>', 'Path to TLS certificate file (implies HTTPS)')
+        .option('--key <path>', 'Path to TLS private key file (implies HTTPS)')
         .action(async (opts) => {
         const { startServe } = await import('./serve.js');
         await startServe({
             port: parseInt(opts.port, 10),
             token: opts.token,
             computerUse: opts.computerUse,
+            ...(opts.https ? { https: true, cert: opts.cert, key: opts.key } : {}),
         });
     });
     program
@@ -2439,7 +2586,7 @@ async function main() {
         .option('--json', 'Output raw JSON')
         .option('--badge', 'Print only the badge markdown (for adding to READMEs)')
         .action(async (repo, auditOpts) => {
-        const { auditRepo, formatAuditReport } = await import('./tools/audit.js');
+        const { auditRepo, formatAuditReport, formatAuditTerminal } = await import('./tools/audit.js');
         printInfo(`Auditing ${repo}...`);
         try {
             const result = await auditRepo(repo);
@@ -2453,14 +2600,16 @@ async function main() {
                 console.log(`[![kbot audit: ${result.grade}](https://img.shields.io/badge/kbot_audit-${result.grade}_(${pct}%25)-${badgeColor})](https://www.npmjs.com/package/@kernel.chat/kbot)`);
                 return;
             }
-            const report = formatAuditReport(result);
-            console.log(report);
-            // Auto-share as gist
+            // Terminal gets the styled version; --share gist gets markdown
+            const terminalReport = formatAuditTerminal(result);
+            console.log(terminalReport);
+            // Auto-share as gist (uses markdown format for portability)
             if (auditOpts.share) {
                 printInfo('Sharing audit report...');
                 try {
+                    const markdownReport = formatAuditReport(result);
                     const { createGist } = await import('./share.js');
-                    const url = createGist(report, `kbot-audit-${repo.replace('/', '-')}.md`, `kbot Audit: ${repo} — Grade ${result.grade}`, true);
+                    const url = createGist(markdownReport, `kbot-audit-${repo.replace('/', '-')}.md`, `kbot Audit: ${repo} — Grade ${result.grade}`, true);
                     if (url?.startsWith('http')) {
                         printSuccess(`Shared! ${url}`);
                         printInfo(`Badge for ${repo}'s README:`);
@@ -3158,6 +3307,574 @@ async function main() {
         const r = await executeTool({ id: 'db_health', name: 'db_health', arguments: {} });
         console.log(r.result);
     });
+    // ── Dream Engine ──
+    const dreamCmd = program
+        .command('dream')
+        .description('Memory consolidation — consolidate session knowledge into durable insights');
+    dreamCmd
+        .command('run')
+        .description('Run a dream cycle now (uses local Ollama)')
+        .action(async () => {
+        const { dream } = await import('./dream.js');
+        console.log();
+        console.log(`  ${chalk.hex('#A78BFA')('◆')} ${chalk.bold('Dream Engine')}  ${chalk.dim('consolidating memories...')}`);
+        console.log();
+        const result = await dream();
+        if (result.success) {
+            console.log(`  ${chalk.hex('#4ADE80')('✓')} ${chalk.bold(`Cycle #${result.cycle} complete`)}  ${chalk.dim(`${result.duration}ms`)}`);
+            console.log();
+            console.log(`    ${chalk.hex('#4ADE80')('+')} ${chalk.bold(String(result.newInsights))} new insights`);
+            console.log(`    ${chalk.hex('#A78BFA')('↻')} ${chalk.bold(String(result.reinforced))} reinforced`);
+            if (result.archived > 0) {
+                console.log(`    ${chalk.dim('↓')} ${chalk.dim(`${result.archived} archived (aged out)`)}`);
+            }
+            console.log();
+            console.log(`  ${chalk.dim('View results:')} ${chalk.hex('#A78BFA')('kbot dream status')}`);
+        }
+        else {
+            console.log(`  ${chalk.hex('#FBBF24')('!')} ${result.error || 'Dream cycle failed'}`);
+            if (result.archived > 0) {
+                console.log(`    ${chalk.dim('↓')} ${chalk.dim(`${result.archived} insights archived (aging only)`)}`);
+            }
+        }
+        console.log();
+    });
+    dreamCmd
+        .command('status')
+        .description('Show dream engine status and top insights')
+        .action(async () => {
+        const { getDreamStatus } = await import('./dream.js');
+        const { state, insights, archiveCount } = getDreamStatus();
+        // ── Helper functions ──
+        const W = 56; // inner width
+        const box = {
+            tl: '╭', tr: '╮', bl: '╰', br: '╯', h: '─', v: '│',
+            pad: (s, w) => {
+                // Pad string to width, accounting for chalk ANSI codes
+                const visible = s.replace(/\x1b\[[0-9;]*m/g, '');
+                const diff = w - visible.length;
+                return diff > 0 ? s + ' '.repeat(diff) : s;
+            },
+        };
+        const relevanceBar = (pct, len = 20) => {
+            const filled = Math.round((pct / 100) * len);
+            const empty = len - filled;
+            const color = pct >= 70 ? chalk.hex('#4ADE80') : pct >= 40 ? chalk.hex('#FBBF24') : chalk.hex('#F87171');
+            return color('█'.repeat(filled)) + chalk.dim('░'.repeat(empty));
+        };
+        const categoryColor = (cat) => {
+            const colors = {
+                pattern: '#A78BFA', preference: '#67E8F9', skill: '#4ADE80',
+                project: '#FB923C', relationship: '#F472B6',
+            };
+            return chalk.hex(colors[cat] || '#A78BFA');
+        };
+        const categoryChip = (cat) => {
+            const c = categoryColor(cat);
+            return c(` ${cat.toUpperCase()} `);
+        };
+        // ── Header box ──
+        console.log();
+        console.log(chalk.hex('#A78BFA')(`  ${box.tl}${box.h.repeat(W)}${box.tr}`));
+        console.log(chalk.hex('#A78BFA')(`  ${box.v}`) + box.pad(`  ${chalk.hex('#A78BFA').bold('◆ DREAM ENGINE')}  ${chalk.dim('memory consolidation')}`, W) + chalk.hex('#A78BFA')(box.v));
+        console.log(chalk.hex('#A78BFA')(`  ${box.bl}${box.h.repeat(W)}${box.br}`));
+        console.log();
+        // ── Stats row ──
+        const lastDreamDisplay = state.lastDream
+            ? new Date(state.lastDream).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            : chalk.dim('never');
+        console.log(`  ${chalk.bold('Cycles')}  ${chalk.hex('#A78BFA')(String(state.cycles))}    ${chalk.bold('Last')}  ${lastDreamDisplay}    ${chalk.bold('Active')}  ${chalk.hex('#4ADE80')(String(state.activeInsights))}`);
+        console.log(`  ${chalk.bold('Total')}   ${chalk.dim(String(state.totalInsights))}    ${chalk.bold('Archived')}  ${chalk.dim(`${state.totalArchived} (${archiveCount} files)`)}`);
+        console.log();
+        if (insights.length > 0) {
+            // ── Average relevance bar ──
+            const avgRel = Math.round(insights.reduce((s, i) => s + i.relevance, 0) / insights.length * 100);
+            console.log(`  ${chalk.bold('Avg Relevance')}  ${relevanceBar(avgRel, 24)}  ${chalk.bold(`${avgRel}%`)}`);
+            console.log();
+            // ── Category breakdown ──
+            const catCounts = {};
+            for (const i of insights)
+                catCounts[i.category] = (catCounts[i.category] || 0) + 1;
+            const chips = Object.entries(catCounts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([cat, count]) => `${categoryChip(cat)} ${chalk.dim(`${count}`)}`)
+                .join('  ');
+            console.log(`  ${chalk.bold('Categories')}  ${chips}`);
+            console.log();
+            // ── Divider ──
+            console.log(chalk.dim(`  ${'─'.repeat(W)}`));
+            console.log();
+            // ── Top insights ──
+            console.log(`  ${chalk.bold('Top Insights')}`);
+            console.log();
+            for (const i of insights.slice(0, 8)) {
+                const pct = Math.round(i.relevance * 100);
+                const bar = relevanceBar(pct, 12);
+                const tag = categoryChip(i.category);
+                console.log(`  ${bar} ${chalk.bold(`${pct}%`)}  ${tag}`);
+                console.log(`  ${chalk.white(i.content)}`);
+                if (i.keywords.length > 0) {
+                    console.log(`  ${chalk.dim(i.keywords.map(k => `#${k}`).join('  '))}  ${chalk.dim('·')}  ${chalk.dim(`${i.sessions} sessions`)}`);
+                }
+                console.log();
+            }
+        }
+        else {
+            console.log(chalk.dim(`  ${'─'.repeat(W)}`));
+            console.log();
+            console.log(`  ${chalk.dim('No insights yet.')}`);
+            console.log(`  ${chalk.dim('Run:')} ${chalk.hex('#A78BFA')('kbot dream run')} ${chalk.dim('to start consolidating memories')}`);
+            console.log();
+        }
+    });
+    dreamCmd
+        .command('search <query>')
+        .description('Search dream insights by keyword')
+        .action(async (query) => {
+        const { searchDreams } = await import('./dream.js');
+        const results = searchDreams(query);
+        // Helpers
+        const relevanceBar = (pct, len = 12) => {
+            const filled = Math.round((pct / 100) * len);
+            const empty = len - filled;
+            const color = pct >= 70 ? chalk.hex('#4ADE80') : pct >= 40 ? chalk.hex('#FBBF24') : chalk.hex('#F87171');
+            return color('█'.repeat(filled)) + chalk.dim('░'.repeat(empty));
+        };
+        const categoryColor = (cat) => {
+            const colors = {
+                pattern: '#A78BFA', preference: '#67E8F9', skill: '#4ADE80',
+                project: '#FB923C', relationship: '#F472B6',
+            };
+            return chalk.hex(colors[cat] || '#A78BFA');
+        };
+        const highlightQuery = (text, q) => {
+            const terms = q.toLowerCase().split(/\s+/);
+            let result = text;
+            for (const term of terms) {
+                const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                result = result.replace(regex, chalk.hex('#FBBF24').bold.underline('$1'));
+            }
+            return result;
+        };
+        if (results.length === 0) {
+            console.log();
+            console.log(`  ${chalk.hex('#A78BFA')('◆')} ${chalk.bold('Dream Search')}  ${chalk.dim(`"${query}"`)}`);
+            console.log();
+            console.log(`  ${chalk.dim('No insights match this query.')}`);
+            console.log(`  ${chalk.dim('Try broader keywords or run')} ${chalk.hex('#A78BFA')('kbot dream run')} ${chalk.dim('first.')}`);
+            console.log();
+            return;
+        }
+        console.log();
+        console.log(`  ${chalk.hex('#A78BFA')('◆')} ${chalk.bold('Dream Search')}  ${chalk.dim(`"${query}"`)}  ${chalk.hex('#4ADE80')(`${results.length} found`)}`);
+        console.log(chalk.dim(`  ${'─'.repeat(52)}`));
+        console.log();
+        for (const i of results.slice(0, 15)) {
+            const pct = Math.round(i.relevance * 100);
+            const bar = relevanceBar(pct);
+            const tag = categoryColor(i.category)(` ${i.category.toUpperCase()} `);
+            console.log(`  ${bar} ${chalk.bold(`${pct}%`)}  ${tag}`);
+            console.log(`  ${highlightQuery(i.content, query)}`);
+            const keywordsHighlighted = i.keywords.map(k => highlightQuery(`#${k}`, query)).join('  ');
+            console.log(`  ${keywordsHighlighted}  ${chalk.dim('·')}  ${chalk.dim(`${i.sessions} sessions`)}  ${chalk.dim('·')}  ${chalk.dim(i.created.split('T')[0])}`);
+            console.log();
+        }
+    });
+    dreamCmd
+        .command('journal')
+        .description('Print the full dream journal')
+        .action(async () => {
+        const { getDreamStatus } = await import('./dream.js');
+        const { state, insights } = getDreamStatus();
+        // Helpers
+        const W = 56;
+        const box = {
+            tl: '╭', tr: '╮', bl: '╰', br: '╯', h: '─', v: '│',
+            pad: (s, w) => {
+                const visible = s.replace(/\x1b\[[0-9;]*m/g, '');
+                const diff = w - visible.length;
+                return diff > 0 ? s + ' '.repeat(diff) : s;
+            },
+        };
+        const relevanceBar = (pct, len = 16) => {
+            const filled = Math.round((pct / 100) * len);
+            const empty = len - filled;
+            const color = pct >= 70 ? chalk.hex('#4ADE80') : pct >= 40 ? chalk.hex('#FBBF24') : chalk.hex('#F87171');
+            return color('█'.repeat(filled)) + chalk.dim('░'.repeat(empty));
+        };
+        const categoryColors = {
+            pattern: '#A78BFA', preference: '#67E8F9', skill: '#4ADE80',
+            project: '#FB923C', relationship: '#F472B6',
+        };
+        const categoryIcon = {
+            pattern: '◇', preference: '♡', skill: '⚡', project: '▸', relationship: '◈',
+        };
+        const categoryColor = (cat) => chalk.hex(categoryColors[cat] || '#A78BFA');
+        if (insights.length === 0) {
+            console.log();
+            console.log(`  ${chalk.hex('#A78BFA')('◆')} ${chalk.bold('Dream Journal')}`);
+            console.log();
+            console.log(`  ${chalk.dim('The journal is empty.')}`);
+            console.log(`  ${chalk.dim('Run')} ${chalk.hex('#A78BFA')('kbot dream run')} ${chalk.dim('after a session to consolidate memories.')}`);
+            console.log();
+            return;
+        }
+        // ── Header ──
+        console.log();
+        console.log(chalk.hex('#A78BFA')(`  ${box.tl}${box.h.repeat(W)}${box.tr}`));
+        const headerContent = `  ${chalk.hex('#A78BFA').bold('◆ DREAM JOURNAL')}  ${chalk.dim(`${insights.length} insights · cycle ${state.cycles}`)}`;
+        console.log(chalk.hex('#A78BFA')(`  ${box.v}`) + box.pad(headerContent, W) + chalk.hex('#A78BFA')(box.v));
+        console.log(chalk.hex('#A78BFA')(`  ${box.bl}${box.h.repeat(W)}${box.br}`));
+        console.log();
+        // ── Group by category ──
+        const grouped = {};
+        for (const i of insights) {
+            if (!grouped[i.category])
+                grouped[i.category] = [];
+            grouped[i.category].push(i);
+        }
+        // Sort categories by total insight count descending
+        const catOrder = Object.entries(grouped).sort((a, b) => b[1].length - a[1].length);
+        for (const [cat, catInsights] of catOrder) {
+            const icon = categoryIcon[cat] || '●';
+            const cc = categoryColor(cat);
+            // ── Category section header ──
+            console.log(`  ${cc(`${icon} ${cat.toUpperCase()}`)}  ${chalk.dim(`(${catInsights.length})`)}`);
+            console.log(`  ${cc('─'.repeat(W))}`);
+            console.log();
+            for (const i of catInsights) {
+                const pct = Math.round(i.relevance * 100);
+                const bar = relevanceBar(pct);
+                const date = i.created.split('T')[0];
+                const reinforced = i.lastReinforced !== i.created
+                    ? chalk.dim(` · reinforced ${i.lastReinforced.split('T')[0]}`)
+                    : '';
+                // Card: relevance bar + content + metadata
+                console.log(`  ${bar} ${chalk.bold(`${pct}%`)}  ${chalk.dim(`${i.sessions} sessions`)}${reinforced}`);
+                console.log(`  ${chalk.white(i.content)}`);
+                if (i.keywords.length > 0) {
+                    console.log(`  ${chalk.dim(i.keywords.map(k => `#${k}`).join('  '))}`);
+                }
+                console.log(`  ${chalk.dim(`${date} · ${i.source} · ${i.id}`)}`);
+                console.log();
+            }
+        }
+        // ── Footer ──
+        console.log(chalk.dim(`  ${'─'.repeat(W)}`));
+        const avgRel = Math.round(insights.reduce((s, i) => s + i.relevance, 0) / insights.length * 100);
+        console.log(`  ${chalk.dim(`${insights.length} active insights · avg relevance ${avgRel}% · ${state.totalArchived} archived`)}`);
+        console.log();
+    });
+    // ── Buddy Commands ──
+    const buddyCmd = program
+        .command('buddy')
+        .description('Your terminal companion — chat, rename, view status');
+    buddyCmd
+        .command('chat')
+        .description('Chat with your buddy companion (local Ollama, $0)')
+        .action(async () => {
+        await buddyChat();
+        process.exit(0);
+    });
+    buddyCmd
+        .command('status')
+        .description('Show your buddy, level, and achievements')
+        .action(() => {
+        const buddy = getBuddy();
+        const lvl = getBuddyLevel();
+        const achievements = getAchievements();
+        const unlocked = achievements.filter(a => a.unlockedAt !== null);
+        const locked = achievements.filter(a => a.unlockedAt === null);
+        console.log();
+        console.log(formatBuddyStatus());
+        console.log();
+        console.log(`  ${chalk.bold('Achievements')} ${chalk.dim(`(${unlocked.length}/${achievements.length})`)}`);
+        console.log(`  ${chalk.dim('─'.repeat(40))}`);
+        for (const a of unlocked) {
+            console.log(`  ${chalk.hex('#4ADE80')(a.icon)} ${a.name} ${chalk.dim('— ' + a.description)}`);
+        }
+        for (const a of locked) {
+            console.log(`  ${chalk.dim(a.icon + ' ' + a.name + ' — ' + a.description + ' [locked]')}`);
+        }
+        console.log();
+        process.exit(0);
+    });
+    buddyCmd
+        .command('rename <name>')
+        .description('Rename your buddy')
+        .action((name) => {
+        const buddy = getBuddy();
+        const oldName = buddy.name;
+        renameBuddy(name);
+        console.log();
+        console.log(formatBuddyStatus(`${oldName} is now ${name}!`));
+        console.log();
+        process.exit(0);
+    });
+    buddyCmd
+        .command('leaderboard')
+        .description('Show the global buddy leaderboard — anonymous rankings across all kbot installs')
+        .option('-l, --limit <n>', 'Number of entries to show', '20')
+        .option('-s, --species <species>', 'Filter by species (fox, owl, cat, robot, ghost, mushroom, octopus, dragon)')
+        .action(async (opts) => {
+        const limit = Math.min(Math.max(parseInt(opts.limit, 10) || 20, 1), 200);
+        const species = opts.species?.toLowerCase();
+        const validSpecies = ['fox', 'owl', 'cat', 'robot', 'ghost', 'mushroom', 'octopus', 'dragon'];
+        if (species && !validSpecies.includes(species)) {
+            printError(`Unknown species "${species}". Valid: ${validSpecies.join(', ')}`);
+            process.exit(1);
+        }
+        printInfo('Fetching leaderboard...');
+        const entries = await fetchBuddyLeaderboard({ limit, species });
+        if (entries.length === 0) {
+            console.log();
+            printWarn('No entries on the leaderboard yet.');
+            printInfo('Use kbot to earn XP and enable cloud sync to appear on the leaderboard.');
+            console.log();
+            process.exit(0);
+        }
+        const SPECIES_ICONS = {
+            fox: '[fox]', owl: '[owl]', cat: '[cat]', robot: '[bot]',
+            ghost: '[gho]', mushroom: '[msh]', octopus: '[oct]', dragon: '[drg]',
+        };
+        const LEVEL_TITLES_SHORT = {
+            0: 'Novice', 1: 'Adept', 2: 'Master', 3: 'Legend',
+        };
+        const header = species
+            ? `Buddy Leaderboard — ${species}`
+            : 'Global Buddy Leaderboard';
+        console.log();
+        console.log(`  ${chalk.bold(header)}`);
+        console.log(`  ${chalk.dim('─'.repeat(56))}`);
+        console.log(`  ${chalk.dim('#'.padStart(3))}  ${chalk.dim('Species'.padEnd(7))} ${chalk.dim('Level'.padEnd(12))} ${chalk.dim('XP'.padStart(6))}  ${chalk.dim('Achv'.padStart(4))}  ${chalk.dim('Sessions'.padStart(8))}`);
+        console.log(`  ${chalk.dim('─'.repeat(56))}`);
+        for (const entry of entries) {
+            const icon = SPECIES_ICONS[entry.species] || entry.species.slice(0, 5);
+            const title = LEVEL_TITLES_SHORT[entry.level] ?? `L${entry.level}`;
+            const levelStr = `${entry.level} ${title}`;
+            const rankStr = String(entry.rank).padStart(3);
+            const xpStr = String(entry.xp).padStart(6);
+            const achvStr = String(entry.achievement_count).padStart(4);
+            const sessStr = String(entry.sessions).padStart(8);
+            // Highlight top 3
+            const rankColor = entry.rank === 1 ? chalk.hex('#FFD700') :
+                entry.rank === 2 ? chalk.hex('#C0C0C0') :
+                    entry.rank === 3 ? chalk.hex('#CD7F32') : chalk.white;
+            console.log(`  ${rankColor(rankStr)}  ${chalk.hex('#A78BFA')(icon.padEnd(7))} ${levelStr.padEnd(12)} ${chalk.hex('#4ADE80')(xpStr)}  ${achvStr}  ${chalk.dim(sessStr)}`);
+        }
+        console.log();
+        console.log(`  ${chalk.dim(`${entries.length} entries shown`)}`);
+        console.log();
+        process.exit(0);
+    });
+    buddyCmd.action(() => {
+        buddyCmd.commands.find(c => c.name() === 'status')?.parse(['', '', 'status']);
+    });
+    // ── Ghost Commands ──
+    const pikaCmd = program
+        .command('ghost')
+        .description('Ghost — AI video meeting bots, avatars, voice cloning');
+    pikaCmd
+        .command('install')
+        .description('Install Ghost (clones repo, installs Python dependencies)')
+        .option('-f, --force', 'Force re-clone even if already installed')
+        .action(async (opts) => {
+        const { registerGhostTools } = await import('./tools/ghost.js');
+        const { executeTool: execTool } = await import('./tools/index.js');
+        registerGhostTools();
+        printInfo('Installing Ghost...');
+        const result = await execTool({ id: 'cli', name: 'pika_install', arguments: { force: opts.force ?? false } });
+        try {
+            const data = JSON.parse(result.result);
+            if (data.success) {
+                printSuccess('Ghost installed successfully!');
+                printInfo(`  Path:     ${data.installed_at}`);
+                printInfo(`  Python:   ${data.python?.version || 'unknown'} (${data.python?.path || 'unknown'})`);
+                printInfo(`  API Key:  ${data.pika_dev_key}`);
+                printInfo(`  Deps:     ${data.pip_dependencies}`);
+                printInfo(`  ffmpeg:   ${data.ffmpeg}`);
+                printInfo(`  Skills:   ${data.skills_found} found`);
+                if (data.skills?.length > 0) {
+                    for (const s of data.skills) {
+                        printInfo(`    - ${s.name}: ${s.description || '(no description)'}`);
+                    }
+                }
+            }
+            else {
+                printError(`Installation failed: ${data.error}`);
+                if (data.fix)
+                    printInfo(`  Fix: ${data.fix}`);
+            }
+        }
+        catch {
+            console.log(result.result);
+        }
+        process.exit(result.error ? 1 : 0);
+    });
+    pikaCmd
+        .command('join <meet-url>')
+        .description('Join a Google Meet call with an AI avatar bot')
+        .option('-n, --name <name>', 'Bot name (default: "kbot Assistant")')
+        .option('-a, --avatar <path>', 'Avatar image path')
+        .option('-v, --voice <voice-id>', 'Voice ID from ghost voice clone')
+        .option('-p, --prompt <text>', 'System prompt for bot behavior')
+        .action(async (meetUrl, opts) => {
+        const { registerGhostTools } = await import('./tools/ghost.js');
+        const { executeTool: execTool } = await import('./tools/index.js');
+        registerGhostTools();
+        printInfo(`Joining meeting: ${meetUrl}`);
+        const result = await execTool({
+            id: 'cli',
+            name: 'pika_meeting_join',
+            arguments: {
+                meet_url: meetUrl,
+                bot_name: opts.name,
+                avatar: opts.avatar,
+                voice_id: opts.voice,
+                system_prompt: opts.prompt,
+            },
+        });
+        try {
+            const data = JSON.parse(result.result);
+            if (data.success) {
+                printSuccess(`Bot "${data.bot_name}" joining ${data.meet_url}`);
+                printInfo(`  Session ID: ${data.session_id}`);
+                printInfo(`  To leave:   kbot ghost leave ${data.session_id}`);
+            }
+            else {
+                printError(`Failed to join: ${data.error}`);
+            }
+        }
+        catch {
+            console.log(result.result);
+        }
+        process.exit(result.error ? 1 : 0);
+    });
+    pikaCmd
+        .command('leave <session-id>')
+        .description('Leave an active Pika meeting session')
+        .action(async (sessionId) => {
+        const { registerGhostTools } = await import('./tools/ghost.js');
+        const { executeTool: execTool } = await import('./tools/index.js');
+        registerGhostTools();
+        printInfo(`Leaving session: ${sessionId}`);
+        const result = await execTool({
+            id: 'cli',
+            name: 'pika_meeting_leave',
+            arguments: { session_id: sessionId },
+        });
+        try {
+            const data = JSON.parse(result.result);
+            if (data.success) {
+                printSuccess(data.message);
+            }
+            else {
+                printError(`Failed to leave: ${data.error}`);
+            }
+        }
+        catch {
+            console.log(result.result);
+        }
+        process.exit(result.error ? 1 : 0);
+    });
+    pikaCmd
+        .command('avatar <prompt>')
+        .description('Generate an AI avatar image for meetings')
+        .option('-o, --output <path>', 'Output file path')
+        .action(async (prompt, opts) => {
+        const { registerGhostTools } = await import('./tools/ghost.js');
+        const { executeTool: execTool } = await import('./tools/index.js');
+        registerGhostTools();
+        printInfo(`Generating avatar: "${prompt}"`);
+        const result = await execTool({
+            id: 'cli',
+            name: 'pika_generate_avatar',
+            arguments: { prompt, output_path: opts.output },
+        });
+        try {
+            const data = JSON.parse(result.result);
+            if (data.success) {
+                printSuccess('Avatar generated!');
+                printInfo(`  Path: ${data.avatar_path}`);
+                printInfo(`  Use with: kbot ghost join <meet-url> --avatar ${data.avatar_path}`);
+            }
+            else {
+                printError(`Avatar generation failed: ${data.error}`);
+            }
+        }
+        catch {
+            console.log(result.result);
+        }
+        process.exit(result.error ? 1 : 0);
+    });
+    pikaCmd
+        .command('voice <audio-file>')
+        .description('Clone a voice from an audio file')
+        .option('--noise-reduction', 'Apply noise reduction (requires ffmpeg)')
+        .action(async (audioFile, opts) => {
+        const { registerGhostTools } = await import('./tools/ghost.js');
+        const { executeTool: execTool } = await import('./tools/index.js');
+        registerGhostTools();
+        printInfo(`Cloning voice from: ${audioFile}`);
+        const result = await execTool({
+            id: 'cli',
+            name: 'pika_clone_voice',
+            arguments: { audio_path: audioFile, noise_reduction: opts.noiseReduction ?? false },
+        });
+        try {
+            const data = JSON.parse(result.result);
+            if (data.success) {
+                printSuccess('Voice cloned!');
+                printInfo(`  Voice ID: ${data.voice_id}`);
+                printInfo(`  Use with: kbot ghost join <meet-url> --voice ${data.voice_id}`);
+            }
+            else {
+                printError(`Voice cloning failed: ${data.error}`);
+            }
+        }
+        catch {
+            console.log(result.result);
+        }
+        process.exit(result.error ? 1 : 0);
+    });
+    pikaCmd
+        .command('status')
+        .description('Check Ghost installation status')
+        .action(async () => {
+        const { registerGhostTools } = await import('./tools/ghost.js');
+        const { executeTool: execTool } = await import('./tools/index.js');
+        registerGhostTools();
+        const result = await execTool({ id: 'cli', name: 'pika_status', arguments: {} });
+        try {
+            const data = JSON.parse(result.result);
+            console.log();
+            console.log(`  ${chalk.bold('Ghost Status')}`);
+            console.log(`  ${chalk.dim('─'.repeat(40))}`);
+            console.log(`  Installed:     ${data.installed ? chalk.green('yes') : chalk.red('no')}`);
+            console.log(`  Path:          ${data.install_path}`);
+            console.log(`  Python:        ${data.python?.status === 'ok' ? chalk.green(`${data.python.version}`) : chalk.red(data.python?.fix || 'not found')}`);
+            console.log(`  PIKA_DEV_KEY:  ${data.pika_dev_key?.status === 'configured' ? chalk.green(`${data.pika_dev_key.preview}`) : chalk.red(data.pika_dev_key?.fix || 'not set')}`);
+            console.log(`  ffmpeg:        ${data.ffmpeg === 'available' ? chalk.green('available') : chalk.yellow(data.ffmpeg)}`);
+            console.log(`  Meeting Skill: ${data.meeting_skill === 'ready' ? chalk.green('ready') : chalk.yellow(data.meeting_skill)}`);
+            console.log(`  Skills:        ${data.skills_count}`);
+            if (data.active_sessions?.length > 0) {
+                console.log();
+                console.log(`  ${chalk.bold('Active Sessions')}`);
+                console.log(`  ${chalk.dim('─'.repeat(40))}`);
+                for (const s of data.active_sessions) {
+                    console.log(`  ${s.id} — ${s.meetUrl} (started ${s.startedAt})`);
+                }
+            }
+            console.log();
+        }
+        catch {
+            console.log(result.result);
+        }
+        process.exit(0);
+    });
+    pikaCmd.action(() => {
+        pikaCmd.commands.find(c => c.name() === 'status')?.parse(['', '', 'status']);
+    });
     program.parse(process.argv);
     const opts = program.opts();
     const promptArgs = program.args;
@@ -3165,7 +3882,7 @@ async function main() {
     if (opts.quiet)
         setQuiet(true);
     // If a sub-command was run, we're done
-    if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions', 'admin', 'monitor', 'analytics', 'deploy', 'env', 'db'].includes(program.args[0]))
+    if (['byok', 'auth', 'ide', 'local', 'ollama', 'kbot-local', 'pull', 'doctor', 'serve', 'agents', 'watch', 'voice', 'export', 'plugins', 'changelog', 'release', 'completions', 'automate', 'status', 'spec', 'a2a', 'init', 'email-agent', 'imessage-agent', 'consultation', 'observe', 'discovery', 'bench', 'lab', 'teach', 'sessions', 'admin', 'monitor', 'analytics', 'deploy', 'env', 'db', 'dream', 'ghost'].includes(program.args[0]))
         return;
     // ── Ollama Launch Integration ──
     // Detect when kbot is started via `ollama launch kbot` or `kbot --ollama-launch`
@@ -3899,6 +4616,28 @@ async function startRepl(agentOpts, context, tier, byokActive = false, localActi
             printInfo(`${p.name}`);
     }
     const sessionCount = incrementSessions();
+    // Buddy greeting — Tamagotchi companion appears at startup
+    {
+        const buddy = getBuddy();
+        const isFirstRun = sessionCount <= 1 && !existsSync(join(homedir(), '.kbot', 'config.json'));
+        const greeting = isFirstRun
+            ? `Hey! I'm ${buddy.name} the ${buddy.species}. Let's set up your API key!`
+            : getBuddyGreeting();
+        console.log();
+        console.log(formatBuddyStatus(greeting));
+        // Dream narration — buddy tells the user what it dreamed about
+        if (!isFirstRun) {
+            try {
+                const dreamNarration = getBuddyDreamNarration();
+                if (dreamNarration) {
+                    console.log();
+                    console.log(formatBuddyStatus(dreamNarration));
+                }
+            }
+            catch { /* dream narration is non-critical */ }
+        }
+        console.log();
+    }
     // Seed knowledge on first run — give new users a head start
     if (sessionCount <= 2) {
         try {

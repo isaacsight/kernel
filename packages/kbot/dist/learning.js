@@ -878,4 +878,45 @@ export function getExtendedStats() {
             .map(k => k.fact.slice(0, 80)),
     };
 }
+// ═══ 12. MEMORY CASCADE ACCESSORS ══════════════════════════════
+// Read-only accessors for the dream engine to pull data from all tiers.
+/** Get the top N patterns from the pattern cache, ranked by effectiveness */
+export function getTopPatterns(n = 10) {
+    return [...patterns]
+        .sort((a, b) => (b.hits * b.successRate) - (a.hits * a.successRate))
+        .slice(0, n);
+}
+/** Get the top N solutions from the solution index, ranked by confidence and reuse */
+export function getTopSolutions(n = 5) {
+    return [...solutions]
+        .sort((a, b) => (b.confidence * (b.reuses + 1)) - (a.confidence * (a.reuses + 1)))
+        .slice(0, n);
+}
+/** Get a text summary of the user profile for consolidation prompts */
+export function getProfileSummary() {
+    const parts = [];
+    if (profile.techStack.length > 0) {
+        parts.push(`Tech stack: ${profile.techStack.join(', ')}`);
+    }
+    if (profile.responseStyle !== 'auto') {
+        parts.push(`Response style: ${profile.responseStyle}`);
+    }
+    const topTasks = Object.entries(profile.taskPatterns)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+    if (topTasks.length > 0) {
+        parts.push(`Task patterns: ${topTasks.map(([t, n]) => `${t}(${n}x)`).join(', ')}`);
+    }
+    const topAgents = Object.entries(profile.preferredAgents)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+    if (topAgents.length > 0) {
+        parts.push(`Preferred agents: ${topAgents.map(([a, n]) => `${a}(${n}x)`).join(', ')}`);
+    }
+    parts.push(`Sessions: ${profile.sessions}, Messages: ${profile.totalMessages}`);
+    if (profile.tokensSaved > 0) {
+        parts.push(`Tokens saved by learning: ${profile.tokensSaved}`);
+    }
+    return parts.join('\n');
+}
 //# sourceMappingURL=learning.js.map

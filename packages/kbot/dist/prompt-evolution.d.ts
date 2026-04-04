@@ -86,6 +86,15 @@ export declare function getEvolutionStats(): {
  */
 export declare function resetEvolution(agent?: string): void;
 /**
+ * Register an external prompt amendment (e.g. from the dream engine).
+ * This allows other subsystems to inject mutations into the evolution state
+ * without going through the trace-based evolvePrompt() pipeline.
+ *
+ * The mutation is tagged with an optional sourceId for traceability
+ * (e.g. the dream insight ID that produced it).
+ */
+export declare function registerAmendment(agent: string, amendment: string, reason: string, sourceId?: string): PromptMutation;
+/**
  * Flush pending state to disk. Call on process exit.
  */
 export declare function flushEvolutionState(): void;

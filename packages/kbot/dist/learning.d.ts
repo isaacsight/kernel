@@ -179,5 +179,11 @@ export declare function getExtendedStats(): LearningStats & {
     projectsCount: number;
     topKnowledge: string[];
 };
+/** Get the top N patterns from the pattern cache, ranked by effectiveness */
+export declare function getTopPatterns(n?: number): CachedPattern[];
+/** Get the top N solutions from the solution index, ranked by confidence and reuse */
+export declare function getTopSolutions(n?: number): CachedSolution[];
+/** Get a text summary of the user profile for consolidation prompts */
+export declare function getProfileSummary(): string;
 export {};
 //# sourceMappingURL=learning.d.ts.map

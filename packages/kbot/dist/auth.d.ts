@@ -64,6 +64,10 @@ export declare function disableByok(): void;
 export declare function isOllamaRunning(): Promise<boolean>;
 /** List available Ollama models */
 export declare function listOllamaModels(): Promise<string[]>;
+/** Fetch the Ollama server version string (e.g. "0.19.0"), or null if unreachable */
+export declare function getOllamaVersion(): Promise<string | null>;
+/** Detect whether Ollama is using the MLX backend (Ollama 0.19+ on Apple Silicon) */
+export declare function isOllamaMLXBackend(): Promise<boolean>;
 /** Set up Ollama as the active provider */
 export declare function setupOllama(model?: string): Promise<boolean>;
 /** Check if LM Studio is running locally (default port 1234) */

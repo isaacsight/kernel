@@ -9,7 +9,7 @@ import { join } from 'node:path';
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import chalk from 'chalk';
-import { loadConfig, isByokEnabled, getByokProvider, isLocalProvider, PROVIDERS, KBOT_DIR, ENV_KEYS, } from './auth.js';
+import { loadConfig, isByokEnabled, getByokProvider, isLocalProvider, PROVIDERS, KBOT_DIR, ENV_KEYS, getOllamaVersion, isOllamaMLXBackend, } from './auth.js';
 import { getExtendedStats } from './learning.js';
 import { getMachineProfile, probeMachine } from './machine.js';
 import { createRequire } from 'node:module';
@@ -168,15 +168,25 @@ async function checkLocalProviderReachable(providerId, providerConfig) {
         if (!res.ok) {
             return { name: providerConfig.name, status: 'fail', message: `returned ${res.status}` };
         }
-        // For Ollama, report model count
+        // For Ollama, report model count, version, and MLX backend
         if (providerId === 'ollama') {
             try {
                 const data = await res.json();
                 const models = data.models ?? [];
-                const modelInfo = models.length > 0
-                    ? `running (${models.length} model${models.length !== 1 ? 's' : ''})`
-                    : 'running (no models pulled)';
-                return { name: providerConfig.name, status: 'pass', message: modelInfo };
+                const parts = [];
+                // Model count
+                parts.push(models.length > 0
+                    ? `${models.length} model${models.length !== 1 ? 's' : ''}`
+                    : 'no models pulled');
+                // Version
+                const version = await getOllamaVersion();
+                if (version)
+                    parts.push(`v${version}`);
+                // MLX backend detection
+                const mlxActive = await isOllamaMLXBackend();
+                if (mlxActive)
+                    parts.push('MLX backend');
+                return { name: providerConfig.name, status: 'pass', message: `running (${parts.join(', ')})` };
             }
             catch {
                 return { name: providerConfig.name, status: 'pass', message: 'running' };
@@ -362,6 +372,38 @@ function checkShell() {
     const completionStatus = completionsInstalled ? ', completions installed' : '';
     return { name: 'Shell', status: 'pass', message: `${shellName}${completionStatus}` };
 }
+// ── Ollama MLX check (0.19+ on Apple Silicon) ──
+async function checkOllamaMLX() {
+    // Only relevant on Apple Silicon
+    if (process.platform !== 'darwin' || process.arch !== 'arm64')
+        return null;
+    const version = await getOllamaVersion();
+    if (!version)
+        return null; // Ollama not running — already reported by provider check
+    const parts = version.split('.').map(Number);
+    const [major = 0, minor = 0] = parts;
+    if (major > 0 || minor >= 19) {
+        const mlxActive = await isOllamaMLXBackend();
+        if (mlxActive) {
+            return {
+                name: 'Ollama MLX',
+                status: 'pass',
+                message: `Ollama ${version} — MLX backend available for 2x faster inference on Apple Silicon`,
+            };
+        }
+        return {
+            name: 'Ollama MLX',
+            status: 'pass',
+            message: `Ollama ${version} — MLX supported (57% faster prefill, 93% faster decode on Apple Silicon)`,
+        };
+    }
+    // Ollama is running but older than 0.19
+    return {
+        name: 'Ollama MLX',
+        status: 'warn',
+        message: `Ollama ${version} — upgrade to 0.19+ for MLX backend (2x faster on Apple Silicon)`,
+    };
+}
 // ── Hardware checks (uses machine.ts) ──
 async function checkHardware() {
     const results = [];
@@ -435,16 +477,20 @@ export async function runDoctor() {
     checks.push(checkKbotVersion());
     checks.push(checkApiKey());
     // Async checks — run in parallel for speed
-    const [providerResults, hardwareResults] = await Promise.all([
+    const [providerResults, hardwareResults, ollamaMLXResult] = await Promise.all([
         checkAllProviders().catch(() => [
             { name: 'Providers', status: 'warn', message: 'check failed unexpectedly' },
         ]),
         checkHardware().catch(() => [
             { name: 'Hardware', status: 'warn', message: 'check failed unexpectedly' },
         ]),
+        checkOllamaMLX().catch(() => null),
     ]);
     // Provider checks (one line per provider)
     checks.push(...providerResults);
+    // Ollama MLX check (Apple Silicon only)
+    if (ollamaMLXResult)
+        checks.push(ollamaMLXResult);
     // Hardware checks
     checks.push(...hardwareResults);
     // More synchronous checks

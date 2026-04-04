@@ -376,6 +376,34 @@ export function resetEvolution(agent) {
     persist();
 }
 /**
+ * Register an external prompt amendment (e.g. from the dream engine).
+ * This allows other subsystems to inject mutations into the evolution state
+ * without going through the trace-based evolvePrompt() pipeline.
+ *
+ * The mutation is tagged with an optional sourceId for traceability
+ * (e.g. the dream insight ID that produced it).
+ */
+export function registerAmendment(agent, amendment, reason, sourceId) {
+    const state = getState();
+    const taggedReason = sourceId ? `${reason} [source: ${sourceId}]` : reason;
+    const mutation = {
+        agent,
+        original: getPromptAmendment(agent),
+        mutated: `\n\n[Dream-Evolved — ${new Date().toISOString().slice(0, 10)}]\n${amendment}`,
+        reason: taggedReason,
+        appliedAt: new Date().toISOString(),
+        scoreBefore: 0,
+        scoreAfter: 0,
+    };
+    state.mutations.push(mutation);
+    if (state.mutations.length > MAX_MUTATIONS) {
+        state.mutations = state.mutations.slice(-MAX_MUTATIONS);
+    }
+    state.generation++;
+    persist();
+    return mutation;
+}
+/**
  * Flush pending state to disk. Call on process exit.
  */
 export function flushEvolutionState() {

@@ -112,13 +112,107 @@ export declare class AbletonM4L {
     /** Generic LOM method call — call any method at any path */
     lomCall(path: string, method: string, args?: unknown[]): Promise<M4LResponse>;
 }
+export interface BrowserSearchResult {
+    name: string;
+    uri: string;
+    is_loadable: boolean;
+    is_device: boolean;
+}
+export interface BrowserCategory {
+    name: string;
+    display_name: string;
+    child_count: number;
+}
+/**
+ * Client for the KBotBridge Remote Script (TCP 9997).
+ *
+ * This is separate from the M4L bridge (9999) because the Browser API
+ * (browser.load_item) is ONLY available from Python Remote Scripts,
+ * not from Max for Live.
+ *
+ * Use this to programmatically load any native device (Saturator,
+ * EQ Eight, Compressor, etc.) onto any track.
+ */
+export declare class AbletonBrowserBridge {
+    private static instance;
+    private socket;
+    private connected;
+    private pending;
+    private nextId;
+    private buffer;
+    static PORT: number;
+    static HOST: string;
+    static TIMEOUT: number;
+    private constructor();
+    static getInstance(): AbletonBrowserBridge;
+    /**
+     * Connect to the KBotBridge Remote Script on port 9997.
+     * Returns true if connected and the bridge responds to ping.
+     */
+    connect(): Promise<boolean>;
+    disconnect(): void;
+    send(cmd: Omit<M4LCommand, 'id'> & {
+        action: string;
+    }): Promise<M4LResponse>;
+    get isConnected(): boolean;
+    private handleResponse;
+    private handleDisconnect;
+    ping(): Promise<boolean>;
+    /**
+     * Search Ableton's browser for items matching a query.
+     * @param query - Search string (case-insensitive)
+     * @param category - instruments/audio_effects/midi_effects/drums/samples/all
+     */
+    browserSearch(query: string, category?: string): Promise<BrowserSearchResult[]>;
+    /**
+     * Load a browser item by URI onto a track.
+     * Use the URI from a browserSearch() result.
+     */
+    browserLoad(track: number, uri: string): Promise<M4LResponse>;
+    /**
+     * Search + load in one step. Finds first loadable match and loads it.
+     * @param track - 0-indexed track number
+     * @param name - Device name to search for (e.g., "Saturator", "EQ Eight")
+     * @param category - instruments/audio_effects/midi_effects/drums/samples/all
+     */
+    browserLoadByName(track: number, name: string, category?: string): Promise<M4LResponse>;
+    /**
+     * List top-level browser categories with child counts.
+     */
+    browserCategories(): Promise<BrowserCategory[]>;
+    /**
+     * List all tracks with names and device counts.
+     */
+    listTracks(): Promise<M4LResponse>;
+    /**
+     * List devices on a track with full parameter details.
+     */
+    listDevices(track: number): Promise<M4LResponse>;
+}
 /**
  * Get a connected M4L bridge instance.
  * Throws if the bridge is not available.
  */
 export declare function ensureM4L(): Promise<AbletonM4L>;
 /**
+ * Get a connected Browser bridge instance (KBotBridge Remote Script on port 9997).
+ * Throws if not available.
+ */
+export declare function ensureBrowserBridge(): Promise<AbletonBrowserBridge>;
+/**
+ * Connect to both M4L bridge (9999) and Browser bridge (9997).
+ * Returns whichever connections succeed. At least one must connect.
+ */
+export declare function connectBrowser(): Promise<{
+    m4l: AbletonM4L | null;
+    browser: AbletonBrowserBridge | null;
+}>;
+/**
  * Format a friendly error message for M4L connection failures.
  */
 export declare function formatM4LError(): string;
+/**
+ * Format a friendly error message for Browser bridge connection failures.
+ */
+export declare function formatBrowserBridgeError(): string;
 //# sourceMappingURL=ableton-m4l.d.ts.map

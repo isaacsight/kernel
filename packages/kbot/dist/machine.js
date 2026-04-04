@@ -314,6 +314,18 @@ function detectGpuAcceleration(gpus) {
         return 'vulkan';
     return 'cpu-only';
 }
+// ── MLX framework detection (Apple Silicon) ──
+function detectMLX() {
+    if (platform() !== 'darwin' || arch() !== 'arm64')
+        return false;
+    // Quick check: try importing mlx in Python
+    const result = exec('python3 -c "import mlx; print(mlx.__version__)" 2>/dev/null', 3000);
+    if (result && !result.includes('ModuleNotFoundError'))
+        return true;
+    // Fallback: check common pip install path
+    const globCheck = exec('ls /usr/local/lib/python3.*/site-packages/mlx/__init__.py 2>/dev/null || ls ~/Library/Python/3.*/lib/python/site-packages/mlx/__init__.py 2>/dev/null', 2000);
+    return !!globCheck;
+}
 // ── Model size recommendation ──
 function recommendModelSize(totalMemoryGB, gpuAccel) {
     // Conservative: leave room for OS + apps
@@ -374,6 +386,7 @@ export async function probeMachine() {
         osInfo = probeLinuxOs();
     }
     const gpuAccel = detectGpuAcceleration(gpus);
+    const mlxAvailable = detectMLX();
     const devTools = probeDevTools();
     // Uptime
     const uptimeSeconds = plat === 'darwin'
@@ -420,6 +433,7 @@ export async function probeMachine() {
         canRunLocalModels: gpuAccel !== 'cpu-only' || totalGB >= 8,
         gpuAcceleration: gpuAccel,
         recommendedModelSize: recommendModelSize(totalGB, gpuAccel),
+        mlxAvailable,
         probedAt: new Date().toISOString(),
     };
     cached = profile;
@@ -505,6 +519,8 @@ export function formatMachineProfile(p) {
     lines.push('');
     lines.push('  AI Capabilities');
     lines.push(`    Acceleration    ${p.gpuAcceleration}`);
+    if (p.mlxAvailable)
+        lines.push(`    MLX framework   available (Apple Silicon accelerated)`);
     lines.push(`    Local models    ${p.canRunLocalModels ? 'yes' : 'no'}`);
     lines.push(`    Recommended     up to ${p.recommendedModelSize} parameters`);
     lines.push('');
@@ -529,7 +545,7 @@ export function formatMachineForPrompt(p) {
     if (p.battery.present) {
         parts.push(`Battery: ${p.battery.percent}% ${p.battery.charging ? 'charging' : 'discharging'}`);
     }
-    parts.push(`GPU accel: ${p.gpuAcceleration} — local models up to ${p.recommendedModelSize}`);
+    parts.push(`GPU accel: ${p.gpuAcceleration}${p.mlxAvailable ? ' + MLX' : ''} — local models up to ${p.recommendedModelSize}`);
     const toolNames = p.devTools.map(t => `${t.name} ${t.version}`).join(', ');
     if (toolNames)
         parts.push(`Tools: ${toolNames}`);

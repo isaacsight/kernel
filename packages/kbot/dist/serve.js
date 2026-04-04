@@ -1,9 +1,11 @@
-// kbot Serve — HTTP server that exposes all tools over REST
+// kbot Serve — HTTP/HTTPS server that exposes all tools over REST
 //
 // Usage:
 //   kbot serve                    # Start on default port 7437
 //   kbot serve --port 3000        # Custom port
 //   kbot serve --token mysecret   # Require auth token
+//   kbot serve --https            # HTTPS with auto-generated self-signed cert
+//   kbot serve --cert x.pem --key x.key  # HTTPS with custom cert
 //
 // Endpoints:
 //   GET  /health          — Health check
@@ -13,6 +15,7 @@
 //   POST /stream          — SSE streaming agent execution
 //   GET  /metrics         — Tool execution metrics
 import { createServer } from 'node:http';
+import { createServer as createHttpsServer } from 'node:https';
 import { createRequire } from 'node:module';
 import { registerAllTools, getAllTools, executeTool, getToolDefinitionsForApi, getToolMetrics } from './tools/index.js';
 import { extractMcpAppFromText, renderMcpApp, listAppCapableTools } from './mcp-apps.js';
@@ -22,6 +25,10 @@ import { runAgent } from './agent.js';
 import { destroySession } from './memory.js';
 import { randomUUID } from 'node:crypto';
 import { mountA2ARoutes } from './a2a.js';
+import { execSync } from 'node:child_process';
+import { existsSync, readFileSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { homedir } from 'node:os';
 const __require = createRequire(import.meta.url);
 const VERSION = __require('../package.json').version;
 function cors(res) {
@@ -42,13 +49,42 @@ function readBody(req) {
         req.on('error', reject);
     });
 }
+/** Generate or load a self-signed TLS certificate for localhost */
+function ensureSelfSignedCert() {
+    const certDir = join(homedir(), '.kbot', 'certs');
+    const certPath = join(certDir, 'localhost.crt');
+    const keyPath = join(certDir, 'localhost.key');
+    if (existsSync(certPath) && existsSync(keyPath)) {
+        return { cert: readFileSync(certPath, 'utf-8'), key: readFileSync(keyPath, 'utf-8') };
+    }
+    mkdirSync(certDir, { recursive: true });
+    printInfo('Generating self-signed TLS certificate for localhost...');
+    execSync(`openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 ` +
+        `-nodes -days 365 -subj "/CN=localhost" ` +
+        `-addext "subjectAltName=DNS:localhost,IP:127.0.0.1" ` +
+        `-keyout "${keyPath}" -out "${certPath}"`, { stdio: 'pipe' });
+    printSuccess('Certificate generated at ~/.kbot/certs/');
+    return { cert: readFileSync(certPath, 'utf-8'), key: readFileSync(keyPath, 'utf-8') };
+}
 export async function startServe(options) {
     // Register all tools before starting
     printInfo('Registering tools...');
     await registerAllTools({ computerUse: options.computerUse });
     const tools = getAllTools();
     printSuccess(`${tools.length} tools registered`);
-    const server = createServer(async (req, res) => {
+    // Determine TLS config
+    const useTls = !!(options.https || options.cert || options.key);
+    let tlsOpts;
+    if (useTls) {
+        if (options.cert && options.key) {
+            tlsOpts = { cert: readFileSync(options.cert, 'utf-8'), key: readFileSync(options.key, 'utf-8') };
+        }
+        else {
+            tlsOpts = ensureSelfSignedCert();
+        }
+    }
+    const protocol = useTls ? 'https' : 'http';
+    const handler = async (req, res) => {
         // CORS preflight
         if (req.method === 'OPTIONS') {
             cors(res);
@@ -66,7 +102,7 @@ export async function startServe(options) {
                 return;
             }
         }
-        const url = new URL(req.url || '/', `http://localhost:${options.port}`);
+        const url = new URL(req.url || '/', `${protocol}://localhost:${options.port}`);
         const path = url.pathname;
         try {
             // GET /health
@@ -218,15 +254,23 @@ export async function startServe(options) {
         catch (err) {
             json(res, 500, { error: err instanceof Error ? err.message : 'Internal error' });
         }
-    });
+    };
+    const server = useTls
+        ? createHttpsServer(tlsOpts, handler)
+        : createServer(handler);
     // Mount A2A protocol routes (Agent Card + task endpoints)
+    // Cast needed: https.Server and http.Server share the same request event API
     mountA2ARoutes(server, {
         port: options.port,
-        endpointUrl: `http://localhost:${options.port}`,
+        endpointUrl: `${protocol}://localhost:${options.port}`,
         token: options.token,
     });
+    const baseUrl = `${protocol}://localhost:${options.port}`;
     server.listen(options.port, () => {
-        printSuccess(`kbot serve running on http://localhost:${options.port}`);
+        printSuccess(`kbot serve running on ${baseUrl}`);
+        if (useTls) {
+            printInfo('  TLS: self-signed cert (browsers will warn — safe for local connectors)');
+        }
         printInfo(`  GET  /health                — Health check`);
         printInfo(`  GET  /tools                 — List ${tools.length} tools`);
         printInfo(`  POST /execute               — Execute a tool`);
@@ -235,14 +279,15 @@ export async function startServe(options) {
         printInfo(`  GET  /metrics               — Execution metrics`);
         printInfo(`  GET  /apps                  — List MCP App-capable tools`);
         printInfo(`  GET  /.well-known/agent.json — A2A Agent Card`);
-        printInfo(`  POST /a2a/tasks             — A2A submit task`);
-        printInfo(`  GET  /a2a/tasks/:id         — A2A task status`);
+        printInfo(`  POST /a2a                   — A2A JSON-RPC endpoint`);
+        printInfo(`  POST /a2a/tasks             — A2A submit task (REST)`);
+        printInfo(`  GET  /a2a/tasks/:id         — A2A task status (REST)`);
         if (options.token) {
             printInfo(`  Auth: Bearer token required`);
         }
         printInfo('');
         printInfo('Connect from kernel.chat:');
-        printInfo(`  connectKbot('http://localhost:${options.port}')`);
+        printInfo(`  connectKbot('${baseUrl}')`);
     });
     // Graceful shutdown
     const shutdown = () => {
