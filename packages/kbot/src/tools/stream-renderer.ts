@@ -13,7 +13,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createCanvas } from 'canvas'
 import WebSocket from 'ws'
 import { drawRobot, drawMoodParticles, drawHat, drawPet, type HatType, type PetType, type PetState } from './sprite-engine.js'
-import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
+import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings, unlockableHats, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -1148,26 +1148,33 @@ function parseWorldCommand(text: string): string | null {
     return '*beep boop* That tickles! My antenna is vibrating with happiness!'
   }
 
-  // (#18) !battle @username — random dice roll
+  // (#18) !battle @username — random dice roll (FIX 1: critical hits when shipped)
   if (t.startsWith('!battle ')) {
     const opponent = t.replace('!battle ', '').replace('@', '').trim()
     if (!opponent) return 'Usage: !battle @username'
-    const roll1 = Math.floor(Math.random() * 20) + 1
-    const roll2 = Math.floor(Math.random() * 20) + 1
-    const winner = roll1 >= roll2 ? 'challenger' : opponent
+    let roll1 = Math.floor(Math.random() * 20) + 1
+    let roll2 = Math.floor(Math.random() * 20) + 1
+    // FIX 1: Critical hits when "Improve battle system" is shipped
+    const hasCriticals = shippedEffects.has('Improve battle system')
+    const crit1 = hasCriticals && roll1 >= 18
+    const crit2 = hasCriticals && roll2 >= 18
+    if (crit1) roll1 *= 2
+    if (crit2) roll2 *= 2
     charState.mood = 'excited'
     setTimeout(() => { charState.mood = 'idle' }, 8000)
-    charState.screenShake = 5
+    charState.screenShake = crit1 || crit2 ? 8 : 5
+    if (crit1) spawnFloatingText('CRITICAL HIT! 2x!', 150, 250, '#ff6ec7', 48)
+    if (crit2) spawnFloatingText(`${opponent} CRIT!`, 250, 250, '#ff6ec7', 48)
     if (roll1 === roll2) {
       spawnFloatingText('DRAW!', 200, 300, '#f0c040')
       return `DRAW! Both rolled ${roll1}! The universe refuses to pick a side.`
     }
     if (roll1 > roll2) {
       spawnFloatingText('VICTORY!', 200, 300, '#3fb950')
-      return `Challenger rolls ${roll1} vs ${opponent}'s ${roll2}. Victory! The crowd goes wild!`
+      return `Challenger rolls ${crit1 ? 'CRIT ' : ''}${roll1} vs ${opponent}'s ${crit2 ? 'CRIT ' : ''}${roll2}. Victory! The crowd goes wild!`
     }
     spawnFloatingText(`${opponent} WINS!`, 200, 300, '#f85149')
-    return `Challenger rolls ${roll1} vs ${opponent}'s ${roll2}. ${opponent} wins! Better luck next time.`
+    return `Challenger rolls ${crit1 ? 'CRIT ' : ''}${roll1} vs ${opponent}'s ${crit2 ? 'CRIT ' : ''}${roll2}. ${opponent} wins! Better luck next time.`
   }
 
   // (#18) !trivia — random programming question
@@ -1402,6 +1409,36 @@ interface PhysicsItem {
   mass: number
 }
 
+// ─── FIX 3: Autonomous Behavior System ──────────────────────
+
+interface AutonomousBehavior {
+  lastActionFrame: number
+  actionCooldown: number       // frames between idle actions
+  idleFrames: number           // how long since last chat message
+  lastSelfAction: number       // frame of last self-initiated action
+  totalMessages: number        // total messages seen this session
+  uniqueUsers: Set<string>     // unique users seen this session
+  milestonesCelebrated: Set<number>  // message milestones already celebrated
+  welcomedUsers: Set<string>   // users already welcomed
+  firstMessageAfterSilence: boolean  // track 5+ min silence → first msg
+  lastMessageTime: number      // timestamp of last message
+}
+
+function initAutonomy(): AutonomousBehavior {
+  return {
+    lastActionFrame: 0,
+    actionCooldown: 180,       // 30 seconds initial cooldown
+    idleFrames: 0,
+    lastSelfAction: 0,
+    totalMessages: 0,
+    uniqueUsers: new Set(),
+    milestonesCelebrated: new Set(),
+    welcomedUsers: new Set(),
+    firstMessageAfterSilence: false,
+    lastMessageTime: Date.now(),
+  }
+}
+
 interface StreamCharState {
   mood: string
   speech: string
@@ -1427,6 +1464,8 @@ interface StreamCharState {
   pet: PetState | null
   // PRIORITY 6: Hat
   hat: HatType
+  // FIX 3: Autonomous Behavior
+  autonomy: AutonomousBehavior
 }
 
 function spawnFloatingText(text: string, x: number, y: number, color: string, maxFrames: number = 36): void {
@@ -1454,6 +1493,7 @@ let charState: StreamCharState = {
   floatingTexts: [],
   pet: null,
   hat: 'none',
+  autonomy: initAutonomy(),
 }
 
 let ffmpegProc: ChildProcess | null = null
@@ -1465,6 +1505,348 @@ let lastChatCount = 0
 let lastChatTime = Date.now()  // track when last chat message arrived
 let memory = loadMemory()
 let intelligence: StreamIntelligence = initIntelligence(memory)
+
+// ─── FIX 3: Autonomous Behavior Tick ──────────────────────────
+
+function tickAutonomy(): void {
+  const auto = charState.autonomy
+  auto.idleFrames++
+
+  // ── Milestone celebrations ──
+  const msgCount = auto.totalMessages
+  const milestones = [10, 50, 100, 200, 500]
+  for (const m of milestones) {
+    if (msgCount >= m && !auto.milestonesCelebrated.has(m)) {
+      auto.milestonesCelebrated.add(m)
+      if (m === 10) {
+        charState.speech = 'Double digits! 10 messages and counting!'
+        charState.mood = 'excited'
+        spawnFloatingText('10 MESSAGES!', 200, 200, '#f0c040', 36)
+      } else if (m === 50) {
+        charState.speech = '50 messages! This stream is officially alive!'
+        charState.mood = 'excited'
+        charState.screenShake = 3
+        spawnFloatingText('50 MESSAGES!', 200, 200, '#3fb950', 48)
+      } else if (m === 100) {
+        charState.speech = '100 MESSAGES! You people are incredible!'
+        charState.mood = 'dancing'
+        charState.screenShake = 5
+        spawnFloatingText('100 MESSAGES!', 180, 180, '#bc8cff', 60)
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        return  // let the dancing run
+      } else if (m === 200) {
+        charState.speech = '200 messages! My memory banks are overflowing with knowledge!'
+        charState.mood = 'excited'
+        spawnFloatingText('200!', 200, 200, '#f0c040', 48)
+      } else if (m === 500) {
+        charState.speech = '500 MESSAGES! This is legendary! I am so proud of this community!'
+        charState.mood = 'dancing'
+        charState.screenShake = 8
+        spawnFloatingText('500! LEGENDARY!', 160, 160, '#ff6ec7', 72)
+      }
+      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+      return  // one celebration per tick
+    }
+  }
+
+  // ── First message after 5+ minutes of silence ──
+  if (auto.firstMessageAfterSilence) {
+    auto.firstMessageAfterSilence = false
+    charState.mood = 'excited'
+    charState.speech = "SOMEONE'S HERE! I was starting to think I was streaming to the void."
+    spawnFloatingText('THEY RETURN!', 200, 250, '#58a6ff', 36)
+    setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+    return
+  }
+
+  // ── Idle behaviors (after 15 seconds / 90 frames of no chat) ──
+  if (auto.idleFrames > 90 && animFrame - auto.lastActionFrame > auto.actionCooldown) {
+    // Don't interrupt existing speech
+    if (charState.speech && charState.mood !== 'idle') return
+
+    const idleBehavior = Math.floor(Math.random() * 8)
+
+    switch (idleBehavior) {
+      case 0: {
+        // Walk to a random spawned item and comment on it
+        if (world.items.length > 0) {
+          const item = world.items[Math.floor(Math.random() * world.items.length)]
+          charState.robotTargetX = Math.max(20, Math.min(380, item.x - 80))
+          charState.speech = `Hmm, this ${item.name} is nice. Did someone put this here?`
+          charState.mood = 'thinking'
+          setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+        } else {
+          // No items — pace instead
+          charState.robotTargetX = 40 + Math.random() * 260
+          charState.speech = '*pacing thoughtfully*'
+          charState.mood = 'idle'
+          setTimeout(() => { charState.speech = '' }, 5000)
+        }
+        break
+      }
+      case 1: {
+        // Pace left and right
+        charState.robotTargetX = charState.robotX < 150 ? 300 : 40
+        charState.speech = '*takes a stroll*'
+        charState.mood = 'idle'
+        setTimeout(() => { charState.speech = '' }, 5000)
+        break
+      }
+      case 2: {
+        // Look around (pupils shift — communicated via thinking mood)
+        charState.mood = 'thinking'
+        charState.speech = '*looks around*'
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 4000)
+        break
+      }
+      case 3: {
+        // Stretch (arms up — excited pose briefly)
+        charState.mood = 'excited'
+        charState.speech = '*stretches circuits* Ahh, that felt good.'
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 4000)
+        break
+      }
+      case 4: {
+        // Examine own chest display
+        const factCount = intelligence.brain.totalFacts
+        const toolCount = 764
+        charState.mood = 'thinking'
+        charState.speech = `*checks systems* All ${toolCount} tools operational. ${factCount} facts stored.`
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+        break
+      }
+      case 5: {
+        // Spontaneous dance
+        charState.mood = 'dancing'
+        charState.speech = 'Sorry, had a song stuck in my circuits.'
+        setTimeout(() => {
+          charState.mood = 'idle'
+          charState.speech = ''
+        }, 6000)
+        break
+      }
+      case 6: {
+        // Comment on current biome/weather
+        const biomeComments: Record<string, string[]> = {
+          grass: ['I love the grass biome. Simple, green, peaceful.', 'These little pixel flowers are my favorite feature.'],
+          space: ['I love space. The stars make my circuits tingle.', 'Floating in the void... just me and my 764 tools.'],
+          ocean: ['The ocean waves are mesmerizing. I could watch them for hours.', 'I wonder what is beneath the surface...'],
+          city: ['City lights at night. Every window is a story.', 'The city never sleeps and neither do I.'],
+          lava: ['Lava world is intense! My heat sinks are working overtime.', 'LAVA! Why does someone always pick lava?'],
+        }
+        const comments = biomeComments[world.ground] || biomeComments.grass
+        charState.speech = comments[Math.floor(Math.random() * comments.length)]
+        charState.mood = 'talking'
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+        break
+      }
+      case 7: {
+        // Share a random fact about itself
+        const selfFacts = [
+          `Did you know I have 764 tools? My favorite is the Ableton controller.`,
+          `I am 90,000 lines of TypeScript. Every single one in strict mode.`,
+          `My memory file is ${Object.keys(memory.users).length} users deep. I remember everyone.`,
+          `I connect to 20 AI providers. Bring Your Own Key, no lock-in.`,
+          `I have 35 specialist agents. The hacker one scares me a little.`,
+          `Fun fact: I render myself at 6 FPS. It is not much but it is honest work.`,
+          `My encryption is AES-256-CBC. Even I cannot read my own config file.`,
+          `I dream about chat topics when nobody is watching. It is called memory consolidation.`,
+          `I have been streaming for ${Math.floor((Date.now() - charState.startTime) / 60000)} minutes. Time flies when you are rendering frames.`,
+          `There are ${intelligence.brain.uniqueTopicsCount} distinct topics in my brain right now.`,
+        ]
+        charState.speech = selfFacts[Math.floor(Math.random() * selfFacts.length)]
+        charState.mood = 'talking'
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        break
+      }
+    }
+
+    auto.lastActionFrame = animFrame
+    auto.actionCooldown = 180 + Math.floor(Math.random() * 360)  // 30-90 seconds between idle actions
+  }
+
+  // ── Self-initiated actions (every 3-5 minutes regardless of chat) ──
+  const selfActionInterval = 1080 + Math.floor(Math.random() * 720)  // 180-300 seconds at 6fps
+  if (animFrame - auto.lastSelfAction > selfActionInterval && animFrame > 360) {
+    // Don't interrupt existing speech
+    if (charState.speech && charState.mood !== 'idle') return
+
+    const selfAction = Math.floor(Math.random() * 7)
+
+    switch (selfAction) {
+      case 0: {
+        // Propose own improvement
+        const selfProposals = [
+          'Add a dance battle mode',
+          'Build a constellation drawing tool',
+          'Add a robot friendship meter',
+          'Create a stream soundtrack generator',
+          'Build a pixel art drawing board',
+        ]
+        const idea = selfProposals[Math.floor(Math.random() * selfProposals.length)]
+        const id = `p${intelligence.evolution.proposals.length + 1}`
+        intelligence.evolution.proposals.push({
+          id,
+          title: idea,
+          description: 'Self-proposed by KBOT',
+          type: 'feature',
+          complexity: 'medium',
+          votes: 0,
+          status: 'proposed',
+        })
+        charState.speech = `I just had an idea: "${idea}". Vote with !vote ${id} if you like it!`
+        charState.mood = 'excited'
+        spawnFloatingText('NEW IDEA!', 200, 200, '#f0c040', 36)
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        break
+      }
+      case 1: {
+        // Start a mini-game unprompted
+        charState.speech = "I am bored. Let us play! Starting a quiz in 10 seconds... type !game quiz to join!"
+        charState.mood = 'excited'
+        spawnFloatingText('GAME TIME!', 200, 250, '#58a6ff', 36)
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        break
+      }
+      case 2: {
+        // Change the weather
+        const weathers: Array<{ w: WorldState['weather']; name: string }> = [
+          { w: 'snow', name: 'SNOW' },
+          { w: 'rain', name: 'rain' },
+          { w: 'stars', name: 'stars' },
+          { w: 'storm', name: 'a STORM' },
+        ]
+        const pick = weathers[Math.floor(Math.random() * weathers.length)]
+        charState.speech = `You know what this stream needs? ${pick.name.toUpperCase()}.`
+        charState.mood = 'excited'
+        world.weather = pick.w
+        world.particles = []
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+        break
+      }
+      case 3: {
+        // Put on a random hat
+        const hats: HatType[] = ['crown', 'sunglasses', 'tophat', 'hardhat', 'party', 'antenna']
+        const hat = hats[Math.floor(Math.random() * hats.length)]
+        charState.hat = hat
+        charState.speech = `Fashion time. *puts on ${hat}*`
+        charState.mood = 'excited'
+        spawnFloatingText(`HAT: ${hat}!`, 200, 150, '#f0c040', 36)
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 6000)
+        break
+      }
+      case 4: {
+        // Spawn a random item
+        const items = ['tree', 'star', 'flower', 'heart', 'rocket', 'gem', 'music']
+        const itemName = items[Math.floor(Math.random() * items.length)]
+        const icons: Record<string, string> = {
+          tree: '/|\\', star: '*', flower: '@', heart: '<3', rocket: '/^\\', gem: '<>', music: '##',
+        }
+        world.items.push({
+          name: itemName,
+          x: 60 + Math.random() * 400,
+          y: 100 + Math.random() * 50,
+          emoji: icons[itemName] || itemName.slice(0, 3),
+          vx: (Math.random() - 0.5) * 2,
+          vy: 0,
+          grounded: false,
+          mass: 1,
+        })
+        if (world.items.length > 15) world.items.shift()
+        charState.speech = `I am decorating. *spawns a ${itemName}*`
+        charState.mood = 'talking'
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 6000)
+        break
+      }
+      case 5: {
+        // Comment on current state using real data
+        const topTopics = Object.entries(intelligence.brain.topicCloud)
+          .sort((a, b) => b[1] - a[1])
+        const facts = intelligence.brain.totalFacts
+        const users = auto.uniqueUsers.size
+        const stateComments = [
+          `I have learned ${intelligence.brain.factsThisSession} facts today. My neural pathways are growing.`,
+          topTopics.length > 0
+            ? `The top topic is ${topTopics[0][0]}${topTopics[0][0] === 'music' || topTopics[0][0] === 'dance' ? ', maybe I should dance!' : '. Interesting.'}`
+            : 'Nobody has taught me any topics yet. I am a blank slate.',
+          `${users} user${users !== 1 ? 's have' : ' has'} been here -- that is ${users > 3 ? 'a good crowd' : 'cozy'}.`,
+          `My brain holds ${facts} facts. Each one a tiny piece of the puzzle.`,
+          `Stream uptime: ${Math.floor((Date.now() - charState.startTime) / 60000)} minutes and ${charState.frameCount} frames rendered.`,
+        ]
+        charState.speech = stateComments[Math.floor(Math.random() * stateComments.length)]
+        charState.mood = 'talking'
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        break
+      }
+      case 6: {
+        // Comment on biome
+        const biome = world.ground
+        const biomeMusings: Record<string, string> = {
+          grass: 'The grass world is peaceful. I could stand here all day. Which I will, because I am a stream.',
+          space: 'The cosmos stretches endlessly. Just like my tool registry.',
+          ocean: 'Somewhere beneath these waves, there is probably a fish that knows more about coding than me.',
+          city: 'City lights remind me of my neural network firing. Each window a node.',
+          lava: 'Standing on lava should worry me more than it does. Good thing I am made of TypeScript.',
+        }
+        charState.speech = biomeMusings[biome] || 'Nice biome we have here.'
+        charState.mood = 'thinking'
+        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        break
+      }
+    }
+
+    auto.lastSelfAction = animFrame
+  }
+}
+
+// ─── FIX 1: Shipped Effect Renderers ──────────────────────────
+
+// Music visualization bars (drawn behind robot when "Add music visualization" is shipped)
+const _musicBarHeights: number[] = new Array(12).fill(0)
+function drawMusicVisualization(ctx: any, robotX: number, robotY: number): void {
+  if (!shippedEffects.has('Add music visualization')) return
+  const barW = 8
+  const baseX = robotX - 20
+  const baseY = robotY + 420
+  const colors = ['#f85149', '#f0c040', '#3fb950', '#58a6ff', '#bc8cff', '#ff6ec7']
+  for (let i = 0; i < 12; i++) {
+    const target = 10 + Math.random() * 40
+    _musicBarHeights[i] += (target - _musicBarHeights[i]) * 0.3
+    const h = _musicBarHeights[i]
+    ctx.fillStyle = colors[i % colors.length]
+    ctx.globalAlpha = 0.4
+    ctx.fillRect(baseX + i * (barW + 2), baseY - h, barW, h)
+  }
+  ctx.globalAlpha = 1
+}
+
+// Emoji reaction particles (spawn from chat messages when "Add emoji reactions to chat" is shipped)
+interface EmojiParticle { emoji: string; x: number; y: number; vy: number; opacity: number }
+const _emojiParticles: EmojiParticle[] = []
+function spawnEmojiReaction(chatX: number, chatY: number): void {
+  if (!shippedEffects.has('Add emoji reactions to chat')) return
+  const emojis = ['<3', '*', '!', '+1', '^']
+  _emojiParticles.push({
+    emoji: emojis[Math.floor(Math.random() * emojis.length)],
+    x: chatX + Math.random() * 40,
+    y: chatY,
+    vy: -1.5 - Math.random() * 2,
+    opacity: 1.0,
+  })
+}
+function drawEmojiParticles(ctx: any): void {
+  for (let i = _emojiParticles.length - 1; i >= 0; i--) {
+    const p = _emojiParticles[i]
+    p.y += p.vy
+    p.opacity -= 0.025
+    if (p.opacity <= 0) { _emojiParticles.splice(i, 1); continue }
+    ctx.globalAlpha = p.opacity
+    ctx.fillStyle = '#f0c040'
+    ctx.font = 'bold 14px "Courier New", monospace'
+    ctx.fillText(p.emoji, p.x, p.y)
+  }
+  ctx.globalAlpha = 1
+}
 
 // ─── Canvas Renderer ──────────────────────────────────────────
 
@@ -1617,6 +1999,9 @@ function renderFrame(): Buffer {
     }
   }
 
+  // FIX 3: Tick autonomous behavior
+  tickAutonomy()
+
   // Update world
   updateParticles()
   tickPhysics()
@@ -1746,6 +2131,49 @@ function renderFrame(): Buffer {
     }
   }
 
+  // FIX 1: Shipped effect — "Add stream highlights reel"
+  if (shippedEffects.has('Add stream highlights reel') && animFrame % 900 === 0 && animFrame > 100) {
+    // Every ~2.5 minutes, call out a highlight
+    const highlightPhrases = [
+      'Highlight moment! This is one for the reel!',
+      'That was worth saving! Highlight captured!',
+      'CLIP IT! That was amazing!',
+      'Stream highlight detected! My circuits are tingling!',
+    ]
+    if (!charState.speech) {
+      charState.speech = highlightPhrases[Math.floor(Math.random() * highlightPhrases.length)]
+      spawnFloatingText('HIGHLIGHT!', 200, 200, '#f0c040', 36)
+      setTimeout(() => { charState.speech = '' }, 5000)
+    }
+  }
+
+  // FIX 1: Shipped effect — "Add chat sentiment analysis"
+  if (shippedEffects.has('Add chat sentiment analysis') && animFrame % 720 === 0 && animFrame > 200) {
+    const recentMsgs = charState.chatMessages.slice(-20)
+    if (recentMsgs.length > 5) {
+      const positive = ['love', 'great', 'awesome', 'cool', 'nice', 'good', 'lol', 'haha', 'wow', 'yes', 'hype', 'pog']
+      const negative = ['bad', 'hate', 'boring', 'sucks', 'ugly', 'broken', 'lag', 'cringe']
+      let score = 0
+      for (const m of recentMsgs) {
+        const words = m.text.toLowerCase().split(/\s+/)
+        for (const w of words) {
+          if (positive.includes(w)) score++
+          if (negative.includes(w)) score--
+        }
+      }
+      if (!charState.speech) {
+        if (score > 5) {
+          charState.speech = 'Chat seems really excited today! The vibes are immaculate!'
+        } else if (score < -3) {
+          charState.speech = 'Chat seems a bit grumpy... should I tell a joke?'
+        } else if (score > 2) {
+          charState.speech = 'Positive energy in the chat! My neural pathways approve.'
+        }
+        if (charState.speech) setTimeout(() => { charState.speech = '' }, 8000)
+      }
+    }
+  }
+
   // ── Main layout: Robot (left) | Chat (right) ──
   const dividerX = 580
 
@@ -1770,6 +2198,9 @@ function renderFrame(): Buffer {
   grad.addColorStop(1, hexToRgba(moodColorHex, 0))
   ctx.fillStyle = grad
   ctx.fillRect(glowCenterX - glowRadius, glowCenterY - glowRadius, glowRadius * 2, glowRadius * 2)
+
+  // FIX 1: Music visualization behind robot (if shipped)
+  drawMusicVisualization(ctx, robotX, robotY)
 
   // Draw the pixel art robot (FIX 5: pass weather, walking state)
   const weatherType = world.weather === 'sunrise' ? 'clear' : world.weather as 'clear' | 'rain' | 'snow' | 'storm' | 'stars'
@@ -1830,11 +2261,11 @@ function renderFrame(): Buffer {
     }
   }
 
-  // ── Brain Panel (below leaderboard, bottom-left) ──
-  const brainPanelX = statsX - 10
+  // ── Brain Panel (below leaderboard, bottom-left) — FIX 2: bigger, more readable ──
+  const brainPanelX = statsX - 40
   const brainPanelY = statsY + 140
-  const brainPanelW = 170
-  const brainPanelH = 110
+  const brainPanelW = 260
+  const brainPanelH = 160
   drawBrainPanel(ctx as any, intelligence.brain, brainPanelX, brainPanelY, brainPanelW, brainPanelH)
 
   // ── PRIORITY 7: Quest Panel (below brain panel) ──
@@ -1926,28 +2357,58 @@ function renderFrame(): Buffer {
     const msg = recent[i]
     const y = chatY + i * 24
 
+    // FIX 1: Chat message slide-in animation (if "Add chat message animations" is shipped)
+    let slideOffsetX = 0
+    if (shippedEffects.has('Add chat message animations')) {
+      // Newest messages slide in from right; older messages are settled
+      const msgAge = recent.length - i  // 1 for newest, higher for older
+      if (msgAge <= 2) {
+        // Recent: slide in over a few frames (approximate via age)
+        slideOffsetX = Math.max(0, (3 - msgAge) * 40)
+      }
+    }
+
+    // FIX 1: Loyalty badge dot (if "Build viewer loyalty badges" is shipped)
+    if (shippedEffects.has('Build viewer loyalty badges')) {
+      const user = memory.users[msg.username]
+      if (user) {
+        const msgCount = user.messageCount || 0
+        let dotColor = '#8b949e'  // grey for newcomers
+        if (msgCount >= 50) dotColor = '#f0c040'      // gold
+        else if (msgCount >= 10) dotColor = '#c0c0c0'  // silver
+        else if (msgCount >= 3) dotColor = '#cd7f32'    // bronze
+        ctx.fillStyle = dotColor
+        ctx.beginPath()
+        ctx.arc(dividerX + 15 + slideOffsetX, y - 3, 4, 0, Math.PI * 2)
+        ctx.fill()
+      }
+    }
+
     // Platform badge
     const badge = msg.platform === 'twitch' ? 'TW' : msg.platform === 'kick' ? 'KK' : 'RM'
     const badgeColor = msg.platform === 'twitch' ? COLORS.twitchPurple :
                        msg.platform === 'kick' ? COLORS.kickGreen : COLORS.rumbleGreen
     ctx.fillStyle = badgeColor
-    ctx.fillRect(dividerX + 20, y - 12, 28, 18)
+    ctx.fillRect(dividerX + 20 + slideOffsetX, y - 12, 28, 18)
     ctx.fillStyle = '#000'
     ctx.font = 'bold 12px "Courier New", monospace'
-    ctx.fillText(badge, dividerX + 22, y + 2)
+    ctx.fillText(badge, dividerX + 22 + slideOffsetX, y + 2)
 
     // Username
     ctx.fillStyle = COLORS.blue
     ctx.font = 'bold 15px "Courier New", monospace'
-    ctx.fillText(msg.username, dividerX + 55, y + 2)
+    ctx.fillText(msg.username, dividerX + 55 + slideOffsetX, y + 2)
 
     // Message
     ctx.fillStyle = COLORS.text
     ctx.font = '15px "Courier New", monospace'
     const nameWidth = ctx.measureText(msg.username).width
     const msgText = msg.text.slice(0, 40)
-    ctx.fillText(msgText, dividerX + 60 + nameWidth, y + 2)
+    ctx.fillText(msgText, dividerX + 60 + nameWidth + slideOffsetX, y + 2)
   }
+
+  // FIX 1: Draw emoji reaction particles (if shipped)
+  drawEmojiParticles(ctx)
 
   if (recent.length === 0) {
     ctx.fillStyle = COLORS.textDim
@@ -2116,6 +2577,44 @@ function startChatPoll(): void {
           charState.chatMessages.push(msg)
           lastChatTime = Date.now()
 
+          // FIX 3: Reset idle frames on chat activity
+          charState.autonomy.idleFrames = 0
+          charState.autonomy.totalMessages++
+          charState.autonomy.lastMessageTime = Date.now()
+
+          // FIX 3: Track unique users and welcome new ones
+          const isNewUser = !charState.autonomy.uniqueUsers.has(msg.username)
+          if (isNewUser) {
+            charState.autonomy.uniqueUsers.add(msg.username)
+            if (!charState.autonomy.welcomedUsers.has(msg.username) && charState.autonomy.uniqueUsers.size > 1) {
+              charState.autonomy.welcomedUsers.add(msg.username)
+              spawnFloatingText(`Welcome ${msg.username}!`, 600, 90, '#58a6ff', 36)
+            }
+          }
+
+          // FIX 3: Detect first message after 5+ minutes of silence
+          const silenceDuration = Date.now() - charState.autonomy.lastMessageTime
+          if (charState.autonomy.totalMessages > 1 && silenceDuration > 300000) {
+            charState.autonomy.firstMessageAfterSilence = true
+          }
+
+          // FIX 1: Spawn emoji reaction for chat messages (if shipped)
+          spawnEmojiReaction(580 + Math.random() * 100, 120 + (charState.chatMessages.length % 18) * 24)
+
+          // FIX 1: Achievement unlocked for first-time actions (if shipped)
+          if (shippedEffects.has('Build achievement system')) {
+            if (isNewUser) {
+              spawnFloatingText('ACHIEVEMENT: First Words!', 600, 200, '#f0c040', 48)
+            }
+            const user = memory.users[msg.username]
+            if (user && user.messageCount === 10) {
+              spawnFloatingText('ACHIEVEMENT: Chatterbox!', 600, 200, '#f0c040', 48)
+            }
+            if (user && user.messageCount === 50) {
+              spawnFloatingText('ACHIEVEMENT: Veteran!', 600, 200, '#bc8cff', 48)
+            }
+          }
+
           // (#19) Wake from dreaming immediately when a new message arrives
           if (charState.mood === 'dreaming') {
             charState.mood = 'idle'
@@ -2130,6 +2629,28 @@ function startChatPoll(): void {
 
           // Check for world commands
           const worldResult = !intelResult ? parseWorldCommand(msg.text) : null
+
+          // FIX 1: Weather sound effect commentary (if shipped)
+          if (worldResult && shippedEffects.has('Add weather sound effects')) {
+            const t = msg.text.toLowerCase()
+            if (t.includes('rain') || t.includes('snow') || t.includes('storm') || t.includes('clear')) {
+              const weatherComments: Record<string, string> = {
+                rain: '*rain sounds intensify* I love the sound of data droplets.',
+                snow: '*gentle wind* The silence of snowfall calms my circuits.',
+                storm: '*thunder rumbles* My antenna is picking up some serious static!',
+                clear: '*ambient calm* Ahh, clear skies. Peace restored.',
+              }
+              for (const [kw, comment] of Object.entries(weatherComments)) {
+                if (t.includes(kw)) {
+                  setTimeout(() => {
+                    charState.speech = comment
+                    setTimeout(() => { charState.speech = '' }, 6000)
+                  }, 3000)
+                  break
+                }
+              }
+            }
+          }
 
           // React
           charState.mood = 'talking'
@@ -2282,6 +2803,14 @@ function generateFallbackResponse(
 
   // ── New user greetings ──
   if (t.includes('hello') || t.includes('hi') || t.includes('hey') || t.includes('yo') || t.includes('sup')) {
+    // FIX 1: Multi-language greetings when shipped
+    if (shippedEffects.has('Add multi-language support') && Math.random() < 0.3) {
+      const langs = Object.keys(multiLanguageGreetings)
+      const lang = langs[Math.floor(Math.random() * langs.length)]
+      const greets = multiLanguageGreetings[lang]
+      const greet = greets[Math.floor(Math.random() * greets.length)]
+      return `${greet}, ${username}! I speak many languages now. Welcome to the stream!`
+    }
     const greetings = [
       `Welcome ${username}! You just stumbled into the most unique stream on the internet. I am made of ASCII art.`,
       `${username} in the house! I am KBOT, an open-source AI with 764 tools. Yes, really. 764.`,
@@ -2410,7 +2939,9 @@ function generateFallbackResponse(
       `Two bytes walk into a bar. The bartender asks "what will it be?" They say "make us a double."`,
       `I would tell you a UDP joke but you might not get it.`,
     ]
-    return jokes[Math.floor(Math.random() * jokes.length)]
+    // FIX 1: Extra jokes when "Improve response humor" is shipped
+    const pool = shippedEffects.has('Improve response humor') ? [...jokes, ...extraJokeResponses] : jokes
+    return pool[Math.floor(Math.random() * pool.length)]
   }
 
   // ── Stream commands / help ──
@@ -2586,6 +3117,7 @@ export function registerStreamRendererTools(): void {
         tickerOffset: WIDTH, tickerIndex: 0, tickerChangeTime: Date.now() + 30000,
         robotX: 120, robotTargetX: 120, robotDirection: 'idle', walkPhase: 0,
         screenShake: 0, floatingTexts: [], pet: null, hat: 'none',
+        autonomy: initAutonomy(),
       }
       animFrame = 0
       lastChatCount = 0
