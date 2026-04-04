@@ -478,6 +478,141 @@ export function renderParticles(ctx, particles) {
     ctx.globalAlpha = 1;
     ctx.restore();
 }
+// ─── 3b. POSITION-BASED PARTICLE DYNAMICS (PBD UPGRADE) ─────────
+/**
+ * Tick particles using Verlet integration (PBD style) instead of simple velocity.
+ * Adds floor constraints with realistic bounce and attractor constraints for orbital particles.
+ */
+export function tickParticlesPBD(particles, groundLevel = 480, attractorX = 0, attractorY = 0) {
+    const dt = 1; // timestep (frame-based)
+    return particles.filter(p => {
+        p.life--;
+        if (p.life <= 0)
+            return false;
+        // Reconstruct previous position from velocity
+        const prevX = p.x - p.vx;
+        const prevY = p.y - p.vy;
+        switch (p.type) {
+            case 'spark': {
+                // Store trail
+                if (p.trail) {
+                    p.trail.push({ x: p.x, y: p.y });
+                    if (p.trail.length > 3)
+                        p.trail.shift();
+                }
+                // Apply gravity force (Verlet: position += accel * dt^2)
+                p.y += (p.gravity ?? 0.3) * dt * dt;
+                p.x += p.vx;
+                p.y += p.vy;
+                // Constraint: floor collision with bounce
+                if (p.y > groundLevel && p.vy > 0) {
+                    p.y = groundLevel;
+                    const vyFromPos = p.y - prevY;
+                    p.vy = -Math.abs(vyFromPos) * 0.4;
+                    if (Math.abs(p.vy) < 0.5)
+                        p.vy = 0;
+                }
+                // Derive velocity from position change (PBD)
+                p.vx = p.x - prevX;
+                p.vy = p.y - prevY;
+                break;
+            }
+            case 'fire': {
+                p.vy += p.gravity ?? -0.2;
+                p.vx = Math.sin(p.life * 0.3) * 0.5;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.size = Math.max(1, p.size - 0.05);
+                const ratio = p.life / p.maxLife;
+                if (ratio > 0.7)
+                    p.color = '#f0c040';
+                else if (ratio > 0.4)
+                    p.color = '#ff6600';
+                else if (ratio > 0.2)
+                    p.color = '#cc2200';
+                else
+                    p.color = '#661100';
+                // Floor constraint for fire (fire rises, but embers fall)
+                if (p.y > groundLevel) {
+                    p.y = groundLevel;
+                    p.vy = -Math.abs(p.vy) * 0.2;
+                }
+                break;
+            }
+            case 'magic': {
+                if (p.cx !== undefined && p.cy !== undefined && p.orbitRadius !== undefined && p.orbitPhase !== undefined) {
+                    p.orbitPhase += 0.15;
+                    p.x = p.cx + Math.cos(p.orbitPhase) * p.orbitRadius;
+                    p.y = p.cy + Math.sin(p.orbitPhase) * p.orbitRadius;
+                }
+                // Attractor constraint: robot core pulls nearby magic particles
+                const dx = attractorX - p.x;
+                const dy = attractorY - p.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 200 && dist > 0) {
+                    p.x += dx * 0.02;
+                    p.y += dy * 0.02;
+                }
+                // Rainbow cycle
+                {
+                    const rainbow = ['#f85149', '#f0c040', '#3fb950', '#58a6ff', '#bc8cff', '#ff6ec7'];
+                    p.color = rainbow[Math.floor((p.maxLife - p.life) * 0.3) % rainbow.length];
+                }
+                // Derive velocity from position change (PBD)
+                p.vx = p.x - prevX;
+                p.vy = p.y - prevY;
+                break;
+            }
+            case 'electricity': {
+                if (p.startX !== undefined && p.endX !== undefined && p.startY !== undefined && p.endY !== undefined) {
+                    if (!p.lastMidpointFrame || (p.maxLife - p.life) - (p.lastMidpointFrame ?? 0) >= 3) {
+                        const segCount = 5 + Math.floor(Math.random() * 3);
+                        p.midpoints = [];
+                        for (let s = 1; s < segCount; s++) {
+                            const t = s / segCount;
+                            const mx = p.startX + (p.endX - p.startX) * t;
+                            const my = p.startY + (p.endY - p.startY) * t;
+                            const edx = p.endX - p.startX;
+                            const edy = p.endY - p.startY;
+                            const len = Math.sqrt(edx * edx + edy * edy) || 1;
+                            const nx = -edy / len;
+                            const ny = edx / len;
+                            const offset = (Math.random() - 0.5) * 10;
+                            p.midpoints.push({ x: mx + nx * offset, y: my + ny * offset });
+                        }
+                        p.lastMidpointFrame = p.maxLife - p.life;
+                    }
+                }
+                break;
+            }
+            case 'trail':
+                break;
+            case 'smoke': {
+                p.vy += p.gravity ?? -0.05;
+                p.vx += (Math.random() - 0.5) * 0.1;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.size += 0.15;
+                break;
+            }
+            case 'aura': {
+                // Attractor constraint for aura particles
+                const adx = attractorX - p.x;
+                const ady = attractorY - p.y;
+                const adist = Math.sqrt(adx * adx + ady * ady);
+                if (adist < 200 && adist > 0) {
+                    p.x += adx * 0.02;
+                    p.y += ady * 0.02;
+                }
+                // Derive velocity from position change (PBD)
+                p.vx = p.x - prevX;
+                p.vy = p.y - prevY;
+                break;
+            }
+        }
+        return true;
+    });
+}
 // ─── 4. PROCEDURAL SKY ──────────────────────────────────────────
 // Stable star positions (seeded pseudorandom)
 const STAR_POSITIONS = [];
@@ -1357,5 +1492,517 @@ export function renderPostProcessing(ctx, width, height, frame, options) {
         ctx.globalCompositeOperation = 'source-over';
     }
     ctx.restore();
+}
+/**
+ * Create an empty radiance grid (20x12 cells covering the 1280x720 canvas).
+ */
+export function createRadianceGrid() {
+    return {
+        cells: new Float32Array(20 * 12 * 3),
+        width: 20,
+        height: 12,
+    };
+}
+/**
+ * Update radiance grid by propagating light from all sources using inverse-square falloff.
+ * Clears grid each frame before re-propagating.
+ */
+export function updateRadianceGrid(grid, lights) {
+    // Clear
+    grid.cells.fill(0);
+    const cellW = 1280 / grid.width; // 64
+    const cellH = 720 / grid.height; // 60
+    for (const light of lights) {
+        let intensity = light.intensity;
+        if (light.flicker) {
+            intensity *= 0.85 + Math.random() * 0.15;
+        }
+        const [lr, lg, lb] = hexToRgb(light.color);
+        for (let cy = 0; cy < grid.height; cy++) {
+            for (let cx = 0; cx < grid.width; cx++) {
+                // Cell center in canvas space
+                const cellCenterX = (cx + 0.5) * cellW;
+                const cellCenterY = (cy + 0.5) * cellH;
+                const dx = cellCenterX - light.x;
+                const dy = cellCenterY - light.y;
+                const distSq = dx * dx + dy * dy;
+                // Inverse-square falloff with a softening factor
+                const contribution = intensity / (1 + distSq * 0.001);
+                // Skip negligible contributions
+                if (contribution < 0.001)
+                    continue;
+                const idx = (cy * grid.width + cx) * 3;
+                grid.cells[idx] += (lr / 255) * contribution;
+                grid.cells[idx + 1] += (lg / 255) * contribution;
+                grid.cells[idx + 2] += (lb / 255) * contribution;
+            }
+        }
+    }
+}
+/**
+ * Render the radiance grid as an additive overlay.
+ * Each grid cell is drawn as a colored rect at low opacity, creating ambient light propagation.
+ */
+export function renderRadianceOverlay(ctx, grid, width, height) {
+    const cellW = width / grid.width;
+    const cellH = height / grid.height;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let cy = 0; cy < grid.height; cy++) {
+        for (let cx = 0; cx < grid.width; cx++) {
+            const idx = (cy * grid.width + cx) * 3;
+            const r = grid.cells[idx];
+            const g = grid.cells[idx + 1];
+            const b = grid.cells[idx + 2];
+            // Skip dark cells
+            const magnitude = r + g + b;
+            if (magnitude < 0.01)
+                continue;
+            // Map accumulated radiance to color, cap at 1.0
+            const cr = Math.min(255, Math.round(Math.min(1, r) * 255));
+            const cg = Math.min(255, Math.round(Math.min(1, g) * 255));
+            const cb = Math.min(255, Math.round(Math.min(1, b) * 255));
+            // Opacity scales with magnitude (0.08-0.15 range)
+            const alpha = Math.min(0.15, 0.08 + magnitude * 0.02);
+            ctx.fillStyle = `rgba(${cr},${cg},${cb},${alpha})`;
+            ctx.fillRect(cx * cellW, cy * cellH, cellW, cellH);
+        }
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.restore();
+}
+// ─── 9. SUBSURFACE SCATTERING APPROXIMATION ─────────────────────
+/**
+ * Shift a hex color's hue toward warm (red-shifted) by a given amount.
+ */
+function warmShiftColor(hex, shiftDeg = 20) {
+    const [r, g, b] = hexToRgb(hex);
+    // Convert to HSL
+    const rf = r / 255, gf = g / 255, bf = b / 255;
+    const max = Math.max(rf, gf, bf), min = Math.min(rf, gf, bf);
+    let h = 0, s = 0;
+    const l = (max + min) / 2;
+    if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max === rf)
+            h = ((gf - bf) / d + (gf < bf ? 6 : 0)) * 60;
+        else if (max === gf)
+            h = ((bf - rf) / d + 2) * 60;
+        else
+            h = ((rf - gf) / d + 4) * 60;
+    }
+    // Shift hue toward warm (lower hue = red/orange)
+    h = (h + shiftDeg) % 360;
+    // HSL to RGB
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+    const m = l - c / 2;
+    let r1 = 0, g1 = 0, b1 = 0;
+    if (h < 60) {
+        r1 = c;
+        g1 = x;
+        b1 = 0;
+    }
+    else if (h < 120) {
+        r1 = x;
+        g1 = c;
+        b1 = 0;
+    }
+    else if (h < 180) {
+        r1 = 0;
+        g1 = c;
+        b1 = x;
+    }
+    else if (h < 240) {
+        r1 = 0;
+        g1 = x;
+        b1 = c;
+    }
+    else if (h < 300) {
+        r1 = x;
+        g1 = 0;
+        b1 = c;
+    }
+    else {
+        r1 = c;
+        g1 = 0;
+        b1 = x;
+    }
+    return `rgb(${Math.round((r1 + m) * 255)},${Math.round((g1 + m) * 255)},${Math.round((b1 + m) * 255)})`;
+}
+/**
+ * Render subsurface scattering approximation on translucent robot panels.
+ * Creates a soft warm glow "leaking through" panel edges using shadowBlur + screen compositing.
+ */
+export function renderSubsurfaceGlow(ctx, panels) {
+    ctx.save();
+    for (const panel of panels) {
+        // Red-shift the color for subsurface warmth
+        const sssColor = warmShiftColor(panel.color, 20);
+        ctx.globalCompositeOperation = 'screen';
+        ctx.shadowColor = sssColor;
+        ctx.shadowBlur = 8 + panel.intensity * 4;
+        ctx.strokeStyle = sssColor;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 0.4 * panel.intensity;
+        // Draw just the border (not filled) for edge glow effect
+        ctx.strokeRect(panel.x, panel.y, panel.width, panel.height);
+    }
+    // Reset
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.restore();
+}
+/**
+ * Build SSS panel definitions for the kbot character.
+ */
+export function buildSubsurfacePanels(robotX, robotY, scale, moodColor) {
+    const panels = [];
+    // Chest display panel
+    panels.push({
+        x: robotX + 12 * scale,
+        y: robotY + 20 * scale,
+        width: 10 * scale,
+        height: 8 * scale,
+        color: moodColor,
+        intensity: 0.7,
+    });
+    // Left eye socket
+    panels.push({
+        x: robotX + 12 * scale,
+        y: robotY + 8 * scale,
+        width: 4 * scale,
+        height: 3 * scale,
+        color: moodColor,
+        intensity: 0.5,
+    });
+    // Right eye socket
+    panels.push({
+        x: robotX + 18 * scale,
+        y: robotY + 8 * scale,
+        width: 4 * scale,
+        height: 3 * scale,
+        color: moodColor,
+        intensity: 0.5,
+    });
+    // Antenna ball
+    panels.push({
+        x: robotX + 14 * scale,
+        y: robotY - 4 * scale,
+        width: 4 * scale,
+        height: 4 * scale,
+        color: moodColor,
+        intensity: 0.8,
+    });
+    // Jet boot thrusters (left)
+    panels.push({
+        x: robotX + 10 * scale,
+        y: robotY + 46 * scale,
+        width: 5 * scale,
+        height: 3 * scale,
+        color: '#e8820c',
+        intensity: 0.6,
+    });
+    // Jet boot thrusters (right)
+    panels.push({
+        x: robotX + 19 * scale,
+        y: robotY + 46 * scale,
+        width: 5 * scale,
+        height: 3 * scale,
+        color: '#e8820c',
+        intensity: 0.6,
+    });
+    return panels;
+}
+/**
+ * Create an empty frame cache for importance-sampled rendering.
+ */
+export function createFrameCache() {
+    return {
+        backgroundLayer: null,
+        bodyLayer: null,
+        lastBackgroundFrame: -999,
+        lastBodyFrame: -999,
+    };
+}
+/**
+ * Determine if a layer should be re-rendered this frame.
+ * - Background: every 4th frame (cached)
+ * - Body: every 2nd frame when idle (cached), always when moving
+ * - Effects: every frame
+ */
+export function shouldRenderLayer(cache, layer, currentFrame, isMoving = false, moodChanged = false, worldChanged = false) {
+    // Invalidate cache on mood/world changes
+    if (moodChanged || worldChanged)
+        return true;
+    switch (layer) {
+        case 'background':
+            if (!cache.backgroundLayer)
+                return true;
+            return (currentFrame - cache.lastBackgroundFrame) >= 4;
+        case 'body':
+            if (!cache.bodyLayer)
+                return true;
+            if (isMoving)
+                return true;
+            return (currentFrame - cache.lastBodyFrame) >= 2;
+        case 'effects':
+            return true; // always render effects
+    }
+}
+/**
+ * Cache a rendered layer as ImageData.
+ */
+export function cacheLayer(cache, ctx, layer, x, y, w, h, currentFrame) {
+    if (layer === 'background') {
+        cache.backgroundLayer = ctx.getImageData(x, y, w, h);
+        cache.lastBackgroundFrame = currentFrame;
+    }
+    else {
+        cache.bodyLayer = ctx.getImageData(x, y, w, h);
+        cache.lastBodyFrame = currentFrame;
+    }
+}
+/**
+ * Draw a cached layer onto the canvas.
+ */
+export function drawCachedLayer(ctx, cache, layer) {
+    if (layer === 'background' && cache.backgroundLayer) {
+        ctx.putImageData(cache.backgroundLayer, 0, 0);
+    }
+    else if (layer === 'body' && cache.bodyLayer) {
+        ctx.putImageData(cache.bodyLayer, 0, 0);
+    }
+}
+// ─── 11. VOLUMETRIC FOG ─────────────────────────────────────────
+/**
+ * Get fog density for a given biome.
+ */
+function getFogDensityForBiome(biome) {
+    switch (biome) {
+        case 'ocean': return 0.4;
+        case 'lava': return 0.3;
+        case 'grass': return 0.1;
+        case 'space': return 0.0;
+        case 'city': return 0.2;
+        default: return 0.15;
+    }
+}
+/**
+ * Render volumetric fog with drifting horizontal bands.
+ * Fog is thinner near light sources and varies by biome.
+ */
+export function renderVolumetricFog(ctx, width, height, frame, fogDensity, fogColor, lightSources) {
+    if (fogDensity <= 0.01)
+        return;
+    const [fr, fg, fb] = hexToRgb(fogColor);
+    const bandCount = 5;
+    const bandYBase = [200, 300, 380, 430, 460]; // vertical positions
+    const bandHeight = [60, 80, 70, 50, 40];
+    ctx.save();
+    for (let i = 0; i < bandCount; i++) {
+        const drift = Math.sin(frame * 0.02 + i * 1.7) * 20;
+        const bandY = bandYBase[i];
+        const bh = bandHeight[i];
+        // Create horizontal gradient for this band (denser in middle)
+        const grad = ctx.createLinearGradient(0, bandY, 0, bandY + bh);
+        // Calculate light reduction at this band's center
+        let lightReduction = 0;
+        const bandCenterY = bandY + bh / 2;
+        for (const light of lightSources) {
+            const dx = (width / 2) - light.x;
+            const dy = bandCenterY - light.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 200) {
+                lightReduction += light.intensity * (1 - dist / 200) * 0.5;
+            }
+        }
+        const effectiveDensity = Math.max(0, fogDensity - lightReduction);
+        if (effectiveDensity < 0.01)
+            continue;
+        const alpha = effectiveDensity * 0.15;
+        grad.addColorStop(0, `rgba(${fr},${fg},${fb},0)`);
+        grad.addColorStop(0.3, `rgba(${fr},${fg},${fb},${alpha})`);
+        grad.addColorStop(0.5, `rgba(${fr},${fg},${fb},${alpha * 1.2})`);
+        grad.addColorStop(0.7, `rgba(${fr},${fg},${fb},${alpha})`);
+        grad.addColorStop(1, `rgba(${fr},${fg},${fb},0)`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(drift, bandY, width - drift, bh);
+        // Wrap-around for drift
+        if (drift > 0) {
+            ctx.fillRect(0, bandY, drift, bh);
+        }
+    }
+    ctx.restore();
+}
+/**
+ * Get fog parameters for the current world state.
+ */
+export function getFogParams(biome, timeOfDay) {
+    const baseDensity = getFogDensityForBiome(biome);
+    // Increase fog at night and dawn
+    let timeMod = 1.0;
+    if (timeOfDay === 'night')
+        timeMod = 1.3;
+    else if (timeOfDay === 'dawn')
+        timeMod = 1.2;
+    else if (timeOfDay === 'day')
+        timeMod = 0.7;
+    // Fog color varies by biome
+    let fogColor = '#8899aa'; // default grey-blue
+    if (biome === 'lava')
+        fogColor = '#332211'; // smoky brown
+    else if (biome === 'ocean')
+        fogColor = '#667788'; // sea mist
+    else if (biome === 'city')
+        fogColor = '#556677'; // smog
+    else if (biome === 'space')
+        fogColor = '#111122';
+    return {
+        density: Math.min(1, baseDensity * timeMod),
+        color: fogColor,
+    };
+}
+// ─── 12. PALETTE CYCLING (NEURAL TEXTURE COMPRESSION) ───────────
+/**
+ * Convert hex color to HSL.
+ */
+function hexToHsl(hex) {
+    const [r, g, b] = hexToRgb(hex);
+    const rf = r / 255, gf = g / 255, bf = b / 255;
+    const max = Math.max(rf, gf, bf), min = Math.min(rf, gf, bf);
+    let h = 0, s = 0;
+    const l = (max + min) / 2;
+    if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max === rf)
+            h = ((gf - bf) / d + (gf < bf ? 6 : 0)) * 60;
+        else if (max === gf)
+            h = ((bf - rf) / d + 2) * 60;
+        else
+            h = ((rf - gf) / d + 4) * 60;
+    }
+    return [h, s * 100, l * 100];
+}
+/**
+ * Convert HSL to hex color string.
+ */
+function hslToHex(h, s, l) {
+    s /= 100;
+    l /= 100;
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+    const m = l - c / 2;
+    let r = 0, g = 0, b = 0;
+    if (h < 60) {
+        r = c;
+        g = x;
+        b = 0;
+    }
+    else if (h < 120) {
+        r = x;
+        g = c;
+        b = 0;
+    }
+    else if (h < 180) {
+        r = 0;
+        g = c;
+        b = x;
+    }
+    else if (h < 240) {
+        r = 0;
+        g = x;
+        b = c;
+    }
+    else if (h < 300) {
+        r = x;
+        g = 0;
+        b = c;
+    }
+    else {
+        r = c;
+        g = 0;
+        b = x;
+    }
+    const toHex = (v) => Math.round((v + m) * 255).toString(16).padStart(2, '0');
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+/**
+ * Cycle palette colors subtly based on frame, mood, and time of day.
+ * Creates a living, shimmering effect using HSL-based color shifting.
+ */
+export function cyclePalette(basePalette, frame, mood, timeOfDay) {
+    const cycled = {};
+    let colorIndex = 0;
+    for (const [key, hex] of Object.entries(basePalette)) {
+        const [h, s, l] = hexToHsl(hex);
+        // Subtle hue shimmer
+        let newH = h + Math.sin(frame * 0.01 + colorIndex * 0.5) * 5;
+        if (newH < 0)
+            newH += 360;
+        if (newH >= 360)
+            newH -= 360;
+        // Saturation boost for excited/dancing moods
+        let newS = s;
+        if (mood === 'excited' || mood === 'dancing') {
+            newS = Math.min(100, s + 10);
+        }
+        // Lightness modulation by time of day
+        let newL = l;
+        if (timeOfDay === 'night')
+            newL = Math.max(0, l - 10);
+        else if (timeOfDay === 'day')
+            newL = Math.min(100, l + 5);
+        else if (timeOfDay === 'sunset') {
+            // Warm hue shift for sunset
+            newH = (newH + 15) % 360;
+        }
+        cycled[key] = hslToHex(newH, Math.max(0, Math.min(100, newS)), Math.max(0, Math.min(100, newL)));
+        colorIndex++;
+    }
+    return cycled;
+}
+/**
+ * Compute animation parameters based on stream context.
+ * Higher engagement = faster, more energetic animations.
+ */
+export function computeAnimationParams(chatRate, // messages per minute
+viewerCount, // estimated viewers
+mood, timeOfDay, streamDuration) {
+    // Base energy from chat rate (0-10 msgs/min maps to 0.2-0.8)
+    let energy = Math.min(0.8, 0.2 + chatRate * 0.06);
+    // Viewer count boost (subtle)
+    energy += Math.min(0.1, viewerCount * 0.005);
+    // Mood modifiers
+    if (mood === 'excited' || mood === 'dancing')
+        energy = Math.min(1, energy + 0.2);
+    else if (mood === 'dreaming')
+        energy = 0.1;
+    else if (mood === 'thinking')
+        energy = Math.max(0.3, energy * 0.7);
+    else if (mood === 'error')
+        energy = Math.min(1, energy + 0.15);
+    // Time of day
+    if (timeOfDay === 'night')
+        energy *= 0.75;
+    else if (timeOfDay === 'dawn')
+        energy *= 0.85;
+    // Stream fatigue — slight decrease over time (max 20% reduction after 3 hours)
+    const fatigueFactor = Math.max(0.8, 1 - (streamDuration / 180) * 0.2);
+    energy *= fatigueFactor;
+    // Clamp
+    energy = Math.max(0.05, Math.min(1, energy));
+    return {
+        blinkRate: 0.1 + energy * 0.3,
+        wobbleFreq: 0.02 + energy * 0.08,
+        wobbleAmp: 1 + energy * 4,
+        glowPulseSpeed: 0.05 + energy * 0.15,
+        breathSpeed: 0.03 + energy * 0.07,
+        energyLevel: energy,
+    };
 }
 //# sourceMappingURL=render-engine.js.map

@@ -47,6 +47,14 @@ export declare function blackboardQuery(type?: BlackboardEntry['type']): Blackbo
 export declare function blackboardSubscribe(key: string, agentId: string, callback?: SubscriptionCallback): void;
 /** Get all decision-type entries (consensus view) */
 export declare function blackboardGetDecisions(): BlackboardEntry[];
+type BlackboardTypeSubscriber = (entry: BlackboardEntry) => void;
+/** Subscribe to blackboard entries by type. Use '*' for wildcard (all types). */
+export declare function subscribeToBlackboard(type: string, callback: BlackboardTypeSubscriber): void;
+/**
+ * Write an entry to the blackboard AND broadcast to all type-based subscribers.
+ * This is the preferred write path when cognitive modules should be notified.
+ */
+export declare function broadcastToBlackboard(key: string, value: unknown, author: string, type: BlackboardEntry['type'], confidence?: number): BlackboardEntry;
 /** Clear the entire blackboard for a new task */
 export declare function blackboardClear(): void;
 export interface Proposal {

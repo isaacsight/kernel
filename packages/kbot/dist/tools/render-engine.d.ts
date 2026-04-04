@@ -82,6 +82,11 @@ export declare function tickParticles(particles: Particle[]): Particle[];
  */
 export declare function renderParticles(ctx: CanvasRenderingContext2D, particles: Particle[]): void;
 /**
+ * Tick particles using Verlet integration (PBD style) instead of simple velocity.
+ * Adds floor constraints with realistic bounce and attractor constraints for orbital particles.
+ */
+export declare function tickParticlesPBD(particles: Particle[], groundLevel?: number, attractorX?: number, attractorY?: number): Particle[];
+/**
  * Render a full procedural sky based on time of day, weather, and frame.
  */
 export declare function renderSky(ctx: CanvasRenderingContext2D, width: number, height: number, timeOfDay: string, weather: string, frame: number, dividerX?: number): void;
@@ -155,4 +160,108 @@ export interface PostProcessOptions {
  * Apply screen-space post-processing effects.
  */
 export declare function renderPostProcessing(ctx: CanvasRenderingContext2D, width: number, height: number, frame: number, options: PostProcessOptions): void;
+export interface RadianceGrid {
+    cells: Float32Array;
+    width: number;
+    height: number;
+}
+/**
+ * Create an empty radiance grid (20x12 cells covering the 1280x720 canvas).
+ */
+export declare function createRadianceGrid(): RadianceGrid;
+/**
+ * Update radiance grid by propagating light from all sources using inverse-square falloff.
+ * Clears grid each frame before re-propagating.
+ */
+export declare function updateRadianceGrid(grid: RadianceGrid, lights: Light[]): void;
+/**
+ * Render the radiance grid as an additive overlay.
+ * Each grid cell is drawn as a colored rect at low opacity, creating ambient light propagation.
+ */
+export declare function renderRadianceOverlay(ctx: CanvasRenderingContext2D, grid: RadianceGrid, width: number, height: number): void;
+/**
+ * Render subsurface scattering approximation on translucent robot panels.
+ * Creates a soft warm glow "leaking through" panel edges using shadowBlur + screen compositing.
+ */
+export declare function renderSubsurfaceGlow(ctx: CanvasRenderingContext2D, panels: Array<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    color: string;
+    intensity: number;
+}>): void;
+/**
+ * Build SSS panel definitions for the kbot character.
+ */
+export declare function buildSubsurfacePanels(robotX: number, robotY: number, scale: number, moodColor: string): Array<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    color: string;
+    intensity: number;
+}>;
+export interface FrameCache {
+    backgroundLayer: any | null;
+    bodyLayer: any | null;
+    lastBackgroundFrame: number;
+    lastBodyFrame: number;
+}
+/**
+ * Create an empty frame cache for importance-sampled rendering.
+ */
+export declare function createFrameCache(): FrameCache;
+/**
+ * Determine if a layer should be re-rendered this frame.
+ * - Background: every 4th frame (cached)
+ * - Body: every 2nd frame when idle (cached), always when moving
+ * - Effects: every frame
+ */
+export declare function shouldRenderLayer(cache: FrameCache, layer: 'background' | 'body' | 'effects', currentFrame: number, isMoving?: boolean, moodChanged?: boolean, worldChanged?: boolean): boolean;
+/**
+ * Cache a rendered layer as ImageData.
+ */
+export declare function cacheLayer(cache: FrameCache, ctx: CanvasRenderingContext2D, layer: 'background' | 'body', x: number, y: number, w: number, h: number, currentFrame: number): void;
+/**
+ * Draw a cached layer onto the canvas.
+ */
+export declare function drawCachedLayer(ctx: CanvasRenderingContext2D, cache: FrameCache, layer: 'background' | 'body'): void;
+/**
+ * Render volumetric fog with drifting horizontal bands.
+ * Fog is thinner near light sources and varies by biome.
+ */
+export declare function renderVolumetricFog(ctx: CanvasRenderingContext2D, width: number, height: number, frame: number, fogDensity: number, fogColor: string, lightSources: Array<{
+    x: number;
+    y: number;
+    color: string;
+    intensity: number;
+}>): void;
+/**
+ * Get fog parameters for the current world state.
+ */
+export declare function getFogParams(biome: string, timeOfDay: string): {
+    density: number;
+    color: string;
+};
+/**
+ * Cycle palette colors subtly based on frame, mood, and time of day.
+ * Creates a living, shimmering effect using HSL-based color shifting.
+ */
+export declare function cyclePalette(basePalette: Record<string, string>, frame: number, mood: string, timeOfDay: string): Record<string, string>;
+export interface AnimationParams {
+    blinkRate: number;
+    wobbleFreq: number;
+    wobbleAmp: number;
+    glowPulseSpeed: number;
+    breathSpeed: number;
+    energyLevel: number;
+}
+/**
+ * Compute animation parameters based on stream context.
+ * Higher engagement = faster, more energetic animations.
+ */
+export declare function computeAnimationParams(chatRate: number, // messages per minute
+viewerCount: number, // estimated viewers
+mood: string, timeOfDay: string, streamDuration: number): AnimationParams;
 //# sourceMappingURL=render-engine.d.ts.map

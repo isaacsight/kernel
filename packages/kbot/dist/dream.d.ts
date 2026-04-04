@@ -55,8 +55,23 @@ export interface ApplyResult {
     factsLearned: number;
     promptAmendments: number;
 }
+/** Cognitive context passed from agent.ts to guide dream consolidation */
+export interface DreamCognitiveContext {
+    /** Intentionality drive state */
+    driveState?: {
+        curiosity: number;
+        frustration: number;
+        motivation: number;
+        consolidation: number;
+    };
+    /** Per-message surprise scores from the free energy engine */
+    surpriseScores?: Array<{
+        message: string;
+        surprise: number;
+    }>;
+}
 /** Run a full dream cycle — consolidate, reinforce, age */
-export declare function dream(sessionId?: string): Promise<DreamResult>;
+export declare function dream(sessionId?: string, cognitiveContext?: DreamCognitiveContext): Promise<DreamResult>;
 export interface DreamResult {
     success: boolean;
     newInsights: number;
@@ -81,5 +96,5 @@ export declare function searchDreams(query: string): DreamInsight[];
 /** Manually reinforce a specific insight (user confirms it's still relevant) */
 export declare function reinforceInsight(insightId: string): boolean;
 /** Run dream after session ends (non-blocking) */
-export declare function dreamAfterSession(sessionId?: string): void;
+export declare function dreamAfterSession(sessionId?: string, cognitiveContext?: DreamCognitiveContext): void;
 //# sourceMappingURL=dream.d.ts.map

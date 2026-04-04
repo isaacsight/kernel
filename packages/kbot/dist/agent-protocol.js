@@ -152,6 +152,31 @@ export function blackboardSubscribe(key, agentId, callback) {
 export function blackboardGetDecisions() {
     return blackboardQuery('decision');
 }
+const typeSubscribers = new Map();
+/** Subscribe to blackboard entries by type. Use '*' for wildcard (all types). */
+export function subscribeToBlackboard(type, callback) {
+    if (!typeSubscribers.has(type))
+        typeSubscribers.set(type, []);
+    typeSubscribers.get(type).push(callback);
+}
+/**
+ * Write an entry to the blackboard AND broadcast to all type-based subscribers.
+ * This is the preferred write path when cognitive modules should be notified.
+ */
+export function broadcastToBlackboard(key, value, author, type, confidence = 1.0) {
+    // Write to blackboard (this already notifies key-based subscribers)
+    const entry = blackboardWrite(key, value, author, type, confidence);
+    // Broadcast to type-based subscribers
+    const typeSubs = typeSubscribers.get(type) || [];
+    const wildcardSubs = typeSubscribers.get('*') || [];
+    for (const sub of [...typeSubs, ...wildcardSubs]) {
+        try {
+            sub(entry);
+        }
+        catch { /* subscriber errors don't break the bus */ }
+    }
+    return entry;
+}
 /** Clear the entire blackboard for a new task */
 export function blackboardClear() {
     blackboard.entries.clear();

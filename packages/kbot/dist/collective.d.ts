@@ -43,12 +43,23 @@ export declare function flushSignals(): Promise<void>;
 export declare function pullCollectiveHints(): Promise<RoutingHint[]>;
 /** Pull collective patterns (tool sequences, strategies) */
 export declare function pullCollectivePatterns(): Promise<CollectivePattern[]>;
-/** Get the best agent for a task category based on collective wisdom */
+/**
+ * Apply temporal decay to collective patterns.
+ * Confidence halves every 30 days without reinforcement (exponential decay).
+ * Dead patterns below 0.05 confidence are pruned.
+ */
+export declare function decayPatterns(patterns: CollectivePattern[]): CollectivePattern[];
+/**
+ * Reinforce a pattern when a new instance confirms it.
+ * 15% confidence boost per confirmation, capped at 1.0.
+ */
+export declare function reinforcePattern(pattern: CollectivePattern): CollectivePattern;
+/** Get the best agent for a task category based on collective wisdom (with decay applied) */
 export declare function getCollectiveRecommendation(category: string): {
     agent: string;
     confidence: number;
 } | null;
-/** Get the best tool sequence for a task category based on collective wisdom */
+/** Get the best tool sequence for a task category based on collective wisdom (with decay applied) */
 export declare function getCollectiveToolSequence(category: string): string[] | null;
 /** Get the current signal queue size (pending signals not yet flushed) */
 export declare function getSignalQueueSize(): number;

@@ -147,7 +147,7 @@ function archiveInsights(insights) {
     writeFileSync(archivePath, JSON.stringify(insights, null, 2));
 }
 // ── Consolidation Prompts ──
-function buildConsolidationPrompt(sessionHistory, existingInsights, existingMemory) {
+function buildConsolidationPrompt(sessionHistory, existingInsights, existingMemory, driveState, surpriseScores) {
     const historyText = sessionHistory
         .map(t => `[${t.role}]: ${t.content.slice(0, 500)}`)
         .join('\n');
@@ -188,6 +188,36 @@ function buildConsolidationPrompt(sessionHistory, existingInsights, existingMemo
     }
     // ── Tier 7: User computer behavior — desktop observation ──
     const behaviorText = getBehaviorForDream(48) || '(no behavior data yet)';
+    // Change 4: Surprise-weighted replay selection.
+    // High-surprise messages are prioritized for consolidation (like biological sleep).
+    let replayHistoryText = historyText;
+    if (surpriseScores && surpriseScores.length > 0) {
+        const scored = sessionHistory.map(t => {
+            const msgSnippet = t.content.slice(0, 100);
+            const score = surpriseScores.find(s => msgSnippet.includes(s.message) || s.message.includes(msgSnippet.slice(0, 50)));
+            return { turn: t, surprise: score?.surprise ?? 0.5 };
+        });
+        // Sort by surprise (descending) and take top 60%
+        scored.sort((a, b) => b.surprise - a.surprise);
+        const topCount = Math.max(4, Math.ceil(scored.length * 0.6));
+        const replayTurns = scored.slice(0, topCount).map(s => s.turn);
+        replayHistoryText = replayTurns
+            .map(t => `[${t.role}]: ${t.content.slice(0, 500)}`)
+            .join('\n');
+    }
+    // Change 3: Drive-based consolidation priority guidance
+    let driveGuidance = '';
+    if (driveState) {
+        driveGuidance += '\n\nPRIORITY GUIDANCE (based on current intrinsic drives):';
+        if (driveState.curiosity > 0.7)
+            driveGuidance += '\n- HIGH CURIOSITY: Focus on novel connections and unexplored topics';
+        if (driveState.frustration > 0.5)
+            driveGuidance += '\n- FRUSTRATION DETECTED: Prioritize consolidating problem-solving patterns that resolved errors';
+        if (driveState.motivation > 0.8)
+            driveGuidance += '\n- HIGH MOTIVATION: Focus on patterns related to successful task completion';
+        if (driveState.consolidation > 0.6)
+            driveGuidance += '\n- CONSOLIDATION DRIVE: Focus on integrating fragmented knowledge into coherent structures';
+    }
     return `You are a memory consolidation system. Analyze this conversation session and ALL accumulated knowledge tiers to extract durable cross-tier insights.
 
 EXISTING DREAM INSIGHTS (Tier 4 — Dream Journal):
@@ -214,8 +244,9 @@ ${musicText}
 USER COMPUTER BEHAVIOR (Tier 7 — Desktop Observation):
 ${behaviorText}
 
-SESSION TO CONSOLIDATE:
-${historyText}
+SESSION TO CONSOLIDATE (surprise-weighted — high-value moments prioritized):
+${replayHistoryText}
+${driveGuidance}
 
 INSTRUCTIONS:
 Extract 1-5 insights by synthesizing across ALL tiers. Each insight should be:
@@ -468,9 +499,8 @@ function extractToolHintsFromInsight(text) {
     }
     return mapped;
 }
-// ── Core Dream Functions ──
 /** Run a full dream cycle — consolidate, reinforce, age */
-export async function dream(sessionId = 'default') {
+export async function dream(sessionId = 'default', cognitiveContext) {
     const result = {
         success: false,
         newInsights: 0,
@@ -512,7 +542,8 @@ export async function dream(sessionId = 'default') {
     journal = aged;
     result.archived = archived.length;
     // Phase 2: Extract new insights from session (cross-tier consolidation)
-    const consolidationPrompt = buildConsolidationPrompt(history, journal, memory);
+    // Changes 3 & 4: Pass drive state and surprise scores for priority guidance + replay weighting
+    const consolidationPrompt = buildConsolidationPrompt(history, journal, memory, cognitiveContext?.driveState, cognitiveContext?.surpriseScores);
     const rawInsights = await ollamaGenerate(consolidationPrompt);
     const newlyCreatedInsights = [];
     if (rawInsights) {
@@ -650,9 +681,9 @@ export function reinforceInsight(insightId) {
     return true;
 }
 /** Run dream after session ends (non-blocking) */
-export function dreamAfterSession(sessionId = 'default') {
+export function dreamAfterSession(sessionId = 'default', cognitiveContext) {
     // Fire and forget — don't block the user
-    dream(sessionId).catch(() => {
+    dream(sessionId, cognitiveContext).catch(() => {
         // Dream failed silently — non-critical
     });
 }

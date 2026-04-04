@@ -44,11 +44,42 @@ export declare class ActiveInferenceEngine {
     private toolOutcomeHistory;
     private beliefUpdates;
     private actionsTaken;
+    private recentObservations;
+    private surpriseLog;
     private readonly explorationThreshold;
     private readonly exploitationThreshold;
     private readonly learningRate;
     private readonly decayRate;
     constructor();
+    /**
+     * Integrate predictions from the PredictiveEngine to improve the generative model.
+     * If the predictive engine detected 'drill_down', the generative model should predict
+     * increasingly specific queries. If 'topic_switch', predict new domain.
+     */
+    integrateWithPredictiveEngine(predictions: {
+        pattern: string;
+        confidence: number;
+        accuracy: number;
+    }): void;
+    private mapPatternToIntent;
+    /**
+     * Observe a blackboard broadcast and update beliefs.
+     * Blackboard entries reduce entropy proportional to their confidence.
+     */
+    observeBlackboardEntry(entry: {
+        type: string;
+        content: string;
+        confidence: number;
+    }): void;
+    /**
+     * Get per-message surprise history for dream replay selection.
+     * High-surprise messages are worth consolidating during "sleep."
+     */
+    getSurpriseHistory(): Array<{
+        message: string;
+        surprise: number;
+        timestamp: number;
+    }>;
     /**
      * Observe a user message and compute surprise.
      * High surprise = our model of the user is wrong → update beliefs.

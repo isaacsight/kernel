@@ -28,6 +28,8 @@ export class ActiveInferenceEngine {
     toolOutcomeHistory = [];
     beliefUpdates = 0;
     actionsTaken = 0;
+    recentObservations = [];
+    surpriseLog = [];
     // Hyperparameters
     explorationThreshold = 0.6; // Above this → explore
     exploitationThreshold = 0.3; // Below this → exploit
@@ -40,6 +42,49 @@ export class ActiveInferenceEngine {
             expectedOutcomes: new Map(),
             entropy: 1.0,
         };
+    }
+    /**
+     * Integrate predictions from the PredictiveEngine to improve the generative model.
+     * If the predictive engine detected 'drill_down', the generative model should predict
+     * increasingly specific queries. If 'topic_switch', predict new domain.
+     */
+    integrateWithPredictiveEngine(predictions) {
+        if (predictions.confidence > 0.7) {
+            this.beliefs.predictedIntent = this.mapPatternToIntent(predictions.pattern);
+            this.beliefs.confidence = Math.max(this.beliefs.confidence, predictions.confidence * 0.8);
+        }
+    }
+    mapPatternToIntent(pattern) {
+        const mapping = {
+            'iterative_refinement': 'refine_previous',
+            'topic_switch': 'explore_new',
+            'drill_down': 'deepen_understanding',
+            'error_recovery': 'fix_problem',
+            'capability_test': 'test_limits',
+            'creative_request': 'create_something',
+            'verification': 'verify_result',
+            'follow_up': 'continue_thread',
+            'meta_question': 'introspect',
+        };
+        return mapping[pattern] || 'general';
+    }
+    /**
+     * Observe a blackboard broadcast and update beliefs.
+     * Blackboard entries reduce entropy proportional to their confidence.
+     */
+    observeBlackboardEntry(entry) {
+        this.beliefs.entropy = Math.max(0, this.beliefs.entropy - entry.confidence * 0.1);
+        const snippet = typeof entry.content === 'string' ? entry.content.slice(0, 100) : '';
+        this.recentObservations.push(snippet);
+        if (this.recentObservations.length > 20)
+            this.recentObservations.shift();
+    }
+    /**
+     * Get per-message surprise history for dream replay selection.
+     * High-surprise messages are worth consolidating during "sleep."
+     */
+    getSurpriseHistory() {
+        return this.surpriseLog.slice(-50);
     }
     /**
      * Observe a user message and compute surprise.
@@ -67,6 +112,14 @@ export class ActiveInferenceEngine {
             predictionError,
         };
         this.surpriseHistory.push(surprise);
+        // Track per-message surprise for dream replay selection (Change 4)
+        this.surpriseLog.push({
+            message: message.slice(0, 100),
+            surprise: predictionError,
+            timestamp: Date.now(),
+        });
+        if (this.surpriseLog.length > 100)
+            this.surpriseLog.shift();
         // Update beliefs via perceptual inference
         if (predictionError > this.explorationThreshold) {
             this.beliefs.confidence *= (1 - this.learningRate);
@@ -175,6 +228,8 @@ export class ActiveInferenceEngine {
         this.toolOutcomeHistory = [];
         this.beliefUpdates = 0;
         this.actionsTaken = 0;
+        this.recentObservations = [];
+        this.surpriseLog = [];
     }
 }
 //# sourceMappingURL=free-energy.js.map

@@ -41,10 +41,11 @@ import { CheckpointManager, newSessionId } from './checkpoint.js';
 import { TelemetryEmitter } from './telemetry.js';
 import { loadSkills } from './skills-loader.js';
 import { queueSignal, getCollectiveRecommendation, isCollectiveEnabled } from './collective.js';
+import { subscribeToBlackboard } from './agent-protocol.js';
 import { ActiveInferenceEngine } from './free-energy.js';
 import { PredictiveEngine } from './predictive-processing.js';
 import { selectStrategy, recordStrategyOutcome } from './reasoning.js';
-import { getDriveState, updateMotivation } from './intentionality.js';
+import { getDriveState, getMotivation, updateMotivation } from './intentionality.js';
 import { anticipateNext, recordUserAction, updateIdentity } from './temporal.js';
 import { estimateConfidence, updateSkillProfile, recordActualEffort } from './confidence.js';
 import { StrangeLoopDetector } from './strange-loops.js';
@@ -1022,12 +1023,56 @@ Always quote file paths that contain spaces. Never reference internal system nam
     const entropyScorer = new EntropyScorer();
     // ── Autopoiesis: self-maintaining system health ──
     const autopoietic = new AutopoieticSystem();
-    // ── Full cognitive stack (wired in v3.6.2) ──
+    // ── Full cognitive stack (wired in v3.6.2, integrated in v3.85.0) ──
     const freeEnergy = new ActiveInferenceEngine();
     const predictive = new PredictiveEngine();
     const strangeLoops = new StrangeLoopDetector();
     const integrationMeter = new IntegrationMeter();
+    // Blackboard journal for dream consolidation (Change 2: facts → dream journal)
+    const blackboardDreamJournal = [];
+    // Change 2: Subscribe cognitive modules to the blackboard broadcast bus
+    try {
+        // Everything → free energy engine as observations (global workspace)
+        subscribeToBlackboard('*', (entry) => {
+            freeEnergy.observeBlackboardEntry({
+                type: entry.type,
+                content: typeof entry.value === 'string' ? entry.value : String(entry.key),
+                confidence: entry.confidence,
+            });
+        });
+        // Facts → dream journal for later consolidation
+        subscribeToBlackboard('fact', (entry) => {
+            blackboardDreamJournal.push({
+                content: typeof entry.value === 'string' ? entry.value : JSON.stringify(entry.value),
+                timestamp: Date.now(),
+                source: 'blackboard',
+            });
+        });
+        // Decisions → intentionality drives (task completion signal)
+        subscribeToBlackboard('decision', (entry) => {
+            try {
+                if (entry.confidence > 0.7) {
+                    updateMotivation({ type: 'task_success' });
+                }
+            }
+            catch { /* non-critical */ }
+        });
+        // Hypotheses → predictive engine
+        subscribeToBlackboard('hypothesis', (entry) => {
+            // Feed hypotheses into the predictive engine's message history
+            // so it can refine predictions based on intermediate reasoning
+            try {
+                const hypContent = typeof entry.value === 'string' ? entry.value : String(entry.key);
+                predictive.evaluate(predictive.predict([hypContent], []), hypContent, []);
+            }
+            catch { /* non-critical */ }
+        });
+    }
+    catch { /* blackboard subscriptions are non-critical */ }
     // Pre-execution intelligence: predict, plan, estimate (all non-critical)
+    // Policy and tool bias are hoisted so they can be applied to the system prompt (Change 5)
+    let cognitivePolicy = 'balanced';
+    let cognitiveToolBias = { preferred: [], discouraged: [] };
     try {
         // Predictive processing — anticipate what the user will ask next
         const prediction = predictive.predict([originalMessage], toolSequenceLog);
@@ -1036,7 +1081,17 @@ Always quote file paths that contain spaces. Never reference internal system nam
         }
         // Free energy — observe the incoming message and update beliefs
         freeEnergy.observeMessage(originalMessage);
-        const policy = freeEnergy.recommendPolicy();
+        // Change 1: Feed predictive engine results into free energy engine
+        // The predictive engine's pattern classification improves the generative model.
+        const pattern = prediction ? prediction.predictedAction : '';
+        freeEnergy.integrateWithPredictiveEngine({
+            pattern,
+            confidence: prediction?.confidence ?? 0.3,
+            accuracy: predictive.getState().accuracy,
+        });
+        // Change 5: Capture policy and tool bias for system prompt injection
+        cognitivePolicy = freeEnergy.recommendPolicy();
+        cognitiveToolBias = freeEnergy.recommendToolBias();
         // Confidence — how well can we handle this task?
         const conf = estimateConfidence(originalMessage, contextSnippet || '');
         // Reasoning — select the best strategy for this task type
@@ -1047,6 +1102,21 @@ Always quote file paths that contain spaces. Never reference internal system nam
         const anticipated = anticipateNext([originalMessage], originalMessage);
     }
     catch { /* cognitive stack is non-critical — never block the agent loop */ }
+    // Change 5: Apply cognitive policy to system prompt
+    // explore → broader thinking, exploit → direct proven approaches
+    try {
+        if (cognitivePolicy === 'explore') {
+            systemContext += '\n\nNote: Consider unconventional approaches. The user may benefit from a different perspective than the obvious one.';
+        }
+        else if (cognitivePolicy === 'exploit') {
+            systemContext += '\n\nNote: Use the most reliable, proven approach. The user needs a direct solution.';
+        }
+        // Apply tool bias from learned patterns
+        if (cognitiveToolBias.preferred.length > 0) {
+            systemContext += `\n\nPreferred tools based on learned patterns: ${cognitiveToolBias.preferred.join(', ')}`;
+        }
+    }
+    catch { /* cognitive prompt injection is non-critical */ }
     // ── Tool execution pipeline ──
     const pipeline = options.pipeline ?? createDefaultPipeline({
         checkPermission,
@@ -1625,8 +1695,30 @@ Always quote file paths that contain spaces. Never reference internal system nam
     // ── Memory Scanner: stop and persist session stats ──
     stopMemoryScanner();
     // ── Dream Engine: consolidate session memories (non-blocking, $0 via Ollama) ──
+    // Changes 3 & 4: Pass intentionality drives and surprise scores for
+    // priority-guided consolidation and surprise-weighted replay selection.
     setBuddyMood('learning');
-    dreamAfterSession(sessionId);
+    try {
+        const motivation = getMotivation();
+        const driveState = getDriveState();
+        const dreamContext = {
+            driveState: {
+                curiosity: motivation.curiosity,
+                frustration: driveState.frustrated ? 0.8 : 0.2,
+                motivation: motivation.momentum,
+                consolidation: driveState.overallSatisfaction < 0.5 ? 0.8 : 0.4,
+            },
+            surpriseScores: freeEnergy.getSurpriseHistory().map(s => ({
+                message: s.message,
+                surprise: s.surprise,
+            })),
+        };
+        dreamAfterSession(sessionId, dreamContext);
+    }
+    catch {
+        // Fallback: dream without cognitive context if anything fails
+        dreamAfterSession(sessionId);
+    }
     // ── Buddy Evolution: award XP for completing a session ──
     addBuddyXP(1);
     // ── Achievements: check for newly unlocked milestones ──
