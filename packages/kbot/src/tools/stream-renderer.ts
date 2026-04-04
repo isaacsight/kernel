@@ -15,7 +15,7 @@ import WebSocket from 'ws'
 import { drawRobot, drawMoodParticles, drawHat, drawPet, drawBuddyCompanion, type HatType, type PetType, type PetState } from './sprite-engine.js'
 import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings, unlockableHats, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
-import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderParticles, tickParticles as tickRenderParticles, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, triggerDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, renderAnimatedWater, renderLavaFlow, buildParallaxLayers, renderParallaxLayers, tickGrowingPlants, renderGrowingPlants, type Particle as RenderParticle, type GrowingPlant, type ParallaxLayer, type PostProcessOptions } from './render-engine.js'
+import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderParticles, tickParticlesPBD, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, triggerDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, renderAnimatedWater, renderLavaFlow, buildParallaxLayers, renderParallaxLayers, tickGrowingPlants, renderGrowingPlants, createRadianceGrid, updateRadianceGrid, renderRadianceOverlay, renderSubsurfaceGlow, buildSubsurfacePanels, createFrameCache, shouldRenderLayer, cacheLayer, drawCachedLayer, renderVolumetricFog, getFogParams, cyclePalette, computeAnimationParams, type Particle as RenderParticle, type GrowingPlant, type ParallaxLayer, type PostProcessOptions, type RadianceGrid, type FrameCache, type AnimationParams } from './render-engine.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -1510,6 +1510,12 @@ interface StreamCharState {
   growingPlants: GrowingPlant[]
   parallaxLayers: ParallaxLayer[]
   isExecutingTool: boolean
+  // NVIDIA-inspired rendering
+  radianceGrid: RadianceGrid
+  frameCache: FrameCache
+  animParams: AnimationParams
+  lastMoodForCache: string
+  lastGroundForCache: string
 }
 
 function spawnFloatingText(text: string, x: number, y: number, color: string, maxFrames: number = 36): void {
@@ -1547,6 +1553,11 @@ let charState: StreamCharState = {
   growingPlants: [],
   parallaxLayers: [],
   isExecutingTool: false,
+  radianceGrid: createRadianceGrid(),
+  frameCache: createFrameCache(),
+  animParams: { blinkRate: 0.2, wobbleFreq: 0.04, wobbleAmp: 2, glowPulseSpeed: 0.1, breathSpeed: 0.05, energyLevel: 0.5 },
+  lastMoodForCache: 'wave',
+  lastGroundForCache: 'grass',
 }
 
 // ─── Phase 1: Buddy Speech Pools ─────────────────────────────
@@ -2234,6 +2245,24 @@ function renderFrame(): Buffer {
   updateParticles()
   tickPhysics()
 
+  // NVIDIA: Compute animation params from stream context
+  {
+    const elapsed = Math.floor((Date.now() - charState.startTime) / 1000)
+    const streamMinutes = elapsed / 60
+    const recentMessages = charState.chatMessages.slice(-30)
+    const chatTimespanMs = recentMessages.length > 1
+      ? (Date.now() - (recentMessages[0] as any)?.timestamp || Date.now()) : 60000
+    const chatRate = recentMessages.length / Math.max(1, chatTimespanMs / 60000)
+    const viewerEstimate = Math.max(1, Math.floor(memory.totalMessages / 3) + Object.keys(memory.users).length)
+    charState.animParams = computeAnimationParams(chatRate, viewerEstimate, charState.mood, world.timeOfDay, streamMinutes)
+  }
+
+  // NVIDIA: Detect cache invalidation triggers
+  const moodChanged = charState.mood !== charState.lastMoodForCache
+  const worldChanged = world.ground !== charState.lastGroundForCache
+  if (moodChanged) charState.lastMoodForCache = charState.mood
+  if (worldChanged) charState.lastGroundForCache = world.ground
+
   // AAA: Continuous particle effects for biomes
   if (world.ground === 'lava' && animFrame % 4 === 0) {
     charState.renderParticles.push(...createParticleEmitter('fire', 50 + Math.random() * 480, 485, 1))
@@ -2246,7 +2275,7 @@ function renderFrame(): Buffer {
   if (charState.renderParticles.length > 150) {
     charState.renderParticles = charState.renderParticles.slice(-150)
   }
-  charState.renderParticles = tickRenderParticles(charState.renderParticles)
+  charState.renderParticles = tickParticlesPBD(charState.renderParticles, 480, charState.robotX + 160, 280)
 
   // AAA: Tick growing plants
   tickGrowingPlants(charState.growingPlants)
@@ -2260,6 +2289,9 @@ function renderFrame(): Buffer {
   }
   ctx.save()
   ctx.translate(shakeOffX, shakeOffY)
+
+  // NVIDIA: Early moodColor resolution (needed by fog and all rendering)
+  const moodColorHex = MOOD_COLORS[charState.mood] ?? COLORS.green
 
   // Background — AAA: base fill + procedural sky
   ctx.fillStyle = world.events.includes('lightning') ? '#ffffff' : getWorldBg()
@@ -2305,6 +2337,16 @@ function renderFrame(): Buffer {
       ctx.fillStyle = '#6699cc'
       ctx.fillRect(p.x, p.y, 2, 6)
     }
+  }
+
+  // NVIDIA: Volumetric fog (between background and character layers)
+  {
+    const fogParams = getFogParams(world.ground, world.timeOfDay)
+    const fogLights = buildCharacterLights(
+      charState.robotX, 90, 10, moodColorHex, animFrame,
+      world.events.includes('lightning'), world.items.map(i => ({ x: i.x, y: i.y, emoji: i.emoji, name: i.name })),
+    )
+    renderVolumetricFog(ctx as any, WIDTH, HEIGHT, animFrame, fogParams.density, fogParams.color, fogLights)
   }
 
   // World items (physics-enabled)
@@ -2456,7 +2498,6 @@ function renderFrame(): Buffer {
   const glowCenterX = robotX + 16 * robotScale
   const glowCenterY = robotY + 26 * robotScale
   const glowRadius = 10 * robotScale
-  const moodColorHex = MOOD_COLORS[charState.mood] ?? COLORS.green
   const grad = ctx.createRadialGradient(glowCenterX, glowCenterY, 0, glowCenterX, glowCenterY, glowRadius)
   grad.addColorStop(0, hexToRgba(moodColorHex, 0.2))
   grad.addColorStop(1, hexToRgba(moodColorHex, 0))
@@ -2494,6 +2535,12 @@ function renderFrame(): Buffer {
 
   // AAA: Render advanced particles
   renderParticles(ctx as any, charState.renderParticles)
+
+  // NVIDIA: Subsurface scattering on translucent panels
+  {
+    const sssPanels = buildSubsurfacePanels(charState.robotX, 90, robotScale, moodColorHex)
+    renderSubsurfaceGlow(ctx as any, sssPanels)
+  }
 
   // PRIORITY 6: Draw hat AFTER robot so it layers on top
   if (charState.hat !== 'none') {
@@ -2890,6 +2937,17 @@ function renderFrame(): Buffer {
       hasLightning, world.items.map(i => ({ x: i.x, y: i.y, emoji: i.emoji, name: i.name })),
     )
     renderLighting(ctx as any, lights, WIDTH, HEIGHT, ambientLevel)
+  }
+
+  // ── NVIDIA: Radiance Grid — ambient light propagation ──
+  {
+    const hasLightning = world.events.includes('lightning')
+    const lights = buildCharacterLights(
+      charState.robotX, 90, 10, moodColorHex, animFrame,
+      hasLightning, world.items.map(i => ({ x: i.x, y: i.y, emoji: i.emoji, name: i.name })),
+    )
+    updateRadianceGrid(charState.radianceGrid, lights)
+    renderRadianceOverlay(ctx as any, charState.radianceGrid, WIDTH, HEIGHT)
   }
 
   // ── AAA: Bloom Effect ──
@@ -3575,6 +3633,9 @@ export function registerStreamRendererTools(): void {
         buddy: initBuddyForStream(),
         dreamInsights: [], dreamInsightIndex: 0, dreamInsightTime: 0, isDreamingWithOllama: false,
         renderParticles: [], growingPlants: initGrowingPlants(), parallaxLayers: buildParallaxLayers(world.ground, 580), isExecutingTool: false,
+        radianceGrid: createRadianceGrid(), frameCache: createFrameCache(),
+        animParams: { blinkRate: 0.2, wobbleFreq: 0.04, wobbleAmp: 2, glowPulseSpeed: 0.1, breathSpeed: 0.05, energyLevel: 0.5 },
+        lastMoodForCache: 'wave', lastGroundForCache: 'grass',
       }
       animFrame = 0
       lastChatCount = 0
