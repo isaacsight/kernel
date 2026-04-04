@@ -1,63 +1,63 @@
 {
-  "timestamp": "2026-04-03T16:29:18.440Z",
+  "timestamp": "2026-04-04T04:35:38.043Z",
   "projects": [
     {
-      "name": "jackwener/opencli",
-      "url": "https://github.com/jackwener/opencli",
-      "stars": 12420,
-      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
+      "name": "tony1223/better-agent-terminal",
+      "url": "https://github.com/tony1223/better-agent-terminal",
+      "stars": 234,
+      "description": "Multi-workspace terminal aggregator with Claude Code AI integration"
+    },
+    {
+      "name": "xvirobotics/metabot",
+      "url": "https://github.com/xvirobotics/metabot",
+      "stars": 521,
+      "description": "构建受监督的、自我进化的 Agent 组织的基础设施 | Infrastructure for supervised, self-improving agent organization. 从飞书/Telegram 运行 Claude Code，共享记忆、Agent 工厂、定时任务、通信总线。"
     },
     {
       "name": "vm0-ai/vm0",
       "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1058,
+      "stars": 1059,
       "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "activepieces/activepieces",
-      "url": "https://github.com/activepieces/activepieces",
-      "stars": 21536,
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 2018,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
     },
     {
-      "name": "utensils/mcp-nixos",
-      "url": "https://github.com/utensils/mcp-nixos",
-      "stars": 530,
-      "description": "MCP-NixOS - Model Context Protocol Server for NixOS resources"
+      "name": "Mirascope/mirascope",
+      "url": "https://github.com/Mirascope/mirascope",
+      "stars": 1446,
+      "description": "The LLM Anti-Framework"
     },
     {
-      "name": "Ruya-AI/cozempic",
-      "url": "https://github.com/Ruya-AI/cozempic",
-      "stars": 186,
-      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
+      "name": "ArcadeAI/arcade-mcp",
+      "url": "https://github.com/ArcadeAI/arcade-mcp",
+      "stars": 845,
+      "description": "The best way to create, deploy, and share MCP Servers"
     },
     {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 364,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
-    },
-    {
-      "name": "cybertheory/clawbuttons",
-      "url": "https://github.com/cybertheory/clawbuttons",
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
-      "description": "OpenClaw and Other Claw Agent buttons to run skills, plugins, and prompts"
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     },
     {
-      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
-      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
+      "name": "ybbms777/compound-engineering",
+      "url": "https://github.com/ybbms777/compound-engineering",
       "stars": 0,
-      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+      "description": "Compound Engineering plugin for OpenClaw — AI skills and agents"
     },
     {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+      "name": "aidongise-cell/prism-scanner",
+      "url": "https://github.com/aidongise-cell/prism-scanner",
+      "stars": 7,
+      "description": "Open-source security scanner for AI Agent skills, plugins & MCP servers. 39 detection rules. pip install prism-scanner"
     }
   ],
   "latestPaper": {
-    "title": "unknown",
-    "summary": "unknown"
+    "title": "ActionParty: Multi-Subject Action Binding in Generative Video Games",
+    "summary": "Recent advances in video diffusion have enabled the development of \"world models\" capable of simulating interactive environments. However, these models are largely restricted to single-agent settings, failing to control multiple agents simultaneously in a scene. In this work, we tackle a fundamental issue of action binding in existing video diffusion models, which struggle to associate specific actions with their corresponding subjects. For this purpose, we propose ActionParty, an action control"
   }
 }
