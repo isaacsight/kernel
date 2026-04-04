@@ -13,6 +13,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createCanvas } from 'canvas'
 import WebSocket from 'ws'
 import { drawRobot, drawMoodParticles } from './sprite-engine.js'
+import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, type StreamIntelligence } from './stream-intelligence.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -1011,6 +1012,7 @@ let animFrame = 0
 let lastChatCount = 0
 let lastChatTime = Date.now()  // track when last chat message arrived
 let memory = loadMemory()
+let intelligence: StreamIntelligence = initIntelligence(memory)
 
 // ─── Canvas Renderer ──────────────────────────────────────────
 
@@ -1114,6 +1116,9 @@ function renderFrame(): Buffer {
 
   // Advance agenda
   advanceAgenda()
+
+  // Tick intelligence systems
+  tickIntelligence(intelligence, animFrame)
 
   // Update world
   updateParticles()
@@ -1257,6 +1262,78 @@ function renderFrame(): Buffer {
       const trophy = i === 0 ? '1.' : i === 1 ? '2.' : '3.'
       ctx.fillStyle = i === 0 ? '#f0c040' : i === 1 ? '#c0c0c0' : '#cd7f32'
       ctx.fillText(`${trophy} ${name.slice(0, 12)}: ${(u as any).xp || 0} XP`, statsX, statsY + 80 + i * 16)
+    }
+  }
+
+  // ── Brain Panel (below leaderboard, bottom-left) ──
+  const brainPanelX = statsX - 10
+  const brainPanelY = statsY + 140
+  const brainPanelW = 170
+  const brainPanelH = 110
+  drawBrainPanel(ctx as any, intelligence.brain, brainPanelX, brainPanelY, brainPanelW, brainPanelH)
+
+  // ── Evolution Code Overlay (when actively building) ──
+  if (intelligence.evolution.active && intelligence.evolution.activeProposal && intelligence.evolution.buildPhase !== 'idle') {
+    const evoX = 20
+    const evoY = 360
+    const evoW = dividerX - 40
+    const evoH = 120
+    ctx.fillStyle = 'rgba(13, 17, 23, 0.9)'
+    ctx.fillRect(evoX, evoY, evoW, evoH)
+    ctx.strokeStyle = '#f0c040'
+    ctx.lineWidth = 1
+    ctx.strokeRect(evoX, evoY, evoW, evoH)
+
+    // Title
+    ctx.fillStyle = '#f0c040'
+    ctx.font = 'bold 11px "Courier New", monospace'
+    ctx.fillText(`BUILDING: ${intelligence.evolution.activeProposal.title.slice(0, 40)}`, evoX + 6, evoY + 14)
+
+    // Phase + progress bar
+    const phase = intelligence.evolution.buildPhase
+    const phaseDurations: Record<string, number> = { analyzing: 30, writing: 90, testing: 30, deploying: 18, done: 1 }
+    const totalF = phaseDurations[phase] || 30
+    const pct = Math.min(100, Math.floor((intelligence.evolution.buildProgress / totalF) * 100))
+    const filled = Math.floor(pct / 5)
+    const bar = '#'.repeat(filled) + '-'.repeat(20 - filled)
+    ctx.fillStyle = '#8b949e'
+    ctx.font = '10px "Courier New", monospace'
+    ctx.fillText(`${phase} [${bar}] ${pct}%`, evoX + 6, evoY + 28)
+
+    // Code preview lines
+    ctx.fillStyle = '#3fb950'
+    ctx.font = '10px "Courier New", monospace'
+    const codeLines = intelligence.evolution.codePreview.slice(-6)
+    for (let i = 0; i < codeLines.length; i++) {
+      ctx.fillText(codeLines[i].slice(0, 70), evoX + 6, evoY + 42 + i * 13)
+    }
+  }
+
+  // ── Collab Overlay (when active, below evolution or in same area) ──
+  if (intelligence.collab.active) {
+    const collabY = (intelligence.evolution.active ? 490 : 360)
+    if (collabY < 490) {
+      const collabX = 20
+      const collabW = dividerX - 40
+      const collabH = 80
+      ctx.fillStyle = 'rgba(13, 17, 23, 0.85)'
+      ctx.fillRect(collabX, collabY, collabW, collabH)
+      ctx.strokeStyle = '#58a6ff'
+      ctx.lineWidth = 1
+      ctx.strokeRect(collabX, collabY, collabW, collabH)
+
+      ctx.fillStyle = '#58a6ff'
+      ctx.font = 'bold 11px "Courier New", monospace'
+      const collabTitle = intelligence.collab.title || 'Untitled'
+      ctx.fillText(`COLLAB [${intelligence.collab.type}]: ${collabTitle.slice(0, 35)}`, collabX + 6, collabY + 14)
+      ctx.fillStyle = '#8b949e'
+      ctx.font = '10px "Courier New", monospace'
+      ctx.fillText(`${intelligence.collab.contributors.size} people | ${intelligence.collab.phase}`, collabX + 6, collabY + 28)
+      ctx.fillStyle = '#e6edf3'
+      const recentContent = intelligence.collab.content.slice(-3)
+      for (let i = 0; i < recentContent.length; i++) {
+        ctx.fillText(recentContent[i].slice(0, 65), collabX + 6, collabY + 42 + i * 13)
+      }
     }
   }
 
@@ -1455,14 +1532,19 @@ function startChatPoll(): void {
           // Learn from message
           learnFromMessage(memory, msg.username, msg.text, msg.platform)
 
+          // Check intelligence commands (evolution, brain, collab)
+          const intelResult = handleIntelligenceCommand(msg.text, msg.username, intelligence)
+
           // Check for world commands
-          const worldResult = parseWorldCommand(msg.text)
+          const worldResult = !intelResult ? parseWorldCommand(msg.text) : null
 
           // React
           charState.mood = 'talking'
-          const responsePromise = worldResult
-            ? Promise.resolve(worldResult)
-            : generateResponse(msg.username, msg.text, msg.platform)
+          const responsePromise = intelResult
+            ? Promise.resolve(intelResult)
+            : worldResult
+              ? Promise.resolve(worldResult)
+              : generateResponse(msg.username, msg.text, msg.platform)
           responsePromise.then(response => {
             charState.speech = `@${msg.username}: ${response}`
             memory.totalResponses++
@@ -1915,6 +1997,7 @@ export function registerStreamRendererTools(): void {
       animFrame = 0
       lastChatCount = 0
       lastChatTime = Date.now()
+      intelligence = initIntelligence(memory)
       agenda = {
         currentIndex: 0,
         currentSegment: 'welcome',
