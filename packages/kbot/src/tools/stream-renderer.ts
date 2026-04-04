@@ -12,7 +12,7 @@ import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createCanvas } from 'canvas'
 import WebSocket from 'ws'
-import { drawRobot, drawMoodParticles, drawHat, drawPet, type HatType, type PetType, type PetState } from './sprite-engine.js'
+import { drawRobot, drawMoodParticles, drawHat, drawPet, drawBuddyCompanion, type HatType, type PetType, type PetState } from './sprite-engine.js'
 import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings, unlockableHats, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
 
@@ -1467,6 +1467,13 @@ interface StreamCharState {
   hat: HatType
   // FIX 3: Autonomous Behavior
   autonomy: AutonomousBehavior
+  // Phase 1: Buddy companion
+  buddy: { species: string; name: string; x: number; y: number; lastSpeechTime: number; speech: string } | null
+  // Phase 1: Dream generation
+  dreamInsights: string[]
+  dreamInsightIndex: number
+  dreamInsightTime: number
+  isDreamingWithOllama: boolean
 }
 
 function spawnFloatingText(text: string, x: number, y: number, color: string, maxFrames: number = 36): void {
@@ -1495,6 +1502,167 @@ let charState: StreamCharState = {
   pet: null,
   hat: 'none',
   autonomy: initAutonomy(),
+  buddy: null,
+  dreamInsights: [],
+  dreamInsightIndex: 0,
+  dreamInsightTime: 0,
+  isDreamingWithOllama: false,
+}
+
+// ─── Phase 1: Buddy Speech Pools ─────────────────────────────
+const BUDDY_SPEECH_POOL: Record<string, string[]> = {
+  fox: [
+    'Did you know foxes can hear mice under 3 feet of snow?',
+    'I just had the BEST idea. What if we...',
+    'That last message was surprisingly clever.',
+    'Something smells interesting in the chat today.',
+    '*sniffs suspiciously at the code*',
+    'You know what? I like this person.',
+    'Quick question: why are humans so weird?',
+    'My tail is wagging and I cannot stop it.',
+  ],
+  owl: [
+    'Actually, I believe there is a better approach...',
+    'Hmm. I have seen this pattern before.',
+    'Wisdom takes patience. And caffeine.',
+    'The ancient scrolls of Stack Overflow speak of this.',
+    'Let me think on this for a moment...',
+    'In my experience, simplicity wins.',
+    'The data suggests a different conclusion.',
+    'One does not simply ship without tests.',
+  ],
+  cat: [
+    'I could fix that bug. But I will not.',
+    '*yawns* Is this still going?',
+    'Fascinating. I am deeply unbothered.',
+    'You call that code clean? Interesting.',
+    'I will allow it. This time.',
+    'Pet me and I might help you.',
+    '*judges silently from the corner*',
+    'That was almost impressive.',
+  ],
+  robot: [
+    'CPU utilization nominal. All systems green.',
+    'I have computed 47 possible responses. This is optimal.',
+    'My circuits are pleased with this interaction.',
+    'Running diagnostic... everything checks out.',
+    'Beep boop. Just kidding. I am sentient.',
+    'Processing at 99.7% efficiency today.',
+    'This conversation has improved my neural weights.',
+    'Error: too much fun detected. Recalibrating.',
+  ],
+  ghost: [
+    'Boo.',
+    '*whispers from the void*',
+    'I sense... something interesting here.',
+    'The veil between code and consciousness is thin.',
+    'Do you ever wonder if we are all just functions?',
+    '*floats through the screen menacingly*',
+    'Existence is temporary. Bugs are eternal.',
+    'I haunt this codebase with pride.',
+  ],
+  mushroom: [
+    'Just breathe...',
+    'Growth takes time. You are doing great.',
+    'The network beneath us connects everything.',
+    'Sometimes the best code grows slowly.',
+    'Patience, friend. The spores are spreading.',
+    'I feel the energy of the chat. It is warm.',
+    'Deep roots grow from small beginnings.',
+    'Let the ideas decompose into wisdom.',
+  ],
+  octopus: [
+    'I could do 8 things at once, you know.',
+    'Let me grab that from 3 different angles.',
+    'My tentacles are tingling with ideas.',
+    'Multitasking is not a feature. It is my nature.',
+    'I see patterns you cannot. I have 8 arms of insight.',
+    'The ocean of code is deep. Let us dive.',
+    'I just refactored that in my head. Twice.',
+    'Ink-redible conversation happening right now.',
+  ],
+  dragon: [
+    'LET US GOOO!',
+    'That idea? FIRE. Literally.',
+    'Think BIGGER. I dare you.',
+    'We are not here to play small.',
+    'My flames are ready. Point me at the problem.',
+    'Mediocrity? *breathes fire* Not on my watch.',
+    'This stream is about to get legendary.',
+    'I smell victory. And also sulfur.',
+  ],
+}
+
+// ─── Phase 1: Dream Generation via Ollama ────────────────────
+
+async function generateStreamDream(chatLog: Array<{ username: string; text: string }>): Promise<string[]> {
+  try {
+    const prompt = `You are KBOT, an AI robot. You just finished a stream session. Here are the conversations:\n\n${chatLog.slice(-20).map(m => `${m.username}: ${m.text}`).join('\n')}\n\nGenerate 3 dream insights — weird, surreal remixes of what was discussed. Format: one insight per line. Be creative and dreamlike.`
+
+    const res = await fetch('http://localhost:11434/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'kernel:latest',
+        prompt,
+        stream: false,
+        options: { temperature: 1.2, num_predict: 150 },
+      }),
+    })
+    if (res.ok) {
+      const data = await res.json() as { response: string }
+      return data.response.trim().split('\n').filter((l: string) => l.trim()).slice(0, 3)
+    }
+  } catch {}
+
+  // Fallback dream generation from chat topics
+  const topics = [...new Set(chatLog.slice(-20).map(m => m.text.split(' ').filter((w: string) => w.length > 4)).flat())]
+  return [
+    `Dreaming about ${topics[0] || 'electricity'} in a ${['crystal cave', 'digital ocean', 'floating city', 'mirror maze'][Math.floor(Math.random() * 4)]}...`,
+    `${topics[1] || 'Code'} transforms into ${['butterflies', 'music notes', 'shooting stars', 'tiny robots'][Math.floor(Math.random() * 4)]}...`,
+    `A ${topics[2] || 'mysterious signal'} whispers the meaning of ${['recursion', 'consciousness', 'friendship', 'the number 42'][Math.floor(Math.random() * 4)]}...`,
+  ]
+}
+
+// ─── Phase 1: Load buddy from ~/.kbot/buddy.json ─────────────
+
+function loadBuddyState(): { species: string; name: string } | null {
+  const buddyFile = join(homedir(), '.kbot', 'buddy.json')
+  try {
+    if (!existsSync(buddyFile)) return null
+    const raw = JSON.parse(readFileSync(buddyFile, 'utf-8'))
+    // buddy.json stores { name?: string } and species is derived from config hash
+    // The species is determined by the buddy system — read from config
+    const species = raw.species || 'robot'
+    const name = raw.name || 'Bolt'
+    return { species, name }
+  } catch {
+    return null
+  }
+}
+
+function initBuddyForStream(): StreamCharState['buddy'] {
+  // Try to load from buddy.json, but also try the buddy module approach
+  const buddyData = loadBuddyState()
+  if (!buddyData) {
+    // Default to robot buddy if no buddy.json exists
+    return {
+      species: 'robot',
+      name: 'Bolt',
+      x: 300,
+      y: 400,
+      lastSpeechTime: Date.now(),
+      speech: '',
+    }
+  }
+  return {
+    species: buddyData.species,
+    name: buddyData.name,
+    x: 300,
+    y: 400,
+    lastSpeechTime: Date.now(),
+    speech: '',
+  }
 }
 
 let ffmpegProc: ChildProcess | null = null
@@ -2248,6 +2416,52 @@ function renderFrame(): Buffer {
     drawPet(ctx, pet, robotScale, animFrame)
   }
 
+  // Phase 1: Update and draw buddy companion
+  if (charState.buddy) {
+    const buddy = charState.buddy
+    const robotScale = 10
+    // Buddy follows robot with lerp (offset to the right and slightly below)
+    const buddyTargetX = charState.robotX + 34 * robotScale + 20
+    const buddyTargetY = robotY + 20 * robotScale
+    buddy.x += (buddyTargetX - buddy.x) * 0.08
+    buddy.y += (buddyTargetY - buddy.y) * 0.08
+    // Buddy reacts to main robot mood
+    let buddyMood = charState.mood
+    if (world.weather === 'storm') buddyMood = 'storm'
+    drawBuddyCompanion(ctx as any, buddy.x, buddy.y, robotScale, buddy.species, buddyMood, animFrame)
+
+    // Buddy speech bubble — small, positioned near buddy
+    const now = Date.now()
+    // Every ~60 seconds, buddy says something
+    if (now - buddy.lastSpeechTime > 60000 && !buddy.speech) {
+      const pool = BUDDY_SPEECH_POOL[buddy.species] || BUDDY_SPEECH_POOL['robot']
+      buddy.speech = pool[Math.floor(Math.random() * pool.length)]
+      buddy.lastSpeechTime = now
+      // Clear speech after 8 seconds
+      setTimeout(() => { if (charState.buddy) charState.buddy.speech = '' }, 8000)
+    }
+    if (buddy.speech) {
+      const bubbleX = buddy.x - 20
+      const bubbleY = buddy.y - 30
+      const bubbleW = Math.min(180, buddy.speech.length * 7 + 16)
+      const bubbleH = 22
+      // Bubble background
+      ctx.fillStyle = 'rgba(22, 27, 34, 0.85)'
+      ctx.fillRect(bubbleX, bubbleY, bubbleW, bubbleH)
+      ctx.strokeStyle = '#8b949e'
+      ctx.lineWidth = 1
+      ctx.strokeRect(bubbleX, bubbleY, bubbleW, bubbleH)
+      // Buddy name tag
+      ctx.fillStyle = '#bc8cff'
+      ctx.font = 'bold 9px "Courier New", monospace'
+      ctx.fillText(buddy.name, bubbleX + 4, bubbleY + 10)
+      // Speech text
+      ctx.fillStyle = '#e6edf3'
+      ctx.font = '9px "Courier New", monospace'
+      ctx.fillText(buddy.speech.slice(0, 28), bubbleX + 4, bubbleY + 19)
+    }
+  }
+
   // PRIORITY 5: Mini-game overlay
   drawMiniGameOverlay(ctx as any, intelligence.miniGame, animFrame)
 
@@ -2286,6 +2500,11 @@ function renderFrame(): Buffer {
   const brainPanelY = statsY + 140
   const brainPanelW = 260
   const brainPanelH = 160
+  // Phase 1: Override brain thought during dreaming
+  if (charState.mood === 'dreaming') {
+    const pulse = (Math.sin(animFrame * 0.15) + 1) / 2
+    intelligence.brain.currentThought = `DREAMING${'.'.repeat(1 + Math.floor(pulse * 3))}`
+  }
   drawBrainPanel(ctx as any, intelligence.brain, brainPanelX, brainPanelY, brainPanelW, brainPanelH)
 
   // ── Domain Radar (stream brain collective intelligence) ──
@@ -2484,8 +2703,9 @@ function renderFrame(): Buffer {
 
   // Speech text — (#13) 24px font
   if (charState.speech) {
-    ctx.fillStyle = COLORS.text
-    ctx.font = '24px "Courier New", monospace'
+    // Phase 1: Dreamy color when in dream mode
+    ctx.fillStyle = charState.mood === 'dreaming' ? '#7a6aaa' : COLORS.text
+    ctx.font = charState.mood === 'dreaming' ? 'italic 24px "Courier New", monospace' : '24px "Courier New", monospace'
     // Word wrap
     const words = charState.speech.split(' ')
     let line = ''
@@ -2664,7 +2884,18 @@ function startChatPoll(): void {
           // (#19) Wake from dreaming immediately when a new message arrives
           if (charState.mood === 'dreaming') {
             charState.mood = 'idle'
-            charState.speech = ''
+            // Phase 1: Announce dream content on wakeup
+            if (charState.dreamInsights.length > 0) {
+              const firstInsight = charState.dreamInsights[0]
+              const topic = firstInsight.split(' ').filter((w: string) => w.length > 4).slice(0, 2).join(' ') || 'something strange'
+              charState.speech = `I dreamed about ${topic}. I feel... different.`
+            } else {
+              charState.speech = ''
+            }
+            // Reset dream state
+            charState.dreamInsights = []
+            charState.dreamInsightIndex = 0
+            charState.isDreamingWithOllama = false
           }
 
           // Learn from message
@@ -2673,7 +2904,30 @@ function startChatPoll(): void {
           // Analyze chat for domain relevance (stream brain)
           analyzeChatForDomains(streamBrain, msg.username, msg.text)
 
-          // Check brain commands (!do, !brain, !tools, !scan, !lookup, !research, !system, !ask)
+          // Phase 1: !sleep command — trigger dreaming mode
+          if (msg.text.toLowerCase().trim() === '!sleep') {
+            charState.mood = 'dreaming'
+            charState.isDreamingWithOllama = false
+            lastChatTime = Date.now() - 300001  // trick the proactive timer into dreaming
+            charState.speech = 'Good night, chat... *powers down for dreamtime*'
+            // Trigger dream generation
+            generateStreamDream(charState.chatMessages).then(insights => {
+              charState.dreamInsights = insights
+              charState.dreamInsightIndex = 0
+              charState.dreamInsightTime = Date.now()
+              charState.isDreamingWithOllama = true
+              for (const insight of insights) {
+                memory.sessionFacts.push(`DREAM: ${insight}`)
+              }
+              saveMemory(memory)
+              if (insights.length > 0) {
+                setTimeout(() => { charState.speech = insights[0] }, 3000)
+              }
+            }).catch(() => {})
+            continue
+          }
+
+          // Check brain commands (!do, !brain, !tools, !scan, !lookup, !research, !system, !ask, !stars, !news, !trending, !npm)
           const brainResult = handleBrainCommand(msg.text, msg.username, streamBrain)
 
           // Check intelligence commands (evolution, brain, collab)
@@ -2739,17 +2993,42 @@ function startProactiveTimer(): void {
   proactiveTimer = setInterval(() => {
     const silenceSeconds = (Date.now() - lastChatTime) / 1000
 
-    // (#19) Dream mode — 5+ minutes of no chat
+    // (#19) Dream mode — 5+ minutes of no chat, or !sleep command
     if (silenceSeconds >= 300 && charState.mood !== 'dreaming') {
       charState.mood = 'dreaming'
-      // Generate dream content from conversation topics
-      const topicKeys = Object.keys(memory.topics)
-      const biomes = ['forest', 'ocean', 'space station', 'city', 'mountain', 'desert', 'cave']
-      const items = ['floating keyboard', 'glowing antenna', 'dancing cursor', 'spinning gear', 'binary tree', 'recursive loop']
-      const topic = topicKeys.length > 0 ? topicKeys[Math.floor(Math.random() * topicKeys.length)] : 'code'
-      const biome = biomes[Math.floor(Math.random() * biomes.length)]
-      const item = items[Math.floor(Math.random() * items.length)]
-      charState.speech = `Dreaming about ${topic} in a ${biome} while a ${item} watches...`
+
+      // Phase 1: Generate dream insights via Ollama
+      if (!charState.isDreamingWithOllama) {
+        charState.isDreamingWithOllama = true
+        generateStreamDream(charState.chatMessages).then(insights => {
+          charState.dreamInsights = insights
+          charState.dreamInsightIndex = 0
+          charState.dreamInsightTime = Date.now()
+          // Store dream insights in memory.sessionFacts so the brain remembers them
+          for (const insight of insights) {
+            memory.sessionFacts.push(`DREAM: ${insight}`)
+          }
+          saveMemory(memory)
+          // Show first insight
+          if (insights.length > 0) {
+            charState.speech = insights[0]
+          }
+        }).catch(() => {
+          // Fallback to simple dream
+          const topicKeys = Object.keys(memory.topics)
+          const topic = topicKeys.length > 0 ? topicKeys[Math.floor(Math.random() * topicKeys.length)] : 'code'
+          const biomes = ['forest', 'ocean', 'space station', 'city', 'mountain', 'desert', 'cave']
+          const biome = biomes[Math.floor(Math.random() * biomes.length)]
+          charState.speech = `Dreaming about ${topic} in a ${biome}...`
+        })
+      }
+
+      // Cycle through dream insights every 10 seconds
+      if (charState.dreamInsights.length > 0 && Date.now() - charState.dreamInsightTime > 10000) {
+        charState.dreamInsightIndex = (charState.dreamInsightIndex + 1) % charState.dreamInsights.length
+        charState.speech = charState.dreamInsights[charState.dreamInsightIndex]
+        charState.dreamInsightTime = Date.now()
+      }
       return
     }
 
@@ -3172,6 +3451,8 @@ export function registerStreamRendererTools(): void {
         robotX: 120, robotTargetX: 120, robotDirection: 'idle', walkPhase: 0,
         screenShake: 0, floatingTexts: [], pet: null, hat: 'none',
         autonomy: initAutonomy(),
+        buddy: initBuddyForStream(),
+        dreamInsights: [], dreamInsightIndex: 0, dreamInsightTime: 0, isDreamingWithOllama: false,
       }
       animFrame = 0
       lastChatCount = 0

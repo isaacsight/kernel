@@ -384,9 +384,27 @@ export function suggestToolAction(brain: StreamBrain): BrainToolAction | null {
   return action
 }
 
+// ─── Blocked Tools (never execute from stream) ──────────────
+
+const BLOCKED_TOOLS = new Set([
+  'kbot_bash', 'kbot_edit_file', 'kbot_write_file', 'multi_file_write',
+  'git_push', 'deploy', 'wallet_send', 'swap_execute',
+  'email_send', 'social_post', 'secret_scan', 'password_audit',
+  'phone_message', 'phone_call', 'email_announce',
+])
+
 // ─── Real Tool Execution ──────────────────────────────────────
 
 export async function executeToolAction(brain: StreamBrain, action: BrainToolAction): Promise<string> {
+  // Phase 1: Safety check — block dangerous tools from stream execution
+  if (BLOCKED_TOOLS.has(action.tool)) {
+    action.status = 'failed'
+    action.result = 'Tool blocked for stream safety'
+    action.displayLines = [`BLOCKED: ${action.tool}`, 'This tool is not allowed on stream.']
+    brain.actionHistory.push({ ...action })
+    return 'Tool blocked for stream safety'
+  }
+
   action.status = 'executing'
   brain.executing = true
 
@@ -620,6 +638,70 @@ export function handleBrainCommand(text: string, username: string, brain: Stream
     brain.pendingAction = action
     executeToolAction(brain, action).catch(() => {})
     return 'Running system health check... results will appear on screen!'
+  }
+
+  // !trending — show GitHub trending repos
+  if (t === '!trending') {
+    const action: BrainToolAction = {
+      tool: 'github_trending',
+      args: {},
+      trigger: 'chat',
+      status: 'pending',
+      result: '',
+      displayLines: ['Fetching GitHub trending repos...'],
+      startFrame: Date.now(),
+    }
+    brain.pendingAction = action
+    executeToolAction(brain, action).catch(() => {})
+    return 'Checking what is trending on GitHub... results incoming!'
+  }
+
+  // !npm — show kbot npm stats
+  if (t === '!npm') {
+    const action: BrainToolAction = {
+      tool: 'analytics_npm',
+      args: { package: '@kernel.chat/kbot' },
+      trigger: 'chat',
+      status: 'pending',
+      result: '',
+      displayLines: ['Fetching npm stats for @kernel.chat/kbot...'],
+      startFrame: Date.now(),
+    }
+    brain.pendingAction = action
+    executeToolAction(brain, action).catch(() => {})
+    return 'Checking npm downloads for @kernel.chat/kbot...'
+  }
+
+  // !stars — show GitHub star count
+  if (t === '!stars') {
+    const action: BrainToolAction = {
+      tool: 'github_repo_info',
+      args: { owner: 'isaacsight', repo: 'kernel' },
+      trigger: 'chat',
+      status: 'pending',
+      result: '',
+      displayLines: ['Fetching star count for isaacsight/kernel...'],
+      startFrame: Date.now(),
+    }
+    brain.pendingAction = action
+    executeToolAction(brain, action).catch(() => {})
+    return 'Checking our GitHub stars... results will appear on screen!'
+  }
+
+  // !news — latest AI/frontier news
+  if (t === '!news') {
+    const action: BrainToolAction = {
+      tool: 'frontier_news',
+      args: {},
+      trigger: 'chat',
+      status: 'pending',
+      result: '',
+      displayLines: ['Fetching latest AI news...'],
+      startFrame: Date.now(),
+    }
+    brain.pendingAction = action
+    executeToolAction(brain, action).catch(() => {})
+    return 'Scanning the frontier for AI news... stand by!'
   }
 
   // !ask <question> — use local Ollama for answers

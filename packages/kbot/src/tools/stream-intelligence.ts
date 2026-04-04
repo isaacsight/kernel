@@ -1,11 +1,73 @@
 // kbot Stream Intelligence — Three AI systems for the livestream character
 //
 // System 1: SELF-EVOLUTION — KBOT analyzes its own codebase and proposes improvements live
-// System 2: VISIBLE BRAIN — Learning displayed in real-time on screen
+// System 2: VISIBLE BRAIN — Learning displayed in real-time on screen (wired to REAL kbot learning data)
 // System 3: COLLABORATIVE CREATION — Chat and KBOT build things together
 //
 // This module exports functions called by stream-renderer.ts.
 // It does NOT register any tools itself.
+
+import { homedir } from 'node:os'
+import { join } from 'node:path'
+import { existsSync, readFileSync } from 'node:fs'
+
+// ─── Real Learning Data Paths ────────────────────────────────
+const KBOT_MEMORY_DIR = join(homedir(), '.kbot', 'memory')
+const REAL_PATTERNS_FILE = join(KBOT_MEMORY_DIR, 'patterns.json')
+const REAL_KNOWLEDGE_FILE = join(KBOT_MEMORY_DIR, 'knowledge.json')
+const REAL_PROFILE_FILE = join(KBOT_MEMORY_DIR, 'profile.json')
+const REAL_SOLUTIONS_FILE = join(KBOT_MEMORY_DIR, 'solutions.json')
+
+/** Safely read and parse a JSON file, returning fallback on any error */
+function readJsonSafe<T>(path: string, fallback: T): T {
+  try {
+    if (!existsSync(path)) return fallback
+    return JSON.parse(readFileSync(path, 'utf-8'))
+  } catch {
+    return fallback
+  }
+}
+
+/** Load real learning data from ~/.kbot/memory/ and merge into brain state */
+function loadRealLearningData(brain: BrainState): void {
+  // Read patterns — extract topic keywords from pattern triggers/descriptions
+  const patterns = readJsonSafe<any[]>(REAL_PATTERNS_FILE, [])
+  for (const p of patterns) {
+    const text = String(p.trigger || p.description || p.pattern || '').toLowerCase()
+    const words = text.split(/\s+/).filter((w: string) => w.length > 3)
+    for (const w of words.slice(0, 3)) {
+      brain.topicCloud[w] = (brain.topicCloud[w] || 0) + (p.hitCount || p.count || 1)
+    }
+  }
+
+  // Read knowledge — these are learned facts
+  const knowledge = readJsonSafe<Record<string, any>>(REAL_KNOWLEDGE_FILE, {})
+  const knowledgeEntries = Array.isArray(knowledge) ? knowledge : Object.keys(knowledge)
+  brain.totalFacts += knowledgeEntries.length
+
+  // Read profile — extract preferred tools, languages, etc.
+  const profile = readJsonSafe<Record<string, any>>(REAL_PROFILE_FILE, {})
+  if (profile.preferredLanguages) {
+    for (const lang of Object.keys(profile.preferredLanguages).slice(0, 5)) {
+      brain.topicCloud[lang] = (brain.topicCloud[lang] || 0) + (profile.preferredLanguages[lang] || 1)
+    }
+  }
+  if (profile.preferredTools) {
+    for (const tool of Object.keys(profile.preferredTools).slice(0, 5)) {
+      brain.topicCloud[tool] = (brain.topicCloud[tool] || 0) + (profile.preferredTools[tool] || 1)
+    }
+  }
+
+  // Read solutions — count them for display
+  const solutions = readJsonSafe<any[]>(REAL_SOLUTIONS_FILE, [])
+  brain.solutionsLearned = solutions.length
+
+  // Update derived counts
+  brain.uniqueTopicsCount = Object.keys(brain.topicCloud).length
+  brain.totalConnections = Object.values(brain.topicCloud).reduce((s, v) => s + v, 0)
+  brain.realDataLoaded = true
+  brain.lastRealDataLoad = Date.now()
+}
 
 // ─── System 1: Self-Evolution ─────────────────────────────────
 
@@ -981,6 +1043,10 @@ export interface BrainState {
   uniqueTopicsCount: number
   hourlyMessageCounts: number[]   // last 24 entries, for time-of-day analysis
   currentHour: number
+  // Phase 1: Real learning data integration
+  solutionsLearned: number        // count from ~/.kbot/memory/solutions.json
+  realDataLoaded: boolean         // whether real data has been loaded
+  lastRealDataLoad: number        // timestamp of last real data reload
 }
 
 export function initBrain(memory: any): BrainState {
@@ -998,7 +1064,7 @@ export function initBrain(memory: any): BrainState {
   const totalFacts = (memory?.sessionFacts?.length || 0) + Object.keys(topics).length
   const totalConnections = Object.values(topics).reduce((s: number, v: any) => s + (v as number), 0)
 
-  return {
+  const brain: BrainState = {
     totalFacts,
     totalConnections,
     recentInsights: [],
@@ -1015,7 +1081,20 @@ export function initBrain(memory: any): BrainState {
     uniqueTopicsCount: Object.keys(topics).length,
     hourlyMessageCounts: new Array(24).fill(0),
     currentHour: new Date().getHours(),
+    solutionsLearned: 0,
+    realDataLoaded: false,
+    lastRealDataLoad: 0,
   }
+
+  // Phase 1: Load real learning data from ~/.kbot/memory/ on init
+  try {
+    loadRealLearningData(brain)
+    brain.currentThought = `Neural pathways loaded: ${brain.totalFacts} facts, ${brain.solutionsLearned} solutions`
+  } catch {
+    // Fall back to chat-only behavior if real data unavailable
+  }
+
+  return brain
 }
 
 export function getBrainDisplay(brain: BrainState): string[] {
@@ -1266,6 +1345,15 @@ export function tickBrain(brain: BrainState, frame: number): void {
     if (brain.brainActivity.length > 30) brain.brainActivity.shift()
   }
 
+  // Phase 1: Re-read real learning data every ~50 seconds (300 frames at 6fps)
+  if (frame % 300 === 0 && frame > 0) {
+    try {
+      loadRealLearningData(brain)
+    } catch {
+      // Non-critical — continue with existing data
+    }
+  }
+
   // Generate insight every ~2 minutes (720 frames at 6fps)
   if (frame % 720 === 0 && frame > 0) {
     const insight = generateInsight(brain)
@@ -1288,6 +1376,8 @@ export function tickBrain(brain: BrainState, frame: number): void {
       'Cross-referencing topic associations...',
       'Pruning redundant neural pathways...',
       'Strengthening high-frequency connections...',
+      ...(brain.solutionsLearned > 0 ? [`${brain.solutionsLearned} solutions learned from past sessions`] : []),
+      ...(brain.realDataLoaded ? ['Real learning data connected. Brain is LIVE.'] : []),
     ]
     brain.currentThought = thoughts[Math.floor(Math.random() * thoughts.length)]
   }
@@ -1372,10 +1462,14 @@ export function drawBrainPanel(
   ctx.font = 'bold 18px "Courier New", monospace'
   ctx.fillText(`${brain.totalFacts} facts`, x + 8, y + 88)
 
-  // Learning rate next to facts
+  // Solutions count + learning rate
   ctx.fillStyle = '#8b949e'
   ctx.font = '13px "Courier New", monospace'
-  ctx.fillText(`${brain.learningRate.toFixed(1)}/min`, x + 140, y + 88)
+  if (brain.solutionsLearned > 0) {
+    ctx.fillText(`${brain.solutionsLearned} solutions | ${brain.learningRate.toFixed(1)}/min`, x + 120, y + 88)
+  } else {
+    ctx.fillText(`${brain.learningRate.toFixed(1)}/min`, x + 140, y + 88)
+  }
 
   // ── Top 3 topics — 14px font, with colored weight bars ──
   const topTopics = Object.entries(brain.topicCloud)

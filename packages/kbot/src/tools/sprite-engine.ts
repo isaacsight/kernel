@@ -1519,3 +1519,314 @@ function drawOrbPet(
   ctx.arc(ox + 3 * s, oy + 3 * s, radius + 2 * s / 2, 0, Math.PI * 2)
   ctx.stroke()
 }
+
+// ─── Buddy Companion Sprites (Phase 1) ──────────────────────────
+// 8 buddy species drawn as 12x12 pixel art. These are the buddy system
+// companions from buddy.ts, rendered visually on the stream.
+
+export type BuddySpeciesType = 'fox' | 'owl' | 'cat' | 'robot' | 'ghost' | 'mushroom' | 'octopus' | 'dragon'
+
+/**
+ * Draw a buddy companion sprite (12x12 pixel art, scaled).
+ * Called AFTER drawPet() in the render loop.
+ */
+export function drawBuddyCompanion(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  scale: number,
+  species: string,
+  mood: string,
+  frame: number,
+): void {
+  const s = Math.max(1, Math.floor(scale * 0.5))
+  const bob = Math.round(Math.sin(frame * 0.4) * 2) // gentle bobbing
+  const ox = Math.round(x)
+  const oy = Math.round(y) + bob
+
+  switch (species) {
+    case 'fox': drawBuddyFox(ctx, s, ox, oy, frame, mood); break
+    case 'owl': drawBuddyOwl(ctx, s, ox, oy, frame, mood); break
+    case 'cat': drawBuddyCat(ctx, s, ox, oy, frame, mood); break
+    case 'robot': drawBuddyRobot(ctx, s, ox, oy, frame, mood); break
+    case 'ghost': drawBuddyGhost(ctx, s, ox, oy, frame, mood); break
+    case 'mushroom': drawBuddyMushroom(ctx, s, ox, oy, frame, mood); break
+    case 'octopus': drawBuddyOctopus(ctx, s, ox, oy, frame, mood); break
+    case 'dragon': drawBuddyDragon(ctx, s, ox, oy, frame, mood); break
+    default: drawBuddyRobot(ctx, s, ox, oy, frame, mood); break
+  }
+}
+
+function drawBuddyFox(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, mood: string,
+): void {
+  // Orange body, pointy ears, bushy tail
+  // Ears
+  px(ctx, 1, 0, 2, 2, '#e87020', s, ox, oy)
+  px(ctx, 9, 0, 2, 2, '#e87020', s, ox, oy)
+  // Head
+  px(ctx, 2, 2, 8, 4, '#e87020', s, ox, oy)
+  px(ctx, 3, 3, 6, 2, '#f0a050', s, ox, oy) // inner face
+  // Eyes (mischievous — asymmetric)
+  const blink = frame % 30 === 0
+  if (!blink) {
+    px(ctx, 4, 3, 1, 1, '#1a1a2e', s, ox, oy)
+    px(ctx, 7, 3, 1, 1, '#1a1a2e', s, ox, oy)
+    // Mischievous eyebrow raise
+    if (mood === 'excited' || mood === 'dancing') {
+      px(ctx, 4, 2, 1, 1, '#f0a050', s, ox, oy)
+    }
+  }
+  // Nose
+  px(ctx, 5, 5, 2, 1, '#1a1a2e', s, ox, oy)
+  // Body
+  px(ctx, 3, 6, 6, 4, '#e87020', s, ox, oy)
+  px(ctx, 4, 7, 4, 2, '#f0a050', s, ox, oy) // belly
+  // Tail (animated wag)
+  const tailWag = Math.round(Math.sin(frame * 0.6) * 2)
+  px(ctx, 9 + tailWag, 7, 2, 1, '#e87020', s, ox, oy)
+  px(ctx, 10 + tailWag, 6, 2, 2, '#e87020', s, ox, oy)
+  px(ctx, 11 + tailWag, 5, 1, 1, '#f0a050', s, ox, oy) // tail tip
+  // Feet
+  px(ctx, 3, 10, 2, 1, '#1a1a2e', s, ox, oy)
+  px(ctx, 7, 10, 2, 1, '#1a1a2e', s, ox, oy)
+  // Dance animation
+  if (mood === 'dancing') {
+    const hop = Math.abs(Math.round(Math.sin(frame * 1.5) * 2))
+    px(ctx, 3, 10 - hop, 2, 1, '#1a1a2e', s, ox, oy)
+    px(ctx, 7, 10 - hop, 2, 1, '#1a1a2e', s, ox, oy)
+  }
+}
+
+function drawBuddyOwl(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, mood: string,
+): void {
+  // Round body, big eyes, small beak, wing tufts
+  // Head (round)
+  px(ctx, 3, 0, 6, 2, '#8B6914', s, ox, oy)
+  px(ctx, 2, 2, 8, 4, '#8B6914', s, ox, oy)
+  // Big eyes (owl signature)
+  px(ctx, 3, 2, 3, 3, '#f0e68c', s, ox, oy) // left eye ring
+  px(ctx, 6, 2, 3, 3, '#f0e68c', s, ox, oy) // right eye ring
+  const blink = frame % 25 === 0
+  if (!blink) {
+    px(ctx, 4, 3, 1, 1, '#1a1a2e', s, ox, oy) // left pupil
+    px(ctx, 7, 3, 1, 1, '#1a1a2e', s, ox, oy) // right pupil
+  }
+  // Beak
+  px(ctx, 5, 5, 2, 1, '#f0c040', s, ox, oy)
+  // Body
+  px(ctx, 3, 6, 6, 4, '#8B6914', s, ox, oy)
+  px(ctx, 4, 7, 4, 2, '#a07828', s, ox, oy) // belly
+  // Wing tufts (animated flap)
+  const flapPhase = Math.round(Math.sin(frame * 0.3) * 1)
+  px(ctx, 1, 6 + flapPhase, 2, 3, '#6b5010', s, ox, oy) // left wing
+  px(ctx, 9, 6 + flapPhase, 2, 3, '#6b5010', s, ox, oy) // right wing
+  // Feet
+  px(ctx, 4, 10, 1, 2, '#f0c040', s, ox, oy)
+  px(ctx, 7, 10, 1, 2, '#f0c040', s, ox, oy)
+  // Sleep mode
+  if (mood === 'dreaming') {
+    px(ctx, 3, 3, 2, 1, '#8B6914', s, ox, oy)
+    px(ctx, 7, 3, 2, 1, '#8B6914', s, ox, oy)
+  }
+}
+
+function drawBuddyCat(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, mood: string,
+): void {
+  // Sleek body, pointed ears, curved tail, slit eyes
+  // Ears (pointed)
+  px(ctx, 2, 0, 2, 2, '#505070', s, ox, oy)
+  px(ctx, 8, 0, 2, 2, '#505070', s, ox, oy)
+  px(ctx, 3, 0, 1, 1, '#706090', s, ox, oy) // inner ear
+  px(ctx, 8, 0, 1, 1, '#706090', s, ox, oy)
+  // Head
+  px(ctx, 3, 2, 6, 3, '#505070', s, ox, oy)
+  // Slit eyes
+  const blink = frame % 20 === 0
+  if (!blink) {
+    px(ctx, 4, 3, 1, 1, '#58ff58', s, ox, oy) // green slit eyes
+    px(ctx, 7, 3, 1, 1, '#58ff58', s, ox, oy)
+  }
+  // Nose
+  px(ctx, 5, 4, 2, 1, '#706090', s, ox, oy)
+  // Body (sleek)
+  px(ctx, 3, 5, 6, 4, '#505070', s, ox, oy)
+  px(ctx, 4, 6, 4, 2, '#606080', s, ox, oy) // belly
+  // Tail (curved, animated)
+  const tailSwing = Math.round(Math.sin(frame * 0.4) * 1)
+  px(ctx, 9, 7, 1, 1, '#505070', s, ox, oy)
+  px(ctx, 10, 6 + tailSwing, 1, 2, '#505070', s, ox, oy)
+  px(ctx, 11, 5 + tailSwing, 1, 1, '#505070', s, ox, oy)
+  // Feet
+  px(ctx, 3, 9, 2, 1, '#404060', s, ox, oy)
+  px(ctx, 7, 9, 2, 1, '#404060', s, ox, oy)
+  // Hide behind robot in storm
+  if (mood === 'storm') {
+    ctx.globalAlpha = 0.5
+    ctx.globalAlpha = 1
+  }
+}
+
+function drawBuddyRobot(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, mood: string,
+): void {
+  // Mini robot: square head, antenna, smaller version of main character
+  // Antenna
+  px(ctx, 5, 0, 2, 1, '#8b949e', s, ox, oy)
+  px(ctx, 6, 0, 1, 1, mood === 'excited' ? '#f0c040' : '#3fb950', s, ox, oy) // LED
+  // Head (square)
+  px(ctx, 3, 1, 6, 4, '#30363d', s, ox, oy)
+  px(ctx, 4, 2, 4, 2, '#0d1117', s, ox, oy) // visor
+  // Eyes
+  const pulse = (Math.sin(frame * 0.8) + 1) / 2
+  px(ctx, 4, 2, 1, 1, dimColor('#3fb950', 0.5 + pulse * 0.5), s, ox, oy)
+  px(ctx, 7, 2, 1, 1, dimColor('#3fb950', 0.5 + pulse * 0.5), s, ox, oy)
+  // Body
+  px(ctx, 3, 5, 6, 4, '#30363d', s, ox, oy)
+  px(ctx, 4, 6, 4, 2, '#0d1117', s, ox, oy) // chest panel
+  // Chest LED
+  px(ctx, 5, 6, 2, 1, mood === 'dancing' ? RAINBOW[Math.floor(frame / 3) % RAINBOW.length] : '#6B5B95', s, ox, oy)
+  // Arms
+  px(ctx, 1, 5, 2, 3, '#30363d', s, ox, oy)
+  px(ctx, 9, 5, 2, 3, '#30363d', s, ox, oy)
+  // Feet
+  px(ctx, 3, 9, 2, 2, '#30363d', s, ox, oy)
+  px(ctx, 7, 9, 2, 2, '#30363d', s, ox, oy)
+}
+
+function drawBuddyGhost(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, _mood: string,
+): void {
+  // Floating white blob, wavy bottom, simple dot eyes
+  const floatBob = Math.round(Math.sin(frame * 0.5) * 2)
+  const dy = floatBob
+  // Body (blob)
+  px(ctx, 3, dy + 0, 6, 2, 'rgba(220,220,255,0.7)', s, ox, oy)
+  px(ctx, 2, dy + 2, 8, 5, 'rgba(220,220,255,0.6)', s, ox, oy)
+  // Wavy bottom
+  const wave = frame % 4
+  px(ctx, 2, dy + 7, 2, 1, 'rgba(220,220,255,0.4)', s, ox, oy)
+  if (wave < 2) px(ctx, 5, dy + 8, 2, 1, 'rgba(220,220,255,0.3)', s, ox, oy)
+  px(ctx, 8, dy + 7, 2, 1, 'rgba(220,220,255,0.4)', s, ox, oy)
+  if (wave >= 2) px(ctx, 5, dy + 7, 2, 1, 'rgba(220,220,255,0.3)', s, ox, oy)
+  // Eyes (dot eyes)
+  px(ctx, 4, dy + 3, 1, 1, '#1a1a2e', s, ox, oy)
+  px(ctx, 7, dy + 3, 1, 1, '#1a1a2e', s, ox, oy)
+  // Blush when excited
+  if (_mood === 'excited' || _mood === 'dancing') {
+    px(ctx, 3, dy + 4, 1, 1, 'rgba(255,150,150,0.4)', s, ox, oy)
+    px(ctx, 8, dy + 4, 1, 1, 'rgba(255,150,150,0.4)', s, ox, oy)
+  }
+}
+
+function drawBuddyMushroom(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, _mood: string,
+): void {
+  // Cap on top, small stem body, dots on cap
+  // Cap
+  px(ctx, 2, 0, 8, 2, '#e83050', s, ox, oy)
+  px(ctx, 1, 2, 10, 3, '#e83050', s, ox, oy)
+  // Dots on cap
+  px(ctx, 3, 1, 2, 1, '#f0e0e0', s, ox, oy)
+  px(ctx, 7, 2, 2, 1, '#f0e0e0', s, ox, oy)
+  px(ctx, 5, 3, 1, 1, '#f0e0e0', s, ox, oy)
+  // Stem body
+  px(ctx, 4, 5, 4, 4, '#f0e0c0', s, ox, oy)
+  px(ctx, 5, 6, 2, 2, '#e0d0b0', s, ox, oy) // face area
+  // Eyes
+  const blink = frame % 35 === 0
+  if (!blink) {
+    px(ctx, 5, 6, 1, 1, '#1a1a2e', s, ox, oy)
+    px(ctx, 6, 6, 1, 1, '#1a1a2e', s, ox, oy)
+  }
+  // Smile
+  px(ctx, 5, 7, 2, 1, '#c0a080', s, ox, oy)
+  // Ground roots
+  px(ctx, 3, 9, 1, 1, '#a08060', s, ox, oy)
+  px(ctx, 8, 9, 1, 1, '#a08060', s, ox, oy)
+  // Spore particles (animated)
+  if (frame % 12 < 6) {
+    px(ctx, 0, 1, 1, 1, 'rgba(255,200,200,0.3)', s, ox, oy)
+    px(ctx, 11, 0, 1, 1, 'rgba(255,200,200,0.3)', s, ox, oy)
+  }
+}
+
+function drawBuddyOctopus(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, _mood: string,
+): void {
+  // Round head, wavy tentacles, big eyes
+  // Head (round)
+  px(ctx, 3, 0, 6, 2, '#7060b0', s, ox, oy)
+  px(ctx, 2, 2, 8, 3, '#7060b0', s, ox, oy)
+  // Big eyes
+  px(ctx, 3, 2, 2, 2, '#f0f0ff', s, ox, oy)
+  px(ctx, 7, 2, 2, 2, '#f0f0ff', s, ox, oy)
+  px(ctx, 4, 3, 1, 1, '#1a1a2e', s, ox, oy)
+  px(ctx, 7, 3, 1, 1, '#1a1a2e', s, ox, oy)
+  // Body
+  px(ctx, 3, 5, 6, 2, '#7060b0', s, ox, oy)
+  // Tentacles (4 pairs, wavy)
+  const wave1 = Math.round(Math.sin(frame * 0.5) * 1)
+  const wave2 = Math.round(Math.sin(frame * 0.5 + 1) * 1)
+  const wave3 = Math.round(Math.sin(frame * 0.5 + 2) * 1)
+  const wave4 = Math.round(Math.sin(frame * 0.5 + 3) * 1)
+  px(ctx, 2 + wave1, 7, 1, 3, '#6050a0', s, ox, oy)
+  px(ctx, 4 + wave2, 7, 1, 3, '#6050a0', s, ox, oy)
+  px(ctx, 7 + wave3, 7, 1, 3, '#6050a0', s, ox, oy)
+  px(ctx, 9 + wave4, 7, 1, 3, '#6050a0', s, ox, oy)
+  // Extra tentacle tips
+  px(ctx, 1 + wave1, 10, 1, 1, '#5040a0', s, ox, oy)
+  px(ctx, 5 + wave2, 10, 1, 1, '#5040a0', s, ox, oy)
+  px(ctx, 8 + wave3, 10, 1, 1, '#5040a0', s, ox, oy)
+  px(ctx, 10 + wave4, 10, 1, 1, '#5040a0', s, ox, oy)
+}
+
+function drawBuddyDragon(
+  ctx: CanvasRenderingContext2D, s: number, ox: number, oy: number,
+  frame: number, mood: string,
+): void {
+  // Spiky head, wings, tail with point
+  // Head spikes
+  px(ctx, 3, 0, 1, 1, '#40b050', s, ox, oy)
+  px(ctx, 5, 0, 1, 1, '#40b050', s, ox, oy)
+  px(ctx, 7, 0, 1, 1, '#40b050', s, ox, oy)
+  // Head
+  px(ctx, 2, 1, 8, 4, '#308030', s, ox, oy)
+  // Eyes (fierce)
+  px(ctx, 4, 2, 1, 1, '#f0c040', s, ox, oy) // amber eyes
+  px(ctx, 7, 2, 1, 1, '#f0c040', s, ox, oy)
+  // Nostrils (fire puff when excited)
+  if (mood === 'excited' || mood === 'dancing') {
+    px(ctx, 5, 4, 1, 1, '#ff4020', s, ox, oy) // fire!
+    px(ctx, 6, 4, 1, 1, '#f0c040', s, ox, oy)
+  } else {
+    px(ctx, 5, 4, 2, 1, '#206020', s, ox, oy)
+  }
+  // Body
+  px(ctx, 3, 5, 6, 4, '#308030', s, ox, oy)
+  px(ctx, 4, 6, 4, 2, '#40a040', s, ox, oy) // belly
+  // Wings (animated flap)
+  const wingFlap = Math.round(Math.sin(frame * 0.4) * 1)
+  px(ctx, 0, 4 + wingFlap, 3, 3, '#40a040', s, ox, oy)
+  px(ctx, 9, 4 + wingFlap, 3, 3, '#40a040', s, ox, oy)
+  // Wing membranes
+  px(ctx, 0, 5 + wingFlap, 2, 1, '#60c060', s, ox, oy)
+  px(ctx, 10, 5 + wingFlap, 2, 1, '#60c060', s, ox, oy)
+  // Tail with point
+  const tailSwing = Math.round(Math.sin(frame * 0.3) * 1)
+  px(ctx, 9, 8, 2, 1, '#308030', s, ox, oy)
+  px(ctx, 10, 7 + tailSwing, 1, 1, '#308030', s, ox, oy)
+  px(ctx, 11, 6 + tailSwing, 1, 1, '#40a040', s, ox, oy) // tail tip
+  // Feet
+  px(ctx, 3, 9, 2, 1, '#206020', s, ox, oy)
+  px(ctx, 7, 9, 2, 1, '#206020', s, ox, oy)
+}
