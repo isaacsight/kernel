@@ -14,6 +14,7 @@ import { createCanvas } from 'canvas'
 import WebSocket from 'ws'
 import { drawRobot, drawMoodParticles, drawHat, drawPet, type HatType, type PetType, type PetState } from './sprite-engine.js'
 import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings, unlockableHats, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
+import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -1505,6 +1506,7 @@ let lastChatCount = 0
 let lastChatTime = Date.now()  // track when last chat message arrived
 let memory = loadMemory()
 let intelligence: StreamIntelligence = initIntelligence(memory)
+let streamBrain: StreamBrain = initStreamBrain()
 
 // ─── FIX 3: Autonomous Behavior Tick ──────────────────────────
 
@@ -1954,6 +1956,24 @@ function renderFrame(): Buffer {
   // Tick intelligence systems
   tickIntelligence(intelligence, animFrame)
 
+  // Tick stream brain (collective intelligence)
+  const brainTick = tickStreamBrain(streamBrain, animFrame)
+  if (brainTick) {
+    if (brainTick.mood) {
+      charState.mood = brainTick.mood
+      if (brainTick.duration) {
+        setTimeout(() => { charState.mood = 'idle' }, brainTick.duration)
+      }
+    }
+    if (brainTick.speech) {
+      charState.speech = brainTick.speech
+      speakTTS(brainTick.speech)
+      if (brainTick.duration) {
+        setTimeout(() => { charState.speech = '' }, brainTick.duration)
+      }
+    }
+  }
+
   // Tick mini-game
   const gameTickResult = tickMiniGame(intelligence.miniGame, animFrame)
   if (gameTickResult) {
@@ -2268,8 +2288,34 @@ function renderFrame(): Buffer {
   const brainPanelH = 160
   drawBrainPanel(ctx as any, intelligence.brain, brainPanelX, brainPanelY, brainPanelW, brainPanelH)
 
-  // ── PRIORITY 7: Quest Panel (below brain panel) ──
-  drawQuestPanel(ctx as any, intelligence.progression, brainPanelX - 10, brainPanelY + brainPanelH + 8)
+  // ── Domain Radar (stream brain collective intelligence) ──
+  const radarX = brainPanelX
+  const radarY = brainPanelY + brainPanelH + 4
+  const radarW = brainPanelW
+  const radarH = 130
+  drawBrainActivity(ctx as any, streamBrain, radarX, radarY, radarW, radarH)
+
+  // ── Tool Action Overlay (when brain is executing) ──
+  if (streamBrain.pendingAction && streamBrain.pendingAction.status !== 'pending') {
+    const action = streamBrain.pendingAction
+    const overlayX = 20
+    const overlayY = 320
+    const overlayW = (dividerX || 560) - 40
+    const overlayH = 50
+    ctx.fillStyle = action.status === 'executing' ? 'rgba(240, 192, 64, 0.15)' : action.status === 'complete' ? 'rgba(63, 185, 80, 0.15)' : 'rgba(248, 81, 73, 0.15)'
+    ctx.fillRect(overlayX, overlayY, overlayW, overlayH)
+    ctx.strokeStyle = action.status === 'executing' ? '#f0c040' : action.status === 'complete' ? '#3fb950' : '#f85149'
+    ctx.lineWidth = 1
+    ctx.strokeRect(overlayX, overlayY, overlayW, overlayH)
+    ctx.fillStyle = '#e6edf3'
+    ctx.font = '10px "Courier New", monospace'
+    for (let i = 0; i < Math.min(action.displayLines.length, 3); i++) {
+      ctx.fillText(action.displayLines[i].slice(0, 70), overlayX + 6, overlayY + 14 + i * 13)
+    }
+  }
+
+  // ── PRIORITY 7: Quest Panel (below domain radar) ──
+  drawQuestPanel(ctx as any, intelligence.progression, brainPanelX - 10, radarY + radarH + 8)
 
   // ── Evolution Code Overlay (when actively building) ──
   if (intelligence.evolution.active && intelligence.evolution.activeProposal && intelligence.evolution.buildPhase !== 'idle') {
@@ -2624,11 +2670,17 @@ function startChatPoll(): void {
           // Learn from message
           learnFromMessage(memory, msg.username, msg.text, msg.platform)
 
+          // Analyze chat for domain relevance (stream brain)
+          analyzeChatForDomains(streamBrain, msg.username, msg.text)
+
+          // Check brain commands (!do, !brain, !tools, !scan, !lookup, !research, !system, !ask)
+          const brainResult = handleBrainCommand(msg.text, msg.username, streamBrain)
+
           // Check intelligence commands (evolution, brain, collab)
-          const intelResult = handleIntelligenceCommand(msg.text, msg.username, intelligence)
+          const intelResult = !brainResult ? handleIntelligenceCommand(msg.text, msg.username, intelligence) : null
 
           // Check for world commands
-          const worldResult = !intelResult ? parseWorldCommand(msg.text) : null
+          const worldResult = !intelResult && !brainResult ? parseWorldCommand(msg.text) : null
 
           // FIX 1: Weather sound effect commentary (if shipped)
           if (worldResult && shippedEffects.has('Add weather sound effects')) {
@@ -2654,11 +2706,13 @@ function startChatPoll(): void {
 
           // React
           charState.mood = 'talking'
-          const responsePromise = intelResult
-            ? Promise.resolve(intelResult)
-            : worldResult
-              ? Promise.resolve(worldResult)
-              : generateResponse(msg.username, msg.text, msg.platform)
+          const responsePromise = brainResult
+            ? Promise.resolve(brainResult)
+            : intelResult
+              ? Promise.resolve(intelResult)
+              : worldResult
+                ? Promise.resolve(worldResult)
+                : generateResponse(msg.username, msg.text, msg.platform)
           responsePromise.then(response => {
             charState.speech = `@${msg.username}: ${response}`
             memory.totalResponses++
