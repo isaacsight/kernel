@@ -828,7 +828,7 @@ function initGrowingPlants(): GrowingPlant[] {
 // ─── PRIORITY 1: Environment Art (Background Scenes) ────────
 
 function drawBackground(ctx: any, frame: number): void {
-  const dividerX = 580
+  const dividerX = WIDTH  // full screen width (was 580 from old panel layout)
 
   if (world.ground === 'grass') {
     // Dark green gradient sky (darker at top)
@@ -2384,11 +2384,9 @@ function renderFrame(): Buffer {
   // ════════════════════════════════════════════════════════════════
   // LAYER 1: TILE WORLD — fills entire 1280x720 frame
   // ════════════════════════════════════════════════════════════════
-  if (tileWorld) {
-    updateCamera(tileWorld, charState.robotX || 640, WIDTH)
-    renderTileWorld(ctx as any, tileWorld, 0, 0, WIDTH, HEIGHT, charState.robotX || 640, animFrame)
-  } else {
-    // Fallback: classic background fills full frame
+  // Use clean animated backgrounds (tile world disabled until properly tuned)
+  // tileWorld rendering commented out — the terrain generation needs work before going live
+  {
     ctx.fillStyle = world.events.includes('lightning') ? '#ffffff' : getWorldBg()
     ctx.fillRect(0, 0, WIDTH, HEIGHT)
     renderSky(ctx as any, WIDTH, HEIGHT, world.timeOfDay, world.weather, animFrame, WIDTH)
@@ -2400,6 +2398,18 @@ function renderFrame(): Buffer {
     if (world.ground === 'ocean') renderAnimatedWater(ctx as any, WIDTH, animFrame)
     else if (world.ground === 'lava') renderLavaFlow(ctx as any, WIDTH, animFrame)
     renderGrowingPlants(ctx as any, charState.growingPlants)
+
+    // Draw a clean ground plane for the robot to stand on
+    const groundY = Math.floor(HEIGHT * 0.62)
+    const groundGrad = ctx.createLinearGradient(0, groundY, 0, HEIGHT)
+    groundGrad.addColorStop(0, '#1a4d1a')
+    groundGrad.addColorStop(0.3, '#0d3310')
+    groundGrad.addColorStop(1, '#061a08')
+    ctx.fillStyle = groundGrad
+    ctx.fillRect(0, groundY, WIDTH, HEIGHT - groundY)
+    // Ground line highlight
+    ctx.fillStyle = '#2d6b2d'
+    ctx.fillRect(0, groundY, WIDTH, 2)
   }
 
   // Weather particles over the full frame
@@ -2434,28 +2444,10 @@ function renderFrame(): Buffer {
   // LAYER 3: ROBOT + COMPANIONS — centered on terrain
   // ════════════════════════════════════════════════════════════════
 
-  // Compute robot screen position: centered horizontally, Y from terrain
-  let robotScreenY: number
-  if (tileWorld) {
-    // Replicate terrainHeight() from tile-world.ts (same formula, not exported)
-    const rwx = charState.robotX || 640
-    const seed = tileWorld.seed
-    const sl = tileWorld.surfaceLevel
-    const h1 = Math.sin(rwx * 0.05 + seed) * 4
-    const h2 = Math.sin(rwx * 0.12 + seed * 2.3) * 2
-    const h3 = Math.sin(rwx * 0.03 + seed * 0.7) * 6
-    const terrainTileY = Math.floor(sl + h1 + h2 + h3)
-    // Convert terrain tile Y to screen pixel Y (same logic as renderTileWorld)
-    const tilesVisibleY = Math.ceil(HEIGHT / TILE_SIZE) + 1
-    const viewStartY = Math.max(0, tileWorld.surfaceLevel - Math.floor(tilesVisibleY * 0.35))
-    const terrainScreenY = (terrainTileY - viewStartY) * TILE_SIZE
-    // Robot stands ON the terrain: its feet at terrainScreenY, sprite drawn above
-    robotScreenY = terrainScreenY - 48 * robotScale
-  } else {
-    // Fallback: position at vertical center-bottom
-    robotScreenY = HEIGHT - 48 * robotScale - 100
-  }
+  // Robot: centered, feet on the ground line, dominant presence
   const robotScreenX = Math.floor(WIDTH / 2 - (32 * robotScale) / 2)
+  const groundY = Math.floor(HEIGHT * 0.62)
+  const robotScreenY = groundY - 50 * robotScale  // feet at ground level (sprite is 50px tall)
 
   // Robot glow
   const glowCenterX = robotScreenX + 16 * robotScale

@@ -96,8 +96,10 @@ function outlineRect(
   x: number, y: number, w: number, h: number,
   color: string, scale: number, ox: number, oy: number,
 ): void {
-  // Outline is 1px larger on all sides
-  px(ctx, x - 1, y - 1, w + 2, h + 2, color, scale, ox, oy)
+  px(ctx, x - 1, y - 1, w + 2, 1, color, scale, ox, oy)  // top
+  px(ctx, x - 1, y + h, w + 2, 1, color, scale, ox, oy)   // bottom
+  px(ctx, x - 1, y, 1, h, color, scale, ox, oy)            // left
+  px(ctx, x + w, y, 1, h, color, scale, ox, oy)             // right
 }
 
 // ─── Sub-drawers ───────────────────────────────────────────────
@@ -833,10 +835,8 @@ export function drawRobot(
 
   const armPose = isWalking ? getWalkingArmPose(walkPhase || 0) : getArmPose(mood, frame)
 
-  // ── Clear the bounding area ──
-  ctx.clearRect(x - 12 * s + weatherShakeX * s, y - 4 * s, 56 * s, 56 * s)
-  // Also clear without shake to avoid artifacts
-  ctx.clearRect(x - 12 * s, y - 4 * s, 56 * s, 56 * s)
+  // NOTE: clearRect removed — it was wiping the background behind the robot to white/transparent
+  // The robot is drawn ON TOP of the world, it should not clear anything beneath it
 
   // Apply weather shake offset
   const drawX = x + weatherShakeX * s
