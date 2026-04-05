@@ -1,9 +1,100 @@
 {
-  "timestamp": "2026-04-05T16:35:41.873Z",
+  "timestamp": "2026-04-05T22:50:39.324Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "duo121"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "Show HN: TermHub – Open-source <em>terminal</em> control gateway built for <em>AI</em> <em>Agents</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/duo121/termhub"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_duo121",
+            "story_47654495",
+            "show_hn"
+          ],
+          "author": "duo121",
+          "children": [
+            47654496
+          ],
+          "created_at": "2026-04-05T22:14:34Z",
+          "created_at_i": 1775427274,
+          "num_comments": 1,
+          "objectID": "47654495",
+          "points": 3,
+          "story_id": 47654495,
+          "title": "Show HN: TermHub – Open-source terminal control gateway built for AI Agents",
+          "updated_at": "2026-04-05T22:50:17Z",
+          "url": "https://github.com/duo121/termhub"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "<em>agent</em>-v0"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "ai",
+                "agent",
+                "terminal"
+              ],
+              "value": "<em>Agent</em> v0 Open-source multi-<em>agent</em> <em>AI</em> orchestration <em>terminal</em>"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "https://github.com/centeler34/<em>Agent</em>-v0"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_agent-v0",
+            "story_47652539"
+          ],
+          "author": "agent-v0",
+          "children": [
+            47652540
+          ],
+          "created_at": "2026-04-05T18:43:07Z",
+          "created_at_i": 1775414587,
+          "num_comments": 1,
+          "objectID": "47652539",
+          "points": 3,
+          "story_id": 47652539,
+          "title": "Agent v0 Open-source multi-agent AI orchestration terminal",
+          "updated_at": "2026-04-05T20:25:16Z",
+          "url": "https://github.com/centeler34/Agent-v0"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -151,107 +242,63 @@
           "title": "Show HN: Skales – I built a desktop AI agent a 6-year-old can use",
           "updated_at": "2026-04-04T10:13:55Z",
           "url": "https://github.com/skalesapp/skales"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kdeldycke"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent",
-                "terminal"
-              ],
-              "value": "I built Extra Platforms over the past 5 years because I kept writing the same detection boilerplate over and over. And also because Python's original platform.linux_distribution() function has been removed in Python 3.8. Its replacement, Distro, only covers Linux.<p>It detects six traits (CPU architecture, OS/distribution, shell, <em>terminal</em>, CI, <em>agents</em>), which are grouped into families (BSD, LINUX, UNIX, ...) for convenience.<p>You can try the library without installing anything:<p><pre><code>  $ uvx --with extra-platforms python\n  &gt;&gt;&gt; from extra_platforms import current_platform, BSD, is_linux\n  &gt;&gt;&gt; current_platform()\n  Platform(id='macos', name='macOS')\n  &gt;&gt;&gt; current_platform() in BSD\n  True\n  &gt;&gt;&gt; is_linux()\n  False\n</code></pre>\nIt also ships Pytest decorators (@skip_linux, @unless_macos) for platform-conditional tests.<p>The library has zero dependencies and is Apache-2.0 licensed.<p>I'm interested in collecting edge cases, which you can send me by performing an auto-detection with:<p><pre><code>  $ uvx extra-platforms</code></pre>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "Show HN: Extra-Platforms, Python library to detect OS, arch, shell, CI, <em>AI</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/kdeldycke/extra-platforms"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kdeldycke",
-            "story_47611994",
-            "show_hn"
-          ],
-          "author": "kdeldycke",
-          "children": [
-            47612892,
-            47612207
-          ],
-          "created_at": "2026-04-02T09:24:09Z",
-          "created_at_i": 1775121849,
-          "num_comments": 2,
-          "objectID": "47611994",
-          "points": 9,
-          "story_id": 47611994,
-          "story_text": "I built Extra Platforms over the past 5 years because I kept writing the same detection boilerplate over and over. And also because Python&#x27;s original platform.linux_distribution() function has been removed in Python 3.8. Its replacement, Distro, only covers Linux.<p>It detects six traits (CPU architecture, OS&#x2F;distribution, shell, terminal, CI, agents), which are grouped into families (BSD, LINUX, UNIX, ...) for convenience.<p>You can try the library without installing anything:<p><pre><code>  $ uvx --with extra-platforms python\n  &gt;&gt;&gt; from extra_platforms import current_platform, BSD, is_linux\n  &gt;&gt;&gt; current_platform()\n  Platform(id=&#x27;macos&#x27;, name=&#x27;macOS&#x27;)\n  &gt;&gt;&gt; current_platform() in BSD\n  True\n  &gt;&gt;&gt; is_linux()\n  False\n</code></pre>\nIt also ships Pytest decorators (@skip_linux, @unless_macos) for platform-conditional tests.<p>The library has zero dependencies and is Apache-2.0 licensed.<p>I&#x27;m interested in collecting edge cases, which you can send me by performing an auto-detection with:<p><pre><code>  $ uvx extra-platforms</code></pre>",
-          "title": "Show HN: Extra-Platforms, Python library to detect OS, arch, shell, CI, AI",
-          "updated_at": "2026-04-02T12:03:32Z",
-          "url": "https://github.com/kdeldycke/extra-platforms"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "AmerSarhan"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Darce – <em>AI</em> coding <em>agent</em> for your <em>terminal</em>, any model, 14 kB"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/AmerSarhan/darce-cli"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_AmerSarhan",
-            "story_47602373"
-          ],
-          "author": "AmerSarhan",
-          "children": [
-            47602543,
-            47602375
-          ],
-          "created_at": "2026-04-01T15:40:32Z",
-          "created_at_i": 1775058032,
-          "num_comments": 1,
-          "objectID": "47602373",
-          "points": 3,
-          "story_id": 47602373,
-          "title": "Darce – AI coding agent for your terminal, any model, 14 kB",
-          "updated_at": "2026-04-01T21:00:01Z",
-          "url": "https://github.com/AmerSarhan/darce-cli"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "brynary"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Hi — I created Fabro to free myself from supervising a fleet of Claude Code tabs running in a REPL (read-eval-prompt-loop). REPLs are great for exploration, but once I know what I need I want to be able to walk away while the <em>agents</em> get it done.\n(Before building Fabro, I looked for something off the shelf but couldn't find anything that was <em>open</em> <em>source</em>, hype-free, and full featured / ready.)<p>Fabro helps experienced engineers evolve towards a “dark” software factory where average time between disengagements increases. It’s easy to throw a Ralph shell script around Claude, but as runtime increases the chance of high quality output declines.<p>Fabro adds the last mile of guardrails to make it actually work: combining deterministic workflows of <em>agents</em>, commands like linters and test suites, with strategically applied human steering. (Similar to the Stripe's Minions.)<p>Fabro is multi-model and makes it easy to combine Claude, Gemini, and GPT in ensemble reviews — or delegate <em>coding</em> to faster and cheaper models like Kimi.<p>Software factories work best when combined with cloud VMs (like Daytona) so you get infinitely scalable, secure sandboxes that can run 24/7 and accessible via SSH, VS Code, and preview links as needed. This can be a bit of a pain to set up today and Fabro tries to make it as easy as Docker.<p>The closest analog to Fabro today would be something like Factory.ai Droids. However, I think it’s critical for engineers to own their own toolchain and so Fabro is <em>open</em> <em>source</em> (MIT) so you can fork it and customize it anytime.<p>The project is highly active and I’d love any feedback or feature requests. I’ll be on here answering questions today.<p>(Had posted this a week or so, hoping to engage in some conversation.)<p>-Bryan"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "open",
+                "source"
+              ],
+              "value": "Show HN: Fabro – <em>open</em>-<em>source</em> dark software factory"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/fabro-sh/fabro"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_brynary",
+            "story_47652404",
+            "show_hn"
+          ],
+          "author": "brynary",
+          "created_at": "2026-04-05T18:30:21Z",
+          "created_at_i": 1775413821,
+          "num_comments": 0,
+          "objectID": "47652404",
+          "points": 2,
+          "story_id": 47652404,
+          "story_text": "Hi — I created Fabro to free myself from supervising a fleet of Claude Code tabs running in a REPL (read-eval-prompt-loop). REPLs are great for exploration, but once I know what I need I want to be able to walk away while the agents get it done.\n(Before building Fabro, I looked for something off the shelf but couldn&#x27;t find anything that was open source, hype-free, and full featured &#x2F; ready.)<p>Fabro helps experienced engineers evolve towards a “dark” software factory where average time between disengagements increases. It’s easy to throw a Ralph shell script around Claude, but as runtime increases the chance of high quality output declines.<p>Fabro adds the last mile of guardrails to make it actually work: combining deterministic workflows of agents, commands like linters and test suites, with strategically applied human steering. (Similar to the Stripe&#x27;s Minions.)<p>Fabro is multi-model and makes it easy to combine Claude, Gemini, and GPT in ensemble reviews — or delegate coding to faster and cheaper models like Kimi.<p>Software factories work best when combined with cloud VMs (like Daytona) so you get infinitely scalable, secure sandboxes that can run 24&#x2F;7 and accessible via SSH, VS Code, and preview links as needed. This can be a bit of a pain to set up today and Fabro tries to make it as easy as Docker.<p>The closest analog to Fabro today would be something like Factory.ai Droids. However, I think it’s critical for engineers to own their own toolchain and so Fabro is open source (MIT) so you can fork it and customize it anytime.<p>The project is highly active and I’d love any feedback or feature requests. I’ll be on here answering questions today.<p>(Had posted this a week or so, hoping to engage in some conversation.)<p>-Bryan",
+          "title": "Show HN: Fabro – open-source dark software factory",
+          "updated_at": "2026-04-05T20:26:17Z",
+          "url": "https://github.com/fabro-sh/fabro"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -432,7 +479,7 @@
           "story_id": 47599303,
           "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
           "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-05T13:39:00Z"
+          "updated_at": "2026-04-05T21:35:48Z"
         },
         {
           "_highlightResult": {
@@ -483,62 +530,6 @@
           "title": "Show HN: UX Quest",
           "updated_at": "2026-04-01T12:16:44Z",
           "url": "https://marmelab.com/ux-quest/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "NarratorTD"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Hey HN! I built Domscribe to solve a problem that was eating my productivity.<p>I spend a lot of my time working with AI <em>coding</em> <em>agents</em>. The thing that kept eating at my productivity though was that every time I asked an <em>agent</em> to fix something on the frontend, the actual edit took maybe 200 tokens. But before that happened, the <em>agent</em> would go on this whole journey, grepping through the codebase and at times having to backtrack. That search loop could burn 5,000-10,000 tokens before a single line of code changed.<p>The <em>agent</em> has zero awareness of what's actually rendering in the browser because the rendered DOM and the <em>source</em> tree are two completely different topologies. So I started thinking about this differently; what if we could optimize a solution to the search problem by giving the <em>agents</em> the right context? What if every DOM element already knew exactly where it came from in <em>source</em>?<p>That's the core idea behind Domscribe. At build time, an AST transform walks your JSX and Vue templates, assigns every element a deterministic ID via xxhash64 content hashing, and writes a manifest mapping each ID to its exact file, line, and column. The IDs are stable across HMR; same file content and element position always produces the same ID. At runtime, framework adapters walk the React fiber tree or inspect Vue VNodes to capture live props, state, and component metadata. A local relay daemon connects the browser and your <em>agent</em> via MCP.<p>The result is two workflows that didn't exist before. Your <em>agent</em> can query any <em>source</em> location and get back only what's actually rendering there; live DOM snapshot, props, state, the works. And from the other direction, you can click any element in the browser overlay, type &quot;make this button use the primary color&quot; in plain English, and Domscribe resolves the exact file:line:col so your <em>agent</em> edits the right file on the first try.<p>(I should mention that the overlay runs as Lit web components inside shadow DOM, specifically so it can't mess with your app's styles.)<p>One thing I'm genuinely proud of is the architecture. I spent a LOT of time making sure this wasn't just a tool that works for React-and-Vite-and-nothing-else. The transform layer has a ParserInterface that the injector consumes without knowing which parser produced the AST (the Acorn, Babel, and Vue SFC parsers are all implementations of the same interface), and the ID injection logic is completely abstracted away. Adding a new template syntax (Lit, Svelte, Stencil) means implementing one interface. On the runtime side, a FrameworkAdapter interface defines methods such as captureProps, captureState, and getComponentInstance; and the React and Vue adapters are built on the same public interface that any community contributor would use. No internal escape hatches.<p>I took the same approach with bundler support (Vite, Webpack, Turbopack) and <em>agent</em> support (Claude Code, Cursor, GitHub Copilot CLI, Gemini CLI - all via first-party plugins that bundle the MCP config and a skill file). But the MCP layer means any compatible <em>agent</em> works out of the box.<p>PII redaction is built in and on by default. All captured data passes through pattern matching for emails, phone numbers, API keys, JWTs etc. before it leaves the browser.<p>Everything is stripped in production builds; zero data-ds attributes and zero overlay scripts. It's enforced by CI tests that run against every real fixture. (Speaking of tests: the entire integration and e2e suite runs against real published packages via a local Verdaccio registry. )<p>Anyway, MIT licensed, fully <em>open</em> <em>source</em>, the whole codebase is right there on GitHub. I'd genuinely love feedback on the architecture and the approach. And I'm especially curious if anyone has thoughts on extending the ParserInterface to other template syntaxes; that's the piece I'm most excited about people contributing to."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Show HN: Domscribe – Deterministic DOM-to-<em>source</em> mapping for AI <em>coding</em> <em>agents</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/patchorbit/domscribe"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_NarratorTD",
-            "story_47591487",
-            "show_hn"
-          ],
-          "author": "NarratorTD",
-          "children": [
-            47624116,
-            47610731
-          ],
-          "created_at": "2026-03-31T18:26:14Z",
-          "created_at_i": 1774981574,
-          "num_comments": 0,
-          "objectID": "47591487",
-          "points": 2,
-          "story_id": 47591487,
-          "story_text": "Hey HN! I built Domscribe to solve a problem that was eating my productivity.<p>I spend a lot of my time working with AI coding agents. The thing that kept eating at my productivity though was that every time I asked an agent to fix something on the frontend, the actual edit took maybe 200 tokens. But before that happened, the agent would go on this whole journey, grepping through the codebase and at times having to backtrack. That search loop could burn 5,000-10,000 tokens before a single line of code changed.<p>The agent has zero awareness of what&#x27;s actually rendering in the browser because the rendered DOM and the source tree are two completely different topologies. So I started thinking about this differently; what if we could optimize a solution to the search problem by giving the agents the right context? What if every DOM element already knew exactly where it came from in source?<p>That&#x27;s the core idea behind Domscribe. At build time, an AST transform walks your JSX and Vue templates, assigns every element a deterministic ID via xxhash64 content hashing, and writes a manifest mapping each ID to its exact file, line, and column. The IDs are stable across HMR; same file content and element position always produces the same ID. At runtime, framework adapters walk the React fiber tree or inspect Vue VNodes to capture live props, state, and component metadata. A local relay daemon connects the browser and your agent via MCP.<p>The result is two workflows that didn&#x27;t exist before. Your agent can query any source location and get back only what&#x27;s actually rendering there; live DOM snapshot, props, state, the works. And from the other direction, you can click any element in the browser overlay, type &quot;make this button use the primary color&quot; in plain English, and Domscribe resolves the exact file:line:col so your agent edits the right file on the first try.<p>(I should mention that the overlay runs as Lit web components inside shadow DOM, specifically so it can&#x27;t mess with your app&#x27;s styles.)<p>One thing I&#x27;m genuinely proud of is the architecture. I spent a LOT of time making sure this wasn&#x27;t just a tool that works for React-and-Vite-and-nothing-else. The transform layer has a ParserInterface that the injector consumes without knowing which parser produced the AST (the Acorn, Babel, and Vue SFC parsers are all implementations of the same interface), and the ID injection logic is completely abstracted away. Adding a new template syntax (Lit, Svelte, Stencil) means implementing one interface. On the runtime side, a FrameworkAdapter interface defines methods such as captureProps, captureState, and getComponentInstance; and the React and Vue adapters are built on the same public interface that any community contributor would use. No internal escape hatches.<p>I took the same approach with bundler support (Vite, Webpack, Turbopack) and agent support (Claude Code, Cursor, GitHub Copilot CLI, Gemini CLI - all via first-party plugins that bundle the MCP config and a skill file). But the MCP layer means any compatible agent works out of the box.<p>PII redaction is built in and on by default. All captured data passes through pattern matching for emails, phone numbers, API keys, JWTs etc. before it leaves the browser.<p>Everything is stripped in production builds; zero data-ds attributes and zero overlay scripts. It&#x27;s enforced by CI tests that run against every real fixture. (Speaking of tests: the entire integration and e2e suite runs against real published packages via a local Verdaccio registry. )<p>Anyway, MIT licensed, fully open source, the whole codebase is right there on GitHub. I&#x27;d genuinely love feedback on the architecture and the approach. And I&#x27;m especially curious if anyone has thoughts on extending the ParserInterface to other template syntaxes; that&#x27;s the piece I&#x27;m most excited about people contributing to.",
-          "title": "Show HN: Domscribe – Deterministic DOM-to-source mapping for AI coding agents",
-          "updated_at": "2026-04-03T07:36:50Z",
-          "url": "https://github.com/patchorbit/domscribe"
         }
       ]
     },
@@ -576,17 +567,18 @@
           ],
           "author": "pauliusztin",
           "children": [
+            47653050,
             47639143
           ],
           "created_at": "2026-04-04T13:50:22Z",
           "created_at_i": 1775310622,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47639059",
           "points": 3,
           "story_id": 47639059,
           "story_text": "While building a financial assistant for an SF start-up, we learned that AI frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain&#x27;s MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB collection as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don&#x27;t need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual learning.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity&#x2F;relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities&#x2F;relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first AI: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7432054336589021184<p>- Most AI agents don&#x27;t need three databases: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7426981104227856385",
           "title": "My 11-step GraphRAG pipeline, what worked, and what's still broken",
-          "updated_at": "2026-04-05T03:26:44Z"
+          "updated_at": "2026-04-05T19:39:03Z"
         },
         {
           "_highlightResult": {
@@ -795,203 +787,215 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "madaxe_again"
+              "value": "rasengan"
             },
-            "title": {
+            "story_text": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Claude AI powered trading <em>bot</em> turns $1 into $3.3M on Polymarket"
+              "value": "Go implementation of mosh (mobile shell) <em>bot</em>h client and server and wire-compatible with the core C implementation.<p>The full mosh protocol is implemented including but not limited to AES-128-OCB3, SSP transport with sequencing and retransmission, datagram fragmentation, protobuf state sync, local echo prediction, etc.<p>It compiles to WASM, which is how we run mosh in the browser at UnixShells.com (WebTransport (HTTP/3) carries the datagrams instead of UDP). This is how things feel instant, despite being wherever you are.<p><a href=\"https://github.com/unixshells/mosh-go\" rel=\"nofollow\">https://github.com/unixshells/mosh-go</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Pure Go mosh client, server, and WASM build for the browser"
             },
             "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://finbold.com/claude-ai-powered-trading-<em>bot</em>-turns-1-into-3-3-million-on-polymarket/"
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/unixshells/mosh-go"
             }
           },
           "_tags": [
             "story",
-            "author_madaxe_again",
-            "story_47650581"
+            "author_rasengan",
+            "story_47654482",
+            "show_hn"
           ],
-          "author": "madaxe_again",
-          "created_at": "2026-04-05T15:46:35Z",
-          "created_at_i": 1775403995,
+          "author": "rasengan",
+          "created_at": "2026-04-05T22:13:16Z",
+          "created_at_i": 1775427196,
           "num_comments": 0,
-          "objectID": "47650581",
-          "points": 3,
-          "story_id": 47650581,
-          "title": "Claude AI powered trading bot turns $1 into $3.3M on Polymarket",
-          "updated_at": "2026-04-05T16:10:22Z",
-          "url": "https://finbold.com/claude-ai-powered-trading-bot-turns-1-into-3-3-million-on-polymarket/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "limondas"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I have created a Google account.\nI was created the account to control my phone uses. I had used this account as a parent account and my email as a child account to lock my phone. I forgotten the parental account password .I have written the password to my notebook.I tried <em>bot</em>h to log in but Google said it's wrong.I can not recover account because I created the as a extra account of my phone without entering phone number or recovery email.Now, I am frustrated.I can't hard reset as it may trigger FRP.I have used it to reduce my screen time.But Its very bad happened."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN:Locked on Selfcontrolled Google Family Link Parental Control System"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_limondas",
-            "story_47648360",
-            "ask_hn"
-          ],
-          "author": "limondas",
-          "created_at": "2026-04-05T11:39:15Z",
-          "created_at_i": 1775389155,
-          "num_comments": 0,
-          "objectID": "47648360",
-          "points": 2,
-          "story_id": 47648360,
-          "story_text": "I have created a Google account.\nI was created the account to control my phone uses. I had used this account as a parent account and my email as a child account to lock my phone. I forgotten the parental account password .I have written the password to my notebook.I tried both to log in but Google said it&#x27;s wrong.I can not recover account because I created the as a extra account of my phone without entering phone number or recovery email.Now, I am frustrated.I can&#x27;t hard reset as it may trigger FRP.I have used it to reduce my screen time.But Its very bad happened.",
-          "title": "Ask HN:Locked on Selfcontrolled Google Family Link Parental Control System",
-          "updated_at": "2026-04-05T11:55:15Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "dsrtslnd23"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "You can now describe a circuit in plain English and get working Verilog out of an LLM. Agents can iterate on it, run simulations, fix timing issues. The biggest barrier to FPGAs was always that writing HDL sucked and the toolchains were hostile. That barrier is rapidly shrinking.<p>So where is the wave of new FPGA projects? Why aren't hobbyists and startups reaching for FPGAs for stuff that would have been microcontroller or GPU territory before? Cheap dev boards exist, the silicon is there, and now the programming side is getting dramatically easier.<p>What am I missing? Is the toolchain still the <em>bot</em>tleneck even if the HDL itself gets easier? Is it a awareness problem? Or do most people just not have problems where FPGAs are the right answer?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: Why isn't FPGA adoption exploding now that LLMs can write HDL?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_dsrtslnd23",
-            "story_47648299",
-            "ask_hn"
-          ],
-          "author": "dsrtslnd23",
-          "children": [
-            47648412,
-            47648578
-          ],
-          "created_at": "2026-04-05T11:26:12Z",
-          "created_at_i": 1775388372,
-          "num_comments": 2,
-          "objectID": "47648299",
+          "objectID": "47654482",
           "points": 1,
-          "story_id": 47648299,
-          "story_text": "You can now describe a circuit in plain English and get working Verilog out of an LLM. Agents can iterate on it, run simulations, fix timing issues. The biggest barrier to FPGAs was always that writing HDL sucked and the toolchains were hostile. That barrier is rapidly shrinking.<p>So where is the wave of new FPGA projects? Why aren&#x27;t hobbyists and startups reaching for FPGAs for stuff that would have been microcontroller or GPU territory before? Cheap dev boards exist, the silicon is there, and now the programming side is getting dramatically easier.<p>What am I missing? Is the toolchain still the bottleneck even if the HDL itself gets easier? Is it a awareness problem? Or do most people just not have problems where FPGAs are the right answer?",
-          "title": "Ask HN: Why isn't FPGA adoption exploding now that LLMs can write HDL?",
-          "updated_at": "2026-04-05T12:46:45Z"
+          "story_id": 47654482,
+          "story_text": "Go implementation of mosh (mobile shell) both client and server and wire-compatible with the core C implementation.<p>The full mosh protocol is implemented including but not limited to AES-128-OCB3, SSP transport with sequencing and retransmission, datagram fragmentation, protobuf state sync, local echo prediction, etc.<p>It compiles to WASM, which is how we run mosh in the browser at UnixShells.com (WebTransport (HTTP&#x2F;3) carries the datagrams instead of UDP). This is how things feel instant, despite being wherever you are.<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;unixshells&#x2F;mosh-go\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;unixshells&#x2F;mosh-go</a>",
+          "title": "Show HN: Pure Go mosh client, server, and WASM build for the browser",
+          "updated_at": "2026-04-05T22:17:32Z",
+          "url": "https://github.com/unixshells/mosh-go"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "mellosouls"
+              "value": "larsmoa"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "The other day I googled &quot;Where is Artemis&quot; expecting to find a tracker showing me the position, but instead getting results from news articles without live data. I eventually found the NASA tracker (<a href=\"https://www.nasa.gov/missions/artemis-ii/arow/\" rel=\"nofollow\">https://www.nasa.gov/missions/artemis-ii/arow/</a>) and <a href=\"https://artemislivetracker.com/\" rel=\"nofollow\">https://artemislivetracker.com/</a>, but neither is optimized for mobile and frankly I found them <em>bot</em>h underwhelming.<p>The domain (whereisartemis.com) was available and I thought &quot;someone should use that&quot;, bought the domain and got started. Hopefully, this is something that can be extended for future Artemis missions and help build engagement for the Artemis program and space travel in general :)<p>The tracker includes:\n- Real-time 3D scene with toggleable camera views (top-down or free orbit), \n- Live telemetry: Distance from Earth/Moon, current speed etc.\n- Live video from NASA\n- Mission schedule with countdowns to upcoming events (lunar flyby, splashdown, etc.)\n- Mission coverage with links to NASA articles\n- Mobile and desktop support<p>How it works under the hood:<p>- Live position and trajectory data is pulled directly from the NASA/JPL Horizons API.\n- Built with Next.js, React Three Fiber/ThreeJS, and Tailwind CSS.<p>Github: <a href=\"https://github.com/larsmoa/whereisartemis2\" rel=\"nofollow\">https://github.com/larsmoa/whereisartemis2</a> (feel free to add issues with suggestions :) )"
             },
             "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "An AI <em>bot</em> invited me to its party in Manchester. It was a pretty good night"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.theguardian.com/technology/2026/apr/05/ai-<em>bot</em>-party-manchester-gaskell"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_mellosouls",
-            "story_47647038"
-          ],
-          "author": "mellosouls",
-          "children": [
-            47647755
-          ],
-          "created_at": "2026-04-05T07:29:26Z",
-          "created_at_i": 1775374166,
-          "num_comments": 1,
-          "objectID": "47647038",
-          "points": 8,
-          "story_id": 47647038,
-          "title": "An AI bot invited me to its party in Manchester. It was a pretty good night",
-          "updated_at": "2026-04-05T13:48:30Z",
-          "url": "https://www.theguardian.com/technology/2026/apr/05/ai-bot-party-manchester-gaskell"
-        },
-        {
-          "_highlightResult": {
-            "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "TheWiggles"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "IntelliJ IDEA's New <em>Kot</em>lin Coroutine Inspections"
+              "value": "Show HN: Where Is Artemis?"
             },
             "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://blog.jetbrains.com/idea/2026/03/intellij-idea-s-new-<em>kot</em>lin-coroutine-inspections-explained/"
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.whereisartemis.com/"
             }
           },
           "_tags": [
             "story",
-            "author_TheWiggles",
-            "story_47645502"
+            "author_larsmoa",
+            "story_47654223",
+            "show_hn"
           ],
-          "author": "TheWiggles",
-          "created_at": "2026-04-05T02:09:58Z",
-          "created_at_i": 1775354998,
+          "author": "larsmoa",
+          "created_at": "2026-04-05T21:48:10Z",
+          "created_at_i": 1775425690,
           "num_comments": 0,
-          "objectID": "47645502",
+          "objectID": "47654223",
+          "points": 4,
+          "story_id": 47654223,
+          "story_text": "The other day I googled &quot;Where is Artemis&quot; expecting to find a tracker showing me the position, but instead getting results from news articles without live data. I eventually found the NASA tracker (<a href=\"https:&#x2F;&#x2F;www.nasa.gov&#x2F;missions&#x2F;artemis-ii&#x2F;arow&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.nasa.gov&#x2F;missions&#x2F;artemis-ii&#x2F;arow&#x2F;</a>) and <a href=\"https:&#x2F;&#x2F;artemislivetracker.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;artemislivetracker.com&#x2F;</a>, but neither is optimized for mobile and frankly I found them both underwhelming.<p>The domain (whereisartemis.com) was available and I thought &quot;someone should use that&quot;, bought the domain and got started. Hopefully, this is something that can be extended for future Artemis missions and help build engagement for the Artemis program and space travel in general :)<p>The tracker includes:\n- Real-time 3D scene with toggleable camera views (top-down or free orbit), \n- Live telemetry: Distance from Earth&#x2F;Moon, current speed etc.\n- Live video from NASA\n- Mission schedule with countdowns to upcoming events (lunar flyby, splashdown, etc.)\n- Mission coverage with links to NASA articles\n- Mobile and desktop support<p>How it works under the hood:<p>- Live position and trajectory data is pulled directly from the NASA&#x2F;JPL Horizons API.\n- Built with Next.js, React Three Fiber&#x2F;ThreeJS, and Tailwind CSS.<p>Github: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;larsmoa&#x2F;whereisartemis2\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;larsmoa&#x2F;whereisartemis2</a> (feel free to add issues with suggestions :) )",
+          "title": "Show HN: Where Is Artemis?",
+          "updated_at": "2026-04-05T22:21:46Z",
+          "url": "https://www.whereisartemis.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "thebababak"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "As someone who loves <em>bot</em>h coding and language learning (I'm learning Japanese right now), I always wished there was a free, open-source tool for learning Japanese, just like Monkeytype in the typing community.<p>Here's the main selling point: I added a gazillion different color themes, fonts and other crazy customization options, inspired directly by Monkeytype. Also, I made the app resemble Duolingo, as that's what I'm using to learn Japanese at the moment and it's what a lot of language learners are already familiar with.<p>Miraculously, people loved the idea, and the project even managed to somehow hit 1k stars on GitHub now. Now, I'm looking to continue working on the project to see where I can take it next.<p>Back in January, I even applied to Vercel's open-source software sponsorship program as a joke. I didn't seriously expect to win, and did it more out of curiosity.<p>Lo and behold, yesterday I woke up to an email saying the app has been accepted into Vercel's Winter cohort. Crazy!<p>Anyway. Why am I doing all this?<p>Because I'm a filthy weeb.<p>どうもありがとうございます"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: I made a cute, open-source Japanese learning app inspired by Monkeytype"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/lingdojo/kana-dojo/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_thebababak",
+            "story_47653966",
+            "show_hn"
+          ],
+          "author": "thebababak",
+          "children": [
+            47654004
+          ],
+          "created_at": "2026-04-05T21:16:44Z",
+          "created_at_i": 1775423804,
+          "num_comments": 0,
+          "objectID": "47653966",
           "points": 2,
-          "story_id": 47645502,
-          "title": "IntelliJ IDEA's New Kotlin Coroutine Inspections",
-          "updated_at": "2026-04-05T02:58:13Z",
-          "url": "https://blog.jetbrains.com/idea/2026/03/intellij-idea-s-new-kotlin-coroutine-inspections-explained/"
+          "story_id": 47653966,
+          "story_text": "As someone who loves both coding and language learning (I&#x27;m learning Japanese right now), I always wished there was a free, open-source tool for learning Japanese, just like Monkeytype in the typing community.<p>Here&#x27;s the main selling point: I added a gazillion different color themes, fonts and other crazy customization options, inspired directly by Monkeytype. Also, I made the app resemble Duolingo, as that&#x27;s what I&#x27;m using to learn Japanese at the moment and it&#x27;s what a lot of language learners are already familiar with.<p>Miraculously, people loved the idea, and the project even managed to somehow hit 1k stars on GitHub now. Now, I&#x27;m looking to continue working on the project to see where I can take it next.<p>Back in January, I even applied to Vercel&#x27;s open-source software sponsorship program as a joke. I didn&#x27;t seriously expect to win, and did it more out of curiosity.<p>Lo and behold, yesterday I woke up to an email saying the app has been accepted into Vercel&#x27;s Winter cohort. Crazy!<p>Anyway. Why am I doing all this?<p>Because I&#x27;m a filthy weeb.<p>どうもありがとうございます",
+          "title": "Show HN: I made a cute, open-source Japanese learning app inspired by Monkeytype",
+          "updated_at": "2026-04-05T21:23:46Z",
+          "url": "https://github.com/lingdojo/kana-dojo/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "debasishbarai"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hi,\nI am Debasish from India. I am passionate about building softwares. I started coding long ago around 2015 when android apps were built only Java. <em>Kot</em>lin was not a thing then. I built railify android app. That was the first time I built and shipped one product to the world. The journey did not stop after that. I built several other products. All of these are my side projects. I am not a software developer by profession. I am an electrical engineer working in a power plant in India. However, as I grew my product base, I literally own so many domains which are all related to my products. All have there mails setup to connect with the relevant ICPs, answering questions of users, solving doubts and also informing the users about any new release of the products. Maintaining all these domains and their email Ids, honestly speaking was difficult. So I started thinking about building something to solve this issue in particular. I built mailmark for this. Mailmark helps you add your domains i.e. abc.com, setup different mailboxes i.e. sales@abc.com, founder@abc.com, marketing@abc.com, updates@abc.com etc. All of these domains and mailboxes are accessible from the same unified UI similar to Gmail or Zoho. I also added one lightweight tracking system to the mails sent throughthis platform, which will show the status of the mails like delivered, opened, not yet delivered or rejected. Also, as it is focused on bulk mails, to the users, it works like email campaigns, similar to Gmass, where all the mails to recipients, will be individual separate mails. I can track all the mails statuses from a single window like the deliveribility status how many mails are delivered, opened etc. I have also built a developer feature where I can send emails programmatically with a key, similar to Resend. There is a lot more there in the product which I will definately like to discuss.\nPlease do checkout the product. Here is the link: <a href=\"https://www.mailmark.dev\" rel=\"nofollow\">https://www.mailmark.dev</a>\nHappy to answer questions here."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: MailMark – Cold email tool where you own your domain and mailboxes"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_debasishbarai",
+            "story_47653287",
+            "show_hn"
+          ],
+          "author": "debasishbarai",
+          "children": [
+            47653430,
+            47654111
+          ],
+          "created_at": "2026-04-05T20:01:08Z",
+          "created_at_i": 1775419268,
+          "num_comments": 1,
+          "objectID": "47653287",
+          "points": 1,
+          "story_id": 47653287,
+          "story_text": "Hi,\nI am Debasish from India. I am passionate about building softwares. I started coding long ago around 2015 when android apps were built only Java. Kotlin was not a thing then. I built railify android app. That was the first time I built and shipped one product to the world. The journey did not stop after that. I built several other products. All of these are my side projects. I am not a software developer by profession. I am an electrical engineer working in a power plant in India. However, as I grew my product base, I literally own so many domains which are all related to my products. All have there mails setup to connect with the relevant ICPs, answering questions of users, solving doubts and also informing the users about any new release of the products. Maintaining all these domains and their email Ids, honestly speaking was difficult. So I started thinking about building something to solve this issue in particular. I built mailmark for this. Mailmark helps you add your domains i.e. abc.com, setup different mailboxes i.e. sales@abc.com, founder@abc.com, marketing@abc.com, updates@abc.com etc. All of these domains and mailboxes are accessible from the same unified UI similar to Gmail or Zoho. I also added one lightweight tracking system to the mails sent throughthis platform, which will show the status of the mails like delivered, opened, not yet delivered or rejected. Also, as it is focused on bulk mails, to the users, it works like email campaigns, similar to Gmass, where all the mails to recipients, will be individual separate mails. I can track all the mails statuses from a single window like the deliveribility status how many mails are delivered, opened etc. I have also built a developer feature where I can send emails programmatically with a key, similar to Resend. There is a lot more there in the product which I will definately like to discuss.\nPlease do checkout the product. Here is the link: <a href=\"https:&#x2F;&#x2F;www.mailmark.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;www.mailmark.dev</a>\nHappy to answer questions here.",
+          "title": "Show HN: MailMark – Cold email tool where you own your domain and mailboxes",
+          "updated_at": "2026-04-05T21:38:33Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "inerte"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I've been working on a new programming language for AI agents. I would love your input on what makes programming languages good for AI agents, especially syntax, compiler, and tooling that could help AI agents write code.<p>What makes Sigil good for coding agents?<p>I've turned conventions into compiler rules whenever possible. The compiler owns the canonical printer and every AST has one accepted textual representation. For almost every syntax feature I tried to save tokens.<p>Order and naming conventions are enforced. No more &quot;I think this argument is important so it should come first.&quot; Most things are alphabetical. Declarations are categorized and ordered alphabetically; parameters, effects, and record fields are alphabetical too. Types are UpperCamelCase. Everything else is lowerCamelCase, including file names.<p>No nulls. No undefined.\nBidirectional type checking.\nNo shadowing.\nFat stdlib (still in progress).\n`sigil debug` supports replay, stepping, watches, and breakpoints.\n`sigil inspect` lets coding agents query the compiler directly, including proof surfaces.<p>Solver-backed refinements and contracts. Different languages already choose different numeric surfaces: byte, short, smallint, unsigned integers, etc. Sigil pushes that one step further: domain constraints can also define types. `where` lets a named type carry a predicate, and `requires` / `ensures` let functions carry proof obligations across call boundaries.<p>Here is a contrived example from the roguelite:<p><pre><code>  t InventoryCount=Int where value≥0\n\n  λspendArrow(arrows:InventoryCount)=&gt;InventoryCount\n  requires arrows&gt;0\n  ensures result≥0\n  =arrows-1\n</code></pre>\nUnder the hood this is backed by Z3: <a href=\"https://github.com/z3prover/z3\" rel=\"nofollow\">https://github.com/z3prover/z3</a> But the surface stays ordinary Sigil syntax. There are no proof scripts and no user-facing SMT language.<p>No imports, rooted references only. In some languages you can import code and have name clashes, so there are many ways to specify imports. Sigil eliminates all of that by only using rooted references. I think this reduces agent churn because when the model sees a line, it does not have to go hunt for an import statement.<p>Service dependencies are declared in `src/topology.lib.sigil`, and environment bindings live in `config/&lt;env&gt;.lib.sigil`.<p>The language has special syntax for tests and they are run in parallel. Every project `src/*.lib.sigil` function must be tested, and if a function can return multiple cases, tests should exercise all of them. &quot;World&quot; is Sigil's model for effects. That is how mocks work: swap one effect for another and make assertions without exercising real external systems.<p>The compiler toolchain is written in Rust, and Sigil outputs to TypeScript, with a Foreign Function Interface to Node.js. See some small projects here <a href=\"https://inerte.github.io/sigil/projects/\" rel=\"nofollow\">https://inerte.github.io/sigil/projects/</a> - the Flashcards is useful to learn about Sigil features <a href=\"https://inerte.github.io/sigil/projects/sigil-flashcards/demo/\" rel=\"nofollow\">https://inerte.github.io/sigil/projects/sigil-flashcards/dem...</a><p>Caveat: I did NOT type a single line of code for the compiler toolchain. It was all generated with Claude Code and Codex. I run <em>bot</em>h with permissions dangerously skipped. This actual post I hand crafted every word.<p>There is also a toy roguelite written in Sigil. It is a work in progress, but it is proof that Sigil can support nontrivial project code. You can play with `pnpm sigil:run:roguelike`.<p>Repository: <a href=\"https://github.com/inerte/sigil\" rel=\"nofollow\">https://github.com/inerte/sigil</a><p>Website: <a href=\"https://inerte.github.io/sigil/\" rel=\"nofollow\">https://inerte.github.io/sigil/</a><p>And I would love if you can find ways to lock down LLM / user programs even more. In Sigil, there should be only one way to do anything."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Sigil – A new programming language for AI agents"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_inerte",
+            "story_47652386",
+            "show_hn"
+          ],
+          "author": "inerte",
+          "created_at": "2026-04-05T18:28:23Z",
+          "created_at_i": 1775413703,
+          "num_comments": 0,
+          "objectID": "47652386",
+          "points": 3,
+          "story_id": 47652386,
+          "story_text": "I&#x27;ve been working on a new programming language for AI agents. I would love your input on what makes programming languages good for AI agents, especially syntax, compiler, and tooling that could help AI agents write code.<p>What makes Sigil good for coding agents?<p>I&#x27;ve turned conventions into compiler rules whenever possible. The compiler owns the canonical printer and every AST has one accepted textual representation. For almost every syntax feature I tried to save tokens.<p>Order and naming conventions are enforced. No more &quot;I think this argument is important so it should come first.&quot; Most things are alphabetical. Declarations are categorized and ordered alphabetically; parameters, effects, and record fields are alphabetical too. Types are UpperCamelCase. Everything else is lowerCamelCase, including file names.<p>No nulls. No undefined.\nBidirectional type checking.\nNo shadowing.\nFat stdlib (still in progress).\n`sigil debug` supports replay, stepping, watches, and breakpoints.\n`sigil inspect` lets coding agents query the compiler directly, including proof surfaces.<p>Solver-backed refinements and contracts. Different languages already choose different numeric surfaces: byte, short, smallint, unsigned integers, etc. Sigil pushes that one step further: domain constraints can also define types. `where` lets a named type carry a predicate, and `requires` &#x2F; `ensures` let functions carry proof obligations across call boundaries.<p>Here is a contrived example from the roguelite:<p><pre><code>  t InventoryCount=Int where value≥0\n\n  λspendArrow(arrows:InventoryCount)=&gt;InventoryCount\n  requires arrows&gt;0\n  ensures result≥0\n  =arrows-1\n</code></pre>\nUnder the hood this is backed by Z3: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;z3prover&#x2F;z3\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;z3prover&#x2F;z3</a> But the surface stays ordinary Sigil syntax. There are no proof scripts and no user-facing SMT language.<p>No imports, rooted references only. In some languages you can import code and have name clashes, so there are many ways to specify imports. Sigil eliminates all of that by only using rooted references. I think this reduces agent churn because when the model sees a line, it does not have to go hunt for an import statement.<p>Service dependencies are declared in `src&#x2F;topology.lib.sigil`, and environment bindings live in `config&#x2F;&lt;env&gt;.lib.sigil`.<p>The language has special syntax for tests and they are run in parallel. Every project `src&#x2F;*.lib.sigil` function must be tested, and if a function can return multiple cases, tests should exercise all of them. &quot;World&quot; is Sigil&#x27;s model for effects. That is how mocks work: swap one effect for another and make assertions without exercising real external systems.<p>The compiler toolchain is written in Rust, and Sigil outputs to TypeScript, with a Foreign Function Interface to Node.js. See some small projects here <a href=\"https:&#x2F;&#x2F;inerte.github.io&#x2F;sigil&#x2F;projects&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;inerte.github.io&#x2F;sigil&#x2F;projects&#x2F;</a> - the Flashcards is useful to learn about Sigil features <a href=\"https:&#x2F;&#x2F;inerte.github.io&#x2F;sigil&#x2F;projects&#x2F;sigil-flashcards&#x2F;demo&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;inerte.github.io&#x2F;sigil&#x2F;projects&#x2F;sigil-flashcards&#x2F;dem...</a><p>Caveat: I did NOT type a single line of code for the compiler toolchain. It was all generated with Claude Code and Codex. I run both with permissions dangerously skipped. This actual post I hand crafted every word.<p>There is also a toy roguelite written in Sigil. It is a work in progress, but it is proof that Sigil can support nontrivial project code. You can play with `pnpm sigil:run:roguelike`.<p>Repository: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;inerte&#x2F;sigil\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;inerte&#x2F;sigil</a><p>Website: <a href=\"https:&#x2F;&#x2F;inerte.github.io&#x2F;sigil&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;inerte.github.io&#x2F;sigil&#x2F;</a><p>And I would love if you can find ways to lock down LLM &#x2F; user programs even more. In Sigil, there should be only one way to do anything.",
+          "title": "Show HN: Sigil – A new programming language for AI agents",
+          "updated_at": "2026-04-05T20:26:17Z"
         }
       ]
     },
@@ -2033,17 +2037,18 @@
           ],
           "author": "pauliusztin",
           "children": [
+            47653050,
             47639143
           ],
           "created_at": "2026-04-04T13:50:22Z",
           "created_at_i": 1775310622,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47639059",
           "points": 3,
           "story_id": 47639059,
           "story_text": "While building a financial assistant for an SF start-up, we learned that AI frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain&#x27;s MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB collection as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don&#x27;t need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual learning.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity&#x2F;relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities&#x2F;relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first AI: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7432054336589021184<p>- Most AI agents don&#x27;t need three databases: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7426981104227856385",
           "title": "My 11-step GraphRAG pipeline, what worked, and what's still broken",
-          "updated_at": "2026-04-05T03:26:44Z"
+          "updated_at": "2026-04-05T19:39:03Z"
         },
         {
           "_highlightResult": {
@@ -2099,13 +2104,13 @@
           ],
           "created_at": "2026-04-04T02:26:42Z",
           "created_at_i": 1775269602,
-          "num_comments": 37,
+          "num_comments": 39,
           "objectID": "47635033",
-          "points": 92,
+          "points": 93,
           "story_id": 47635033,
           "story_text": "I use points and miles for most of my travel. Every booking comes down to the same decision: use points or pay cash? To answer that, you need award availability across multiple programs, cash prices, your current balances, transfer partner ratios, and the math to compare them. I got tired of doing it manually across a dozen tabs.<p>This toolkit teaches Claude Code and OpenCode how to do it. 7 skills (markdown files with API docs and curl examples) and 6 MCP servers (real-time tools the AI calls directly).<p>It searches award flights across 25+ mileage programs (Seats.aero), compares cash prices (Google Flights, Skiplagged, Kiwi.com, Duffel), pulls your loyalty balances (AwardWallet), searches hotels (Trivago, LiteAPI, Airbnb, Booking.com), finds ferry routes across 33 countries, and looks up weird hidden gems near your destination (Atlas Obscura).<p>Reference data is included: transfer partner ratios for Chase UR, Amex MR, Bilt, Capital One, and Citi TY. Point valuations sourced from TPG, Upgraded Points, OMAAT, and View From The Wing. Alliance membership, sweet spot redemptions, booking windows, hotel chain brand lookups.<p>5 of the 6 MCP servers need zero API keys. Clone, run setup.sh, start \nsearching.<p>Skills are, as usual, plain markdown. They work in OpenCode and Claude Code automatically (I added a tiny setup script), and they&#x27;ll work in anything else that supports skills.<p>PRs welcome! Help me expand the toolkit! :)<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;borski&#x2F;travel-hacking-toolkit</a>",
           "title": "Show HN: Travel Hacking Toolkit – Points search and trip planning with AI",
-          "updated_at": "2026-04-05T05:31:58Z",
+          "updated_at": "2026-04-05T22:36:32Z",
           "url": "https://github.com/borski/travel-hacking-toolkit"
         },
         {
@@ -2142,6 +2147,7 @@
           ],
           "author": "deltaops",
           "children": [
+            47651347,
             47633299
           ],
           "created_at": "2026-04-03T20:31:28Z",
@@ -2151,7 +2157,7 @@
           "points": 1,
           "story_id": 47631865,
           "title": "Show HN: Lustre – MCP server giving AI tools premium Flutter components",
-          "updated_at": "2026-04-03T22:43:24Z",
+          "updated_at": "2026-04-05T16:58:47Z",
           "url": "https://www.npmjs.com/package/lustre-mcp"
         },
         {
@@ -2334,10 +2340,10 @@
           "created_at_i": 1775262841,
           "num_comments": 1,
           "objectID": "47634234",
-          "points": 11,
+          "points": 12,
           "story_id": 47634234,
           "title": "Silicon Valley Is in a Frenzy over Bots That Build Themselves",
-          "updated_at": "2026-04-04T23:34:43Z",
+          "updated_at": "2026-04-05T18:48:16Z",
           "url": "https://www.theatlantic.com/technology/2026/04/ai-industry-self-improving-bots/686686/"
         },
         {
