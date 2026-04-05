@@ -10,7 +10,9 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createCanvas } from 'canvas';
-import { drawRobot, drawMoodParticles, drawHat, drawPet, drawBuddyCompanion } from './sprite-engine.js';
+import { drawRobot, drawGorilla, drawMoodParticles, drawGorillaParticles, drawHat, drawPet, drawBuddyCompanion } from './sprite-engine.js';
+// Character selection — switch between robot and gorilla
+let characterType = 'gorilla'; // default to new gorilla character
 import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings } from './stream-intelligence.js';
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity } from './stream-brain.js';
 import { renderLighting, renderBloom, renderPostProcessing, renderParticles, tickParticlesPBD, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, buildParallaxLayers, tickGrowingPlants, createRadianceGrid, updateRadianceGrid, renderRadianceOverlay, renderSubsurfaceGlow, buildSubsurfacePanels, createFrameCache, renderVolumetricFog, getFogParams, computeAnimationParams } from './render-engine.js';
@@ -2399,8 +2401,13 @@ function renderBootFrame(bootFrame) {
         ctx.fillStyle = '#6B5B95';
         ctx.font = 'bold 28px "Courier New", monospace';
         ctx.fillText('K : B O T   L I V E', 40, 40);
-        // Robot
-        drawRobot(ctx, 80, 90, 10, 'idle', bootFrame);
+        // Character (robot or gorilla)
+        if (characterType === 'gorilla') {
+            drawGorilla(ctx, 80, 90, 10, 'idle', bootFrame);
+        }
+        else {
+            drawRobot(ctx, 80, 90, 10, 'idle', bootFrame);
+        }
         ctx.restore();
     }
     // Scanlines
@@ -2775,13 +2782,25 @@ function renderFrame() {
         ctx.save();
         ctx.globalAlpha = 0.3;
         ctx.globalCompositeOperation = 'lighter';
-        drawRobot(ctx, robotScreenX - offset, robotScreenY, robotScale, charState.mood, animFrame, [255, 50, 50], weatherType, isWalking, charState.walkPhase);
-        drawRobot(ctx, robotScreenX + offset, robotScreenY, robotScale, charState.mood, animFrame, [50, 50, 255], weatherType, isWalking, charState.walkPhase);
+        if (characterType === 'gorilla') {
+            drawGorilla(ctx, robotScreenX - offset, robotScreenY, robotScale, charState.mood, animFrame, [255, 50, 50]);
+            drawGorilla(ctx, robotScreenX + offset, robotScreenY, robotScale, charState.mood, animFrame, [50, 50, 255]);
+        }
+        else {
+            drawRobot(ctx, robotScreenX - offset, robotScreenY, robotScale, charState.mood, animFrame, [255, 50, 50], weatherType, isWalking, charState.walkPhase);
+            drawRobot(ctx, robotScreenX + offset, robotScreenY, robotScale, charState.mood, animFrame, [50, 50, 255], weatherType, isWalking, charState.walkPhase);
+        }
         ctx.restore();
     }
     renderDamageFlash(ctx, robotScreenX, robotScreenY, robotScale);
-    drawRobot(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase);
-    drawMoodParticles(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame);
+    if (characterType === 'gorilla') {
+        drawGorilla(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame, undefined);
+        drawGorillaParticles(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame);
+    }
+    else {
+        drawRobot(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase);
+        drawMoodParticles(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame);
+    }
     // Subsurface scattering
     {
         const sssPanels = buildSubsurfacePanels(robotScreenX, robotScreenY, robotScale, moodColorHex);

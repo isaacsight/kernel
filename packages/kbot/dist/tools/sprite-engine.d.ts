@@ -1,6 +1,24 @@
 import type { CanvasRenderingContext2D } from 'canvas';
 export declare function drawRobot(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number, mood: string, frame: number, moodColor?: [number, number, number], weather?: 'clear' | 'rain' | 'snow' | 'storm' | 'stars', isWalking?: boolean, walkPhase?: number): void;
 /**
+ * Draw a stocky gorilla/monkey pixel art character (32x32 grid).
+ * Drop-in replacement for drawRobot() with the same signature.
+ *
+ * @param ctx       - Canvas 2D rendering context
+ * @param x         - Top-left X position in canvas pixels
+ * @param y         - Top-left Y position in canvas pixels
+ * @param scale     - Pixel scale multiplier (4-10 recommended)
+ * @param mood      - Current mood: idle, talking, thinking, excited, dancing, walking
+ * @param frame     - Animation frame counter (incrementing integer)
+ * @param moodColor - Optional RGB override for mood accent color
+ */
+export declare function drawGorilla(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number, mood: string, frame: number, moodColor?: [number, number, number]): void;
+/**
+ * Draw animated mood particles around the gorilla.
+ * Same interface as drawMoodParticles but tuned for gorilla position/shape.
+ */
+export declare function drawGorillaParticles(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number, mood: string, frame: number): void;
+/**
  * Draw animated mood particles around the robot.
  *
  * @param ctx   - Canvas 2D rendering context

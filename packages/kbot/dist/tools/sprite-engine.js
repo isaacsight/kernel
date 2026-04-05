@@ -151,7 +151,7 @@ function drawHead(ctx, s, ox, oy, eyeColor, mood, frame, headShiftX) {
     // Eye glow background — brighter white-green for alive look, dimmed if dreaming
     const eyeC = mood === 'dreaming'
         ? dimColor(eyeColor.startsWith('rgb') ? '#4a6670' : eyeColor, 0.5)
-        : '#80ffb0'; // bright cyan-green that contrasts against the green head
+        : '#b0ffe0'; // HACK 3: even brighter cyan-white for maximum pop
     px(ctx, hx + 2, eyeY, 4, eyeH, eyeC, s, ox, oy);
     px(ctx, hx + 8, eyeY, 4, eyeH, eyeC, s, ox, oy);
     // Specular highlights on eyes — 2px L-shape catch-light for glassy/alive look (technique 8)
@@ -894,6 +894,440 @@ function drawWalkingLegs(ctx, s, ox, oy, bodyShiftY, walkPhase) {
     // Rim light on right edge of right foot
     px(ctx, 21 + rightLegOffset, footY, 1, 2, PAL.rimLight, s, ox, oy);
     px(ctx, 17 + rightLegOffset, footY + 2, 4, 1, PAL.jetOrange, s, ox, oy);
+}
+// ─── Gorilla Character ────────────────────────────────────────
+const GORILLA = {
+    furDark: '#8B6914', // dark brown
+    furMain: '#C4943D', // main tan/brown
+    furLight: '#DEB860', // light tan highlights
+    furChest: '#E8D5A0', // pale chest/face
+    skinDark: '#7A5B2E', // darker skin (face creases)
+    eyeWhite: '#F0F0E0', // eye whites
+    eyePupil: '#1a1a1a', // dark pupils
+    mouth: '#3D2B1A', // dark mouth
+    fang: '#F0F0E0', // white fangs
+    capRed: '#CC2222', // red cap
+    capWhite: '#F0F0F0', // white cap panel
+    capBrim: '#999999', // brim underside
+    claws: '#D0D0D0', // light gray claws
+    outline: '#2A1F0A', // dark brown outline
+    nose: '#5A3D1E', // nose color
+};
+let _gorillaPrevMood = '';
+let _gorillaSettleFrames = 0;
+/**
+ * Draw a stocky gorilla/monkey pixel art character (32x32 grid).
+ * Drop-in replacement for drawRobot() with the same signature.
+ *
+ * @param ctx       - Canvas 2D rendering context
+ * @param x         - Top-left X position in canvas pixels
+ * @param y         - Top-left Y position in canvas pixels
+ * @param scale     - Pixel scale multiplier (4-10 recommended)
+ * @param mood      - Current mood: idle, talking, thinking, excited, dancing, walking
+ * @param frame     - Animation frame counter (incrementing integer)
+ * @param moodColor - Optional RGB override for mood accent color
+ */
+export function drawGorilla(ctx, x, y, scale, mood, frame, moodColor) {
+    const s = scale;
+    const G = GORILLA;
+    // Settle animation on mood change
+    if (mood !== _gorillaPrevMood) {
+        _gorillaSettleFrames = 3;
+        _gorillaPrevMood = mood;
+    }
+    let settleShift = 0;
+    if (_gorillaSettleFrames > 0) {
+        settleShift = _gorillaSettleFrames === 3 ? -1 : _gorillaSettleFrames === 2 ? 1 : 0;
+        _gorillaSettleFrames--;
+    }
+    // ── Animation offsets ──
+    let bodyY = settleShift;
+    let bodyX = 0;
+    let headTilt = 0;
+    let mouthOpen = 0; // 0=closed, 1=half, 2=open, 3=wide
+    let leftArmFwd = 0; // forward offset for walking
+    let rightArmFwd = 0;
+    let eyeState = 'narrow'; // default grumpy
+    let capTilt = 0;
+    let questionMark = false;
+    // Breathing (idle)
+    const breathFrame = frame % 12;
+    let breathShift = 0;
+    if (mood === 'idle') {
+        if (breathFrame >= 1 && breathFrame <= 3)
+            breathShift = -1; // rise
+        if (breathFrame >= 4 && breathFrame <= 5) {
+            breathShift = 0;
+            bodyY += 1;
+        }
+        // Blink every ~24 frames
+        if (frame % 24 === 23)
+            eyeState = 'blink';
+        else if (frame % 24 === 22)
+            eyeState = 'blink';
+    }
+    if (mood === 'talking') {
+        // Mouth animation cycles
+        mouthOpen = frame % 4; // 0=open, 1=half, 2=wide, 3=closed
+        eyeState = 'narrow';
+    }
+    else if (mood === 'walking') {
+        // Walking: arms alternate, body bobs
+        const wf = frame % 4;
+        if (wf === 0) {
+            leftArmFwd = -2;
+            rightArmFwd = 2;
+            bodyX = -1;
+        }
+        else if (wf === 1) {
+            leftArmFwd = 0;
+            rightArmFwd = 0;
+        }
+        else if (wf === 2) {
+            leftArmFwd = 2;
+            rightArmFwd = -2;
+            bodyX = 1;
+        }
+        else {
+            leftArmFwd = 0;
+            rightArmFwd = 0;
+        }
+        bodyY += (wf % 2 === 0) ? -1 : 0;
+    }
+    else if (mood === 'excited') {
+        const ef = frame % 4;
+        if (ef === 0) {
+            bodyY -= 2;
+        }
+        else if (ef === 2) {
+            bodyY -= 3;
+            mouthOpen = 2;
+            eyeState = 'wide';
+        }
+        else {
+            eyeState = 'narrow';
+        }
+    }
+    else if (mood === 'thinking') {
+        const tf = frame % 3;
+        if (tf === 0) {
+            headTilt = 1;
+        }
+        else if (tf === 1) {
+            eyeState = 'up';
+        }
+        else {
+            questionMark = true;
+        }
+    }
+    else if (mood === 'dancing') {
+        const df = frame % 4;
+        if (df === 0) {
+            bodyX = -2;
+            bodyY -= 1;
+        }
+        else if (df === 1) {
+            bodyX = 0;
+        }
+        else if (df === 2) {
+            bodyX = 2;
+            bodyY -= 1;
+        }
+        else {
+            bodyX = 0;
+            capTilt = 1;
+        }
+        eyeState = 'narrow';
+        mouthOpen = (df % 2 === 0) ? 1 : 0;
+    }
+    bodyY += breathShift;
+    const ox = x + bodyX * s;
+    const oy = y + bodyY * s;
+    // ── Drop shadow ──
+    ctx.save();
+    ctx.fillStyle = 'rgba(30, 20, 5, 0.3)';
+    ctx.beginPath();
+    ctx.ellipse(ox + 16 * s, oy + 31 * s, 12 * s, 3 * s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    // ── Tail (draw first, behind body) ──
+    // Curled tail on the right side, rows 14-20
+    px(ctx, 27, 14, 2, 1, G.furMain, s, ox, oy);
+    px(ctx, 28, 15, 2, 1, G.furMain, s, ox, oy);
+    px(ctx, 29, 16, 2, 1, G.furDark, s, ox, oy);
+    px(ctx, 29, 17, 1, 1, G.furDark, s, ox, oy);
+    px(ctx, 28, 18, 1, 1, G.furMain, s, ox, oy);
+    px(ctx, 27, 19, 2, 1, G.furMain, s, ox, oy);
+    // Curl tip
+    px(ctx, 26, 18, 1, 1, G.furLight, s, ox, oy);
+    // Outline
+    px(ctx, 27, 13, 2, 1, G.outline, s, ox, oy);
+    px(ctx, 29, 14, 1, 1, G.outline, s, ox, oy);
+    px(ctx, 30, 15, 1, 2, G.outline, s, ox, oy);
+    px(ctx, 31, 16, 1, 1, G.outline, s, ox, oy);
+    px(ctx, 30, 17, 1, 1, G.outline, s, ox, oy);
+    px(ctx, 30, 18, 1, 1, G.outline, s, ox, oy);
+    px(ctx, 29, 19, 1, 1, G.outline, s, ox, oy);
+    px(ctx, 27, 20, 2, 1, G.outline, s, ox, oy);
+    px(ctx, 25, 18, 1, 1, G.outline, s, ox, oy);
+    // ── Back legs (behind body) ──
+    // Left back leg (rows 22-28)
+    px(ctx, 17, 24, 5, 5, G.furDark, s, ox, oy);
+    px(ctx, 18, 24, 3, 4, G.furMain, s, ox, oy);
+    px(ctx, 17, 29, 6, 2, G.furDark, s, ox, oy); // foot
+    px(ctx, 18, 29, 4, 1, G.furMain, s, ox, oy);
+    // Claws on back foot
+    px(ctx, 17, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 19, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 21, 31, 1, 1, G.claws, s, ox, oy);
+    // Right back leg
+    px(ctx, 22, 24, 5, 5, G.furDark, s, ox, oy);
+    px(ctx, 23, 24, 3, 4, G.furMain, s, ox, oy);
+    px(ctx, 22, 29, 6, 2, G.furDark, s, ox, oy); // foot
+    px(ctx, 23, 29, 4, 1, G.furMain, s, ox, oy);
+    // Claws
+    px(ctx, 22, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 24, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 26, 31, 1, 1, G.claws, s, ox, oy);
+    // ── Body (rows 12-24) ── Very wide, stocky torso
+    // Outline
+    outlineRect(ctx, 5, 12, 22, 14, G.outline, s, ox, oy);
+    // Body fill — dark brown base
+    px(ctx, 5, 12, 22, 14, G.furDark, s, ox, oy);
+    // Main fur color on upper body
+    px(ctx, 6, 13, 20, 8, G.furMain, s, ox, oy);
+    // Light highlights on top (back ridge)
+    px(ctx, 8, 12, 16, 2, G.furLight, s, ox, oy);
+    // Lighter chest/belly underneath
+    px(ctx, 9, 19, 14, 6, G.furChest, s, ox, oy);
+    // Dithered transition from main fur to chest
+    dither(ctx, 9, 18, 14, 1, G.furMain, G.furChest, s, ox, oy);
+    // Dark underside shadow
+    px(ctx, 6, 25, 20, 1, G.skinDark, s, ox, oy);
+    // ── Front arms (rows 14-28): thick, reaching to ground ──
+    // Left front arm
+    const laOff = leftArmFwd;
+    outlineRect(ctx, 2 + laOff, 14, 6, 14, G.outline, s, ox, oy);
+    px(ctx, 2 + laOff, 14, 6, 14, G.furDark, s, ox, oy);
+    px(ctx, 3 + laOff, 14, 4, 12, G.furMain, s, ox, oy);
+    // Shoulder highlight
+    px(ctx, 3 + laOff, 14, 4, 2, G.furLight, s, ox, oy);
+    // Forearm darker
+    px(ctx, 3 + laOff, 22, 4, 4, G.skinDark, s, ox, oy);
+    // Hand/knuckles
+    px(ctx, 1 + laOff, 28, 7, 3, G.furDark, s, ox, oy);
+    px(ctx, 2 + laOff, 28, 5, 2, G.furMain, s, ox, oy);
+    // Claws
+    px(ctx, 1 + laOff, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 3 + laOff, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 5 + laOff, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 7 + laOff, 31, 1, 1, G.claws, s, ox, oy);
+    // Right front arm
+    const raOff = rightArmFwd;
+    outlineRect(ctx, 24 + raOff, 14, 6, 14, G.outline, s, ox, oy);
+    px(ctx, 24 + raOff, 14, 6, 14, G.furDark, s, ox, oy);
+    px(ctx, 25 + raOff, 14, 4, 12, G.furMain, s, ox, oy);
+    // Shoulder highlight
+    px(ctx, 25 + raOff, 14, 4, 2, G.furLight, s, ox, oy);
+    // Forearm darker
+    px(ctx, 25 + raOff, 22, 4, 4, G.skinDark, s, ox, oy);
+    // Hand/knuckles
+    px(ctx, 24 + raOff, 28, 7, 3, G.furDark, s, ox, oy);
+    px(ctx, 25 + raOff, 28, 5, 2, G.furMain, s, ox, oy);
+    // Claws
+    px(ctx, 24 + raOff, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 26 + raOff, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 28 + raOff, 31, 1, 1, G.claws, s, ox, oy);
+    px(ctx, 30 + raOff, 31, 1, 1, G.claws, s, ox, oy);
+    // ── Head (rows 3-12): big round head ──
+    const hx = 7 + headTilt;
+    const hy = 3;
+    // Outline
+    outlineRect(ctx, hx, hy, 18, 10, G.outline, s, ox, oy);
+    // Head fill — dark base
+    px(ctx, hx, hy, 18, 10, G.furDark, s, ox, oy);
+    // Main fur
+    px(ctx, hx + 1, hy + 1, 16, 8, G.furMain, s, ox, oy);
+    // Brow ridge highlight
+    px(ctx, hx + 2, hy + 1, 14, 2, G.furLight, s, ox, oy);
+    // Lighter face area (center)
+    px(ctx, hx + 4, hy + 4, 10, 5, G.furChest, s, ox, oy);
+    // Darker brow ridge above eyes (makes them look grumpy/narrowed)
+    px(ctx, hx + 3, hy + 3, 12, 2, G.skinDark, s, ox, oy);
+    // ── Eyes (rows 7-9 relative, hy+4 to hy+6 in head) ──
+    const eyeY = hy + 5;
+    if (eyeState === 'blink') {
+        // Closed eyes — thin line
+        px(ctx, hx + 5, eyeY, 3, 1, G.outline, s, ox, oy);
+        px(ctx, hx + 11, eyeY, 3, 1, G.outline, s, ox, oy);
+    }
+    else if (eyeState === 'narrow') {
+        // Narrowed/grumpy eyes — 3x2, squinted
+        // Eye whites (narrow slit)
+        px(ctx, hx + 5, eyeY, 3, 2, G.eyeWhite, s, ox, oy);
+        px(ctx, hx + 11, eyeY, 3, 2, G.eyeWhite, s, ox, oy);
+        // Pupils
+        px(ctx, hx + 6, eyeY, 2, 2, G.eyePupil, s, ox, oy);
+        px(ctx, hx + 12, eyeY, 2, 2, G.eyePupil, s, ox, oy);
+        // Heavy brow line pushing down (grumpy)
+        px(ctx, hx + 4, eyeY - 1, 5, 1, G.skinDark, s, ox, oy);
+        px(ctx, hx + 10, eyeY - 1, 5, 1, G.skinDark, s, ox, oy);
+    }
+    else if (eyeState === 'up') {
+        // Looking up
+        px(ctx, hx + 5, eyeY - 1, 3, 2, G.eyeWhite, s, ox, oy);
+        px(ctx, hx + 11, eyeY - 1, 3, 2, G.eyeWhite, s, ox, oy);
+        px(ctx, hx + 6, eyeY - 1, 1, 1, G.eyePupil, s, ox, oy);
+        px(ctx, hx + 12, eyeY - 1, 1, 1, G.eyePupil, s, ox, oy);
+    }
+    else if (eyeState === 'wide') {
+        // Wide/surprised
+        px(ctx, hx + 5, eyeY - 1, 3, 3, G.eyeWhite, s, ox, oy);
+        px(ctx, hx + 11, eyeY - 1, 3, 3, G.eyeWhite, s, ox, oy);
+        px(ctx, hx + 6, eyeY, 1, 1, G.eyePupil, s, ox, oy);
+        px(ctx, hx + 12, eyeY, 1, 1, G.eyePupil, s, ox, oy);
+    }
+    else {
+        // Normal eyes
+        px(ctx, hx + 5, eyeY, 3, 2, G.eyeWhite, s, ox, oy);
+        px(ctx, hx + 11, eyeY, 3, 2, G.eyeWhite, s, ox, oy);
+        px(ctx, hx + 6, eyeY, 2, 2, G.eyePupil, s, ox, oy);
+        px(ctx, hx + 12, eyeY, 2, 2, G.eyePupil, s, ox, oy);
+    }
+    // ── Nose ──
+    px(ctx, hx + 8, hy + 7, 3, 2, G.nose, s, ox, oy);
+    // Nostrils
+    px(ctx, hx + 8, hy + 8, 1, 1, G.outline, s, ox, oy);
+    px(ctx, hx + 10, hy + 8, 1, 1, G.outline, s, ox, oy);
+    // ── Mouth (rows 10-11 of head) ──
+    const mouthY = hy + 9;
+    const mouthX = hx + 6;
+    if (mouthOpen === 0) {
+        // Closed grumpy mouth — wide line with downturned ends
+        px(ctx, mouthX, mouthY, 7, 1, G.mouth, s, ox, oy);
+        // Fangs poking down
+        px(ctx, mouthX + 1, mouthY + 1, 1, 1, G.fang, s, ox, oy);
+        px(ctx, mouthX + 5, mouthY + 1, 1, 1, G.fang, s, ox, oy);
+    }
+    else if (mouthOpen === 1) {
+        // Half open
+        px(ctx, mouthX, mouthY, 7, 1, G.mouth, s, ox, oy);
+        px(ctx, mouthX + 1, mouthY + 1, 5, 1, G.mouth, s, ox, oy);
+        // Fangs
+        px(ctx, mouthX, mouthY + 1, 1, 1, G.fang, s, ox, oy);
+        px(ctx, mouthX + 6, mouthY + 1, 1, 1, G.fang, s, ox, oy);
+    }
+    else if (mouthOpen === 2) {
+        // Wide open — show red inside
+        px(ctx, mouthX - 1, mouthY, 9, 2, G.mouth, s, ox, oy);
+        px(ctx, mouthX, mouthY, 7, 2, '#8B2020', s, ox, oy); // red inner
+        // Big fangs
+        px(ctx, mouthX - 1, mouthY, 1, 2, G.fang, s, ox, oy);
+        px(ctx, mouthX + 7, mouthY, 1, 2, G.fang, s, ox, oy);
+    }
+    else {
+        // Closed tight line
+        px(ctx, mouthX + 1, mouthY, 5, 1, G.mouth, s, ox, oy);
+    }
+    // ── Baseball cap (rows 0-5): red with white front panel ──
+    const capX = hx - 1 + capTilt;
+    const capY = hy - 3;
+    // Cap crown — red
+    px(ctx, capX + 2, capY, 16, 2, G.capRed, s, ox, oy);
+    px(ctx, capX + 1, capY + 2, 18, 2, G.capRed, s, ox, oy);
+    // White front panel (left portion — cap is backwards/sideways)
+    px(ctx, capX + 2, capY, 5, 2, G.capWhite, s, ox, oy);
+    px(ctx, capX + 1, capY + 2, 6, 2, G.capWhite, s, ox, oy);
+    // Brim extending to the right (cap worn sideways)
+    px(ctx, capX + 18, capY + 3, 4, 2, G.capRed, s, ox, oy);
+    px(ctx, capX + 18, capY + 4, 4, 1, G.capBrim, s, ox, oy); // brim underside
+    // Cap outline
+    px(ctx, capX + 2, capY - 1, 16, 1, G.outline, s, ox, oy); // top
+    px(ctx, capX, capY + 2, 1, 2, G.outline, s, ox, oy); // left side
+    px(ctx, capX + 1, capY + 4, 18, 1, G.outline, s, ox, oy); // bottom band
+    px(ctx, capX + 22, capY + 3, 1, 2, G.outline, s, ox, oy); // brim end
+    // Cap button on top
+    px(ctx, capX + 9, capY - 1, 2, 1, G.capRed, s, ox, oy);
+    // ── Question mark particle (thinking frame 2) ──
+    if (questionMark) {
+        const qColor = getMoodColor('thinking', frame, moodColor);
+        px(ctx, hx + 6, hy - 6, 3, 1, qColor, s, ox, oy);
+        px(ctx, hx + 8, hy - 5, 1, 1, qColor, s, ox, oy);
+        px(ctx, hx + 7, hy - 4, 1, 1, qColor, s, ox, oy);
+        px(ctx, hx + 7, hy - 2, 1, 1, qColor, s, ox, oy);
+    }
+}
+/**
+ * Draw animated mood particles around the gorilla.
+ * Same interface as drawMoodParticles but tuned for gorilla position/shape.
+ */
+export function drawGorillaParticles(ctx, x, y, scale, mood, frame) {
+    const s = scale;
+    const color = getMoodColor(mood, frame);
+    if (mood === 'dancing') {
+        // Music notes floating up
+        const notes = [
+            { baseX: -2, baseY: 2, phase: 0 },
+            { baseX: 30, baseY: 0, phase: 2 },
+            { baseX: 14, baseY: -2, phase: 4 },
+        ];
+        for (const note of notes) {
+            const floatY = ((frame + note.phase) % 8) * -2;
+            const ny = note.baseY + floatY;
+            if (ny > -8) {
+                const c = RAINBOW[(frame + note.phase) % RAINBOW.length];
+                px(ctx, note.baseX, ny + 3, 2, 2, c, s, x, y);
+                px(ctx, note.baseX + 1, ny, 1, 3, c, s, x, y);
+                px(ctx, note.baseX + 1, ny, 2, 1, c, s, x, y);
+            }
+        }
+    }
+    else if (mood === 'excited') {
+        // Sparkle + shapes
+        const positions = [
+            { x: -2, y: 4 }, { x: 30, y: 2 },
+            { x: 2, y: -4 }, { x: 28, y: -2 },
+        ];
+        for (let i = 0; i < positions.length; i++) {
+            const visible = ((frame + i * 2) % 4) < 2;
+            if (!visible)
+                continue;
+            const p = positions[i];
+            px(ctx, p.x + 1, p.y, 1, 3, color, s, x, y);
+            px(ctx, p.x, p.y + 1, 3, 1, color, s, x, y);
+        }
+    }
+    else if (mood === 'thinking') {
+        // Thought bubbles
+        const f = frame % 3;
+        if (f === 0) {
+            px(ctx, 20, -6, 3, 1, color, s, x, y);
+            px(ctx, 22, -5, 1, 1, color, s, x, y);
+            px(ctx, 21, -4, 1, 1, color, s, x, y);
+            px(ctx, 21, -2, 1, 1, color, s, x, y);
+        }
+        else if (f === 1) {
+            px(ctx, 19, -4, 1, 1, color, s, x, y);
+            px(ctx, 21, -5, 1, 1, color, s, x, y);
+            px(ctx, 23, -4, 1, 1, color, s, x, y);
+        }
+    }
+    else if (mood === 'talking') {
+        // Sound waves from mouth area
+        const baseX = 26;
+        const baseY = 14;
+        for (let i = 0; i < 3; i++) {
+            const visible = ((frame + i) % 4) < 3;
+            if (!visible)
+                continue;
+            const dist = i * 2 + ((frame % 2) * 1);
+            const alpha = 1 - i * 0.3;
+            const c = dimColor(color.startsWith('rgb') ? '#58a6ff' : color, alpha);
+            px(ctx, baseX + dist, baseY - 1, 1, 1, c, s, x, y);
+            px(ctx, baseX + dist + 1, baseY, 1, 1, c, s, x, y);
+            px(ctx, baseX + dist, baseY + 1, 1, 1, c, s, x, y);
+        }
+    }
 }
 // ─── Mood Particles ────────────────────────────────────────────
 /**

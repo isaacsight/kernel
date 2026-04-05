@@ -12,7 +12,10 @@ import { join } from 'node:path'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { createCanvas } from 'canvas'
 import WebSocket from 'ws'
-import { drawRobot, drawMoodParticles, drawHat, drawPet, drawBuddyCompanion, type HatType, type PetType, type PetState } from './sprite-engine.js'
+import { drawRobot, drawGorilla, drawMoodParticles, drawGorillaParticles, drawHat, drawPet, drawBuddyCompanion, type HatType, type PetType, type PetState } from './sprite-engine.js'
+
+// Character selection — switch between robot and gorilla
+let characterType: 'robot' | 'gorilla' = 'gorilla'  // default to new gorilla character
 import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings, unlockableHats, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
 import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderParticles, tickParticlesPBD, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, triggerDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, renderAnimatedWater, renderLavaFlow, buildParallaxLayers, renderParallaxLayers, tickGrowingPlants, renderGrowingPlants, createRadianceGrid, updateRadianceGrid, renderRadianceOverlay, renderSubsurfaceGlow, buildSubsurfacePanels, createFrameCache, shouldRenderLayer, cacheLayer, drawCachedLayer, renderVolumetricFog, getFogParams, cyclePalette, computeAnimationParams, type Particle as RenderParticle, type GrowingPlant, type ParallaxLayer, type PostProcessOptions, type RadianceGrid, type FrameCache, type AnimationParams } from './render-engine.js'
@@ -2516,8 +2519,12 @@ function renderBootFrame(bootFrame: number): Buffer {
     ctx.font = 'bold 28px "Courier New", monospace'
     ctx.fillText('K : B O T   L I V E', 40, 40)
 
-    // Robot
-    drawRobot(ctx, 80, 90, 10, 'idle', bootFrame)
+    // Character (robot or gorilla)
+    if (characterType === 'gorilla') {
+      drawGorilla(ctx, 80, 90, 10, 'idle', bootFrame)
+    } else {
+      drawRobot(ctx, 80, 90, 10, 'idle', bootFrame)
+    }
 
     ctx.restore()
   }
@@ -2904,14 +2911,24 @@ function renderFrame(): Buffer {
     ctx.save()
     ctx.globalAlpha = 0.3
     ctx.globalCompositeOperation = 'lighter'
-    drawRobot(ctx, robotScreenX - offset, robotScreenY, robotScale, charState.mood, animFrame, [255, 50, 50], weatherType, isWalking, charState.walkPhase)
-    drawRobot(ctx, robotScreenX + offset, robotScreenY, robotScale, charState.mood, animFrame, [50, 50, 255], weatherType, isWalking, charState.walkPhase)
+    if (characterType === 'gorilla') {
+      drawGorilla(ctx, robotScreenX - offset, robotScreenY, robotScale, charState.mood, animFrame, [255, 50, 50])
+      drawGorilla(ctx, robotScreenX + offset, robotScreenY, robotScale, charState.mood, animFrame, [50, 50, 255])
+    } else {
+      drawRobot(ctx, robotScreenX - offset, robotScreenY, robotScale, charState.mood, animFrame, [255, 50, 50], weatherType, isWalking, charState.walkPhase)
+      drawRobot(ctx, robotScreenX + offset, robotScreenY, robotScale, charState.mood, animFrame, [50, 50, 255], weatherType, isWalking, charState.walkPhase)
+    }
     ctx.restore()
   }
 
   renderDamageFlash(ctx as any, robotScreenX, robotScreenY, robotScale)
-  drawRobot(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase)
-  drawMoodParticles(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame)
+  if (characterType === 'gorilla') {
+    drawGorilla(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame, undefined)
+    drawGorillaParticles(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame)
+  } else {
+    drawRobot(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase)
+    drawMoodParticles(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame)
+  }
 
   // Subsurface scattering
   {
