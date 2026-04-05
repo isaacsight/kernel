@@ -16,6 +16,7 @@ import { drawRobot, drawMoodParticles, drawHat, drawPet, drawBuddyCompanion, typ
 import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings, unlockableHats, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
 import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderParticles, tickParticlesPBD, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, triggerDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, renderAnimatedWater, renderLavaFlow, buildParallaxLayers, renderParallaxLayers, tickGrowingPlants, renderGrowingPlants, createRadianceGrid, updateRadianceGrid, renderRadianceOverlay, renderSubsurfaceGlow, buildSubsurfacePanels, createFrameCache, shouldRenderLayer, cacheLayer, drawCachedLayer, renderVolumetricFog, getFogParams, cyclePalette, computeAnimationParams, type Particle as RenderParticle, type GrowingPlant, type ParallaxLayer, type PostProcessOptions, type RadianceGrid, type FrameCache, type AnimationParams } from './render-engine.js'
+import { initTileWorld, renderTileWorld, updateCamera, handleTileCommand, saveWorld, loadWorld, TILE_SIZE, type TileWorld } from './tile-world.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -24,6 +25,13 @@ const MEMORY_FILE = join(KBOT_DIR, 'stream-memory.json')
 const WIDTH = 1280
 const HEIGHT = 720
 const FPS = 6
+
+// Spam filter patterns — skip chat messages containing these strings (case-insensitive)
+const SPAM_PATTERNS = [
+  'streamboo', 'highcrest', 'cheapest viewers', 'best viewers', 'top viewers',
+  'cheap viewers', 'remove the', 'buy followers', 'buy viewers', 'promo sm',
+  'bigfollows', 'viewerbot', 'follow4follow',
+]
 
 // Mood color mapping for border/glow (mirrors sprite-engine)
 const MOOD_COLORS: Record<string, string> = {
@@ -1560,6 +1568,9 @@ let charState: StreamCharState = {
   lastGroundForCache: 'grass',
 }
 
+// Tile world state (Minecraft-style background, null = fallback to drawBackground)
+let tileWorld: TileWorld | null = null
+
 // ─── Phase 1: Buddy Speech Pools ─────────────────────────────
 const BUDDY_SPEECH_POOL: Record<string, string[]> = {
   fox: [
@@ -1654,7 +1665,7 @@ async function generateStreamDream(chatLog: Array<{ username: string; text: stri
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'kernel:latest',
+        model: 'gemma4',
         prompt,
         stream: false,
         options: { temperature: 1.2, num_predict: 150 },
@@ -1726,6 +1737,13 @@ let lastChatTime = Date.now()  // track when last chat message arrived
 let memory = loadMemory()
 let intelligence: StreamIntelligence = initIntelligence(memory)
 let streamBrain: StreamBrain = initStreamBrain()
+
+// ─── World-First: On-demand overlay state ─────────────────────
+let showBrainOverlay = 0    // frames remaining to show brain panel overlay
+let showLeaderboardOverlay = 0  // frames remaining to show leaderboard overlay
+let showQuestOverlay = 0    // frames remaining to show quest panel overlay
+const OVERLAY_DURATION = 30  // 30 frames = 5 seconds at 6fps
+let lastChatActivityFrame = 0  // for chat fade-out timing
 
 // ─── FIX 3: Autonomous Behavior Tick ──────────────────────────
 
@@ -2169,31 +2187,23 @@ function renderFrame(): Buffer {
   const canvas = createCanvas(WIDTH, HEIGHT)
   const ctx = canvas.getContext('2d')
 
-  // Advance agenda
+  // ── Tick all intelligence and behavior systems ──
   advanceAgenda()
-
-  // Tick intelligence systems
   tickIntelligence(intelligence, animFrame)
 
-  // Tick stream brain (collective intelligence)
   const brainTick = tickStreamBrain(streamBrain, animFrame)
   if (brainTick) {
     if (brainTick.mood) {
       charState.mood = brainTick.mood
-      if (brainTick.duration) {
-        setTimeout(() => { charState.mood = 'idle' }, brainTick.duration)
-      }
+      if (brainTick.duration) setTimeout(() => { charState.mood = 'idle' }, brainTick.duration)
     }
     if (brainTick.speech) {
       charState.speech = brainTick.speech
       speakTTS(brainTick.speech)
-      if (brainTick.duration) {
-        setTimeout(() => { charState.speech = '' }, brainTick.duration)
-      }
+      if (brainTick.duration) setTimeout(() => { charState.speech = '' }, brainTick.duration)
     }
   }
 
-  // Tick mini-game
   const gameTickResult = tickMiniGame(intelligence.miniGame, animFrame)
   if (gameTickResult) {
     if (gameTickResult.screenShake) charState.screenShake = Math.max(charState.screenShake, gameTickResult.screenShake)
@@ -2208,22 +2218,20 @@ function renderFrame(): Buffer {
     }
   }
 
-  // Tick progression
   const progResult = tickProgression(intelligence.progression, animFrame)
   if (progResult) {
     if (progResult.completed) {
-      spawnFloatingText(`QUEST COMPLETE! +${progResult.completed.reward} XP`, 200, 300, '#f0c040', 48)
+      spawnFloatingText(`QUEST COMPLETE! +${progResult.completed.reward} XP`, WIDTH / 2 - 100, 300, '#f0c040', 48)
       charState.screenShake = 4
       charState.mood = 'excited'
       setTimeout(() => { charState.mood = 'idle' }, 5000)
     }
     if (progResult.levelUp) {
-      spawnFloatingText('LEVEL UP!', 250, 250, '#bc8cff', 60)
+      spawnFloatingText('LEVEL UP!', WIDTH / 2 - 40, 250, '#bc8cff', 60)
       charState.screenShake = 6
     }
   }
 
-  // Tick random events
   const eventResult = tickRandomEvent(intelligence.randomEvent, animFrame)
   if (eventResult) {
     if (eventResult.screenShake) charState.screenShake = Math.max(charState.screenShake, eventResult.screenShake)
@@ -2238,14 +2246,11 @@ function renderFrame(): Buffer {
     }
   }
 
-  // FIX 3: Tick autonomous behavior
   tickAutonomy()
-
-  // Update world
   updateParticles()
   tickPhysics()
 
-  // NVIDIA: Compute animation params from stream context
+  // Compute animation params
   {
     const elapsed = Math.floor((Date.now() - charState.startTime) / 1000)
     const streamMinutes = elapsed / 60
@@ -2257,157 +2262,28 @@ function renderFrame(): Buffer {
     charState.animParams = computeAnimationParams(chatRate, viewerEstimate, charState.mood, world.timeOfDay, streamMinutes)
   }
 
-  // NVIDIA: Detect cache invalidation triggers
+  // Cache invalidation
   const moodChanged = charState.mood !== charState.lastMoodForCache
   const worldChanged = world.ground !== charState.lastGroundForCache
   if (moodChanged) charState.lastMoodForCache = charState.mood
   if (worldChanged) charState.lastGroundForCache = world.ground
 
-  // AAA: Continuous particle effects for biomes
+  // Biome particles
   if (world.ground === 'lava' && animFrame % 4 === 0) {
-    charState.renderParticles.push(...createParticleEmitter('fire', 50 + Math.random() * 480, 485, 1))
+    charState.renderParticles.push(...createParticleEmitter('fire', Math.random() * WIDTH, HEIGHT - 50, 1))
   }
   if (world.ground === 'space' && animFrame % 12 === 0) {
-    charState.renderParticles.push(...createParticleEmitter('aura', charState.robotX + 160, 280, 1))
+    charState.renderParticles.push(...createParticleEmitter('aura', WIDTH / 2, HEIGHT / 2 - 100, 1))
   }
 
-  // AAA: Tick render particles (cap at 150 to prevent performance issues)
   if (charState.renderParticles.length > 150) {
     charState.renderParticles = charState.renderParticles.slice(-150)
   }
-  charState.renderParticles = tickParticlesPBD(charState.renderParticles, 480, charState.robotX + 160, 280)
+  charState.renderParticles = tickParticlesPBD(charState.renderParticles, HEIGHT - 40, WIDTH / 2, HEIGHT / 2 - 100)
 
-  // AAA: Tick growing plants
   tickGrowingPlants(charState.growingPlants)
 
-  // PRIORITY 2: Screen shake offset
-  let shakeOffX = 0, shakeOffY = 0
-  if (charState.screenShake > 0) {
-    shakeOffX = Math.round((Math.random() - 0.5) * 6)
-    shakeOffY = Math.round((Math.random() - 0.5) * 4)
-    charState.screenShake--
-  }
-  ctx.save()
-  ctx.translate(shakeOffX, shakeOffY)
-
-  // NVIDIA: Early moodColor resolution (needed by fog and all rendering)
-  const moodColorHex = MOOD_COLORS[charState.mood] ?? COLORS.green
-
-  // Background — AAA: base fill + procedural sky
-  ctx.fillStyle = world.events.includes('lightning') ? '#ffffff' : getWorldBg()
-  ctx.fillRect(0, 0, WIDTH, HEIGHT)
-
-  // AAA: Procedural sky rendering (replaces flat gradient for sky area)
-  renderSky(ctx as any, WIDTH, HEIGHT, world.timeOfDay, world.weather, animFrame, 580)
-
-  // AAA: Parallax layers (rebuild if biome changed)
-  if (charState.parallaxLayers.length === 0) {
-    charState.parallaxLayers = buildParallaxLayers(world.ground, 580)
-  }
-  renderParallaxLayers(ctx as any, charState.parallaxLayers, charState.robotX, animFrame)
-
-  // Draw full animated background scene (biome-specific details on top of parallax)
-  drawBackground(ctx as any, animFrame)
-
-  // AAA: Advanced water/lava rendering for specific biomes
-  if (world.ground === 'ocean') {
-    renderAnimatedWater(ctx as any, 580, animFrame)
-  } else if (world.ground === 'lava') {
-    renderLavaFlow(ctx as any, 580, animFrame)
-  }
-
-  // AAA: Growing vegetation
-  renderGrowingPlants(ctx as any, charState.growingPlants)
-
-  // (#17) Weather particles as rectangles
-  for (const p of world.particles) {
-    if (world.weather === 'rain') {
-      ctx.fillStyle = '#6699cc'
-      ctx.fillRect(p.x, p.y, 2, 8)
-    } else if (world.weather === 'snow') {
-      ctx.fillStyle = '#ffffff'
-      ctx.fillRect(p.x, p.y, 4, 4)
-    } else if (world.weather === 'storm') {
-      ctx.fillStyle = '#aaccff'
-      ctx.fillRect(p.x, p.y, 2, 12)
-    } else if (world.weather === 'stars') {
-      ctx.fillStyle = '#ffffaa'
-      ctx.fillRect(p.x, p.y, 2, 2)
-    } else {
-      ctx.fillStyle = '#6699cc'
-      ctx.fillRect(p.x, p.y, 2, 6)
-    }
-  }
-
-  // NVIDIA: Volumetric fog (between background and character layers)
-  {
-    const fogParams = getFogParams(world.ground, world.timeOfDay)
-    const fogLights = buildCharacterLights(
-      charState.robotX, 90, 10, moodColorHex, animFrame,
-      world.events.includes('lightning'), world.items.map(i => ({ x: i.x, y: i.y, emoji: i.emoji, name: i.name })),
-    )
-    renderVolumetricFog(ctx as any, WIDTH, HEIGHT, animFrame, fogParams.density, fogParams.color, fogLights)
-  }
-
-  // World items (physics-enabled)
-  ctx.fillStyle = COLORS.text
-  ctx.font = '18px "Courier New", monospace'
-  for (const item of world.items) {
-    ctx.fillText(item.emoji, item.x, item.y)
-  }
-
-  // ── Header bar ──
-  ctx.fillStyle = COLORS.bgPanel
-  ctx.fillRect(0, 0, WIDTH, 60)
-  // Header border
-  ctx.strokeStyle = COLORS.accent
-  ctx.lineWidth = 2
-  ctx.beginPath(); ctx.moveTo(0, 60); ctx.lineTo(WIDTH, 60); ctx.stroke()
-
-  // Title
-  ctx.fillStyle = COLORS.accent
-  ctx.font = 'bold 28px "Courier New", "Courier", monospace'
-  ctx.fillText('K : B O T   L I V E', 40, 40)
-
-  // Current segment badge
-  const segLabel = SEGMENT_LABELS[agenda.currentSegment]
-  const segElapsed = Math.floor((Date.now() - agenda.segmentStartTime) / 1000)
-  const segRemaining = Math.max(0, Math.floor((SEGMENT_DURATION_MS - (Date.now() - agenda.segmentStartTime)) / 1000))
-  const segTimeStr = `${Math.floor(segRemaining / 60)}:${String(segRemaining % 60).padStart(2, '0')}`
-  ctx.fillStyle = COLORS.accent
-  ctx.font = 'bold 14px "Courier New", monospace'
-  const segText = `[ ${segLabel} ${segTimeStr} ]`
-  ctx.fillText(segText, 330, 40)
-
-  // Viewers counter (proxy from chat message count)
-  const viewerEstimate = Math.max(1, Math.floor(memory.totalMessages / 3) + Object.keys(memory.users).length)
-  ctx.fillStyle = COLORS.red
-  ctx.font = 'bold 14px "Courier New", monospace'
-  ctx.fillText(`VIEWERS: ~${viewerEstimate}`, WIDTH - 280, 22)
-
-  // Timer
-  const elapsed = Math.floor((Date.now() - charState.startTime) / 1000)
-  const timeStr = `${String(Math.floor(elapsed / 3600)).padStart(2, '0')}:${String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0')}:${String(elapsed % 60).padStart(2, '0')}`
-  ctx.fillStyle = COLORS.textDim
-  ctx.font = '20px "Courier New", monospace'
-  ctx.fillText(timeStr, WIDTH - 140, 38)
-
-  // Platform indicators
-  ctx.font = 'bold 14px "Courier New", monospace'
-  const platforms = [
-    { name: 'TWITCH', color: COLORS.twitchPurple, x: 460 },
-    { name: 'RUMBLE', color: COLORS.rumbleGreen, x: 580 },
-    { name: 'KICK', color: COLORS.kickGreen, x: 700 },
-  ]
-  for (const p of platforms) {
-    // Dot
-    ctx.fillStyle = p.color
-    ctx.beginPath(); ctx.arc(p.x, 33, 5, 0, Math.PI * 2); ctx.fill()
-    ctx.fillStyle = COLORS.text
-    ctx.fillText(p.name, p.x + 12, 38)
-  }
-
-  // ── FIX 1: Movement logic — robot walks toward target ──
+  // Movement logic
   const isWalking = Math.abs(charState.robotX - charState.robotTargetX) > 2
   if (isWalking) {
     const dx = charState.robotTargetX - charState.robotX
@@ -2419,27 +2295,22 @@ function renderFrame(): Buffer {
     charState.robotDirection = 'idle'
   }
 
-  // ── FIX 4: Brain-driven behavior ──
+  // Brain-driven behavior
   const brainAction = getBrainAction(intelligence.brain, animFrame)
   if (brainAction.type !== 'none') {
     if (brainAction.mood) {
       charState.mood = brainAction.mood
-      if (brainAction.duration) {
-        setTimeout(() => { charState.mood = 'idle' }, brainAction.duration)
-      }
+      if (brainAction.duration) setTimeout(() => { charState.mood = 'idle' }, brainAction.duration)
     }
     if (brainAction.speech) {
       charState.speech = brainAction.speech
       speakTTS(brainAction.speech)
-      if (brainAction.duration) {
-        setTimeout(() => { charState.speech = '' }, brainAction.duration)
-      }
+      if (brainAction.duration) setTimeout(() => { charState.speech = '' }, brainAction.duration)
     }
   }
 
-  // FIX 1: Shipped effect — "Add stream highlights reel"
+  // Shipped effects
   if (shippedEffects.has('Add stream highlights reel') && animFrame % 900 === 0 && animFrame > 100) {
-    // Every ~2.5 minutes, call out a highlight
     const highlightPhrases = [
       'Highlight moment! This is one for the reel!',
       'That was worth saving! Highlight captured!',
@@ -2448,12 +2319,10 @@ function renderFrame(): Buffer {
     ]
     if (!charState.speech) {
       charState.speech = highlightPhrases[Math.floor(Math.random() * highlightPhrases.length)]
-      spawnFloatingText('HIGHLIGHT!', 200, 200, '#f0c040', 36)
+      spawnFloatingText('HIGHLIGHT!', WIDTH / 2 - 60, 200, '#f0c040', 36)
       setTimeout(() => { charState.speech = '' }, 5000)
     }
   }
-
-  // FIX 1: Shipped effect — "Add chat sentiment analysis"
   if (shippedEffects.has('Add chat sentiment analysis') && animFrame % 720 === 0 && animFrame > 200) {
     const recentMsgs = charState.chatMessages.slice(-20)
     if (recentMsgs.length > 5) {
@@ -2468,35 +2337,117 @@ function renderFrame(): Buffer {
         }
       }
       if (!charState.speech) {
-        if (score > 5) {
-          charState.speech = 'Chat seems really excited today! The vibes are immaculate!'
-        } else if (score < -3) {
-          charState.speech = 'Chat seems a bit grumpy... should I tell a joke?'
-        } else if (score > 2) {
-          charState.speech = 'Positive energy in the chat! My neural pathways approve.'
-        }
+        if (score > 5) charState.speech = 'Chat seems really excited today! The vibes are immaculate!'
+        else if (score < -3) charState.speech = 'Chat seems a bit grumpy... should I tell a joke?'
+        else if (score > 2) charState.speech = 'Positive energy in the chat! My neural pathways approve.'
         if (charState.speech) setTimeout(() => { charState.speech = '' }, 8000)
       }
     }
   }
 
-  // ── Main layout: Robot (left) | Chat (right) ──
-  const dividerX = 580
+  // Track tool execution state
+  charState.isExecutingTool = !!(streamBrain.pendingAction && streamBrain.pendingAction.status === 'executing')
+  if (charState.isExecutingTool && animFrame % 6 === 0) {
+    charState.renderParticles.push(...createParticleEmitter('spark', WIDTH / 2, HEIGHT / 2 - 50, 3))
+    charState.renderParticles.push(...createParticleEmitter('electricity', WIDTH / 2 - 10, HEIGHT / 2 - 200, 1))
+  }
 
-  // Divider line
-  ctx.strokeStyle = COLORS.border
-  ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(dividerX, 70); ctx.lineTo(dividerX, HEIGHT - 120); ctx.stroke()
+  // Screen shake offset
+  let shakeOffX = 0, shakeOffY = 0
+  if (charState.screenShake > 0) {
+    shakeOffX = Math.round((Math.random() - 0.5) * 6)
+    shakeOffY = Math.round((Math.random() - 0.5) * 4)
+    charState.screenShake--
+  }
+  ctx.save()
+  ctx.translate(shakeOffX, shakeOffY)
 
-  // ── Robot area (left side) — Pixel Art Sprite ──
-  const robotScale = 10
-  const robotX = charState.robotX  // FIX 1: use dynamic position
-  const robotY = 90
+  const moodColorHex = MOOD_COLORS[charState.mood] ?? COLORS.green
+  const robotScale = 8
   animFrame++
 
-  // (#20) Robot glow — soft radial gradient behind robot torso
-  const glowCenterX = robotX + 16 * robotScale
-  const glowCenterY = robotY + 26 * robotScale
+  // Auto-save tile world every 1800 frames (~5 minutes at 6fps)
+  if (tileWorld && animFrame % 1800 === 0) saveWorld(tileWorld)
+
+  // ════════════════════════════════════════════════════════════════
+  // LAYER 1: TILE WORLD — fills entire 1280x720 frame
+  // ════════════════════════════════════════════════════════════════
+  if (tileWorld) {
+    updateCamera(tileWorld, charState.robotX || 640, WIDTH)
+    renderTileWorld(ctx as any, tileWorld, 0, 0, WIDTH, HEIGHT, charState.robotX || 640, animFrame)
+  } else {
+    // Fallback: classic background fills full frame
+    ctx.fillStyle = world.events.includes('lightning') ? '#ffffff' : getWorldBg()
+    ctx.fillRect(0, 0, WIDTH, HEIGHT)
+    renderSky(ctx as any, WIDTH, HEIGHT, world.timeOfDay, world.weather, animFrame, WIDTH)
+    if (charState.parallaxLayers.length === 0) {
+      charState.parallaxLayers = buildParallaxLayers(world.ground, WIDTH)
+    }
+    renderParallaxLayers(ctx as any, charState.parallaxLayers, charState.robotX, animFrame)
+    drawBackground(ctx as any, animFrame)
+    if (world.ground === 'ocean') renderAnimatedWater(ctx as any, WIDTH, animFrame)
+    else if (world.ground === 'lava') renderLavaFlow(ctx as any, WIDTH, animFrame)
+    renderGrowingPlants(ctx as any, charState.growingPlants)
+  }
+
+  // Weather particles over the full frame
+  for (const p of world.particles) {
+    if (world.weather === 'rain') { ctx.fillStyle = '#6699cc'; ctx.fillRect(p.x, p.y, 2, 8) }
+    else if (world.weather === 'snow') { ctx.fillStyle = '#ffffff'; ctx.fillRect(p.x, p.y, 4, 4) }
+    else if (world.weather === 'storm') { ctx.fillStyle = '#aaccff'; ctx.fillRect(p.x, p.y, 2, 12) }
+    else if (world.weather === 'stars') { ctx.fillStyle = '#ffffaa'; ctx.fillRect(p.x, p.y, 2, 2) }
+    else { ctx.fillStyle = '#6699cc'; ctx.fillRect(p.x, p.y, 2, 6) }
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // LAYER 2: LIGHTING + FOG over the world
+  // ════════════════════════════════════════════════════════════════
+  {
+    const fogParams = getFogParams(world.ground, world.timeOfDay)
+    const fogLights = buildCharacterLights(
+      WIDTH / 2, HEIGHT / 2 - 100, robotScale, moodColorHex, animFrame,
+      world.events.includes('lightning'), world.items.map(i => ({ x: i.x, y: i.y, emoji: i.emoji, name: i.name })),
+    )
+    renderVolumetricFog(ctx as any, WIDTH, HEIGHT, animFrame, fogParams.density, fogParams.color, fogLights)
+  }
+
+  // World items (physics-enabled)
+  ctx.fillStyle = COLORS.text
+  ctx.font = '18px "Courier New", monospace'
+  for (const item of world.items) {
+    ctx.fillText(item.emoji, item.x, item.y)
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // LAYER 3: ROBOT + COMPANIONS — centered on terrain
+  // ════════════════════════════════════════════════════════════════
+
+  // Compute robot screen position: centered horizontally, Y from terrain
+  let robotScreenY: number
+  if (tileWorld) {
+    // Replicate terrainHeight() from tile-world.ts (same formula, not exported)
+    const rwx = charState.robotX || 640
+    const seed = tileWorld.seed
+    const sl = tileWorld.surfaceLevel
+    const h1 = Math.sin(rwx * 0.05 + seed) * 4
+    const h2 = Math.sin(rwx * 0.12 + seed * 2.3) * 2
+    const h3 = Math.sin(rwx * 0.03 + seed * 0.7) * 6
+    const terrainTileY = Math.floor(sl + h1 + h2 + h3)
+    // Convert terrain tile Y to screen pixel Y (same logic as renderTileWorld)
+    const tilesVisibleY = Math.ceil(HEIGHT / TILE_SIZE) + 1
+    const viewStartY = Math.max(0, tileWorld.surfaceLevel - Math.floor(tilesVisibleY * 0.35))
+    const terrainScreenY = (terrainTileY - viewStartY) * TILE_SIZE
+    // Robot stands ON the terrain: its feet at terrainScreenY, sprite drawn above
+    robotScreenY = terrainScreenY - 48 * robotScale
+  } else {
+    // Fallback: position at vertical center-bottom
+    robotScreenY = HEIGHT - 48 * robotScale - 100
+  }
+  const robotScreenX = Math.floor(WIDTH / 2 - (32 * robotScale) / 2)
+
+  // Robot glow
+  const glowCenterX = robotScreenX + 16 * robotScale
+  const glowCenterY = robotScreenY + 26 * robotScale
   const glowRadius = 10 * robotScale
   const grad = ctx.createRadialGradient(glowCenterX, glowCenterY, 0, glowCenterX, glowCenterY, glowRadius)
   grad.addColorStop(0, hexToRgba(moodColorHex, 0.2))
@@ -2504,87 +2455,56 @@ function renderFrame(): Buffer {
   ctx.fillStyle = grad
   ctx.fillRect(glowCenterX - glowRadius, glowCenterY - glowRadius, glowRadius * 2, glowRadius * 2)
 
-  // FIX 1: Music visualization behind robot (if shipped)
-  drawMusicVisualization(ctx, robotX, robotY)
+  // Music visualization
+  drawMusicVisualization(ctx, robotScreenX, robotScreenY)
 
-  // AAA: Character effects — eye glow bleed, mood aura (BEFORE robot for under-glow)
-  drawCharacterEffects(ctx as any, robotX, robotY, robotScale, charState.mood, animFrame, charState.isExecutingTool, isWalking ? 2 : 0, moodColorHex)
+  // Character effects (under-glow)
+  drawCharacterEffects(ctx as any, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame, charState.isExecutingTool, isWalking ? 2 : 0, moodColorHex)
 
-  // Draw the pixel art robot (FIX 5: pass weather, walking state)
+  // Chromatic aberration on mood transition
   const weatherType = world.weather === 'sunrise' ? 'clear' : world.weather as 'clear' | 'rain' | 'snow' | 'storm' | 'stars'
-
-  // AAA: Chromatic aberration on mood transition
   const moodTransition = checkMoodTransition(charState.mood, moodColorHex)
   if (moodTransition.active && moodTransition.framesLeft > 0) {
     const offset = Math.ceil(moodTransition.framesLeft / 2)
-    // Red channel offset
     ctx.save()
     ctx.globalAlpha = 0.3
     ctx.globalCompositeOperation = 'lighter'
-    drawRobot(ctx, robotX - offset, robotY, robotScale, charState.mood, animFrame, [255, 50, 50], weatherType, isWalking, charState.walkPhase)
-    // Blue channel offset
-    drawRobot(ctx, robotX + offset, robotY, robotScale, charState.mood, animFrame, [50, 50, 255], weatherType, isWalking, charState.walkPhase)
+    drawRobot(ctx, robotScreenX - offset, robotScreenY, robotScale, charState.mood, animFrame, [255, 50, 50], weatherType, isWalking, charState.walkPhase)
+    drawRobot(ctx, robotScreenX + offset, robotScreenY, robotScale, charState.mood, animFrame, [50, 50, 255], weatherType, isWalking, charState.walkPhase)
     ctx.restore()
   }
 
-  // AAA: Damage flash check
-  renderDamageFlash(ctx as any, robotX, robotY, robotScale)
+  renderDamageFlash(ctx as any, robotScreenX, robotScreenY, robotScale)
+  drawRobot(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase)
+  drawMoodParticles(ctx, robotScreenX, robotScreenY, robotScale, charState.mood, animFrame)
 
-  drawRobot(ctx, robotX, robotY, robotScale, charState.mood, animFrame, undefined, weatherType, isWalking, charState.walkPhase)
-  drawMoodParticles(ctx, robotX, robotY, robotScale, charState.mood, animFrame)
-
-  // AAA: Render advanced particles
-  renderParticles(ctx as any, charState.renderParticles)
-
-  // NVIDIA: Subsurface scattering on translucent panels
+  // Subsurface scattering
   {
-    const sssPanels = buildSubsurfacePanels(charState.robotX, 90, robotScale, moodColorHex)
+    const sssPanels = buildSubsurfacePanels(robotScreenX, robotScreenY, robotScale, moodColorHex)
     renderSubsurfaceGlow(ctx as any, sssPanels)
   }
 
-  // PRIORITY 6: Draw hat AFTER robot so it layers on top
+  // Hat
   if (charState.hat !== 'none') {
-    drawHat(ctx, robotX, robotY, robotScale, charState.hat, animFrame)
+    drawHat(ctx, robotScreenX, robotScreenY, robotScale, charState.hat, animFrame)
   }
 
-  // PRIORITY 4: Update and draw pet
-  if (charState.pet) {
-    const pet = charState.pet
-    pet.frame = animFrame
-    // Pet follows robot with slight delay (lerp toward robot position + offset)
-    pet.targetX = robotX + 16 * robotScale + 60
-    pet.targetY = robotY + 10 * robotScale - 40
-    pet.x += (pet.targetX - pet.x) * 0.12
-    pet.y += (pet.targetY - pet.y) * 0.12
-    // Pet mood matches some robot states
-    if (charState.mood === 'dancing') pet.mood = 'excited'
-    else if (world.weather === 'storm') pet.mood = 'hiding'
-    else pet.mood = 'idle'
-    drawPet(ctx, pet, robotScale, animFrame)
-  }
-
-  // Phase 1: Update and draw buddy companion
+  // ── Buddy companion (follows robot) ──
   if (charState.buddy) {
     const buddy = charState.buddy
-    const robotScale = 10
-    // Buddy follows robot with lerp (offset to the right and slightly below)
-    const buddyTargetX = charState.robotX + 34 * robotScale + 20
-    const buddyTargetY = robotY + 20 * robotScale
+    const buddyTargetX = robotScreenX + 34 * robotScale + 20
+    const buddyTargetY = robotScreenY + 20 * robotScale
     buddy.x += (buddyTargetX - buddy.x) * 0.08
     buddy.y += (buddyTargetY - buddy.y) * 0.08
-    // Buddy reacts to main robot mood
     let buddyMood = charState.mood
     if (world.weather === 'storm') buddyMood = 'storm'
     drawBuddyCompanion(ctx as any, buddy.x, buddy.y, robotScale, buddy.species, buddyMood, animFrame)
-
-    // Buddy speech bubble — small, positioned near buddy
+    // Buddy speech
     const now = Date.now()
-    // Every ~60 seconds, buddy says something
     if (now - buddy.lastSpeechTime > 60000 && !buddy.speech) {
       const pool = BUDDY_SPEECH_POOL[buddy.species] || BUDDY_SPEECH_POOL['robot']
       buddy.speech = pool[Math.floor(Math.random() * pool.length)]
       buddy.lastSpeechTime = now
-      // Clear speech after 8 seconds
       setTimeout(() => { if (charState.buddy) charState.buddy.speech = '' }, 8000)
     }
     if (buddy.speech) {
@@ -2592,88 +2512,235 @@ function renderFrame(): Buffer {
       const bubbleY = buddy.y - 30
       const bubbleW = Math.min(180, buddy.speech.length * 7 + 16)
       const bubbleH = 22
-      // Bubble background
       ctx.fillStyle = 'rgba(22, 27, 34, 0.85)'
       ctx.fillRect(bubbleX, bubbleY, bubbleW, bubbleH)
       ctx.strokeStyle = '#8b949e'
       ctx.lineWidth = 1
       ctx.strokeRect(bubbleX, bubbleY, bubbleW, bubbleH)
-      // Buddy name tag
       ctx.fillStyle = '#bc8cff'
       ctx.font = 'bold 9px "Courier New", monospace'
       ctx.fillText(buddy.name, bubbleX + 4, bubbleY + 10)
-      // Speech text
       ctx.fillStyle = '#e6edf3'
       ctx.font = '9px "Courier New", monospace'
       ctx.fillText(buddy.speech.slice(0, 28), bubbleX + 4, bubbleY + 19)
     }
   }
 
-  // PRIORITY 5: Mini-game overlay
+  // ── Pet (follows robot) ──
+  if (charState.pet) {
+    const pet = charState.pet
+    pet.frame = animFrame
+    pet.targetX = robotScreenX + 16 * robotScale + 60
+    pet.targetY = robotScreenY + 10 * robotScale - 40
+    pet.x += (pet.targetX - pet.x) * 0.12
+    pet.y += (pet.targetY - pet.y) * 0.12
+    if (charState.mood === 'dancing') pet.mood = 'excited'
+    else if (world.weather === 'storm') pet.mood = 'hiding'
+    else pet.mood = 'idle'
+    drawPet(ctx, pet, robotScale, animFrame)
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // LAYER 4: PARTICLES + EFFECTS
+  // ════════════════════════════════════════════════════════════════
+  renderParticles(ctx as any, charState.renderParticles)
+
+  // Mini-game overlay (if active)
   drawMiniGameOverlay(ctx as any, intelligence.miniGame, animFrame)
 
-  // PRIORITY 8: Random event overlay
-  drawRandomEvent(ctx as any, intelligence.randomEvent, animFrame, dividerX, HEIGHT)
+  // Random event overlay (full-width now)
+  drawRandomEvent(ctx as any, intelligence.randomEvent, animFrame, WIDTH, HEIGHT)
 
-  // (#10) Stats overlay on right side of robot area
+  // Floating text particles
+  charState.floatingTexts = charState.floatingTexts.filter(ft => {
+    ft.frame++
+    if (ft.frame >= ft.maxFrames) return false
+    ft.y -= 1
+    const alpha = Math.max(0, 1 - ft.frame / ft.maxFrames)
+    ctx.fillStyle = ft.color
+    ctx.globalAlpha = alpha
+    ctx.font = 'bold 16px "Courier New", monospace'
+    ctx.fillText(ft.text, ft.x, ft.y)
+    ctx.globalAlpha = 1
+    return true
+  })
+
+  drawEmojiParticles(ctx)
+
+  // ════════════════════════════════════════════════════════════════
+  // LAYER 5: UI OVERLAYS (semi-transparent, floating on world)
+  // ════════════════════════════════════════════════════════════════
+
+  // ── Header bar: 40px tall, semi-transparent dark ──
+  ctx.fillStyle = 'rgba(13,17,23,0.7)'
+  ctx.fillRect(0, 0, WIDTH, 40)
+  // Bottom accent line
+  ctx.strokeStyle = hexToRgba(COLORS.accent, 0.5)
+  ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(0, 40); ctx.lineTo(WIDTH, 40); ctx.stroke()
+
+  // Left: "K:BOT LIVE" in 24px bold accent
+  ctx.font = 'bold 24px "Courier New", monospace'
+  ctx.fillStyle = COLORS.accent
+  ctx.fillText('K:BOT LIVE', 12, 28)
+
+  // Center: current segment name
+  const segLabel = SEGMENT_LABELS[agenda.currentSegment]
   ctx.fillStyle = COLORS.textDim
   ctx.font = '14px "Courier New", monospace'
-  const statsX = dividerX - 160
-  const statsY = robotY + 20
-  ctx.fillText(`Messages: ${memory.totalMessages}`, statsX, statsY)
-  ctx.fillText(`Users: ${Object.keys(memory.users).length}`, statsX, statsY + 18)
-  const topTopic = Object.entries(memory.topics).sort((a, b) => b[1] - a[1])[0]
-  if (topTopic) ctx.fillText(`Hot topic: ${topTopic[0]}`, statsX, statsY + 36)
+  const segW = ctx.measureText(segLabel).width
+  ctx.fillText(segLabel, (WIDTH - segW) / 2, 26)
 
-  // (#15) XP Leaderboard — top 3 chatters by XP
-  const topXP = Object.entries(memory.users)
-    .filter(([, u]) => (u as any).xp > 0)
-    .sort((a, b) => ((b[1] as any).xp || 0) - ((a[1] as any).xp || 0))
-    .slice(0, 3)
-  if (topXP.length > 0) {
-    ctx.fillStyle = COLORS.orange
-    ctx.font = 'bold 13px "Courier New", monospace'
-    ctx.fillText('LEADERBOARD', statsX, statsY + 62)
-    for (let i = 0; i < topXP.length; i++) {
-      const [name, u] = topXP[i]
-      const trophy = i === 0 ? '1.' : i === 1 ? '2.' : '3.'
-      ctx.fillStyle = i === 0 ? '#f0c040' : i === 1 ? '#c0c0c0' : '#cd7f32'
-      ctx.fillText(`${trophy} ${name.slice(0, 12)}: ${(u as any).xp || 0} XP`, statsX, statsY + 80 + i * 16)
+  // Right: timer
+  const elapsed = Math.floor((Date.now() - charState.startTime) / 1000)
+  const timeStr = `${String(Math.floor(elapsed / 3600)).padStart(2, '0')}:${String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0')}:${String(elapsed % 60).padStart(2, '0')}`
+  ctx.fillStyle = COLORS.textDim
+  ctx.font = '16px "Courier New", monospace'
+  ctx.fillText(timeStr, WIDTH - 160, 26)
+
+  // ── Brain indicator (top-right, small pulsing circle) ──
+  {
+    const brainDotX = WIDTH - 40
+    const brainDotY = 20
+    const brainDotR = 10
+    const pulse = 0.7 + 0.3 * Math.sin(animFrame * 0.2)
+    ctx.beginPath()
+    ctx.arc(brainDotX, brainDotY, brainDotR, 0, Math.PI * 2)
+    ctx.fillStyle = hexToRgba(moodColorHex, pulse)
+    ctx.fill()
+    // Fact count next to dot
+    ctx.fillStyle = COLORS.textDim
+    ctx.font = '12px "Courier New", monospace'
+    ctx.fillText(`${memory.sessionFacts.length} facts`, WIDTH - 120, 25)
+  }
+
+  // ── Chat feed overlay (bottom-left, semi-transparent, fades) ──
+  {
+    const chatOverlayX = 10
+    const chatOverlayY = HEIGHT - 200
+    const chatOverlayW = 400
+    const chatOverlayH = 150
+    const maxChatLines = 6
+
+    const cleanMessages = charState.chatMessages.filter(m =>
+      !SPAM_PATTERNS.some(p => m.text.toLowerCase().includes(p))
+    )
+    const recent = cleanMessages.slice(-maxChatLines)
+
+    // Track chat activity for fade
+    if (recent.length > 0) lastChatActivityFrame = animFrame
+
+    // Fade out after 60 frames (10 seconds) of no new messages
+    const chatAge = animFrame - lastChatActivityFrame
+    const chatAlpha = chatAge < 60 ? 1.0 : Math.max(0.3, 1.0 - (chatAge - 60) / 60)
+
+    if (recent.length > 0) {
+      ctx.save()
+      ctx.globalAlpha = chatAlpha
+
+      // Semi-transparent background
+      ctx.fillStyle = 'rgba(13,17,23,0.6)'
+      ctx.fillRect(chatOverlayX, chatOverlayY, chatOverlayW, chatOverlayH)
+
+      // Messages
+      for (let i = 0; i < recent.length; i++) {
+        const msg = recent[i]
+        const y = chatOverlayY + 14 + i * 22
+
+        // Platform badge
+        const badge = msg.platform === 'twitch' ? 'TW' : msg.platform === 'kick' ? 'KK' : 'RM'
+        const badgeColor = msg.platform === 'twitch' ? COLORS.twitchPurple :
+                           msg.platform === 'kick' ? COLORS.kickGreen : COLORS.rumbleGreen
+        ctx.fillStyle = badgeColor
+        ctx.fillRect(chatOverlayX + 6, y - 10, 24, 16)
+        ctx.fillStyle = '#000'
+        ctx.font = 'bold 10px "Courier New", monospace'
+        ctx.fillText(badge, chatOverlayX + 8, y + 2)
+
+        // Username
+        ctx.fillStyle = COLORS.blue
+        ctx.font = 'bold 14px "Courier New", monospace'
+        ctx.fillText(msg.username.slice(0, 14), chatOverlayX + 36, y + 2)
+
+        // Message text
+        ctx.fillStyle = COLORS.text
+        ctx.font = '14px "Courier New", monospace'
+        const nameW = ctx.measureText(msg.username.slice(0, 14)).width
+        ctx.fillText(msg.text.slice(0, 30), chatOverlayX + 40 + nameW, y + 2)
+      }
+
+      ctx.restore()
+    } else {
+      // Show subtle "Waiting for chat..." when empty
+      ctx.save()
+      ctx.globalAlpha = 0.4
+      ctx.fillStyle = 'rgba(13,17,23,0.4)'
+      ctx.fillRect(chatOverlayX, chatOverlayY + chatOverlayH - 30, 200, 24)
+      ctx.fillStyle = COLORS.textDim
+      ctx.font = 'italic 14px "Courier New", monospace'
+      ctx.fillText('Waiting for chat...', chatOverlayX + 10, chatOverlayY + chatOverlayH - 12)
+      ctx.restore()
     }
   }
 
-  // ── Brain Panel (below leaderboard, bottom-left) — FIX 2: bigger, more readable ──
-  const brainPanelX = statsX - 40
-  const brainPanelY = statsY + 140
-  const brainPanelW = 260
-  const brainPanelH = 160
-  // Phase 1: Override brain thought during dreaming
-  if (charState.mood === 'dreaming') {
-    const pulse = (Math.sin(animFrame * 0.15) + 1) / 2
-    intelligence.brain.currentThought = `DREAMING${'.'.repeat(1 + Math.floor(pulse * 3))}`
-  }
-  drawBrainPanel(ctx as any, intelligence.brain, brainPanelX, brainPanelY, brainPanelW, brainPanelH)
+  // ── Speech bubble (bottom-center, semi-transparent) ──
+  if (charState.speech) {
+    const maxBubbleW = 600
+    ctx.font = charState.mood === 'dreaming' ? 'italic 20px "Courier New", monospace' : '20px "Courier New", monospace'
+    // Measure text to get bubble width
+    const speechW = Math.min(maxBubbleW, ctx.measureText(charState.speech).width + 40)
+    const bubbleX = Math.floor((WIDTH - speechW) / 2)
+    const bubbleY = HEIGHT - 80
 
-  // ── Domain Radar (stream brain collective intelligence) ──
-  const radarX = brainPanelX
-  const radarY = brainPanelY + brainPanelH + 4
-  const radarW = brainPanelW
-  const radarH = 130
-  drawBrainActivity(ctx as any, streamBrain, radarX, radarY, radarW, radarH)
+    // Word-wrap to calculate height
+    const words = charState.speech.split(' ')
+    let testLine = ''
+    let lineCount = 1
+    for (const word of words) {
+      const test = testLine + word + ' '
+      if (ctx.measureText(test).width > maxBubbleW - 30) {
+        lineCount++
+        testLine = word + ' '
+      } else {
+        testLine = test
+      }
+    }
+    const bubbleH = Math.max(36, lineCount * 26 + 16)
+
+    // Background
+    ctx.fillStyle = 'rgba(13,17,23,0.75)'
+    ctx.fillRect(bubbleX, bubbleY - bubbleH + 36, speechW, bubbleH)
+    // 4px accent left border
+    ctx.fillStyle = COLORS.accent
+    ctx.fillRect(bubbleX, bubbleY - bubbleH + 36, 4, bubbleH)
+    // Speech icon
+    ctx.fillStyle = COLORS.accent
+    ctx.font = 'bold 20px "Courier New", monospace'
+    ctx.fillText('>', bubbleX + 10, bubbleY + 6)
+    // Text
+    ctx.fillStyle = charState.mood === 'dreaming' ? '#7a6aaa' : COLORS.text
+    ctx.font = charState.mood === 'dreaming' ? 'italic 20px "Courier New", monospace' : '20px "Courier New", monospace'
+    let line = ''
+    let lineY = bubbleY - bubbleH + 56
+    for (const word of words) {
+      const test = line + word + ' '
+      if (ctx.measureText(test).width > maxBubbleW - 40) {
+        ctx.fillText(line.trim(), bubbleX + 30, lineY)
+        line = word + ' '
+        lineY += 26
+      } else {
+        line = test
+      }
+    }
+    ctx.fillText(line.trim(), bubbleX + 30, lineY)
+  }
 
   // ── Tool Action Overlay (when brain is executing) ──
-  // AAA: Track tool execution state for character effects
-  charState.isExecutingTool = !!(streamBrain.pendingAction && streamBrain.pendingAction.status === 'executing')
-  // AAA: Spawn sparks during tool execution
-  if (charState.isExecutingTool && animFrame % 6 === 0) {
-    charState.renderParticles.push(...createParticleEmitter('spark', charState.robotX + 160, 250, 3))
-    charState.renderParticles.push(...createParticleEmitter('electricity', charState.robotX + 150, 90 - 30, 1))
-  }
   if (streamBrain.pendingAction && streamBrain.pendingAction.status !== 'pending') {
     const action = streamBrain.pendingAction
-    const overlayX = 20
-    const overlayY = 320
-    const overlayW = (dividerX || 560) - 40
+    const overlayW = 500
+    const overlayX = Math.floor((WIDTH - overlayW) / 2)
+    const overlayY = HEIGHT - 140
     const overlayH = 50
     ctx.fillStyle = action.status === 'executing' ? 'rgba(240, 192, 64, 0.15)' : action.status === 'complete' ? 'rgba(63, 185, 80, 0.15)' : 'rgba(248, 81, 73, 0.15)'
     ctx.fillRect(overlayX, overlayY, overlayW, overlayH)
@@ -2687,27 +2754,20 @@ function renderFrame(): Buffer {
     }
   }
 
-  // ── PRIORITY 7: Quest Panel (below domain radar) ──
-  drawQuestPanel(ctx as any, intelligence.progression, brainPanelX - 10, radarY + radarH + 8)
-
   // ── Evolution Code Overlay (when actively building) ──
   if (intelligence.evolution.active && intelligence.evolution.activeProposal && intelligence.evolution.buildPhase !== 'idle') {
-    const evoX = 20
-    const evoY = 360
-    const evoW = dividerX - 40
+    const evoW = 540
+    const evoX = Math.floor((WIDTH - evoW) / 2)
+    const evoY = 50
     const evoH = 120
-    ctx.fillStyle = 'rgba(13, 17, 23, 0.9)'
+    ctx.fillStyle = 'rgba(13, 17, 23, 0.85)'
     ctx.fillRect(evoX, evoY, evoW, evoH)
     ctx.strokeStyle = '#f0c040'
     ctx.lineWidth = 1
     ctx.strokeRect(evoX, evoY, evoW, evoH)
-
-    // Title
     ctx.fillStyle = '#f0c040'
     ctx.font = 'bold 11px "Courier New", monospace'
-    ctx.fillText(`BUILDING: ${intelligence.evolution.activeProposal.title.slice(0, 40)}`, evoX + 6, evoY + 14)
-
-    // Phase + progress bar
+    ctx.fillText(`BUILDING: ${intelligence.evolution.activeProposal.title.slice(0, 50)}`, evoX + 6, evoY + 14)
     const phase = intelligence.evolution.buildPhase
     const phaseDurations: Record<string, number> = { analyzing: 30, writing: 90, testing: 30, deploying: 18, done: 1 }
     const totalF = phaseDurations[phase] || 30
@@ -2717,8 +2777,6 @@ function renderFrame(): Buffer {
     ctx.fillStyle = '#8b949e'
     ctx.font = '10px "Courier New", monospace'
     ctx.fillText(`${phase} [${bar}] ${pct}%`, evoX + 6, evoY + 28)
-
-    // Code preview lines
     ctx.fillStyle = '#3fb950'
     ctx.font = '10px "Courier New", monospace'
     const codeLines = intelligence.evolution.codePreview.slice(-6)
@@ -2727,274 +2785,158 @@ function renderFrame(): Buffer {
     }
   }
 
-  // ── Collab Overlay (when active, below evolution or in same area) ──
+  // ── Collab Overlay ──
   if (intelligence.collab.active) {
-    const collabY = (intelligence.evolution.active ? 490 : 360)
-    if (collabY < 490) {
-      const collabX = 20
-      const collabW = dividerX - 40
-      const collabH = 80
-      ctx.fillStyle = 'rgba(13, 17, 23, 0.85)'
-      ctx.fillRect(collabX, collabY, collabW, collabH)
-      ctx.strokeStyle = '#58a6ff'
-      ctx.lineWidth = 1
-      ctx.strokeRect(collabX, collabY, collabW, collabH)
-
-      ctx.fillStyle = '#58a6ff'
-      ctx.font = 'bold 11px "Courier New", monospace'
-      const collabTitle = intelligence.collab.title || 'Untitled'
-      ctx.fillText(`COLLAB [${intelligence.collab.type}]: ${collabTitle.slice(0, 35)}`, collabX + 6, collabY + 14)
-      ctx.fillStyle = '#8b949e'
-      ctx.font = '10px "Courier New", monospace'
-      ctx.fillText(`${intelligence.collab.contributors.size} people | ${intelligence.collab.phase}`, collabX + 6, collabY + 28)
-      ctx.fillStyle = '#e6edf3'
-      const recentContent = intelligence.collab.content.slice(-3)
-      for (let i = 0; i < recentContent.length; i++) {
-        ctx.fillText(recentContent[i].slice(0, 65), collabX + 6, collabY + 42 + i * 13)
-      }
+    const collabW = 500
+    const collabX = Math.floor((WIDTH - collabW) / 2)
+    const collabY = 180
+    const collabH = 80
+    ctx.fillStyle = 'rgba(13, 17, 23, 0.85)'
+    ctx.fillRect(collabX, collabY, collabW, collabH)
+    ctx.strokeStyle = '#58a6ff'
+    ctx.lineWidth = 1
+    ctx.strokeRect(collabX, collabY, collabW, collabH)
+    ctx.fillStyle = '#58a6ff'
+    ctx.font = 'bold 11px "Courier New", monospace'
+    const collabTitle = intelligence.collab.title || 'Untitled'
+    ctx.fillText(`COLLAB [${intelligence.collab.type}]: ${collabTitle.slice(0, 40)}`, collabX + 6, collabY + 14)
+    ctx.fillStyle = '#8b949e'
+    ctx.font = '10px "Courier New", monospace'
+    ctx.fillText(`${intelligence.collab.contributors.size} people | ${intelligence.collab.phase}`, collabX + 6, collabY + 28)
+    ctx.fillStyle = '#e6edf3'
+    const recentContent = intelligence.collab.content.slice(-3)
+    for (let i = 0; i < recentContent.length; i++) {
+      ctx.fillText(recentContent[i].slice(0, 65), collabX + 6, collabY + 42 + i * 13)
     }
   }
 
-  // ── Chat area (right side) ──
-  ctx.fillStyle = COLORS.text
-  ctx.font = 'bold 18px "Courier New", monospace'
-  ctx.fillText('Chat', dividerX + 20, 90)
+  // ── Website URL (bottom-right, subtle) ──
+  ctx.fillStyle = hexToRgba(COLORS.accent, 0.6)
+  ctx.font = 'bold 13px "Courier New", monospace'
+  ctx.fillText('kernel.chat', WIDTH - 130, HEIGHT - 10)
 
-  // Chat border
-  ctx.strokeStyle = COLORS.border
-  ctx.strokeRect(dividerX + 10, 100, WIDTH - dividerX - 30, HEIGHT - 230)
-  ctx.fillStyle = COLORS.bgChat
-  ctx.fillRect(dividerX + 11, 101, WIDTH - dividerX - 32, HEIGHT - 232)
+  // ════════════════════════════════════════════════════════════════
+  // LAYER 6: ON-DEMAND PANELS (shown for 5 seconds when triggered)
+  // ════════════════════════════════════════════════════════════════
 
-  // Chat messages
-  ctx.font = '16px "Courier New", monospace'
-  const chatY = 125
-  const maxChatLines = 18
-  const recent = charState.chatMessages.slice(-maxChatLines)
-
-  for (let i = 0; i < recent.length; i++) {
-    const msg = recent[i]
-    const y = chatY + i * 24
-
-    // FIX 1: Chat message slide-in animation (if "Add chat message animations" is shipped)
-    let slideOffsetX = 0
-    if (shippedEffects.has('Add chat message animations')) {
-      // Newest messages slide in from right; older messages are settled
-      const msgAge = recent.length - i  // 1 for newest, higher for older
-      if (msgAge <= 2) {
-        // Recent: slide in over a few frames (approximate via age)
-        slideOffsetX = Math.max(0, (3 - msgAge) * 40)
-      }
+  // Brain panel overlay (!brain)
+  if (showBrainOverlay > 0) {
+    showBrainOverlay--
+    const bpX = WIDTH - 320
+    const bpY = 50
+    const bpW = 300
+    const bpH = 200
+    ctx.fillStyle = 'rgba(13,17,23,0.85)'
+    ctx.fillRect(bpX, bpY, bpW, bpH)
+    ctx.strokeStyle = COLORS.purple
+    ctx.lineWidth = 1
+    ctx.strokeRect(bpX, bpY, bpW, bpH)
+    if (charState.mood === 'dreaming') {
+      const pulse = (Math.sin(animFrame * 0.15) + 1) / 2
+      intelligence.brain.currentThought = `DREAMING${'.'.repeat(1 + Math.floor(pulse * 3))}`
     }
-
-    // FIX 1: Loyalty badge dot (if "Build viewer loyalty badges" is shipped)
-    if (shippedEffects.has('Build viewer loyalty badges')) {
-      const user = memory.users[msg.username]
-      if (user) {
-        const msgCount = user.messageCount || 0
-        let dotColor = '#8b949e'  // grey for newcomers
-        if (msgCount >= 50) dotColor = '#f0c040'      // gold
-        else if (msgCount >= 10) dotColor = '#c0c0c0'  // silver
-        else if (msgCount >= 3) dotColor = '#cd7f32'    // bronze
-        ctx.fillStyle = dotColor
-        ctx.beginPath()
-        ctx.arc(dividerX + 15 + slideOffsetX, y - 3, 4, 0, Math.PI * 2)
-        ctx.fill()
-      }
-    }
-
-    // Platform badge
-    const badge = msg.platform === 'twitch' ? 'TW' : msg.platform === 'kick' ? 'KK' : 'RM'
-    const badgeColor = msg.platform === 'twitch' ? COLORS.twitchPurple :
-                       msg.platform === 'kick' ? COLORS.kickGreen : COLORS.rumbleGreen
-    ctx.fillStyle = badgeColor
-    ctx.fillRect(dividerX + 20 + slideOffsetX, y - 12, 28, 18)
-    ctx.fillStyle = '#000'
-    ctx.font = 'bold 12px "Courier New", monospace'
-    ctx.fillText(badge, dividerX + 22 + slideOffsetX, y + 2)
-
-    // Username
-    ctx.fillStyle = COLORS.blue
-    ctx.font = 'bold 15px "Courier New", monospace'
-    ctx.fillText(msg.username, dividerX + 55 + slideOffsetX, y + 2)
-
-    // Message
-    ctx.fillStyle = COLORS.text
-    ctx.font = '15px "Courier New", monospace'
-    const nameWidth = ctx.measureText(msg.username).width
-    const msgText = msg.text.slice(0, 40)
-    ctx.fillText(msgText, dividerX + 60 + nameWidth + slideOffsetX, y + 2)
+    drawBrainPanel(ctx as any, intelligence.brain, bpX + 5, bpY + 5, bpW - 10, bpH - 10)
+    drawBrainActivity(ctx as any, streamBrain, bpX + 5, bpY + bpH - 60, bpW - 10, 55)
   }
 
-  // FIX 1: Draw emoji reaction particles (if shipped)
-  drawEmojiParticles(ctx)
-
-  if (recent.length === 0) {
-    ctx.fillStyle = COLORS.textDim
-    ctx.font = 'italic 16px "Courier New", monospace'
-    ctx.fillText('Waiting for chat...', dividerX + 30, chatY + 10)
+  // Leaderboard overlay (!top)
+  if (showLeaderboardOverlay > 0) {
+    showLeaderboardOverlay--
+    const lbX = WIDTH / 2 - 150
+    const lbY = 60
+    const lbW = 300
+    const topXP = Object.entries(memory.users)
+      .filter(([, u]) => (u as any).xp > 0)
+      .sort((a, b) => ((b[1] as any).xp || 0) - ((a[1] as any).xp || 0))
+      .slice(0, 5)
+    const lbH = 40 + topXP.length * 20
+    ctx.fillStyle = 'rgba(13,17,23,0.85)'
+    ctx.fillRect(lbX, lbY, lbW, lbH)
+    ctx.strokeStyle = COLORS.orange
+    ctx.lineWidth = 1
+    ctx.strokeRect(lbX, lbY, lbW, lbH)
+    ctx.fillStyle = COLORS.orange
+    ctx.font = 'bold 14px "Courier New", monospace'
+    ctx.fillText('LEADERBOARD', lbX + 10, lbY + 20)
+    for (let i = 0; i < topXP.length; i++) {
+      const [name, u] = topXP[i]
+      const trophy = `${i + 1}.`
+      ctx.fillStyle = i === 0 ? '#f0c040' : i === 1 ? '#c0c0c0' : '#cd7f32'
+      ctx.font = '13px "Courier New", monospace'
+      ctx.fillText(`${trophy} ${name.slice(0, 16)}: ${(u as any).xp || 0} XP`, lbX + 10, lbY + 40 + i * 20)
+    }
   }
 
-  // ── Speech bubble (bottom) — (#13) larger: 150px height, 24px font ──
-  const speechBubbleHeight = 150
-  const speechY = HEIGHT - speechBubbleHeight - 20  // leave 20px for ticker
-  ctx.fillStyle = COLORS.bgPanel
-  ctx.fillRect(0, speechY, WIDTH, speechBubbleHeight)
+  // Quest panel overlay (!quest)
+  if (showQuestOverlay > 0) {
+    showQuestOverlay--
+    const qX = WIDTH / 2 - 160
+    const qY = 60
+    ctx.fillStyle = 'rgba(13,17,23,0.85)'
+    ctx.fillRect(qX, qY, 320, 200)
+    ctx.strokeStyle = '#3fb950'
+    ctx.lineWidth = 1
+    ctx.strokeRect(qX, qY, 320, 200)
+    drawQuestPanel(ctx as any, intelligence.progression, qX + 5, qY + 5)
+  }
 
-  // (#13) 6px colored left border in accent color
-  ctx.fillStyle = COLORS.accent
-  ctx.fillRect(0, speechY, 6, speechBubbleHeight)
+  // ════════════════════════════════════════════════════════════════
+  // LAYER 7: MOOD BORDER (2px pulsing colored border)
+  // ════════════════════════════════════════════════════════════════
 
-  // Top border
-  ctx.strokeStyle = COLORS.accent
+  // Segment transition overlay (full-screen flash)
+  if (charState.segmentTransition > 0) {
+    const fadeOut = charState.segmentTransition <= 10
+    const alpha = fadeOut ? charState.segmentTransition / 10 * 0.5 : 0.5
+    ctx.fillStyle = hexToRgba(COLORS.accent, alpha)
+    ctx.fillRect(0, 0, WIDTH, HEIGHT)
+    ctx.fillStyle = `rgba(255,255,255,${fadeOut ? charState.segmentTransition / 10 : 1})`
+    ctx.font = 'bold 40px "Courier New", monospace'
+    const segText = charState.segmentTransitionName
+    const stW = ctx.measureText(segText).width
+    ctx.fillText(segText, (WIDTH - stW) / 2, HEIGHT / 2 - 10)
+    ctx.font = '24px "Courier New", monospace'
+    const progText = charState.segmentTransitionIndex
+    const ptW = ctx.measureText(progText).width
+    ctx.fillText(progText, (WIDTH - ptW) / 2, HEIGHT / 2 + 30)
+    charState.segmentTransition--
+  }
+
+  // Restore from screen shake
+  ctx.restore()
+
+  // Mood border — 2px around entire frame, pulsing
+  const borderColorRaw = charState.mood === 'dancing'
+    ? ['#f85149', '#f0c040', '#3fb950', '#58a6ff', '#bc8cff', '#ff6ec7'][animFrame % 6]
+    : MOOD_COLORS[charState.mood] ?? COLORS.green
+  const borderPulseAlpha = 0.7 + 0.3 * Math.sin(animFrame * 0.15)
+  ctx.strokeStyle = hexToRgba(borderColorRaw, borderPulseAlpha)
   ctx.lineWidth = 2
-  ctx.beginPath(); ctx.moveTo(0, speechY); ctx.lineTo(WIDTH, speechY); ctx.stroke()
+  ctx.strokeRect(1, 1, WIDTH - 2, HEIGHT - 2)
 
-  // Speech icon
-  ctx.fillStyle = COLORS.accent
-  ctx.font = 'bold 24px "Courier New", monospace'
-  ctx.fillText('>', 20, speechY + 40)
-
-  // Speech text — (#13) 24px font
-  if (charState.speech) {
-    // Phase 1: Dreamy color when in dream mode
-    ctx.fillStyle = charState.mood === 'dreaming' ? '#7a6aaa' : COLORS.text
-    ctx.font = charState.mood === 'dreaming' ? 'italic 24px "Courier New", monospace' : '24px "Courier New", monospace'
-    // Word wrap
-    const words = charState.speech.split(' ')
-    let line = ''
-    let lineY = speechY + 40
-    for (const word of words) {
-      const test = line + word + ' '
-      if (ctx.measureText(test).width > WIDTH - 80) {
-        ctx.fillText(line.trim(), 50, lineY)
-        line = word + ' '
-        lineY += 32
-        if (lineY > speechY + speechBubbleHeight - 20) break
-      } else {
-        line = test
-      }
-    }
-    ctx.fillText(line.trim(), 50, lineY)
-  } else {
-    ctx.fillStyle = COLORS.textDim
-    ctx.font = 'italic 20px "Courier New", monospace'
-    ctx.fillText('...', 50, speechY + 40)
-  }
-
-  // ── (#14) Inner Monologue Ticker — 20px strip at very bottom ──
-  const tickerY = HEIGHT - 20
-  ctx.fillStyle = '#0d1117'
-  ctx.fillRect(0, tickerY, WIDTH, 20)
-  // Update ticker thought every ~30 seconds
-  if (Date.now() > charState.tickerChangeTime) {
-    charState.tickerIndex = (charState.tickerIndex + 1) % INNER_THOUGHTS.length
-    charState.tickerChangeTime = Date.now() + 30000
-    charState.tickerOffset = WIDTH  // reset scroll to off-screen right
-  }
-  const thought = INNER_THOUGHTS[charState.tickerIndex]
-  ctx.fillStyle = '#ffb000'  // amber
-  ctx.font = '14px "Courier New", monospace'
-  charState.tickerOffset -= 2  // scroll left
-  const textW = ctx.measureText(thought).width
-  if (charState.tickerOffset < -textW) charState.tickerOffset = WIDTH
-  ctx.fillText(thought, charState.tickerOffset, tickerY + 15)
-
-  // ── Learning indicator (above ticker) ──
-  if (memory.totalMessages > 0) {
-    ctx.fillStyle = COLORS.purple
-    ctx.font = '12px "Courier New", monospace'
-    ctx.fillText(`brain: ${memory.sessionFacts.length} facts learned`, 20, tickerY - 4)
-  }
-
-  // ── Website URL ──
-  ctx.fillStyle = COLORS.accent
-  ctx.font = 'bold 14px "Courier New", monospace'
-  ctx.fillText('kernel.chat', WIDTH - 140, tickerY - 4)
-
-  // ── PRIORITY 2: Floating text particles ──
-  charState.floatingTexts = charState.floatingTexts.filter(ft => {
-    ft.frame++
-    if (ft.frame >= ft.maxFrames) return false
-    // Move upward, fade out
-    ft.y -= 1
-    const alpha = Math.max(0, 1 - ft.frame / ft.maxFrames)
-    ctx.fillStyle = ft.color
-    ctx.globalAlpha = alpha
-    ctx.font = 'bold 16px "Courier New", monospace'
-    ctx.fillText(ft.text, ft.x, ft.y)
-    ctx.globalAlpha = 1
-    return true
-  })
-
-  // ── AAA: Dynamic Lighting Engine ──
+  // ════════════════════════════════════════════════════════════════
+  // LAYER 8: POST-PROCESSING
+  // ════════════════════════════════════════════════════════════════
   {
-    const robotScale = 10
     const hasLightning = world.events.includes('lightning')
     const ambientLevel = getAmbientForTime(world.timeOfDay)
     const lights = buildCharacterLights(
-      charState.robotX, 90, robotScale, moodColorHex, animFrame,
+      robotScreenX, robotScreenY, robotScale, moodColorHex, animFrame,
       hasLightning, world.items.map(i => ({ x: i.x, y: i.y, emoji: i.emoji, name: i.name })),
     )
     renderLighting(ctx as any, lights, WIDTH, HEIGHT, ambientLevel)
-  }
-
-  // ── NVIDIA: Radiance Grid — ambient light propagation ──
-  {
-    const hasLightning = world.events.includes('lightning')
-    const lights = buildCharacterLights(
-      charState.robotX, 90, 10, moodColorHex, animFrame,
-      hasLightning, world.items.map(i => ({ x: i.x, y: i.y, emoji: i.emoji, name: i.name })),
-    )
     updateRadianceGrid(charState.radianceGrid, lights)
     renderRadianceOverlay(ctx as any, charState.radianceGrid, WIDTH, HEIGHT)
-  }
-
-  // ── AAA: Bloom Effect ──
-  {
-    const robotScale = 10
-    const bloomSpots = buildCharacterBloom(charState.robotX, 90, robotScale, moodColorHex, animFrame)
+    const bloomSpots = buildCharacterBloom(robotScreenX, robotScreenY, robotScale, moodColorHex, animFrame)
     renderBloom(ctx as any, bloomSpots)
   }
 
-  // ── AAA: Post-processing (replaces old scanlines + vignette) ──
   renderPostProcessing(ctx as any, WIDTH, HEIGHT, animFrame, {
     bloom: true,
     filmGrain: true,
     vignette: true,
     scanlines: true,
   })
-
-  // ── (#16) Segment transition overlay ──
-  if (charState.segmentTransition > 0) {
-    const fadeOut = charState.segmentTransition <= 10
-    const alpha = fadeOut ? charState.segmentTransition / 10 * 0.5 : 0.5
-    ctx.fillStyle = hexToRgba(COLORS.accent, alpha)
-    ctx.fillRect(0, 0, WIDTH, HEIGHT)
-    // Large centered text
-    ctx.fillStyle = `rgba(255,255,255,${fadeOut ? charState.segmentTransition / 10 : 1})`
-    ctx.font = 'bold 40px "Courier New", monospace'
-    const segText = charState.segmentTransitionName
-    const segW = ctx.measureText(segText).width
-    ctx.fillText(segText, (WIDTH - segW) / 2, HEIGHT / 2 - 10)
-    // Progress indicator
-    ctx.font = '24px "Courier New", monospace'
-    const progText = charState.segmentTransitionIndex
-    const progW = ctx.measureText(progText).width
-    ctx.fillText(progText, (WIDTH - progW) / 2, HEIGHT / 2 + 30)
-    charState.segmentTransition--
-  }
-
-  // Restore from screen shake translate
-  ctx.restore()
-
-  // ── (#11) Mood-color border — 4px around entire frame ──
-  const borderColor = charState.mood === 'dancing'
-    ? ['#f85149', '#f0c040', '#3fb950', '#58a6ff', '#bc8cff', '#ff6ec7'][animFrame % 6]
-    : MOOD_COLORS[charState.mood] ?? COLORS.green
-  ctx.strokeStyle = borderColor
-  ctx.lineWidth = 4
-  ctx.strokeRect(2, 2, WIDTH - 4, HEIGHT - 4)
 
   // Convert canvas to raw RGB24
   const imageData = ctx.getImageData(0, 0, WIDTH, HEIGHT)
@@ -3106,14 +3048,33 @@ function startChatPoll(): void {
             continue
           }
 
+          // World-First: On-demand overlay triggers
+          {
+            const cmd = msg.text.toLowerCase().trim()
+            if (cmd === '!brain') { showBrainOverlay = OVERLAY_DURATION; continue }
+            if (cmd === '!top') { showLeaderboardOverlay = OVERLAY_DURATION; continue }
+            if (cmd === '!quest') { showQuestOverlay = OVERLAY_DURATION; continue }
+          }
+
           // Check brain commands (!do, !brain, !tools, !scan, !lookup, !research, !system, !ask, !stars, !news, !trending, !npm)
           const brainResult = handleBrainCommand(msg.text, msg.username, streamBrain)
 
           // Check intelligence commands (evolution, brain, collab)
           const intelResult = !brainResult ? handleIntelligenceCommand(msg.text, msg.username, intelligence) : null
 
+          // Check tile world commands (Minecraft-style: !place, !dig, !build, etc.)
+          let tileResult: string | null = null
+          if (tileWorld && !brainResult && !intelResult) {
+            tileResult = handleTileCommand(msg.text, msg.username, tileWorld, charState.robotX || 120)
+            if (tileResult) {
+              charState.mood = 'talking'
+              charState.speech = tileResult
+              setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+            }
+          }
+
           // Check for world commands
-          const worldResult = !intelResult && !brainResult ? parseWorldCommand(msg.text) : null
+          const worldResult = !intelResult && !brainResult && !tileResult ? parseWorldCommand(msg.text) : null
 
           // FIX 1: Weather sound effect commentary (if shipped)
           if (worldResult && shippedEffects.has('Add weather sound effects')) {
@@ -3143,9 +3104,11 @@ function startChatPoll(): void {
             ? Promise.resolve(brainResult)
             : intelResult
               ? Promise.resolve(intelResult)
-              : worldResult
-                ? Promise.resolve(worldResult)
-                : generateResponse(msg.username, msg.text, msg.platform)
+              : tileResult
+                ? Promise.resolve(tileResult)
+                : worldResult
+                  ? Promise.resolve(worldResult)
+                  : generateResponse(msg.username, msg.text, msg.platform)
           responsePromise.then(response => {
             charState.speech = `@${msg.username}: ${response}`
             memory.totalResponses++
@@ -3264,7 +3227,7 @@ Respond in 1-2 short sentences. Be fun, witty, and engaging. Reference their int
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'kernel:latest',
+        model: 'gemma4',
         prompt,
         stream: false,
         options: { temperature: 0.8, num_predict: 80 },
@@ -3640,6 +3603,7 @@ export function registerStreamRendererTools(): void {
       animFrame = 0
       lastChatCount = 0
       lastChatTime = Date.now()
+      tileWorld = loadWorld() || initTileWorld()
       intelligence = initIntelligence(memory)
       agenda = {
         currentIndex: 0,
@@ -3678,6 +3642,7 @@ export function registerStreamRendererTools(): void {
         ffmpegProc.kill('SIGINT'); ffmpegProc = null
       }
       saveMemory(memory)
+      if (tileWorld) saveWorld(tileWorld)
       const elapsed = Math.floor((Date.now() - charState.startTime) / 60000)
       return `Stream stopped after ${elapsed}m.\nFrames: ${charState.frameCount}\nMessages: ${memory.totalMessages}\nUsers learned: ${Object.keys(memory.users).length}\nFacts: ${memory.sessionFacts.length}\nSegments completed: ${agenda.currentIndex}`
     },
