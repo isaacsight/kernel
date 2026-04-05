@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-04-05T17:06:36.231Z",
+  "cycle": 21,
+  "observations": {
+    "pulsesCollected": 0,
+    "starsDelta": 0,
+    "hnScore": 1,
+    "hnComments": 0
+  },
+  "improvement": {
+    "description": "Improve error handling by providing more detailed error messages.",
+    "status": "NOT APPLIED"
+  },
+  "feedback": {
+    "totalSuccesses": 2,
+    "totalFailures": 10,
+    "successRate": "16.7%"
+  }
+}
