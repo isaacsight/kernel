@@ -1,7 +1,14 @@
 {
-  "timestamp": "2026-04-05T10:20:42.385Z",
+  "timestamp": "2026-04-05T16:35:45.109Z",
   "count": 30,
   "opportunities": [
+    {
+      "source": "hn-comment",
+      "title": "Ask HN: Who is hiring? (April 2026)",
+      "url": "https://news.ycombinator.com/item?id=47604920",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
     {
       "source": "hn-comment",
       "title": "Schedule tasks on the web",
@@ -13,13 +20,6 @@
       "source": "hn-comment",
       "title": "Show HN: An open-source safety net for home hemodialysis",
       "url": "https://news.ycombinator.com/item?id=47460486",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Show HN: Soros – AI for geopolitical macro investing",
-      "url": "https://news.ycombinator.com/item?id=47418557",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,43 +67,43 @@
     },
     {
       "source": "hn-comment",
+      "title": "The threat is comfortable drift toward not understanding what you're doing",
+      "url": "https://news.ycombinator.com/item?id=47650735",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "The threat is comfortable drift toward not understanding what you're doing",
+      "url": "https://news.ycombinator.com/item?id=47650055",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Tell HN: Anthropic no longer allowing Claude Code subscriptions to use OpenClaw",
       "url": "https://news.ycombinator.com/item?id=47634002",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "We replaced RAG with a virtual filesystem for our AI documentation assistant",
-      "url": "https://news.ycombinator.com/item?id=47631890",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "Update MCP REPL banner, fix bugs, and enhance documentation",
+      "url": "https://github.com/hoangsonww/AI-Agents-Orchestrator/pull/30",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
-      "source": "hn-comment",
-      "title": "Ask HN: Who wants to be hired? (April 2026)",
-      "url": "https://news.ycombinator.com/item?id=47625603",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "Dargon789 patch 9",
+      "url": "https://github.com/Dargon789/fnm/pull/203",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
       "title": "Enhance agentic infrastructure with specialized agents, tools, and UI",
       "url": "https://github.com/hoangsonww/AI-Agents-Orchestrator/pull/28",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add missing files from commit bbb6851 initialization patch",
-      "url": "https://github.com/nisarllc206-sys/Chrome-sas-landing-page-repo-nisarllc206/pull/3",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "🐛 119 test failure(s) in Coverage Suite run #134",
-      "url": "https://github.com/kubestellar/console/issues/4586",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(plugin-sdk): resolve facade post-load re-entry",
-      "url": "https://github.com/openclaw/openclaw/pull/61286",
+      "title": "fix(matrix): clarify exec approval fallback UX",
+      "url": "https://github.com/openclaw/openclaw/pull/61424",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat: OpenClaw integration — full Lobster replacement (v0.6.0)",
-      "url": "https://github.com/developerinlondon/assay/pull/15",
+      "title": "Mullusi/phase 5",
+      "url": "https://github.com/openclaw/openclaw/pull/61415",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(eval): DSPy engine phase 2 — concurrency, artifacts, batch mode",
-      "url": "https://github.com/getlarge/themoltnet/pull/665",
+      "title": "fix(ci): post review as sticky comment, trigger only on push not PR open",
+      "url": "https://github.com/getlarge/themoltnet/pull/670",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,13 +172,6 @@
     },
     {
       "source": "reddit-commandline",
-      "title": "Storm - React-based terminal UI framework with cell-level diff rendering",
-      "url": "https://reddit.com/r/commandline/comments/1scwefi/storm_reactbased_terminal_ui_framework_with/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
       "title": "essh: a Rust SSH client with a real TUI",
       "url": "https://reddit.com/r/commandline/comments/1sck6ly/essh_a_rust_ssh_client_with_a_real_tui/",
       "why": "Discussion in r/commandline about AI agents",
@@ -192,6 +185,20 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
+      "source": "reddit-commandline",
+      "title": "Sheets: a terminal based spreadsheet tool",
+      "url": "https://reddit.com/r/commandline/comments/1sah35v/sheets_a_terminal_based_spreadsheet_tool/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "OpenClaw security checklist: practical safeguards for AI agents",
+      "url": "https://reddit.com/r/artificial/comments/1sd7g80/openclaw_security_checklist_practical_safeguards/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
       "source": "reddit-artificial",
       "title": "Auto agent - Self improving domain expertise agent",
       "url": "https://reddit.com/r/artificial/comments/1scx9kw/auto_agent_self_improving_domain_expertise_agent/",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "[P] Cadenza: Connect Wandb logs to agents easily for autonomous research.",
       "url": "https://reddit.com/r/artificial/comments/1scmaxt/p_cadenza_connect_wandb_logs_to_agents_easily_for/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "we just hit 555 stars on our open source AI agent config tool and i'm honestly still in shock",
-      "url": "https://reddit.com/r/artificial/comments/1sckxf1/we_just_hit_555_stars_on_our_open_source_ai_agent/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
