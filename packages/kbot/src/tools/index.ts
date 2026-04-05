@@ -412,6 +412,8 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './social-engine.js',  registerFn: 'registerSocialEngineTools' },
   { path: './evolution-engine.js', registerFn: 'registerEvolutionEngineTools' },
   { path: './coordination-engine.js', registerFn: 'registerCoordinationEngineTools' },
+  { path: './foundation-engines.js', registerFn: 'registerFoundationEngineTools' },
+  { path: './research-engine.js', registerFn: 'registerResearchEngineTools' },
 ]
 
 /** Track whether lazy tools have been registered */
