@@ -17,6 +17,7 @@ import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrai
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
 import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderParticles, tickParticlesPBD, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, triggerDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, renderAnimatedWater, renderLavaFlow, buildParallaxLayers, renderParallaxLayers, tickGrowingPlants, renderGrowingPlants, createRadianceGrid, updateRadianceGrid, renderRadianceOverlay, renderSubsurfaceGlow, buildSubsurfacePanels, createFrameCache, shouldRenderLayer, cacheLayer, drawCachedLayer, renderVolumetricFog, getFogParams, cyclePalette, computeAnimationParams, type Particle as RenderParticle, type GrowingPlant, type ParallaxLayer, type PostProcessOptions, type RadianceGrid, type FrameCache, type AnimationParams } from './render-engine.js'
 import { initTileWorld, renderTileWorld, updateCamera, handleTileCommand, saveWorld, loadWorld, TILE_SIZE, type TileWorld } from './tile-world.js'
+import { initLivingWorld, tickLivingWorld, renderLivingWorldOverlays, onChatMessage as onLivingWorldChat, renderFlowers, renderFire, saveLivingWorldState, loadLivingWorldState, evolveWorld, applyDreamChanges, type EcologyState, type WorldMemory as LivingWorldMemory, type EmotionalMap, type ConversationLayer } from './living-world.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -30,7 +31,8 @@ const FPS = 6
 const SPAM_PATTERNS = [
   'streamboo', 'highcrest', 'cheapest viewers', 'best viewers', 'top viewers',
   'cheap viewers', 'remove the', 'buy followers', 'buy viewers', 'promo sm',
-  'bigfollows', 'viewerbot', 'follow4follow',
+  'bigfollows', 'viewerbot', 'follow4follow', 'ownkick', 'botting service',
+  'custom username bots', 'affordable botting', 'crypto payments',
 ]
 
 // Mood color mapping for border/glow (mirrors sprite-engine)
@@ -1570,6 +1572,7 @@ let charState: StreamCharState = {
 
 // Tile world state (Minecraft-style background, null = fallback to drawBackground)
 let tileWorld: TileWorld | null = null
+let livingWorld: { ecology: EcologyState; memory: LivingWorldMemory; emotions: EmotionalMap; conversations: ConversationLayer } | null = null
 
 // ─── Phase 1: Buddy Speech Pools ─────────────────────────────
 const BUDDY_SPEECH_POOL: Record<string, string[]> = {
@@ -2368,6 +2371,15 @@ function renderFrame(): Buffer {
 
   // Auto-save tile world every 1800 frames (~5 minutes at 6fps)
   if (tileWorld && animFrame % 1800 === 0) saveWorld(tileWorld)
+  // Tick living world ecology every 60 frames (10 seconds)
+  if (tileWorld && livingWorld && animFrame % 60 === 0) {
+    const chatActive = charState.chatMessages.length > 0 && Date.now() - (charState as any).lastChatTime < 30000
+    tickLivingWorld(tileWorld, livingWorld.ecology, livingWorld.memory, livingWorld.emotions, livingWorld.conversations, charState.robotX || 640, chatActive, animFrame)
+    // Record footstep
+    livingWorld.memory.footpaths.set(`${Math.floor((charState.robotX || 640) / TILE_SIZE)}`, (livingWorld.memory.footpaths.get(`${Math.floor((charState.robotX || 640) / TILE_SIZE)}`) || 0) + 1)
+  }
+  // Save living world every 5 minutes
+  if (livingWorld && animFrame % 1800 === 0) saveLivingWorldState(livingWorld.ecology, livingWorld.memory, livingWorld.emotions, livingWorld.conversations)
 
   // ════════════════════════════════════════════════════════════════
   // LAYER 1: TILE WORLD — fills entire 1280x720 frame
@@ -3604,6 +3616,15 @@ export function registerStreamRendererTools(): void {
       lastChatCount = 0
       lastChatTime = Date.now()
       tileWorld = loadWorld() || initTileWorld()
+      livingWorld = loadLivingWorldState() || initLivingWorld()
+      // Evolve world based on time since last stream
+      if (tileWorld && livingWorld) {
+        const lastSave = tileWorld.cameraX !== 0 ? 1 : 0 // rough check
+        if (lastSave > 0) {
+          const changes = evolveWorld(tileWorld, livingWorld.ecology, 1) // simulate 1 hour
+          if (changes.length > 0) charState.speech = `The world evolved while I was away... ${changes.length} things changed.`
+        }
+      }
       intelligence = initIntelligence(memory)
       agenda = {
         currentIndex: 0,
