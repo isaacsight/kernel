@@ -2368,7 +2368,7 @@ function renderFrame(): Buffer {
   ctx.translate(shakeOffX, shakeOffY)
 
   const moodColorHex = MOOD_COLORS[charState.mood] ?? COLORS.green
-  const robotScale = 8
+  const robotScale = 6
   animFrame++
 
   // Auto-save tile world every 1800 frames (~5 minutes at 6fps)
@@ -2390,14 +2390,8 @@ function renderFrame(): Buffer {
   if (romState) {
     tickRomEngine(romState, 1000 / FPS)
     renderRomBackground(ctx as any, romState, charState.robotX || 0, animFrame, WIDTH, HEIGHT)
-    // Ground plane below parallax hills
-    const groundY = Math.floor(HEIGHT * 0.55)
-    const groundGrad = ctx.createLinearGradient(0, groundY, 0, HEIGHT)
-    groundGrad.addColorStop(0, '#1a4d1a')
-    groundGrad.addColorStop(0.3, '#0d3310')
-    groundGrad.addColorStop(1, '#061a08')
-    ctx.fillStyle = groundGrad
-    ctx.fillRect(0, groundY, WIDTH, HEIGHT - groundY)
+    // Ground plane drawn AFTER robot position is calculated (uses groundY from robot)
+    // Deferred to after robot position calc
   } else {
     // Fallback
     ctx.fillStyle = '#0d1117'
@@ -2436,10 +2430,21 @@ function renderFrame(): Buffer {
   // LAYER 3: ROBOT + COMPANIONS — centered on terrain
   // ════════════════════════════════════════════════════════════════
 
-  // Robot: centered, feet on the ground line, dominant presence
+  // Robot: centered both horizontally and vertically in the scene
   const robotScreenX = Math.floor(WIDTH / 2 - (32 * robotScale) / 2)
-  const groundY = Math.floor(HEIGHT * 0.55)
-  const robotScreenY = groundY - 50 * robotScale  // feet at ground level (sprite is 50px tall)
+  const robotHeight = 50 * robotScale  // 300px at scale 6
+  const robotScreenY = Math.floor(HEIGHT / 2 - robotHeight / 2 + 30)  // slightly below center
+  const groundY = robotScreenY + robotHeight  // ground meets robot feet (sprite is 50px tall)
+
+  // Ground plane below robot feet
+  {
+    const gGrad = ctx.createLinearGradient(0, groundY, 0, HEIGHT)
+    gGrad.addColorStop(0, '#1a4d1a')
+    gGrad.addColorStop(0.3, '#0d3310')
+    gGrad.addColorStop(1, '#061a08')
+    ctx.fillStyle = gGrad
+    ctx.fillRect(0, groundY, WIDTH, HEIGHT - groundY)
+  }
 
   // Robot glow
   const glowCenterX = robotScreenX + 16 * robotScale
