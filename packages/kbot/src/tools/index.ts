@@ -404,6 +404,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './stream-renderer.js', registerFn: 'registerStreamRendererTools' },
   { path: './kbot-browser.js',   registerFn: 'registerKBotBrowserTools' },
   { path: './kbot-terminal.js',  registerFn: 'registerKBotTerminalTools' },
+  { path: './stream-control.js', registerFn: 'registerStreamControlTools' },
 ]
 
 /** Track whether lazy tools have been registered */
