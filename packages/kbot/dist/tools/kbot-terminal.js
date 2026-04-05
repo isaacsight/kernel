@@ -247,7 +247,8 @@ export function registerKBotTerminalTools() {
         terminal.defaultSession = terminal.sessions.keys().next().value;
     }
     // Start background queue processor
-    startQueueProcessor();
+    // Queue processor disabled by default — only runs when explicitly commanded
+    // startQueueProcessor()
     registerTool({
         name: 'terminal_exec',
         description: 'Execute a command in kbot\'s persistent terminal. Shell state (cwd, history) persists across calls and sessions. Output is stored for later retrieval.',
@@ -361,7 +362,7 @@ export function registerKBotTerminalTools() {
     });
     registerTool({
         name: 'terminal_queue',
-        description: 'Queue a command for later execution in kbot\'s terminal. Commands run autonomously every 10 seconds, even when no one is watching. Use for scheduled maintenance, builds, or autonomous operations.',
+        description: 'Queue a command for later execution in kbot\'s terminal. Queued commands only run when explicitly triggered with terminal_exec "process_queue". Use for batching commands you want to run together.',
         parameters: {
             command: { type: 'string', description: 'Command to queue (omit to list pending queue)', required: false },
             delay_seconds: { type: 'string', description: 'Delay in seconds before execution (default: 0 = next cycle)' },

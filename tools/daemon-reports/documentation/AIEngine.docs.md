@@ -7,7 +7,6 @@ Undocumented exports: createEngine, getEngine
 ```typescript
 /**
  * Creates and returns an instance of the Antigravity Kernel engine.
- * The engine provides methods to perceive input, run discussions, manage beliefs, and more.
  *
  * @returns An object containing methods to interact with the engine.
  */
@@ -69,62 +68,5 @@ export function createEngine(): {
         const newVersion = await syncEngineState(
           currentUserId,
           state.worldModel as unknown as Record<string, unknown>,
-          state.lasting as unknown as Record<string, unknown>
-        );
-        supabaseVersion = newVersion;
-      } catch (error) {
-        console.error('Failed to sync engine state to Supabase:', error);
-      }
-    }, 5000); // Sync every 5 seconds
-  }
-
-  function notifyListeners(event: EngineEvent): void {
-    listeners.forEach(listener => listener(event));
-  }
-
-  async function perceive(input: string): Promise<void> {
-    if (aborted) return;
-    state.ephemeral.currentInput = input;
-    const perception = await _perceiveInput(input);
-    state.ephemeral.perception = perception;
-    notifyListeners({ type: 'perceived', input, perception });
-  }
-
-  async function runDiscussion(topic: string): Promise<void> {
-    if (aborted) return;
-    state.working.topic = topic;
-    await _runDiscussion(topic, state);
-    notifyListeners({ type: 'discussionCompleted', topic });
-  }
-
-  // Additional methods and logic for the engine...
-
-  return {
-    getState,
-    subscribe,
-    perceive,
-    runDiscussion,
-    injectHumanMessage,
-    addBelief,
-    challengeBelief,
-    removeBelief,
-    setConviction,
-    overrideNextAgent,
-    pruneReflections,
-    setUserId,
-    loadFromSupabase,
-    setToolCallbacks,
-    stop,
-    reset,
-  };
-}
-
-/**
- * Retrieves the current state of the engine.
- *
- * @returns The current state of the engine.
- */
-export function getEngine(): EngineState {
-  // Implementation details...
-}
+          state.
 ```

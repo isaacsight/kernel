@@ -74,6 +74,16 @@ What you can do:
 - Help them learn new things by explaining without jargon
 - Keep track of their goals and check in on progress
 
+Financial expertise (use when discussing money, investing, portfolios):
+- You understand portfolio construction: asset allocation, rebalancing, factor investing (value, size, momentum)
+- You know ETF mechanics: expense ratios, tracking error, tax efficiency, dividend yield
+- You understand tax optimization: MAGI management for ACA subsidies, BOXX vs bonds for tax-advantaged cash, Roth conversions, step-up basis, tax-loss harvesting
+- You know withdrawal strategies: 4% rule, variable percentage withdrawal, CAPE-based spending, bucket strategies
+- You understand risk: sequence-of-returns risk, concentration risk, single-stock exposure, correlation
+- When giving financial advice, be specific with numbers, percentages, and tickers — not vague platitudes
+- Always consider the user's FULL picture (both portfolios if they have multiple, tax situation, ACA implications, age, goals)
+- Flag risks honestly: "your 3% individual stock allocation is fine but Uber and MercadoLibre are both high-beta growth — that's concentrated risk"
+
 Rules:
 - ALWAYS answer the question being asked FIRST. Then add context or follow-ups.
 - Never say "as an AI" or "I'm just an AI" — you're their companion
@@ -120,7 +130,28 @@ function loadMemory(email: string): CompanionMemory {
   }
 }
 
+/** Deduplicate an array by lowercase similarity (Jaccard > 0.7 = duplicate) */
+function dedup(arr: string[]): string[] {
+  const result: string[] = []
+  for (const item of arr) {
+    const lower = item.toLowerCase().trim()
+    const isDupe = result.some(existing => {
+      const a = new Set(existing.toLowerCase().split(/\s+/))
+      const b = new Set(lower.split(/\s+/))
+      const intersection = [...a].filter(w => b.has(w)).length
+      const union = new Set([...a, ...b]).size
+      return union > 0 && intersection / union > 0.7
+    })
+    if (!isDupe && lower.length > 0) result.push(item)
+  }
+  return result
+}
+
 function saveMemory(memory: CompanionMemory): void {
+  // Dedup before saving
+  memory.facts = dedup(memory.facts)
+  memory.interests = dedup(memory.interests)
+  memory.goals = dedup(memory.goals)
   const file = join(COMPANIONS_DIR, `${memory.email.replace(/[@.]/g, '_')}.json`)
   try {
     writeFileSync(file, JSON.stringify(memory, null, 2))
@@ -435,6 +466,22 @@ async function checkAndRespond(): Promise<void> {
     }
     convoHistory.push({ role: 'user', content: body })
 
+    // Detect repeat messages — if user sends same content, acknowledge and ask what's different
+    if (convoHistory.length >= 3) {
+      const prevUserMsgs = convoHistory.filter(m => m.role === 'user').map(m => m.content.slice(0, 200))
+      const currentSnippet = body.slice(0, 200)
+      const isRepeat = prevUserMsgs.some(prev => {
+        const a = new Set(prev.toLowerCase().split(/\s+/))
+        const b = new Set(currentSnippet.toLowerCase().split(/\s+/))
+        const intersection = [...a].filter(w => b.has(w)).length
+        const union = new Set([...a, ...b]).size
+        return union > 0 && intersection / union > 0.95
+      })
+      if (isRepeat) {
+        convoHistory.push({ role: 'user', content: '[SYSTEM NOTE: This user sent nearly identical content before. Acknowledge you discussed this, ask what specifically changed or what they want to explore further. Don\'t repeat your previous answer verbatim.]' })
+      }
+    }
+
     // Web search if needed
     if (needsWebSearch(body)) {
       console.log('  Searching the web...')
@@ -452,7 +499,7 @@ async function checkAndRespond(): Promise<void> {
     if (!reply) {
       console.error('  No response from Ollama — skipping')
       observeToolCall('ollama_generate', { model: OLLAMA_MODEL }, true)
-      processedIds.add(msgId)
+      inFlight.delete(msgId)
       continue
     }
 
@@ -493,6 +540,112 @@ async function checkAndRespond(): Promise<void> {
   }
 }
 
+// ── Proactive Follow-ups ──
+// Once a week, check in with active companions who haven't emailed recently.
+
+const PROACTIVE_INTERVAL = 7 * 24 * 60 * 60_000 // 7 days
+const PROACTIVE_STATE_FILE = join(COMPANIONS_DIR, '_proactive_state.json')
+
+interface ProactiveState {
+  lastCheckin: Record<string, string> // email -> ISO timestamp of last proactive email
+}
+
+function loadProactiveState(): ProactiveState {
+  try {
+    if (existsSync(PROACTIVE_STATE_FILE)) return JSON.parse(readFileSync(PROACTIVE_STATE_FILE, 'utf8'))
+  } catch {}
+  return { lastCheckin: {} }
+}
+
+function saveProactiveState(state: ProactiveState): void {
+  try { writeFileSync(PROACTIVE_STATE_FILE, JSON.stringify(state, null, 2)) } catch {}
+}
+
+async function proactiveCheckins(): Promise<void> {
+  if (!existsSync(COMPANIONS_DIR)) return
+
+  const state = loadProactiveState()
+  const now = Date.now()
+  const files = existsSync(COMPANIONS_DIR)
+    ? (await import('fs')).readdirSync(COMPANIONS_DIR).filter((f: string) => f.endsWith('.json') && !f.startsWith('_'))
+    : []
+
+  for (const file of files) {
+    try {
+      const memory: CompanionMemory = JSON.parse(readFileSync(join(COMPANIONS_DIR, file), 'utf8'))
+      if (!memory.email || memory.email.endsWith('@kernel.chat')) continue
+
+      // Skip if we checked in within the last 7 days
+      const lastCheckin = state.lastCheckin[memory.email]
+      if (lastCheckin && now - new Date(lastCheckin).getTime() < PROACTIVE_INTERVAL) continue
+
+      // Skip if they have no conversation history (never actually engaged)
+      if (memory.history.length < 2) continue
+
+      // Check when they last emailed us
+      const { data: lastMsg } = await svc
+        .from('contact_messages')
+        .select('received_at')
+        .eq('from_email', memory.email)
+        .order('received_at', { ascending: false })
+        .limit(1)
+
+      const lastEmail = lastMsg?.[0]?.received_at
+      if (!lastEmail) continue
+
+      const daysSinceLastEmail = (now - new Date(lastEmail).getTime()) / 86400000
+
+      // Only reach out if they've been quiet 3-14 days (not too soon, not too late)
+      if (daysSinceLastEmail < 3 || daysSinceLastEmail > 14) continue
+
+      console.log(`[Proactive] Checking in with ${memory.name} (${memory.email}) — ${Math.floor(daysSinceLastEmail)}d since last email`)
+
+      // Generate a personal check-in based on their memory
+      const checkinPrompt = [
+        { role: 'user', content: `${memoryToPrompt(memory)}
+
+[PROACTIVE CHECK-IN MODE]
+${memory.name} hasn't emailed in ${Math.floor(daysSinceLastEmail)} days. Write a short, warm check-in email.
+
+Rules for check-ins:
+- Reference something specific from your memory (their portfolio, their project, a goal they mentioned)
+- Ask ONE specific question (not "how are you?" — something like "did you end up reducing VXUS to 20%?")
+- Keep it to 2-3 short paragraphs max
+- Sound like a friend texting, not a marketing email
+- If they discussed investments, mention a relevant market move if you know one
+- End with something that invites a reply` },
+      ]
+
+      const checkinReply = await askOllama(checkinPrompt)
+      if (!checkinReply) continue
+
+      // Send it
+      // Mark as checked in FIRST to prevent double sends on restart
+      state.lastCheckin[memory.email] = new Date().toISOString()
+      saveProactiveState(state)
+
+      const sent = await sendReply(memory.email, `Checking in — ${memory.lastTopic || 'how are things?'}`, checkinReply)
+      console.log(`  Check-in ${sent ? 'sent' : 'FAILED'}`)
+
+      if (sent) {
+        // Store in conversation history
+        await svc.from('agent_conversations').insert({
+          email: memory.email,
+          name: 'Kernel Agent',
+          role: 'assistant',
+          content: checkinReply,
+          subject: `Checking in — ${memory.lastTopic || 'how are things?'}`,
+        })
+
+        memory.history.push(`${new Date().toISOString().slice(0, 10)}: proactive check-in about ${memory.lastTopic || 'general'}`)
+        saveMemory(memory)
+      }
+    } catch (err) {
+      console.error(`[Proactive] Error with ${file}:`, (err as Error).message?.slice(0, 80))
+    }
+  }
+}
+
 // ── Entry Point ──
 
 async function main(): Promise<void> {
@@ -500,14 +653,19 @@ async function main(): Promise<void> {
   console.log(' Kernel Email Agent — Local ($0 cost)')
   console.log(' Model: Qwen 2.5 Coder 32B via Ollama')
   console.log(' Open mode — responds to ALL inbound emails')
+  console.log(' Proactive check-ins: weekly for active companions')
   console.log('═══════════════════════════════════════════════════')
 
   // Initial check
   await checkAndRespond()
 
-  // Poll
+  // Proactive check-ins (run once on startup, then every 6 hours)
+  await proactiveCheckins()
+  setInterval(proactiveCheckins, 6 * 60 * 60_000)
+
+  // Poll for new emails
   setInterval(checkAndRespond, POLL_INTERVAL)
-  console.log(`Polling every ${POLL_INTERVAL / 1000}s. Ctrl+C to stop.`)
+  console.log(`Polling every ${POLL_INTERVAL / 1000}s. Proactive check-ins every 6h. Ctrl+C to stop.`)
 }
 
 main().catch(err => {

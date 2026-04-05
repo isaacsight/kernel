@@ -112,6 +112,33 @@ const PRESETS: Record<string, PresetParams> = {
     filter: { cutoff: 0.28, resonance: 8, drive: 20 },
     character: 'dark',
   },
+  'ethereal-dream': {
+    name: 'kbot - Ethereal Dream',
+    type: 'pad',
+    oscA: { unison: 8, detune: 0.20, width: 100 },
+    oscB: { enabled: true, volume: -3, detune: 0.15 },
+    env: { attack: 2.0, decay: 0.5, sustain: -0.5, release: 5.0 },
+    filter: { cutoff: 0.55, resonance: 3, drive: 2 },
+    character: 'dreamy',
+  },
+  'midnight-aurora': {
+    name: 'kbot - Midnight Aurora',
+    type: 'pad',
+    oscA: { unison: 12, detune: 0.25, width: 100 },
+    oscB: { enabled: true, volume: -2, detune: 0.20 },
+    env: { attack: 3.0, decay: 0.3, sustain: -0.2, release: 6.0 },
+    filter: { cutoff: 0.45, resonance: 5, drive: 4 },
+    character: 'lush',
+  },
+  'cloud-cathedral': {
+    name: 'kbot - Cloud Cathedral',
+    type: 'pad',
+    oscA: { unison: 16, detune: 0.30, width: 100 },
+    oscB: { enabled: true, volume: -1, detune: 0.22 },
+    env: { attack: 4.0, decay: 0.2, sustain: -0.1, release: 8.0 },
+    filter: { cutoff: 0.38, resonance: 6, drive: 1 },
+    character: 'dreamy',
+  },
 }
 
 export function registerSerum2PresetTools() {

@@ -2,7 +2,7 @@
  * install-remote-script.ts — Install KBotBridge Remote Script into Ableton Live
  *
  * Copies the KBotBridge Python Remote Script to Ableton's User Library,
- * enabling the Browser API bridge on TCP port 9998.
+ * enabling the Browser API bridge on TCP port 9997.
  *
  * The Remote Script exposes Ableton's browser.load_item() API, which is
  * ONLY available from Python Remote Scripts (not from Max for Live).
@@ -99,11 +99,11 @@ export async function installKBotBridge(): Promise<string> {
   log('  5. Close Preferences')
   log('')
   log('Verify:')
-  log('  - Ableton status bar shows "KBotBridge: Listening on port 9998"')
-  log('  - Run: echo \'{"id":1,"action":"ping"}\\n\' | nc localhost 9998')
+  log('  - Ableton status bar shows "KBotBridge: Listening on port 9997"')
+  log('  - Run: echo \'{"id":1,"action":"ping"}\\n\' | nc localhost 9997')
   log('')
   log('KBotBridge runs alongside AbletonOSC — they use different ports:')
-  log('  - KBotBridge: TCP 9998 (Browser API, device loading)')
+  log('  - KBotBridge: TCP 9997 (Browser API, device loading)')
   log('  - M4L Bridge: TCP 9999 (LOM access, clips, mixing)')
   log('  - AbletonOSC: UDP 11000/11001 (OSC, legacy)')
 

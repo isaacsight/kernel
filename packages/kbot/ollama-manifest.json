@@ -2,7 +2,7 @@
   "name": "kbot",
   "display_name": "kbot",
   "description": "Open-source terminal AI agent — 670+ tools, 35 agents, science, finance, security, music production, and more.",
-  "version": "3.60.1",
+  "version": "3.62.0",
   "homepage": "https://kernel.chat",
   "repository": "https://github.com/isaacsight/kernel",
   "license": "MIT",

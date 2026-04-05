@@ -372,7 +372,7 @@ export class AbletonM4L {
   }
 }
 
-// ── Browser Bridge (KBotBridge Remote Script on port 9998) ──────────
+// ── Browser Bridge (KBotBridge Remote Script on port 9997) ──────────
 
 export interface BrowserSearchResult {
   name: string
@@ -388,7 +388,7 @@ export interface BrowserCategory {
 }
 
 /**
- * Client for the KBotBridge Remote Script (TCP 9998).
+ * Client for the KBotBridge Remote Script (TCP 9997).
  *
  * This is separate from the M4L bridge (9999) because the Browser API
  * (browser.load_item) is ONLY available from Python Remote Scripts,
@@ -406,7 +406,7 @@ export class AbletonBrowserBridge {
   private nextId = 1
   private buffer = ''
 
-  static PORT = 9998
+  static PORT = 9997
   static HOST = '127.0.0.1'
   static TIMEOUT = 15_000 // Browser operations can be slow
 
@@ -420,7 +420,7 @@ export class AbletonBrowserBridge {
   }
 
   /**
-   * Connect to the KBotBridge Remote Script on port 9998.
+   * Connect to the KBotBridge Remote Script on port 9997.
    * Returns true if connected and the bridge responds to ping.
    */
   async connect(): Promise<boolean> {
@@ -630,7 +630,7 @@ export async function ensureM4L(): Promise<AbletonM4L> {
 }
 
 /**
- * Get a connected Browser bridge instance (KBotBridge Remote Script on port 9998).
+ * Get a connected Browser bridge instance (KBotBridge Remote Script on port 9997).
  * Throws if not available.
  */
 export async function ensureBrowserBridge(): Promise<AbletonBrowserBridge> {
@@ -644,7 +644,7 @@ export async function ensureBrowserBridge(): Promise<AbletonBrowserBridge> {
       'Make sure:\n' +
       '1. Ableton Live is running\n' +
       '2. KBotBridge is selected as a Control Surface in Preferences > Link, Tempo & MIDI\n' +
-      '3. Ableton status bar shows "KBotBridge: Listening on port 9998"\n\n' +
+      '3. Ableton status bar shows "KBotBridge: Listening on port 9997"\n\n' +
       'To install: kbot ableton install-bridge\n'
     )
   }
@@ -652,7 +652,7 @@ export async function ensureBrowserBridge(): Promise<AbletonBrowserBridge> {
 }
 
 /**
- * Connect to both M4L bridge (9999) and Browser bridge (9998).
+ * Connect to both M4L bridge (9999) and Browser bridge (9997).
  * Returns whichever connections succeed. At least one must connect.
  */
 export async function connectBrowser(): Promise<{
@@ -704,7 +704,7 @@ export function formatBrowserBridgeError(): string {
     '5. Close Preferences',
     '',
     'This runs alongside the M4L bridge — they use different ports:',
-    '- KBotBridge: TCP 9998 (Browser API, device loading)',
+    '- KBotBridge: TCP 9997 (Browser API, device loading)',
     '- M4L Bridge: TCP 9999 (LOM access, clips, mixing)',
   ].join('\n')
 }

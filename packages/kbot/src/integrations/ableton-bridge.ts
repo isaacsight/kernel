@@ -11,7 +11,7 @@
  *
  * Fallback chain (used by tools):
  *   1. AbletonBridge (port 9001) — full browser API
- *   2. KBotBridge (port 9998) — kbot's own Remote Script
+ *   2. KBotBridge (port 9997) — kbot's own Remote Script
  *   3. Error with install instructions
  *
  * Follows the same singleton + newline-delimited JSON pattern as AbletonM4L.
@@ -336,10 +336,10 @@ export class AbletonBridgeClient {
   }
 }
 
-// ── KBotBridge fallback (port 9998) ────────────────────────────────────
+// ── KBotBridge fallback (port 9997) ────────────────────────────────────
 
 /**
- * Lightweight TCP probe for the kbot Remote Script on port 9998.
+ * Lightweight TCP probe for the kbot Remote Script on port 9997.
  * Uses the same newline-delimited JSON protocol as AbletonM4L.
  */
 export class KBotRemoteClient {
@@ -351,7 +351,7 @@ export class KBotRemoteClient {
   private nextId = 1
   private buffer = ''
 
-  static PORT = 9998
+  static PORT = 9997
   static HOST = '127.0.0.1'
   static TIMEOUT = 10_000
   static CONNECT_TIMEOUT = 3_000
@@ -521,7 +521,7 @@ export async function tryAbletonBridge(): Promise<AbletonBridgeClient | null> {
 }
 
 /**
- * Try to connect to KBotBridge Remote Script (port 9998).
+ * Try to connect to KBotBridge Remote Script (port 9997).
  * Returns the connected client or null if unavailable.
  */
 export async function tryKBotRemote(): Promise<KBotRemoteClient | null> {
@@ -573,7 +573,7 @@ export function formatBridgeError(): string {
     '  kbot\'s own Remote Script. Install:',
     '  1. Run `kbot ableton install` or copy KBotBridge to Remote Scripts',
     '  2. Enable in Ableton: Preferences → Link/Tempo/MIDI → Control Surface → KBotBridge',
-    '  3. Verify: TCP server starts on localhost:9998',
+    '  3. Verify: TCP server starts on localhost:9997',
     '',
     'Both require Ableton Live to be running.',
   ].join('\n')

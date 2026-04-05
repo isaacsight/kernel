@@ -1,0 +1,229 @@
+// Scaffold for: src/router.tsx
+// Review and rename to .test.ts/.test.tsx to activate
+// Generated: 2026-04-01T08:43:15.184Z
+// Model: kernel-coder:latest
+
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
+import { router } from './router' // Adjust the import path as necessary
+
+vi.mock('./components/Layout', () => ({
+  Layout: () => <div>Layout</div>,
+}))
+
+vi.mock('./components/ErrorBoundary', () => ({
+  ErrorBoundary: ({ children }) => <>{children}</>,
+}))
+
+vi.mock('./components/KernelLoading', () => ({
+  KernelLoading: () => <div>Loading...</div>,
+}))
+
+vi.mock('./pages/LandingPage', () => ({
+  LandingPage: () => <div>Landing Page</div>,
+}))
+
+vi.mock('./pages/AdminPage', () => ({
+  AdminPage: () => <div>Admin Page</div>,
+}))
+
+vi.mock('./pages/BriefingPage', () => ({
+  BriefingPage: () => <div>Briefing Page</div>,
+}))
+
+vi.mock('./pages/SharedConversationPage', () => ({
+  SharedConversationPage: () => <div>Shared Conversation Page</div>,
+}))
+
+vi.mock('./pages/PrivacyPage', () => ({
+  PrivacyPage: () => <div>Privacy Page</div>,
+}))
+
+vi.mock('./pages/TermsPage', () => ({
+  TermsPage: () => <div>Terms Page</div>,
+}))
+
+vi.mock('./pages/PublishedContentPage', () => ({
+  PublishedContentPage: () => <div>Published Content Page</div>,
+}))
+
+vi.mock('./components/SocialCallbackPage', () => ({
+  SocialCallbackPage: () => <div>Social Callback Page</div>,
+}))
+
+vi.mock('./pages/ExplorePage', () => ({
+  ExplorePage: () => <div>Explore Page</div>,
+}))
+
+vi.mock('./pages/AuthorProfilePage', () => ({
+  AuthorProfilePage: () => <div>Author Profile Page</div>,
+}))
+
+vi.mock('./pages/LiveSharePage', () => ({
+  LiveSharePage: () => <div>Live Share Page</div>,
+}))
+
+vi.mock('./pages/WorkspaceAdminPage', () => ({
+  WorkspaceAdminPage: () => <div>Workspace Admin Page</div>,
+}))
+
+vi.mock('./pages/PlayPage', () => ({
+  PlayPage: () => <div>Play Page</div>,
+}))
+
+vi.mock('./pages/SecurityPage', () => ({
+  SecurityPage: () => <div>Security Page</div>,
+}))
+
+vi.mock('./pages/BenchPage', () => ({
+  BenchPage: () => <div>Bench Page</div>,
+}))
+
+describe('Router Configuration', () => {
+  it('renders the Layout component as the root element', async () => {
+    render(<RouterProvider router={router} />)
+    expect(await screen.findByText('Layout')).toBeInTheDocument()
+  })
+
+  it('renders the LandingPage component on the index route', async () => {
+    render(<RouterProvider router={router} />)
+    expect(await screen.findByText('Landing Page')).toBeInTheDocument()
+  })
+
+  it('renders the AdminPage component on the /admin route', async () => {
+    const adminRoute = createHashRouter([
+      { path: '/admin', element: <LazyAdmin /> },
+    ])
+    render(<RouterProvider router={adminRoute} />)
+    expect(await screen.findByText('Loading dashboard...')).toBeInTheDocument()
+    expect(await screen.findByText('Admin Page')).toBeInTheDocument()
+  })
+
+  it('renders the BriefingPage component on the /briefing/:id route', async () => {
+    const briefingRoute = createHashRouter([
+      { path: '/briefing/:id', element: <BriefingPage /> },
+    ])
+    render(<RouterProvider router={briefingRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Briefing Page')).toBeInTheDocument()
+  })
+
+  it('renders the SharedConversationPage component on the /shared/:id route', async () => {
+    const sharedRoute = createHashRouter([
+      { path: '/shared/:id', element: <SharedConversationPage /> },
+    ])
+    render(<RouterProvider router={sharedRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Shared Conversation Page')).toBeInTheDocument()
+  })
+
+  it('renders the PrivacyPage component on the /privacy route', async () => {
+    const privacyRoute = createHashRouter([
+      { path: '/privacy', element: <PrivacyPage /> },
+    ])
+    render(<RouterProvider router={privacyRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Privacy Page')).toBeInTheDocument()
+  })
+
+  it('renders the TermsPage component on the /terms route', async () => {
+    const termsRoute = createHashRouter([
+      { path: '/terms', element: <TermsPage /> },
+    ])
+    render(<RouterProvider router={termsRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Terms Page')).toBeInTheDocument()
+  })
+
+  it('renders the PublishedContentPage component on the /p/:slug route', async () => {
+    const publishedRoute = createHashRouter([
+      { path: '/p/:slug', element: <PublishedContentPage /> },
+    ])
+    render(<RouterProvider router={publishedRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Published Content Page')).toBeInTheDocument()
+  })
+
+  it('renders the SocialCallbackPage component on the /social/callback/:platform route', async () => {
+    const socialRoute = createHashRouter([
+      { path: '/social/callback/:platform', element: <SocialCallbackPage /> },
+    ])
+    render(<RouterProvider router={socialRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Social Callback Page')).toBeInTheDocument()
+  })
+
+  it('renders the ExplorePage component on the /explore route', async () => {
+    const exploreRoute = createHashRouter([
+      { path: '/explore', element: <ExplorePage /> },
+    ])
+    render(<RouterProvider router={exploreRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Explore Page')).toBeInTheDocument()
+  })
+
+  it('renders the AuthorProfilePage component on the /author/:id route', async () => {
+    const authorRoute = createHashRouter([
+      { path: '/author/:id', element: <AuthorProfilePage /> },
+    ])
+    render(<RouterProvider router={authorRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Author Profile Page')).toBeInTheDocument()
+  })
+
+  it('renders the LiveSharePage component on the /live-share route', async () => {
+    const liveShareRoute = createHashRouter([
+      { path: '/live-share', element: <LiveSharePage /> },
+    ])
+    render(<RouterProvider router={liveShareRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Live Share Page')).toBeInTheDocument()
+  })
+
+  it('renders the WorkspaceAdminPage component on the /workspace-admin route', async () => {
+    const workspaceAdminRoute = createHashRouter([
+      { path: '/workspace-admin', element: <WorkspaceAdminPage /> },
+    ])
+    render(<RouterProvider router={workspaceAdminRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Workspace Admin Page')).toBeInTheDocument()
+  })
+
+  it('renders the PlayPage component on the /play route', async () => {
+    const playRoute = createHashRouter([
+      { path: '/play', element: <PlayPage /> },
+    ])
+    render(<RouterProvider router={playRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Play Page')).toBeInTheDocument()
+  })
+
+  it('renders the SecurityPage component on the /security route', async () => {
+    const securityRoute = createHashRouter([
+      { path: '/security', element: <SecurityPage /> },
+    ])
+    render(<RouterProvider router={securityRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Security Page')).toBeInTheDocument()
+  })
+
+  it('renders the BenchPage component on the /bench route', async () => {
+    const benchRoute = createHashRouter([
+      { path: '/bench', element: <BenchPage /> },
+    ])
+    render(<RouterProvider router={benchRoute} />)
+    expect(await screen.findByText('Loading...')).toBeInTheDocument()
+    expect(await screen.findByText('Bench Page')).toBeInTheDocument()
+  })
+
+  it('renders the RootErrorPage component on an error route', async () => {
+    const errorRoute = createHashRouter([
+      { path: '/error', element: <div>Test Error</div> },
+    ])
+    render(<RouterProvider router={errorRoute} />)
+    expect(await screen.findByText('Something went wrong')).toBeInTheDocument()
+  })
+})
+```

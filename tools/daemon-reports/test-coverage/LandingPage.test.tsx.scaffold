@@ -1,0 +1,62 @@
+// Scaffold for: src/pages/LandingPage.tsx
+// Review and rename to .test.ts/.test.tsx to activate
+// Generated: 2026-04-03T06:00:30.515Z
+// Model: kernel-coder:latest
+
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
+import LandingPage from './LandingPage'
+
+vi.mock('react', async (original) => {
+  const React = await original()
+  return {
+    ...React,
+    useEffect: (f) => f(),
+  }
+})
+
+describe('LandingPage', () => {
+  it('renders the landing page with features and agents', () => {
+    render(<LandingPage />)
+
+    FEATURES.forEach((feature) => {
+      expect(screen.getByText(feature.title)).toBeInTheDocument()
+      expect(screen.getByText(feature.desc)).toBeInTheDocument()
+    })
+
+    AGENTS.forEach((agent) => {
+      expect(screen.getByText(agent)).toBeInTheDocument()
+    })
+  })
+
+  it('fetches and displays npm downloads', async () => {
+    const mockDownloads = 12345
+    vi.mocked(fetch).mockResolvedValueOnce({
+      json: vi.fn().mockResolvedValue({ downloads: { last_week: mockDownloads } }),
+    })
+
+    render(<LandingPage />)
+
+    await screen.findByText(`Last week's downloads: ${mockDownloads}`)
+  })
+
+  it('copies the installation command to clipboard', async () => {
+    const mockCommand = 'npm install @kernel.chat/kbot'
+    vi.mocked(navigator.clipboard.writeText).mockResolvedValueOnce()
+
+    render(<LandingPage />)
+
+    fireEvent.click(screen.getByRole('button', { name: /copy/i }))
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockCommand)
+  })
+
+  it('handles fetch error gracefully', async () => {
+    vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'))
+
+    render(<LandingPage />)
+
+    await screen.findByText('Failed to load download stats')
+  })
+})
+```

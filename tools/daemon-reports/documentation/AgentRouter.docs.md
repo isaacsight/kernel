@@ -9,7 +9,7 @@ Undocumented exports: ClassificationResult, ModelRoutingContext, classifyIntent
  * Represents the result of an intent classification.
  */
 export interface ClassificationResult {
-  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator' | 'oracle' | 'chronist' | 'sage' | 'hacker' | 'operator' | 'dreamer'
+  agentId: 'kernel' | 'researcher' | 'coder' | 'writer' | 'analyst' | 'aesthete' | 'guardian' | 'curator' | 'strategist' | 'infrastructure' | 'quant' | 'investigator' | 'oracle' | 'chronist' | 'sage' | 'hacker' | 'engineer' | 'operator' | 'dreamer'
   confidence: number
   complexity: number
   needsResearch: boolean
@@ -34,7 +34,7 @@ export interface ModelRoutingContext {
 
 /**
  * Auto-selects a model based on task complexity, message length, and conversation depth.
- * 
+ *
  * @param c - The classification result containing intent details.
  * @param ctx - Optional context about the message and conversation.
  * @returns The selected model as either 'sonnet' or 'haiku'.

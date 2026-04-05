@@ -7,7 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const logFile = path.join(process.cwd(), '.claude', 'session-log.txt');
+const projectRoot = path.resolve(__dirname, '..', '..');
+const logFile = path.join(projectRoot, '.claude', 'session-log.txt');
 const timestamp = new Date().toISOString();
 
 // Read stdin for stop event data

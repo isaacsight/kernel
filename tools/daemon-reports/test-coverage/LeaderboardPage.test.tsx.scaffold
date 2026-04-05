@@ -1,0 +1,74 @@
+// Scaffold for: src/pages/LeaderboardPage.tsx
+// Review and rename to .test.ts/.test.tsx to activate
+// Generated: 2026-04-03T06:01:13.166Z
+// Model: kernel-coder:latest
+
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
+import { LeaderboardPage } from './LeaderboardPage'
+
+vi.mock('../engine/SupabaseClient', () => ({
+  supabase: {
+    rpc: vi.fn(),
+  },
+}))
+
+describe('LeaderboardPage', () => {
+  it('renders loading state initially', async () => {
+    render(<LeaderboardPage />)
+
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument()
+  })
+
+  it('fetches leaderboard data on mount', async () => {
+    const mockData = [
+      { rank: 1, species: 'fox', level: 5, xp: 1200, achievement_count: 3, sessions: 10 },
+      { rank: 2, species: 'owl', level: 4, xp: 800, achievement_count: 2, sessions: 8 },
+    ]
+
+    vi.mocked(supabase.rpc).mockResolvedValue({ data: mockData })
+
+    render(<LeaderboardPage />)
+
+    await screen.findByText(/fox/i)
+    expect(screen.getByText(/fox/i)).toBeInTheDocument()
+    expect(screen.getByText(/owl/i)).toBeInTheDocument()
+  })
+
+  it('handles fetch error', async () => {
+    vi.mocked(supabase.rpc).mockRejectedValue(new Error('Network error'))
+
+    render(<LeaderboardPage />)
+
+    await screen.findByText(/Failed to load leaderboard/i)
+    expect(screen.getByText(/Failed to load leaderboard/i)).toBeInTheDocument()
+  })
+
+  it('filters entries by species', async () => {
+    const mockData = [
+      { rank: 1, species: 'fox', level: 5, xp: 1200, achievement_count: 3, sessions: 10 },
+      { rank: 2, species: 'owl', level: 4, xp: 800, achievement_count: 2, sessions: 8 },
+    ]
+
+    vi.mocked(supabase.rpc).mockResolvedValue({ data: mockData })
+
+    render(<LeaderboardPage />)
+
+    await screen.findByText(/fox/i)
+    fireEvent.click(screen.getByRole('button', { name: /Owl/i }))
+
+    expect(screen.queryByText(/fox/i)).not.toBeInTheDocument()
+    expect(screen.getByText(/owl/i)).toBeInTheDocument()
+  })
+
+  it('copies install command on button click', async () => {
+    render(<LeaderboardPage />)
+
+    fireEvent.click(screen.getByRole('button', { name: /Copy Install Command/i }))
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('npm i -g @kernel.chat/kbot')
+    expect(await screen.findByText(/Copied!/i)).toBeInTheDocument()
+  })
+})
+```

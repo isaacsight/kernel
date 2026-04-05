@@ -6,7 +6,8 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const scratchpad = path.join(process.cwd(), 'SCRATCHPAD.md');
+const projectRoot = path.resolve(__dirname, '..', '..');
+const scratchpad = path.join(projectRoot, 'SCRATCHPAD.md');
 const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
 let output = `📅 ${today}\n`;
@@ -34,7 +35,7 @@ try {
     const toolCount = execSync('grep -r "registerTool" packages/kbot/src/tools/ 2>/dev/null | wc -l', { encoding: 'utf-8' }).trim();
 
     // Version
-    const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'packages/kbot/package.json'), 'utf-8'));
+    const pkg = JSON.parse(fs.readFileSync(path.join(projectRoot, 'packages/kbot/package.json'), 'utf-8'));
     const version = pkg.version;
 
     // npm downloads (cached, non-blocking)
@@ -53,7 +54,7 @@ try {
     } catch { }
 
     // Last bootstrap run
-    const logPath = path.join(process.cwd(), 'tools/daemon-reports/bootstrap-log.md');
+    const logPath = path.join(projectRoot, 'tools/daemon-reports/bootstrap-log.md');
     let lastBootstrap = 'never';
     if (fs.existsSync(logPath)) {
         const log = fs.readFileSync(logPath, 'utf-8');
@@ -66,7 +67,7 @@ try {
     output += `  Last bootstrap: ${lastBootstrap}\n`;
 
     // Check for stale surfaces (quick)
-    const readmeMatch = fs.readFileSync(path.join(process.cwd(), 'README.md'), 'utf-8').includes(toolCount.trim());
+    const readmeMatch = fs.readFileSync(path.join(projectRoot, 'README.md'), 'utf-8').includes(toolCount.trim());
     if (!readmeMatch) {
         output += `  ⚠ README.md may be stale (tool count mismatch)\n`;
     }

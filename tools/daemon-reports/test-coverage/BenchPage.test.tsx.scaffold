@@ -1,0 +1,128 @@
+// Scaffold for: src/pages/BenchPage.tsx
+// Review and rename to .test.ts/.test.tsx to activate
+// Generated: 2026-04-03T06:00:01.097Z
+// Model: kernel-coder:latest
+
+```typescript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import BenchPage from './BenchPage'
+
+vi.mock('react', () => ({
+  ...vi.importActual('react'),
+  useEffect: vi.fn(),
+}))
+
+describe('BenchPage', () => {
+  it('renders the hero section correctly', () => {
+    render(<BenchPage />)
+
+    expect(screen.getByText('Benchmark Dashboard')).toBeInTheDocument()
+    expect(screen.getByText('kbot by the numbers')).toBeInTheDocument()
+    expect(screen.getByText('The most capable open-source terminal AI agent. Measured, not marketed.')).toBeInTheDocument()
+
+    HERO_STATS.forEach(stat => {
+      expect(screen.getByText(stat.value)).toBeInTheDocument()
+      expect(screen.getByText(stat.label)).toBeInTheDocument()
+      expect(screen.getByText(stat.desc)).toBeInTheDocument()
+    })
+  })
+
+  it('renders the comparison table correctly', () => {
+    render(<BenchPage />)
+
+    expect(screen.getByText('Head-to-head')).toBeInTheDocument()
+    expect(screen.getByText('Feature comparison against every major terminal AI agent. Updated March 2026.')).toBeInTheDocument()
+
+    COMPARISON.forEach(row => {
+      expect(screen.getByText(row.feature)).toBeInTheDocument()
+      expect(screen.getByText(row.kbot.toString())).toBeInTheDocument()
+      expect(screen.getByText(row.claudeCode.toString())).toBeInTheDocument()
+      expect(screen.getByText(row.codexCli.toString())).toBeInTheDocument()
+      expect(screen.getByText(row.openCode.toString())).toBeInTheDocument()
+      expect(screen.getByText(row.aider.toString())).toBeInTheDocument()
+      expect(screen.getByText(row.cline.toString())).toBeInTheDocument()
+    })
+  })
+
+  it('renders the category breakdown section correctly', () => {
+    render(<BenchPage />)
+
+    expect(screen.getByText('Category breakdown')).toBeInTheDocument()
+
+    CATEGORIES.forEach(category => {
+      expect(screen.getByText(category.name)).toBeInTheDocument()
+      expect(screen.getByText(`${category.kbot}%`)).toBeInTheDocument()
+    })
+  })
+
+  it('copies the install command to clipboard on button click', async () => {
+    render(<BenchPage />)
+
+    const copyButton = screen.getByRole('button', { name: /copy/i })
+    await copyButton.click()
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('npm install -g @kernel.chat/kbot')
+    expect(screen.getByText('Copied!')).toBeInTheDocument()
+  })
+
+  it('handles useEffect cleanup correctly', () => {
+    const useEffectMock = vi.mocked(useEffect)
+    render(<BenchPage />)
+
+    expect(useEffectMock).toHaveBeenCalledTimes(1)
+    const cleanupFunction = useEffectMock.mock.calls[0][0]()
+
+    cleanupFunction()
+    expect(document.body.classList.remove).toHaveBeenCalledWith('ka-scrollable-page')
+  })
+
+  it('applies weak class to comparison table cells with weak values', () => {
+    render(<BenchPage />)
+
+    COMPARISON.forEach(row => {
+      if (isWeakValue(row.claudeCode)) {
+        expect(screen.getByText(row.claudeCode.toString())).toHaveClass('ka-bench-weak')
+      }
+      if (isWeakValue(row.codexCli)) {
+        expect(screen.getByText(row.codexCli.toString())).toHaveClass('ka-bench-weak')
+      }
+      if (isWeakValue(row.openCode)) {
+        expect(screen.getByText(row.openCode.toString())).toHaveClass('ka-bench-weak')
+      }
+      if (isWeakValue(row.aider)) {
+        expect(screen.getByText(row.aider.toString())).toHaveClass('ka-bench-weak')
+      }
+      if (isWeakValue(row.cline)) {
+        expect(screen.getByText(row.cline.toString())).toHaveClass('ka-bench-weak')
+      }
+    })
+  })
+
+  it('does not apply weak class to comparison table cells with strong values', () => {
+    render(<BenchPage />)
+
+    COMPARISON.forEach(row => {
+      if (!isWeakValue(row.kbot)) {
+        expect(screen.getByText(row.kbot.toString())).not.toHaveClass('ka-bench-weak')
+      }
+    })
+  })
+
+  it('handles edge case where no categories are provided', () => {
+    const originalCategories = CATEGORIES
+    CATEGORIES.length = 0
+
+    render(<BenchPage />)
+
+    expect(screen.queryByText('Category breakdown')).not.toBeInTheDocument()
+
+    CATEGORIES.length = originalCategories.length
+  })
+})
+
+function isWeakValue(value: string | number): boolean {
+  // Assuming weak values are those less than or equal to 10
+  return typeof value === 'number' && value <= 10 || (typeof value === 'string' && parseInt(value) <= 10)
+}
+```

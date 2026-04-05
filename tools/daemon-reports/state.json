@@ -1,13 +1,15 @@
 {
-  "lastProcessedCommit": "3dcf3edc8b24571be1765d33ac84b8f1011d1715",
+  "lastProcessedCommit": "89c69c5d1222fb2adf99cacbcde3d16d7d9216ec",
   "lastRunTimestamps": {
-    "gitReview": "2026-03-15T21:42:27.427Z",
-    "codeQuality": "2026-03-15T20:11:17.429Z",
-    "dailyDigest": "2026-03-15T06:16:48.356Z",
-    "documentation": "2026-03-15T16:08:02.326Z",
-    "testCoverage": "2026-03-15T16:10:03.492Z",
-    "embeddings": "2026-03-15T19:26:14.396Z",
-    "i18nSync": "2026-03-15T17:26:06.357Z"
+    "gitReview": "2026-04-03T05:50:28.303Z",
+    "codeQuality": "2026-04-03T05:55:58.409Z",
+    "dailyDigest": "2026-04-03T05:57:07.629Z",
+    "documentation": "2026-04-03T05:58:56.493Z",
+    "testCoverage": "2026-04-03T06:01:13.166Z",
+    "embeddings": "2026-04-03T06:01:13.821Z",
+    "i18nSync": "2026-04-03T06:01:13.859Z",
+    "dreamConsolidation": "2026-04-03T06:01:13.910Z",
+    "morningBriefing": "2026-04-03T06:02:20.627Z"
   },
   "embeddingIndex": {
     "src/App.tsx": {
@@ -443,8 +445,8 @@
       "updatedAt": "2026-03-12T06:06:58.460Z"
     },
     "src/engine/AgentRouter.ts": {
-      "hash": "12d4ad1211d3",
-      "updatedAt": "2026-03-12T06:06:58.491Z"
+      "hash": "d96257c76b2e",
+      "updatedAt": "2026-04-01T08:43:15.779Z"
     },
     "src/engine/AgentSelection.test.ts": {
       "hash": "a1c82f325b92",
@@ -1099,8 +1101,8 @@
       "updatedAt": "2026-03-12T06:07:03.946Z"
     },
     "src/pages/ApiDocsPage.tsx": {
-      "hash": "0e72099b85e1",
-      "updatedAt": "2026-03-12T06:07:03.981Z"
+      "hash": "dae639273ece",
+      "updatedAt": "2026-04-01T08:43:15.877Z"
     },
     "src/pages/AuthorProfilePage.tsx": {
       "hash": "b90d8da83f62",
@@ -1143,8 +1145,8 @@
       "updatedAt": "2026-03-12T06:07:04.332Z"
     },
     "src/pages/TermsPage.tsx": {
-      "hash": "2ec9a23ed454",
-      "updatedAt": "2026-03-12T06:07:04.363Z"
+      "hash": "dbfae0e3c7a6",
+      "updatedAt": "2026-04-01T08:43:16.183Z"
     },
     "src/pages/WorkspaceAdminPage.tsx": {
       "hash": "ea48459805b3",
@@ -1155,8 +1157,8 @@
       "updatedAt": "2026-03-12T06:07:04.417Z"
     },
     "src/router.tsx": {
-      "hash": "3669521d9066",
-      "updatedAt": "2026-03-12T06:07:04.454Z"
+      "hash": "617459e4a416",
+      "updatedAt": "2026-04-03T06:01:13.816Z"
     },
     "src/setupTests.ts": {
       "hash": "2c271435e60d",
@@ -1265,14 +1267,38 @@
     "src/components/MemoryPanel.tsx": {
       "hash": "18cf0edf0d2a",
       "updatedAt": "2026-03-12T17:54:01.834Z"
+    },
+    "src/hooks/useSynthesisState.ts": {
+      "hash": "e72f93a44d06",
+      "updatedAt": "2026-04-01T08:43:15.839Z"
+    },
+    "src/pages/BenchPage.tsx": {
+      "hash": "7b1987ba3b29",
+      "updatedAt": "2026-04-03T06:01:13.695Z"
+    },
+    "src/pages/LandingPage.tsx": {
+      "hash": "e00c3278e2bf",
+      "updatedAt": "2026-04-03T06:01:13.736Z"
+    },
+    "src/pages/PlayPage.tsx": {
+      "hash": "d58b412a5e71",
+      "updatedAt": "2026-04-01T08:43:16.003Z"
+    },
+    "src/pages/SecurityPage.tsx": {
+      "hash": "6d2d2f59eb6a",
+      "updatedAt": "2026-04-01T08:43:16.150Z"
+    },
+    "src/pages/LeaderboardPage.tsx": {
+      "hash": "f6bed5bea6f0",
+      "updatedAt": "2026-04-03T06:01:13.777Z"
     }
   },
   "i18nProgress": {},
   "stats": {
-    "totalRuns": 238,
-    "totalTokens": 399711,
+    "totalRuns": 240,
+    "totalTokens": 481579,
     "lastOllamaStatus": "up",
-    "errorsToday": 8,
-    "lastErrorDate": "2026-03-15"
+    "errorsToday": 1,
+    "lastErrorDate": "2026-04-03"
   }
 }
