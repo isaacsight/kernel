@@ -504,7 +504,7 @@ function tileXToLocalX(tileX: number): number {
 // ─── Tile Access Helpers ──────────────────────────────────────
 
 /** Get a tile at absolute tile coordinates, generating chunk if needed */
-function getTile(world: TileWorld, tileX: number, tileY: number): BlockType {
+export function getTile(world: TileWorld, tileX: number, tileY: number): BlockType {
   if (tileY < 0 || tileY >= WORLD_HEIGHT) return 'air'
   const chunkIdx = tileXToChunkIndex(tileX)
   let chunk = world.chunks.get(chunkIdx)
@@ -517,7 +517,7 @@ function getTile(world: TileWorld, tileX: number, tileY: number): BlockType {
 }
 
 /** Set a tile at absolute tile coordinates */
-function setTile(world: TileWorld, tileX: number, tileY: number, block: BlockType): boolean {
+export function setTile(world: TileWorld, tileX: number, tileY: number, block: BlockType): boolean {
   if (tileY < 0 || tileY >= WORLD_HEIGHT) return false
   const chunkIdx = tileXToChunkIndex(tileX)
   let chunk = world.chunks.get(chunkIdx)
@@ -1210,7 +1210,7 @@ export function handleTileCommand(
 }
 
 /** Find the surface Y (first non-air tile from top) at a given tile X */
-function findSurfaceY(world: TileWorld, tileX: number): number {
+export function findSurfaceY(world: TileWorld, tileX: number): number {
   for (let y = 0; y < WORLD_HEIGHT; y++) {
     const block = getTile(world, tileX, y)
     if (block !== 'air' && block !== 'leaves' && block !== 'water') {

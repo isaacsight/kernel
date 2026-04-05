@@ -417,7 +417,7 @@ function tileXToLocalX(tileX) {
 }
 // ─── Tile Access Helpers ──────────────────────────────────────
 /** Get a tile at absolute tile coordinates, generating chunk if needed */
-function getTile(world, tileX, tileY) {
+export function getTile(world, tileX, tileY) {
     if (tileY < 0 || tileY >= WORLD_HEIGHT)
         return 'air';
     const chunkIdx = tileXToChunkIndex(tileX);
@@ -430,7 +430,7 @@ function getTile(world, tileX, tileY) {
     return chunk.tiles[tileY][lx];
 }
 /** Set a tile at absolute tile coordinates */
-function setTile(world, tileX, tileY, block) {
+export function setTile(world, tileX, tileY, block) {
     if (tileY < 0 || tileY >= WORLD_HEIGHT)
         return false;
     const chunkIdx = tileXToChunkIndex(tileX);
@@ -1009,7 +1009,7 @@ export function handleTileCommand(text, username, world, robotWorldPixelX) {
     return null;
 }
 /** Find the surface Y (first non-air tile from top) at a given tile X */
-function findSurfaceY(world, tileX) {
+export function findSurfaceY(world, tileX) {
     for (let y = 0; y < WORLD_HEIGHT; y++) {
         const block = getTile(world, tileX, y);
         if (block !== 'air' && block !== 'leaves' && block !== 'water') {

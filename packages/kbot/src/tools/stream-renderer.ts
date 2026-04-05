@@ -16,7 +16,7 @@ import { drawRobot, drawMoodParticles, drawHat, drawPet, drawBuddyCompanion, typ
 import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrainPanel, getBrainAction, tickMiniGame, drawMiniGameOverlay, tickProgression, updateQuestProgress, drawQuestPanel, tickRandomEvent, drawRandomEvent, shippedEffects, extraJokeResponses, multiLanguageGreetings, unlockableHats, type StreamIntelligence, type BrainAction } from './stream-intelligence.js'
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
 import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderParticles, tickParticlesPBD, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, triggerDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, renderAnimatedWater, renderLavaFlow, buildParallaxLayers, renderParallaxLayers, tickGrowingPlants, renderGrowingPlants, createRadianceGrid, updateRadianceGrid, renderRadianceOverlay, renderSubsurfaceGlow, buildSubsurfacePanels, createFrameCache, shouldRenderLayer, cacheLayer, drawCachedLayer, renderVolumetricFog, getFogParams, cyclePalette, computeAnimationParams, type Particle as RenderParticle, type GrowingPlant, type ParallaxLayer, type PostProcessOptions, type RadianceGrid, type FrameCache, type AnimationParams } from './render-engine.js'
-import { initTileWorld, renderTileWorld, updateCamera, handleTileCommand, saveWorld, loadWorld, TILE_SIZE, type TileWorld } from './tile-world.js'
+import { initTileWorld, renderTileWorld, updateCamera, handleTileCommand, saveWorld, loadWorld, TILE_SIZE, CHUNK_WIDTH, WORLD_HEIGHT, getTile, setTile, findSurfaceY, type TileWorld } from './tile-world.js'
 import { initRomEngine, renderRomBackground, tickRomEngine, type RomEngineState } from './rom-engine.js'
 import { initLivingWorld, tickLivingWorld, renderLivingWorldOverlays, onChatMessage as onLivingWorldChat, renderFlowers, renderFire, saveLivingWorldState, loadLivingWorldState, evolveWorld, applyDreamChanges, type EcologyState, type WorldMemory as LivingWorldMemory, type EmotionalMap, type ConversationLayer } from './living-world.js'
 import { initEvolutionEngine, loadEvolutionState, saveEvolutionState, tickEvolution, renderTechnique, type EvolutionEngine } from './evolution-engine.js'
@@ -1777,12 +1777,19 @@ function queueSpeech(text: string, mood: string, priority: number, duration: num
 }
 
 // ─── Exploration State Machine ──────────────────────────────────
+type StructureType = 'tower' | 'wall' | 'bridge' | 'marker' | 'shelter'
+const STRUCTURE_TYPES: StructureType[] = ['tower', 'wall', 'bridge', 'marker', 'shelter']
+
 interface ExplorationState {
   activity: 'idle' | 'walking' | 'examining' | 'building' | 'discovering' | 'thinking'
   activityStartFrame: number
   activityDuration: number  // frames
   targetX: number
   buildProgress: number
+  structureType: StructureType
+  blocksPlaced: number      // how many blocks placed so far in current build
+  buildBaseX: number        // tile X where building starts
+  buildBaseY: number        // surface Y at build location
 }
 let exploration: ExplorationState | null = null
 
@@ -1833,7 +1840,7 @@ const discoveryLines = [
 ]
 
 function tickExploration(frame: number): void {
-  if (!exploration) exploration = { activity: 'idle', activityStartFrame: 0, activityDuration: 0, targetX: charState.robotX || 640, buildProgress: 0 }
+  if (!exploration) exploration = { activity: 'idle', activityStartFrame: 0, activityDuration: 0, targetX: charState.robotX || 640, buildProgress: 0, structureType: 'tower', blocksPlaced: 0, buildBaseX: 0, buildBaseY: 0 }
 
   const elapsed = frame - exploration.activityStartFrame
 
@@ -1874,12 +1881,23 @@ function tickExploration(frame: number): void {
         queueSpeech(examiningLines[Math.floor(Math.random() * examiningLines.length)], 'thinking', 40, 48, 'exploration')
         break
 
-      case 'building':
-        // Build something!
+      case 'building': {
+        // Build something! Pick a structure type and find a build location
         exploration.activityDuration = 90 + Math.floor(Math.random() * 90) // 15-30 seconds
         exploration.buildProgress = 0
-        queueSpeech(buildingLines[Math.floor(Math.random() * buildingLines.length)], 'excited', 50, 48, 'exploration')
+        exploration.blocksPlaced = 0
+        exploration.structureType = STRUCTURE_TYPES[Math.floor(Math.random() * STRUCTURE_TYPES.length)]
+        if (tileWorld) {
+          const robotTileX = Math.floor((charState.robotX || 640) / TILE_SIZE)
+          exploration.buildBaseX = robotTileX + 2
+          exploration.buildBaseY = findSurfaceY(tileWorld, robotTileX + 2)
+        }
+        const structureNames: Record<StructureType, string> = {
+          tower: 'a tower', wall: 'a wall', bridge: 'a bridge', marker: 'a marker', shelter: 'a shelter'
+        }
+        queueSpeech(`Time to build ${structureNames[exploration.structureType]}. Placing blocks...`, 'excited', 50, 48, 'exploration')
         break
+      }
 
       case 'thinking':
         // Deep thought
@@ -1903,9 +1921,123 @@ function tickExploration(frame: number): void {
     }
   }
 
-  // During building, increment progress (visual feedback)
+  // During building — actually place blocks in the tile world every ~30 frames (5 seconds)
   if (exploration.activity === 'building') {
     exploration.buildProgress = elapsed / exploration.activityDuration
+    if (tileWorld && elapsed > 0 && elapsed % 30 === 0) {
+      const bx = exploration.buildBaseX
+      const by = exploration.buildBaseY
+      if (by > 0) {
+        const step = exploration.blocksPlaced
+        let placed = false
+        switch (exploration.structureType) {
+          case 'tower':
+            // Stack bricks vertically (5 blocks tall)
+            if (step < 5) {
+              setTile(tileWorld, bx, by - 1 - step, 'brick')
+              placed = true
+            }
+            break
+          case 'wall':
+            // Place bricks horizontally (5 blocks wide)
+            if (step < 5) {
+              setTile(tileWorld, bx + step, by - 1, 'brick')
+              placed = true
+            }
+            break
+          case 'bridge':
+            // Place wood blocks spanning a gap (5 wide)
+            if (step < 5) {
+              setTile(tileWorld, bx + step, by, 'wood')
+              placed = true
+            }
+            break
+          case 'marker':
+            // Single column: 3 bricks + glass on top
+            if (step < 3) {
+              setTile(tileWorld, bx, by - 1 - step, 'brick')
+              placed = true
+            } else if (step === 3) {
+              setTile(tileWorld, bx, by - 4, 'glass')
+              placed = true
+            }
+            break
+          case 'shelter':
+            // 3-wide base, 2 walls, roof (7 blocks total)
+            if (step === 0) { setTile(tileWorld, bx, by - 1, 'brick'); placed = true }
+            else if (step === 1) { setTile(tileWorld, bx + 1, by - 1, 'air'); placed = true }
+            else if (step === 2) { setTile(tileWorld, bx + 2, by - 1, 'brick'); placed = true }
+            else if (step === 3) { setTile(tileWorld, bx, by - 2, 'brick'); placed = true }
+            else if (step === 4) { setTile(tileWorld, bx + 2, by - 2, 'brick'); placed = true }
+            else if (step === 5) { setTile(tileWorld, bx, by - 3, 'wood'); placed = true }
+            else if (step === 6) { setTile(tileWorld, bx + 1, by - 3, 'wood'); placed = true; setTile(tileWorld, bx + 2, by - 3, 'wood') }
+            break
+        }
+        if (placed) {
+          exploration.blocksPlaced++
+          if (exploration.blocksPlaced <= 5) {
+            queueSpeech(`Placing block ${exploration.blocksPlaced}...`, 'talking', 35, 24, 'building')
+          }
+        }
+      }
+    }
+    // When building finishes, save the world
+    if (elapsed >= exploration.activityDuration && tileWorld) {
+      saveWorld(tileWorld)
+      queueSpeech('Structure complete. Saved to the world.', 'excited', 50, 36, 'building')
+    }
+  }
+
+  // During discovering — scan the tile world for interesting underground features
+  if (exploration.activity === 'discovering' && tileWorld && elapsed === 18) {
+    const robotTileX = Math.floor((charState.robotX || 640) / TILE_SIZE)
+    const findings: string[] = []
+    for (let dx = -5; dx <= 5; dx++) {
+      const gx = robotTileX + dx
+      const gy = findSurfaceY(tileWorld, gx)
+      if (gy <= 0) continue
+      for (let dy = 1; dy < 10; dy++) {
+        if (gy + dy >= WORLD_HEIGHT) break
+        const block = getTile(tileWorld, gx, gy + dy)
+        if (block === 'ore_iron') findings.push('iron ore')
+        if (block === 'ore_gold') findings.push('gold ore')
+        if (block === 'ore_diamond') findings.push('diamond ore')
+      }
+    }
+    if (findings.length > 0) {
+      const unique = [...new Set(findings)]
+      queueSpeech(`Discovery! I detected ${unique.join(' and ')} deposits nearby. ${unique.length} vein${unique.length > 1 ? 's' : ''} underground.`, 'excited', 60, 48, 'discovery')
+    }
+  }
+
+  // During examining — read the actual terrain and report real observations
+  if (exploration.activity === 'examining' && tileWorld && elapsed === 12) {
+    const robotTileX = Math.floor((charState.robotX || 640) / TILE_SIZE)
+    const groundY = findSurfaceY(tileWorld, robotTileX)
+    let trees = 0, water = 0, caves = 0
+    for (let dx = -10; dx <= 10; dx++) {
+      const gx = robotTileX + dx
+      const gy = findSurfaceY(tileWorld, gx)
+      if (gy <= 0) continue
+      // Check for tree canopy (leaves above surface)
+      if (gy > 0 && getTile(tileWorld, gx, gy - 1) === 'leaves') trees++
+      // Check for water at surface
+      if (getTile(tileWorld, gx, gy) === 'water') water++
+      // Check for caves (air pockets underground)
+      for (let dy = 3; dy < 15; dy++) {
+        if (gy + dy >= WORLD_HEIGHT) break
+        if (getTile(tileWorld, gx, gy + dy) === 'air') { caves++; break }
+      }
+    }
+    const observations: string[] = []
+    if (trees > 3) observations.push(`${trees} trees in this area`)
+    if (water > 0) observations.push(`water nearby`)
+    if (caves > 2) observations.push(`cave systems below`)
+    if (groundY < 14) observations.push(`high elevation`)
+    if (groundY > 18) observations.push(`in a valley`)
+    if (observations.length > 0) {
+      queueSpeech(`Examining the terrain: ${observations.join(', ')}. Depth to bedrock: ${WORLD_HEIGHT - groundY} blocks.`, 'thinking', 40, 48, 'examining')
+    }
   }
 }
 

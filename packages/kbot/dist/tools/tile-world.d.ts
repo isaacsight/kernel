@@ -32,9 +32,15 @@ export declare function updateCamera(world: TileWorld, robotWorldX: number, pane
 export declare function worldXToTile(worldPixelX: number): number;
 /** Convert tile X to world pixel X */
 export declare function tileToWorldX(tileX: number): number;
+/** Get a tile at absolute tile coordinates, generating chunk if needed */
+export declare function getTile(world: TileWorld, tileX: number, tileY: number): BlockType;
+/** Set a tile at absolute tile coordinates */
+export declare function setTile(world: TileWorld, tileX: number, tileY: number, block: BlockType): boolean;
 /** Render the visible tile world */
 export declare function renderTileWorld(ctx: CanvasRenderingContext2D, world: TileWorld, panelX: number, panelY: number, panelWidth: number, panelHeight: number, robotWorldX: number, frame: number): void;
 /** Parse and handle tile world chat commands. Returns response string or null if not a tile command. */
 export declare function handleTileCommand(text: string, username: string, world: TileWorld, robotWorldPixelX: number): string | null;
+/** Find the surface Y (first non-air tile from top) at a given tile X */
+export declare function findSurfaceY(world: TileWorld, tileX: number): number;
 export declare function registerTileWorldTools(): void;
 //# sourceMappingURL=tile-world.d.ts.map
