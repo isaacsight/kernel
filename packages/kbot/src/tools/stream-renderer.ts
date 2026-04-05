@@ -17,6 +17,7 @@ import { initIntelligence, tickIntelligence, handleIntelligenceCommand, drawBrai
 import { initStreamBrain, analyzeChatForDomains, tickStreamBrain, handleBrainCommand, drawBrainActivity, type StreamBrain } from './stream-brain.js'
 import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderParticles, tickParticlesPBD, createParticleEmitter, drawCharacterEffects, checkMoodTransition, renderDamageFlash, triggerDamageFlash, buildCharacterLights, buildCharacterBloom, getAmbientForTime, renderAnimatedWater, renderLavaFlow, buildParallaxLayers, renderParallaxLayers, tickGrowingPlants, renderGrowingPlants, createRadianceGrid, updateRadianceGrid, renderRadianceOverlay, renderSubsurfaceGlow, buildSubsurfacePanels, createFrameCache, shouldRenderLayer, cacheLayer, drawCachedLayer, renderVolumetricFog, getFogParams, cyclePalette, computeAnimationParams, type Particle as RenderParticle, type GrowingPlant, type ParallaxLayer, type PostProcessOptions, type RadianceGrid, type FrameCache, type AnimationParams } from './render-engine.js'
 import { initTileWorld, renderTileWorld, updateCamera, handleTileCommand, saveWorld, loadWorld, TILE_SIZE, type TileWorld } from './tile-world.js'
+import { initRomEngine, renderRomBackground, tickRomEngine, type RomEngineState } from './rom-engine.js'
 import { initLivingWorld, tickLivingWorld, renderLivingWorldOverlays, onChatMessage as onLivingWorldChat, renderFlowers, renderFire, saveLivingWorldState, loadLivingWorldState, evolveWorld, applyDreamChanges, type EcologyState, type WorldMemory as LivingWorldMemory, type EmotionalMap, type ConversationLayer } from './living-world.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
@@ -1572,6 +1573,7 @@ let charState: StreamCharState = {
 
 // Tile world state (Minecraft-style background, null = fallback to drawBackground)
 let tileWorld: TileWorld | null = null
+let romState: RomEngineState | null = null
 let livingWorld: { ecology: EcologyState; memory: LivingWorldMemory; emotions: EmotionalMap; conversations: ConversationLayer } | null = null
 
 // ─── Phase 1: Buddy Speech Pools ─────────────────────────────
@@ -2384,32 +2386,22 @@ function renderFrame(): Buffer {
   // ════════════════════════════════════════════════════════════════
   // LAYER 1: TILE WORLD — fills entire 1280x720 frame
   // ════════════════════════════════════════════════════════════════
-  // Use clean animated backgrounds (tile world disabled until properly tuned)
-  // tileWorld rendering commented out — the terrain generation needs work before going live
-  {
-    ctx.fillStyle = world.events.includes('lightning') ? '#ffffff' : getWorldBg()
-    ctx.fillRect(0, 0, WIDTH, HEIGHT)
-    renderSky(ctx as any, WIDTH, HEIGHT, world.timeOfDay, world.weather, animFrame, WIDTH)
-    if (charState.parallaxLayers.length === 0) {
-      charState.parallaxLayers = buildParallaxLayers(world.ground, WIDTH)
-    }
-    renderParallaxLayers(ctx as any, charState.parallaxLayers, charState.robotX, animFrame)
-    drawBackground(ctx as any, animFrame)
-    if (world.ground === 'ocean') renderAnimatedWater(ctx as any, WIDTH, animFrame)
-    else if (world.ground === 'lava') renderLavaFlow(ctx as any, WIDTH, animFrame)
-    renderGrowingPlants(ctx as any, charState.growingPlants)
-
-    // Draw a clean ground plane for the robot to stand on
-    const groundY = Math.floor(HEIGHT * 0.62)
+  // ROM Engine background — HDMA sky gradient + parallax layers
+  if (romState) {
+    tickRomEngine(romState, 1000 / FPS)
+    renderRomBackground(ctx as any, romState, charState.robotX || 0, animFrame, WIDTH, HEIGHT)
+    // Ground plane below parallax hills
+    const groundY = Math.floor(HEIGHT * 0.55)
     const groundGrad = ctx.createLinearGradient(0, groundY, 0, HEIGHT)
     groundGrad.addColorStop(0, '#1a4d1a')
     groundGrad.addColorStop(0.3, '#0d3310')
     groundGrad.addColorStop(1, '#061a08')
     ctx.fillStyle = groundGrad
     ctx.fillRect(0, groundY, WIDTH, HEIGHT - groundY)
-    // Ground line highlight
-    ctx.fillStyle = '#2d6b2d'
-    ctx.fillRect(0, groundY, WIDTH, 2)
+  } else {
+    // Fallback
+    ctx.fillStyle = '#0d1117'
+    ctx.fillRect(0, 0, WIDTH, HEIGHT)
   }
 
   // Weather particles over the full frame
@@ -2446,7 +2438,7 @@ function renderFrame(): Buffer {
 
   // Robot: centered, feet on the ground line, dominant presence
   const robotScreenX = Math.floor(WIDTH / 2 - (32 * robotScale) / 2)
-  const groundY = Math.floor(HEIGHT * 0.62)
+  const groundY = Math.floor(HEIGHT * 0.55)
   const robotScreenY = groundY - 50 * robotScale  // feet at ground level (sprite is 50px tall)
 
   // Robot glow
@@ -3608,6 +3600,7 @@ export function registerStreamRendererTools(): void {
       lastChatCount = 0
       lastChatTime = Date.now()
       tileWorld = loadWorld() || initTileWorld()
+      romState = initRomEngine('plains', 'night')
       livingWorld = loadLivingWorldState() || initLivingWorld()
       // Evolve world based on time since last stream
       if (tileWorld && livingWorld) {
