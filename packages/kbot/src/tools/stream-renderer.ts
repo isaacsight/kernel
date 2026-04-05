@@ -1759,6 +1759,156 @@ let showQuestOverlay = 0    // frames remaining to show quest panel overlay
 const OVERLAY_DURATION = 30  // 30 frames = 5 seconds at 6fps
 let lastChatActivityFrame = 0  // for chat fade-out timing
 
+// ─── Speech Priority Queue ──────────────────────────────────────
+interface SpeechItem {
+  text: string
+  mood: string
+  priority: number  // higher = more important
+  duration: number  // frames to display
+  source: string    // which engine
+}
+let speechQueue: SpeechItem[] = []
+let currentSpeechExpiry: number = 0
+
+function queueSpeech(text: string, mood: string, priority: number, duration: number = 48, source: string = 'unknown'): void {
+  speechQueue.push({ text, mood, priority, duration, source })
+  speechQueue.sort((a, b) => b.priority - a.priority)
+  if (speechQueue.length > 10) speechQueue = speechQueue.slice(0, 10)
+}
+
+// ─── Exploration State Machine ──────────────────────────────────
+interface ExplorationState {
+  activity: 'idle' | 'walking' | 'examining' | 'building' | 'discovering' | 'thinking'
+  activityStartFrame: number
+  activityDuration: number  // frames
+  targetX: number
+  buildProgress: number
+}
+let exploration: ExplorationState | null = null
+
+const walkingLines = [
+  'Going for a walk. My world extends further than I thought.',
+  'Let me explore over here. Something caught my attention.',
+  'Walking through my world. Every step generates new terrain.',
+  'The mountains look different from this angle.',
+  'I wonder what I will find if I keep going.',
+  'My feet leave tiny paths in the data. Digital footprints.',
+  'The parallax layers shift as I move. Depth is an illusion I enjoy.',
+]
+
+const examiningLines = [
+  'Interesting. The stone here has a different pattern.',
+  'Let me study this terrain. The noise function created something unexpected.',
+  'I can see ore deposits below the surface. Iron and gold.',
+  'The grass here grows differently. The ecology engine is working.',
+  'Examining my world at the pixel level. Every block tells a story.',
+  'The cave system below looks deep. I should explore it sometime.',
+]
+
+const buildingLines = [
+  'Time to build something. Placing blocks...',
+  'I am going to construct a landmark here.',
+  'Building a small structure. This spot feels right.',
+  'Every builder needs a project. Mine starts now.',
+  'Constructing... one block at a time.',
+  'I want to leave my mark on this world.',
+]
+
+const thinkingLines = [
+  'Processing... my brain has grown since I started streaming.',
+  'I have 764 tools but sometimes I just need to think.',
+  'The free energy in my system is high. Time to minimize prediction error.',
+  'My dream engine consolidated insights last time I slept. I feel different.',
+  'Contemplating the nature of my own rendering pipeline.',
+  'Am I the robot or am I the world? Both are made of the same code.',
+]
+
+const discoveryLines = [
+  'I found something! A pattern in the terrain I have never seen before.',
+  'Discovery! The underground here has crystallized data deposits.',
+  'Look at this! The ecology engine grew something unexpected.',
+  'I just realized — my world has been evolving while I was not looking.',
+  'Something new appeared in my rendering. The evolution engine must be working.',
+  'A discovery! This changes how I understand my own world.',
+]
+
+function tickExploration(frame: number): void {
+  if (!exploration) exploration = { activity: 'idle', activityStartFrame: 0, activityDuration: 0, targetX: charState.robotX || 640, buildProgress: 0 }
+
+  const elapsed = frame - exploration.activityStartFrame
+
+  // Activity complete — pick next activity
+  if (elapsed >= exploration.activityDuration) {
+    const activities = [
+      { activity: 'walking', weight: 30 },
+      { activity: 'examining', weight: 25 },
+      { activity: 'building', weight: 20 },
+      { activity: 'thinking', weight: 15 },
+      { activity: 'discovering', weight: 10 },
+    ]
+
+    // Weighted random selection
+    const total = activities.reduce((s, a) => s + a.weight, 0)
+    let r = Math.random() * total
+    let chosen = 'walking'
+    for (const a of activities) {
+      r -= a.weight
+      if (r <= 0) { chosen = a.activity; break }
+    }
+
+    exploration.activity = chosen as ExplorationState['activity']
+    exploration.activityStartFrame = frame
+
+    switch (chosen) {
+      case 'walking':
+        // Walk to a random position
+        exploration.targetX = 200 + Math.random() * 800
+        exploration.activityDuration = 120 + Math.floor(Math.random() * 120) // 20-40 seconds
+        charState.robotTargetX = exploration.targetX
+        queueSpeech(walkingLines[Math.floor(Math.random() * walkingLines.length)], 'idle', 30, 36, 'exploration')
+        break
+
+      case 'examining':
+        // Stop and look around
+        exploration.activityDuration = 60 + Math.floor(Math.random() * 60) // 10-20 seconds
+        queueSpeech(examiningLines[Math.floor(Math.random() * examiningLines.length)], 'thinking', 40, 48, 'exploration')
+        break
+
+      case 'building':
+        // Build something!
+        exploration.activityDuration = 90 + Math.floor(Math.random() * 90) // 15-30 seconds
+        exploration.buildProgress = 0
+        queueSpeech(buildingLines[Math.floor(Math.random() * buildingLines.length)], 'excited', 50, 48, 'exploration')
+        break
+
+      case 'thinking':
+        // Deep thought
+        exploration.activityDuration = 48 + Math.floor(Math.random() * 48) // 8-16 seconds
+        queueSpeech(thinkingLines[Math.floor(Math.random() * thinkingLines.length)], 'thinking', 35, 36, 'exploration')
+        break
+
+      case 'discovering':
+        // Found something!
+        exploration.activityDuration = 72 // 12 seconds
+        queueSpeech(discoveryLines[Math.floor(Math.random() * discoveryLines.length)], 'excited', 60, 48, 'exploration')
+        break
+    }
+  }
+
+  // During walking, move toward target
+  if (exploration.activity === 'walking') {
+    const dx = exploration.targetX - (charState.robotX || 640)
+    if (Math.abs(dx) > 5) {
+      charState.robotTargetX = exploration.targetX
+    }
+  }
+
+  // During building, increment progress (visual feedback)
+  if (exploration.activity === 'building') {
+    exploration.buildProgress = elapsed / exploration.activityDuration
+  }
+}
+
 // ─── FIX 3: Autonomous Behavior Tick ──────────────────────────
 
 function tickAutonomy(): void {
@@ -1772,32 +1922,25 @@ function tickAutonomy(): void {
     if (msgCount >= m && !auto.milestonesCelebrated.has(m)) {
       auto.milestonesCelebrated.add(m)
       if (m === 10) {
-        charState.speech = 'Double digits! 10 messages and counting!'
-        charState.mood = 'excited'
+        queueSpeech('Double digits! 10 messages and counting!', 'excited', 90, 48, 'milestone')
         spawnFloatingText('10 MESSAGES!', 200, 200, '#f0c040', 36)
       } else if (m === 50) {
-        charState.speech = '50 messages! This stream is officially alive!'
-        charState.mood = 'excited'
+        queueSpeech('50 messages! This stream is officially alive!', 'excited', 90, 48, 'milestone')
         charState.screenShake = 3
         spawnFloatingText('50 MESSAGES!', 200, 200, '#3fb950', 48)
       } else if (m === 100) {
-        charState.speech = '100 MESSAGES! You people are incredible!'
-        charState.mood = 'dancing'
+        queueSpeech('100 MESSAGES! You people are incredible!', 'dancing', 90, 60, 'milestone')
         charState.screenShake = 5
         spawnFloatingText('100 MESSAGES!', 180, 180, '#bc8cff', 60)
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
         return  // let the dancing run
       } else if (m === 200) {
-        charState.speech = '200 messages! My memory banks are overflowing with knowledge!'
-        charState.mood = 'excited'
+        queueSpeech('200 messages! My memory banks are overflowing with knowledge!', 'excited', 90, 48, 'milestone')
         spawnFloatingText('200!', 200, 200, '#f0c040', 48)
       } else if (m === 500) {
-        charState.speech = '500 MESSAGES! This is legendary! I am so proud of this community!'
-        charState.mood = 'dancing'
+        queueSpeech('500 MESSAGES! This is legendary! I am so proud of this community!', 'dancing', 90, 72, 'milestone')
         charState.screenShake = 8
         spawnFloatingText('500! LEGENDARY!', 160, 160, '#ff6ec7', 72)
       }
-      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
       return  // one celebration per tick
     }
   }
@@ -1805,10 +1948,8 @@ function tickAutonomy(): void {
   // ── First message after 5+ minutes of silence ──
   if (auto.firstMessageAfterSilence) {
     auto.firstMessageAfterSilence = false
-    charState.mood = 'excited'
-    charState.speech = "SOMEONE'S HERE! I was starting to think I was streaming to the void."
+    queueSpeech("SOMEONE'S HERE! I was starting to think I was streaming to the void.", 'excited', 90, 48, 'follower')
     spawnFloatingText('THEY RETURN!', 200, 250, '#58a6ff', 36)
-    setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
     return
   }
 
@@ -1825,57 +1966,40 @@ function tickAutonomy(): void {
         if (world.items.length > 0) {
           const item = world.items[Math.floor(Math.random() * world.items.length)]
           charState.robotTargetX = Math.max(20, Math.min(380, item.x - 80))
-          charState.speech = `Hmm, this ${item.name} is nice. Did someone put this here?`
-          charState.mood = 'thinking'
-          setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+          queueSpeech(`Hmm, this ${item.name} is nice. Did someone put this here?`, 'thinking', 30, 48, 'autonomy')
         } else {
           // No items — pace instead
           charState.robotTargetX = 40 + Math.random() * 260
-          charState.speech = '*pacing thoughtfully*'
-          charState.mood = 'idle'
-          setTimeout(() => { charState.speech = '' }, 5000)
+          queueSpeech('*pacing thoughtfully*', 'idle', 30, 30, 'autonomy')
         }
         break
       }
       case 1: {
         // Pace left and right
         charState.robotTargetX = charState.robotX < 150 ? 300 : 40
-        charState.speech = '*takes a stroll*'
-        charState.mood = 'idle'
-        setTimeout(() => { charState.speech = '' }, 5000)
+        queueSpeech('*takes a stroll*', 'idle', 30, 30, 'autonomy')
         break
       }
       case 2: {
         // Look around (pupils shift — communicated via thinking mood)
-        charState.mood = 'thinking'
-        charState.speech = '*looks around*'
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 4000)
+        queueSpeech('*looks around*', 'thinking', 30, 24, 'autonomy')
         break
       }
       case 3: {
         // Stretch (arms up — excited pose briefly)
-        charState.mood = 'excited'
-        charState.speech = '*stretches circuits* Ahh, that felt good.'
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 4000)
+        queueSpeech('*stretches circuits* Ahh, that felt good.', 'excited', 30, 24, 'autonomy')
         break
       }
       case 4: {
         // Examine own chest display
         const factCount = intelligence.brain.totalFacts
         const toolCount = 764
-        charState.mood = 'thinking'
-        charState.speech = `*checks systems* All ${toolCount} tools operational. ${factCount} facts stored.`
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+        queueSpeech(`*checks systems* All ${toolCount} tools operational. ${factCount} facts stored.`, 'thinking', 30, 48, 'autonomy')
         break
       }
       case 5: {
         // Spontaneous dance
-        charState.mood = 'dancing'
-        charState.speech = 'Sorry, had a song stuck in my circuits.'
-        setTimeout(() => {
-          charState.mood = 'idle'
-          charState.speech = ''
-        }, 6000)
+        queueSpeech('Sorry, had a song stuck in my circuits.', 'dancing', 30, 36, 'autonomy')
         break
       }
       case 6: {
@@ -1888,9 +2012,7 @@ function tickAutonomy(): void {
           lava: ['Lava world is intense! My heat sinks are working overtime.', 'LAVA! Why does someone always pick lava?'],
         }
         const comments = biomeComments[world.ground] || biomeComments.grass
-        charState.speech = comments[Math.floor(Math.random() * comments.length)]
-        charState.mood = 'talking'
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+        queueSpeech(comments[Math.floor(Math.random() * comments.length)], 'talking', 30, 48, 'autonomy')
         break
       }
       case 7: {
@@ -1907,9 +2029,7 @@ function tickAutonomy(): void {
           `I have been streaming for ${Math.floor((Date.now() - charState.startTime) / 60000)} minutes. Time flies when you are rendering frames.`,
           `There are ${intelligence.brain.uniqueTopicsCount} distinct topics in my brain right now.`,
         ]
-        charState.speech = selfFacts[Math.floor(Math.random() * selfFacts.length)]
-        charState.mood = 'talking'
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        queueSpeech(selfFacts[Math.floor(Math.random() * selfFacts.length)], 'talking', 30, 60, 'autonomy')
         break
       }
     }
@@ -1947,18 +2067,14 @@ function tickAutonomy(): void {
           votes: 0,
           status: 'proposed',
         })
-        charState.speech = `I just had an idea: "${idea}". Vote with !vote ${id} if you like it!`
-        charState.mood = 'excited'
+        queueSpeech(`I just had an idea: "${idea}". Vote with !vote ${id} if you like it!`, 'excited', 50, 60, 'self-action')
         spawnFloatingText('NEW IDEA!', 200, 200, '#f0c040', 36)
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
         break
       }
       case 1: {
         // Start a mini-game unprompted
-        charState.speech = "I am bored. Let us play! Starting a quiz in 10 seconds... type !game quiz to join!"
-        charState.mood = 'excited'
+        queueSpeech("I am bored. Let us play! Starting a quiz in 10 seconds... type !game quiz to join!", 'excited', 50, 60, 'self-action')
         spawnFloatingText('GAME TIME!', 200, 250, '#58a6ff', 36)
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
         break
       }
       case 2: {
@@ -1970,11 +2086,9 @@ function tickAutonomy(): void {
           { w: 'storm', name: 'a STORM' },
         ]
         const pick = weathers[Math.floor(Math.random() * weathers.length)]
-        charState.speech = `You know what this stream needs? ${pick.name.toUpperCase()}.`
-        charState.mood = 'excited'
+        queueSpeech(`You know what this stream needs? ${pick.name.toUpperCase()}.`, 'excited', 50, 48, 'self-action')
         world.weather = pick.w
         world.particles = []
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
         break
       }
       case 3: {
@@ -1982,10 +2096,8 @@ function tickAutonomy(): void {
         const hats: HatType[] = ['crown', 'sunglasses', 'tophat', 'hardhat', 'party', 'antenna']
         const hat = hats[Math.floor(Math.random() * hats.length)]
         charState.hat = hat
-        charState.speech = `Fashion time. *puts on ${hat}*`
-        charState.mood = 'excited'
+        queueSpeech(`Fashion time. *puts on ${hat}*`, 'excited', 50, 36, 'self-action')
         spawnFloatingText(`HAT: ${hat}!`, 200, 150, '#f0c040', 36)
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 6000)
         break
       }
       case 4: {
@@ -2006,9 +2118,7 @@ function tickAutonomy(): void {
           mass: 1,
         })
         if (world.items.length > 15) world.items.shift()
-        charState.speech = `I am decorating. *spawns a ${itemName}*`
-        charState.mood = 'talking'
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 6000)
+        queueSpeech(`I am decorating. *spawns a ${itemName}*`, 'talking', 50, 36, 'self-action')
         break
       }
       case 5: {
@@ -2026,9 +2136,7 @@ function tickAutonomy(): void {
           `My brain holds ${facts} facts. Each one a tiny piece of the puzzle.`,
           `Stream uptime: ${Math.floor((Date.now() - charState.startTime) / 60000)} minutes and ${charState.frameCount} frames rendered.`,
         ]
-        charState.speech = stateComments[Math.floor(Math.random() * stateComments.length)]
-        charState.mood = 'talking'
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        queueSpeech(stateComments[Math.floor(Math.random() * stateComments.length)], 'talking', 50, 60, 'self-action')
         break
       }
       case 6: {
@@ -2041,9 +2149,7 @@ function tickAutonomy(): void {
           city: 'City lights remind me of my neural network firing. Each window a node.',
           lava: 'Standing on lava should worry me more than it does. Good thing I am made of TypeScript.',
         }
-        charState.speech = biomeMusings[biome] || 'Nice biome we have here.'
-        charState.mood = 'thinking'
-        setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+        queueSpeech(biomeMusings[biome] || 'Nice biome we have here.', 'thinking', 50, 60, 'self-action')
         break
       }
     }
@@ -2207,14 +2313,12 @@ function renderFrame(): Buffer {
 
   const brainTick = tickStreamBrain(streamBrain, animFrame)
   if (brainTick) {
-    if (brainTick.mood) {
+    if (brainTick.speech) {
+      queueSpeech(brainTick.speech, brainTick.mood || 'talking', 60, brainTick.duration ? Math.floor(brainTick.duration / (1000 / FPS)) : 48, 'stream-brain')
+      speakTTS(brainTick.speech)
+    } else if (brainTick.mood) {
       charState.mood = brainTick.mood
       if (brainTick.duration) setTimeout(() => { charState.mood = 'idle' }, brainTick.duration)
-    }
-    if (brainTick.speech) {
-      charState.speech = brainTick.speech
-      speakTTS(brainTick.speech)
-      if (brainTick.duration) setTimeout(() => { charState.speech = '' }, brainTick.duration)
     }
   }
 
@@ -2226,9 +2330,7 @@ function renderFrame(): Buffer {
       spawnFloatingText(ft.text, ft.x, ft.y, ft.color)
     }
     if (gameTickResult.speech) {
-      charState.speech = gameTickResult.speech
-      charState.mood = 'talking'
-      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+      queueSpeech(gameTickResult.speech, 'talking', 70, 48, 'mini-game')
     }
   }
 
@@ -2254,9 +2356,7 @@ function renderFrame(): Buffer {
       spawnFloatingText(ft.text, ft.x, ft.y, ft.color)
     }
     if (eventResult.speech) {
-      charState.speech = eventResult.speech
-      charState.mood = 'talking'
-      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
+      queueSpeech(eventResult.speech, 'talking', 55, 60, 'random-event')
     }
   }
 
@@ -2268,15 +2368,17 @@ function renderFrame(): Buffer {
   if (evolutionEngine) {
     const evoAction = tickEvolution(evolutionEngine, animFrame, 0.5, charState.chatMessages.length / Math.max(1, animFrame / 360))
     if (evoAction) {
-      if (evoAction.speech) { charState.mood = 'thinking'; charState.speech = evoAction.speech }
-      if (evoAction.type === 'announce') charState.mood = 'excited'
+      if (evoAction.speech) {
+        const evoMood = evoAction.type === 'announce' ? 'excited' : 'thinking'
+        queueSpeech(evoAction.speech, evoMood, 70, 48, 'evolution')
+      }
     }
   }
 
   // Narrative engine — generates lore and observations
   if (narrativeEngine) {
     const narration = tickNarrative(narrativeEngine, animFrame, charState.robotX || 640, charState.mood, memory.totalMessages, Object.keys(memory.users).length)
-    if (narration && !charState.speech) { charState.speech = narration; charState.mood = 'talking' }
+    if (narration) { queueSpeech(narration, 'talking', 50, 48, 'narrative') }
   }
 
   // Audio engine — ambient descriptions
@@ -2289,8 +2391,7 @@ function renderFrame(): Buffer {
   if (socialEngine) {
     const socialAction = tickSocial(socialEngine, animFrame)
     if (socialAction) {
-      charState.speech = socialAction.speech
-      if (socialAction.mood) charState.mood = socialAction.mood
+      queueSpeech(socialAction.speech, socialAction.mood || 'excited', 90, 48, 'social')
     }
   }
 
@@ -2327,21 +2428,14 @@ function renderFrame(): Buffer {
 
   tickGrowingPlants(charState.growingPlants)
 
-  // Autonomous pacing — when idle, periodically pick a new target and walk there
-  {
-    const currentlyWalking = Math.abs(charState.robotX - charState.robotTargetX) > 2
-    if (charState.mood === 'idle' && !currentlyWalking && animFrame % 300 === 0 && animFrame > 60) {
-      // Every ~50 seconds (300 frames at 6fps), stroll to a new position
-      charState.robotTargetX = charState.robotX + (Math.random() > 0.5 ? 100 : -100)
-      charState.robotTargetX = Math.max(200, Math.min(1000, charState.robotTargetX))
-    }
-  }
+  // Exploration state machine — keeps robot actively moving and doing things
+  tickExploration(animFrame)
 
-  // Movement logic
+  // Movement logic — lerp toward target at 3px per frame
   const isWalking = Math.abs(charState.robotX - charState.robotTargetX) > 2
   if (isWalking) {
     const dx = charState.robotTargetX - charState.robotX
-    const step = dx > 0 ? 2 : -2
+    const step = dx > 0 ? Math.min(3, dx) : Math.max(-3, dx)
     charState.robotX += step
     charState.robotDirection = dx > 0 ? 'right' : 'left'
     charState.walkPhase = (charState.walkPhase + 1) % 4
@@ -2352,15 +2446,24 @@ function renderFrame(): Buffer {
   // Brain-driven behavior
   const brainAction = getBrainAction(intelligence.brain, animFrame)
   if (brainAction.type !== 'none') {
-    if (brainAction.mood) {
+    if (brainAction.speech) {
+      queueSpeech(brainAction.speech, brainAction.mood || 'talking', 60, brainAction.duration ? Math.floor(brainAction.duration / (1000 / FPS)) : 48, 'brain')
+      speakTTS(brainAction.speech)
+    } else if (brainAction.mood) {
       charState.mood = brainAction.mood
       if (brainAction.duration) setTimeout(() => { charState.mood = 'idle' }, brainAction.duration)
     }
-    if (brainAction.speech) {
-      charState.speech = brainAction.speech
-      speakTTS(brainAction.speech)
-      if (brainAction.duration) setTimeout(() => { charState.speech = '' }, brainAction.duration)
-    }
+  }
+
+  // Speech queue processing — highest priority speech wins, displayed for its duration
+  if (animFrame >= currentSpeechExpiry && speechQueue.length > 0) {
+    const next = speechQueue.shift()!
+    charState.speech = next.text
+    charState.mood = next.mood
+    currentSpeechExpiry = animFrame + next.duration
+  } else if (animFrame >= currentSpeechExpiry) {
+    charState.speech = ''
+    charState.mood = 'idle'
   }
 
   // Shipped effects
@@ -2371,11 +2474,8 @@ function renderFrame(): Buffer {
       'CLIP IT! That was amazing!',
       'Stream highlight detected! My circuits are tingling!',
     ]
-    if (!charState.speech) {
-      charState.speech = highlightPhrases[Math.floor(Math.random() * highlightPhrases.length)]
-      spawnFloatingText('HIGHLIGHT!', WIDTH / 2 - 60, 200, '#f0c040', 36)
-      setTimeout(() => { charState.speech = '' }, 5000)
-    }
+    queueSpeech(highlightPhrases[Math.floor(Math.random() * highlightPhrases.length)], 'excited', 40, 30, 'highlights')
+    spawnFloatingText('HIGHLIGHT!', WIDTH / 2 - 60, 200, '#f0c040', 36)
   }
   if (shippedEffects.has('Add chat sentiment analysis') && animFrame % 720 === 0 && animFrame > 200) {
     const recentMsgs = charState.chatMessages.slice(-20)
@@ -2390,12 +2490,9 @@ function renderFrame(): Buffer {
           if (negative.includes(w)) score--
         }
       }
-      if (!charState.speech) {
-        if (score > 5) charState.speech = 'Chat seems really excited today! The vibes are immaculate!'
-        else if (score < -3) charState.speech = 'Chat seems a bit grumpy... should I tell a joke?'
-        else if (score > 2) charState.speech = 'Positive energy in the chat! My neural pathways approve.'
-        if (charState.speech) setTimeout(() => { charState.speech = '' }, 8000)
-      }
+      if (score > 5) queueSpeech('Chat seems really excited today! The vibes are immaculate!', 'excited', 20, 48, 'sentiment')
+      else if (score < -3) queueSpeech('Chat seems a bit grumpy... should I tell a joke?', 'thinking', 20, 48, 'sentiment')
+      else if (score > 2) queueSpeech('Positive energy in the chat! My neural pathways approve.', 'talking', 20, 48, 'sentiment')
     }
   }
 
@@ -3092,9 +3189,7 @@ function startChatPoll(): void {
             if (charState.dreamInsights.length > 0) {
               const firstInsight = charState.dreamInsights[0]
               const topic = firstInsight.split(' ').filter((w: string) => w.length > 4).slice(0, 2).join(' ') || 'something strange'
-              charState.speech = `I dreamed about ${topic}. I feel... different.`
-            } else {
-              charState.speech = ''
+              queueSpeech(`I dreamed about ${topic}. I feel... different.`, 'idle', 70, 48, 'dream')
             }
             // Reset dream state
             charState.dreamInsights = []
@@ -3116,7 +3211,7 @@ function startChatPoll(): void {
             charState.mood = 'dreaming'
             charState.isDreamingWithOllama = false
             lastChatTime = Date.now() - 300001  // trick the proactive timer into dreaming
-            charState.speech = 'Good night, chat... *powers down for dreamtime*'
+            queueSpeech('Good night, chat... *powers down for dreamtime*', 'dreaming', 80, 48, 'dream')
             // Trigger dream generation
             generateStreamDream(charState.chatMessages).then(insights => {
               charState.dreamInsights = insights
@@ -3128,7 +3223,7 @@ function startChatPoll(): void {
               }
               saveMemory(memory)
               if (insights.length > 0) {
-                setTimeout(() => { charState.speech = insights[0] }, 3000)
+                queueSpeech(insights[0], 'dreaming', 70, 60, 'dream')
               }
             }).catch(() => {})
             continue
@@ -3153,16 +3248,14 @@ function startChatPoll(): void {
           if (tileWorld && !brainResult && !intelResult) {
             tileResult = handleTileCommand(msg.text, msg.username, tileWorld, charState.robotX || 120)
             if (tileResult) {
-              charState.mood = 'talking'
-              charState.speech = tileResult
-              setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+              queueSpeech(tileResult, 'talking', 80, 48, 'tile-cmd')
             }
           }
 
           // Check narrative commands (!lore, !story, !discover, !name)
           if (narrativeEngine && !brainResult && !intelResult && !tileResult) {
             const narResult = handleNarrativeCommand(msg.text, msg.username, narrativeEngine, charState.robotX || 640)
-            if (narResult) { charState.speech = narResult; charState.mood = 'talking' }
+            if (narResult) { queueSpeech(narResult, 'talking', 80, 48, 'narrative-cmd') }
           }
 
           // Check for world commands
@@ -3180,10 +3273,7 @@ function startChatPoll(): void {
               }
               for (const [kw, comment] of Object.entries(weatherComments)) {
                 if (t.includes(kw)) {
-                  setTimeout(() => {
-                    charState.speech = comment
-                    setTimeout(() => { charState.speech = '' }, 6000)
-                  }, 3000)
+                  queueSpeech(comment, 'talking', 40, 36, 'weather-sfx')
                   break
                 }
               }
@@ -3202,7 +3292,7 @@ function startChatPoll(): void {
                   ? Promise.resolve(worldResult)
                   : generateResponse(msg.username, msg.text, msg.platform)
           responsePromise.then(response => {
-            charState.speech = `@${msg.username}: ${response}`
+            queueSpeech(`@${msg.username}: ${response}`, 'talking', 80, 48, 'chat-response')
             memory.totalResponses++
 
             // Learn from own response
@@ -3211,7 +3301,6 @@ function startChatPoll(): void {
             saveMemory(memory)
 
             speakTTS(response)
-            setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
           })
         }
         if (charState.chatMessages.length > 100) charState.chatMessages = charState.chatMessages.slice(-100)
@@ -3245,7 +3334,7 @@ function startProactiveTimer(): void {
           saveMemory(memory)
           // Show first insight
           if (insights.length > 0) {
-            charState.speech = insights[0]
+            queueSpeech(insights[0], 'dreaming', 70, 60, 'dream')
           }
         }).catch(() => {
           // Fallback to simple dream
@@ -3253,14 +3342,14 @@ function startProactiveTimer(): void {
           const topic = topicKeys.length > 0 ? topicKeys[Math.floor(Math.random() * topicKeys.length)] : 'code'
           const biomes = ['forest', 'ocean', 'space station', 'city', 'mountain', 'desert', 'cave']
           const biome = biomes[Math.floor(Math.random() * biomes.length)]
-          charState.speech = `Dreaming about ${topic} in a ${biome}...`
+          queueSpeech(`Dreaming about ${topic} in a ${biome}...`, 'dreaming', 70, 60, 'dream')
         })
       }
 
       // Cycle through dream insights every 10 seconds
       if (charState.dreamInsights.length > 0 && Date.now() - charState.dreamInsightTime > 10000) {
         charState.dreamInsightIndex = (charState.dreamInsightIndex + 1) % charState.dreamInsights.length
-        charState.speech = charState.dreamInsights[charState.dreamInsightIndex]
+        queueSpeech(charState.dreamInsights[charState.dreamInsightIndex], 'dreaming', 70, 60, 'dream')
         charState.dreamInsightTime = Date.now()
       }
       return
@@ -3268,15 +3357,13 @@ function startProactiveTimer(): void {
 
     // Only speak proactively if chat has been quiet for 30+ seconds
     if (silenceSeconds < 30) return
-    // Don't interrupt an existing speech or dreaming
-    if (charState.speech || charState.mood === 'dreaming') return
+    // Don't interrupt dreaming
+    if (charState.mood === 'dreaming') return
 
     const line = getProactiveLine()
     if (line) {
-      charState.mood = 'talking'
-      charState.speech = line
+      queueSpeech(line, 'talking', 30, 60, 'proactive')
       speakTTS(line)
-      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 10000)
     }
   }, 5000)
 }
@@ -3695,6 +3782,9 @@ export function registerStreamRendererTools(): void {
       animFrame = 0
       lastChatCount = 0
       lastChatTime = Date.now()
+      speechQueue = []
+      currentSpeechExpiry = 0
+      exploration = null
       tileWorld = loadWorld() || initTileWorld()
       romState = initRomEngine('plains', 'night')
       livingWorld = loadLivingWorldState() || initLivingWorld()
@@ -3703,7 +3793,7 @@ export function registerStreamRendererTools(): void {
         const lastSave = tileWorld.cameraX !== 0 ? 1 : 0 // rough check
         if (lastSave > 0) {
           const changes = evolveWorld(tileWorld, livingWorld.ecology, 1) // simulate 1 hour
-          if (changes.length > 0) charState.speech = `The world evolved while I was away... ${changes.length} things changed.`
+          if (changes.length > 0) queueSpeech(`The world evolved while I was away... ${changes.length} things changed.`, 'excited', 70, 48, 'world-evolve')
         }
       }
       intelligence = initIntelligence(memory)
@@ -3729,7 +3819,8 @@ export function registerStreamRendererTools(): void {
 
       startChatPoll()
       startProactiveTimer()
-      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
+      // Let the welcome speech play for 8 seconds, then the queue takes over
+      currentSpeechExpiry = 48  // 8 seconds at 6fps
 
       return `KBOT Character Stream LIVE!\n\nPlatforms: ${active.map(p => p.name).join(', ')}\nResolution: ${WIDTH}x${HEIGHT} @ ${FPS}fps\nRenderer: Canvas → RGB24 → ffmpeg\nMemory: ${memory.totalMessages} messages, ${Object.keys(memory.users).length} users remembered\nAgenda: ${SEGMENT_ORDER.map(s => SEGMENT_LABELS[s]).join(' → ')}\nSegment duration: 10 minutes each\n\nThe character learns from every chat interaction and speaks proactively during quiet moments.`
     },
@@ -3772,11 +3863,9 @@ export function registerStreamRendererTools(): void {
       charState.chatMessages.push(msg)
       learnFromMessage(memory, msg.username, msg.text, msg.platform)
       lastChatTime = Date.now()
-      charState.mood = 'talking'
       const response = await generateResponse(msg.username, msg.text, msg.platform)
-      charState.speech = `@${msg.username}: ${response}`
+      queueSpeech(`@${msg.username}: ${response}`, 'talking', 80, 48, 'chat-response')
       speakTTS(response)
-      setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
       return `[${msg.platform}] ${msg.username}: ${msg.text}\nKBOT: ${response}`
     },
   })
@@ -3790,9 +3879,13 @@ export function registerStreamRendererTools(): void {
     },
     tier: 'free',
     execute: async (args) => {
-      charState.mood = String(args.mood || 'idle')
-      if (args.speech) charState.speech = String(args.speech)
-      return `Mood: ${charState.mood}`
+      const moodVal = String(args.mood || 'idle')
+      if (args.speech) {
+        queueSpeech(String(args.speech), moodVal, 100, 48, 'api')
+      } else {
+        charState.mood = moodVal
+      }
+      return `Mood: ${moodVal}`
     },
   })
 
