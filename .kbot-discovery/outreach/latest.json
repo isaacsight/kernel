@@ -1,59 +1,59 @@
 {
-  "timestamp": "2026-04-05T05:05:39.582Z",
+  "timestamp": "2026-04-05T17:20:37.483Z",
   "projects": [
-    {
-      "name": "presenton/presenton",
-      "url": "https://github.com/presenton/presenton",
-      "stars": 4560,
-      "description": "Open-Source AI Presentation Generator and API (Gamma, Beautiful AI, Decktopus Alternative)"
-    },
     {
       "name": "activepieces/activepieces",
       "url": "https://github.com/activepieces/activepieces",
-      "stars": 21573,
+      "stars": 21583,
       "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
     },
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1059,
-      "description": "the easiest way to run natural language-described workflows automatically"
+      "name": "iamtouchskyer/memex",
+      "url": "https://github.com/iamtouchskyer/memex",
+      "stars": 55,
+      "description": "Zettelkasten-based persistent memory for AI coding agents. Works with Claude Code, Cursor, VS Code Copilot, Codex, Windsurf & any MCP client. No vector DB — just markdown + git sync."
     },
     {
-      "name": "taylorwilsdon/google_workspace_mcp",
-      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
-      "stars": 2024,
-      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
+      "name": "sonichi/sutando",
+      "url": "https://github.com/sonichi/sutando",
+      "stars": 55,
+      "description": "Summon your AI superpower — voice, vision, and autonomous action"
     },
     {
       "name": "mensfeld/code-on-incus",
       "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 367,
+      "stars": 370,
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 671,
-      "description": "Agent Skills for Solopreneurs"
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 2025,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
     },
     {
-      "name": "davepoon/buildwithclaude",
-      "url": "https://github.com/davepoon/buildwithclaude",
-      "stars": 2696,
-      "description": "A single hub to find Claude Skills, Agents, Commands, Hooks, Plugins, and Marketplace collections to extend Claude Code, Claude Desktop, Agent SDK and OpenClaw"
+      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "stars": 185,
+      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+    },
+    {
+      "name": "dacrypt/tesla-claude-plugin",
+      "url": "https://github.com/dacrypt/tesla-claude-plugin",
+      "stars": 0,
+      "description": "Tesla plugin for Claude Code — control your Tesla with natural language. 9 skills: status, charging, vehicle control, order tracking, analytics, and a self-hosted web dashboard."
+    },
+    {
+      "name": "koach08/agentsift",
+      "url": "https://github.com/koach08/agentsift",
+      "stars": 0,
+      "description": "Security scanner for AI agent plugins, skills, and MCP packages. npm audit for the AI agent ecosystem."
     },
     {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
       "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
       "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     }
   ],
   "latestPaper": {
