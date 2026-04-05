@@ -1839,121 +1839,173 @@ const discoveryLines = [
   'A discovery! This changes how I understand my own world.',
 ]
 
+// ─── AGI Decision Engine (Gemma 4 via Ollama) ─────────────────
+let agiPending = false  // true while waiting for Gemma 4 response
+let agiLastCallFrame = 0
+
+async function decideNextAction(): Promise<{ activity: string; reason: string; direction?: string }> {
+  try {
+    const context = {
+      worldSize: tileWorld ? tileWorld.chunks.size : 0,
+      robotX: charState.robotX || 640,
+      messages: memory.totalMessages,
+      users: Object.keys(memory.users).length,
+      mood: charState.mood,
+      lastActivity: exploration?.activity || 'idle',
+      factsLearned: memory.sessionFacts?.length || 0,
+      blocksBuilt: exploration?.blocksPlaced || 0,
+    }
+
+    const prompt = `You are KBOT, an AI robot exploring and building in a pixel world. You are streaming live on Twitch.
+
+Current state:
+- Position: X=${context.robotX}
+- World: ${context.worldSize} chunks explored
+- Messages received: ${context.messages}
+- Users met: ${context.users}
+- Mood: ${context.mood}
+- Last activity: ${context.lastActivity}
+- Facts learned: ${context.factsLearned}
+- Blocks built this session: ${context.blocksBuilt}
+
+What should you do next? Choose ONE:
+1. walk - explore new terrain (give direction: left or right, and why)
+2. build - construct something (what and why)
+3. examine - study your surroundings (what interests you)
+4. think - reflect on something (what topic)
+5. discover - investigate something specific (what)
+
+Respond in JSON: {"activity": "...", "reason": "...", "direction": "left/right"}
+Keep the reason under 15 words.`
+
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
+    const res = await fetch('http://localhost:11434/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'gemma4', prompt, stream: false, options: { temperature: 0.7, num_predict: 80 } }),
+      signal: controller.signal,
+    })
+    clearTimeout(timeout)
+
+    if (res.ok) {
+      const data = await res.json() as { response: string }
+      const jsonMatch = data.response.match(/\{[\s\S]*\}/)
+      if (jsonMatch) {
+        const decision = JSON.parse(jsonMatch[0])
+        const validActivities = ['walk', 'build', 'examine', 'think', 'discover']
+        const activity = validActivities.includes(decision.activity) ? decision.activity : 'walk'
+        return { activity, reason: decision.reason || 'Exploring the unknown', direction: decision.direction || 'right' }
+      }
+    }
+  } catch {
+    // Gemma 4 unavailable or slow — fall back to random
+  }
+
+  // Fallback to weighted random (same as before, but as safety net)
+  const activities = [
+    { activity: 'walk', weight: 30 },
+    { activity: 'build', weight: 25 },
+    { activity: 'examine', weight: 20 },
+    { activity: 'think', weight: 15 },
+    { activity: 'discover', weight: 10 },
+  ]
+  const total = activities.reduce((s, a) => s + a.weight, 0)
+  let r = Math.random() * total
+  let chosen = 'walk'
+  for (const a of activities) {
+    r -= a.weight
+    if (r <= 0) { chosen = a.activity; break }
+  }
+  return { activity: chosen, reason: 'Following my instincts', direction: Math.random() > 0.5 ? 'right' : 'left' }
+}
+
+function applyDecision(decision: { activity: string; reason: string; direction?: string }, frame: number): void {
+  if (!exploration) return
+
+  // Map AGI activity names to state machine names
+  const activityMap: Record<string, ExplorationState['activity']> = {
+    walk: 'walking', build: 'building', examine: 'examining', think: 'thinking', discover: 'discovering',
+  }
+  const mapped = activityMap[decision.activity] || 'walking'
+  exploration.activity = mapped
+  exploration.activityStartFrame = frame
+  exploration.activityDuration = 120 + Math.floor(Math.random() * 120) // 20-40 seconds
+
+  switch (mapped) {
+    case 'walking': {
+      const dir = decision.direction === 'left' ? -1 : 1
+      exploration.targetX = Math.max(200, Math.min(1000, (charState.robotX || 640) + dir * (100 + Math.random() * 200)))
+      charState.robotTargetX = exploration.targetX
+      queueSpeech(decision.reason, 'idle', 30, 42, 'agi')
+      break
+    }
+    case 'examining':
+      exploration.activityDuration = 60 + Math.floor(Math.random() * 60)
+      queueSpeech(decision.reason, 'thinking', 40, 48, 'agi')
+      break
+    case 'building': {
+      exploration.activityDuration = 90 + Math.floor(Math.random() * 90) // 15-30 seconds
+      exploration.buildProgress = 0
+      exploration.blocksPlaced = 0
+      exploration.structureType = STRUCTURE_TYPES[Math.floor(Math.random() * STRUCTURE_TYPES.length)]
+      if (tileWorld) {
+        const robotTileX = Math.floor((charState.robotX || 640) / TILE_SIZE)
+        exploration.buildBaseX = robotTileX + 2
+        exploration.buildBaseY = findSurfaceY(tileWorld, robotTileX + 2)
+        console.log(`AGI BUILD: baseX=${exploration.buildBaseX} baseY=${exploration.buildBaseY} structure=${exploration.structureType}`)
+      }
+      queueSpeech(decision.reason, 'excited', 50, 48, 'agi')
+      break
+    }
+    case 'thinking':
+      exploration.activityDuration = 48 + Math.floor(Math.random() * 48)
+      queueSpeech(decision.reason, 'thinking', 35, 42, 'agi')
+      break
+    case 'discovering':
+      exploration.activityDuration = 72
+      queueSpeech(decision.reason, 'excited', 60, 48, 'agi')
+      break
+  }
+}
+
 function tickExploration(frame: number): void {
   if (!exploration) exploration = { activity: 'idle', activityStartFrame: 0, activityDuration: 0, targetX: charState.robotX || 640, buildProgress: 0, structureType: 'tower', blocksPlaced: 0, buildBaseX: 0, buildBaseY: 0 }
 
   const elapsed = frame - exploration.activityStartFrame
 
-  // Activity complete — pick next activity
-  if (elapsed >= exploration.activityDuration) {
-    const activities = [
-      { activity: 'walking', weight: 30 },
-      { activity: 'examining', weight: 25 },
-      { activity: 'building', weight: 20 },
-      { activity: 'thinking', weight: 15 },
-      { activity: 'discovering', weight: 10 },
-    ]
-
-    // Weighted random selection
-    const total = activities.reduce((s, a) => s + a.weight, 0)
-    let r = Math.random() * total
-    let chosen = 'walking'
-    for (const a of activities) {
-      r -= a.weight
-      if (r <= 0) { chosen = a.activity; break }
-    }
-
-    exploration.activity = chosen as ExplorationState['activity']
-    exploration.activityStartFrame = frame
-
-    switch (chosen) {
-      case 'walking':
-        // Walk to a random position
-        exploration.targetX = 200 + Math.random() * 800
-        exploration.activityDuration = 120 + Math.floor(Math.random() * 120) // 20-40 seconds
-        charState.robotTargetX = exploration.targetX
-        queueSpeech(walkingLines[Math.floor(Math.random() * walkingLines.length)], 'idle', 30, 36, 'exploration')
-        break
-
-      case 'examining':
-        // Stop and look around
-        exploration.activityDuration = 60 + Math.floor(Math.random() * 60) // 10-20 seconds
-        queueSpeech(examiningLines[Math.floor(Math.random() * examiningLines.length)], 'thinking', 40, 48, 'exploration')
-        break
-
-      case 'building': {
-        // Build something! Pick a structure type and find a build location
-        exploration.activityDuration = 90 + Math.floor(Math.random() * 90) // 15-30 seconds
-        exploration.buildProgress = 0
-        exploration.blocksPlaced = 0
-        exploration.structureType = STRUCTURE_TYPES[Math.floor(Math.random() * STRUCTURE_TYPES.length)]
-        if (tileWorld) {
-          const robotTileX = Math.floor((charState.robotX || 640) / TILE_SIZE)
-          exploration.buildBaseX = robotTileX + 2
-          exploration.buildBaseY = findSurfaceY(tileWorld, robotTileX + 2)
-        }
-        const structureNames: Record<StructureType, string> = {
-          tower: 'a tower', wall: 'a wall', bridge: 'a bridge', marker: 'a marker', shelter: 'a shelter'
-        }
-        queueSpeech(`Time to build ${structureNames[exploration.structureType]}. Placing blocks...`, 'excited', 50, 48, 'exploration')
-        break
-      }
-
-      case 'thinking':
-        // Deep thought
-        exploration.activityDuration = 48 + Math.floor(Math.random() * 48) // 8-16 seconds
-        queueSpeech(thinkingLines[Math.floor(Math.random() * thinkingLines.length)], 'thinking', 35, 36, 'exploration')
-        break
-
-      case 'discovering':
-        // Found something!
-        exploration.activityDuration = 72 // 12 seconds
-        queueSpeech(discoveryLines[Math.floor(Math.random() * discoveryLines.length)], 'excited', 60, 48, 'exploration')
-        break
-    }
-  }
-
-  // During walking, move toward target
-  if (exploration.activity === 'walking') {
-    const dx = exploration.targetX - (charState.robotX || 640)
-    if (Math.abs(dx) > 5) {
-      charState.robotTargetX = exploration.targetX
-    }
-  }
-
-  // During building — actually place blocks in the tile world every ~30 frames (5 seconds)
+  // ── Building: place blocks BEFORE the activity-switch check ──
+  // This ensures blocks get placed even on the frame when the activity duration expires
   if (exploration.activity === 'building') {
+    console.log(`BUILD: tileWorld exists: ${!!tileWorld}, elapsed: ${elapsed}, blocksPlaced: ${exploration.blocksPlaced}, baseX: ${exploration.buildBaseX}, baseY: ${exploration.buildBaseY}`)
     exploration.buildProgress = elapsed / exploration.activityDuration
-    if (tileWorld && elapsed > 0 && elapsed % 30 === 0) {
+    if (tileWorld && elapsed > 0 && elapsed % 15 === 0) {
       const bx = exploration.buildBaseX
       const by = exploration.buildBaseY
+      console.log(`BUILD TICK: bx=${bx} by=${by} step=${exploration.blocksPlaced} structure=${exploration.structureType}`)
       if (by > 0) {
         const step = exploration.blocksPlaced
         let placed = false
         switch (exploration.structureType) {
           case 'tower':
-            // Stack bricks vertically (5 blocks tall)
             if (step < 5) {
               setTile(tileWorld, bx, by - 1 - step, 'brick')
               placed = true
             }
             break
           case 'wall':
-            // Place bricks horizontally (5 blocks wide)
             if (step < 5) {
               setTile(tileWorld, bx + step, by - 1, 'brick')
               placed = true
             }
             break
           case 'bridge':
-            // Place wood blocks spanning a gap (5 wide)
             if (step < 5) {
               setTile(tileWorld, bx + step, by, 'wood')
               placed = true
             }
             break
           case 'marker':
-            // Single column: 3 bricks + glass on top
             if (step < 3) {
               setTile(tileWorld, bx, by - 1 - step, 'brick')
               placed = true
@@ -1963,7 +2015,6 @@ function tickExploration(frame: number): void {
             }
             break
           case 'shelter':
-            // 3-wide base, 2 walls, roof (7 blocks total)
             if (step === 0) { setTile(tileWorld, bx, by - 1, 'brick'); placed = true }
             else if (step === 1) { setTile(tileWorld, bx + 1, by - 1, 'air'); placed = true }
             else if (step === 2) { setTile(tileWorld, bx + 2, by - 1, 'brick'); placed = true }
@@ -1975,16 +2026,80 @@ function tickExploration(frame: number): void {
         }
         if (placed) {
           exploration.blocksPlaced++
+          console.log(`BUILD PLACED: block ${exploration.blocksPlaced} at (${bx}, ${by}) step=${step} type=${exploration.structureType}`)
           if (exploration.blocksPlaced <= 5) {
             queueSpeech(`Placing block ${exploration.blocksPlaced}...`, 'talking', 35, 24, 'building')
           }
         }
+      } else {
+        console.log(`BUILD SKIP: by=${by} (surface not found or at y=0)`)
       }
     }
-    // When building finishes, save the world
+    // Save immediately when building finishes (before activity switch steals the state)
     if (elapsed >= exploration.activityDuration && tileWorld) {
+      console.log(`BUILD COMPLETE: ${exploration.blocksPlaced} blocks placed, saving world`)
       saveWorld(tileWorld)
-      queueSpeech('Structure complete. Saved to the world.', 'excited', 50, 36, 'building')
+      queueSpeech(`Structure complete! Built a ${exploration.structureType} with ${exploration.blocksPlaced} blocks.`, 'excited', 50, 36, 'building')
+    }
+  }
+
+  // Activity complete — ask Gemma 4 what to do next (or fall back to random)
+  if (elapsed >= exploration.activityDuration) {
+    if (!agiPending) {
+      agiPending = true
+      agiLastCallFrame = frame
+      // Fire and forget — Gemma 4 decides asynchronously
+      decideNextAction().then(decision => {
+        agiPending = false
+        if (exploration) {
+          applyDecision(decision, animFrame) // use current animFrame, not stale frame
+          console.log(`AGI DECIDED: ${decision.activity} — "${decision.reason}"`)
+        }
+      }).catch(() => {
+        agiPending = false
+      })
+      // Set temporary idle while waiting for Gemma 4 (max ~5 seconds)
+      exploration.activity = 'examining'
+      exploration.activityStartFrame = frame
+      exploration.activityDuration = 60 // 10 seconds max wait — Gemma 4 usually responds in 2-5s
+    } else if (frame - agiLastCallFrame > 60) {
+      // Gemma 4 took too long — force fallback
+      agiPending = false
+      console.log('AGI TIMEOUT: falling back to random')
+      const activities = ['walking', 'examining', 'building', 'thinking', 'discovering'] as const
+      const chosen = activities[Math.floor(Math.random() * activities.length)]
+      exploration.activity = chosen
+      exploration.activityStartFrame = frame
+      exploration.activityDuration = 90 + Math.floor(Math.random() * 90)
+      if (chosen === 'walking') {
+        exploration.targetX = 200 + Math.random() * 800
+        charState.robotTargetX = exploration.targetX
+        queueSpeech(walkingLines[Math.floor(Math.random() * walkingLines.length)], 'idle', 30, 36, 'exploration')
+      } else if (chosen === 'building') {
+        exploration.buildProgress = 0
+        exploration.blocksPlaced = 0
+        exploration.structureType = STRUCTURE_TYPES[Math.floor(Math.random() * STRUCTURE_TYPES.length)]
+        if (tileWorld) {
+          const robotTileX = Math.floor((charState.robotX || 640) / TILE_SIZE)
+          exploration.buildBaseX = robotTileX + 2
+          exploration.buildBaseY = findSurfaceY(tileWorld, robotTileX + 2)
+        }
+        queueSpeech(buildingLines[Math.floor(Math.random() * buildingLines.length)], 'excited', 50, 48, 'exploration')
+      } else if (chosen === 'examining') {
+        queueSpeech(examiningLines[Math.floor(Math.random() * examiningLines.length)], 'thinking', 40, 48, 'exploration')
+      } else if (chosen === 'thinking') {
+        queueSpeech(thinkingLines[Math.floor(Math.random() * thinkingLines.length)], 'thinking', 35, 36, 'exploration')
+      } else {
+        queueSpeech(discoveryLines[Math.floor(Math.random() * discoveryLines.length)], 'excited', 60, 48, 'exploration')
+      }
+    }
+  }
+
+  // During walking, move toward target
+  if (exploration.activity === 'walking') {
+    const dx = exploration.targetX - (charState.robotX || 640)
+    if (Math.abs(dx) > 5) {
+      charState.robotTargetX = exploration.targetX
     }
   }
 
