@@ -205,7 +205,7 @@ function drawHead(
   // Eye glow background — brighter white-green for alive look, dimmed if dreaming
   const eyeC = mood === 'dreaming'
     ? dimColor(eyeColor.startsWith('rgb') ? '#4a6670' : eyeColor, 0.5)
-    : '#80ffb0'  // bright cyan-green that contrasts against the green head
+    : '#b0ffe0'  // HACK 3: even brighter cyan-white for maximum pop
   px(ctx, hx + 2, eyeY, 4, eyeH, eyeC, s, ox, oy)
   px(ctx, hx + 8, eyeY, 4, eyeH, eyeC, s, ox, oy)
 

@@ -2676,6 +2676,25 @@ function renderFrame(): Buffer {
     ctx.fillRect(0, 0, WIDTH, HEIGHT)
   }
 
+  // ── Early groundY for hacks (computed from robot position) ──
+  const earlyGroundY = Math.floor(HEIGHT / 2 + 50 * robotScale / 2 + 30)
+
+  // ── HACK 2: Tile world rendered over ROM background ──
+  if (tileWorld) {
+    updateCamera(tileWorld, charState.robotX || 640, WIDTH)
+    renderTileWorld(ctx as any, tileWorld, 0, Math.floor(earlyGroundY - 80), WIDTH, HEIGHT - Math.floor(earlyGroundY - 80), charState.robotX || 640, animFrame)
+  }
+
+  // ── HACK 1: Stars in the sky ──
+  for (let i = 0; i < 40; i++) {
+    const sx = (i * 97 + 31) % WIDTH
+    const sy = 40 + (i * 137 + 53) % Math.max(100, earlyGroundY - 100)
+    const brightness = 0.3 + Math.sin(animFrame * (0.08 + (i % 7) * 0.03) + i * 1.7) * 0.4 + 0.3
+    const size = i < 5 ? 2 : 1
+    ctx.fillStyle = `rgba(255,255,${200 + (i % 55)},${brightness})`
+    ctx.fillRect(sx, sy, size, size)
+  }
+
   // Weather particles over the full frame
   for (const p of world.particles) {
     if (world.weather === 'rain') { ctx.fillStyle = '#6699cc'; ctx.fillRect(p.x, p.y, 2, 8) }
