@@ -407,6 +407,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './stream-control.js', registerFn: 'registerStreamControlTools' },
   { path: './tile-world.js',    registerFn: 'registerTileWorldTools' },
   { path: './stream-self-eval.js', registerFn: 'registerStreamSelfEvalTools' },
+  { path: './audio-engine.js',    registerFn: 'registerAudioEngineTools' },
 ]
 
 /** Track whether lazy tools have been registered */
