@@ -70,8 +70,10 @@ function dither(ctx, x, y, w, h, color1, color2, scale, ox, oy) {
 }
 /** Draw a 1px outline silhouette for a rectangular region */
 function outlineRect(ctx, x, y, w, h, color, scale, ox, oy) {
-    // Outline is 1px larger on all sides
-    px(ctx, x - 1, y - 1, w + 2, h + 2, color, scale, ox, oy);
+    px(ctx, x - 1, y - 1, w + 2, 1, color, scale, ox, oy); // top
+    px(ctx, x - 1, y + h, w + 2, 1, color, scale, ox, oy); // bottom
+    px(ctx, x - 1, y, 1, h, color, scale, ox, oy); // left
+    px(ctx, x + w, y, 1, h, color, scale, ox, oy); // right
 }
 // ─── Sub-drawers ───────────────────────────────────────────────
 function drawAntenna(ctx, s, ox, oy, glowColor, frame, breathPhase = 0) {
@@ -105,18 +107,18 @@ function drawHead(ctx, s, ox, oy, eyeColor, mood, frame, headShiftX) {
     const hy = 5;
     // 1px outline silhouette (technique 4)
     outlineRect(ctx, hx, hy, 14, 11, PAL.outline, s, ox, oy);
-    // Sub-pixel AA on rounded corners: deep shadow pixels for smoother curves (technique 2)
+    // Head base (shadow layer)
+    px(ctx, hx, hy, 14, 11, PAL.bodyDark, s, ox, oy);
+    // Cut corners for rounded look — clearRect actually erases pixels (transparent fillRect does nothing)
+    ctx.clearRect(ox + hx * s, oy + hy * s, s, s);
+    ctx.clearRect(ox + (hx + 13) * s, oy + hy * s, s, s);
+    ctx.clearRect(ox + hx * s, oy + (hy + 10) * s, s, s);
+    ctx.clearRect(ox + (hx + 13) * s, oy + (hy + 10) * s, s, s);
+    // Sub-pixel AA on rounded corners — drawn AFTER clearing so they aren't overwritten (technique 2)
     px(ctx, hx - 1, hy, 1, 1, PAL.bodyDeepShadow, s, ox, oy);
     px(ctx, hx + 14, hy, 1, 1, PAL.bodyDeepShadow, s, ox, oy);
     px(ctx, hx - 1, hy + 10, 1, 1, PAL.bodyDeepShadow, s, ox, oy);
     px(ctx, hx + 14, hy + 10, 1, 1, PAL.bodyDeepShadow, s, ox, oy);
-    // Head base (shadow layer)
-    px(ctx, hx, hy, 14, 11, PAL.bodyDark, s, ox, oy);
-    // Cut corners for rounded look
-    px(ctx, hx, hy, 1, 1, 'transparent', s, ox, oy);
-    px(ctx, hx + 13, hy, 1, 1, 'transparent', s, ox, oy);
-    px(ctx, hx, hy + 10, 1, 1, 'transparent', s, ox, oy);
-    px(ctx, hx + 13, hy + 10, 1, 1, 'transparent', s, ox, oy);
     // Head fill (inner area) — bodyMain
     px(ctx, hx + 1, hy + 1, 12, 9, PAL.bodyMain, s, ox, oy);
     // Top surface: bodyMidLight (facing light source)
@@ -141,14 +143,23 @@ function drawHead(ctx, s, ox, oy, eyeColor, mood, frame, headShiftX) {
     // (#9) Dreaming: eyes closed (flat line)
     const eyesClosed = mood === 'dreaming';
     const eyeH = fullBlink || eyesClosed ? 1 : halfBlink ? 2 : 3;
-    // Eye glow background — dimmed if dreaming
-    const eyeC = mood === 'dreaming' ? dimColor(eyeColor.startsWith('rgb') ? '#4a6670' : eyeColor, 0.5) : eyeColor;
+    // Eye sockets — dark recessed area around eyes for contrast (makes eyes pop from face)
+    if (!fullBlink && !eyesClosed) {
+        px(ctx, hx + 1, eyeY - 1, 6, eyeH + 2, PAL.bodyDeepShadow, s, ox, oy);
+        px(ctx, hx + 7, eyeY - 1, 6, eyeH + 2, PAL.bodyDeepShadow, s, ox, oy);
+    }
+    // Eye glow background — brighter white-green for alive look, dimmed if dreaming
+    const eyeC = mood === 'dreaming'
+        ? dimColor(eyeColor.startsWith('rgb') ? '#4a6670' : eyeColor, 0.5)
+        : '#80ffb0'; // bright cyan-green that contrasts against the green head
     px(ctx, hx + 2, eyeY, 4, eyeH, eyeC, s, ox, oy);
     px(ctx, hx + 8, eyeY, 4, eyeH, eyeC, s, ox, oy);
-    // Specular highlights on eyes — makes them look glassy/alive (technique 8)
+    // Specular highlights on eyes — 2px L-shape catch-light for glassy/alive look (technique 8)
     if (!fullBlink && !eyesClosed) {
-        px(ctx, hx + 2, eyeY, 1, 1, PAL.bodySpecular, s, ox, oy);
-        px(ctx, hx + 8, eyeY, 1, 1, PAL.bodySpecular, s, ox, oy);
+        px(ctx, hx + 2, eyeY, 2, 1, PAL.white, s, ox, oy);
+        px(ctx, hx + 2, eyeY + 1, 1, 1, PAL.white, s, ox, oy);
+        px(ctx, hx + 8, eyeY, 2, 1, PAL.white, s, ox, oy);
+        px(ctx, hx + 8, eyeY + 1, 1, 1, PAL.white, s, ox, oy);
     }
     if (!fullBlink && !eyesClosed) {
         // Pupils — shift based on mood
@@ -301,8 +312,12 @@ function drawTorso(ctx, s, ox, oy, accentColor, mood, frame, bodyShiftY, torsoWi
     dither(ctx, 21, ty + 2, 1, 8, PAL.accentDark, PAL.bodyMain, s, ox, oy);
     // Specular highlight on chest panel frame (technique 8)
     px(ctx, 11, ty + 2, 1, 1, PAL.bodySpecular, s, ox, oy);
-    // Chest display inner (8x6 dark)
-    px(ctx, 12, ty + 3, 8, 6, PAL.black, s, ox, oy);
+    // Chest display inner (8x6) — dark with subtle screen glow for readability
+    px(ctx, 12, ty + 3, 8, 6, '#0a1628', s, ox, oy);
+    // Scanline effect — subtle horizontal lines for CRT/screen feel
+    for (let scanY = 0; scanY < 6; scanY += 2) {
+        px(ctx, 12, ty + 3 + scanY, 8, 1, '#0d1e36', s, ox, oy);
+    }
     // Animated display content (now using 8x6 inner area)
     drawChestDisplay(ctx, s, ox, oy, 12, ty + 3, accentColor, mood, frame);
 }
@@ -310,13 +325,14 @@ function drawChestDisplay(ctx, s, ox, oy, dx, dy, color, mood, frame) {
     // Inner display area: 8x6 pixels
     const dimC = dimColor(color.startsWith('rgb') ? '#3fb950' : color, 0.3);
     if (mood === 'idle') {
-        // Scrolling sine wave pattern across 8px width
+        // Scrolling sine wave pattern across 8px width — thicker (2px tall) for readability
+        const brightC = dimColor(color.startsWith('rgb') ? '#3fb950' : color, 1.0);
         for (let i = 0; i < 8; i++) {
             const waveY = Math.round(Math.sin((i + frame) * 0.8) * 2) + 2;
-            px(ctx, dx + i, dy + waveY, 1, 1, color, s, ox, oy);
-            // Dimmer trail below
-            if (waveY + 1 < 6)
-                px(ctx, dx + i, dy + waveY + 1, 1, 1, dimC, s, ox, oy);
+            px(ctx, dx + i, dy + waveY, 1, 2, brightC, s, ox, oy);
+            // Glow trail above wave
+            if (waveY - 1 >= 0)
+                px(ctx, dx + i, dy + waveY - 1, 1, 1, dimC, s, ox, oy);
         }
     }
     else if (mood === 'talking') {
@@ -737,10 +753,8 @@ export function drawRobot(ctx, x, y, scale, mood, frame, moodColor, weather, isW
         headShiftX += (frame % 6 < 3) ? 1 : 0;
     }
     const armPose = isWalking ? getWalkingArmPose(walkPhase || 0) : getArmPose(mood, frame);
-    // ── Clear the bounding area ──
-    ctx.clearRect(x - 12 * s + weatherShakeX * s, y - 4 * s, 56 * s, 56 * s);
-    // Also clear without shake to avoid artifacts
-    ctx.clearRect(x - 12 * s, y - 4 * s, 56 * s, 56 * s);
+    // NOTE: clearRect removed — it was wiping the background behind the robot to white/transparent
+    // The robot is drawn ON TOP of the world, it should not clear anything beneath it
     // Apply weather shake offset
     const drawX = x + weatherShakeX * s;
     // ── Drop Shadow (technique 10: dark blue-green, not pure black) ──

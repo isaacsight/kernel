@@ -59,6 +59,10 @@ export interface BrainState {
     solutionsLearned: number;
     realDataLoaded: boolean;
     lastRealDataLoad: number;
+    lastSelfReflection: number;
+    totalAutonomousActions: number;
+    lastExplorationFrame: number;
+    lastNarrationFrame: number;
 }
 export declare function initBrain(memory: any): BrainState;
 export declare function getBrainDisplay(brain: BrainState): string[];
@@ -72,6 +76,8 @@ export interface BrainAction {
     duration?: number;
 }
 export declare function getBrainAction(brain: BrainState, frame: number): BrainAction;
+/** Speech lines for when someone chats after a period of silence */
+export declare function getGreetingAfterSilence(): string;
 export declare function tickBrain(brain: BrainState, frame: number): void;
 export declare function drawBrainPanel(ctx: CanvasRenderingContext2D, brain: BrainState, x: number, y: number, width: number, height: number): void;
 export type CollabType = 'story' | 'game' | 'song' | 'world' | 'code';

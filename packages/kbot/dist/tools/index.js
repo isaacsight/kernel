@@ -325,6 +325,7 @@ const LAZY_MODULE_IMPORTS = [
     { path: './audio-engine.js', registerFn: 'registerAudioEngineTools' },
     { path: './narrative-engine.js', registerFn: 'registerNarrativeEngineTools' },
     { path: './social-engine.js', registerFn: 'registerSocialEngineTools' },
+    { path: './evolution-engine.js', registerFn: 'registerEvolutionEngineTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;

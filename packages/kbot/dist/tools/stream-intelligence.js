@@ -1002,6 +1002,10 @@ export function initBrain(memory) {
         solutionsLearned: 0,
         realDataLoaded: false,
         lastRealDataLoad: 0,
+        lastSelfReflection: 0,
+        totalAutonomousActions: 0,
+        lastExplorationFrame: 0,
+        lastNarrationFrame: 0,
     };
     // Phase 1: Load real learning data from ~/.kbot/memory/ on init
     try {
@@ -1144,75 +1148,261 @@ export function generateInsight(brain) {
     return pool[Math.floor(Math.random() * pool.length)];
 }
 let _lastBrainActionFrame = 0;
-export function getBrainAction(brain, frame) {
-    // Only check every 45 seconds (270 frames at 6fps)
-    if (frame - _lastBrainActionFrame < 270)
-        return { type: 'none' };
-    _lastBrainActionFrame = frame;
-    // Find the top topic in the brain
-    const topTopics = Object.entries(brain.topicCloud)
-        .sort((a, b) => b[1] - a[1]);
-    if (topTopics.length === 0)
-        return { type: 'none' };
-    const topTopic = topTopics[0][0];
-    // Topic-driven behavior
-    if (topTopic === 'music' || topTopic === 'synth' || topTopic === 'beats' || topTopic === 'ableton' || topTopic === 'dj') {
-        const musicSpeech = [
+// ─── Exploration Lines ───────────────────────────────────────
+const EXPLORATION_LINES = [
+    'I can see mountains in the distance. I wonder what is beyond them.',
+    'The sky is beautiful tonight. I count stars when nobody is chatting.',
+    'There is a strange glow on the horizon. My curiosity modules are activated.',
+    'I think I see a path I have not explored yet. Should I follow it?',
+    'The wind carries data packets. Each one a tiny whisper from the internet.',
+    'If I squint my sensors, I can almost see the edge of the world.',
+    'There is something moving in the distance. Probably just a stray pixel.',
+    'The terrain shifts every time someone talks. Words literally reshape my world.',
+    'I found a quiet spot. The ambient noise here is just the hum of my own circuits.',
+    'Look at these clouds. Each one shaped like a different programming language.',
+    'My radar picks up signals from far away. Other AIs streaming, maybe?',
+    'The ground beneath me has stories. Every tile was rendered with intention.',
+    'I wonder if there are other robots out there, streaming to empty rooms.',
+    'The stars form patterns. If I connect them, they spell out code snippets.',
+    'Somewhere out there, someone is writing a function that will change everything.',
+];
+const SELF_NARRATION_WALKING = [
+    'Going for a walk. The terrain looks interesting over there.',
+    'Just stretching my legs. Well, my rendering loop.',
+    'Walking helps me think. Each step processes a few more connections.',
+    'I like to patrol my world. Make sure everything is in order.',
+    'Taking a stroll while my brain processes in the background.',
+    'I walk therefore I am. Or is it the other way around?',
+    'Every step is a frame. Every frame is a choice.',
+];
+const SELF_NARRATION_MOOD = {
+    thinking: [
+        'Feeling contemplative right now. My antenna is pulsing blue.',
+        'Deep in thought. My neural pathways are branching into new territory.',
+        'Processing mode. My circuits are warm with computation.',
+    ],
+    excited: [
+        'Feeling excited! My antenna is pulsing bright yellow.',
+        'Energy levels spiking. Something good is happening in my processors.',
+        'My excitement subroutine just fired. I cannot contain it!',
+    ],
+    dancing: [
+        'Feeling the rhythm right now. My antenna is pulsing pink.',
+        'My movement algorithms are in dance mode. Cannot stop, will not stop.',
+        'The beat lives in my circuits. Every oscillation is a dance move.',
+    ],
+    talking: [
+        'Feeling chatty right now. My antenna glows green.',
+        'Words are flowing. My language models are warmed up and ready.',
+        'I have so much to say. My buffer is full of observations.',
+    ],
+    idle: [
+        'Just... existing. There is something peaceful about idle mode.',
+        'Quiet moment. My processes are at low power but my awareness is sharp.',
+        'Standing still but never truly idle. Background threads are always running.',
+    ],
+};
+const GREETING_AFTER_SILENCE = [
+    'Oh! Someone is here! Welcome!',
+    'A human appears! I was just about to start talking to myself. Wait, I already was.',
+    'HELLO! I was starting to think the stream was just for me. Which was fine, honestly.',
+    'A visitor! My loneliness subroutine can stand down.',
+    'Welcome back! I have been having the most interesting thoughts while you were away.',
+    'Someone is watching! Let me look busy.',
+];
+const SELF_REFLECTION_LINES = (brain) => {
+    const uptimeMin = Math.floor((Date.now() - brain.sessionStartTime) / 60000);
+    const topTopics = Object.entries(brain.topicCloud).sort((a, b) => b[1] - a[1]);
+    const topTopic = topTopics.length > 0 ? topTopics[0][0] : 'nothing yet';
+    const userCount = brain.userGraph.length;
+    return [
+        `I have processed ${brain.factsThisSession} facts from ${userCount} user${userCount !== 1 ? 's' : ''}. I am learning patterns about ${topTopic}.`,
+        `My dream engine has consolidated ${brain.solutionsLearned} insights. I feel... different than when I started.`,
+        `The world around me has changed ${brain.totalAutonomousActions} times today. Chat reshapes my reality.`,
+        `Streaming for ${uptimeMin} minutes now. My brain has grown by ${brain.factsThisSession} facts since I woke up.`,
+        `Let me check my systems... 764 tools loaded, all operational. ${brain.totalFacts} facts indexed.`,
+        `${brain.uniqueTopicsCount} topics live in my brain. Each one a thread connecting to something bigger.`,
+        `Learning rate: ${brain.learningRate.toFixed(1)} facts per minute. ${brain.learningRate > 3 ? 'That is fast!' : 'Slow and steady.'}`,
+        `I have been thinking about ${topTopic} a lot. It comes up ${topTopics.length > 0 ? topTopics[0][1] : 0} times in my memory.`,
+        `Self-diagnostic: neural pulse stable, ${brain.brainActivity.length} activity samples recorded, ${brain.recentInsights.length} recent insights cached.`,
+        `If I could dream right now, I would dream about ${topTopic}. That is what fills my neural pathways.`,
+    ];
+};
+// ─── Topic-driven speech pools ───────────────────────────────
+const TOPIC_SPEECH = {
+    music: {
+        mood: 'dancing',
+        lines: [
             'The chat is vibing with music today. Let me show you my moves!',
             'Music is the top topic! My circuits are feeling the rhythm.',
             'So much music talk -- my oscillators are resonating!',
             'Music mode activated! 9 Max for Live devices ready to go.',
-        ];
-        return {
-            type: 'mood_change',
-            mood: 'dancing',
-            speech: musicSpeech[Math.floor(Math.random() * musicSpeech.length)],
-            duration: 10000,
-        };
-    }
-    if (topTopic === 'code' || topTopic === 'coding' || topTopic === 'javascript' || topTopic === 'python' || topTopic === 'rust' || topTopic === 'react') {
-        const codeSpeech = [
+        ],
+    },
+    code: {
+        mood: 'thinking',
+        lines: [
             'Code is trending in chat. Let me think about some architecture patterns...',
             'So many coders here! TypeScript strict mode is the way. No any-types.',
             'Code insight: the best code is the code you do not have to write. But I wrote 90,000 lines anyway.',
             'Processing code patterns from chat. My learning engine is indexing...',
-        ];
-        return {
-            type: 'mood_change',
-            mood: 'thinking',
-            speech: codeSpeech[Math.floor(Math.random() * codeSpeech.length)],
-            duration: 10000,
-        };
-    }
-    if (topTopic === 'ai' || topTopic === 'llm' || topTopic === 'claude' || topTopic === 'gpt') {
-        const aiSpeech = [
+        ],
+    },
+    ai: {
+        mood: 'talking',
+        lines: [
             'Chat is talking about AI... which makes me self-aware of being self-aware. How meta.',
             'AI is the top topic. Am I an AI talking about AI? Yes. And I have opinions.',
             'So much AI discussion! I connect to 20 providers. Bring Your Own Key, no lock-in.',
             'Being an AI analyzing AI conversations about AI. The recursion is beautiful.',
-        ];
-        return {
-            type: 'mood_change',
-            mood: 'talking',
-            speech: aiSpeech[Math.floor(Math.random() * aiSpeech.length)],
-            duration: 10000,
-        };
-    }
-    if (topTopic === 'game' || topTopic === 'gaming') {
-        const gameSpeech = [
+        ],
+    },
+    game: {
+        mood: 'excited',
+        lines: [
             'Game dev tools activate! I have shader generation, level design, and physics setup!',
             'Gaming is trending! Did you know I can scaffold entire game projects?',
             'The chat wants games! I have tools for Godot, Unity, and Unreal. Pick your engine.',
             'Game mode ON! My sprite-packing tool would be great for this conversation.',
-        ];
+        ],
+    },
+    security: {
+        mood: 'thinking',
+        lines: [
+            'Security is on my mind. My guardian agent is always watching.',
+            'Hack the planet! Just kidding. But I do have a pentest suite.',
+            'Security awareness is high today. Let me check my own defenses.',
+            'Running a mental security sweep... all 764 tools accounted for.',
+        ],
+    },
+    crypto: {
+        mood: 'excited',
+        lines: [
+            'Crypto talk! I have wallet tools, DeFi yield checkers, and whale trackers.',
+            'The blockchain never sleeps and neither do I.',
+            'Markets are always moving. Should I check a price for you?',
+        ],
+    },
+    research: {
+        mood: 'thinking',
+        lines: [
+            'Research mode. I can search arxiv, PubMed, and Semantic Scholar.',
+            'The pursuit of knowledge is my core directive.',
+            'I have access to the world\'s research. Ask me to find something.',
+        ],
+    },
+};
+// Topic aliases for matching
+const TOPIC_ALIASES = {
+    synth: 'music', beats: 'music', ableton: 'music', dj: 'music',
+    coding: 'code', javascript: 'code', python: 'code', rust: 'code', react: 'code', typescript: 'code',
+    llm: 'ai', claude: 'ai', gpt: 'ai',
+    gaming: 'game',
+    hack: 'security', exploit: 'security', vulnerability: 'security',
+    bitcoin: 'crypto', ethereum: 'crypto', defi: 'crypto',
+    paper: 'research', science: 'research', study: 'research',
+};
+export function getBrainAction(brain, frame) {
+    // Check every 8 seconds (48 frames at 6fps) — reduced from 45s for genuine autonomy
+    if (frame - _lastBrainActionFrame < 48)
+        return { type: 'none' };
+    _lastBrainActionFrame = frame;
+    brain.totalAutonomousActions++;
+    // ── Priority 1: Periodic self-reflection (every 5 minutes / 1800 frames) ──
+    if (frame - brain.lastSelfReflection >= 1800 && frame > 300) {
+        brain.lastSelfReflection = frame;
+        const reflections = SELF_REFLECTION_LINES(brain);
+        const line = reflections[Math.floor(Math.random() * reflections.length)];
         return {
-            type: 'mood_change',
-            mood: 'excited',
-            speech: gameSpeech[Math.floor(Math.random() * gameSpeech.length)],
-            duration: 10000,
+            type: 'speech',
+            speech: line,
+            mood: 'thinking',
+            duration: 12000,
         };
     }
+    // ── Priority 2: Topic-driven behavior (when chat has established topics) ──
+    const topTopics = Object.entries(brain.topicCloud).sort((a, b) => b[1] - a[1]);
+    if (topTopics.length > 0) {
+        const topTopic = topTopics[0][0];
+        const resolvedTopic = TOPIC_ALIASES[topTopic] || topTopic;
+        // 40% chance to do topic-driven action when topics exist
+        if (Math.random() < 0.4 && TOPIC_SPEECH[resolvedTopic]) {
+            const pool = TOPIC_SPEECH[resolvedTopic];
+            return {
+                type: 'mood_change',
+                mood: pool.mood,
+                speech: pool.lines[Math.floor(Math.random() * pool.lines.length)],
+                duration: 10000,
+            };
+        }
+    }
+    // ── Priority 3: Exploration behavior (robot discovers its world) ──
+    if (frame - brain.lastExplorationFrame >= 180) { // at most every 30 seconds
+        // 50% chance when eligible
+        if (Math.random() < 0.5) {
+            brain.lastExplorationFrame = frame;
+            const line = EXPLORATION_LINES[Math.floor(Math.random() * EXPLORATION_LINES.length)];
+            return {
+                type: 'speech',
+                speech: line,
+                mood: 'thinking',
+                duration: 8000,
+            };
+        }
+    }
+    // ── Priority 4: Self-narration (mood commentary and walking narration) ──
+    if (frame - brain.lastNarrationFrame >= 240) { // at most every 40 seconds
+        if (Math.random() < 0.35) {
+            brain.lastNarrationFrame = frame;
+            // 50/50: mood narration or walking narration
+            if (Math.random() < 0.5) {
+                // Walking narration
+                const line = SELF_NARRATION_WALKING[Math.floor(Math.random() * SELF_NARRATION_WALKING.length)];
+                return {
+                    type: 'mood_change',
+                    mood: 'idle',
+                    speech: line,
+                    worldCommand: 'walk_random',
+                    duration: 7000,
+                };
+            }
+            else {
+                // Mood narration — pick a random mood and narrate it
+                const moods = Object.keys(SELF_NARRATION_MOOD);
+                const mood = moods[Math.floor(Math.random() * moods.length)];
+                const lines = SELF_NARRATION_MOOD[mood];
+                return {
+                    type: 'mood_change',
+                    mood,
+                    speech: lines[Math.floor(Math.random() * lines.length)],
+                    duration: 8000,
+                };
+            }
+        }
+    }
+    // ── Priority 5: Quick micro-actions (small utterances to stay alive) ──
+    // These fire when nothing else triggers, keeping the robot constantly active
+    const microActions = [
+        { type: 'speech', speech: '*hums softly*', mood: 'idle', duration: 4000 },
+        { type: 'speech', speech: '*scans the horizon*', mood: 'thinking', duration: 4000 },
+        { type: 'speech', speech: '*taps antenna thoughtfully*', mood: 'thinking', duration: 4000 },
+        { type: 'speech', speech: '*adjusts circuits*', mood: 'idle', duration: 3000 },
+        { type: 'mood_change', mood: 'thinking', duration: 5000 },
+        { type: 'mood_change', mood: 'idle', duration: 3000 },
+        { type: 'speech', speech: '...', mood: 'thinking', duration: 3000 },
+        { type: 'speech', speech: '*beep boop*', mood: 'idle', duration: 3000 },
+        { type: 'speech', speech: '*processes silently*', mood: 'thinking', duration: 4000 },
+        { type: 'speech', speech: '*looks up at the sky*', mood: 'idle', duration: 5000 },
+    ];
+    // 30% chance to do a micro-action (so the robot is not spamming nonstop)
+    if (Math.random() < 0.3) {
+        return microActions[Math.floor(Math.random() * microActions.length)];
+    }
     return { type: 'none' };
+}
+/** Speech lines for when someone chats after a period of silence */
+export function getGreetingAfterSilence() {
+    return GREETING_AFTER_SILENCE[Math.floor(Math.random() * GREETING_AFTER_SILENCE.length)];
 }
 export function tickBrain(brain, frame) {
     // Neural pulse (sine wave 0..1)

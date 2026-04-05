@@ -356,8 +356,8 @@ export function tickStreamBrain(brain, frame) {
         }
         brain.activeCapabilities = [...new Set(brain.activeCapabilities)];
     }
-    // Every 300 frames (~50 seconds): suggest a tool action if appropriate
-    if (frame - brain.lastSuggestionFrame >= 300) {
+    // Every 120 frames (~20 seconds): suggest a tool action if appropriate
+    if (frame - brain.lastSuggestionFrame >= 120) {
         brain.lastSuggestionFrame = frame;
         const suggestion = suggestToolAction(brain);
         if (suggestion) {
@@ -370,8 +370,8 @@ export function tickStreamBrain(brain, frame) {
             };
         }
     }
-    // Every 600 frames (~100 seconds): generate cross-domain insight if possible
-    if (frame - brain.lastInsightFrame >= 600) {
+    // Every 240 frames (~40 seconds): generate cross-domain insight if possible
+    if (frame - brain.lastInsightFrame >= 240) {
         brain.lastInsightFrame = frame;
         const relevantDomains = Object.entries(brain.domainGraph)
             .filter(([, n]) => n.relevance >= 0.3)
