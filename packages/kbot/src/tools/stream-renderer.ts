@@ -19,6 +19,10 @@ import { renderLighting, renderBloom, renderPostProcessing, renderSky, renderPar
 import { initTileWorld, renderTileWorld, updateCamera, handleTileCommand, saveWorld, loadWorld, TILE_SIZE, type TileWorld } from './tile-world.js'
 import { initRomEngine, renderRomBackground, tickRomEngine, type RomEngineState } from './rom-engine.js'
 import { initLivingWorld, tickLivingWorld, renderLivingWorldOverlays, onChatMessage as onLivingWorldChat, renderFlowers, renderFire, saveLivingWorldState, loadLivingWorldState, evolveWorld, applyDreamChanges, type EcologyState, type WorldMemory as LivingWorldMemory, type EmotionalMap, type ConversationLayer } from './living-world.js'
+import { initEvolutionEngine, loadEvolutionState, saveEvolutionState, tickEvolution, renderTechnique, type EvolutionEngine } from './evolution-engine.js'
+import { createNarrativeEngine, loadNarrative, saveNarrative, tickNarrative, handleNarrativeCommand, type NarrativeEngine } from './narrative-engine.js'
+import { createAudioEngine, tickAudio, type AudioEngine } from './audio-engine.js'
+import { createSocialEngine, loadSocialEngine, saveSocialEngine, trackViewer, tickSocial, type SocialEngine } from './social-engine.js'
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json')
@@ -1575,6 +1579,11 @@ let charState: StreamCharState = {
 let tileWorld: TileWorld | null = null
 let romState: RomEngineState | null = null
 let livingWorld: { ecology: EcologyState; memory: LivingWorldMemory; emotions: EmotionalMap; conversations: ConversationLayer } | null = null
+let evolutionEngine: EvolutionEngine | null = null
+let narrativeEngine: NarrativeEngine | null = null
+let audioEngine: AudioEngine | null = null
+let socialEngine: SocialEngine | null = null
+let activeAudioDescription: string | null = null  // current audio atmosphere text for rendering
 
 // ─── Phase 1: Buddy Speech Pools ─────────────────────────────
 const BUDDY_SPEECH_POOL: Record<string, string[]> = {
@@ -2255,6 +2264,36 @@ function renderFrame(): Buffer {
   updateParticles()
   tickPhysics()
 
+  // Evolution engine — tries new techniques every 5 minutes
+  if (evolutionEngine) {
+    const evoAction = tickEvolution(evolutionEngine, animFrame, 0.5, charState.chatMessages.length / Math.max(1, animFrame / 360))
+    if (evoAction) {
+      if (evoAction.speech) { charState.mood = 'thinking'; charState.speech = evoAction.speech }
+      if (evoAction.type === 'announce') charState.mood = 'excited'
+    }
+  }
+
+  // Narrative engine — generates lore and observations
+  if (narrativeEngine) {
+    const narration = tickNarrative(narrativeEngine, animFrame, charState.robotX || 640, charState.mood, memory.totalMessages, Object.keys(memory.users).length)
+    if (narration && !charState.speech) { charState.speech = narration; charState.mood = 'talking' }
+  }
+
+  // Audio engine — ambient descriptions
+  if (audioEngine) {
+    const audioDesc = tickAudio(audioEngine, world.ground, world.weather, charState.mood, world.timeOfDay, animFrame)
+    if (audioDesc) activeAudioDescription = audioDesc
+  }
+
+  // Social engine — viewer tracking + follower celebrations
+  if (socialEngine) {
+    const socialAction = tickSocial(socialEngine, animFrame)
+    if (socialAction) {
+      charState.speech = socialAction.speech
+      if (socialAction.mood) charState.mood = socialAction.mood
+    }
+  }
+
   // Compute animation params
   {
     const elapsed = Math.floor((Date.now() - charState.startTime) / 1000)
@@ -2436,6 +2475,23 @@ function renderFrame(): Buffer {
     ctx.fillText(item.emoji, item.x, item.y)
   }
 
+  // Evolution technique rendering — active experiments + applied techniques
+  if (evolutionEngine) {
+    const activeExp = evolutionEngine.experiments.find(e => e.status === 'running')
+    if (activeExp) {
+      const technique = evolutionEngine.techniques.techniques.find(t => t.id === activeExp.techniqueId)
+      if (technique && technique.implemented) {
+        renderTechnique(ctx as any, technique, WIDTH, HEIGHT, animFrame, technique.parameters)
+      }
+    }
+    for (const applied of evolutionEngine.applied) {
+      const technique = evolutionEngine.techniques.techniques.find(t => t.id === applied.techniqueId)
+      if (technique) {
+        renderTechnique(ctx as any, technique, WIDTH, HEIGHT, animFrame, applied.params)
+      }
+    }
+  }
+
   // ════════════════════════════════════════════════════════════════
   // LAYER 3: ROBOT + COMPANIONS — centered on terrain
   // ════════════════════════════════════════════════════════════════
@@ -2613,6 +2669,17 @@ function renderFrame(): Buffer {
   ctx.fillStyle = COLORS.textDim
   ctx.font = '16px "Courier New", monospace'
   ctx.fillText(timeStr, WIDTH - 160, 26)
+
+  // ── Audio atmosphere description (top-center, italic, fades) ──
+  if (activeAudioDescription) {
+    ctx.save()
+    ctx.globalAlpha = 0.6
+    ctx.fillStyle = '#8b949e'
+    ctx.font = 'italic 12px "Courier New", monospace'
+    const audioW = ctx.measureText(activeAudioDescription).width
+    ctx.fillText(activeAudioDescription, (WIDTH - audioW) / 2, 56)
+    ctx.restore()
+  }
 
   // ── Brain indicator (top-right, small pulsing circle) ──
   {
@@ -3041,6 +3108,9 @@ function startChatPoll(): void {
           // Analyze chat for domain relevance (stream brain)
           analyzeChatForDomains(streamBrain, msg.username, msg.text)
 
+          // Track viewer in social engine
+          if (socialEngine) trackViewer(socialEngine, msg.username, msg.platform, msg.text)
+
           // Phase 1: !sleep command — trigger dreaming mode
           if (msg.text.toLowerCase().trim() === '!sleep') {
             charState.mood = 'dreaming'
@@ -3087,6 +3157,12 @@ function startChatPoll(): void {
               charState.speech = tileResult
               setTimeout(() => { charState.mood = 'idle'; charState.speech = '' }, 8000)
             }
+          }
+
+          // Check narrative commands (!lore, !story, !discover, !name)
+          if (narrativeEngine && !brainResult && !intelResult && !tileResult) {
+            const narResult = handleNarrativeCommand(msg.text, msg.username, narrativeEngine, charState.robotX || 640)
+            if (narResult) { charState.speech = narResult; charState.mood = 'talking' }
           }
 
           // Check for world commands
@@ -3631,6 +3707,11 @@ export function registerStreamRendererTools(): void {
         }
       }
       intelligence = initIntelligence(memory)
+      evolutionEngine = loadEvolutionState() || initEvolutionEngine()
+      narrativeEngine = loadNarrative() || createNarrativeEngine()
+      audioEngine = createAudioEngine()
+      socialEngine = loadSocialEngine()
+      activeAudioDescription = null
       agenda = {
         currentIndex: 0,
         currentSegment: 'welcome',
@@ -3669,6 +3750,9 @@ export function registerStreamRendererTools(): void {
       }
       saveMemory(memory)
       if (tileWorld) saveWorld(tileWorld)
+      if (evolutionEngine) saveEvolutionState(evolutionEngine)
+      if (narrativeEngine) saveNarrative(narrativeEngine)
+      if (socialEngine) saveSocialEngine(socialEngine)
       const elapsed = Math.floor((Date.now() - charState.startTime) / 60000)
       return `Stream stopped after ${elapsed}m.\nFrames: ${charState.frameCount}\nMessages: ${memory.totalMessages}\nUsers learned: ${Object.keys(memory.users).length}\nFacts: ${memory.sessionFacts.length}\nSegments completed: ${agenda.currentIndex}`
     },
