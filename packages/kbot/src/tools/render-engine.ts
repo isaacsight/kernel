@@ -75,11 +75,11 @@ export function renderLighting(
  */
 export function getAmbientForTime(timeOfDay: string): number {
   switch (timeOfDay) {
-    case 'night': return 0.15
-    case 'day': return 0.6
-    case 'sunset': return 0.35
-    case 'dawn': return 0.25
-    default: return 0.3
+    case 'night': return 0.45
+    case 'day': return 0.8
+    case 'sunset': return 0.6
+    case 'dawn': return 0.5
+    default: return 0.55
   }
 }
 

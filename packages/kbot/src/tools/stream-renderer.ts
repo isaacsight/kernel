@@ -2288,6 +2288,16 @@ function renderFrame(): Buffer {
 
   tickGrowingPlants(charState.growingPlants)
 
+  // Autonomous pacing — when idle, periodically pick a new target and walk there
+  {
+    const currentlyWalking = Math.abs(charState.robotX - charState.robotTargetX) > 2
+    if (charState.mood === 'idle' && !currentlyWalking && animFrame % 300 === 0 && animFrame > 60) {
+      // Every ~50 seconds (300 frames at 6fps), stroll to a new position
+      charState.robotTargetX = charState.robotX + (Math.random() > 0.5 ? 100 : -100)
+      charState.robotTargetX = Math.max(200, Math.min(1000, charState.robotTargetX))
+    }
+  }
+
   // Movement logic
   const isWalking = Math.abs(charState.robotX - charState.robotTargetX) > 2
   if (isWalking) {
@@ -2436,14 +2446,19 @@ function renderFrame(): Buffer {
   const robotScreenY = Math.floor(HEIGHT / 2 - robotHeight / 2 + 30)  // slightly below center
   const groundY = robotScreenY + robotHeight  // ground meets robot feet (sprite is 50px tall)
 
-  // Ground plane below robot feet
+  // Ground plane — extends upward to seamlessly meet parallax hills (no seam gap)
+  // The nearHills parallax layer ends around groundY - 72px. We start the ground
+  // fill 100px above groundY so it overlaps with the bottom of the parallax,
+  // using the same base color (#1a4d1a) as the nearHills layer.
   {
-    const gGrad = ctx.createLinearGradient(0, groundY, 0, HEIGHT)
-    gGrad.addColorStop(0, '#1a4d1a')
-    gGrad.addColorStop(0.3, '#0d3310')
+    const groundTop = groundY - 100  // overlap with bottom of parallax hills
+    const gGrad = ctx.createLinearGradient(0, groundTop, 0, HEIGHT)
+    gGrad.addColorStop(0, '#1a4d1a')     // matches nearHills base color exactly
+    gGrad.addColorStop(0.15, '#1a4d1a')  // hold the color through the overlap zone
+    gGrad.addColorStop(0.4, '#0d3310')
     gGrad.addColorStop(1, '#061a08')
     ctx.fillStyle = gGrad
-    ctx.fillRect(0, groundY, WIDTH, HEIGHT - groundY)
+    ctx.fillRect(0, groundTop, WIDTH, HEIGHT - groundTop)
   }
 
   // Robot glow

@@ -95,21 +95,100 @@ function seededRandom(seed: number): () => number {
 
 // ─── Terrain Generation ───────────────────────────────────────
 
-/** Compute terrain surface height for a given world X coordinate */
-function terrainHeight(worldX: number, seed: number, surfaceLevel: number): number {
-  const h1 = Math.sin(worldX * 0.05 + seed) * 4
-  const h2 = Math.sin(worldX * 0.12 + seed * 2.3) * 2
-  const h3 = Math.sin(worldX * 0.03 + seed * 0.7) * 6
-  return Math.floor(surfaceLevel + h1 + h2 + h3)
+// Water level: water fills enclosed basins up to this Y (absolute).
+// Set during chunk generation relative to surfaceLevel.
+const WATER_LEVEL_OFFSET = 2  // water surface sits 2 rows below surfaceLevel
+
+/** Hash-based deterministic value for tile variation (returns 0-2) */
+function tileHash(x: number, y: number, seed: number): number {
+  let h = (x * 374761393 + y * 668265263 + seed * 1274126177) | 0
+  h = (h ^ (h >> 13)) * 1103515245
+  h = h ^ (h >> 16)
+  return ((h >>> 0) % 3)
 }
 
-/** Check if a position should be a cave */
+/**
+ * 1D value noise: hash-based pseudo-random values at integer points,
+ * smoothly interpolated between them using cosine interpolation.
+ */
+function valueNoise1D(x: number, seed: number): number {
+  const xi = Math.floor(x)
+  const frac = x - xi
+
+  // Hash integer positions to pseudo-random values in [0, 1]
+  const hash = (n: number): number => {
+    let h = ((n + seed * 7919) * 374761393) | 0
+    h = (h ^ (h >> 13)) * 1103515245
+    h = h ^ (h >> 16)
+    return ((h >>> 0) % 10000) / 10000
+  }
+
+  const a = hash(xi)
+  const b = hash(xi + 1)
+
+  // Cosine interpolation for smooth curves
+  const t = (1 - Math.cos(frac * Math.PI)) * 0.5
+  return a + (b - a) * t
+}
+
+/**
+ * Multi-octave noise using layered value noise.
+ * 6 octaves, each half the amplitude and double the frequency.
+ * Returns a value in [0, 1].
+ */
+function multiOctaveNoise(x: number, seed: number, octaves: number = 6): number {
+  let value = 0
+  let amplitude = 1
+  let frequency = 0.02   // base frequency — gentle hills
+  let maxValue = 0
+
+  for (let i = 0; i < octaves; i++) {
+    value += amplitude * valueNoise1D(x * frequency, seed + i * 31337)
+    maxValue += amplitude
+    amplitude *= 0.5
+    frequency *= 2
+  }
+
+  return value / maxValue  // normalized to [0, 1]
+}
+
+/** Compute terrain surface height for a given world X coordinate.
+ *  Uses multi-octave noise with power redistribution for flatter lowlands
+ *  and sharper peaks.  Surface level sits at 40% of WORLD_HEIGHT.
+ */
+function terrainHeight(worldX: number, seed: number, _surfaceLevel: number): number {
+  const baseLevel = Math.floor(WORLD_HEIGHT * 0.40)  // surface at 40%
+
+  // Get noise in [0, 1], then center it to [-0.5, 0.5]
+  const raw = multiOctaveNoise(worldX, seed, 6) - 0.5
+
+  // Power redistribution: preserve sign, flatten near zero, amplify extremes
+  const sign = raw >= 0 ? 1 : -1
+  const shaped = sign * Math.pow(Math.abs(raw) * 2, 1.8) / 2
+
+  // Scale to tile offset: gentle undulation of +/- 8 tiles from base
+  const maxSwing = 8
+  const offset = Math.round(shaped * maxSwing * 2)
+
+  return Math.max(2, Math.min(WORLD_HEIGHT - 3, baseLevel + offset))
+}
+
+/** Check if a position should be a cave.  Uses cellular-automata-style
+ *  density from layered noise.  Caves form coherent tunnels instead of
+ *  random holes.
+ */
 function isCave(worldX: number, y: number, seed: number): boolean {
-  const c1 = Math.sin(worldX * 0.08 + y * 0.15 + seed * 1.1)
-  const c2 = Math.sin(worldX * 0.13 + y * 0.09 + seed * 2.7)
-  const c3 = Math.sin(worldX * 0.04 + y * 0.22 + seed * 0.3)
-  const combined = (c1 + c2 + c3) / 3
-  return combined > 0.45
+  // Two noise fields at different scales
+  const n1 = Math.sin(worldX * 0.06 + y * 0.09 + seed * 1.3) *
+             Math.cos(worldX * 0.04 + y * 0.07 + seed * 0.7)
+  const n2 = Math.sin(worldX * 0.12 + y * 0.05 + seed * 2.1) *
+             Math.cos(worldX * 0.09 + y * 0.13 + seed * 3.3)
+
+  // Combine: the product of two sine waves creates natural-looking voids
+  const density = (n1 + n2) / 2
+
+  // Threshold: only open caves where both noise fields agree (narrow band)
+  return density > 0.28 && density < 0.5
 }
 
 /** Generate a chunk at the given chunk X index */
@@ -123,29 +202,61 @@ export function generateChunk(world: TileWorld, chunkX: number): Chunk {
 
   const rng = seededRandom(world.seed * 7919 + chunkX * 104729)
 
-  // For each column
+  // Water level: absolute Y coordinate for water surface
+  const waterLevel = Math.floor(WORLD_HEIGHT * 0.40) + WATER_LEVEL_OFFSET
+
+  // Pre-compute surface heights for all columns (needed for basin detection + slope)
+  const surfaces: number[] = []
   for (let lx = 0; lx < CHUNK_WIDTH; lx++) {
     const worldX = chunkX * CHUNK_WIDTH + lx
     const surface = terrainHeight(worldX, world.seed, world.surfaceLevel)
+    surfaces[lx] = Math.max(2, Math.min(WORLD_HEIGHT - 3, surface))
+  }
 
-    // Clamp surface to valid range
-    const clampedSurface = Math.max(2, Math.min(WORLD_HEIGHT - 3, surface))
+  // Compute neighbor surfaces outside chunk bounds for edge-basin detection.
+  // Look up to 8 columns beyond each edge to find the nearest bank.
+  const BANK_SEARCH = 8
+  let leftNeighborSurface = WORLD_HEIGHT  // default: no bank found (deep)
+  for (let d = 1; d <= BANK_SEARCH; d++) {
+    const s = Math.max(2, Math.min(WORLD_HEIGHT - 3,
+      terrainHeight(chunkX * CHUNK_WIDTH - d, world.seed, world.surfaceLevel)))
+    if (s <= waterLevel) { leftNeighborSurface = s; break }
+  }
+  let rightNeighborSurface = WORLD_HEIGHT
+  for (let d = 0; d < BANK_SEARCH; d++) {
+    const s = Math.max(2, Math.min(WORLD_HEIGHT - 3,
+      terrainHeight((chunkX + 1) * CHUNK_WIDTH + d, world.seed, world.surfaceLevel)))
+    if (s <= waterLevel) { rightNeighborSurface = s; break }
+  }
+
+  // ── Pass 1: Fill terrain (surface + underground) ──
+
+  for (let lx = 0; lx < CHUNK_WIDTH; lx++) {
+    const worldX = chunkX * CHUNK_WIDTH + lx
+    const clampedSurface = surfaces[lx]
+
+    // Biome tinting: use a slow noise to pick between grass/sand/snow at surface
+    const biomeNoise = multiOctaveNoise(worldX, world.seed + 50000, 3)
+    // Default to grass; sand near water level, snow at high elevations
+    let surfaceBlock: BlockType = 'grass'
+    if (clampedSurface >= waterLevel - 1 && clampedSurface <= waterLevel + 1) {
+      surfaceBlock = 'sand'  // beaches near water level
+    } else if (clampedSurface <= Math.floor(WORLD_HEIGHT * 0.15)) {
+      surfaceBlock = biomeNoise > 0.5 ? 'snow' : 'grass'
+    }
 
     // Fill from surface down
     for (let y = clampedSurface; y < WORLD_HEIGHT; y++) {
       const depth = y - clampedSurface
 
       if (depth === 0) {
-        // Surface block = grass
-        tiles[y][lx] = 'grass'
+        tiles[y][lx] = surfaceBlock
       } else if (depth <= 3 + Math.floor(rng() * 2)) {
-        // Dirt layer (3-4 blocks)
-        tiles[y][lx] = 'dirt'
+        // Dirt layer (3-4 blocks); sand under sand surfaces
+        tiles[y][lx] = surfaceBlock === 'sand' ? 'sand' : 'dirt'
       } else {
-        // Stone layer
-        // Check for caves
+        // Stone layer — check for caves
         if (isCave(worldX, y, world.seed)) {
-          // Deep caves might have lava
           if (y >= WORLD_HEIGHT - 4 && rng() < 0.3) {
             tiles[y][lx] = 'lava'
           } else {
@@ -166,48 +277,105 @@ export function generateChunk(world: TileWorld, chunkX: number): Chunk {
         }
       }
     }
+  }
 
-    // Fill valleys with water: any air below the global surface level
-    for (let y = world.surfaceLevel; y < WORLD_HEIGHT; y++) {
-      if (tiles[y][lx] === 'air' && y >= clampedSurface) {
-        // Only fill above surface to a shallow depth
-        break
-      }
-      if (tiles[y][lx] === 'air' && y < clampedSurface) {
-        tiles[y][lx] = 'water'
-      }
-    }
+  // ── Pass 2: Fill ENCLOSED basins with water (not every air gap) ──
+  // A basin is a contiguous run of columns where the surface dips below
+  // waterLevel AND is enclosed on both sides by terrain at or above waterLevel.
+  // We scan left-to-right, finding basins, then fill only those.
 
-    // Tree generation: 15% chance on grass, but not too close together
-    if (tiles[clampedSurface]?.[lx] === 'grass' && rng() < 0.15) {
-      // Check we have room (not at edges)
-      if (lx >= 2 && lx < CHUNK_WIDTH - 2 && clampedSurface >= 6) {
-        const trunkHeight = 3 + Math.floor(rng() * 3) // 3-5 blocks tall
-        // Place trunk
-        for (let th = 1; th <= trunkHeight; th++) {
-          const ty = clampedSurface - th
-          if (ty >= 0) {
-            tiles[ty][lx] = 'wood'
-          }
-        }
-        // Place leaves crown (3x3 centered on trunk top, plus 1 block above)
-        const crownY = clampedSurface - trunkHeight
-        for (let dy = -1; dy <= 1; dy++) {
-          for (let dx = -1; dx <= 1; dx++) {
-            const ly = crownY + dy
-            const llx = lx + dx
-            if (ly >= 0 && ly < WORLD_HEIGHT && llx >= 0 && llx < CHUNK_WIDTH) {
-              if (tiles[ly][llx] === 'air') {
-                tiles[ly][llx] = 'leaves'
-              }
+  {
+    let lx = 0
+    let waterColumns = 0
+    const maxWaterColumns = Math.floor(CHUNK_WIDTH * 0.30)  // max 30% water
+
+    while (lx < CHUNK_WIDTH && waterColumns < maxWaterColumns) {
+      // Skip columns at or above water level
+      if (surfaces[lx] <= waterLevel) {
+        lx++
+        continue
+      }
+
+      // Found a column below water level — scan for basin extent
+      const basinStart = lx
+      while (lx < CHUNK_WIDTH && surfaces[lx] > waterLevel) {
+        lx++
+      }
+      const basinEnd = lx  // exclusive
+
+      // Check enclosure: left bank and right bank must be at or above waterLevel
+      const leftBank = basinStart > 0 ? surfaces[basinStart - 1] : leftNeighborSurface
+      const rightBank = basinEnd < CHUNK_WIDTH ? surfaces[basinEnd] : rightNeighborSurface
+
+      const leftEnclosed = leftBank <= waterLevel
+      const rightEnclosed = rightBank <= waterLevel
+
+      if (leftEnclosed && rightEnclosed) {
+        // Enclosed basin — fill air between waterLevel and surface with water.
+        // In our coordinate system, higher Y = deeper.  The surface Y is
+        // greater than waterLevel for basin columns.  Fill from waterLevel
+        // downward to the surface.
+        for (let bx = basinStart; bx < basinEnd && waterColumns < maxWaterColumns; bx++) {
+          for (let y = waterLevel; y < surfaces[bx]; y++) {
+            if (tiles[y][bx] === 'air') {
+              tiles[y][bx] = 'water'
             }
           }
-        }
-        // Extra leaf on top
-        if (crownY - 1 >= 0 && tiles[crownY - 1][lx] === 'air') {
-          tiles[crownY - 1][lx] = 'leaves'
+          // Convert the surface block and adjacent blocks to sand (beach effect)
+          if (tiles[surfaces[bx]][bx] === 'grass' || tiles[surfaces[bx]][bx] === 'dirt') {
+            tiles[surfaces[bx]][bx] = 'sand'
+          }
+          waterColumns++
         }
       }
+    }
+  }
+
+  // ── Pass 3: Trees — only on flat areas (slope < 2 between adjacent columns) ──
+
+  // Track last tree position to avoid clustering
+  let lastTreeX = -5
+
+  for (let lx = 2; lx < CHUNK_WIDTH - 2; lx++) {
+    if (lx - lastTreeX < 4) continue  // minimum spacing between trees
+
+    const clampedSurface = surfaces[lx]
+
+    // Slope check: compare with left and right neighbor heights
+    const slopeLeft = Math.abs(surfaces[lx] - surfaces[lx - 1])
+    const slopeRight = Math.abs(surfaces[lx] - surfaces[lx + 1])
+    if (slopeLeft >= 2 || slopeRight >= 2) continue  // too steep
+
+    // Must be on grass (not sand, water, snow)
+    if (tiles[clampedSurface]?.[lx] !== 'grass') continue
+
+    // 12% base chance
+    if (rng() > 0.12) continue
+
+    if (clampedSurface < 6) continue  // need headroom
+
+    lastTreeX = lx
+
+    const trunkHeight = 3 + Math.floor(rng() * 3) // 3-5 blocks tall
+    // Place trunk
+    for (let th = 1; th <= trunkHeight; th++) {
+      const ty = clampedSurface - th
+      if (ty >= 0) tiles[ty][lx] = 'wood'
+    }
+    // Place leaves crown (3x3 centered on trunk top, plus 1 block above)
+    const crownY = clampedSurface - trunkHeight
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const ly = crownY + dy
+        const llx = lx + dx
+        if (ly >= 0 && ly < WORLD_HEIGHT && llx >= 0 && llx < CHUNK_WIDTH) {
+          if (tiles[ly][llx] === 'air') tiles[ly][llx] = 'leaves'
+        }
+      }
+    }
+    // Extra leaf on top
+    if (crownY - 1 >= 0 && tiles[crownY - 1][lx] === 'air') {
+      tiles[crownY - 1][lx] = 'leaves'
     }
   }
 
@@ -229,7 +397,7 @@ export function initTileWorld(seed?: number): TileWorld {
   const world: TileWorld = {
     chunks: new Map(),
     cameraX: 0,
-    surfaceLevel: 12,
+    surfaceLevel: Math.floor(WORLD_HEIGHT * 0.40),  // 40% of world height
     seed: seed ?? Math.floor(Math.random() * 999999),
     timeOfDay: 'day',
     weather: 'clear',
@@ -380,9 +548,180 @@ function adjustBrightness(hex: string, factor: number): string {
   return `rgb(${clamp(r)},${clamp(g)},${clamp(b)})`
 }
 
+// ─── Autotile Types ──────────────────────────────────────────
+
+/** Block types that receive autotiling (soft edges based on neighbors) */
+const AUTOTILE_BLOCKS = new Set<BlockType>(['grass', 'sand', 'snow', 'water'])
+
 // ─── Rendering ────────────────────────────────────────────────
 
-/** Draw a single tile block with 3D-style shading */
+/**
+ * Compute 4-bit autotile mask for a block.
+ * Bits: North=1, West=2, East=4, South=8.
+ * A bit is set if the neighbor in that direction is the SAME block type.
+ */
+function autotileMask(world: TileWorld, tileX: number, tileY: number, blockType: BlockType): number {
+  let mask = 0
+  if (getTile(world, tileX, tileY - 1) === blockType) mask |= 1   // North
+  if (getTile(world, tileX - 1, tileY) === blockType) mask |= 2   // West
+  if (getTile(world, tileX + 1, tileY) === blockType) mask |= 4   // East
+  if (getTile(world, tileX, tileY + 1) === blockType) mask |= 8   // South
+  return mask
+}
+
+/**
+ * Draw tile variation details.  Uses tileHash to pick 1 of 3 visual variants.
+ * Each variant adds minor pixel-level details (cracks, grass blades, grain).
+ */
+function drawTileVariation(
+  ctx: CanvasRenderingContext2D,
+  screenX: number,
+  screenY: number,
+  block: BlockType,
+  seed: number,
+  tileWorldX: number,
+  tileWorldY: number,
+): void {
+  const S = TILE_SIZE
+  const variant = tileHash(tileWorldX, tileWorldY, seed)
+  const colors = BLOCK_COLORS[block]
+
+  switch (block) {
+    case 'grass': {
+      // Variant grass blade positions (tiny 1px darker marks)
+      ctx.fillStyle = colors.dark
+      if (variant === 0) {
+        ctx.fillRect(screenX + 3, screenY + 2, 1, 2)
+        ctx.fillRect(screenX + 10, screenY + 1, 1, 3)
+      } else if (variant === 1) {
+        ctx.fillRect(screenX + 6, screenY + 2, 1, 2)
+        ctx.fillRect(screenX + 13, screenY + 3, 1, 2)
+        ctx.fillRect(screenX + 1, screenY + 1, 1, 2)
+      } else {
+        ctx.fillRect(screenX + 4, screenY + 3, 1, 2)
+        ctx.fillRect(screenX + 11, screenY + 2, 1, 2)
+      }
+      break
+    }
+    case 'dirt': {
+      // Small rock/crack details
+      ctx.fillStyle = adjustBrightness(colors.face, variant === 0 ? 0.8 : variant === 1 ? 1.15 : 0.9)
+      if (variant === 0) {
+        ctx.fillRect(screenX + 4, screenY + 5, 2, 1)
+        ctx.fillRect(screenX + 10, screenY + 10, 2, 1)
+      } else if (variant === 1) {
+        ctx.fillRect(screenX + 7, screenY + 3, 1, 2)
+        ctx.fillRect(screenX + 2, screenY + 9, 2, 2)
+      } else {
+        ctx.fillRect(screenX + 5, screenY + 7, 3, 1)
+        ctx.fillRect(screenX + 12, screenY + 4, 1, 1)
+      }
+      break
+    }
+    case 'stone': {
+      // Crack lines and shade variation
+      const shade = variant === 0 ? 0.85 : variant === 1 ? 0.92 : 1.08
+      ctx.fillStyle = adjustBrightness(colors.face, shade)
+      if (variant === 0) {
+        ctx.fillRect(screenX + 2, screenY + 6, 4, 1)
+        ctx.fillRect(screenX + 5, screenY + 6, 1, 3)
+      } else if (variant === 1) {
+        ctx.fillRect(screenX + 8, screenY + 4, 1, 5)
+        ctx.fillRect(screenX + 3, screenY + 11, 3, 1)
+      } else {
+        ctx.fillRect(screenX + 6, screenY + 2, 3, 1)
+        ctx.fillRect(screenX + 10, screenY + 8, 2, 2)
+      }
+      break
+    }
+    case 'sand': {
+      // Subtle grain dots
+      ctx.fillStyle = adjustBrightness(colors.face, variant === 0 ? 1.1 : 0.9)
+      const offsets = variant === 0
+        ? [[3,4],[9,7],[13,11]]
+        : variant === 1
+          ? [[5,3],[7,10],[12,5]]
+          : [[2,8],[8,3],[11,12]]
+      for (const [ox, oy] of offsets) {
+        ctx.fillRect(screenX + ox, screenY + oy, 1, 1)
+      }
+      break
+    }
+    case 'snow': {
+      // Sparkle dots
+      ctx.fillStyle = '#ffffff'
+      ctx.globalAlpha = 0.4
+      const sparkles = variant === 0
+        ? [[4,3],[11,8]]
+        : variant === 1
+          ? [[7,5],[2,11],[13,3]]
+          : [[5,9],[10,4]]
+      for (const [ox, oy] of sparkles) {
+        ctx.fillRect(screenX + ox, screenY + oy, 1, 1)
+      }
+      ctx.globalAlpha = 1
+      break
+    }
+    default:
+      break
+  }
+}
+
+/**
+ * Draw autotile softened edges.  For each edge where the neighbor is NOT
+ * the same type, we draw a rounded/softened transition (2px inset with the
+ * face color of whatever is adjacent — typically air → sky gradient fakes).
+ * This makes grass-to-air edges look curved rather than blocky.
+ */
+function drawAutotileEdges(
+  ctx: CanvasRenderingContext2D,
+  screenX: number,
+  screenY: number,
+  mask: number,
+  colors: BlockColor,
+): void {
+  const S = TILE_SIZE
+  const INSET = 2  // how many pixels to soften
+
+  // For missing neighbors, draw a subtle rounded corner effect
+  // by drawing the dark shade in the corner pixels
+
+  ctx.fillStyle = colors.dark
+
+  // If no north neighbor → soften top-left and top-right corners
+  if (!(mask & 1)) {
+    ctx.fillRect(screenX, screenY, INSET, 1)
+    ctx.fillRect(screenX + S - INSET, screenY, INSET, 1)
+    ctx.fillRect(screenX, screenY + 1, 1, 1)
+    ctx.fillRect(screenX + S - 1, screenY + 1, 1, 1)
+  }
+
+  // If no south neighbor → soften bottom corners
+  if (!(mask & 8)) {
+    ctx.fillRect(screenX, screenY + S - 1, INSET, 1)
+    ctx.fillRect(screenX + S - INSET, screenY + S - 1, INSET, 1)
+    ctx.fillRect(screenX, screenY + S - 2, 1, 1)
+    ctx.fillRect(screenX + S - 1, screenY + S - 2, 1, 1)
+  }
+
+  // If no west neighbor → soften left edge
+  if (!(mask & 2)) {
+    ctx.fillRect(screenX, screenY, 1, INSET)
+    ctx.fillRect(screenX, screenY + S - INSET, 1, INSET)
+    ctx.fillRect(screenX + 1, screenY, 1, 1)
+    ctx.fillRect(screenX + 1, screenY + S - 1, 1, 1)
+  }
+
+  // If no east neighbor → soften right edge
+  if (!(mask & 4)) {
+    ctx.fillRect(screenX + S - 1, screenY, 1, INSET)
+    ctx.fillRect(screenX + S - 1, screenY + S - INSET, 1, INSET)
+    ctx.fillRect(screenX + S - 2, screenY, 1, 1)
+    ctx.fillRect(screenX + S - 2, screenY + S - 1, 1, 1)
+  }
+}
+
+/** Draw a single tile block with 3D-style shading, autotiling, and variation */
 function drawBlock(
   ctx: CanvasRenderingContext2D,
   screenX: number,
@@ -391,18 +730,18 @@ function drawBlock(
   frame: number,
   tileWorldX: number,
   tileWorldY: number,
+  world: TileWorld,
 ): void {
   if (block === 'air') return
 
   const colors = BLOCK_COLORS[block]
   const S = TILE_SIZE
 
-  // Special: water at 60% opacity
+  // Special: water at 60% opacity with autotile
   if (block === 'water') {
     ctx.save()
     ctx.globalAlpha = 0.6
 
-    // Wave animation: shift top row
     const waveOffset = Math.sin(frame * 0.15 + tileWorldX * 0.5) * 2
 
     // Main body
@@ -417,6 +756,13 @@ function drawBlock(
     ctx.fillStyle = colors.dark
     ctx.fillRect(screenX + S - 1, screenY, 1, S)
     ctx.fillRect(screenX, screenY + S - 1, S, 1)
+
+    // Autotile softened edges
+    const mask = autotileMask(world, tileWorldX, tileWorldY, block)
+    drawAutotileEdges(ctx, screenX, screenY, mask, colors)
+
+    // Tile variation: subtle wave lines
+    drawTileVariation(ctx, screenX, screenY, block, world.seed, tileWorldX, tileWorldY)
 
     ctx.restore()
     return
@@ -453,7 +799,7 @@ function drawBlock(
     ctx.fillRect(screenX + S - 1, screenY, 1, S)
     ctx.fillRect(screenX, screenY + S - 1, S, 1)
 
-    // Occasional bubble (1px orange dot above)
+    // Occasional bubble
     if (Math.sin(frame * 0.7 + tileWorldX * 3.1) > 0.9) {
       const bubbleY = screenY - 1 - Math.floor(Math.abs(Math.sin(frame * 0.5 + tileWorldX)) * 3)
       ctx.fillStyle = '#ff9f43'
@@ -478,7 +824,8 @@ function drawBlock(
     return
   }
 
-  // Default block rendering
+  // ── Default block rendering with autotile + variation ──
+
   // Main face
   ctx.fillStyle = colors.face
   ctx.fillRect(screenX, screenY, S, S)
@@ -494,12 +841,20 @@ function drawBlock(
   // Bottom shadow edge
   ctx.fillRect(screenX, screenY + S - 1, S, 1)
 
+  // Autotile: soften edges for grass, sand, snow
+  if (AUTOTILE_BLOCKS.has(block)) {
+    const mask = autotileMask(world, tileWorldX, tileWorldY, block)
+    drawAutotileEdges(ctx, screenX, screenY, mask, colors)
+  }
+
+  // Tile variation: minor pixel details per block type
+  drawTileVariation(ctx, screenX, screenY, block, world.seed, tileWorldX, tileWorldY)
+
   // Ore fleck rendering
   if (block === 'ore_iron' || block === 'ore_gold' || block === 'ore_diamond') {
     const fleckColor = ORE_FLECK_COLORS[block]
     ctx.fillStyle = fleckColor
 
-    // 2-3 fleck positions, deterministic based on position
     const fleckSeed = tileWorldX * 31 + tileWorldY * 17
     const numFlecks = 2 + (fleckSeed % 2)
     for (let i = 0; i < numFlecks; i++) {
@@ -601,7 +956,7 @@ export function renderTileWorld(
       if (screenX + TILE_SIZE < panelX || screenX > panelX + panelWidth) continue
       if (screenY + TILE_SIZE < panelY || screenY > panelY + panelHeight) continue
 
-      drawBlock(ctx, screenX, screenY, block, frame, tileX, tileY)
+      drawBlock(ctx, screenX, screenY, block, frame, tileX, tileY, world)
     }
   }
 

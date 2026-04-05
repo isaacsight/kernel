@@ -1077,7 +1077,251 @@ export function renderRomBackground(
 }
 
 // ---------------------------------------------------------------------------
-// 8. Tool Registration (kbot integration)
+// 8. Phase 3 — Palette-Cycled Element Rendering
+// ---------------------------------------------------------------------------
+//
+// These functions render water, lava, fire, and sky using the indexed palette
+// colors directly. As tickPaletteCycles rotates the palette entries, the
+// visuals animate with ZERO new frames — pure Mark Ferrari technique.
+
+/**
+ * Convert a packed RGBA uint32 to a CSS rgba() string.
+ * Used by all palette-cycled renderers to set ctx.fillStyle.
+ */
+function paletteToCSS(palette: RomPalette, index: number): string {
+  const [r, g, b, a] = unpackRGBA(palette.colors[index])
+  return `rgba(${r},${g},${b},${a / 255})`
+}
+
+/**
+ * renderWaterSurface — Draws an animated water body using palette cycling colors.
+ *
+ * Draws horizontal strips where each strip uses a different palette index from
+ * the water range (32-47). As tickPaletteCycles rotates indices 32-39 and 40-47,
+ * the strips shift color — creating flowing water animation with ZERO new frames.
+ *
+ * The water surface includes sine-wave distortion for a ripple effect and
+ * highlight bands at the top for specular reflection.
+ */
+export function renderWaterSurface(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  palette: RomPalette,
+  frame: number,
+): void {
+  const stripCount = 16 // palette indices 32-47
+  const stripH = Math.max(1, Math.ceil(height / stripCount))
+
+  for (let i = 0; i < stripCount; i++) {
+    const paletteIdx = 32 + i
+    const stripY = y + i * stripH
+
+    // Skip strips that are off-screen
+    if (stripY + stripH < y || stripY > y + height) continue
+
+    // Sine-wave horizontal offset per strip — ripple effect
+    const waveOffset = Math.sin((frame * 0.15) + (i * 0.8)) * 3
+
+    ctx.fillStyle = paletteToCSS(palette, paletteIdx)
+
+    // Clamp strip height to not exceed the water body bounds
+    const clampedH = Math.min(stripH, (y + height) - stripY)
+    ctx.fillRect(x + waveOffset, stripY, width, clampedH)
+  }
+
+  // Specular highlights: thin white-ish lines near the top using the brightest
+  // water palette entries (indices 38-39 are the bright end of the surface cycle)
+  const savedAlpha = ctx.globalAlpha
+  ctx.globalAlpha = 0.25
+  for (let h = 0; h < 3; h++) {
+    const highlightY = y + h * 2 + Math.sin(frame * 0.2 + h) * 1.5
+    // Use surface-cycle bright indices
+    ctx.fillStyle = paletteToCSS(palette, 38 + (h % 2))
+    ctx.fillRect(x, highlightY, width, 1)
+  }
+  ctx.globalAlpha = savedAlpha
+}
+
+/**
+ * renderLavaPool — Draws animated lava using palette cycling + dithering.
+ *
+ * Uses palette range 64-79 (lava). The dithered checkerboard pattern makes
+ * adjacent pixels use offset palette indices, so when the palette cycles in
+ * pingpong mode the lava appears to bubble and pulse.
+ */
+export function renderLavaPool(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  palette: RomPalette,
+  frame: number,
+): void {
+  // Pixel size for the dither grid — 4px blocks for performance at 1280x720
+  const blockSize = 4
+  const cols = Math.ceil(width / blockSize)
+  const rows = Math.ceil(height / blockSize)
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      // Dithered checkerboard: offset palette index by 1 on alternate cells
+      const dither = ((row + col) & 1)
+
+      // Map row position to lava palette range (64-79, 16 entries)
+      // Add a slow vertical wave so the lava appears to churn
+      const waveShift = Math.sin((frame * 0.1) + (row * 0.3) + (col * 0.05)) * 2
+      const baseIdx = Math.floor((row / rows) * 8) // 0-7 within lava range
+      const paletteIdx = 64 + ((baseIdx + dither + Math.round(Math.abs(waveShift))) % 16)
+
+      ctx.fillStyle = paletteToCSS(palette, paletteIdx)
+      const bx = x + col * blockSize
+      const by = y + row * blockSize
+      const bw = Math.min(blockSize, (x + width) - bx)
+      const bh = Math.min(blockSize, (y + height) - by)
+      ctx.fillRect(bx, by, bw, bh)
+    }
+  }
+
+  // Lava glow: bright emission along the top surface
+  const savedAlpha = ctx.globalAlpha
+  ctx.globalAlpha = 0.4
+  const glowH = Math.min(6, height)
+  for (let g = 0; g < glowH; g++) {
+    // Use the hot end of the lava palette (indices 71-73 are the bright orange/yellow)
+    const glowIdx = 64 + 7 + (g % 4) // 71-74
+    ctx.fillStyle = paletteToCSS(palette, Math.min(glowIdx, 79))
+    ctx.globalAlpha = 0.4 - (g * 0.06)
+    ctx.fillRect(x, y + g, width, 1)
+  }
+  ctx.globalAlpha = savedAlpha
+}
+
+/**
+ * renderCycledSky — Draws animated sky using palette range 112-127 during
+ * sunset/dawn for color shifting. During day/night, renders a subtle gradient
+ * overlay using the sky palette.
+ *
+ * The sky palette has 16 entries from deep blue to light horizon. During
+ * sunset/dawn the cycling rotates these entries, creating a smooth color shift
+ * across the sky height.
+ */
+export function renderCycledSky(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  skyHeight: number,
+  palette: RomPalette,
+  timeOfDay: string,
+): void {
+  // Number of palette entries in the sky range
+  const skyEntries = 16 // indices 112-127
+  const bandH = Math.max(1, Math.ceil(skyHeight / skyEntries))
+
+  for (let i = 0; i < skyEntries; i++) {
+    const paletteIdx = 112 + i
+    const bandY = i * bandH
+
+    if (bandY >= skyHeight) break
+
+    ctx.fillStyle = paletteToCSS(palette, paletteIdx)
+    const clampedH = Math.min(bandH, skyHeight - bandY)
+    ctx.fillRect(0, bandY, width, clampedH)
+  }
+
+  // For sunset/dawn, add a warm overlay tint that intensifies near the horizon
+  if (timeOfDay === 'sunset' || timeOfDay === 'dawn') {
+    const savedAlpha = ctx.globalAlpha
+    for (let i = 0; i < skyEntries; i++) {
+      const t = i / (skyEntries - 1) // 0 at top, 1 at horizon
+      const warmth = t * t * 0.3 // quadratic fade — stronger near horizon
+      ctx.globalAlpha = warmth
+      // Use the fire palette for warm tinting (144-159)
+      const fireIdx = 144 + Math.floor(t * 6) // pull from the warm end
+      ctx.fillStyle = paletteToCSS(palette, fireIdx)
+      const bandY = i * bandH
+      const clampedH = Math.min(bandH, skyHeight - bandY)
+      ctx.fillRect(0, bandY, width, clampedH)
+    }
+    ctx.globalAlpha = savedAlpha
+  }
+}
+
+/**
+ * renderFireColumn — Draws animated fire using palette range 144-159.
+ * Each column of the fire has a randomized height offset seeded by position,
+ * and the palette cycling creates the flickering animation.
+ */
+export function renderFireColumn(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  palette: RomPalette,
+  frame: number,
+): void {
+  const colWidth = 3 // 3px wide flame tongues
+  const cols = Math.ceil(width / colWidth)
+
+  for (let col = 0; col < cols; col++) {
+    const cx = x + col * colWidth
+    // Flame height varies per column using pseudo-random + time
+    const seed = col * 7.13 + frame * 0.25
+    const flameHeight = height * (0.5 + 0.5 * Math.abs(Math.sin(seed)))
+    const strips = Math.ceil(flameHeight / 3)
+
+    for (let s = 0; s < strips; s++) {
+      // Bottom = hot (high palette index), top = cool (low index)
+      const t = s / Math.max(strips - 1, 1)
+      const paletteIdx = 144 + Math.floor((1 - t) * 12) // 156 at base, 144 at tip
+      const sy = y + height - flameHeight + s * 3
+
+      if (sy < y || sy >= y + height) continue
+
+      ctx.fillStyle = paletteToCSS(palette, Math.min(paletteIdx, 159))
+      ctx.fillRect(cx, sy, Math.min(colWidth, (x + width) - cx), 3)
+    }
+  }
+}
+
+/**
+ * renderPaletteCycledElement — Master dispatcher. Draws a named element type
+ * at the given position using the palette-cycled colors.
+ *
+ * Element types: 'water', 'lava', 'fire', 'sky'
+ */
+export function renderPaletteCycledElement(
+  ctx: CanvasRenderingContext2D,
+  element: 'water' | 'lava' | 'fire' | 'sky',
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  palette: RomPalette,
+  frame: number,
+  timeOfDay: string = 'day',
+): void {
+  switch (element) {
+    case 'water':
+      renderWaterSurface(ctx, x, y, width, height, palette, frame)
+      break
+    case 'lava':
+      renderLavaPool(ctx, x, y, width, height, palette, frame)
+      break
+    case 'fire':
+      renderFireColumn(ctx, x, y, width, height, palette, frame)
+      break
+    case 'sky':
+      renderCycledSky(ctx, width, height, palette, timeOfDay)
+      break
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 9. Tool Registration (kbot integration)
 // ---------------------------------------------------------------------------
 
 import { registerTool } from './index.js'
@@ -1162,3 +1406,160 @@ registerTool({
     return JSON.stringify({ layout, cycles: cycleInfo, sampleColors }, null, 2)
   },
 })
+
+registerTool({
+  name: 'rom_engine_cycle_render',
+  description: 'Render palette-cycled elements (water, lava, fire, sky) to a test PNG. Generates 6 sequential frames showing the palette cycling in action.',
+  parameters: {
+    outputDir: {
+      type: 'string',
+      description: 'Directory to save PNGs (default: /tmp)',
+      required: false,
+      default: '/tmp',
+    },
+    prefix: {
+      type: 'string',
+      description: 'Filename prefix (default: kbot-cycle)',
+      required: false,
+      default: 'kbot-cycle',
+    },
+  },
+  tier: 'free',
+  execute: async (args) => {
+    const outDir = (args.outputDir as string) || '/tmp'
+    const prefix = (args.prefix as string) || 'kbot-cycle'
+    return await renderCycleTestFrames(outDir, prefix)
+  },
+})
+
+/**
+ * Render 6 test frames showing palette cycling for water, lava, fire, and sky.
+ * Each frame advances the palette cycles by 100ms, demonstrating the animation.
+ */
+export async function renderCycleTestFrames(outDir: string, prefix: string): Promise<string> {
+  try {
+    const fs = await import('fs')
+    const path = await import('path')
+    // Dynamic import for optional 'canvas' dependency
+    const canvasMod = await import('canvas')
+    const createCanvas = canvasMod.createCanvas
+
+    const W = 1280
+    const H = 720
+    const palette = createPalette()
+    const cycles = createDefaultCycles()
+    const frameCount = 6
+    const deltaMs = 100 // ms between frames
+
+    const files: string[] = []
+
+    for (let f = 0; f < frameCount; f++) {
+      const canvas = createCanvas(W, H)
+      const ctx = canvas.getContext('2d') as unknown as CanvasRenderingContext2D
+
+      // Clear to dark
+      ctx.fillStyle = '#0a0a0a'
+      ctx.fillRect(0, 0, W, H)
+
+      // Layout: 4 quadrants
+      // Top-left: Sky (sunset with cycling)
+      // Top-right: Water surface
+      // Bottom-left: Lava pool
+      // Bottom-right: Fire columns
+
+      const halfW = W / 2
+      const halfH = H / 2
+      const padding = 10
+
+      // Labels
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = '16px monospace'
+
+      // --- Top-left: Cycled Sky (sunset) ---
+      ctx.fillText(`SKY (sunset, frame ${f + 1})`, padding + 4, 20)
+      renderCycledSky(ctx, halfW - padding * 2, halfH - padding * 2 - 24, palette, 'sunset')
+      // Translate the sky down a bit for the label
+      ctx.save()
+      ctx.translate(padding, 28)
+      renderCycledSky(ctx, halfW - padding * 2, halfH - padding * 2 - 28, palette, 'sunset')
+      ctx.restore()
+
+      // --- Top-right: Water ---
+      ctx.fillStyle = '#FFFFFF'
+      ctx.fillText(`WATER (frame ${f + 1})`, halfW + padding + 4, 20)
+      renderWaterSurface(
+        ctx,
+        halfW + padding,
+        28,
+        halfW - padding * 2,
+        halfH - padding * 2 - 28,
+        palette,
+        f,
+      )
+
+      // --- Bottom-left: Lava ---
+      ctx.fillStyle = '#FFFFFF'
+      ctx.fillText(`LAVA (frame ${f + 1})`, padding + 4, halfH + 20)
+      renderLavaPool(
+        ctx,
+        padding,
+        halfH + 28,
+        halfW - padding * 2,
+        halfH - padding * 2 - 28,
+        palette,
+        f,
+      )
+
+      // --- Bottom-right: Fire ---
+      ctx.fillStyle = '#FFFFFF'
+      ctx.fillText(`FIRE (frame ${f + 1})`, halfW + padding + 4, halfH + 20)
+      renderFireColumn(
+        ctx,
+        halfW + padding,
+        halfH + 28,
+        halfW - padding * 2,
+        halfH - padding * 2 - 28,
+        palette,
+        f,
+      )
+
+      // Divider lines
+      ctx.strokeStyle = '#404040'
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.moveTo(halfW, 0)
+      ctx.lineTo(halfW, H)
+      ctx.moveTo(0, halfH)
+      ctx.lineTo(W, halfH)
+      ctx.stroke()
+
+      // Frame indicator
+      ctx.fillStyle = '#6B5B95'
+      ctx.font = 'bold 14px monospace'
+      ctx.fillText(`PALETTE CYCLE FRAME ${f + 1}/${frameCount}  (${(f + 1) * deltaMs}ms elapsed)`, W - 400, H - 10)
+
+      // Save PNG
+      const filename = `${prefix}-${String(f + 1).padStart(3, '0')}.png`
+      const filepath = path.join(outDir, filename)
+      const buffer = canvas.toBuffer('image/png')
+      fs.writeFileSync(filepath, buffer)
+      files.push(filepath)
+
+      // Advance palette cycles for next frame
+      tickPaletteCycles(palette, cycles, deltaMs)
+    }
+
+    return JSON.stringify({
+      success: true,
+      frames: frameCount,
+      deltaMs,
+      files,
+      message: `Rendered ${frameCount} palette cycle test frames. Water shimmers, lava pulses, fire flickers, sky shifts.`,
+    }, null, 2)
+  } catch (err) {
+    return JSON.stringify({
+      success: false,
+      error: `Canvas rendering failed: ${err instanceof Error ? err.message : String(err)}. Install the "canvas" npm package for PNG output.`,
+    }, null, 2)
+  }
+}
