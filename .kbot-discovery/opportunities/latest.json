@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-06T05:05:44.377Z",
+  "timestamp": "2026-04-06T11:20:42.878Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(container): update image ghcr.io/openclaw/openclaw (2026.4.2 → 2026.4.5)",
-      "url": "https://github.com/drag0n141/home-ops/pull/5207",
+      "title": "[StarAutoManager] ✅ Applied — 24 repos categorized (2026-04-06)",
+      "url": "https://github.com/Sibuxiangx/StarAutoManager/issues/6",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(container): update ghcr.io/openclaw/openclaw ( 2026.4.2 → 2026.4.5 )",
-      "url": "https://github.com/wipash/homelab/pull/5666",
+      "title": "docs: Clawworld production reference — 11 mainnet contracts implementing all four BAP-578 capabilities",
+      "url": "https://github.com/ChatAndBuild/non-fungible-agents-BAP-578/pull/36",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "chore(deps): update dependency openclaw/openclaw to v2026.4.5",
-      "url": "https://github.com/justmiles/carapace/pull/25",
+      "title": "Update ghcr.io/openclaw/openclaw Docker tag to v2026.4.5",
+      "url": "https://github.com/claytono/infra/pull/1923",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
