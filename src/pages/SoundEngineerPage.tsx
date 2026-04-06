@@ -73,15 +73,81 @@ const SERVICES = [
   },
 ]
 
-const TOOLS = [
-  'Ableton Live 12 Suite',
-  'Serum 2',
-  'Universal Audio (170+ plugins)',
-  'Roland Cloud (ZENOLOGY, TR, Juno)',
-  'Native Instruments (Kontakt, Massive)',
-  'Spitfire LABS',
-  'Splice Sounds',
-  'kbot Sound Engine',
+const TOOL_CATEGORIES = [
+  {
+    label: 'DAW & Production',
+    icon: '\u2318',
+    tools: [
+      'Ableton Live 12 Suite',
+      'Serum 2',
+      'Max for Live (custom devices)',
+      'Splice Sounds & Samples',
+    ],
+  },
+  {
+    label: 'Plugins & Processing',
+    icon: '\u2699',
+    tools: [
+      'Universal Audio (170+ plugins)',
+      'Roland Cloud (ZENOLOGY, TR, Juno)',
+      'Native Instruments (Kontakt, Massive)',
+      'Spitfire LABS & BBCSO',
+      'Neural DSP (amp modeling)',
+      'FabFilter (Pro-Q, Pro-L, Pro-C)',
+      'Soundtoys (effects)',
+    ],
+  },
+  {
+    label: 'AI-Powered Audio',
+    icon: '\u2605',
+    tools: [
+      'iZotope Ozone / Neutron (AI mastering & mixing)',
+      'Sonible smart:EQ 4 / smart:comp 2 (AI-adaptive EQ & compression)',
+      'LANDR (AI mastering & distribution)',
+      'Suno (AI music generation & ideation)',
+      'Udio (AI composition & arrangement)',
+      'Stable Audio (text-to-audio generation)',
+      'AIVA (AI composition assistant)',
+    ],
+  },
+  {
+    label: 'AI Stem & Voice',
+    icon: '\u266C',
+    tools: [
+      'LALAL.AI (AI stem separation)',
+      'Demucs / Meta (neural source separation)',
+      'ElevenLabs (voice synthesis & cloning)',
+      'Adobe Podcast (AI speech enhancement)',
+      'RX 11 (AI-powered audio repair)',
+      'RAVE (real-time neural audio synthesis)',
+      'Descript (AI audio editing)',
+    ],
+  },
+  {
+    label: 'kbot Sound Engine',
+    icon: '\u25C8',
+    tools: [
+      'Ableton OSC bridge (14 tools — control Live from terminal)',
+      'Programmatic Serum 2 preset generation',
+      'AI chord detection & harmonic analysis',
+      'Automated stem analysis & mix referencing',
+      'DJ set builder (transition planning, BPM matching)',
+      'PCM audio engine (oscillators, ADSR, chiptune)',
+      'Magenta integration (melody, drum, harmony generation)',
+      'Real-time audio visualization',
+    ],
+  },
+  {
+    label: 'Spatial & Immersive',
+    icon: '\u29BF',
+    tools: [
+      'Dolby Atmos (immersive mixing)',
+      'Apple Spatial Audio',
+      'ambiX (ambisonics)',
+      'DearVR (3D audio)',
+      'Envelop for Live (spatial panning)',
+    ],
+  },
 ]
 
 export function SoundEngineerPage() {
@@ -135,6 +201,10 @@ export function SoundEngineerPage() {
 
   return (
     <div className="ka-sound">
+      {/* Nav */}
+      <nav className="ka-sound-nav">
+        <a href="#/" className="ka-sound-nav-home">{'\u2190'} kernel.chat</a>
+      </nav>
       {/* Hero */}
       <section className="ka-sound-hero">
         <div className="ka-sound-wave" aria-hidden="true" />
@@ -195,7 +265,16 @@ export function SoundEngineerPage() {
                 <span className="ka-sound-track-date">{t.date}</span>
               </div>
               {playingIdx === i && (
-                <div className="ka-sound-track-progress">
+                <div
+                  className="ka-sound-track-progress"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (!audio) return
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    const pct = (e.clientX - rect.left) / rect.width
+                    audio.currentTime = pct * audio.duration
+                  }}
+                >
                   <div className="ka-sound-track-progress-fill" style={{ width: `${progress}%` }} />
                 </div>
               )}
@@ -207,11 +286,24 @@ export function SoundEngineerPage() {
       <div className="ka-sound-divider" />
 
       {/* Tools */}
-      <section className="ka-sound-section">
-        <h2 className="ka-sound-h2">Tools</h2>
-        <div className="ka-sound-tools">
-          {TOOLS.map(t => (
-            <span key={t} className="ka-sound-tool">{t}</span>
+      <section className="ka-sound-section ka-sound-section--wide">
+        <h2 className="ka-sound-h2">Tools & AI Stack</h2>
+        <p className="ka-sound-section-desc">
+          Traditional production tools augmented with AI at every stage — from composition to mastering to spatial audio.
+        </p>
+        <div className="ka-sound-tool-grid">
+          {TOOL_CATEGORIES.map(cat => (
+            <div key={cat.label} className="ka-sound-tool-category">
+              <div className="ka-sound-tool-cat-header">
+                <span className="ka-sound-tool-cat-icon" aria-hidden="true">{cat.icon}</span>
+                <h3 className="ka-sound-tool-cat-title">{cat.label}</h3>
+              </div>
+              <ul className="ka-sound-tool-list">
+                {cat.tools.map(t => (
+                  <li key={t} className="ka-sound-tool-item">{t}</li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </section>

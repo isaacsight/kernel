@@ -8,6 +8,29 @@
   overflow-x: hidden;
 }
 
+/* Nav */
+.ka-sound-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px;
+  z-index: 100;
+  background: linear-gradient(to bottom, #0d0d0d 60%, transparent);
+}
+
+.ka-sound-nav-home {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  color: #888;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ka-sound-nav-home:hover {
+  color: #FAF9F6;
+}
+
 /* Hero */
 .ka-sound-hero {
   text-align: center;
@@ -272,38 +295,106 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 6px;
   background: #222;
+  cursor: pointer;
+}
+
+.ka-sound-track-progress:hover {
+  height: 8px;
 }
 
 .ka-sound-track-progress-fill {
   height: 100%;
   background: #6B5B95;
-  transition: width 0.3s linear;
+  transition: width 0.25s linear;
+  border-radius: 0 3px 3px 0;
+  position: relative;
+}
+
+.ka-sound-track-progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background: #FAF9F6;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.ka-sound-track-progress:hover .ka-sound-track-progress-fill::after {
+  opacity: 1;
 }
 
 /* Tools */
-.ka-sound-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+.ka-sound-section--wide {
+  max-width: 1000px;
 }
 
-.ka-sound-tool {
-  font-family: 'Courier Prime', monospace;
-  font-size: 13px;
-  color: #aaa;
+.ka-sound-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.ka-sound-tool-category {
   background: #151413;
   border: 1px solid #222;
-  border-radius: 20px;
-  padding: 6px 16px;
+  border-radius: 10px;
+  padding: 24px;
   transition: border-color 0.2s;
 }
 
-.ka-sound-tool:hover {
+.ka-sound-tool-category:hover {
   border-color: #6B5B9540;
+}
+
+.ka-sound-tool-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ka-sound-tool-cat-icon {
+  font-size: 18px;
+  color: #6B5B95;
+}
+
+.ka-sound-tool-cat-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
   color: #FAF9F6;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.ka-sound-tool-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ka-sound-tool-item {
+  font-size: 14px;
+  color: #888;
+  line-height: 1.4;
+  padding-left: 14px;
+  position: relative;
+}
+
+.ka-sound-tool-item::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+  color: #333;
 }
 
 /* CTA */

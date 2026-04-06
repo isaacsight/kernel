@@ -199,6 +199,13 @@ export function LandingPage() {
         <ParticleField />
       </div>
 
+      {/* Top Nav */}
+      <nav className="ka-landing-nav">
+        <a href="#/security">Security</a>
+        <a href="#/bench">Benchmarks</a>
+        <a href="#/sound-engineer">Sound Engineer</a>
+      </nav>
+
       {/* Hero */}
       <section className="ka-landing-hero ka-landing-hero--animated">
         <div className="ka-landing-badge ka-hero-anim" style={{ animationDelay: '0.1s' }}>Open Source &middot; MIT Licensed</div>
@@ -359,6 +366,7 @@ export function LandingPage() {
           <a href="https://github.com/isaacsight/kernel" target="_blank" rel="noopener">GitHub</a>
           <a href="https://www.npmjs.com/package/@kernel.chat/kbot" target="_blank" rel="noopener">npm</a>
           <a href="https://discord.gg/kdMauM9abG" target="_blank" rel="noopener">Discord</a>
+          <a href="#/sound-engineer">Sound Engineer</a>
           <a href="#/privacy">Privacy</a>
           <a href="#/terms">Terms</a>
         </div>

@@ -11,6 +11,42 @@
   -webkit-overflow-scrolling: touch;
 }
 
+/* ── Top Nav ── */
+.ka-landing-nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 24px;
+  padding: 16px 28px;
+  z-index: 100;
+  background: linear-gradient(to bottom, #0d0d0d 60%, transparent);
+}
+
+.ka-landing-nav a {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ka-landing-nav a:hover {
+  color: #FAF9F6;
+}
+
+@media (max-width: 768px) {
+  .ka-landing-nav {
+    gap: 16px;
+    padding: 12px 16px;
+  }
+  .ka-landing-nav a {
+    font-size: 12px;
+  }
+}
+
 /* ── Particle Canvas ── */
 .ka-landing-particle-wrap {
   position: fixed;
