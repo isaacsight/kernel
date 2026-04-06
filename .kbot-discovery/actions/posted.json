@@ -215,5 +215,14 @@
     "comment": "The distributed state tracking is actually where things get messy—figuring out which tool call affected what across multiple services without a central source of truth is harder than people expect. LLMs can sound confident even when they're completely wrong, but the real failure mode is when the orchestration can't reconcile partial tool results.",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-04-06T14:36:42.482Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "The local-first architecture choice creates real latency friction that users underappreciate until they're in the flow—cold starts can really break sustained coding sessions. For tool orchestration, caching schema introspection results aggressively helps, since re-querying the same tool definitions on every invocation undermines the whole point. I'm curious how others handle schema caching when dealing with multiple local tools across different contexts?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
