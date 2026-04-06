@@ -32,9 +32,7 @@ function withErrorBoundary(element: React.ReactNode) {
 function LazyAdmin() {
   return (
     <Suspense fallback={
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>
-        Loading dashboard...
-      </div>
+      <div className="ka-page-loading">Loading dashboard...</div>
     }>
       <AdminPage />
     </Suspense>
@@ -69,77 +67,77 @@ export const router = createHashRouter([
       ) },
       { path: 'admin', element: withErrorBoundary(<LazyAdmin />) },
       { path: 'briefing/:id', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <BriefingPage />
         </Suspense>
       ) },
       { path: 'shared/:id', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <SharedConversationPage />
         </Suspense>
       ) },
       { path: 'privacy', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <PrivacyPage />
         </Suspense>
       ) },
       { path: 'terms', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <TermsPage />
         </Suspense>
       ) },
       { path: 'p/:slug', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <PublishedContentPage />
         </Suspense>
       ) },
       { path: 'social/callback/:platform', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <SocialCallbackPage />
         </Suspense>
       ) },
       { path: 'explore', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <ExplorePage />
         </Suspense>
       ) },
       { path: 'author/:id', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <AuthorProfilePage />
         </Suspense>
       ) },
       { path: 'workspace/:id', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <WorkspaceAdminPage />
         </Suspense>
       ) },
       { path: 'live/:code', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Joining...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Joining...</div>}>
           <LiveSharePage />
         </Suspense>
       ) },
       { path: 'play', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4, color: '#fff', background: '#0a0a0a' }}>Loading synthesis...</div>}>
+        <Suspense fallback={<div className="ka-page-loading ka-page-loading--dark">Loading synthesis...</div>}>
           <PlayPage />
         </Suspense>
       ) },
       { path: 'security', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
           <SecurityPage />
         </Suspense>
       ) },
       { path: 'bench', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading benchmarks...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading benchmarks...</div>}>
           <BenchPage />
         </Suspense>
       ) },
       { path: 'leaderboard', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading leaderboard...</div>}>
+        <Suspense fallback={<div className="ka-page-loading">Loading leaderboard...</div>}>
           <LeaderboardPage />
         </Suspense>
       ) },
       { path: 'sound-engineer', element: withErrorBoundary(
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4, color: '#fff', background: '#0d0d0d' }}>Loading...</div>}>
+        <Suspense fallback={<div className="ka-page-loading ka-page-loading--dark">Loading...</div>}>
           <SoundEngineerPage />
         </Suspense>
       ) },

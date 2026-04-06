@@ -14,17 +14,14 @@ interface State {
 function ErrorFallback({ error, onRetry }: { error: Error | null; onRetry: () => void }) {
   const { t } = useTranslation('common');
   return (
-    <div className="flex-1 flex items-center justify-center p-10">
-      <div className="max-w-md text-center">
-        <div className="text-6xl mb-6 opacity-20">!</div>
-        <h2 className="text-2xl mb-4">{t('errorTitle')}</h2>
-        <p className="opacity-60 italic mb-6">
+    <div className="ka-error-container">
+      <div className="ka-error-content">
+        <div className="ka-error-icon" aria-hidden="true">!</div>
+        <h2 className="ka-error-title">{t('errorTitle')}</h2>
+        <p className="ka-error-message">
           {error?.message || t('errorDefault')}
         </p>
-        <button
-          onClick={onRetry}
-          className="px-6 py-3 bg-[--rubin-slate] text-[--rubin-ivory] rounded-full mono text-sm hover:opacity-90 transition-opacity"
-        >
+        <button onClick={onRetry} className="ka-error-retry">
           {t('tryAgain')}
         </button>
       </div>

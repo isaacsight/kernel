@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: #0d0d0d;
   color: #e8e6e3;
-  font-family: 'EB Garamond', Georgia, serif;
+  font-family: var(--font-serif);
   overflow-x: hidden;
 }
 
@@ -18,8 +18,8 @@
 
 .ka-security-badge {
   display: inline-block;
-  font-family: 'Courier Prime', monospace;
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: #28c840;
@@ -30,27 +30,27 @@
 }
 
 .ka-security-title {
-  font-family: 'Courier Prime', monospace;
+  font-family: var(--font-mono);
   font-size: clamp(36px, 8vw, 64px);
   font-weight: 700;
   color: #FAF9F6;
   margin: 0 0 16px;
   letter-spacing: -1px;
-  line-height: 1.1;
+  line-height: var(--line-height-tight);
 }
 
 .ka-security-subtitle {
   font-size: clamp(18px, 3.5vw, 24px);
   color: #aaa;
   margin: 0 0 12px;
-  line-height: 1.4;
+  line-height: var(--line-height-relaxed);
 }
 
 .ka-security-tagline {
-  font-size: 16px;
-  color: #666;
+  font-size: var(--text-sm);
+  color: #888;
   margin: 0 0 40px;
-  line-height: 1.6;
+  line-height: var(--line-height-relaxed);
   max-width: 560px;
   margin-left: auto;
   margin-right: auto;
@@ -99,20 +99,21 @@
 }
 
 .ka-security-h2 {
-  font-family: 'Courier Prime', monospace;
+  font-family: var(--font-mono);
   font-size: 28px;
   color: #FAF9F6;
   margin: 0 0 12px;
   text-align: center;
+  line-height: var(--line-height-tight);
 }
 
 .ka-security-section-desc {
-  font-size: 16px;
-  color: #888;
+  font-size: var(--text-sm);
+  color: var(--text-secondary-on-dark);
   text-align: center;
   max-width: 560px;
   margin: 0 auto 32px;
-  line-height: 1.6;
+  line-height: var(--line-height-relaxed);
 }
 
 /* Feature grid */
@@ -127,16 +128,18 @@
   border: 1px solid #222;
   border-radius: 10px;
   padding: 24px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   position: relative;
 }
 
 .ka-security-card:hover {
   border-color: #28c84040;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107, 91, 149, 0.15);
 }
 
 .ka-security-card-icon {
-  font-family: 'Courier Prime', monospace;
+  font-family: var(--font-mono);
   font-size: 20px;
   margin-bottom: 12px;
   display: block;
@@ -145,22 +148,23 @@
 }
 
 .ka-security-card-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: 15px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   color: #FAF9F6;
   margin: 0 0 8px;
+  line-height: var(--line-height-tight);
 }
 
 .ka-security-card-desc {
-  font-size: 14px;
-  color: #888;
+  font-size: var(--text-sm);
+  color: var(--text-secondary-on-dark);
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--line-height-relaxed);
 }
 
 .ka-security-card-tag {
   display: inline-block;
-  font-family: 'Courier Prime', monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -181,15 +185,15 @@
 .ka-security-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Courier Prime', monospace;
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
 }
 
 .ka-security-table th {
   text-align: left;
   padding: 10px 16px;
   border-bottom: 1px solid #333;
-  color: #666;
+  color: #888;
   font-weight: 400;
 }
 
@@ -201,7 +205,7 @@
 .ka-security-table td {
   padding: 8px 16px;
   border-bottom: 1px solid #1a1a1a;
-  color: #888;
+  color: var(--text-secondary-on-dark);
 }
 
 .ka-security-table td:first-child {
@@ -227,8 +231,8 @@
 }
 
 .ka-security-opensource-badge {
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   letter-spacing: 2px;
   color: #6B5B95;
   margin-bottom: 16px;
@@ -236,7 +240,7 @@
 
 .ka-security-body {
   font-size: 17px;
-  line-height: 1.7;
+  line-height: var(--line-height-relaxed);
   color: #aaa;
   text-align: center;
   max-width: 600px;
@@ -269,17 +273,17 @@
 }
 
 .ka-security-terminal-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: 12px;
-  color: #666;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: #888;
   margin-left: 8px;
 }
 
 .ka-security-terminal-body {
   padding: 16px 20px;
-  font-family: 'Courier Prime', monospace;
-  font-size: 13px;
-  line-height: 1.6;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--line-height-relaxed);
 }
 
 .ka-security-line {
@@ -292,7 +296,7 @@
 }
 
 .ka-security-dim {
-  color: #555;
+  color: #777;
 }
 
 .ka-security-green {
@@ -311,6 +315,7 @@
   cursor: pointer;
   transition: border-color 0.2s;
   margin: 32px auto 0;
+  min-height: 44px;
 }
 
 .ka-security-install:hover {
@@ -318,15 +323,15 @@
 }
 
 .ka-security-install code {
-  font-family: 'Courier Prime', monospace;
-  font-size: 15px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   color: #28c840;
 }
 
 .ka-security-copy {
-  font-family: 'Courier Prime', monospace;
-  font-size: 12px;
-  color: #666;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: #888;
   border-left: 1px solid #333;
   padding-left: 16px;
 }
@@ -349,9 +354,12 @@
 }
 
 .ka-security-cta {
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   padding: 10px 28px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   border-radius: 6px;
   text-decoration: none;
   transition: all 0.2s;
@@ -393,8 +401,8 @@
 }
 
 .ka-security-principle-num {
-  font-family: 'Courier Prime', monospace;
-  font-size: 24px;
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
   color: #28c840;
   opacity: 0.4;
   min-width: 36px;
@@ -403,9 +411,9 @@
 }
 
 .ka-security-principle-text {
-  font-size: 16px;
+  font-size: var(--text-sm);
   color: #aaa;
-  line-height: 1.6;
+  line-height: var(--line-height-relaxed);
 }
 
 .ka-security-principle-text strong {
@@ -429,9 +437,9 @@
 }
 
 .ka-security-footer-links a {
-  font-family: 'Courier Prime', monospace;
-  font-size: 13px;
-  color: #666;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: #888;
   text-decoration: none;
   transition: color 0.2s;
 }
@@ -441,7 +449,7 @@
 }
 
 .ka-security-copyright {
-  font-size: 13px;
+  font-size: var(--text-xs);
   color: #444;
   margin: 0;
 }

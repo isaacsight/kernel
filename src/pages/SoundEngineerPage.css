@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: #0d0d0d;
   color: #e8e6e3;
-  font-family: 'EB Garamond', Georgia, serif;
+  font-family: var(--font-serif);
   overflow-x: hidden;
 }
 
@@ -20,9 +20,9 @@
 }
 
 .ka-sound-nav-home {
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
-  color: #888;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-secondary-on-dark);
   text-decoration: none;
   transition: color 0.2s;
 }
@@ -41,8 +41,8 @@
 
 .ka-sound-badge {
   display: inline-block;
-  font-family: 'Courier Prime', monospace;
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: #6B5B95;
@@ -53,27 +53,27 @@
 }
 
 .ka-sound-title {
-  font-family: 'Courier Prime', monospace;
+  font-family: var(--font-mono);
   font-size: clamp(36px, 8vw, 64px);
   font-weight: 700;
   color: #FAF9F6;
   margin: 0 0 16px;
   letter-spacing: -1px;
-  line-height: 1.1;
+  line-height: var(--line-height-tight);
 }
 
 .ka-sound-subtitle {
   font-size: clamp(18px, 3.5vw, 24px);
   color: #aaa;
   margin: 0 0 12px;
-  line-height: 1.4;
+  line-height: var(--line-height-relaxed);
 }
 
 .ka-sound-tagline {
-  font-size: 16px;
-  color: #666;
+  font-size: var(--text-sm);
+  color: #888;
   margin: 0 auto 40px;
-  line-height: 1.6;
+  line-height: var(--line-height-relaxed);
   max-width: 560px;
 }
 
@@ -121,20 +121,21 @@
 }
 
 .ka-sound-h2 {
-  font-family: 'Courier Prime', monospace;
+  font-family: var(--font-mono);
   font-size: clamp(24px, 5vw, 36px);
   color: #FAF9F6;
   margin: 0 0 16px;
   text-align: center;
   letter-spacing: -0.5px;
+  line-height: var(--line-height-tight);
 }
 
 .ka-sound-section-desc {
   text-align: center;
-  color: #888;
-  font-size: 16px;
+  color: var(--text-secondary-on-dark);
+  font-size: var(--text-sm);
   margin: 0 0 40px;
-  line-height: 1.5;
+  line-height: var(--line-height-relaxed);
 }
 
 .ka-sound-divider {
@@ -156,32 +157,35 @@
   border: 1px solid #222;
   border-radius: 10px;
   padding: 28px 24px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .ka-sound-card:hover {
   border-color: #6B5B9560;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107, 91, 149, 0.15);
 }
 
 .ka-sound-card-icon {
-  font-size: 24px;
+  font-size: var(--text-md);
   display: block;
   margin-bottom: 12px;
   color: #6B5B95;
 }
 
 .ka-sound-card-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: 16px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   color: #FAF9F6;
   margin: 0 0 8px;
+  line-height: var(--line-height-tight);
 }
 
 .ka-sound-card-desc {
-  font-size: 15px;
-  color: #888;
+  font-size: var(--text-sm);
+  color: var(--text-secondary-on-dark);
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--line-height-relaxed);
 }
 
 /* Tracklist / Player */
@@ -216,8 +220,8 @@
 }
 
 .ka-sound-track-play {
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   color: #6B5B95;
   width: 36px;
   height: 36px;
@@ -240,15 +244,15 @@
 }
 
 .ka-sound-track-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: 15px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   color: #FAF9F6;
   display: block;
 }
 
 .ka-sound-track-artist {
-  font-size: 13px;
-  color: #888;
+  font-size: var(--text-xs);
+  color: var(--text-secondary-on-dark);
   display: block;
   margin-top: 2px;
 }
@@ -261,7 +265,7 @@
 }
 
 .ka-sound-track-tag {
-  font-family: 'Courier Prime', monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -277,15 +281,15 @@
 }
 
 .ka-sound-track-duration {
-  font-family: 'Courier Prime', monospace;
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
   color: #aaa;
   display: block;
 }
 
 .ka-sound-track-date {
-  font-size: 12px;
-  color: #555;
+  font-size: var(--text-xs);
+  color: #777;
   display: block;
   margin-top: 2px;
 }
@@ -346,11 +350,13 @@
   border: 1px solid #222;
   border-radius: 10px;
   padding: 24px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .ka-sound-tool-category:hover {
   border-color: #6B5B9540;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107, 91, 149, 0.15);
 }
 
 .ka-sound-tool-cat-header {
@@ -361,13 +367,13 @@
 }
 
 .ka-sound-tool-cat-icon {
-  font-size: 18px;
+  font-size: var(--text-base);
   color: #6B5B95;
 }
 
 .ka-sound-tool-cat-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   color: #FAF9F6;
   margin: 0;
   letter-spacing: 0.3px;
@@ -383,9 +389,9 @@
 }
 
 .ka-sound-tool-item {
-  font-size: 14px;
-  color: #888;
-  line-height: 1.4;
+  font-size: var(--text-sm);
+  color: var(--text-secondary-on-dark);
+  line-height: var(--line-height-relaxed);
   padding-left: 14px;
   position: relative;
 }
@@ -413,8 +419,8 @@
 }
 
 .ka-sound-cta {
-  font-family: 'Courier Prime', monospace;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
   color: #FAF9F6;
   background: #6B5B95;
   border: 1px solid #6B5B95;
@@ -459,9 +465,9 @@
 }
 
 .ka-sound-footer-links a {
-  font-family: 'Courier Prime', monospace;
-  font-size: 13px;
-  color: #555;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: #777;
   text-decoration: none;
   transition: color 0.2s;
 }
@@ -471,8 +477,8 @@
 }
 
 .ka-sound-copyright {
-  font-family: 'Courier Prime', monospace;
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
   color: #333;
   margin: 0;
 }
@@ -499,7 +505,7 @@
   .ka-sound-track-play {
     width: 32px;
     height: 32px;
-    font-size: 12px;
+    font-size: var(--text-xs);
   }
 
   .ka-sound-track-tags {
