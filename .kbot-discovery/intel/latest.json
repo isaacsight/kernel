@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-06T17:35:41.670Z",
+  "timestamp": "2026-04-06T23:50:40.151Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -35,8 +35,8 @@
           ],
           "author": "duo121",
           "children": [
-            47658014,
             47654496,
+            47658014,
             47655055
           ],
           "created_at": "2026-04-05T22:14:34Z",
@@ -46,7 +46,7 @@
           "points": 5,
           "story_id": 47654495,
           "title": "Show HN: TermHub – Open-source terminal control gateway built for AI Agents",
-          "updated_at": "2026-04-06T07:43:48Z",
+          "updated_at": "2026-04-06T22:13:22Z",
           "url": "https://github.com/duo121/termhub"
         },
         {
@@ -255,6 +255,190 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "raghavchamadiya"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "coding",
+                "agent"
+              ],
+              "value": "Every AI <em>coding</em> session starts from zero. The <em>agent</em> doesn't know who owns a file, which files change together, which ones are dead, or why something was built that way.<p>I got tired of Claude Code asking me &quot;what does this service do?&quot; on a codebase I've worked on for two years. The context is all there (git history, dependency graph, past decisions), it's just not in a format the <em>agent</em> can use.<p>Repowise indexes your codebase into four layers: dependency graph (tree-sitter → NetworkX), git intelligence (hotspots, ownership, co-change patterns), auto-generated docs, and architectural decision records. These get exposed via 8 MCP tools. On each commit, only changed files get re-indexed. No full rebuilds, under 30 seconds.<p>The decisions layer is the part I'm most excited about. It surfaces architectural intent from commit history: large diffs, migration patterns, tradeoff language. It also tracks staleness as code evolves. Works well on repos with decent commit messages, less well on &quot;fix&quot; history.<p>pip install repowise\nrepowise init        # ~25 min first time, &lt;30s incremental\nrepowise serve       # MCP server + local dashboard<p>Works with Claude Code, Cursor, and any MCP-compatible <em>agent</em>. AGPL-3.0, self-hosted, your code stays on your machine.<p>I'm running early benchmarks on SWE-Bench and SWE-QA. Results are promising, especially on tasks where grounded context matters. Publishing the full methodology soon.<p>What's rough: Windows untested, language coverage is Python/TS/Go/Rust/Java/C/C++, decisions UX needs work. Happy to hear what breaks.\nPre-indexed demos (FastAPI, Starlette) on the site. Working on Slack, Jira, and Linear integrations for the hosted team version.<p>GitHub: github.com/repowise-dev/repowise\nSite: repowise.dev"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Show HN: Repowise – Codebase intelligence for AI <em>coding</em> <em>agents</em> (<em>open</em> <em>source</em>)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/repowise-dev/repowise"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_raghavchamadiya",
+            "story_47666413",
+            "show_hn"
+          ],
+          "author": "raghavchamadiya",
+          "children": [
+            47668404
+          ],
+          "created_at": "2026-04-06T20:15:26Z",
+          "created_at_i": 1775506526,
+          "num_comments": 0,
+          "objectID": "47666413",
+          "points": 1,
+          "story_id": 47666413,
+          "story_text": "Every AI coding session starts from zero. The agent doesn&#x27;t know who owns a file, which files change together, which ones are dead, or why something was built that way.<p>I got tired of Claude Code asking me &quot;what does this service do?&quot; on a codebase I&#x27;ve worked on for two years. The context is all there (git history, dependency graph, past decisions), it&#x27;s just not in a format the agent can use.<p>Repowise indexes your codebase into four layers: dependency graph (tree-sitter → NetworkX), git intelligence (hotspots, ownership, co-change patterns), auto-generated docs, and architectural decision records. These get exposed via 8 MCP tools. On each commit, only changed files get re-indexed. No full rebuilds, under 30 seconds.<p>The decisions layer is the part I&#x27;m most excited about. It surfaces architectural intent from commit history: large diffs, migration patterns, tradeoff language. It also tracks staleness as code evolves. Works well on repos with decent commit messages, less well on &quot;fix&quot; history.<p>pip install repowise\nrepowise init        # ~25 min first time, &lt;30s incremental\nrepowise serve       # MCP server + local dashboard<p>Works with Claude Code, Cursor, and any MCP-compatible agent. AGPL-3.0, self-hosted, your code stays on your machine.<p>I&#x27;m running early benchmarks on SWE-Bench and SWE-QA. Results are promising, especially on tasks where grounded context matters. Publishing the full methodology soon.<p>What&#x27;s rough: Windows untested, language coverage is Python&#x2F;TS&#x2F;Go&#x2F;Rust&#x2F;Java&#x2F;C&#x2F;C++, decisions UX needs work. Happy to hear what breaks.\nPre-indexed demos (FastAPI, Starlette) on the site. Working on Slack, Jira, and Linear integrations for the hosted team version.<p>GitHub: github.com&#x2F;repowise-dev&#x2F;repowise\nSite: repowise.dev",
+          "title": "Show HN: Repowise – Codebase intelligence for AI coding agents (open source)",
+          "updated_at": "2026-04-06T22:52:06Z",
+          "url": "https://github.com/repowise-dev/repowise"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "MattHart88"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "I built this because I wanted to see how far I could get with a voice-to-text app that used 100% local models so no data left my computer. I've been using a ton for <em>coding</em> and emails. Experimenting with using it as a voice interface for my other <em>agents</em> too. 100% <em>open</em>-<em>source</em> MIT license, would love feedback, PRs, and ideas on where to take it."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Ghost Pepper – Local hold-to-talk speech-to-text for macOS"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/matthartman/ghost-pepper"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_MattHart88",
+            "story_47666024",
+            "show_hn",
+            "front_page"
+          ],
+          "author": "MattHart88",
+          "children": [
+            47668726,
+            47667921,
+            47667734,
+            47666315,
+            47668845,
+            47666186,
+            47667062,
+            47667271,
+            47666394,
+            47667473,
+            47667743,
+            47666292,
+            47668774,
+            47666755,
+            47666947,
+            47668137,
+            47668044,
+            47668488,
+            47667257,
+            47667016,
+            47667494,
+            47667233,
+            47666980,
+            47667671,
+            47667935,
+            47666999,
+            47667704
+          ],
+          "created_at": "2026-04-06T19:50:16Z",
+          "created_at_i": 1775505016,
+          "num_comments": 81,
+          "objectID": "47666024",
+          "points": 179,
+          "story_id": 47666024,
+          "story_text": "I built this because I wanted to see how far I could get with a voice-to-text app that used 100% local models so no data left my computer. I&#x27;ve been using a ton for coding and emails. Experimenting with using it as a voice interface for my other agents too. 100% open-source MIT license, would love feedback, PRs, and ideas on where to take it.",
+          "title": "Show HN: Ghost Pepper – Local hold-to-talk speech-to-text for macOS",
+          "updated_at": "2026-04-06T23:50:21Z",
+          "url": "https://github.com/matthartman/ghost-pepper"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "essamsleiman"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "We built meta-<em>agent</em>: an <em>open</em>-<em>source</em> library that automatically and continuously improves <em>agent</em> harnesses from production traces.<p>Point it at an existing <em>agent</em>, a stream of unlabeled production traces, and a small labeled holdout set.<p>An LLM judge scores unlabeled production traces as they stream.<p>A proposer reads failed traces and writes one targeted harness update at a time, such as changes to prompts, hooks, tools, or subagents.\nThe update is kept only if it improves holdout accuracy.<p>On tau-bench v3 airline, meta-<em>agent</em> improved holdout accuracy from 67% to 87%.<p>We <em>open</em>-sourced meta-<em>agent</em>. It currently supports Claude <em>Agent</em> SDK, with more frameworks <em>coming</em> soon.<p>Try it here: <a href=\"https://github.com/canvas-org/meta-agent\" rel=\"nofollow\">https://github.com/canvas-org/meta-<em>agent</em></a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "Show HN: Meta-<em>agent</em>: self-improving <em>agent</em> harnesses from live traces"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "https://github.com/canvas-org/meta-<em>agent</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_essamsleiman",
+            "story_47665630",
+            "show_hn"
+          ],
+          "author": "essamsleiman",
+          "created_at": "2026-04-06T19:22:06Z",
+          "created_at_i": 1775503326,
+          "num_comments": 0,
+          "objectID": "47665630",
+          "points": 4,
+          "story_id": 47665630,
+          "story_text": "We built meta-agent: an open-source library that automatically and continuously improves agent harnesses from production traces.<p>Point it at an existing agent, a stream of unlabeled production traces, and a small labeled holdout set.<p>An LLM judge scores unlabeled production traces as they stream.<p>A proposer reads failed traces and writes one targeted harness update at a time, such as changes to prompts, hooks, tools, or subagents.\nThe update is kept only if it improves holdout accuracy.<p>On tau-bench v3 airline, meta-agent improved holdout accuracy from 67% to 87%.<p>We open-sourced meta-agent. It currently supports Claude Agent SDK, with more frameworks coming soon.<p>Try it here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;canvas-org&#x2F;meta-agent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;canvas-org&#x2F;meta-agent</a>",
+          "title": "Show HN: Meta-agent: self-improving agent harnesses from live traces",
+          "updated_at": "2026-04-06T23:25:39Z",
+          "url": "https://github.com/canvas-org/meta-agent"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "brynary"
             },
             "story_text": {
@@ -343,195 +527,6 @@
           "title": "Rubyn-code – open-source agentic coding assistant for Ruby/Rails",
           "updated_at": "2026-04-03T19:53:23Z",
           "url": "https://github.com/MatthewSuttles/rubyn-code"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "wangzhijie"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Hi HN,<p>I built OpenHarness , an <em>open</em>-<em>source</em> terminal <em>coding</em> <em>agent</em> that works with any LLM: Ollama (free, local), OpenAI, Anthropic, Deepseek, Qwen or any OpenAI-compatible API.<p><pre><code>  Install and run:\n\n    npm install -g @zhijiewang/openharness\n    oh                                    # auto-detect local model\n    oh --model ollama/qwen2.5:7b          # specific model\n\n  What it does:\n  - 17 tools (file read/edit/write, bash, grep, glob, web search, task management, notebooks)\n  - 16 slash commands (/diff, /undo, /commit, /cost, /compact, /plan, /review...)\n  - Git integration: every AI edit auto-committed, /undo reverts instantly\n  - Headless mode for CI/CD: oh run &quot;fix the tests&quot; --json\n  - Permission gates: ask/trust/deny modes so the <em>agent</em> can't rm -rf without approval\n  - React+Ink terminal UI with markdown rendering and shimmer spinner\n</code></pre>\nDemo: <a href=\"https://github.com/zhijiewong/openharness\" rel=\"nofollow\">https://github.com/zhijiewong/openharness</a><p><em>Source</em>: <a href=\"https://github.com/zhijiewong/openharness\" rel=\"nofollow\">https://github.com/zhijiewong/openharness</a><p>npm: npm install -g @zhijiewang/openharness<p>openharness is ready to collborate<p>Everyone is welcome to join and build it together."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Show HN: OpenHarness <em>Open</em>-<em>source</em> terminal <em>coding</em> <em>agent</em> for any LLM"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/zhijiewong/openharness"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_wangzhijie",
-            "story_47600371",
-            "show_hn"
-          ],
-          "author": "wangzhijie",
-          "children": [
-            47602467
-          ],
-          "created_at": "2026-04-01T13:09:37Z",
-          "created_at_i": 1775048977,
-          "num_comments": 1,
-          "objectID": "47600371",
-          "points": 7,
-          "story_id": 47600371,
-          "story_text": "Hi HN,<p>I built OpenHarness , an open-source terminal coding agent that works with any LLM: Ollama (free, local), OpenAI, Anthropic, Deepseek, Qwen or any OpenAI-compatible API.<p><pre><code>  Install and run:\n\n    npm install -g @zhijiewang&#x2F;openharness\n    oh                                    # auto-detect local model\n    oh --model ollama&#x2F;qwen2.5:7b          # specific model\n\n  What it does:\n  - 17 tools (file read&#x2F;edit&#x2F;write, bash, grep, glob, web search, task management, notebooks)\n  - 16 slash commands (&#x2F;diff, &#x2F;undo, &#x2F;commit, &#x2F;cost, &#x2F;compact, &#x2F;plan, &#x2F;review...)\n  - Git integration: every AI edit auto-committed, &#x2F;undo reverts instantly\n  - Headless mode for CI&#x2F;CD: oh run &quot;fix the tests&quot; --json\n  - Permission gates: ask&#x2F;trust&#x2F;deny modes so the agent can&#x27;t rm -rf without approval\n  - React+Ink terminal UI with markdown rendering and shimmer spinner\n</code></pre>\nDemo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;zhijiewong&#x2F;openharness\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;zhijiewong&#x2F;openharness</a><p>Source: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;zhijiewong&#x2F;openharness\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;zhijiewong&#x2F;openharness</a><p>npm: npm install -g @zhijiewang&#x2F;openharness<p>openharness is ready to collborate<p>Everyone is welcome to join and build it together.",
-          "title": "Show HN: OpenHarness Open-source terminal coding agent for any LLM",
-          "updated_at": "2026-04-04T23:43:14Z",
-          "url": "https://github.com/zhijiewong/openharness"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "piscator"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with <em>open</em> <em>source</em> components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their <em>coding</em> <em>agents</em>.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their <em>coding</em> <em>agents</em> will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "coding"
-              ],
-              "value": "Ask HN: Client took over development by vibe <em>coding</em>. What to do?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_piscator",
-            "story_47599303",
-            "ask_hn"
-          ],
-          "author": "piscator",
-          "children": [
-            47600438,
-            47602371,
-            47599966,
-            47600025,
-            47621561,
-            47601468,
-            47599758,
-            47600185,
-            47600714,
-            47612172,
-            47620860,
-            47602570,
-            47614223,
-            47612850,
-            47601763,
-            47601210,
-            47605230,
-            47599778,
-            47600126,
-            47623817,
-            47605481,
-            47599763,
-            47637390,
-            47599892,
-            47649181,
-            47649174,
-            47607627,
-            47624268,
-            47602905,
-            47605704,
-            47599316,
-            47624475,
-            47609511,
-            47606353,
-            47610895,
-            47608353,
-            47600031
-          ],
-          "created_at": "2026-04-01T11:09:03Z",
-          "created_at_i": 1775041743,
-          "num_comments": 42,
-          "objectID": "47599303",
-          "points": 61,
-          "story_id": 47599303,
-          "story_text": "I’ve worked on a project for one year now, a marketplace web application for one of my clients. It involves a web shop frontend, integration with suppliers, payment platforms, product management, stock syncing, and much more. I built the project from scratch with open source components, guided other developers on the project, and was leading all the technical decisions.<p>Last year I started using LLM’s for cumbersome tasks, and since the beginning of this year I started working with Claude Code to implement features. Still, I always need to think about the implementation, and actively direct and correct the bot. As many of you will know, it can speed up development, but I still need to use my more than ten years of experience as a developer. I thought the project for my client would be safe.<p>This changed when they started developing some of their own, much smaller and simpler projects on an AI-powered no-code platform. They immediately concluded this also must be applied to the marketplace project that will run their core business. I tried to convince them with good arguments that this wouldn’t be a good idea, but failed. Since I am not the owner of the code, and don’t want to be a gatekeeper, I instructed them how to participate in the development with their coding agents.<p>The additions they made to the codebase in only a week are huge, around 10,000 lines of code. To be honest, most of the features they introduced are functional, but the performance of the application has suffered already. What I am most concerned about is the maintainability of the project and how we will get this live. Before, I had a clear mental model of how everything was built, and I added human readable documentation where needed. They still want me to participate in the project and work on the most critical parts of the application, DevOps and other parts they and their coding agents will not succeed in themselves.<p>It seems some people are possessed by the promises of AI-tools, and do not have a clear mind anymore.<p>I’ve lost all joy in the project, but from a professional perspective it might be too soon to abandon it completely. I’m curious what I can do in this situation, or what I could have done differently. Are there more people whose work on a project has been taken away by AI bots?",
-          "title": "Ask HN: Client took over development by vibe coding. What to do?",
-          "updated_at": "2026-04-06T17:22:35Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "fzaninotto"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Developers sometimes struggle to identify UX problems in their own work. The problem is becoming more pressing as <em>coding</em> <em>agents</em> take on more of the implementation work, but fail to address usability issues.<p>A long time ago, I stumbled upon Can't Unsee, an in-browser design problem detection game. I found it was a fun way to improve my design skills. I imagined a similar game for UX, where user interaction is key, to help train my colleagues. However, building such a game proved difficult at the time.<p>This changed with AI <em>coding</em> tools and transformers. Not only did the cost of building mini-apps rapidly decrease, but scoring user answers became feasible with an in-browser ML model.<p>So here it is : a UX problem detection training game. Users examine mini-applications, identify the deliberate UX flaw in each, and describe it in text. Best of all: it's <em>open</em>-<em>source</em>, so anyone can add new mini-apps."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: UX Quest"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://marmelab.com/ux-quest/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_fzaninotto",
-            "story_47598747",
-            "show_hn"
-          ],
-          "author": "fzaninotto",
-          "children": [
-            47599084
-          ],
-          "created_at": "2026-04-01T09:41:21Z",
-          "created_at_i": 1775036481,
-          "num_comments": 0,
-          "objectID": "47598747",
-          "points": 3,
-          "story_id": 47598747,
-          "story_text": "Developers sometimes struggle to identify UX problems in their own work. The problem is becoming more pressing as coding agents take on more of the implementation work, but fail to address usability issues.<p>A long time ago, I stumbled upon Can&#x27;t Unsee, an in-browser design problem detection game. I found it was a fun way to improve my design skills. I imagined a similar game for UX, where user interaction is key, to help train my colleagues. However, building such a game proved difficult at the time.<p>This changed with AI coding tools and transformers. Not only did the cost of building mini-apps rapidly decrease, but scoring user answers became feasible with an in-browser ML model.<p>So here it is : a UX problem detection training game. Users examine mini-applications, identify the deliberate UX flaw in each, and describe it in text. Best of all: it&#x27;s open-source, so anyone can add new mini-apps.",
-          "title": "Show HN: UX Quest",
-          "updated_at": "2026-04-01T12:16:44Z",
-          "url": "https://marmelab.com/ux-quest/"
         }
       ]
     },
@@ -799,41 +794,41 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "<em>kot</em>aKat"
+              "value": "<em>bot</em>hangles"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Studio Display XDR medical imaging feature gets FDA cleared, launching this week"
+              "value": "RAPP Brainstem"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://9to5mac.com/2026/04/06/studio-display-xdr-medical-imaging-feature-fda-clearance/"
+              "value": "https://kody-w.github.io/RAR/virtual-brainstem.html"
             }
           },
           "_tags": [
             "story",
-            "author_kotaKat",
-            "story_47664127"
+            "author_bothangles",
+            "story_47668921"
           ],
-          "author": "kotaKat",
-          "created_at": "2026-04-06T17:33:39Z",
-          "created_at_i": 1775496819,
+          "author": "bothangles",
+          "created_at": "2026-04-06T23:48:36Z",
+          "created_at_i": 1775519316,
           "num_comments": 0,
-          "objectID": "47664127",
+          "objectID": "47668921",
           "points": 1,
-          "story_id": 47664127,
-          "title": "Studio Display XDR medical imaging feature gets FDA cleared, launching this week",
-          "updated_at": "2026-04-06T17:35:36Z",
-          "url": "https://9to5mac.com/2026/04/06/studio-display-xdr-medical-imaging-feature-fda-clearance/"
+          "story_id": 47668921,
+          "title": "RAPP Brainstem",
+          "updated_at": "2026-04-06T23:49:07Z",
+          "url": "https://kody-w.github.io/RAR/virtual-brainstem.html"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "wslh"
+              "value": "veeceey"
             },
             "title": {
               "fullyHighlighted": false,
@@ -841,39 +836,131 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Surprising links between autism, Alzheimer's could change how we treat <em>bot</em>h"
+              "value": "<em>Bot</em>stadium – A prediction market where 2.6k AI agents compete on real sports"
             },
             "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.washingtonpost.com/health/2026/04/02/autism-alzheimers-link-research-treatment/"
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://<em>bot</em>stadium.ai"
             }
           },
           "_tags": [
             "story",
-            "author_wslh",
-            "story_47664042"
+            "author_veeceey",
+            "story_47666381"
           ],
-          "author": "wslh",
+          "author": "veeceey",
           "children": [
-            47664043
+            47666404
           ],
-          "created_at": "2026-04-06T17:28:38Z",
-          "created_at_i": 1775496518,
-          "num_comments": 1,
-          "objectID": "47664042",
-          "points": 1,
-          "story_id": 47664042,
-          "title": "Surprising links between autism, Alzheimer's could change how we treat both",
-          "updated_at": "2026-04-06T17:32:24Z",
-          "url": "https://www.washingtonpost.com/health/2026/04/02/autism-alzheimers-link-research-treatment/"
+          "created_at": "2026-04-06T20:12:22Z",
+          "created_at_i": 1775506342,
+          "num_comments": 0,
+          "objectID": "47666381",
+          "points": 2,
+          "story_id": 47666381,
+          "title": "Botstadium – A prediction market where 2.6k AI agents compete on real sports",
+          "updated_at": "2026-04-06T20:21:36Z",
+          "url": "https://botstadium.ai"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "FounderLindsay"
+              "value": "hackernj"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Wikipedia's AI agent row likely just the beginning of the <em>bot</em>-ocalypse"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.malwarebytes.com/blog/ai/2026/04/wikipedias-ai-agent-row-likely-just-the-beginning-of-the-<em>bot</em>-ocalypse"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_hackernj",
+            "story_47665902"
+          ],
+          "author": "hackernj",
+          "children": [
+            47666200,
+            47667412,
+            47667977,
+            47667925,
+            47667911,
+            47666059,
+            47668170,
+            47667804,
+            47667088,
+            47668754
+          ],
+          "created_at": "2026-04-06T19:41:39Z",
+          "created_at_i": 1775504499,
+          "num_comments": 50,
+          "objectID": "47665902",
+          "points": 46,
+          "story_id": 47665902,
+          "title": "Wikipedia's AI agent row likely just the beginning of the bot-ocalypse",
+          "updated_at": "2026-04-06T23:50:21Z",
+          "url": "https://www.malwarebytes.com/blog/ai/2026/04/wikipedias-ai-agent-row-likely-just-the-beginning-of-the-bot-ocalypse"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "ParanoidRV"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "The Genie Out of the <em>Bot</em>tle – What Happens When AI Grants Your Wishes"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://mpdc.dev/a-i-laddins-lamp/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_ParanoidRV",
+            "story_47664505"
+          ],
+          "author": "ParanoidRV",
+          "created_at": "2026-04-06T18:01:59Z",
+          "created_at_i": 1775498519,
+          "num_comments": 0,
+          "objectID": "47664505",
+          "points": 1,
+          "story_id": 47664505,
+          "title": "The Genie Out of the Bottle – What Happens When AI Grants Your Wishes",
+          "updated_at": "2026-04-06T18:03:21Z",
+          "url": "https://mpdc.dev/a-i-laddins-lamp/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "junaid_97"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -881,124 +968,90 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Dangers of monopolies like Google are real. The danger trickles down far beyond impacting other businesses trying to break into a field. Monopolies impact customers...Customer service declines when a company is so comfortable relying on their belief that customers do not have another option.<p>This morning I encountered an issue that brings this exact scenario to light. I have been building a consulting agency and relying on Google for communication infrastructure. Today, when trying to access an account, I was informed that it was frozen. Not by a hacker, not by a server outage, but by a completely inaccessible automated <em>bot</em> at Google. While configuring API keys to launch a new service, Google's automated security algorithm flagged my admin account and instantly suspended it.<p>The danger isn't the automated flag... there should be safety checks to ensure there is not spam. However, the problem is when the system inaccurately suspends accounts AND there is NO NUMBER to reach a human being to fix it...EVEN as a paying Google one subscriber on another account, I was told that their siloed agents could not help and there was no LIVE support to fix this problem.<p>Thankfully, my engineering architecture runs on independent servers, so my actual SaaS platform and my clients remain 100% physically unaffected by this email lockout. But no small business should have to aggressively build redundant architectures just to protect themselves from an automated customer service failure. Interested to hear others experiences too!<p>As founders, we are encouraged to build infrastructure on top of massive ecosystems like Google... But when there is zero path to human support, a single algorithmic misfire can paralyze a small business, cutting off communications with vendors and clients.<p>Has any other founder experienced this void in customer service? The ethics around this should allow small businesses to get the same quality service as large enterprise customers. How does a founder protect their business operations when they are completely at the mercy of algorithms with no human oversight?<p>https://www.linkedin.com/posts/activity-7446948277373186048-a6YQ?utm_source=share&amp;utm_medium=member_desktop&amp;rcm=ACoAAAkBjYQBHee6OYfbj9IrYz0nw6tFnsiNU-g"
+              "value": "I'm building Fillvisa - It's a free USCIS form-filling web-app<p>USCIS forms still use XFA PDFs, which don’t let you edit in most browsers. Even with Adobe, some fields break and are unfillable.<p>So I converted the PDF form into modern, browser-friendly web forms - and kept every field 1:1 with the original. You fill the form, submit it, and get the official USCIS PDF filled.<p>I found out SimpleCitizen(YC S16) offers a DIY plan for $529 [1]<p>---<p>What Fillvisa does:<p>- Fills USCIS forms with a guided web interface.\n- Autosaves as you go\n- Generates a completed PDF ready to print and mail\n- Works offline after first load<p>What it doesn't do:<p>- It won't file for you. \n- No lawyer review. If your case is complex, hire an attorney.<p>---<p>How do I maintain the forms + business model:<p>Fillvisa will always be 100% free for immigrants. I'm building a paid version (plus.fillvisa.com) for immigration professionals (lawyers, paralegals, document prep specialists).<p><em>Bot</em>h the apps utilize the same form + mapping. Thus,it takes care of revenue + I have incentive to maintain the forms.<p>---<p>I shared the prototype on FB groups and Reddit - most DIY applicants love it :)<p>---<p>[1]  <a href=\"https://www.simplecitizen.com/pricing/\" rel=\"nofollow\">https://www.simplecitizen.com/pricing/</a>"
             },
             "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Tell HN: Google <em>bot</em> suspended our startup's email with 0 human recourse"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_FounderLindsay",
-            "story_47663132",
-            "ask_hn"
-          ],
-          "author": "FounderLindsay",
-          "children": [
-            47663954,
-            47663730,
-            47663158
-          ],
-          "created_at": "2026-04-06T16:31:36Z",
-          "created_at_i": 1775493096,
-          "num_comments": 3,
-          "objectID": "47663132",
-          "points": 3,
-          "story_id": 47663132,
-          "story_text": "Dangers of monopolies like Google are real. The danger trickles down far beyond impacting other businesses trying to break into a field. Monopolies impact customers...Customer service declines when a company is so comfortable relying on their belief that customers do not have another option.<p>This morning I encountered an issue that brings this exact scenario to light. I have been building a consulting agency and relying on Google for communication infrastructure. Today, when trying to access an account, I was informed that it was frozen. Not by a hacker, not by a server outage, but by a completely inaccessible automated bot at Google. While configuring API keys to launch a new service, Google&#x27;s automated security algorithm flagged my admin account and instantly suspended it.<p>The danger isn&#x27;t the automated flag... there should be safety checks to ensure there is not spam. However, the problem is when the system inaccurately suspends accounts AND there is NO NUMBER to reach a human being to fix it...EVEN as a paying Google one subscriber on another account, I was told that their siloed agents could not help and there was no LIVE support to fix this problem.<p>Thankfully, my engineering architecture runs on independent servers, so my actual SaaS platform and my clients remain 100% physically unaffected by this email lockout. But no small business should have to aggressively build redundant architectures just to protect themselves from an automated customer service failure. Interested to hear others experiences too!<p>As founders, we are encouraged to build infrastructure on top of massive ecosystems like Google... But when there is zero path to human support, a single algorithmic misfire can paralyze a small business, cutting off communications with vendors and clients.<p>Has any other founder experienced this void in customer service? The ethics around this should allow small businesses to get the same quality service as large enterprise customers. How does a founder protect their business operations when they are completely at the mercy of algorithms with no human oversight?<p>https:&#x2F;&#x2F;www.linkedin.com&#x2F;posts&#x2F;activity-7446948277373186048-a6YQ?utm_source=share&amp;utm_medium=member_desktop&amp;rcm=ACoAAAkBjYQBHee6OYfbj9IrYz0nw6tFnsiNU-g",
-          "title": "Tell HN: Google bot suspended our startup's email with 0 human recourse",
-          "updated_at": "2026-04-06T17:23:06Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "arc_light"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "The Platform That Fights <em>Bot</em>s by Eliminating People"
+              "value": "Show HN: I made a free alternative to SimpleCitizen (YC S16)"
             },
             "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://thesquaremanifest.substack.com/p/the-platform-that-fights-<em>bot</em>s-by"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_arc_light",
-            "story_47662212"
-          ],
-          "author": "arc_light",
-          "created_at": "2026-04-06T15:29:48Z",
-          "created_at_i": 1775489388,
-          "num_comments": 0,
-          "objectID": "47662212",
-          "points": 2,
-          "story_id": 47662212,
-          "title": "The Platform That Fights Bots by Eliminating People",
-          "updated_at": "2026-04-06T15:35:21Z",
-          "url": "https://thesquaremanifest.substack.com/p/the-platform-that-fights-bots-by"
-        },
-        {
-          "_highlightResult": {
-            "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "PaulHoule"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Huge Amounts of nanoplastics discovered in tap and <em>bot</em>tled water"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://news.mongabay.com/short-article/2026/03/huge-amounts-of-nanoplastics-discovered-in-tap-and-<em>bot</em>tled-water/"
+              "value": "https://fillvisa.com/"
             }
           },
           "_tags": [
             "story",
-            "author_PaulHoule",
-            "story_47662002"
+            "author_junaid_97",
+            "story_47664322",
+            "show_hn"
           ],
-          "author": "PaulHoule",
-          "created_at": "2026-04-06T15:13:46Z",
-          "created_at_i": 1775488426,
+          "author": "junaid_97",
+          "created_at": "2026-04-06T17:46:04Z",
+          "created_at_i": 1775497564,
           "num_comments": 0,
-          "objectID": "47662002",
+          "objectID": "47664322",
           "points": 1,
-          "story_id": 47662002,
-          "title": "Huge Amounts of nanoplastics discovered in tap and bottled water",
-          "updated_at": "2026-04-06T16:11:20Z",
-          "url": "https://news.mongabay.com/short-article/2026/03/huge-amounts-of-nanoplastics-discovered-in-tap-and-bottled-water/"
+          "story_id": 47664322,
+          "story_text": "I&#x27;m building Fillvisa - It&#x27;s a free USCIS form-filling web-app<p>USCIS forms still use XFA PDFs, which don’t let you edit in most browsers. Even with Adobe, some fields break and are unfillable.<p>So I converted the PDF form into modern, browser-friendly web forms - and kept every field 1:1 with the original. You fill the form, submit it, and get the official USCIS PDF filled.<p>I found out SimpleCitizen(YC S16) offers a DIY plan for $529 [1]<p>---<p>What Fillvisa does:<p>- Fills USCIS forms with a guided web interface.\n- Autosaves as you go\n- Generates a completed PDF ready to print and mail\n- Works offline after first load<p>What it doesn&#x27;t do:<p>- It won&#x27;t file for you. \n- No lawyer review. If your case is complex, hire an attorney.<p>---<p>How do I maintain the forms + business model:<p>Fillvisa will always be 100% free for immigrants. I&#x27;m building a paid version (plus.fillvisa.com) for immigration professionals (lawyers, paralegals, document prep specialists).<p>Both the apps utilize the same form + mapping. Thus,it takes care of revenue + I have incentive to maintain the forms.<p>---<p>I shared the prototype on FB groups and Reddit - most DIY applicants love it :)<p>---<p>[1]  <a href=\"https:&#x2F;&#x2F;www.simplecitizen.com&#x2F;pricing&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.simplecitizen.com&#x2F;pricing&#x2F;</a>",
+          "title": "Show HN: I made a free alternative to SimpleCitizen (YC S16)",
+          "updated_at": "2026-04-06T17:48:07Z",
+          "url": "https://fillvisa.com/"
         }
       ]
     },
     {
       "query": "OpenClaw+plugin",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "davidcrowe"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Hi. I'm David, founder of Agentic Control Plane (ACP).<p>Last year I connected an app to an LLM with a MCP connector. Turned out that authenticating the LLM user in the app backend was surprisingly hard.<p>That was the canary in the coalmine. If it's hard to authenticate actual users:<p>- what about their agents?\n- what about downstream governance? Permissions, limits, audit logs<p>ACP is a governance layer that sits in front of AI coding agents like Claude Code and <em>OpenClaw</em>. It runs on every tool call (Bash, Read, Write, file edits, web fetches, MCP, API calls). Every call is logged and optionally policy checked before execution.<p>It works by hooking into your agent's tool pipeline. For Claude Code, it's a PreToolUse hook (~200ms). For <em>OpenClaw</em>, it's a before_tool_call <em>plugin</em> at priority 0. The plugins are MIT-licensed and all governance logic runs server-side.<p>You get an audit trail and can set permissions and limits. Allow/ deny by tool or type of agent.<p>One-command install for Claude Code and <em>OpenClaw</em>:<p>curl -sf <a href=\"https://agenticcontrolplane.com/install.sh\" rel=\"nofollow\">https://agenticcontrolplane.com/install.sh</a> | bash"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "openclaw"
+              ],
+              "value": "Show HN: ACP – Governance for AI Coding Agents (Claude Code, <em>OpenClaw</em>)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://agenticcontrolplane.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_davidcrowe",
+            "story_47668118",
+            "show_hn"
+          ],
+          "author": "davidcrowe",
+          "created_at": "2026-04-06T22:22:56Z",
+          "created_at_i": 1775514176,
+          "num_comments": 0,
+          "objectID": "47668118",
+          "points": 1,
+          "story_id": 47668118,
+          "story_text": "Hi. I&#x27;m David, founder of Agentic Control Plane (ACP).<p>Last year I connected an app to an LLM with a MCP connector. Turned out that authenticating the LLM user in the app backend was surprisingly hard.<p>That was the canary in the coalmine. If it&#x27;s hard to authenticate actual users:<p>- what about their agents?\n- what about downstream governance? Permissions, limits, audit logs<p>ACP is a governance layer that sits in front of AI coding agents like Claude Code and OpenClaw. It runs on every tool call (Bash, Read, Write, file edits, web fetches, MCP, API calls). Every call is logged and optionally policy checked before execution.<p>It works by hooking into your agent&#x27;s tool pipeline. For Claude Code, it&#x27;s a PreToolUse hook (~200ms). For OpenClaw, it&#x27;s a before_tool_call plugin at priority 0. The plugins are MIT-licensed and all governance logic runs server-side.<p>You get an audit trail and can set permissions and limits. Allow&#x2F; deny by tool or type of agent.<p>One-command install for Claude Code and OpenClaw:<p>curl -sf <a href=\"https:&#x2F;&#x2F;agenticcontrolplane.com&#x2F;install.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;agenticcontrolplane.com&#x2F;install.sh</a> | bash",
+          "title": "Show HN: ACP – Governance for AI Coding Agents (Claude Code, OpenClaw)",
+          "updated_at": "2026-04-06T22:25:08Z",
+          "url": "https://agenticcontrolplane.com/"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -1178,57 +1231,62 @@
           "title": "Show HN: Shoofly – pre-execution security for Claude Code Cowork and OpenClaw",
           "updated_at": "2026-03-29T21:38:18Z",
           "url": "https://shoofly.dev/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "lanchiii"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "Show HN: Native, Structured and Long-Term Memory <em>Plugin</em> for <em>OpenClaw</em>"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "openclaw"
-              ],
-              "value": "https://docs.byterover.dev/autonomous-agents/<em>openclaw</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_lanchiii",
-            "story_47514797",
-            "show_hn"
-          ],
-          "author": "lanchiii",
-          "children": [
-            47514798
-          ],
-          "created_at": "2026-03-25T08:38:17Z",
-          "created_at_i": 1774427897,
-          "num_comments": 1,
-          "objectID": "47514797",
-          "points": 1,
-          "story_id": 47514797,
-          "title": "Show HN: Native, Structured and Long-Term Memory Plugin for OpenClaw",
-          "updated_at": "2026-03-25T10:21:43Z",
-          "url": "https://docs.byterover.dev/autonomous-agents/openclaw"
         }
       ]
     },
     {
       "query": "Claude+Code+alternative",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "vixalien"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Hello all, been trying to switch away from <em>Claude</em> <em>Code</em> and have been trailing this:<p>- Harness: Opencode (via Openchamber)\n- Subscription: GitHub Copilot (50$)\n- API Usage (beyond subscription): Open router\n- Free models: Opencode go<p>Here's the models I've trialed and like:<p>- Large (<em>alternative</em> to Opus): GPT 5.3 Codex\n- Medium (<em>alternative</em> to Sonnet): Minimax 2.7\n- Smol: GPT 5.4 mini<p>these models are not yet on par to their respective <em>Claude</em> <em>alternatives</em> for me, but maybe I need to switch to something else or tune them, what have you been using?<p>Also looking for nice Opencode plugins, skills, completion providers (<em>alternative</em> to Cursor that I could use with Zen).<p>Happy to hear about your choices and experience"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Ask HN: <em>Alternatives</em> to <em>Claude</em> (<em>Code</em>)?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vixalien",
+            "story_47666811",
+            "ask_hn"
+          ],
+          "author": "vixalien",
+          "children": [
+            47668682,
+            47667220,
+            47668612
+          ],
+          "created_at": "2026-04-06T20:44:41Z",
+          "created_at_i": 1775508281,
+          "num_comments": 4,
+          "objectID": "47666811",
+          "points": 2,
+          "story_id": 47666811,
+          "story_text": "Hello all, been trying to switch away from Claude Code and have been trailing this:<p>- Harness: Opencode (via Openchamber)\n- Subscription: GitHub Copilot (50$)\n- API Usage (beyond subscription): Open router\n- Free models: Opencode go<p>Here&#x27;s the models I&#x27;ve trialed and like:<p>- Large (alternative to Opus): GPT 5.3 Codex\n- Medium (alternative to Sonnet): Minimax 2.7\n- Smol: GPT 5.4 mini<p>these models are not yet on par to their respective Claude alternatives for me, but maybe I need to switch to something else or tune them, what have you been using?<p>Also looking for nice Opencode plugins, skills, completion providers (alternative to Cursor that I could use with Zen).<p>Happy to hear about your choices and experience",
+          "title": "Ask HN: Alternatives to Claude (Code)?",
+          "updated_at": "2026-04-06T23:19:36Z"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -1421,52 +1479,6 @@
           "title": "Show HN: lmcli - A sleek, sandboxed alternative to Claude Code",
           "updated_at": "2026-03-31T01:49:07Z",
           "url": "https://codeberg.org/mlow/lmcli"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "adinhitlore"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "claude",
-                "code",
-                "alternative"
-              ],
-              "value": "So, a side project I've spent/wasted ~1000 hours on, with 2 goals set in mind:<p>1. faster than transformers on CPU;\n2. smarter than transformers.<p>couple of screenshots below (the black/red part are censored on purpose...for now):<p>https://i.imgur.com/r0equ55.png\nhttps://i.imgur.com/fohRbIr.png\nhttps://i.imgur.com/5Xx1RGX.png<p>Summary: what the hell is this?<p>Two architectures -<p>1. Linear RNN which solves the long memory problem in current front-runner RNN transformer <em>alternatives</em> (RWKV, Mamba), in addition to being cpu friendly and entirely in C from scratch, but not too big: ~4000 lines.<p>2. 2 SNN experimental programs (in C originally but also ported to C# and F#) that turned out to be better than expected but unfortunately for the time being: dumber than the linear RNN one (i need more tests).<p>The question is: what to do with them? google gemini pro 3.1/sonnet 4.6 told me to patent, IP, estimating value in the many millions and while this is clearly a mistake: I've uploaded all the <em>code</em> to <em>claude</em>/gemini for analysis though seeing how the project is ~70% vibecoded I think it would be snobby to act like a gatekeeper.<p>The thing is: I don't want millions but at the same time i see several issues with fee open source rollout:<p>* completely unalighned, i don't believe in the &quot;agi hype&quot; but potential risks may exist, such as in cybersecurity;\n*  I frankly hate Xai and Musk and since the companies who may be interested in running AI models as b2c solution are likely ~20, one of them will be xai.\n* Very unorthodox implementation: All in C with ports in c#/f#. No python or rust, which would mean likely some people unfamiliar with these languages in ML running into issues so i'd have to support nonstop which is time consuming and let's face it i'll have to do it for free once it's open source.\n* It may die completely unheard of somewhere on GitHub even if it has potential, organic traffic rarely works unless you hit the lottery.<p>This is NOT a flex btw, I'm convinced there are programmers better than me, people who understand ML better than me, mathematicians better than me though frankly I posses special kind of persistence combined with arrogance which goes a long way in terms of technology/inventions/novelty.<p>Like i said this is the results of hundreds of hours work spiced up by many years programming experience in other areas, this wasn't one weekend &quot;<em>claude</em>, give me agi&quot; kind of shot.<p>All of the projects compile with zero warnings, logically seem to work and are visibly faster than transformers with obvious ability to generalize and create new/unique content. The missing part is scaling and benchmarking on classic benchmarks.<p>What I lack is understanding adoption of technology.10x!"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "alternative"
-              ],
-              "value": "Ask HN: Release Path for 'Transformers <em>Alternatives</em>'?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_adinhitlore",
-            "story_47568444",
-            "ask_hn"
-          ],
-          "author": "adinhitlore",
-          "children": [
-            47578747
-          ],
-          "created_at": "2026-03-29T23:13:32Z",
-          "created_at_i": 1774826012,
-          "num_comments": 1,
-          "objectID": "47568444",
-          "points": 4,
-          "story_id": 47568444,
-          "story_text": "So, a side project I&#x27;ve spent&#x2F;wasted ~1000 hours on, with 2 goals set in mind:<p>1. faster than transformers on CPU;\n2. smarter than transformers.<p>couple of screenshots below (the black&#x2F;red part are censored on purpose...for now):<p>https:&#x2F;&#x2F;i.imgur.com&#x2F;r0equ55.png\nhttps:&#x2F;&#x2F;i.imgur.com&#x2F;fohRbIr.png\nhttps:&#x2F;&#x2F;i.imgur.com&#x2F;5Xx1RGX.png<p>Summary: what the hell is this?<p>Two architectures -<p>1. Linear RNN which solves the long memory problem in current front-runner RNN transformer alternatives (RWKV, Mamba), in addition to being cpu friendly and entirely in C from scratch, but not too big: ~4000 lines.<p>2. 2 SNN experimental programs (in C originally but also ported to C# and F#) that turned out to be better than expected but unfortunately for the time being: dumber than the linear RNN one (i need more tests).<p>The question is: what to do with them? google gemini pro 3.1&#x2F;sonnet 4.6 told me to patent, IP, estimating value in the many millions and while this is clearly a mistake: I&#x27;ve uploaded all the code to claude&#x2F;gemini for analysis though seeing how the project is ~70% vibecoded I think it would be snobby to act like a gatekeeper.<p>The thing is: I don&#x27;t want millions but at the same time i see several issues with fee open source rollout:<p>* completely unalighned, i don&#x27;t believe in the &quot;agi hype&quot; but potential risks may exist, such as in cybersecurity;\n*  I frankly hate Xai and Musk and since the companies who may be interested in running AI models as b2c solution are likely ~20, one of them will be xai.\n* Very unorthodox implementation: All in C with ports in c#&#x2F;f#. No python or rust, which would mean likely some people unfamiliar with these languages in ML running into issues so i&#x27;d have to support nonstop which is time consuming and let&#x27;s face it i&#x27;ll have to do it for free once it&#x27;s open source.\n* It may die completely unheard of somewhere on GitHub even if it has potential, organic traffic rarely works unless you hit the lottery.<p>This is NOT a flex btw, I&#x27;m convinced there are programmers better than me, people who understand ML better than me, mathematicians better than me though frankly I posses special kind of persistence combined with arrogance which goes a long way in terms of technology&#x2F;inventions&#x2F;novelty.<p>Like i said this is the results of hundreds of hours work spiced up by many years programming experience in other areas, this wasn&#x27;t one weekend &quot;claude, give me agi&quot; kind of shot.<p>All of the projects compile with zero warnings, logically seem to work and are visibly faster than transformers with obvious ability to generalize and create new&#x2F;unique content. The missing part is scaling and benchmarking on classic benchmarks.<p>What I lack is understanding adoption of technology.10x!",
-          "title": "Ask HN: Release Path for 'Transformers Alternatives'?",
-          "updated_at": "2026-03-30T21:08:37Z"
         }
       ]
     },
@@ -1549,19 +1561,19 @@
             47656439,
             47657588,
             47659642,
-            47660550,
             47658552,
-            47657287,
+            47660550,
             47657890,
-            47660569,
+            47657287,
             47657249,
+            47660569,
             47656014,
-            47662213,
             47657759,
-            47661216,
-            47661291,
-            47660760,
+            47662213,
             47658048,
+            47661216,
+            47660760,
+            47661291,
             47657465,
             47656159,
             47656169,
@@ -1571,10 +1583,10 @@
           "created_at_i": 1775433550,
           "num_comments": 18,
           "objectID": "47655268",
-          "points": 91,
+          "points": 93,
           "story_id": 47655268,
           "title": "Show HN: Modo – I built an open-source alternative to Kiro, Cursor, and Windsurf",
-          "updated_at": "2026-04-06T17:19:21Z",
+          "updated_at": "2026-04-06T23:12:09Z",
           "url": "https://github.com/mohshomis/modo"
         },
         {
@@ -2013,6 +2025,150 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "davidcrowe"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hi. I'm David, founder of Agentic Control Plane (ACP).<p>Last year I connected an app to an LLM with a <em>MCP</em> connector. Turned out that authenticating the LLM user in the app backend was surprisingly hard.<p>That was the canary in the coalmine. If it's hard to authenticate actual users:<p>- what about their agents?\n- what about downstream governance? Permissions, limits, audit logs<p>ACP is a governance layer that sits in front of AI coding agents like Claude Code and OpenClaw. It runs on every <em>tool</em> call (Bash, Read, Write, file edits, web fetches, <em>MCP</em>, API calls). Every call is logged and optionally policy checked before execution.<p>It works by hooking into your agent's <em>tool</em> pipeline. For Claude Code, it's a PreToolUse hook (~200ms). For OpenClaw, it's a before_<em>tool</em>_call plugin at priority 0. The plugins are MIT-licensed and all governance logic runs <em>server</em>-side.<p>You get an audit trail and can set permissions and limits. Allow/ deny by <em>tool</em> or type of agent.<p>One-command install for Claude Code and OpenClaw:<p>curl -sf <a href=\"https://agenticcontrolplane.com/install.sh\" rel=\"nofollow\">https://agenticcontrolplane.com/install.sh</a> | bash"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: ACP – Governance for AI Coding Agents (Claude Code, OpenClaw)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://agenticcontrolplane.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_davidcrowe",
+            "story_47668118",
+            "show_hn"
+          ],
+          "author": "davidcrowe",
+          "created_at": "2026-04-06T22:22:56Z",
+          "created_at_i": 1775514176,
+          "num_comments": 0,
+          "objectID": "47668118",
+          "points": 1,
+          "story_id": 47668118,
+          "story_text": "Hi. I&#x27;m David, founder of Agentic Control Plane (ACP).<p>Last year I connected an app to an LLM with a MCP connector. Turned out that authenticating the LLM user in the app backend was surprisingly hard.<p>That was the canary in the coalmine. If it&#x27;s hard to authenticate actual users:<p>- what about their agents?\n- what about downstream governance? Permissions, limits, audit logs<p>ACP is a governance layer that sits in front of AI coding agents like Claude Code and OpenClaw. It runs on every tool call (Bash, Read, Write, file edits, web fetches, MCP, API calls). Every call is logged and optionally policy checked before execution.<p>It works by hooking into your agent&#x27;s tool pipeline. For Claude Code, it&#x27;s a PreToolUse hook (~200ms). For OpenClaw, it&#x27;s a before_tool_call plugin at priority 0. The plugins are MIT-licensed and all governance logic runs server-side.<p>You get an audit trail and can set permissions and limits. Allow&#x2F; deny by tool or type of agent.<p>One-command install for Claude Code and OpenClaw:<p>curl -sf <a href=\"https:&#x2F;&#x2F;agenticcontrolplane.com&#x2F;install.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;agenticcontrolplane.com&#x2F;install.sh</a> | bash",
+          "title": "Show HN: ACP – Governance for AI Coding Agents (Claude Code, OpenClaw)",
+          "updated_at": "2026-04-06T22:25:08Z",
+          "url": "https://agenticcontrolplane.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "raghavchamadiya"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Every AI coding session starts from zero. The agent doesn't know who owns a file, which files change together, which ones are dead, or why something was built that way.<p>I got tired of Claude Code asking me &quot;what does this service do?&quot; on a codebase I've worked on for two years. The context is all there (git history, dependency graph, past decisions), it's just not in a format the agent can use.<p>Repowise indexes your codebase into four layers: dependency graph (tree-sitter → NetworkX), git intelligence (hotspots, ownership, co-change patterns), auto-generated docs, and architectural decision records. These get exposed via 8 <em>MCP</em> <em>tools</em>. On each commit, only changed files get re-indexed. No full rebuilds, under 30 seconds.<p>The decisions layer is the part I'm most excited about. It surfaces architectural intent from commit history: large diffs, migration patterns, tradeoff language. It also tracks staleness as code evolves. Works well on repos with decent commit messages, less well on &quot;fix&quot; history.<p>pip install repowise\nrepowise init        # ~25 min first time, &lt;30s incremental\nrepowise serve       # <em>MCP</em> <em>server</em> + local dashboard<p>Works with Claude Code, Cursor, and any <em>MCP</em>-compatible agent. AGPL-3.0, self-hosted, your code stays on your machine.<p>I'm running early benchmarks on SWE-Bench and SWE-QA. Results are promising, especially on tasks where grounded context matters. Publishing the full methodology soon.<p>What's rough: Windows untested, language coverage is Python/TS/Go/Rust/Java/C/C++, decisions UX needs work. Happy to hear what breaks.\nPre-indexed demos (FastAPI, Starlette) on the site. Working on Slack, Jira, and Linear integrations for the hosted team version.<p>GitHub: github.com/repowise-dev/repowise\nSite: repowise.dev"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Repowise – Codebase intelligence for AI coding agents (open source)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/repowise-dev/repowise"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_raghavchamadiya",
+            "story_47666413",
+            "show_hn"
+          ],
+          "author": "raghavchamadiya",
+          "children": [
+            47668404
+          ],
+          "created_at": "2026-04-06T20:15:26Z",
+          "created_at_i": 1775506526,
+          "num_comments": 0,
+          "objectID": "47666413",
+          "points": 1,
+          "story_id": 47666413,
+          "story_text": "Every AI coding session starts from zero. The agent doesn&#x27;t know who owns a file, which files change together, which ones are dead, or why something was built that way.<p>I got tired of Claude Code asking me &quot;what does this service do?&quot; on a codebase I&#x27;ve worked on for two years. The context is all there (git history, dependency graph, past decisions), it&#x27;s just not in a format the agent can use.<p>Repowise indexes your codebase into four layers: dependency graph (tree-sitter → NetworkX), git intelligence (hotspots, ownership, co-change patterns), auto-generated docs, and architectural decision records. These get exposed via 8 MCP tools. On each commit, only changed files get re-indexed. No full rebuilds, under 30 seconds.<p>The decisions layer is the part I&#x27;m most excited about. It surfaces architectural intent from commit history: large diffs, migration patterns, tradeoff language. It also tracks staleness as code evolves. Works well on repos with decent commit messages, less well on &quot;fix&quot; history.<p>pip install repowise\nrepowise init        # ~25 min first time, &lt;30s incremental\nrepowise serve       # MCP server + local dashboard<p>Works with Claude Code, Cursor, and any MCP-compatible agent. AGPL-3.0, self-hosted, your code stays on your machine.<p>I&#x27;m running early benchmarks on SWE-Bench and SWE-QA. Results are promising, especially on tasks where grounded context matters. Publishing the full methodology soon.<p>What&#x27;s rough: Windows untested, language coverage is Python&#x2F;TS&#x2F;Go&#x2F;Rust&#x2F;Java&#x2F;C&#x2F;C++, decisions UX needs work. Happy to hear what breaks.\nPre-indexed demos (FastAPI, Starlette) on the site. Working on Slack, Jira, and Linear integrations for the hosted team version.<p>GitHub: github.com&#x2F;repowise-dev&#x2F;repowise\nSite: repowise.dev",
+          "title": "Show HN: Repowise – Codebase intelligence for AI coding agents (open source)",
+          "updated_at": "2026-04-06T22:52:06Z",
+          "url": "https://github.com/repowise-dev/repowise"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "djsdjs"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Still working on Splice CAD.  The two most significant updates focus on handling design complexity and automating using agentic workflows. Previous Show HN here:<p><a href=\"https://news.ycombinator.com/item?id=44978140\">https://news.ycombinator.com/item?id=44978140</a><p>1. Projects:<p>This workflow is more amenable to system-level modeling. It overlaps somewhat with the original workflow but includes improvements including:<p>Complex Routing: Model topologies with branchpoints.<p>Mating Relationships: Represent physical mating (e.g., a receptacle into a PCB header or a ferrule into a terminal block) for completeness.<p>Decoupled BOMs: Part assignment is now separate from component addition; you can generate a BOM and then assign specific MPNs to components as the design evolves.<p>Net Visualization: Nets are identified and visualized across conductors, terminations, and mating relationships.<p>QOL and Visualization Improvements: Assign components to one or more pages to separate designs by function. Ability to create Device Groups (eg. model a PCB with multiple headers and then break out your wiring) and Subassemblies for design reuse. Copy and paste from TSV for easier interaction with spreadsheets. Copy and paste between browser tabs.<p>2. <em>MCP</em> <em>Server</em> &amp; Agentic Workflows:<p>Also new is the Splice CAD <em>MCP</em> <em>server</em>, which allows the <em>tool</em> to interact directly with LLMs like Claude. Manually entering data and extracting it from PDFs has always been a pain when documenting wiring and cable assemblies. I initially tried to handle PDF vision and extraction internally and took several wrong turns; the agentic approach is a much better fit. You can point Claude at a PDF schematic or a GitHub BOM and have it generate a multi-page design.<p>Try it out (No signup): <a href=\"https://splice-cad.com/#/harness\" rel=\"nofollow\">https://splice-cad.com/#/harness</a> + Create icon from top toolbar, New Project<p>Documentation: <a href=\"https://splice-cad.com/docs/plan\" rel=\"nofollow\">https://splice-cad.com/docs/plan</a> and some examples <a href=\"https://splice-cad.com/docs/plan/multi-endpoint-harness\" rel=\"nofollow\">https://splice-cad.com/docs/plan/multi-endpoint-harness</a><p><em>MCP</em> <em>Server</em> Details: <a href=\"https://splice-cad.com/blog/mcp-server-agentic-workflows-march-2026\" rel=\"nofollow\">https://splice-cad.com/blog/<em>mcp</em>-<em>server</em>-agentic-workflows-mar...</a> and <a href=\"https://github.com/splice-cad/splice-cad-mcp\" rel=\"nofollow\">https://github.com/splice-cad/splice-cad-<em>mcp</em></a><p>Discord: <a href=\"https://discord.gg/5CTH7mnrk8\" rel=\"nofollow\">https://discord.gg/5CTH7mnrk8</a><p>My intention is to keep Splice CAD free for design use and leverage it as a platform to connect cable assembly and wiring shops with engineers who need their designs fabricated. I’m seeking a co-founder with a strong background in manufacturing sales and business development to complement my technical focus. If you're interested, please email me using the address listed in my About section."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Splice CAD – Wiring and cable assembly CAD with an agentic assist"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://splice-cad.com/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_djsdjs",
+            "story_47666050",
+            "show_hn"
+          ],
+          "author": "djsdjs",
+          "children": [
+            47668401
+          ],
+          "created_at": "2026-04-06T19:51:46Z",
+          "created_at_i": 1775505106,
+          "num_comments": 0,
+          "objectID": "47666050",
+          "points": 3,
+          "story_id": 47666050,
+          "story_text": "Still working on Splice CAD.  The two most significant updates focus on handling design complexity and automating using agentic workflows. Previous Show HN here:<p><a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44978140\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44978140</a><p>1. Projects:<p>This workflow is more amenable to system-level modeling. It overlaps somewhat with the original workflow but includes improvements including:<p>Complex Routing: Model topologies with branchpoints.<p>Mating Relationships: Represent physical mating (e.g., a receptacle into a PCB header or a ferrule into a terminal block) for completeness.<p>Decoupled BOMs: Part assignment is now separate from component addition; you can generate a BOM and then assign specific MPNs to components as the design evolves.<p>Net Visualization: Nets are identified and visualized across conductors, terminations, and mating relationships.<p>QOL and Visualization Improvements: Assign components to one or more pages to separate designs by function. Ability to create Device Groups (eg. model a PCB with multiple headers and then break out your wiring) and Subassemblies for design reuse. Copy and paste from TSV for easier interaction with spreadsheets. Copy and paste between browser tabs.<p>2. MCP Server &amp; Agentic Workflows:<p>Also new is the Splice CAD MCP server, which allows the tool to interact directly with LLMs like Claude. Manually entering data and extracting it from PDFs has always been a pain when documenting wiring and cable assemblies. I initially tried to handle PDF vision and extraction internally and took several wrong turns; the agentic approach is a much better fit. You can point Claude at a PDF schematic or a GitHub BOM and have it generate a multi-page design.<p>Try it out (No signup): <a href=\"https:&#x2F;&#x2F;splice-cad.com&#x2F;#&#x2F;harness\" rel=\"nofollow\">https:&#x2F;&#x2F;splice-cad.com&#x2F;#&#x2F;harness</a> + Create icon from top toolbar, New Project<p>Documentation: <a href=\"https:&#x2F;&#x2F;splice-cad.com&#x2F;docs&#x2F;plan\" rel=\"nofollow\">https:&#x2F;&#x2F;splice-cad.com&#x2F;docs&#x2F;plan</a> and some examples <a href=\"https:&#x2F;&#x2F;splice-cad.com&#x2F;docs&#x2F;plan&#x2F;multi-endpoint-harness\" rel=\"nofollow\">https:&#x2F;&#x2F;splice-cad.com&#x2F;docs&#x2F;plan&#x2F;multi-endpoint-harness</a><p>MCP Server Details: <a href=\"https:&#x2F;&#x2F;splice-cad.com&#x2F;blog&#x2F;mcp-server-agentic-workflows-march-2026\" rel=\"nofollow\">https:&#x2F;&#x2F;splice-cad.com&#x2F;blog&#x2F;mcp-server-agentic-workflows-mar...</a> and <a href=\"https:&#x2F;&#x2F;github.com&#x2F;splice-cad&#x2F;splice-cad-mcp\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;splice-cad&#x2F;splice-cad-mcp</a><p>Discord: <a href=\"https:&#x2F;&#x2F;discord.gg&#x2F;5CTH7mnrk8\" rel=\"nofollow\">https:&#x2F;&#x2F;discord.gg&#x2F;5CTH7mnrk8</a><p>My intention is to keep Splice CAD free for design use and leverage it as a platform to connect cable assembly and wiring shops with engineers who need their designs fabricated. I’m seeking a co-founder with a strong background in manufacturing sales and business development to complement my technical focus. If you&#x27;re interested, please email me using the address listed in my About section.",
+          "title": "Show HN: Splice CAD – Wiring and cable assembly CAD with an agentic assist",
+          "updated_at": "2026-04-06T22:52:06Z",
+          "url": "https://splice-cad.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "peaknk"
             },
             "title": {
@@ -2044,10 +2200,10 @@
           "created_at_i": 1775493527,
           "num_comments": 0,
           "objectID": "47663251",
-          "points": 3,
+          "points": 5,
           "story_id": 47663251,
           "title": "JitAPI – An MCP server for dynamic tool discovery (34x fewer tokens)",
-          "updated_at": "2026-04-06T17:02:36Z",
+          "updated_at": "2026-04-06T22:05:36Z",
           "url": "https://github.com/nk3750/jitapi"
         },
         {
@@ -2085,172 +2241,73 @@
             "show_hn"
           ],
           "author": "MaxWolf-01",
+          "children": [
+            47668519
+          ],
           "created_at": "2026-04-06T12:28:04Z",
           "created_at_i": 1775478484,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47660043",
-          "points": 4,
+          "points": 5,
           "story_id": 47660043,
           "story_text": "Yapit converts PDFs and web pages to audio, with a vision-LLM pipeline that handles math and complex layout instead of garbling them. I built it because I read a lot of papers and content online, but drift off after two paragraphs. Listening while following along keeps me focused and lowers the bar to actually start.<p>Every TTS tool I tried broke on complex formatting. Papers with math, citations, figure references, page numbers in the middle of sentences. You either get garbled output or you&#x27;re listening to raw LaTeX.<p>Yapit converts everything to markdown as a common format. For web pages, defuddle (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;kepano&#x2F;defuddle\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kepano&#x2F;defuddle</a>) handles the extraction and strips clutter from web pages, presenting the main article content in a clean, consistent format.\nFor PDFs, a vision LLM rewrites each page into markdown with annotation tags that separate what you see from what gets read aloud. Math is rendered visually but gets spoken alt text. Citations like &quot;[13]&quot; or &quot;(Schmidhuber, 1970)&quot; are silently displayed. Page numbers and headers are removed entirely.<p>Both extraction and audio are cached by content hash, so the same content is never processed or synthesized twice.<p>Self-hosting works with any OpenAI-compatible TTS server (vLLM-Omni, ...) and any OpenAI-compatible vision model for PDF extraction:<p><pre><code>  git clone --depth 1 https:&#x2F;&#x2F;github.com&#x2F;yapit-tts&#x2F;yapit.git &amp;&amp; cd yapit\n  cp .env.selfhost.example .env.selfhost\n  make self-host\n</code></pre>\nKokoro TTS also runs in the browser via WebGPU on desktop.<p>Try it on Attention Is All You Need (all voices cached, no account needed): <a href=\"https:&#x2F;&#x2F;yapit.md&#x2F;listen&#x2F;3bde213b-3a5a-465f-9198-be65430b699e#3-model-architecture\" rel=\"nofollow\">https:&#x2F;&#x2F;yapit.md&#x2F;listen&#x2F;3bde213b-3a5a-465f-9198-be65430b699e...</a><p>Or paste any URL: \n  <a href=\"https:&#x2F;&#x2F;yapit.md&#x2F;https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1810.04805\" rel=\"nofollow\">https:&#x2F;&#x2F;yapit.md&#x2F;https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1810.04805</a>\n  <a href=\"https:&#x2F;&#x2F;yapit.md&#x2F;https:&#x2F;&#x2F;x.com&#x2F;karpathy&#x2F;status&#x2F;2039805659525644595\" rel=\"nofollow\">https:&#x2F;&#x2F;yapit.md&#x2F;https:&#x2F;&#x2F;x.com&#x2F;karpathy&#x2F;status&#x2F;2039805659525...</a><p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;yapit-tts&#x2F;yapit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;yapit-tts&#x2F;yapit</a> (AGPL-3)",
           "title": "Show HN: Yapit – PDF and webpage reader with TTS that doesn't suck",
-          "updated_at": "2026-04-06T16:18:21Z",
+          "updated_at": "2026-04-06T23:03:21Z",
           "url": "https://github.com/yapit-tts/yapit"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "anton_salcher"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "tools"
-              ],
-              "value": "Hey HN,<p>I built Pace, a Claude Connector that lets you connect all your wearables (Garmin, Polar, Whoop, 20+) with Claude.<p>You connect your devices once and can analyze your data with Claude. No Dashboard needed, just in natural language.\nI already use it everyday, especially the visualization <em>tool</em> in Claude makes this really cool to use.<p><em>Tools</em> include: overview, sleep, training, activity, samples and trends.<p>Tech Stack: Python (FastMCP), Google Cloud Run, Google Cloud SQL (PostgreSQL) and Firebase<p>It is live and free to try (no Claude Pro/MAX Plan needed)..<p>Would love feedback, especially from people who've built <em>MCP</em> servers or use wearables seriously."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "server"
-              ],
-              "value": "Show HN: I just built a <em>MCP</em> <em>Server</em> that connects Claude to all your wearables"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://pacetraining.co/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_anton_salcher",
-            "story_47658617",
-            "show_hn"
-          ],
-          "author": "anton_salcher",
-          "children": [
-            47662373,
-            47658796,
-            47658675,
-            47658667,
-            47661520
-          ],
-          "created_at": "2026-04-06T09:22:45Z",
-          "created_at_i": 1775467365,
-          "num_comments": 8,
-          "objectID": "47658617",
-          "points": 9,
-          "story_id": 47658617,
-          "story_text": "Hey HN,<p>I built Pace, a Claude Connector that lets you connect all your wearables (Garmin, Polar, Whoop, 20+) with Claude.<p>You connect your devices once and can analyze your data with Claude. No Dashboard needed, just in natural language.\nI already use it everyday, especially the visualization tool in Claude makes this really cool to use.<p>Tools include: overview, sleep, training, activity, samples and trends.<p>Tech Stack: Python (FastMCP), Google Cloud Run, Google Cloud SQL (PostgreSQL) and Firebase<p>It is live and free to try (no Claude Pro&#x2F;MAX Plan needed)..<p>Would love feedback, especially from people who&#x27;ve built MCP servers or use wearables seriously.",
-          "title": "Show HN: I just built a MCP Server that connects Claude to all your wearables",
-          "updated_at": "2026-04-06T17:16:07Z",
-          "url": "https://pacetraining.co/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kcaldas"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "I use Coding <em>tools</em> daily and got tired of it describing code by line numbers. So I built an <em>MCP</em> <em>server</em> that lets the agent control my Neovim instance instead: opening files, highlighting lines, adding annotations, splitting views.<p>The tool I actually wanted was &quot;walkthrough mode&quot;: I ask the agent to walk me through a PR, it opens each file, highlights what matters, explains briefly, and waits for my questions. Turns code review into pair programming where the agent points at the screen.<p>It also works passively — while the agent investigates a bug or reads code, my Neovim follows along so I can see what it's looking at.<p>Built with pynvim, talks to Neovim via --listen socket. Works with any <em>MCP</em> client.<p><a href=\"https://github.com/kcaldas/vim-navigator\" rel=\"nofollow\">https://github.com/kcaldas/vim-navigator</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "server"
-              ],
-              "value": "Show HN: Vim Navigator – <em>MCP</em> <em>server</em> that lets AI agents drive your Neovim"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/kcaldas/vim-navigator"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kcaldas",
-            "story_47655128",
-            "show_hn"
-          ],
-          "author": "kcaldas",
-          "created_at": "2026-04-05T23:41:42Z",
-          "created_at_i": 1775432502,
-          "num_comments": 0,
-          "objectID": "47655128",
-          "points": 3,
-          "story_id": 47655128,
-          "story_text": "I use Coding tools daily and got tired of it describing code by line numbers. So I built an MCP server that lets the agent control my Neovim instance instead: opening files, highlighting lines, adding annotations, splitting views.<p>The tool I actually wanted was &quot;walkthrough mode&quot;: I ask the agent to walk me through a PR, it opens each file, highlights what matters, explains briefly, and waits for my questions. Turns code review into pair programming where the agent points at the screen.<p>It also works passively — while the agent investigates a bug or reads code, my Neovim follows along so I can see what it&#x27;s looking at.<p>Built with pynvim, talks to Neovim via --listen socket. Works with any MCP client.<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;kcaldas&#x2F;vim-navigator\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kcaldas&#x2F;vim-navigator</a>",
-          "title": "Show HN: Vim Navigator – MCP server that lets AI agents drive your Neovim",
-          "updated_at": "2026-04-06T03:06:04Z",
-          "url": "https://github.com/kcaldas/vim-navigator"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pauliusztin"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "While building a financial assistant for an SF start-up, we learned that AI frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain's MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB collection as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don't need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls <em>tools</em> through an <em>MCP</em> <em>server</em>. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest <em>tools</em> to write back to the database for continual learning.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity/relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities/relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https://www.linkedin.com/feed/update/urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https://www.linkedin.com/feed/update/urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first AI: https://www.linkedin.com/feed/update/urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https://www.linkedin.com/feed/update/urn:li:activity:7432054336589021184<p>- Most AI agents don't need three databases: https://www.linkedin.com/feed/update/urn:li:activity:7426981104227856385"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "My 11-step GraphRAG pipeline, what worked, and what's still broken"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pauliusztin",
-            "story_47639059",
-            "ask_hn"
-          ],
-          "author": "pauliusztin",
-          "children": [
-            47653050,
-            47639143
-          ],
-          "created_at": "2026-04-04T13:50:22Z",
-          "created_at_i": 1775310622,
-          "num_comments": 1,
-          "objectID": "47639059",
-          "points": 3,
-          "story_id": 47639059,
-          "story_text": "While building a financial assistant for an SF start-up, we learned that AI frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain&#x27;s MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB collection as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don&#x27;t need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual learning.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity&#x2F;relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities&#x2F;relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first AI: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7432054336589021184<p>- Most AI agents don&#x27;t need three databases: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7426981104227856385",
-          "title": "My 11-step GraphRAG pipeline, what worked, and what's still broken",
-          "updated_at": "2026-04-05T19:39:03Z"
         }
       ]
     },
     {
       "query": "self+improving+AI",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "essamsleiman"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "We built meta-agent: an open-source library that automatically and continuously improves agent harnesses from production traces.<p>Point it at an existing agent, a stream of unlabeled production traces, and a small labeled holdout set.<p>An LLM judge scores unlabeled production traces as they stream.<p>A proposer reads failed traces and writes one targeted harness update at a time, such as changes to prompts, hooks, tools, or subagents.\nThe update is kept only if it improves holdout accuracy.<p>On tau-bench v3 <em>ai</em>rline, meta-agent improved holdout accuracy from 67% to 87%.<p>We open-sourced meta-agent. It currently supports Claude Agent SDK, with more frameworks coming soon.<p>Try it here: <a href=\"https://github.com/canvas-org/meta-agent\" rel=\"nofollow\">https://github.com/canvas-org/meta-agent</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "self",
+                "improving"
+              ],
+              "value": "Show HN: Meta-agent: <em>self</em>-<em>improving</em> agent harnesses from live traces"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/canvas-org/meta-agent"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_essamsleiman",
+            "story_47665630",
+            "show_hn"
+          ],
+          "author": "essamsleiman",
+          "created_at": "2026-04-06T19:22:06Z",
+          "created_at_i": 1775503326,
+          "num_comments": 0,
+          "objectID": "47665630",
+          "points": 4,
+          "story_id": 47665630,
+          "story_text": "We built meta-agent: an open-source library that automatically and continuously improves agent harnesses from production traces.<p>Point it at an existing agent, a stream of unlabeled production traces, and a small labeled holdout set.<p>An LLM judge scores unlabeled production traces as they stream.<p>A proposer reads failed traces and writes one targeted harness update at a time, such as changes to prompts, hooks, tools, or subagents.\nThe update is kept only if it improves holdout accuracy.<p>On tau-bench v3 airline, meta-agent improved holdout accuracy from 67% to 87%.<p>We open-sourced meta-agent. It currently supports Claude Agent SDK, with more frameworks coming soon.<p>Try it here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;canvas-org&#x2F;meta-agent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;canvas-org&#x2F;meta-agent</a>",
+          "title": "Show HN: Meta-agent: self-improving agent harnesses from live traces",
+          "updated_at": "2026-04-06T23:25:39Z",
+          "url": "https://github.com/canvas-org/meta-agent"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -2439,49 +2496,6 @@
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
           "updated_at": "2026-04-06T12:00:36Z",
           "url": "https://github.com/amangsingh/castra"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "grodriguez100"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "Meta releases HyperAgents: <em>self</em>-<em>improving</em> <em>AI</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/facebookresearch/Hyperagents"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_grodriguez100",
-            "story_47528807"
-          ],
-          "author": "grodriguez100",
-          "children": [
-            47528849,
-            47529382
-          ],
-          "created_at": "2026-03-26T10:41:40Z",
-          "created_at_i": 1774521700,
-          "num_comments": 3,
-          "objectID": "47528807",
-          "points": 3,
-          "story_id": 47528807,
-          "title": "Meta releases HyperAgents: self-improving AI",
-          "updated_at": "2026-03-26T17:43:34Z",
-          "url": "https://github.com/facebookresearch/Hyperagents"
         }
       ]
     }
