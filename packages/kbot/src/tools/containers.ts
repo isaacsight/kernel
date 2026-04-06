@@ -272,27 +272,79 @@ export function registerContainerTools(): void {
     async execute(args) {
       const expr = String(args.expression)
       try {
-        // Safe math evaluation via Python (no eval() in JS)
-        const result = await shell('python3', ['-c', `
-import math
-from math import *
-try:
-    result = eval("""${expr.replace(/"/g, '\\"')}""")
-    print(f"Result: {result}")
-except Exception as e:
-    print(f"Error: {e}")
-`], 10_000)
+        // Safe math evaluation via Python — expression passed via stdin to prevent injection
+        const result = await new Promise<string>((resolve, reject) => {
+          const proc = execFile('python3', ['-c',
+            'import sys, math; expr = sys.stdin.read().strip(); print(f"Result: {eval(expr, {\\"__builtins__\\": {}}, vars(math))}")'],
+            { timeout: 10_000, maxBuffer: 1024 * 1024 },
+            (err, stdout, stderr) => {
+              if (err) reject(new Error(stderr || err.message))
+              else resolve(stdout || stderr)
+            },
+          )
+          proc.stdin?.write(expr)
+          proc.stdin?.end()
+        })
         return result.trim()
       } catch {
-        // Fallback: safe math evaluation (no eval/new Function — security policy)
+        // Fallback: safe numeric-only evaluation without eval() or Function()
         try {
           // Only allow numeric expressions: digits, operators, parens, decimal points, spaces
           if (!/^[0-9+\-*/().^,\s]+$/.test(expr)) {
             return 'Expression contains unsafe characters. Only numeric expressions are supported in fallback mode.'
           }
-          const safeExpr = expr.replace(/\^/g, '**')
-          // Use indirect eval through a strict numeric-only expression
-          const result = Number(Function('"use strict"; return (' + safeExpr + ')')())
+          // Simple recursive-descent evaluation for basic arithmetic
+          const safeExpr = expr.replace(/\^/g, '**').replace(/\s+/g, '')
+          const tokens = safeExpr.match(/(\d+\.?\d*|\+|-|\*{1,2}|\/|\(|\))/g)
+          if (!tokens) return 'Could not parse expression.'
+          let pos = 0
+          function peek() { return tokens![pos] }
+          function consume() { return tokens![pos++] }
+          function parseExpr(): number {
+            let left = parseTerm()
+            while (peek() === '+' || peek() === '-') {
+              const op = consume()
+              const right = parseTerm()
+              left = op === '+' ? left + right : left - right
+            }
+            return left
+          }
+          function parseTerm(): number {
+            let left = parsePower()
+            while (peek() === '*' && tokens![pos + 1] !== '*' || peek() === '/') {
+              const op = consume()
+              const right = parsePower()
+              left = op === '*' ? left * right : left / right
+            }
+            return left
+          }
+          function parsePower(): number {
+            let base = parseUnary()
+            while (peek() === '*' && tokens![pos + 1] === '*') {
+              consume(); consume() // consume **
+              const exp = parseUnary()
+              base = Math.pow(base, exp)
+            }
+            return base
+          }
+          function parseUnary(): number {
+            if (peek() === '-') { consume(); return -parseAtom() }
+            if (peek() === '+') { consume(); return parseAtom() }
+            return parseAtom()
+          }
+          function parseAtom(): number {
+            if (peek() === '(') {
+              consume() // (
+              const val = parseExpr()
+              if (peek() === ')') consume() // )
+              return val
+            }
+            const tok = consume()
+            const num = Number(tok)
+            if (!Number.isFinite(num)) throw new Error(`Invalid token: ${tok}`)
+            return num
+          }
+          const result = parseExpr()
           if (!Number.isFinite(result)) return 'Result is not a finite number.'
           return `Result: ${result}`
         } catch (err) {

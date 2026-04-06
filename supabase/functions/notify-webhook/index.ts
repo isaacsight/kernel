@@ -116,11 +116,11 @@ serve(async (req: Request) => {
       )
     }
 
-    const discordWebhookUrl = Deno.env.get('DISCORD_WEBHOOK_URL')
+    const discordWebhookUrl = Deno.env.get('DISCORD_INBOX_WEBHOOK_URL') || Deno.env.get('DISCORD_WEBHOOK_URL')
     if (!discordWebhookUrl) {
-      console.error('Missing DISCORD_WEBHOOK_URL secret')
+      console.error('Missing DISCORD_INBOX_WEBHOOK_URL secret')
       return new Response(
-        JSON.stringify({ error: 'Missing DISCORD_WEBHOOK_URL' }),
+        JSON.stringify({ error: 'Missing DISCORD_INBOX_WEBHOOK_URL' }),
         { status: 500, headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
       )
     }

@@ -339,7 +339,7 @@ export default function AccountSettingsPanel({
               </span>
             </div>
             <span className="ka-billing-plan-upgrade-hint">
-              {isPro ? '200 messages per month' : '10 messages per month'}
+              {isPro ? '200 messages per month' : '20 messages per day'}
             </span>
           </div>
           {!isPro && !isAdmin && onUpgrade && (

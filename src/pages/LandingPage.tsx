@@ -298,7 +298,7 @@ export function LandingPage() {
 
       {/* Agents */}
       <section ref={s4} className="ka-landing-section ka-reveal">
-        <h2 className="ka-landing-h2">23 Specialist Agents</h2>
+        <h2 className="ka-landing-h2">35 Specialist Agents</h2>
         <p className="ka-landing-body">
           kbot auto-routes your request to the right expert. Or pick one yourself.
         </p>
@@ -306,7 +306,7 @@ export function LandingPage() {
           {AGENTS.map((a, i) => (
             <span key={a} className="ka-landing-agent-tag ka-stagger" style={{ transitionDelay: `${i * 0.05}s` }}>{a}</span>
           ))}
-          <span className="ka-landing-agent-tag ka-landing-dim ka-stagger" style={{ transitionDelay: `${AGENTS.length * 0.05}s` }}>+11 more</span>
+          <span className="ka-landing-agent-tag ka-landing-dim ka-stagger" style={{ transitionDelay: `${AGENTS.length * 0.05}s` }}>+23 more</span>
         </div>
       </section>
 
@@ -331,7 +331,7 @@ export function LandingPage() {
               <tr><td>Builds own tools</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
               <tr><td>Cognitive modules</td><td>11</td><td>0</td><td>0</td><td>0</td></tr>
               <tr><td>AI providers</td><td>20</td><td>1</td><td>4</td><td>100+</td></tr>
-              <tr><td>Built-in tools</td><td>290</td><td>~15</td><td>~10</td><td>~10</td></tr>
+              <tr><td>Built-in tools</td><td>764+</td><td>~15</td><td>~10</td><td>~10</td></tr>
               <tr><td>Runs offline</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td></tr>
               <tr><td>Open source</td><td>MIT</td><td>No</td><td>No</td><td>Apache</td></tr>
               <tr><td>Cost</td><td>$0 local</td><td>$20+/mo</td><td>$20/mo</td><td>BYOK</td></tr>

@@ -213,7 +213,7 @@ serve(async (req: Request) => {
     }
 
     if (channels.includes('discord')) {
-      const webhookUrl = Deno.env.get('DISCORD_WEBHOOK_URL')
+      const webhookUrl = Deno.env.get('DISCORD_INBOX_WEBHOOK_URL') || Deno.env.get('DISCORD_WEBHOOK_URL')
       if (webhookUrl) {
         const discordRes = await fetch(webhookUrl, {
           method: 'POST',

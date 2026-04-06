@@ -19,7 +19,7 @@ export function UpgradePrompt({ feature, onUpgrade, loading }: UpgradePromptProp
         <IconAlertCircle size={20} />
       </div>
       <h3 className="ka-upgrade-prompt-title">
-        {isLimit ? "You've used your 10 free messages this month" : 'Limit reached'}
+        {isLimit ? "You've used your 20 free messages today" : 'Limit reached'}
       </h3>
       <p className="ka-upgrade-prompt-desc">
         Upgrade to Pro for 200 messages a month, convergence, file analysis, and more.

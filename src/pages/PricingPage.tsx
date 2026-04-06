@@ -15,7 +15,7 @@ export function PricingPage() {
       <div className="ka-pricing-hero">
         <h1>Kernel is free to use</h1>
         <p className="ka-pricing-subtitle">
-          Chat 10 times a day. No credit card. No catch.
+          Chat 20 times a day. No credit card. No catch.
         </p>
       </div>
 
@@ -30,8 +30,8 @@ export function PricingPage() {
               <p className="ka-pricing-card-desc">Everything you need to get started</p>
             </div>
             <ul className="ka-pricing-card-features">
-              <li>10 messages every day</li>
-              <li>5 expert AI helpers</li>
+              <li>20 messages every day</li>
+              <li>35 expert AI helpers</li>
               <li>Search the web for answers</li>
               <li>Remembers who you are</li>
               <li>All your chats saved</li>

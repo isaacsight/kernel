@@ -130,7 +130,7 @@ async function main(): Promise<void> {
       console.log(`  ${chalk.cyan('https://github.com/isaacsight/kernel/issues')}  ${chalk.dim('Bug reports')}`)
       console.log(`  ${chalk.cyan('support@kernel.chat')}  ${chalk.dim('Email (AI-assisted replies)')}`)
       console.log()
-      console.log(`  ${chalk.dim('35 specialist agents · 360+ tools · 20 providers · MIT licensed')}`)
+      console.log(`  ${chalk.dim('35 specialist agents · 764+ tools · 20 providers · MIT licensed')}`)
       console.log()
       process.exit(0)
     })

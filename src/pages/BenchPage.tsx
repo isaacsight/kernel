@@ -217,7 +217,7 @@ export default function BenchPage() {
               Running 690 tests across 8 categories...
             </div>
             <div className="ka-bench-line ka-bench-dim">
-              {'\u2713'} Tool breadth: 560 tools registered
+              {'\u2713'} Tool breadth: 764+ tools registered
             </div>
             <div className="ka-bench-line ka-bench-dim">
               {'\u2713'} Agent routing: 35 specialists loaded

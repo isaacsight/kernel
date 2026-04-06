@@ -140,8 +140,8 @@ export function TermsPage() {
       <h2>10. Free Tier Limits</h2>
 
       <p>
-        Free accounts are limited to 10 messages per month across web and CLI. This
-        limit is a hard cap and resets at the start of each billing cycle. The paid Pro plan
+        Free accounts are limited to 20 messages per day across web and CLI. This
+        limit is a hard cap and resets on a rolling 24-hour window. The paid Pro plan
         includes a higher quota of 200 messages per month, also hard-capped with no overage billing.
       </p>
 
@@ -162,7 +162,7 @@ export function TermsPage() {
       </p>
 
       <ul>
-        <li><strong>Free:</strong> 10 messages per month (hard cap, no overage)</li>
+        <li><strong>Free:</strong> 20 messages per day (hard cap, no overage)</li>
         <li><strong>Pro ($15/month):</strong> 200 messages per month (hard cap, no overage)</li>
       </ul>
 

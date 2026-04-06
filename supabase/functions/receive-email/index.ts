@@ -222,7 +222,7 @@ serve(async (req: Request) => {
     }
 
     // --- 2. Discord notification ---
-    const discordWebhook = Deno.env.get('DISCORD_WEBHOOK_URL')
+    const discordWebhook = Deno.env.get('DISCORD_INBOX_WEBHOOK_URL') || Deno.env.get('DISCORD_WEBHOOK_URL')
     if (discordWebhook) {
       const preview = bodyText.length > 300 ? bodyText.substring(0, 300) + '...' : bodyText
       const embed = {

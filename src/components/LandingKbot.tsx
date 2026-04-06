@@ -73,11 +73,11 @@ export function LandingKbot() {
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">◆</span>
-            <span>60+ built-in tools — manage files, search the web, use GitHub, and more</span>
+            <span>764+ built-in tools — manage files, search the web, use GitHub, and more</span>
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">▸</span>
-            <span>17 smart helpers that pick the right one for your question</span>
+            <span>35 smart helpers that pick the right one for your question</span>
           </div>
           <div className="landing-kbot-feat">
             <span className="landing-kbot-feat-icon">⚡</span>
@@ -122,7 +122,7 @@ export function LandingKbot() {
   ┊ ·   ●  ·   · ◦  · ●  ·  │  ┊
   +╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌+`}
               </div>
-              <TermLine text="  K:BOT v2.3.1" delay={3800} />
+              <TermLine text="  K:BOT" delay={3800} />
               <TermLine text="" delay={4000} />
               <TermLine text="fix the auth redirect bug" prefix="  ~/project ❯ " delay={4200} />
             </>
