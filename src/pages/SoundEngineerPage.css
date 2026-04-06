@@ -1,0 +1,421 @@
+/* Sound Engineer Page */
+
+.ka-sound {
+  min-height: 100vh;
+  background: #0d0d0d;
+  color: #e8e6e3;
+  font-family: 'EB Garamond', Georgia, serif;
+  overflow-x: hidden;
+}
+
+/* Hero */
+.ka-sound-hero {
+  text-align: center;
+  padding: 120px 24px 80px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.ka-sound-badge {
+  display: inline-block;
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6B5B95;
+  border: 1px solid #6B5B9540;
+  border-radius: 20px;
+  padding: 4px 16px;
+  margin-bottom: 32px;
+}
+
+.ka-sound-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: clamp(36px, 8vw, 64px);
+  font-weight: 700;
+  color: #FAF9F6;
+  margin: 0 0 16px;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.ka-sound-subtitle {
+  font-size: clamp(18px, 3.5vw, 24px);
+  color: #aaa;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+.ka-sound-tagline {
+  font-size: 16px;
+  color: #666;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+  max-width: 560px;
+}
+
+/* Wave icon — pure CSS */
+.ka-sound-wave {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 80px;
+  height: 80px;
+  border: 2px solid #6B5B9550;
+  border-radius: 50%;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.ka-sound-wave::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  background: #6B5B95;
+  border-radius: 2px;
+  left: 30px;
+  top: 30px;
+  box-shadow:
+    8px 4px 0 #6B5B95,
+    16px -6px 0 #6B5B95,
+    24px 2px 0 #6B5B95,
+    -8px 6px 0 #6B5B95;
+  animation: ka-sound-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ka-sound-pulse {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.4); }
+}
+
+/* Sections */
+.ka-sound-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.ka-sound-h2 {
+  font-family: 'Courier Prime', monospace;
+  font-size: clamp(24px, 5vw, 36px);
+  color: #FAF9F6;
+  margin: 0 0 16px;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.ka-sound-section-desc {
+  text-align: center;
+  color: #888;
+  font-size: 16px;
+  margin: 0 0 40px;
+  line-height: 1.5;
+}
+
+.ka-sound-divider {
+  max-width: 120px;
+  height: 1px;
+  background: #333;
+  margin: 0 auto;
+}
+
+/* Services grid */
+.ka-sound-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.ka-sound-card {
+  background: #151413;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 28px 24px;
+  transition: border-color 0.2s;
+}
+
+.ka-sound-card:hover {
+  border-color: #6B5B9560;
+}
+
+.ka-sound-card-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 12px;
+  color: #6B5B95;
+}
+
+.ka-sound-card-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 16px;
+  color: #FAF9F6;
+  margin: 0 0 8px;
+}
+
+.ka-sound-card-desc {
+  font-size: 15px;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Tracklist / Player */
+.ka-sound-tracklist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ka-sound-track {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #151413;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.ka-sound-track:hover {
+  background: #1a1917;
+  border-color: #333;
+}
+
+.ka-sound-track--playing {
+  background: #1a1917;
+  border-color: #6B5B9560;
+}
+
+.ka-sound-track-play {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  color: #6B5B95;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #6B5B9540;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.ka-sound-track:hover .ka-sound-track-play {
+  background: #6B5B9515;
+}
+
+.ka-sound-track-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ka-sound-track-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 15px;
+  color: #FAF9F6;
+  display: block;
+}
+
+.ka-sound-track-artist {
+  font-size: 13px;
+  color: #888;
+  display: block;
+  margin-top: 2px;
+}
+
+.ka-sound-track-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.ka-sound-track-tag {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #6B5B95;
+  background: #6B5B9515;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+.ka-sound-track-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ka-sound-track-duration {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #aaa;
+  display: block;
+}
+
+.ka-sound-track-date {
+  font-size: 12px;
+  color: #555;
+  display: block;
+  margin-top: 2px;
+}
+
+.ka-sound-track-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #222;
+}
+
+.ka-sound-track-progress-fill {
+  height: 100%;
+  background: #6B5B95;
+  transition: width 0.3s linear;
+}
+
+/* Tools */
+.ka-sound-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.ka-sound-tool {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #aaa;
+  background: #151413;
+  border: 1px solid #222;
+  border-radius: 20px;
+  padding: 6px 16px;
+  transition: border-color 0.2s;
+}
+
+.ka-sound-tool:hover {
+  border-color: #6B5B9540;
+  color: #FAF9F6;
+}
+
+/* CTA */
+.ka-sound-cta-section {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.ka-sound-cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ka-sound-cta {
+  font-family: 'Courier Prime', monospace;
+  font-size: 14px;
+  color: #FAF9F6;
+  background: #6B5B95;
+  border: 1px solid #6B5B95;
+  border-radius: 8px;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ka-sound-cta:hover {
+  background: #7B6BA5;
+}
+
+.ka-sound-cta--secondary {
+  background: transparent;
+  border-color: #333;
+  color: #aaa;
+}
+
+.ka-sound-cta--secondary:hover {
+  border-color: #6B5B95;
+  color: #FAF9F6;
+}
+
+/* Footer */
+.ka-sound-footer {
+  border-top: 1px solid #1a1a1a;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.ka-sound-footer-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.ka-sound-footer-links a {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #555;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ka-sound-footer-links a:hover {
+  color: #FAF9F6;
+}
+
+.ka-sound-copyright {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12px;
+  color: #333;
+  margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .ka-sound-hero {
+    padding: 80px 20px 60px;
+  }
+
+  .ka-sound-section {
+    padding: 40px 20px;
+  }
+
+  .ka-sound-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ka-sound-track {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .ka-sound-track-play {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .ka-sound-track-tags {
+    display: none;
+  }
+
+  .ka-sound-cta-section {
+    padding: 60px 20px;
+  }
+}

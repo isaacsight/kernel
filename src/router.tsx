@@ -23,6 +23,7 @@ const PlayPage = lazyRetry(() => import('./pages/PlayPage').then(m => ({ default
 const SecurityPage = lazyRetry(() => import('./pages/SecurityPage').then(m => ({ default: m.SecurityPage })))
 const BenchPage = lazyRetry(() => import('./pages/BenchPage'))
 const LeaderboardPage = lazyRetry(() => import('./pages/LeaderboardPage').then(m => ({ default: m.LeaderboardPage })))
+const SoundEngineerPage = lazyRetry(() => import('./pages/SoundEngineerPage').then(m => ({ default: m.SoundEngineerPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -135,6 +136,11 @@ export const router = createHashRouter([
       { path: 'leaderboard', element: withErrorBoundary(
         <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4 }}>Loading leaderboard...</div>}>
           <LeaderboardPage />
+        </Suspense>
+      ) },
+      { path: 'sound-engineer', element: withErrorBoundary(
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontFamily: 'Courier Prime, monospace', opacity: 0.4, color: '#fff', background: '#0d0d0d' }}>Loading...</div>}>
+          <SoundEngineerPage />
         </Suspense>
       ) },
       { path: '*', element: <Navigate to="/" replace /> },
