@@ -17,6 +17,8 @@
   <a href="https://glama.ai/mcp/servers/isaacsight/kernel"><img src="https://glama.ai/mcp/servers/isaacsight/kernel/badges/score.svg" alt="kbot MCP server"></a>
 </p>
 
+> If kbot is useful to you, consider [starring the repo](https://github.com/isaacsight/kernel) — it helps others discover the project.
+
 ```bash
 npm install -g @kernel.chat/kbot
 ```

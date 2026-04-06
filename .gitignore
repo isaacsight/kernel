@@ -81,3 +81,5 @@ android/
 claude_code_handover.md
 CREATIVE-BRIEF.md
 KERNEL_RESEARCH.md
+.kbot.json
+.kbot/
