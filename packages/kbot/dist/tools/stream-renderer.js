@@ -21,8 +21,13 @@ import { initRomEngine, renderRomBackground, tickRomEngine } from './rom-engine.
 import { initLivingWorld, tickLivingWorld, saveLivingWorldState, loadLivingWorldState, evolveWorld } from './living-world.js';
 import { initEvolutionEngine, loadEvolutionState, saveEvolutionState, tickEvolution, renderTechnique } from './evolution-engine.js';
 import { createNarrativeEngine, loadNarrative, saveNarrative, tickNarrative, handleNarrativeCommand } from './narrative-engine.js';
-import { createAudioEngine, tickAudio } from './audio-engine.js';
+import { createAudioEngine, tickAudio, generateAudioBuffer, triggerSFX } from './audio-engine.js';
 import { loadSocialEngine, saveSocialEngine, trackViewer, tickSocial } from './social-engine.js';
+import { getOverlay } from './stream-overlay.js';
+import { getWeatherSystem } from './stream-weather.js';
+import { StreamChatAI } from './stream-chat-ai.js';
+import { StreamVOD } from './stream-vod.js';
+import { getStreamCommands } from './stream-commands.js';
 const KBOT_DIR = join(homedir(), '.kbot');
 const CHAT_BRIDGE_FILE = join(KBOT_DIR, 'stream-chat-live.json');
 const MEMORY_FILE = join(KBOT_DIR, 'stream-memory.json');
@@ -1478,6 +1483,12 @@ let narrativeEngine = null;
 let audioEngine = null;
 let socialEngine = null;
 let activeAudioDescription = null; // current audio atmosphere text for rendering
+// ─── New Systems (v2) ──────────────────────────────────────────
+let overlay = null;
+let weatherSystem = null;
+let chatAI = null;
+let vodSystem = null;
+let streamCommands = null;
 // ─── Phase 1: Buddy Speech Pools ─────────────────────────────
 const BUDDY_SPEECH_POOL = {
     fox: [
@@ -2522,6 +2533,34 @@ function renderFrame() {
             queueSpeech(socialAction.speech, socialAction.mood || 'excited', 90, 48, 'social');
         }
     }
+    // ── New Systems (v2) ────────────────────────────────────────
+    // Weather system — dynamic weather + day/night cycle
+    if (weatherSystem) {
+        const recentMsgs = charState.chatMessages.slice(-30);
+        const chatTimespanMs = recentMsgs.length > 1
+            ? (Date.now() - recentMsgs[0]?.timestamp || Date.now()) : 60000;
+        const chatActivity = recentMsgs.length / Math.max(1, chatTimespanMs / 60000);
+        weatherSystem.tick(animFrame, chatActivity);
+        // Sync weather to world state for audio engine
+        const ws = weatherSystem.getWeather();
+        world.weather = ws.type === 'clear' ? 'clear' : ws.type.includes('rain') ? 'rain' : ws.type.includes('snow') ? 'snow' : ws.type.includes('storm') ? 'storm' : world.weather;
+        const tod = weatherSystem.getTimeOfDay();
+        const todMap = {
+            dawn: 'dawn', morning: 'day', noon: 'day', afternoon: 'day',
+            dusk: 'sunset', evening: 'night', night: 'night',
+        };
+        world.timeOfDay = todMap[tod] ?? 'day';
+    }
+    // Overlay system — tick animations
+    if (overlay)
+        overlay.tick(animFrame);
+    // Stream commands — tick cooldowns, polls, boss fights
+    if (streamCommands)
+        streamCommands.tick(animFrame);
+    // VOD — feed chat rate for highlight detection
+    if (vodSystem && vodSystem.isRecording()) {
+        // Chat spike detection handled per-message in chat poll
+    }
     // Compute animation params
     {
         const elapsed = Math.floor((Date.now() - charState.startTime) / 1000);
@@ -2532,6 +2571,18 @@ function renderFrame() {
         const chatRate = recentMessages.length / Math.max(1, chatTimespanMs / 60000);
         const viewerEstimate = Math.max(1, Math.floor(memory.totalMessages / 3) + Object.keys(memory.users).length);
         charState.animParams = computeAnimationParams(chatRate, viewerEstimate, charState.mood, world.timeOfDay, streamMinutes);
+        // Update overlay info bar every 6 frames (1 second)
+        if (overlay && animFrame % 6 === 0) {
+            const uptimeSec = Math.floor((Date.now() - charState.startTime) / 1000);
+            const h = Math.floor(uptimeSec / 3600);
+            const m = Math.floor((uptimeSec % 3600) / 60);
+            overlay.updateInfoBar({
+                viewers: viewerEstimate,
+                uptime: `${h}h ${m}m`,
+                biome: world.ground,
+                chatRate: Math.round(chatRate * 10) / 10,
+            });
+        }
     }
     // Cache invalidation
     const moodChanged = charState.mood !== charState.lastMoodForCache;
@@ -2656,6 +2707,12 @@ function renderFrame() {
     if (livingWorld && animFrame % 1800 === 0)
         saveLivingWorldState(livingWorld.ecology, livingWorld.memory, livingWorld.emotions, livingWorld.conversations);
     // ════════════════════════════════════════════════════════════════
+    // LAYER 0.5: WEATHER SKY (renders under everything if active)
+    // ════════════════════════════════════════════════════════════════
+    if (weatherSystem) {
+        weatherSystem.renderSky(ctx, WIDTH, HEIGHT);
+    }
+    // ════════════════════════════════════════════════════════════════
     // LAYER 1: TILE WORLD — fills entire 1280x720 frame
     // ════════════════════════════════════════════════════════════════
     // ROM Engine background — HDMA sky gradient + parallax layers
@@ -2676,6 +2733,16 @@ function renderFrame() {
     if (tileWorld) {
         updateCamera(tileWorld, charState.robotX || 640, WIDTH);
         renderTileWorld(ctx, tileWorld, 0, Math.floor(earlyGroundY - 80), WIDTH, HEIGHT - Math.floor(earlyGroundY - 80), charState.robotX || 640, animFrame);
+    }
+    // ── Ground-level atmospheric haze for depth ──
+    if (world.ground !== 'space') {
+        const hazeY = earlyGroundY - 20;
+        const hazeGrad = ctx.createLinearGradient(0, hazeY - 40, 0, hazeY + 60);
+        hazeGrad.addColorStop(0, 'rgba(13,17,23,0)');
+        hazeGrad.addColorStop(0.5, 'rgba(30,40,50,0.15)');
+        hazeGrad.addColorStop(1, 'rgba(13,17,23,0)');
+        ctx.fillStyle = hazeGrad;
+        ctx.fillRect(0, hazeY - 40, WIDTH, 100);
     }
     // ── HACK 1: Stars in the sky ──
     for (let i = 0; i < 40; i++) {
@@ -2707,6 +2774,113 @@ function renderFrame() {
         else {
             ctx.fillStyle = '#6699cc';
             ctx.fillRect(p.x, p.y, 2, 6);
+        }
+    }
+    // ════════════════════════════════════════════════════════════════
+    // LAYER 1.5: AMBIENT SCENERY — trees, rocks, grass, flowers, clouds
+    // ════════════════════════════════════════════════════════════════
+    {
+        const biome = world.ground;
+        const hasVegetation = biome === 'grass' || biome === 'city';
+        const hasAnything = biome !== 'space' && biome !== 'ocean';
+        const camX = charState.robotX || 640;
+        // Deterministic hash: returns 0..1 for a given seed
+        const hash = (seed) => ((Math.sin(seed * 9301 + 4917) * 49297) % 1 + 1) % 1;
+        // ── Clouds (all biomes except space) ──
+        if (biome !== 'space') {
+            for (let i = 0; i < 4; i++) {
+                const baseX = hash(i * 73 + 11) * 1600 - 160;
+                const cy = 40 + hash(i * 47 + 3) * 80;
+                const speed = 0.3 + hash(i * 19 + 7) * 0.7;
+                const cx = (baseX + animFrame * speed) % (WIDTH + 200) - 100;
+                const cw = 60 + hash(i * 31 + 5) * 60;
+                ctx.fillStyle = biome === 'lava' ? 'rgba(80,40,30,0.25)' : 'rgba(255,255,255,0.15)';
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, cw / 2, 12 + hash(i * 53) * 8, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(cx - cw * 0.2, cy + 4, cw * 0.3, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        // ── Trees (grass / city only) ──
+        if (hasVegetation) {
+            for (let i = 0; i < 10; i++) {
+                const wx = hash(i * 131 + 41) * 2400 - 400; // world-space x
+                const tx = ((wx - camX + 3000) % 2400) - 560; // screen x with parallax wrap
+                const depth = 0.5 + hash(i * 67 + 9) * 0.5; // 0.5=far, 1=near
+                const treeH = Math.floor(20 + 25 * depth);
+                const ty = earlyGroundY - treeH * 0.3 - (1 - depth) * 50; // further back = higher
+                const variant = Math.floor(hash(i * 89 + 23) * 3);
+                const trunkW = Math.max(2, Math.floor(3 * depth));
+                const trunkH = Math.floor(treeH * 0.45);
+                // Trunk
+                ctx.fillStyle = variant === 2 ? '#d4cfc4' : '#5a3a1a';
+                ctx.fillRect(tx - trunkW / 2, ty + treeH - trunkH, trunkW, trunkH);
+                // Canopy
+                if (variant === 0) { // pine — triangle
+                    ctx.fillStyle = '#2d5a27';
+                    ctx.beginPath();
+                    ctx.moveTo(tx, ty);
+                    ctx.lineTo(tx - treeH * 0.3, ty + treeH * 0.6);
+                    ctx.lineTo(tx + treeH * 0.3, ty + treeH * 0.6);
+                    ctx.fill();
+                }
+                else if (variant === 1) { // oak — round
+                    ctx.fillStyle = '#3a7a34';
+                    ctx.beginPath();
+                    ctx.arc(tx, ty + treeH * 0.3, treeH * 0.32, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                else { // birch — small leaves on white trunk
+                    ctx.fillStyle = '#5a9a44';
+                    ctx.beginPath();
+                    ctx.ellipse(tx, ty + treeH * 0.25, treeH * 0.22, treeH * 0.3, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+        // ── Rocks (any non-water/space biome) ──
+        if (hasAnything) {
+            for (let i = 0; i < 7; i++) {
+                const rx = ((hash(i * 199 + 77) * 2000 - camX + 3000) % 2000) - 360;
+                const big = hash(i * 61 + 13) > 0.5;
+                const rw = big ? 8 : 4;
+                const rh = big ? 5 : 3;
+                ctx.fillStyle = '#4a5568';
+                ctx.fillRect(rx, earlyGroundY - rh, rw, rh);
+                ctx.fillStyle = '#718096'; // highlight top edge
+                ctx.fillRect(rx, earlyGroundY - rh, rw, 1);
+            }
+        }
+        // ── Grass tufts (grass / city) ──
+        if (hasVegetation) {
+            for (let i = 0; i < 18; i++) {
+                const gx = ((hash(i * 157 + 33) * 2200 - camX + 3000) % 2200) - 460;
+                const sway = Math.sin(animFrame * 0.06 + i * 2.1) * 1.2;
+                ctx.strokeStyle = biome === 'city' ? '#4a7a3a' : '#3a8a2a';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(gx, earlyGroundY);
+                ctx.lineTo(gx + sway, earlyGroundY - 3 - hash(i * 43) * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(gx + 2, earlyGroundY);
+                ctx.lineTo(gx + 2 - sway * 0.7, earlyGroundY - 2 - hash(i * 71) * 2);
+                ctx.stroke();
+            }
+        }
+        // ── Flowers (grass only — not lava/space/ocean/city) ──
+        if (biome === 'grass') {
+            const flowerColors = ['#e53e3e', '#ecc94b', '#ed64a6', '#ffffff', '#f6ad55', '#9f7aea'];
+            for (let i = 0; i < 8; i++) {
+                const fx = ((hash(i * 211 + 59) * 2000 - camX + 3000) % 2000) - 360;
+                const color = flowerColors[Math.floor(hash(i * 97 + 17) * flowerColors.length)];
+                ctx.fillStyle = color;
+                ctx.fillRect(fx, earlyGroundY - 3, 2, 2);
+                ctx.fillStyle = '#3a8a2a'; // tiny stem
+                ctx.fillRect(fx, earlyGroundY - 1, 1, 1);
+            }
         }
     }
     // ════════════════════════════════════════════════════════════════
@@ -2900,22 +3074,40 @@ function renderFrame() {
     ctx.moveTo(0, 40);
     ctx.lineTo(WIDTH, 40);
     ctx.stroke();
-    // Left: "K:BOT LIVE" in 24px bold accent
+    // Left: "K:BOT" in accent + pulsing red LIVE dot
     ctx.font = 'bold 24px "Courier New", monospace';
     ctx.fillStyle = COLORS.accent;
-    ctx.fillText('K:BOT LIVE', 12, 28);
-    // Center: current segment name
+    ctx.fillText('K:BOT', 12, 28);
+    // Pulsing red LIVE indicator
+    const livePulse = 0.6 + 0.4 * Math.sin(animFrame * 0.15);
+    ctx.beginPath();
+    ctx.arc(130, 22, 5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(248,81,73,${livePulse})`;
+    ctx.fill();
+    ctx.fillStyle = COLORS.red;
+    ctx.font = 'bold 16px "Courier New", monospace';
+    ctx.fillText('LIVE', 140, 28);
+    // Center: segment name + weather/time info
     const segLabel = SEGMENT_LABELS[agenda.currentSegment];
+    const weatherLabel = weatherSystem ? `${weatherSystem.getWeather().type.replace('_', ' ')} | ${weatherSystem.getTimeOfDay()}` : '';
+    const centerText = weatherLabel ? `${segLabel}  ~  ${weatherLabel}` : segLabel;
     ctx.fillStyle = COLORS.textDim;
     ctx.font = '14px "Courier New", monospace';
-    const segW = ctx.measureText(segLabel).width;
-    ctx.fillText(segLabel, (WIDTH - segW) / 2, 26);
-    // Right: timer
+    const segW = ctx.measureText(centerText).width;
+    ctx.fillText(centerText, (WIDTH - segW) / 2, 26);
+    // Right: timer + viewer count
     const elapsed = Math.floor((Date.now() - charState.startTime) / 1000);
     const timeStr = `${String(Math.floor(elapsed / 3600)).padStart(2, '0')}:${String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0')}:${String(elapsed % 60).padStart(2, '0')}`;
     ctx.fillStyle = COLORS.textDim;
     ctx.font = '16px "Courier New", monospace';
     ctx.fillText(timeStr, WIDTH - 160, 26);
+    // Viewer count badge
+    const viewerCount = Object.keys(memory.users).length;
+    if (viewerCount > 0) {
+        ctx.fillStyle = hexToRgba(COLORS.green, 0.8);
+        ctx.font = 'bold 12px "Courier New", monospace';
+        ctx.fillText(`${viewerCount} viewers`, WIDTH - 260, 26);
+    }
     // ── Audio atmosphere description (top-center, italic, fades) ──
     if (activeAudioDescription) {
         ctx.save();
@@ -2959,9 +3151,11 @@ function renderFrame() {
         if (recent.length > 0) {
             ctx.save();
             ctx.globalAlpha = chatAlpha;
-            // Semi-transparent background
-            ctx.fillStyle = 'rgba(13,17,23,0.6)';
+            // Semi-transparent background with accent border
+            ctx.fillStyle = 'rgba(13,17,23,0.65)';
             ctx.fillRect(chatOverlayX, chatOverlayY, chatOverlayW, chatOverlayH);
+            ctx.fillStyle = hexToRgba(COLORS.accent, 0.4);
+            ctx.fillRect(chatOverlayX, chatOverlayY, 3, chatOverlayH);
             // Messages
             for (let i = 0; i < recent.length; i++) {
                 const msg = recent[i];
@@ -3006,7 +3200,7 @@ function renderFrame() {
         // Measure text to get bubble width
         const speechW = Math.min(maxBubbleW, ctx.measureText(charState.speech).width + 40);
         const bubbleX = Math.floor((WIDTH - speechW) / 2);
-        const bubbleY = HEIGHT - 80;
+        const bubbleY = HEIGHT - 130;
         // Word-wrap to calculate height
         const words = charState.speech.split(' ');
         let testLine = '';
@@ -3122,10 +3316,12 @@ function renderFrame() {
             ctx.fillText(recentContent[i].slice(0, 65), collabX + 6, collabY + 42 + i * 13);
         }
     }
-    // ── Website URL (bottom-right, subtle) ──
-    ctx.fillStyle = hexToRgba(COLORS.accent, 0.6);
-    ctx.font = 'bold 13px "Courier New", monospace';
-    ctx.fillText('kernel.chat', WIDTH - 130, HEIGHT - 10);
+    // ── Website URL (bottom-right, branded) ──
+    ctx.fillStyle = hexToRgba(COLORS.accent, 0.35);
+    ctx.font = 'bold 16px "Courier New", monospace';
+    ctx.fillText('kernel.chat', WIDTH - 140, HEIGHT - 14);
+    ctx.fillStyle = hexToRgba(COLORS.accent, 0.8);
+    ctx.fillRect(WIDTH - 142, HEIGHT - 10, 130, 2);
     // ════════════════════════════════════════════════════════════════
     // LAYER 6: ON-DEMAND PANELS (shown for 5 seconds when triggered)
     // ════════════════════════════════════════════════════════════════
@@ -3217,6 +3413,15 @@ function renderFrame() {
     ctx.strokeStyle = hexToRgba(borderColorRaw, borderPulseAlpha);
     ctx.lineWidth = 2;
     ctx.strokeRect(1, 1, WIDTH - 2, HEIGHT - 2);
+    // ════════════════════════════════════════════════════════════════
+    // LAYER 7.5: WEATHER PARTICLES + OVERLAY + COMMANDS
+    // ════════════════════════════════════════════════════════════════
+    if (weatherSystem)
+        weatherSystem.render(ctx, WIDTH, HEIGHT);
+    if (streamCommands)
+        streamCommands.render(ctx, WIDTH, HEIGHT);
+    if (overlay)
+        overlay.render(ctx, WIDTH, HEIGHT);
     // ════════════════════════════════════════════════════════════════
     // LAYER 8: POST-PROCESSING
     // ════════════════════════════════════════════════════════════════
@@ -3314,6 +3519,12 @@ function startChatPoll() {
                     // Track viewer in social engine
                     if (socialEngine)
                         trackViewer(socialEngine, msg.username, msg.platform, msg.text);
+                    // VOD — track chat for highlight detection
+                    if (vodSystem && vodSystem.isRecording())
+                        vodSystem.onChatMessage(msg.username);
+                    // Audio SFX — blip on chat
+                    if (audioEngine)
+                        triggerSFX(audioEngine, 'chat');
                     // Phase 1: !sleep command — trigger dreaming mode
                     if (msg.text.toLowerCase().trim() === '!sleep') {
                         charState.mood = 'dreaming';
@@ -3391,6 +3602,35 @@ function startChatPoll() {
                             }
                         }
                     }
+                    // Stream commands (!duel, !slots, !inventory, !weather vote, etc.)
+                    let cmdResult = null;
+                    if (streamCommands && !brainResult && !intelResult && !tileResult && !worldResult) {
+                        const cr = streamCommands.handleMessage(msg.username, msg.text, msg.platform);
+                        if (cr) {
+                            cmdResult = cr.response;
+                            // Trigger overlay alerts for special events
+                            if (overlay && cr.response.includes('JACKPOT')) {
+                                overlay.queueAlert({ type: 'achievement', username: msg.username, title: 'JACKPOT!', message: cr.response });
+                            }
+                            if (overlay && cr.response.includes('BOSS')) {
+                                overlay.queueAlert({ type: 'raid', username: msg.username, title: 'BOSS FIGHT!', message: 'A boss has appeared!' });
+                            }
+                            // Audio SFX for command results
+                            if (audioEngine) {
+                                if (cr.response.includes('win') || cr.response.includes('won'))
+                                    triggerSFX(audioEngine, 'achievement');
+                                if (cr.response.includes('BOSS'))
+                                    triggerSFX(audioEngine, 'boss');
+                            }
+                        }
+                    }
+                    // Weather system commands (!weather, !time)
+                    let weatherResult = null;
+                    if (weatherSystem && !brainResult && !intelResult && !tileResult && !worldResult && !cmdResult) {
+                        const weatherCmd = weatherSystem.handleCommand(msg.text, msg.text.slice(1));
+                        if (weatherCmd && weatherCmd !== msg.text)
+                            weatherResult = weatherCmd;
+                    }
                     // React
                     charState.mood = 'talking';
                     const responsePromise = brainResult
@@ -3401,7 +3641,13 @@ function startChatPoll() {
                                 ? Promise.resolve(tileResult)
                                 : worldResult
                                     ? Promise.resolve(worldResult)
-                                    : generateResponse(msg.username, msg.text, msg.platform);
+                                    : cmdResult
+                                        ? Promise.resolve(cmdResult)
+                                        : weatherResult
+                                            ? Promise.resolve(weatherResult)
+                                            : chatAI
+                                                ? chatAI.processMessage(msg.username, msg.text, msg.platform).then(r => r || generateResponse(msg.username, msg.text, msg.platform))
+                                                : generateResponse(msg.username, msg.text, msg.platform);
                     responsePromise.then(response => {
                         queueSpeech(`@${msg.username}: ${response}`, 'talking', 80, 48, 'chat-response');
                         memory.totalResponses++;
@@ -3771,23 +4017,26 @@ function startStream(platforms) {
         const tee = platforms.map(p => `[f=flv]${p.endpoint}/${p.key}`).join('|');
         outputArgs = ['-f', 'tee', tee];
     }
+    const usePCMAudio = audioEngine?.pcmEnabled ?? false;
     const ffmpegArgs = [
         '-f', 'rawvideo', '-pix_fmt', 'rgb24',
         '-s', `${WIDTH}x${HEIGHT}`, '-r', String(FPS),
         '-i', 'pipe:0',
-        '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo',
-        '-c:v', 'libx264', '-preset', 'veryfast',
-        '-b:v', '2000k', '-maxrate', '2000k', '-bufsize', '4000k',
-        '-g', String(FPS * 2), '-keyint_min', String(FPS * 2),
-        '-pix_fmt', 'yuv420p',
-        '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
-        '-shortest',
     ];
+    // If PCM audio, use pipe:3. Otherwise use anullsrc.
+    if (usePCMAudio) {
+        ffmpegArgs.push('-f', 'f32le', '-ar', '44100', '-ac', '1', '-i', 'pipe:3');
+    }
+    else {
+        ffmpegArgs.push('-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo');
+    }
+    ffmpegArgs.push('-c:v', 'libx264', '-preset', 'veryfast', '-b:v', '2000k', '-maxrate', '2000k', '-bufsize', '4000k', '-g', String(FPS * 2), '-keyint_min', String(FPS * 2), '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-ar', '44100', '-shortest');
     if (platforms.length > 1) {
         ffmpegArgs.push('-map', '0:v', '-map', '1:a');
     }
     ffmpegArgs.push(...outputArgs);
-    const proc = spawn('ffmpeg', ffmpegArgs, { stdio: ['pipe', 'pipe', 'pipe'] });
+    const stdioConfig = usePCMAudio ? ['pipe', 'pipe', 'pipe', 'pipe'] : ['pipe', 'pipe', 'pipe'];
+    const proc = spawn('ffmpeg', ffmpegArgs, { stdio: stdioConfig });
     frameTimer = setInterval(() => {
         if (!proc.stdin || proc.stdin.destroyed)
             return;
@@ -3797,6 +4046,16 @@ function startStream(platforms) {
             charState.frameCount++;
         }
         catch { }
+        // Write real PCM audio samples to pipe:3 when available
+        if (usePCMAudio && audioEngine && audioEngine.pcmEnabled && proc.stdio[3] && !proc.stdio[3].destroyed) {
+            const samplesPerFrame = Math.floor(44100 / FPS); // ~7350 samples per frame at 6fps
+            const audioBuf = generateAudioBuffer(audioEngine, samplesPerFrame, 44100);
+            const buffer = Buffer.from(audioBuf.buffer, audioBuf.byteOffset, audioBuf.byteLength);
+            try {
+                proc.stdio[3].write(buffer);
+            }
+            catch { }
+        }
     }, 1000 / FPS);
     return proc;
 }
@@ -3868,8 +4127,19 @@ export function registerStreamRendererTools() {
             evolutionEngine = loadEvolutionState() || initEvolutionEngine();
             narrativeEngine = loadNarrative() || createNarrativeEngine();
             audioEngine = createAudioEngine();
+            audioEngine.pcmEnabled = true;
+            audioEngine.musicEnabled = true;
             socialEngine = loadSocialEngine();
             activeAudioDescription = null;
+            // Init new systems (v2)
+            overlay = getOverlay();
+            weatherSystem = getWeatherSystem();
+            chatAI = new StreamChatAI();
+            chatAI.loadMemory();
+            vodSystem = new StreamVOD();
+            vodSystem.loadState();
+            streamCommands = getStreamCommands();
+            streamCommands.loadState();
             agenda = {
                 currentIndex: 0,
                 currentSegment: 'welcome',
@@ -3922,6 +4192,15 @@ export function registerStreamRendererTools() {
                 saveNarrative(narrativeEngine);
             if (socialEngine)
                 saveSocialEngine(socialEngine);
+            // Save new systems
+            if (chatAI)
+                chatAI.saveMemory();
+            if (vodSystem && vodSystem.isRecording())
+                vodSystem.stopRecording();
+            if (vodSystem)
+                vodSystem.saveState();
+            if (streamCommands)
+                streamCommands.saveState();
             const elapsed = Math.floor((Date.now() - charState.startTime) / 60000);
             return `Stream stopped after ${elapsed}m.\nFrames: ${charState.frameCount}\nMessages: ${memory.totalMessages}\nUsers learned: ${Object.keys(memory.users).length}\nFacts: ${memory.sessionFacts.length}\nSegments completed: ${agenda.currentIndex}`;
         },

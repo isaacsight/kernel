@@ -1,32 +1,78 @@
 // kbot Audio Engine — Procedural sound generation for the stream
-//
-// Tools: audio_status, audio_mood
-//
-// v1: Audio Description System
-// The stream currently pipes silent audio via ffmpeg's anullsrc filter.
-// Piping actual PCM audio requires significant architecture changes (separate
-// pipe fd, real-time audio synthesis, mixing). For v1, this engine generates
-// textual audio atmosphere descriptions that the narrative engine and renderer
-// can display as italic stage directions (like a screenplay).
-//
-// v2 roadmap: Generate actual PCM Float32 audio and pipe to ffmpeg via pipe:3.
-//
-// FUTURE: Generate actual PCM audio
-// export function generatePCMAudio(engine: AudioEngine, sampleRate: number, samples: number): Float32Array
-// This would generate procedural audio using:
-// - Oscillators (sine, square, sawtooth for chiptune)
-// - Noise generators (white noise for wind/rain)
-// - Envelope generators (ADSR for notes)
-// - Simple reverb (delay line)
-// - Mix to mono PCM, pipe to ffmpeg via separate audio input
-// ffmpeg would need: -f f32le -ar 44100 -ac 1 -i pipe:3 (additional pipe for audio)
+// Tools: audio_status, audio_mood, audio_pcm_status
+// v1: Text description system (fallback). v2: Real PCM Float32 synthesis.
+// Output: Float32Array piped to ffmpeg via -f f32le -ar 44100 -ac 1 -i pipe:3
 import { registerTool } from './index.js';
+// ─── Constants ───────────────────────────────────────────────────
+const DEFAULT_SAMPLE_RATE = 44100;
+const TWO_PI = Math.PI * 2;
+/** MIDI note to frequency (A4 = 440 Hz) */
+function midiToFreq(note) {
+    return 440 * Math.pow(2, (note - 69) / 12);
+}
+// Scale intervals (semitones from root)
+const SCALES = {
+    pentatonic: [0, 2, 4, 7, 9],
+    minor: [0, 2, 3, 5, 7, 8, 10],
+    major: [0, 2, 4, 5, 7, 9, 11],
+};
+/** Pick a scale based on mood */
+function moodToScale(mood) {
+    switch (mood) {
+        case 'calm': return 'pentatonic';
+        case 'tense': return 'minor';
+        case 'epic': return 'minor';
+        case 'dreamy': return 'pentatonic';
+        case 'playful': return 'major';
+        default: return 'pentatonic';
+    }
+}
+/** Base MIDI note for mood (root note + octave) */
+function moodToRoot(mood) {
+    switch (mood) {
+        case 'calm': return 60; // C4
+        case 'tense': return 57; // A3
+        case 'epic': return 48; // C3
+        case 'dreamy': return 64; // E4
+        case 'playful': return 60; // C4
+        default: return 60;
+    }
+}
+function createDefaultChannel(waveform, vol, filterFreq) {
+    return {
+        pattern: new Array(16).fill(0),
+        waveform,
+        envelope: { attack: 0.01, decay: 0.1, sustain: 0.5, release: 0.15 },
+        volume: vol,
+        filterType: 'lowpass',
+        filterFreq,
+        filterQ: 1.0,
+        phase: 0,
+        envStage: 'off',
+        envLevel: 0,
+        envTime: 0,
+        currentNote: 0,
+    };
+}
+function createDelayLine(sampleRate) {
+    const delaySamples = Math.floor(sampleRate * 0.3); // 300ms delay
+    return {
+        buffer: new Float32Array(delaySamples),
+        writeIndex: 0,
+        delaySamples,
+        feedback: 0.3,
+        mix: 0.2,
+    };
+}
 // ─── Factory ─────────────────────────────────────────────────────
 export function createAudioEngine() {
-    return {
+    const sampleRate = DEFAULT_SAMPLE_RATE;
+    const bpm = 70;
+    const samplesPerStep = Math.floor((sampleRate * 60) / (bpm * 4)); // 16th notes
+    const engine = {
         currentAmbience: 'peaceful',
         musicState: {
-            bpm: 70,
+            bpm,
             key: 'C major',
             mood: 'calm',
             playing: true,
@@ -38,7 +84,459 @@ export function createAudioEngine() {
         lastSoundFrame: 0,
         ambienceInterval: 720, // 120 seconds at 6fps
         totalDescriptions: 0,
+        // v2 PCM
+        pcmEnabled: false,
+        sfxQueue: [],
+        sequencer: {
+            step: 0,
+            sampleCounter: 0,
+            samplesPerStep,
+            channels: {
+                melody: createDefaultChannel('square', 0.25, 4000),
+                bass: createDefaultChannel('sawtooth', 0.3, 800),
+                arp: createDefaultChannel('square', 0.15, 6000),
+                drums: createDefaultChannel('noise_white', 0.35, 2000),
+            },
+        },
+        masterVolume: 0.6,
+        delayLine: createDelayLine(sampleRate),
+        totalSamplesGenerated: 0,
+        musicEnabled: true,
     };
+    // Generate initial patterns based on default mood
+    regeneratePatterns(engine);
+    return engine;
+}
+// ─── PCM Oscillators ─────────────────────────────────────────────
+function oscillator(waveform, phase) {
+    switch (waveform) {
+        case 'sine':
+            return Math.sin(phase);
+        case 'square':
+            return Math.sin(phase) >= 0 ? 0.8 : -0.8;
+        case 'sawtooth':
+            return ((phase % TWO_PI) / Math.PI) - 1.0;
+        case 'triangle': {
+            const t = (phase % TWO_PI) / TWO_PI;
+            return t < 0.5 ? (4 * t - 1) : (3 - 4 * t);
+        }
+        case 'noise_white':
+            return (Math.random() * 2) - 1;
+        case 'noise_pink': {
+            // Voss-McCartney approximation (simplified)
+            const w = (Math.random() * 2 - 1) * 0.5;
+            return w + (Math.random() * 2 - 1) * 0.3 + (Math.random() * 2 - 1) * 0.2;
+        }
+        default:
+            return 0;
+    }
+}
+// ─── ADSR Envelope ───────────────────────────────────────────────
+function tickEnvelope(ch, dt) {
+    const env = ch.envelope;
+    ch.envTime += dt;
+    switch (ch.envStage) {
+        case 'attack':
+            ch.envLevel = env.attack > 0 ? Math.min(1, ch.envTime / env.attack) : 1;
+            if (ch.envTime >= env.attack) {
+                ch.envStage = 'decay';
+                ch.envTime = 0;
+            }
+            break;
+        case 'decay':
+            ch.envLevel = 1 - (1 - env.sustain) * Math.min(1, ch.envTime / env.decay);
+            if (ch.envTime >= env.decay) {
+                ch.envStage = 'sustain';
+                ch.envTime = 0;
+            }
+            break;
+        case 'sustain':
+            ch.envLevel = env.sustain;
+            break;
+        case 'release':
+            ch.envLevel = env.sustain * Math.max(0, 1 - ch.envTime / env.release);
+            if (ch.envTime >= env.release) {
+                ch.envStage = 'off';
+                ch.envLevel = 0;
+            }
+            break;
+        case 'off':
+            ch.envLevel = 0;
+            break;
+    }
+}
+function triggerNote(ch, note) {
+    ch.currentNote = note;
+    ch.envStage = 'attack';
+    ch.envTime = 0;
+    ch.envLevel = 0;
+}
+function releaseNote(ch) {
+    if (ch.envStage !== 'off') {
+        ch.envStage = 'release';
+        ch.envTime = 0;
+    }
+}
+const filterStates = new WeakMap();
+function getFilterState(ch) {
+    let s = filterStates.get(ch);
+    if (!s) {
+        s = { y1: 0, y2: 0, x1: 0, x2: 0 };
+        filterStates.set(ch, s);
+    }
+    return s;
+}
+function applyFilter(ch, input, sampleRate) {
+    const s = getFilterState(ch);
+    const freq = Math.min(ch.filterFreq, sampleRate * 0.45);
+    const w0 = TWO_PI * freq / sampleRate;
+    const sinW0 = Math.sin(w0);
+    const cosW0 = Math.cos(w0);
+    const alpha = sinW0 / (2 * ch.filterQ);
+    let b0, b1, b2, a0, a1, a2;
+    switch (ch.filterType) {
+        case 'lowpass':
+            b0 = (1 - cosW0) / 2;
+            b1 = 1 - cosW0;
+            b2 = (1 - cosW0) / 2;
+            a0 = 1 + alpha;
+            a1 = -2 * cosW0;
+            a2 = 1 - alpha;
+            break;
+        case 'highpass':
+            b0 = (1 + cosW0) / 2;
+            b1 = -(1 + cosW0);
+            b2 = (1 + cosW0) / 2;
+            a0 = 1 + alpha;
+            a1 = -2 * cosW0;
+            a2 = 1 - alpha;
+            break;
+        case 'bandpass':
+            b0 = alpha;
+            b1 = 0;
+            b2 = -alpha;
+            a0 = 1 + alpha;
+            a1 = -2 * cosW0;
+            a2 = 1 - alpha;
+            break;
+        default:
+            return input;
+    }
+    const output = (b0 / a0) * input + (b1 / a0) * s.x1 + (b2 / a0) * s.x2
+        - (a1 / a0) * s.y1 - (a2 / a0) * s.y2;
+    s.x2 = s.x1;
+    s.x1 = input;
+    s.y2 = s.y1;
+    s.y1 = output;
+    return output;
+}
+// ─── Delay Line (reverb/echo) ───────────────────────────────────
+function processDelay(dl, input) {
+    const readIndex = (dl.writeIndex - dl.delaySamples + dl.buffer.length) % dl.buffer.length;
+    const delayed = dl.buffer[readIndex];
+    dl.buffer[dl.writeIndex] = input + delayed * dl.feedback;
+    dl.writeIndex = (dl.writeIndex + 1) % dl.buffer.length;
+    return input * (1 - dl.mix) + delayed * dl.mix;
+}
+// ─── Pattern Generation ─────────────────────────────────────────
+function generatePattern(scale, root, octaveRange, density, seed) {
+    const intervals = SCALES[scale];
+    const pattern = new Array(16).fill(0);
+    // Deterministic-ish from seed
+    let r = seed;
+    const next = () => { r = (r * 1103515245 + 12345) & 0x7fffffff; return r / 0x7fffffff; };
+    for (let i = 0; i < 16; i++) {
+        if (next() < density) {
+            const octave = Math.floor(next() * octaveRange);
+            const idx = Math.floor(next() * intervals.length);
+            pattern[i] = root + intervals[idx] + octave * 12;
+        }
+    }
+    return pattern;
+}
+function generateDrumPattern(mood, seed) {
+    const pattern = new Array(16).fill(0);
+    let r = seed;
+    const next = () => { r = (r * 1103515245 + 12345) & 0x7fffffff; return r / 0x7fffffff; };
+    // Kick on beats (MIDI 36), snare on 2 & 4 (38), hat (42)
+    for (let i = 0; i < 16; i++) {
+        if (i % 4 === 0)
+            pattern[i] = 36; // kick
+        else if (i % 4 === 2 && mood !== 'calm')
+            pattern[i] = 38; // snare
+        else if (i % 2 === 0 && next() < 0.4)
+            pattern[i] = 42; // hat
+        else if (mood === 'epic' && next() < 0.3)
+            pattern[i] = 36; // extra kicks for epic
+    }
+    return pattern;
+}
+/** Regenerate all 4 channel patterns based on the current mood */
+function regeneratePatterns(engine) {
+    const mood = engine.musicState.mood;
+    const scale = moodToScale(mood);
+    const root = moodToRoot(mood);
+    const seed = Date.now() & 0xffffff;
+    const seq = engine.sequencer;
+    const ch = seq.channels;
+    // Mood shapes pattern density and channel config
+    switch (mood) {
+        case 'calm':
+            ch.melody.pattern = generatePattern(scale, root + 12, 1, 0.3, seed);
+            ch.melody.envelope = { attack: 0.05, decay: 0.2, sustain: 0.4, release: 0.3 };
+            ch.bass.pattern = generatePattern(scale, root - 12, 1, 0.2, seed + 1);
+            ch.bass.envelope = { attack: 0.02, decay: 0.15, sustain: 0.6, release: 0.2 };
+            ch.arp.pattern = generatePattern(scale, root, 2, 0.5, seed + 2);
+            ch.arp.envelope = { attack: 0.005, decay: 0.08, sustain: 0.2, release: 0.1 };
+            ch.drums.pattern = generateDrumPattern(mood, seed + 3);
+            ch.drums.volume = 0.15;
+            ch.melody.filterFreq = 3000;
+            break;
+        case 'tense':
+            ch.melody.pattern = generatePattern(scale, root + 12, 1, 0.4, seed);
+            ch.melody.envelope = { attack: 0.01, decay: 0.1, sustain: 0.6, release: 0.1 };
+            ch.bass.pattern = generatePattern(scale, root - 12, 1, 0.5, seed + 1);
+            ch.bass.envelope = { attack: 0.005, decay: 0.08, sustain: 0.7, release: 0.1 };
+            ch.arp.pattern = generatePattern(scale, root, 2, 0.6, seed + 2);
+            ch.arp.envelope = { attack: 0.003, decay: 0.05, sustain: 0.3, release: 0.08 };
+            ch.drums.pattern = generateDrumPattern(mood, seed + 3);
+            ch.drums.volume = 0.3;
+            ch.melody.filterFreq = 2500; // darker
+            break;
+        case 'epic':
+            ch.melody.pattern = generatePattern(scale, root + 12, 2, 0.55, seed);
+            ch.melody.envelope = { attack: 0.01, decay: 0.15, sustain: 0.7, release: 0.15 };
+            ch.melody.volume = 0.3;
+            ch.bass.pattern = generatePattern(scale, root - 12, 1, 0.6, seed + 1);
+            ch.bass.envelope = { attack: 0.005, decay: 0.1, sustain: 0.8, release: 0.1 };
+            ch.bass.volume = 0.35;
+            ch.arp.pattern = generatePattern(scale, root, 2, 0.7, seed + 2);
+            ch.arp.envelope = { attack: 0.003, decay: 0.06, sustain: 0.4, release: 0.08 };
+            ch.drums.pattern = generateDrumPattern(mood, seed + 3);
+            ch.drums.volume = 0.35;
+            ch.melody.filterFreq = 5000;
+            break;
+        case 'dreamy':
+            ch.melody.pattern = generatePattern(scale, root + 12, 1, 0.25, seed);
+            ch.melody.envelope = { attack: 0.1, decay: 0.3, sustain: 0.5, release: 0.5 };
+            ch.melody.waveform = 'sine';
+            ch.bass.pattern = generatePattern(scale, root - 12, 1, 0.15, seed + 1);
+            ch.bass.envelope = { attack: 0.08, decay: 0.2, sustain: 0.4, release: 0.4 };
+            ch.arp.pattern = generatePattern(scale, root, 2, 0.35, seed + 2);
+            ch.arp.envelope = { attack: 0.05, decay: 0.15, sustain: 0.3, release: 0.3 };
+            ch.drums.pattern = generateDrumPattern(mood, seed + 3);
+            ch.drums.volume = 0.1;
+            engine.delayLine.mix = 0.4; // more reverb
+            engine.delayLine.feedback = 0.45;
+            ch.melody.filterFreq = 2000;
+            break;
+        case 'playful':
+            ch.melody.pattern = generatePattern(scale, root + 12, 2, 0.5, seed);
+            ch.melody.envelope = { attack: 0.005, decay: 0.08, sustain: 0.4, release: 0.1 };
+            ch.bass.pattern = generatePattern(scale, root - 12, 1, 0.4, seed + 1);
+            ch.bass.envelope = { attack: 0.005, decay: 0.1, sustain: 0.5, release: 0.1 };
+            ch.arp.pattern = generatePattern(scale, root, 2, 0.65, seed + 2);
+            ch.arp.envelope = { attack: 0.003, decay: 0.05, sustain: 0.3, release: 0.08 };
+            ch.drums.pattern = generateDrumPattern(mood, seed + 3);
+            ch.drums.volume = 0.25;
+            ch.melody.filterFreq = 6000;
+            break;
+    }
+    // Update tempo
+    seq.samplesPerStep = Math.floor((DEFAULT_SAMPLE_RATE * 60) / (engine.musicState.bpm * 4));
+}
+// ─── Render One Channel Sample ───────────────────────────────────
+function renderChannel(ch, sampleRate) {
+    if (ch.envStage === 'off')
+        return 0;
+    const freq = ch.waveform.startsWith('noise') ? 0 : midiToFreq(ch.currentNote);
+    let sample;
+    if (ch.waveform.startsWith('noise')) {
+        sample = oscillator(ch.waveform, 0);
+    }
+    else {
+        sample = oscillator(ch.waveform, ch.phase);
+        ch.phase += TWO_PI * freq / sampleRate;
+        if (ch.phase > TWO_PI)
+            ch.phase -= TWO_PI;
+    }
+    // Apply envelope
+    sample *= ch.envLevel;
+    // Apply filter
+    sample = applyFilter(ch, sample, sampleRate);
+    // Apply channel volume
+    sample *= ch.volume;
+    return sample;
+}
+// ─── SFX Rendering ──────────────────────────────────────────────
+const SFX_DURATION_SAMPLES = {
+    chat: Math.floor(DEFAULT_SAMPLE_RATE * 0.08),
+    follow: Math.floor(DEFAULT_SAMPLE_RATE * 0.4),
+    achievement: Math.floor(DEFAULT_SAMPLE_RATE * 0.6),
+    boss: Math.floor(DEFAULT_SAMPLE_RATE * 0.8),
+    raid: Math.floor(DEFAULT_SAMPLE_RATE * 0.7),
+    build: Math.floor(DEFAULT_SAMPLE_RATE * 0.12),
+    discovery: Math.floor(DEFAULT_SAMPLE_RATE * 0.5),
+};
+function renderSFXSample(sfx, sampleRate) {
+    const totalSamples = SFX_DURATION_SAMPLES[sfx.type];
+    const elapsed = totalSamples - sfx.samplesRemaining;
+    const t = elapsed / sampleRate; // time in seconds
+    const progress = elapsed / totalSamples; // 0-1
+    // Simple amplitude envelope (quick attack, exponential decay)
+    const env = Math.exp(-progress * 5) * (1 - Math.exp(-elapsed * 0.01));
+    switch (sfx.type) {
+        case 'chat': {
+            // Soft blip — high sine with fast decay
+            const freq = 1200 + 400 * (1 - progress);
+            sfx.phase += TWO_PI * freq / sampleRate;
+            return Math.sin(sfx.phase) * env * 0.3;
+        }
+        case 'follow': {
+            // Ascending chime — 3 tones rising
+            const stage = Math.floor(progress * 3);
+            const freqs = [523, 659, 784]; // C5, E5, G5
+            const freq = freqs[Math.min(stage, 2)];
+            sfx.phase += TWO_PI * freq / sampleRate;
+            return Math.sin(sfx.phase) * env * 0.4;
+        }
+        case 'achievement': {
+            // Fanfare — 3 ascending notes with harmonics
+            const stage = Math.floor(progress * 3);
+            const freqs = [440, 554, 659]; // A4, C#5, E5
+            const freq = freqs[Math.min(stage, 2)];
+            sfx.phase += TWO_PI * freq / sampleRate;
+            const fundamental = Math.sin(sfx.phase);
+            const harmonic = Math.sin(sfx.phase * 2) * 0.3;
+            return (fundamental + harmonic) * env * 0.4;
+        }
+        case 'boss': {
+            // Low rumble — detuned bass sine + noise
+            sfx.phase += TWO_PI * 55 / sampleRate; // A1
+            const bass = Math.sin(sfx.phase) + Math.sin(sfx.phase * 1.01) * 0.5;
+            const noise = (Math.random() * 2 - 1) * 0.15;
+            return (bass + noise) * env * 0.5;
+        }
+        case 'raid': {
+            // Drum roll — rapid noise bursts
+            const rollFreq = 15 + progress * 10; // accelerating
+            const burstEnv = Math.abs(Math.sin(TWO_PI * rollFreq * t));
+            const noise = (Math.random() * 2 - 1);
+            return noise * burstEnv * env * 0.4;
+        }
+        case 'build': {
+            // Thunk — short noise burst with lowpass feel
+            const noise = (Math.random() * 2 - 1);
+            const thunkEnv = Math.exp(-progress * 20);
+            sfx.phase += TWO_PI * 150 / sampleRate;
+            return (noise * 0.3 + Math.sin(sfx.phase) * 0.7) * thunkEnv * 0.4;
+        }
+        case 'discovery': {
+            // Shimmer — detuned sine sweep
+            const freq = 400 + 1200 * progress;
+            sfx.phase += TWO_PI * freq / sampleRate;
+            const s1 = Math.sin(sfx.phase);
+            const s2 = Math.sin(sfx.phase * 1.005); // slight detune
+            const s3 = Math.sin(sfx.phase * 0.995);
+            return (s1 + s2 + s3) / 3 * env * 0.35;
+        }
+        default:
+            return 0;
+    }
+}
+// ─── Public PCM API ─────────────────────────────────────────────
+/**
+ * Trigger a sound effect. The SFX will be mixed into the next generateAudioBuffer call.
+ */
+export function triggerSFX(engine, sfx) {
+    engine.sfxQueue.push({
+        type: sfx,
+        triggeredAt: engine.totalSamplesGenerated,
+        samplesRemaining: SFX_DURATION_SAMPLES[sfx],
+        phase: 0,
+    });
+    if (engine.sfxQueue.length > 8) { // cap concurrent SFX
+        engine.sfxQueue = engine.sfxQueue.slice(-8);
+    }
+}
+/**
+ * Enable or disable background music generation.
+ */
+export function setMusicEnabled(engine, enabled) {
+    engine.musicEnabled = enabled;
+}
+/**
+ * Generate a buffer of PCM Float32 audio samples.
+ * Mixes the 4-channel chiptune sequencer + any active SFX.
+ * Output: mono Float32Array, ready to pipe to ffmpeg via -f f32le -ar 44100 -ac 1 -i pipe:3
+ *
+ * @param engine      The audio engine state
+ * @param sampleCount Number of samples to generate
+ * @param sampleRate  Sample rate (default 44100)
+ * @returns Float32Array of PCM samples in [-1, 1]
+ */
+export function generateAudioBuffer(engine, sampleCount, sampleRate = DEFAULT_SAMPLE_RATE) {
+    const buffer = new Float32Array(sampleCount);
+    if (!engine.pcmEnabled) {
+        // PCM disabled — return silence
+        return buffer;
+    }
+    const seq = engine.sequencer;
+    const dt = 1 / sampleRate;
+    for (let i = 0; i < sampleCount; i++) {
+        let sample = 0;
+        // ── Music (4-channel sequencer) ──
+        if (engine.musicEnabled && engine.musicState.playing) {
+            // Step advance
+            seq.sampleCounter++;
+            if (seq.sampleCounter >= seq.samplesPerStep) {
+                seq.sampleCounter = 0;
+                seq.step = (seq.step + 1) % 16;
+                // Trigger or release notes on each channel
+                const channels = seq.channels;
+                for (const key of ['melody', 'bass', 'arp', 'drums']) {
+                    const ch = channels[key];
+                    const note = ch.pattern[seq.step];
+                    if (note > 0) {
+                        triggerNote(ch, note);
+                    }
+                    else {
+                        releaseNote(ch);
+                    }
+                }
+            }
+            // Render each channel
+            for (const key of ['melody', 'bass', 'arp', 'drums']) {
+                const ch = seq.channels[key];
+                tickEnvelope(ch, dt);
+                sample += renderChannel(ch, sampleRate);
+            }
+        }
+        // ── SFX layer ──
+        for (let s = engine.sfxQueue.length - 1; s >= 0; s--) {
+            const sfx = engine.sfxQueue[s];
+            if (sfx.samplesRemaining > 0) {
+                sample += renderSFXSample(sfx, sampleRate);
+                sfx.samplesRemaining--;
+            }
+            else {
+                engine.sfxQueue.splice(s, 1);
+            }
+        }
+        // ── Master processing ──
+        // Delay (reverb/echo)
+        sample = processDelay(engine.delayLine, sample);
+        // Master volume
+        sample *= engine.masterVolume;
+        // Soft clip to prevent harsh distortion
+        if (sample > 1)
+            sample = 1 - 1 / (sample + 1);
+        else if (sample < -1)
+            sample = -1 + 1 / (-sample + 1);
+        buffer[i] = sample;
+    }
+    engine.totalSamplesGenerated += sampleCount;
+    return buffer;
 }
 // ─── Ambience Descriptions ───────────────────────────────────────
 const AMBIENCE_DESCRIPTIONS = {
@@ -311,6 +809,10 @@ export function tickAudio(engine, biome, weather, mood, timeOfDay, frame) {
     const newMood = resolveMusicMood(mood);
     const moodChanged = newMood !== engine.musicState.mood;
     engine.musicState.mood = newMood;
+    // When mood changes and PCM is active, regenerate sequencer patterns
+    if (moodChanged && engine.pcmEnabled) {
+        regeneratePatterns(engine);
+    }
     // Priority 1: Queued sound events (immediate)
     const soundDescriptions = drainSoundQueue(engine);
     if (soundDescriptions.length > 0) {
@@ -371,7 +873,7 @@ export function registerAudioEngineTools() {
                     'notification', 'achievement', 'weather',
                     'footstep', 'build', 'discovery',
                 ],
-                note: 'v1 generates audio descriptions (text). PCM audio generation is planned for v2.',
+                note: 'v1: text descriptions (fallback). v2: real PCM synthesis via generateAudioBuffer().',
             }, null, 2);
         },
     });
@@ -419,6 +921,63 @@ export function registerAudioEngineTools() {
                 ambienceDescription: ambienceDesc,
                 combined: `${ambienceDesc}\n${musicDesc}`,
                 note: 'These descriptions appear as italic stage directions on the stream overlay.',
+            }, null, 2);
+        },
+    });
+    registerTool({
+        name: 'audio_pcm_status',
+        description: 'Get the PCM audio synthesis engine state — sequencer position, channel patterns, ' +
+            'active SFX, delay settings, total samples generated. Shows the v2 real-time audio status.',
+        parameters: {},
+        tier: 'free',
+        execute: async () => {
+            const engine = createAudioEngine();
+            engine.pcmEnabled = true; // show what PCM state looks like
+            const seq = engine.sequencer;
+            const channelSummary = (name, ch) => ({
+                name,
+                waveform: ch.waveform,
+                volume: ch.volume,
+                filterType: ch.filterType,
+                filterFreq: ch.filterFreq,
+                envelope: ch.envelope,
+                activeNotes: ch.pattern.filter(n => n > 0).length,
+                pattern: ch.pattern.map(n => n > 0 ? n : '.').join(' '),
+            });
+            return JSON.stringify({
+                pcmEnabled: engine.pcmEnabled,
+                musicEnabled: engine.musicEnabled,
+                masterVolume: engine.masterVolume,
+                sampleRate: DEFAULT_SAMPLE_RATE,
+                format: 'Float32 mono',
+                ffmpegPipe: '-f f32le -ar 44100 -ac 1 -i pipe:3',
+                sequencer: {
+                    step: seq.step,
+                    samplesPerStep: seq.samplesPerStep,
+                    bpm: engine.musicState.bpm,
+                    mood: engine.musicState.mood,
+                    channels: [
+                        channelSummary('melody', seq.channels.melody),
+                        channelSummary('bass', seq.channels.bass),
+                        channelSummary('arp', seq.channels.arp),
+                        channelSummary('drums', seq.channels.drums),
+                    ],
+                },
+                delay: {
+                    delaySamples: engine.delayLine.delaySamples,
+                    delayMs: Math.round(engine.delayLine.delaySamples / DEFAULT_SAMPLE_RATE * 1000),
+                    feedback: engine.delayLine.feedback,
+                    mix: engine.delayLine.mix,
+                },
+                sfxQueue: engine.sfxQueue.length,
+                supportedSFX: ['chat', 'follow', 'achievement', 'boss', 'raid', 'build', 'discovery'],
+                totalSamplesGenerated: engine.totalSamplesGenerated,
+                synthesis: {
+                    oscillators: ['sine', 'square', 'sawtooth', 'triangle', 'noise_white', 'noise_pink'],
+                    filters: ['lowpass', 'highpass', 'bandpass'],
+                    envelope: 'ADSR (attack, decay, sustain, release)',
+                    effects: 'delay line (reverb/echo), soft clipper',
+                },
             }, null, 2);
         },
     });

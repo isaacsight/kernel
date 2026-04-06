@@ -329,6 +329,12 @@ const LAZY_MODULE_IMPORTS = [
     { path: './coordination-engine.js', registerFn: 'registerCoordinationEngineTools' },
     { path: './foundation-engines.js', registerFn: 'registerFoundationEngineTools' },
     { path: './research-engine.js', registerFn: 'registerResearchEngineTools' },
+    { path: './stream-overlay.js', registerFn: 'registerOverlayTools' },
+    { path: './stream-weather.js', registerFn: 'registerStreamWeatherTools' },
+    { path: './stream-chat-ai.js', registerFn: 'registerStreamChatAITools' },
+    { path: './stream-vod.js', registerFn: 'registerStreamVODTools' },
+    { path: './stream-commands.js', registerFn: 'registerStreamCommandsTools' },
+    { path: '../coordinator.js', registerFn: 'registerCoordinatorTools' },
 ];
 /** Track whether lazy tools have been registered */
 let lazyToolsRegistered = false;

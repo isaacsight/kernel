@@ -11,6 +11,55 @@ export interface SoundEvent {
     type: SoundEventType;
     timestamp: number;
 }
+export type SFXType = 'chat' | 'follow' | 'achievement' | 'boss' | 'raid' | 'build' | 'discovery';
+export type WaveformType = 'sine' | 'square' | 'sawtooth' | 'triangle' | 'noise_white' | 'noise_pink';
+export type FilterType = 'lowpass' | 'highpass' | 'bandpass';
+export type ScaleType = 'pentatonic' | 'minor' | 'major';
+export interface ADSREnvelope {
+    attack: number;
+    decay: number;
+    sustain: number;
+    release: number;
+}
+export interface SFXEvent {
+    type: SFXType;
+    triggeredAt: number;
+    /** Remaining samples of this SFX (counts down to 0) */
+    samplesRemaining: number;
+    phase: number;
+}
+export interface SequencerChannel {
+    pattern: number[];
+    waveform: WaveformType;
+    envelope: ADSREnvelope;
+    volume: number;
+    filterType: FilterType;
+    filterFreq: number;
+    filterQ: number;
+    phase: number;
+    envStage: 'off' | 'attack' | 'decay' | 'sustain' | 'release';
+    envLevel: number;
+    envTime: number;
+    currentNote: number;
+}
+export interface SequencerState {
+    step: number;
+    sampleCounter: number;
+    samplesPerStep: number;
+    channels: {
+        melody: SequencerChannel;
+        bass: SequencerChannel;
+        arp: SequencerChannel;
+        drums: SequencerChannel;
+    };
+}
+export interface DelayLine {
+    buffer: Float32Array;
+    writeIndex: number;
+    delaySamples: number;
+    feedback: number;
+    mix: number;
+}
 export interface AudioEngine {
     currentAmbience: AmbienceType;
     musicState: MusicState;
@@ -25,8 +74,35 @@ export interface AudioEngine {
     ambienceInterval: number;
     /** Total descriptions emitted */
     totalDescriptions: number;
+    pcmEnabled: boolean;
+    sfxQueue: SFXEvent[];
+    sequencer: SequencerState;
+    masterVolume: number;
+    delayLine: DelayLine;
+    /** Total PCM samples generated since engine creation */
+    totalSamplesGenerated: number;
+    musicEnabled: boolean;
 }
 export declare function createAudioEngine(): AudioEngine;
+/**
+ * Trigger a sound effect. The SFX will be mixed into the next generateAudioBuffer call.
+ */
+export declare function triggerSFX(engine: AudioEngine, sfx: SFXType): void;
+/**
+ * Enable or disable background music generation.
+ */
+export declare function setMusicEnabled(engine: AudioEngine, enabled: boolean): void;
+/**
+ * Generate a buffer of PCM Float32 audio samples.
+ * Mixes the 4-channel chiptune sequencer + any active SFX.
+ * Output: mono Float32Array, ready to pipe to ffmpeg via -f f32le -ar 44100 -ac 1 -i pipe:3
+ *
+ * @param engine      The audio engine state
+ * @param sampleCount Number of samples to generate
+ * @param sampleRate  Sample rate (default 44100)
+ * @returns Float32Array of PCM samples in [-1, 1]
+ */
+export declare function generateAudioBuffer(engine: AudioEngine, sampleCount: number, sampleRate?: number): Float32Array;
 export declare function getAmbienceDescription(ambience: AmbienceType): string;
 export declare function getSoundDescription(event: SoundEvent): string;
 export declare function getMusicDescription(mood: string, biome: string): string;

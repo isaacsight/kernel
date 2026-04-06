@@ -79,6 +79,7 @@ import { generateReflections, getRelevantReflections, formatReflectionsForPrompt
 import { getSynthesisContext } from './memory-synthesis.js'
 import { getActiveCorrectionsPrompt } from './synthesis-engine.js'
 import { recordTrace, shouldEvolve, evolvePrompt, getPromptAmendment, updateMutationScore } from './prompt-evolution.js'
+import { getCoordinator } from './coordinator.js'
 import chalk from 'chalk'
 
 const MAX_TOOL_LOOPS = 75
@@ -1299,6 +1300,17 @@ Always quote file paths that contain spaces. Never reference internal system nam
     const anticipated = anticipateNext([originalMessage], originalMessage)
   } catch { /* cognitive stack is non-critical — never block the agent loop */ }
 
+  // ── Intelligence Coordinator: unified pre-processing ──
+  let coordinatorContext = ''
+  try {
+    const coordinator = getCoordinator()
+    const preResult = await coordinator.preProcess(originalMessage, sessionId)
+    if (preResult.systemPromptAddition) coordinatorContext = preResult.systemPromptAddition
+    if (preResult.needsClarification) {
+      telemetry.emit('tool_call_end', { tool: 'coordinator', duration_ms: 0, error: preResult.clarificationReason })
+    }
+  } catch { /* coordinator is non-critical */ }
+
   // Change 5: Apply cognitive policy to system prompt
   // explore → broader thinking, exploit → direct proven approaches
   try {
@@ -1311,6 +1323,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
     if (cognitiveToolBias.preferred.length > 0) {
       systemContext += `\n\nPreferred tools based on learned patterns: ${cognitiveToolBias.preferred.join(', ')}`
     }
+    if (coordinatorContext) systemContext += `\n\n${coordinatorContext}`
   } catch { /* cognitive prompt injection is non-critical */ }
 
   // ── Tool execution pipeline ──
@@ -1322,6 +1335,12 @@ Always quote file paths that contain spaces. Never reference internal system nam
     },
     runPostHook: (name, args, result) => { runPostToolHook(name, args, result, options.agent || 'kernel') },
     executeTool: async (name, args) => {
+      // Coordinator tool oversight
+      try {
+        const coord = getCoordinator()
+        const eval_ = coord.evaluateToolCall(name, args as Record<string, unknown>)
+        if (eval_.warn) process.stderr.write(`\n  \x1b[2m[coordinator] ${eval_.warn}\x1b[0m\n`)
+      } catch { /* non-critical */ }
       const r = await executeTool({ id: name, name, arguments: args })
       return { result: r.result, error: r.error ? r.result : undefined }
     },
@@ -1695,6 +1714,13 @@ Always quote file paths that contain spaces. Never reference internal system nam
             if (shouldAutoTrain()) {
               try { selfTrain() } catch { /* silent */ }
             }
+
+            // ── Intelligence Coordinator: post-response self-evaluation ──
+            try {
+              const coord = getCoordinator()
+              coord.postProcess(originalMessage, content, toolSequenceLog, sessionId)
+                .catch(() => { /* non-critical */ })
+            } catch { /* coordinator is non-critical */ }
 
             // ── Prompt Evolution (GEPA): record trace and evolve if threshold met ──
             try {
