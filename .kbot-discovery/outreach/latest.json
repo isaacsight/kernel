@@ -1,23 +1,35 @@
 {
-  "timestamp": "2026-04-05T17:20:37.483Z",
+  "timestamp": "2026-04-06T05:35:38.580Z",
   "projects": [
     {
-      "name": "activepieces/activepieces",
-      "url": "https://github.com/activepieces/activepieces",
-      "stars": 21583,
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
+      "name": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": 21059,
+      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
     },
     {
-      "name": "iamtouchskyer/memex",
-      "url": "https://github.com/iamtouchskyer/memex",
-      "stars": 55,
-      "description": "Zettelkasten-based persistent memory for AI coding agents. Works with Claude Code, Cursor, VS Code Copilot, Codex, Windsurf & any MCP client. No vector DB — just markdown + git sync."
+      "name": "adnaan-worker/Adnify",
+      "url": "https://github.com/adnaan-worker/Adnify",
+      "stars": 185,
+      "description": "Adnify—— 轻量级、高定制化 AI Agent 编辑器，碾压主流 AI 编程工具的极致体验！轻量化架构秒启不卡顿，支持 AI Agent 全流程定制（逻辑编排 / 工具审批 / 智能交互），深度集成 XTerminal（WebGL 加速 + 自定义快捷键），搭配 Markdown 多模式编辑、主题自定义、Git 一体化管理，告别臃肿模板，让 AI 开发完全贴合你的习惯。"
     },
     {
-      "name": "sonichi/sutando",
-      "url": "https://github.com/sonichi/sutando",
-      "stars": 55,
-      "description": "Summon your AI superpower — voice, vision, and autonomous action"
+      "name": "tony1223/better-agent-terminal",
+      "url": "https://github.com/tony1223/better-agent-terminal",
+      "stars": 256,
+      "description": "Multi-workspace terminal aggregator with Claude Code AI integration"
+    },
+    {
+      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "stars": 186,
+      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+    },
+    {
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 2030,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
     },
     {
       "name": "mensfeld/code-on-incus",
@@ -26,38 +38,26 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "taylorwilsdon/google_workspace_mcp",
-      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
-      "stars": 2025,
-      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
-    },
-    {
-      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 185,
-      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
-    },
-    {
-      "name": "dacrypt/tesla-claude-plugin",
-      "url": "https://github.com/dacrypt/tesla-claude-plugin",
-      "stars": 0,
-      "description": "Tesla plugin for Claude Code — control your Tesla with natural language. 9 skills: status, charging, vehicle control, order tracking, analytics, and a self-hosted web dashboard."
-    },
-    {
-      "name": "koach08/agentsift",
-      "url": "https://github.com/koach08/agentsift",
-      "stars": 0,
-      "description": "Security scanner for AI agent plugins, skills, and MCP packages. npm audit for the AI agent ecosystem."
-    },
-    {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
       "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
       "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+    },
+    {
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
+      "stars": 0,
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+    },
+    {
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "stars": 0,
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     }
   ],
   "latestPaper": {
-    "title": "ActionParty: Multi-Subject Action Binding in Generative Video Games",
-    "summary": "Recent advances in video diffusion have enabled the development of \"world models\" capable of simulating interactive environments. However, these models are largely restricted to single-agent settings, failing to control multiple agents simultaneously in a scene. In this work, we tackle a fundamental issue of action binding in existing video diffusion models, which struggle to associate specific actions with their corresponding subjects. For this purpose, we propose ActionParty, an action control"
+    "title": "Coupled Control, Structured Memory, and Verifiable Action in Agentic AI (SCRAT -- Stochastic Control with Retrieval and Auditable Trajectories): A Comparative Perspective from Squirrel Locomotion and Scatter-Hoarding",
+    "summary": "Agentic AI is increasingly judged not by fluent output alone but by whether it can act, remember, and verify under partial observability, delay, and strategic observation. Existing research often studies these demands separately: robotics emphasizes control, retrieval systems emphasize memory, and alignment or assurance work emphasizes checking and oversight. This article argues that squirrel ecology offers a sharp comparative case because arboreal locomotion, scatter-hoarding, and audience-sens"
   }
 }
