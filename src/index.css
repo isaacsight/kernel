@@ -29286,4 +29286,8 @@ h4 {
 .ka-marketing-footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: var(--space-lg); }
 .ka-marketing-footer-links a { font-family: var(--font-mono); font-size: 13px; color: #555; text-decoration: none; transition: color 0.2s; }
 .ka-marketing-footer-links a:hover { color: #FAF9F6; }
+/* Page back nav — shared across marketing pages */
+.ka-page-nav { position: fixed; top: 0; left: 0; right: 0; padding: 16px 24px; z-index: 100; background: linear-gradient(to bottom, #0d0d0d 60%, transparent); }
+.ka-page-nav-home { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-secondary-on-dark); text-decoration: none; transition: color 0.2s; }
+.ka-page-nav-home:hover { color: #FAF9F6; }
 @media (max-width: 768px) { .ka-marketing-hero { padding: 80px 20px 60px; } .ka-marketing-section { padding: 40px 20px; } }

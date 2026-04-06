@@ -194,7 +194,7 @@ export function SoundEngineerPage() {
   }, [audio])
 
   const copyEmail = () => {
-    navigator.clipboard.writeText('isaac@kernel.chat')
+    navigator.clipboard.writeText('kernel.chat@gmail.com')
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -214,7 +214,7 @@ export function SoundEngineerPage() {
           Mixing. Mastering. Production. Sound Design.
         </p>
         <p className="ka-sound-tagline">
-          Austin, TX — Engineering sound with precision tools and AI-assisted workflows.
+          Southern California — Engineering sound with precision tools and AI-assisted workflows.
           Every track gets the attention it deserves.
         </p>
       </section>
@@ -317,9 +317,9 @@ export function SoundEngineerPage() {
           Send stems, references, and a brief. I'll send back a mix that hits.
         </p>
         <div className="ka-sound-cta-row">
-          <button className="ka-sound-cta" onClick={copyEmail}>
-            {copied ? 'Copied!' : 'isaac@kernel.chat'}
-          </button>
+          <a href="mailto:kernel.chat@gmail.com?subject=Sound%20Engineering%20Inquiry" className="ka-sound-cta">
+            kernel.chat@gmail.com
+          </a>
           <a href="https://discord.gg/kdMauM9abG" className="ka-sound-cta ka-sound-cta--secondary" target="_blank" rel="noopener">
             Discord
           </a>

@@ -79,6 +79,10 @@ export function SecurityPage() {
 
   return (
     <div className="ka-security">
+      {/* Nav */}
+      <nav className="ka-page-nav">
+        <a href="#/" className="ka-page-nav-home">{'\u2190'} kernel.chat</a>
+      </nav>
       {/* Hero */}
       <section className="ka-security-hero">
         <div className="ka-security-shield" aria-hidden="true" />

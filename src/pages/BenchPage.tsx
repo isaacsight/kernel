@@ -75,6 +75,10 @@ export default function BenchPage() {
 
   return (
     <div className="ka-bench">
+      {/* Nav */}
+      <nav className="ka-page-nav">
+        <a href="#/" className="ka-page-nav-home">{'\u2190'} kernel.chat</a>
+      </nav>
       {/* Hero */}
       <section className="ka-bench-hero">
         <div className="ka-bench-badge">Benchmark Dashboard</div>
