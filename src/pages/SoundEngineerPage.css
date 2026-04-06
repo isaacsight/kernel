@@ -299,13 +299,23 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 6px;
+  height: 8px;
   background: #222;
   cursor: pointer;
+  touch-action: none;
+}
+
+.ka-sound-track-progress::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  height: 32px;
 }
 
 .ka-sound-track-progress:hover {
-  height: 8px;
+  height: 10px;
 }
 
 .ka-sound-track-progress-fill {

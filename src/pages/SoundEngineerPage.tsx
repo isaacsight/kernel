@@ -269,10 +269,40 @@ export function SoundEngineerPage() {
                   className="ka-sound-track-progress"
                   onClick={(e) => {
                     e.stopPropagation()
-                    if (!audio) return
+                    if (!audio || !audio.duration) return
                     const rect = e.currentTarget.getBoundingClientRect()
-                    const pct = (e.clientX - rect.left) / rect.width
+                    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
                     audio.currentTime = pct * audio.duration
+                  }}
+                  onTouchStart={(e) => {
+                    e.stopPropagation()
+                    if (!audio || !audio.duration) return
+                    const seek = (touch: React.Touch) => {
+                      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                      const pct = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width))
+                      audio.currentTime = pct * audio.duration
+                    }
+                    seek(e.touches[0])
+                    const bar = e.currentTarget as HTMLElement
+                    const onMove = (ev: TouchEvent) => { ev.preventDefault(); seek(ev.touches[0] as unknown as React.Touch) }
+                    const onEnd = () => { bar.removeEventListener('touchmove', onMove); bar.removeEventListener('touchend', onEnd) }
+                    bar.addEventListener('touchmove', onMove, { passive: false })
+                    bar.addEventListener('touchend', onEnd)
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation()
+                    if (!audio || !audio.duration) return
+                    const bar = e.currentTarget as HTMLElement
+                    const seek = (clientX: number) => {
+                      const rect = bar.getBoundingClientRect()
+                      const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+                      audio.currentTime = pct * audio.duration
+                    }
+                    seek(e.clientX)
+                    const onMove = (ev: MouseEvent) => seek(ev.clientX)
+                    const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp) }
+                    window.addEventListener('mousemove', onMove)
+                    window.addEventListener('mouseup', onUp)
                   }}
                 >
                   <div className="ka-sound-track-progress-fill" style={{ width: `${progress}%` }} />
