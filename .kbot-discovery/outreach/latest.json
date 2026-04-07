@@ -1,47 +1,41 @@
 {
-  "timestamp": "2026-04-07T05:50:38.201Z",
+  "timestamp": "2026-04-07T17:58:36.310Z",
   "projects": [
     {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 30030,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+      "name": "Open-ACP/OpenACP",
+      "url": "https://github.com/Open-ACP/OpenACP",
+      "stars": 54,
+      "description": "Self-hosted bridge that lets you interact with AI coding agents (Claude Code, Codex, etc.) from messaging platforms (Telegram, Discord, etc.) via the Agent Client Protocol (ACP)."
     },
     {
-      "name": "n1byn1kt/apitap",
-      "url": "https://github.com/n1byn1kt/apitap",
-      "stars": 78,
-      "description": "CLI, MCP server, and npm library that turns any website into an API — no docs, no SDK, no browser."
+      "name": "clawwork-ai/ClawWork",
+      "url": "https://github.com/clawwork-ai/ClawWork",
+      "stars": 431,
+      "description": "Client for OpenClaw — Connect ClawWork to your own OpenClaw and unlock 10x multi-session productivity."
     },
     {
-      "name": "iamtouchskyer/memex",
-      "url": "https://github.com/iamtouchskyer/memex",
-      "stars": 56,
-      "description": "Zettelkasten-based persistent memory for AI coding agents. Works with Claude Code, Cursor, VS Code Copilot, Codex, Windsurf & any MCP client. No vector DB — just markdown + git sync."
-    },
-    {
-      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 191,
-      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1060,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
       "name": "mensfeld/code-on-incus",
       "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 373,
+      "stars": 374,
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
       "name": "Ruya-AI/cozempic",
       "url": "https://github.com/Ruya-AI/cozempic",
-      "stars": 205,
+      "stars": 207,
       "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
     },
     {
-      "name": "SafeAI-Lab-X/ClawKeeper",
-      "url": "https://github.com/SafeAI-Lab-X/ClawKeeper",
-      "stars": 436,
-      "description": "ClawKeeper: Comprehensive Safety Protection for OpenClaw Agents Through Skills, Plugins, and Watchers (aka The Norton for OpenClaw)"
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 2053,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
     },
     {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
@@ -54,6 +48,12 @@
       "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
       "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+    },
+    {
+      "name": "samber/cc-skills-golang",
+      "url": "https://github.com/samber/cc-skills-golang",
+      "stars": 1049,
+      "description": "🧑‍🎨 A collection of Golang agentic skills that works"
     }
   ],
   "latestPaper": {
