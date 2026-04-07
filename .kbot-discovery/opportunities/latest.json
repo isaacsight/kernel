@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-07T06:05:45.234Z",
+  "timestamp": "2026-04-07T12:13:40.988Z",
   "count": 30,
   "opportunities": [
     {
@@ -81,10 +81,17 @@
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN: Who is hiring? (April 2026)",
-      "url": "https://news.ycombinator.com/item?id=47663311",
+      "title": "The cult of vibe coding is dogfooding run amok",
+      "url": "https://news.ycombinator.com/item?id=47665989",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "github-issue",
+      "title": "Update benchmarks: genai-enterprise-strategy.md (2025–26 data)",
+      "url": "https://github.com/DogInfantry/claude-skill-management-consultant-B1/issues/5",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "Integrate SonarQube and Snyk for enhanced security scanning",
       "url": "https://github.com/hoangsonww/DocuThinker-AI-App/pull/41",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "chore(deps): update aws-sdk-js-v3 monorepo to v3.1024.0",
-      "url": "https://github.com/hello-nrfcloud/public-parameter-registry-aws/pull/803",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(docker): use built bundled plugins in runtime images",
-      "url": "https://github.com/openclaw/openclaw/pull/62316",
+      "title": "feat(legreffier): support GitHub org account in onboarding",
+      "url": "https://github.com/getlarge/themoltnet/pull/704",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(ci,go): remove release-cli co-release block, reset manifest, bump go.mod",
-      "url": "https://github.com/getlarge/themoltnet/pull/694",
+      "title": "ci: bump npm publish jobs to Node 24",
+      "url": "https://github.com/getlarge/themoltnet/pull/703",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(console): switch to Ory Account Experience, drop Ory Elements",
-      "url": "https://github.com/getlarge/themoltnet/pull/693",
+      "title": "atlascloud: add Atlas Cloud video generation provider plugin",
+      "url": "https://github.com/openclaw/openclaw/pull/62457",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "claude-sessions: CLI for managing multiple Claude Code sessions + phone call voice control",
+      "url": "https://reddit.com/r/commandline/comments/1sep4qz/claudesessions_cli_for_managing_multiple_claude/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "I made a terminal pet that watches my coding sessions and judges me -- now it's OSS",
       "url": "https://reddit.com/r/commandline/comments/1sem4p0/i_made_a_terminal_pet_that_watches_my_coding/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,30 +192,23 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "A zero-dependency Node.js CLI for Battle.net 2FA because the mobile app is pain",
-      "url": "https://reddit.com/r/commandline/comments/1sd8tuc/a_zerodependency_nodejs_cli_for_battlenet_2fa/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "The \"Jarvis on day one\" trap: why trying to build one AI agent that does everything costs you months",
+      "url": "https://reddit.com/r/artificial/comments/1seu2cw/the_jarvis_on_day_one_trap_why_trying_to_build/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Stop Overcomplicating AI Workflows. This Is the Simple Framework",
+      "url": "https://reddit.com/r/artificial/comments/1setez5/stop_overcomplicating_ai_workflows_this_is_the/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
       "title": "I got tired of 3 AM PagerDuty alerts, so I built an AI agent to fix cloud outages while I sleep. (Built with GLM-5.1)",
       "url": "https://reddit.com/r/artificial/comments/1selmm8/i_got_tired_of_3_am_pagerduty_alerts_so_i_built/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Who needs fancy stuff, When you can program, build, train and run 2 completely different ai agents on an i3 4GB RAM and onboard gpu chip? looool",
-      "url": "https://reddit.com/r/artificial/comments/1sefj36/who_needs_fancy_stuff_when_you_can_program_build/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "CodeGraphContext - An MCP server that converts your codebase into a graph database",
-      "url": "https://reddit.com/r/artificial/comments/1sedtfm/codegraphcontext_an_mcp_server_that_converts_your/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
