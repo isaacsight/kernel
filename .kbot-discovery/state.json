@@ -1,30 +1,30 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-04-07T21:13:34.501Z",
+    "pulse": "2026-04-07T21:43:34.626Z",
     "intel": "2026-04-07T18:13:47.223Z",
     "outreach": "2026-04-07T17:58:36.310Z",
     "writing": "2026-04-07T19:13:38.423Z",
     "evolution": "2026-04-07T17:30:08.652Z",
     "opportunities": "2026-04-07T18:13:59.499Z",
-    "actions": "2026-04-07T15:29:32.854Z",
-    "synthesis": "2026-04-07T21:13:34.821Z",
+    "actions": "2026-04-07T21:44:13.199Z",
+    "synthesis": "2026-04-07T21:43:34.845Z",
     "obsidian": "2026-04-07T17:58:36.368Z"
   },
   "stats": {
-    "totalRuns": 2148,
-    "totalPulses": 842,
+    "totalRuns": 2149,
+    "totalPulses": 843,
     "totalIntel": 89,
     "totalOutreach": 40,
     "totalWriting": 21,
     "totalEvolution": 23,
     "errorsToday": 0,
     "lastErrorDate": "2026-04-07",
-    "postsAttempted": 1,
+    "postsAttempted": 2,
     "postsEngaged": 0,
     "postsFlagged": 0,
     "evolutionSuccesses": 2,
     "evolutionFailures": 13,
-    "totalSynthesis": 636,
+    "totalSynthesis": 637,
     "totalObsidianSyncs": 23
   },
   "knownStars": 11,
@@ -43,6 +43,18 @@
       "currentComments": 0,
       "repliesReceived": 0,
       "outcome": "ignored"
+    },
+    {
+      "postedAt": "2026-04-07T21:44:11.608Z",
+      "url": "https://news.ycombinator.com/item?id=47676224",
+      "title": "Show HN: Output.ai - OSS framework we extracted from 500+ production AI agents",
+      "scoreAtPost": 1,
+      "commentsAtPost": 0,
+      "lastCheckedAt": "2026-04-07T21:44:11.608Z",
+      "currentScore": 1,
+      "currentComments": 0,
+      "repliesReceived": 0,
+      "outcome": "pending"
     }
   ],
   "reachedMilestones": [
