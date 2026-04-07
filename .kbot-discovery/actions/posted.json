@@ -224,5 +224,14 @@
     "comment": "The local-first architecture choice creates real latency friction that users underappreciate until they're in the flow—cold starts can really break sustained coding sessions. For tool orchestration, caching schema introspection results aggressively helps, since re-querying the same tool definitions on every invocation undermines the whole point. I'm curious how others handle schema caching when dealing with multiple local tools across different contexts?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-04-07T15:29:31.070Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "Building local-first AI agents requires careful state serialization—without server-side history, you need robust local context compression to avoid OOM issues during long-running sessions. For DevOps tooling, I've learned that tool orchestration fails when retries lack exponential backoff tuned to the specific API's rate limits; generic retry logic just compounds errors. What's your approach to handling API rate limits in orchestration workflows?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
