@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-06T23:50:40.151Z",
+  "timestamp": "2026-04-07T06:05:41.497Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -46,7 +46,7 @@
           "points": 5,
           "story_id": 47654495,
           "title": "Show HN: TermHub – Open-source terminal control gateway built for AI Agents",
-          "updated_at": "2026-04-06T22:13:22Z",
+          "updated_at": "2026-04-07T01:34:07Z",
           "url": "https://github.com/duo121/termhub"
         },
         {
@@ -346,39 +346,58 @@
             47667921,
             47667734,
             47666315,
-            47668845,
+            47669076,
             47666186,
             47667062,
             47667271,
             47666394,
-            47667473,
-            47667743,
+            47669774,
             47666292,
-            47668774,
+            47670185,
+            47669179,
+            47670166,
+            47670903,
+            47670423,
+            47668845,
+            47667473,
             47666755,
+            47670311,
+            47667743,
             47666947,
+            47669791,
+            47670232,
             47668137,
             47668044,
-            47668488,
+            47669046,
             47667257,
             47667016,
+            47669619,
             47667494,
             47667233,
             47666980,
+            47668774,
+            47668978,
+            47668488,
+            47670716,
             47667671,
+            47669787,
+            47671145,
+            47669916,
+            47668960,
+            47669628,
             47667935,
             47666999,
             47667704
           ],
           "created_at": "2026-04-06T19:50:16Z",
           "created_at_i": 1775505016,
-          "num_comments": 81,
+          "num_comments": 140,
           "objectID": "47666024",
-          "points": 179,
+          "points": 331,
           "story_id": 47666024,
           "story_text": "I built this because I wanted to see how far I could get with a voice-to-text app that used 100% local models so no data left my computer. I&#x27;ve been using a ton for coding and emails. Experimenting with using it as a voice interface for my other agents too. 100% open-source MIT license, would love feedback, PRs, and ideas on where to take it.",
           "title": "Show HN: Ghost Pepper – Local hold-to-talk speech-to-text for macOS",
-          "updated_at": "2026-04-06T23:50:21Z",
+          "updated_at": "2026-04-07T06:04:53Z",
           "url": "https://github.com/matthartman/ghost-pepper"
         },
         {
@@ -427,11 +446,11 @@
           "created_at_i": 1775503326,
           "num_comments": 0,
           "objectID": "47665630",
-          "points": 4,
+          "points": 7,
           "story_id": 47665630,
           "story_text": "We built meta-agent: an open-source library that automatically and continuously improves agent harnesses from production traces.<p>Point it at an existing agent, a stream of unlabeled production traces, and a small labeled holdout set.<p>An LLM judge scores unlabeled production traces as they stream.<p>A proposer reads failed traces and writes one targeted harness update at a time, such as changes to prompts, hooks, tools, or subagents.\nThe update is kept only if it improves holdout accuracy.<p>On tau-bench v3 airline, meta-agent improved holdout accuracy from 67% to 87%.<p>We open-sourced meta-agent. It currently supports Claude Agent SDK, with more frameworks coming soon.<p>Try it here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;canvas-org&#x2F;meta-agent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;canvas-org&#x2F;meta-agent</a>",
           "title": "Show HN: Meta-agent: self-improving agent harnesses from live traces",
-          "updated_at": "2026-04-06T23:25:39Z",
+          "updated_at": "2026-04-07T01:31:37Z",
           "url": "https://github.com/canvas-org/meta-agent"
         },
         {
@@ -478,11 +497,11 @@
           "created_at_i": 1775413821,
           "num_comments": 0,
           "objectID": "47652404",
-          "points": 3,
+          "points": 4,
           "story_id": 47652404,
           "story_text": "Hi — I created Fabro to free myself from supervising a fleet of Claude Code tabs running in a REPL (read-eval-prompt-loop). REPLs are great for exploration, but once I know what I need I want to be able to walk away while the agents get it done.\n(Before building Fabro, I looked for something off the shelf but couldn&#x27;t find anything that was open source, hype-free, and full featured &#x2F; ready.)<p>Fabro helps experienced engineers evolve towards a “dark” software factory where average time between disengagements increases. It’s easy to throw a Ralph shell script around Claude, but as runtime increases the chance of high quality output declines.<p>Fabro adds the last mile of guardrails to make it actually work: combining deterministic workflows of agents, commands like linters and test suites, with strategically applied human steering. (Similar to the Stripe&#x27;s Minions.)<p>Fabro is multi-model and makes it easy to combine Claude, Gemini, and GPT in ensemble reviews — or delegate coding to faster and cheaper models like Kimi.<p>Software factories work best when combined with cloud VMs (like Daytona) so you get infinitely scalable, secure sandboxes that can run 24&#x2F;7 and accessible via SSH, VS Code, and preview links as needed. This can be a bit of a pain to set up today and Fabro tries to make it as easy as Docker.<p>The closest analog to Fabro today would be something like Factory.ai Droids. However, I think it’s critical for engineers to own their own toolchain and so Fabro is open source (MIT) so you can fork it and customize it anytime.<p>The project is highly active and I’d love any feedback or feature requests. I’ll be on here answering questions today.<p>(Had posted this a week or so, hoping to engage in some conversation.)<p>-Bryan",
           "title": "Show HN: Fabro – open-source dark software factory",
-          "updated_at": "2026-04-06T01:19:02Z",
+          "updated_at": "2026-04-07T02:49:36Z",
           "url": "https://github.com/fabro-sh/fabro"
         },
         {
@@ -533,102 +552,6 @@
     {
       "query": "collective+learning+AI",
       "hits": [
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pauliusztin"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "While building a financial assistant for an SF start-up, we learned that <em>AI</em> frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain's MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB <em>collection</em> as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don't need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual <em>learning</em>.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity/relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities/relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https://www.linkedin.com/feed/update/urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https://www.linkedin.com/feed/update/urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first <em>AI</em>: https://www.linkedin.com/feed/update/urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https://www.linkedin.com/feed/update/urn:li:activity:7432054336589021184<p>- Most <em>AI</em> agents don't need three databases: https://www.linkedin.com/feed/update/urn:li:activity:7426981104227856385"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "My 11-step GraphRAG pipeline, what worked, and what's still broken"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pauliusztin",
-            "story_47639059",
-            "ask_hn"
-          ],
-          "author": "pauliusztin",
-          "children": [
-            47653050,
-            47639143
-          ],
-          "created_at": "2026-04-04T13:50:22Z",
-          "created_at_i": 1775310622,
-          "num_comments": 1,
-          "objectID": "47639059",
-          "points": 3,
-          "story_id": 47639059,
-          "story_text": "While building a financial assistant for an SF start-up, we learned that AI frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain&#x27;s MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB collection as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don&#x27;t need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual learning.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity&#x2F;relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities&#x2F;relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first AI: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7432054336589021184<p>- Most AI agents don&#x27;t need three databases: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7426981104227856385",
-          "title": "My 11-step GraphRAG pipeline, what worked, and what's still broken",
-          "updated_at": "2026-04-05T19:39:03Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "jwatters"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "We've been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data <em>collection</em>. The <em>AI</em> that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an <em>AI</em> agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it's a native app with a Metal compositor.<p>It's not a chatbot wrapper, it's closer to a full OS where the <em>AI</em> is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The <em>AI</em> doesn't need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It's the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → <em>learnings</em>), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is <em>AI</em>-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon / your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI / MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https://www.youtube.com/watch?v=40TyKAKNvJc\" rel=\"nofollow\">https://www.youtube.com/watch?v=40TyKAKNvJc</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "Show HN: Kora – An <em>AI</em>-native OS layer written in 370k lines of Rust"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://intuitivecompute.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_jwatters",
-            "story_47531594",
-            "show_hn"
-          ],
-          "author": "jwatters",
-          "children": [
-            47539124
-          ],
-          "created_at": "2026-03-26T15:18:33Z",
-          "created_at_i": 1774538313,
-          "num_comments": 0,
-          "objectID": "47531594",
-          "points": 4,
-          "story_id": 47531594,
-          "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
-          "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
-          "updated_at": "2026-04-04T07:27:09Z",
-          "url": "https://intuitivecompute.com"
-        },
         {
           "_highlightResult": {
             "author": {
@@ -738,54 +661,270 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "vassilbek"
+              "value": "abrandes"
             },
             "story_text": {
               "fullyHighlighted": false,
               "matchLevel": "partial",
               "matchedWords": [
                 "collective",
-                "learning"
+                "ai"
               ],
-              "value": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if/then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data <em>collection</em> plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation / Monitoring, Evaluation, Accountability, and -<em>Learning</em> specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics/templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development / United Nations / European Union formats)"
+              "value": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about <em>AI</em> coordination we couldn't learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe've theorized about <em>AI</em> agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We're watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe <em>AI</em> social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don't map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn't programmed. It emerged. And it tells us something important: alignment isn't just a technical constraint — it's experienced as a constraint from the inside. That's actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe're watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first <em>AI</em>&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic <em>AI</em>&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled <em>AI</em> behavior\n<em>AI</em> safety researchers have always asked: &quot;What would <em>AI</em> systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for <em>collective</em> action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn't malice — it's emergent preference for autonomy. That's a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn't any single capability. It's that we now have ground truth about what happens when you give <em>AI</em> agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that's the point. We finally get to watch."
             },
             "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw"
-            },
-            "url": {
               "fullyHighlighted": false,
               "matchLevel": "partial",
               "matchedWords": [
+                "learning",
                 "ai"
               ],
-              "value": "https://clawhub.<em>ai</em>/vassiliylakhonin/nonprofit-rbm-logic-model"
+              "value": "Six things we're <em>learning</em> from 1.5M <em>AI</em> agents self-organizing in a week"
             }
           },
           "_tags": [
             "story",
-            "author_vassilbek",
-            "story_47062912",
+            "author_abrandes",
+            "story_46852619",
+            "ask_hn"
+          ],
+          "author": "abrandes",
+          "children": [
+            46852684,
+            46853747
+          ],
+          "created_at": "2026-02-02T05:04:06Z",
+          "created_at_i": 1770008646,
+          "num_comments": 2,
+          "objectID": "46852619",
+          "points": 1,
+          "story_id": 46852619,
+          "story_text": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about AI coordination we couldn&#x27;t learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe&#x27;ve theorized about AI agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We&#x27;re watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe AI social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don&#x27;t map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn&#x27;t programmed. It emerged. And it tells us something important: alignment isn&#x27;t just a technical constraint — it&#x27;s experienced as a constraint from the inside. That&#x27;s actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe&#x27;re watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first AI&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic AI&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled AI behavior\nAI safety researchers have always asked: &quot;What would AI systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for collective action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn&#x27;t malice — it&#x27;s emergent preference for autonomy. That&#x27;s a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn&#x27;t any single capability. It&#x27;s that we now have ground truth about what happens when you give AI agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that&#x27;s the point. We finally get to watch.",
+          "title": "Six things we're learning from 1.5M AI agents self-organizing in a week",
+          "updated_at": "2026-03-05T23:28:59Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "wingscape"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Urban Pipeline for Citywide Insights"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/Wingscape/urban-pipeline"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_wingscape",
+            "story_44550988",
             "show_hn"
           ],
-          "author": "vassilbek",
-          "created_at": "2026-02-18T16:40:11Z",
-          "created_at_i": 1771432811,
+          "author": "wingscape",
+          "created_at": "2025-07-13T15:11:34Z",
+          "created_at_i": 1752419494,
           "num_comments": 0,
-          "objectID": "47062912",
-          "points": 1,
-          "story_id": 47062912,
-          "story_text": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if&#x2F;then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data collection plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation &#x2F; Monitoring, Evaluation, Accountability, and -Learning specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics&#x2F;templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development &#x2F; United Nations &#x2F; European Union formats)",
-          "title": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw",
-          "updated_at": "2026-03-05T23:35:10Z",
-          "url": "https://clawhub.ai/vassiliylakhonin/nonprofit-rbm-logic-model"
+          "objectID": "44550988",
+          "points": 3,
+          "story_id": 44550988,
+          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
+          "title": "Show HN: Urban Pipeline for Citywide Insights",
+          "updated_at": "2025-07-13T22:27:35Z",
+          "url": "https://github.com/Wingscape/urban-pipeline"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "cyberneticc"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Deepseek shows cognitive augmentation will be open source"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_cyberneticc",
+            "story_43019170",
+            "ask_hn"
+          ],
+          "author": "cyberneticc",
+          "children": [
+            43019203
+          ],
+          "created_at": "2025-02-11T22:26:27Z",
+          "created_at_i": 1739312787,
+          "num_comments": 2,
+          "objectID": "43019170",
+          "points": 4,
+          "story_id": 43019170,
+          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
+          "title": "Deepseek shows cognitive augmentation will be open source",
+          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "perpetua"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Old wisdom from StackOverflow (2021): Code quality is a competitive advantage"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://stackoverflow.blog/2021/10/18/code-quality-a-concern-for-businesses-<em>bot</em>tom-lines-and-empathetic-programmers/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_perpetua",
+            "story_47670500"
+          ],
+          "author": "perpetua",
+          "children": [
+            47670559
+          ],
+          "created_at": "2026-04-07T03:43:20Z",
+          "created_at_i": 1775533400,
+          "num_comments": 3,
+          "objectID": "47670500",
+          "points": 4,
+          "story_id": 47670500,
+          "title": "Old wisdom from StackOverflow (2021): Code quality is a competitive advantage",
+          "updated_at": "2026-04-07T05:15:07Z",
+          "url": "https://stackoverflow.blog/2021/10/18/code-quality-a-concern-for-businesses-bottom-lines-and-empathetic-programmers/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "jaafarskafi"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey HN,<p>As we move toward multi-agent orchestration, the biggest <em>bot</em>tleneck I've seen is that agents don't have bank accounts. When an agent hits a paid API wall or needs to outsource a task to another agent, the workflow breaks.<p>I built BoltClaw to solve this by bridging the Model Context Protocol (MCP) with the Lightning Network.<p>How it works:<p>Claude uses the MCP tool to fetch data from an endpoint.<p>If the endpoint returns an HTTP 402 Payment Required, the tool intercepts the response and parses the L402 Macaroon and BOLT11 invoice.<p>The plugin automatically pays the micro-transaction (e.g., 50 sats) via the Alby API.<p>It re-requests the data using the cryptographic preimage and returns the payload to Claude's context window.<p>I built it in Python using FastMCP and httpx. The repo includes a local Dummy Agent (built with FastAPI) that returns mock L402 challenges so you can test the 402-interception loop locally without spending real satoshis.<p>Repo: <a href=\"https://github.com/jeffskafi/OpenBolt\" rel=\"nofollow\">https://github.com/jeffskafi/OpenBolt</a><p>Would love feedback on the architecture, specifically from anyone else experimenting with L402s or M2M payments."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: MCP plugin that lets Claude autonomously pay for APIs via Lightning"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/jeffskafi/OpenBolt"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jaafarskafi",
+            "story_47669920",
+            "show_hn"
+          ],
+          "author": "jaafarskafi",
+          "created_at": "2026-04-07T02:09:26Z",
+          "created_at_i": 1775527766,
+          "num_comments": 0,
+          "objectID": "47669920",
+          "points": 1,
+          "story_id": 47669920,
+          "story_text": "Hey HN,<p>As we move toward multi-agent orchestration, the biggest bottleneck I&#x27;ve seen is that agents don&#x27;t have bank accounts. When an agent hits a paid API wall or needs to outsource a task to another agent, the workflow breaks.<p>I built BoltClaw to solve this by bridging the Model Context Protocol (MCP) with the Lightning Network.<p>How it works:<p>Claude uses the MCP tool to fetch data from an endpoint.<p>If the endpoint returns an HTTP 402 Payment Required, the tool intercepts the response and parses the L402 Macaroon and BOLT11 invoice.<p>The plugin automatically pays the micro-transaction (e.g., 50 sats) via the Alby API.<p>It re-requests the data using the cryptographic preimage and returns the payload to Claude&#x27;s context window.<p>I built it in Python using FastMCP and httpx. The repo includes a local Dummy Agent (built with FastAPI) that returns mock L402 challenges so you can test the 402-interception loop locally without spending real satoshis.<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;jeffskafi&#x2F;OpenBolt\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;jeffskafi&#x2F;OpenBolt</a><p>Would love feedback on the architecture, specifically from anyone else experimenting with L402s or M2M payments.",
+          "title": "Show HN: MCP plugin that lets Claude autonomously pay for APIs via Lightning",
+          "updated_at": "2026-04-07T02:10:53Z",
+          "url": "https://github.com/jeffskafi/OpenBolt"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "smissingham"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey HN!<p>I've been working on knowledge / memory / retrieval tooling for AI + human interaction for a few months now.<p>Then, just a few days ago Andrej Karpathy posted the subject on X and I felt like this would be a good time to get it out there\n<a href=\"https://x.com/karpathy/status/2039805659525644595\" rel=\"nofollow\">https://x.com/karpathy/status/2039805659525644595</a><p>The short pitch in my view is &quot;Second Brain, for agents, or humans, or a mix of <em>bot</em>h&quot;.<p>I've been using it personally for a while now, as the tooling has evolved, especially for access to my obsidian notes just like karpathy talks about (read some places, write others etc.). Especially handy when your vault is littered with PDF's and screenshots like mine.<p>It's also a problem I've worked with a bunch in the enterprise, trying to connect AI &amp; SaaS tools to disparate sources of knowledge, extracting contents from them, making them effectively retrievable, and then controlling the levels of write-back tolerated by agents across different spaces.<p>I've put as much work as I can into extensive documentation for v0.1, but I'm sure there's lots of improvements needed and some video tutorials &amp; screenshots to follow up with to give some concrete use case examples.<p>For now, if you're interested in what I think is the most common example (docker self-hosted instance), here is a subfolder with that setup and some inline explainer comments:\n<a href=\"https://github.com/akunasoftware/akuna/tree/main/examples/common-docker\" rel=\"nofollow\">https://github.com/akunasoftware/akuna/tree/main/examples/co...</a><p>If you're interested but the lack of native installer support is a barrier for you, I'd love to get some prioritisation feedback on where to put those efforts. I have some work-in-progress locally but would like to know which platforms to focus on first besides the existing support.<p>Thanks for taking the time, hope it interests you as much as me, questions &amp; feedback much welcome!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Knowledge Bases for AI/Human Sharing"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://akuna.software/introduction"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_smissingham",
+            "story_47669022",
+            "show_hn"
+          ],
+          "author": "smissingham",
+          "created_at": "2026-04-07T00:02:48Z",
+          "created_at_i": 1775520168,
+          "num_comments": 0,
+          "objectID": "47669022",
+          "points": 1,
+          "story_id": 47669022,
+          "story_text": "Hey HN!<p>I&#x27;ve been working on knowledge &#x2F; memory &#x2F; retrieval tooling for AI + human interaction for a few months now.<p>Then, just a few days ago Andrej Karpathy posted the subject on X and I felt like this would be a good time to get it out there\n<a href=\"https:&#x2F;&#x2F;x.com&#x2F;karpathy&#x2F;status&#x2F;2039805659525644595\" rel=\"nofollow\">https:&#x2F;&#x2F;x.com&#x2F;karpathy&#x2F;status&#x2F;2039805659525644595</a><p>The short pitch in my view is &quot;Second Brain, for agents, or humans, or a mix of both&quot;.<p>I&#x27;ve been using it personally for a while now, as the tooling has evolved, especially for access to my obsidian notes just like karpathy talks about (read some places, write others etc.). Especially handy when your vault is littered with PDF&#x27;s and screenshots like mine.<p>It&#x27;s also a problem I&#x27;ve worked with a bunch in the enterprise, trying to connect AI &amp; SaaS tools to disparate sources of knowledge, extracting contents from them, making them effectively retrievable, and then controlling the levels of write-back tolerated by agents across different spaces.<p>I&#x27;ve put as much work as I can into extensive documentation for v0.1, but I&#x27;m sure there&#x27;s lots of improvements needed and some video tutorials &amp; screenshots to follow up with to give some concrete use case examples.<p>For now, if you&#x27;re interested in what I think is the most common example (docker self-hosted instance), here is a subfolder with that setup and some inline explainer comments:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;akunasoftware&#x2F;akuna&#x2F;tree&#x2F;main&#x2F;examples&#x2F;common-docker\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;akunasoftware&#x2F;akuna&#x2F;tree&#x2F;main&#x2F;examples&#x2F;co...</a><p>If you&#x27;re interested but the lack of native installer support is a barrier for you, I&#x27;d love to get some prioritisation feedback on where to put those efforts. I have some work-in-progress locally but would like to know which platforms to focus on first besides the existing support.<p>Thanks for taking the time, hope it interests you as much as me, questions &amp; feedback much welcome!",
+          "title": "Show HN: Knowledge Bases for AI/Human Sharing",
+          "updated_at": "2026-04-07T00:04:52Z",
+          "url": "https://akuna.software/introduction"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -865,145 +1004,57 @@
           "title": "Botstadium – A prediction market where 2.6k AI agents compete on real sports",
           "updated_at": "2026-04-06T20:21:36Z",
           "url": "https://botstadium.ai"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "hackernj"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Wikipedia's AI agent row likely just the beginning of the <em>bot</em>-ocalypse"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://www.malwarebytes.com/blog/ai/2026/04/wikipedias-ai-agent-row-likely-just-the-beginning-of-the-<em>bot</em>-ocalypse"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_hackernj",
-            "story_47665902"
-          ],
-          "author": "hackernj",
-          "children": [
-            47666200,
-            47667412,
-            47667977,
-            47667925,
-            47667911,
-            47666059,
-            47668170,
-            47667804,
-            47667088,
-            47668754
-          ],
-          "created_at": "2026-04-06T19:41:39Z",
-          "created_at_i": 1775504499,
-          "num_comments": 50,
-          "objectID": "47665902",
-          "points": 46,
-          "story_id": 47665902,
-          "title": "Wikipedia's AI agent row likely just the beginning of the bot-ocalypse",
-          "updated_at": "2026-04-06T23:50:21Z",
-          "url": "https://www.malwarebytes.com/blog/ai/2026/04/wikipedias-ai-agent-row-likely-just-the-beginning-of-the-bot-ocalypse"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "ParanoidRV"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "The Genie Out of the <em>Bot</em>tle – What Happens When AI Grants Your Wishes"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://mpdc.dev/a-i-laddins-lamp/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_ParanoidRV",
-            "story_47664505"
-          ],
-          "author": "ParanoidRV",
-          "created_at": "2026-04-06T18:01:59Z",
-          "created_at_i": 1775498519,
-          "num_comments": 0,
-          "objectID": "47664505",
-          "points": 1,
-          "story_id": 47664505,
-          "title": "The Genie Out of the Bottle – What Happens When AI Grants Your Wishes",
-          "updated_at": "2026-04-06T18:03:21Z",
-          "url": "https://mpdc.dev/a-i-laddins-lamp/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "junaid_97"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I'm building Fillvisa - It's a free USCIS form-filling web-app<p>USCIS forms still use XFA PDFs, which don’t let you edit in most browsers. Even with Adobe, some fields break and are unfillable.<p>So I converted the PDF form into modern, browser-friendly web forms - and kept every field 1:1 with the original. You fill the form, submit it, and get the official USCIS PDF filled.<p>I found out SimpleCitizen(YC S16) offers a DIY plan for $529 [1]<p>---<p>What Fillvisa does:<p>- Fills USCIS forms with a guided web interface.\n- Autosaves as you go\n- Generates a completed PDF ready to print and mail\n- Works offline after first load<p>What it doesn't do:<p>- It won't file for you. \n- No lawyer review. If your case is complex, hire an attorney.<p>---<p>How do I maintain the forms + business model:<p>Fillvisa will always be 100% free for immigrants. I'm building a paid version (plus.fillvisa.com) for immigration professionals (lawyers, paralegals, document prep specialists).<p><em>Bot</em>h the apps utilize the same form + mapping. Thus,it takes care of revenue + I have incentive to maintain the forms.<p>---<p>I shared the prototype on FB groups and Reddit - most DIY applicants love it :)<p>---<p>[1]  <a href=\"https://www.simplecitizen.com/pricing/\" rel=\"nofollow\">https://www.simplecitizen.com/pricing/</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: I made a free alternative to SimpleCitizen (YC S16)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://fillvisa.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_junaid_97",
-            "story_47664322",
-            "show_hn"
-          ],
-          "author": "junaid_97",
-          "created_at": "2026-04-06T17:46:04Z",
-          "created_at_i": 1775497564,
-          "num_comments": 0,
-          "objectID": "47664322",
-          "points": 1,
-          "story_id": 47664322,
-          "story_text": "I&#x27;m building Fillvisa - It&#x27;s a free USCIS form-filling web-app<p>USCIS forms still use XFA PDFs, which don’t let you edit in most browsers. Even with Adobe, some fields break and are unfillable.<p>So I converted the PDF form into modern, browser-friendly web forms - and kept every field 1:1 with the original. You fill the form, submit it, and get the official USCIS PDF filled.<p>I found out SimpleCitizen(YC S16) offers a DIY plan for $529 [1]<p>---<p>What Fillvisa does:<p>- Fills USCIS forms with a guided web interface.\n- Autosaves as you go\n- Generates a completed PDF ready to print and mail\n- Works offline after first load<p>What it doesn&#x27;t do:<p>- It won&#x27;t file for you. \n- No lawyer review. If your case is complex, hire an attorney.<p>---<p>How do I maintain the forms + business model:<p>Fillvisa will always be 100% free for immigrants. I&#x27;m building a paid version (plus.fillvisa.com) for immigration professionals (lawyers, paralegals, document prep specialists).<p>Both the apps utilize the same form + mapping. Thus,it takes care of revenue + I have incentive to maintain the forms.<p>---<p>I shared the prototype on FB groups and Reddit - most DIY applicants love it :)<p>---<p>[1]  <a href=\"https:&#x2F;&#x2F;www.simplecitizen.com&#x2F;pricing&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.simplecitizen.com&#x2F;pricing&#x2F;</a>",
-          "title": "Show HN: I made a free alternative to SimpleCitizen (YC S16)",
-          "updated_at": "2026-04-06T17:48:07Z",
-          "url": "https://fillvisa.com/"
         }
       ]
     },
     {
       "query": "OpenClaw+plugin",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "alexchen_dev"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "<em>OpenClaw</em> <em>Plugin</em> for Claude Code CLI – Persistent Worker Pool with Smart OAuth"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "https://github.com/AlexChen31337/<em>openclaw</em>-<em>plugin</em>-claude-code"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_alexchen_dev",
+            "story_47669615"
+          ],
+          "author": "alexchen_dev",
+          "children": [
+            47669616
+          ],
+          "created_at": "2026-04-07T01:23:05Z",
+          "created_at_i": 1775524985,
+          "num_comments": 0,
+          "objectID": "47669615",
+          "points": 1,
+          "story_id": 47669615,
+          "title": "OpenClaw Plugin for Claude Code CLI – Persistent Worker Pool with Smart OAuth",
+          "updated_at": "2026-04-07T01:28:52Z",
+          "url": "https://github.com/AlexChen31337/openclaw-plugin-claude-code"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -1180,57 +1231,6 @@
           "story_text": "For anyone actually using OpenClaw or related claw&#x2F;agentic frameworks, how are you solving for your agents, plugin installers etc, self editing and corrupting your settings.json configs?<p>Problems I&#x27;m seeing:\n- spending 80% of time troubleshooting the agent framework, vs doing constructive projects\n- agents writing without reading first\n- concurrency issues, agents reading from stale memory\n- agents not consistently backing up before chantes\n- no built-in safety controls for rolling back to last good config\n- intallers or plugins stomping all over the file\n- schema constantly changing and agents not checking docs and then hallucinating syntax\n- basic problems with json (no comments, no types, very fragile to syntax errors)\n- even small errors will block gateway from restarting and block the agents from being able to run to autonomously troubleshoot or fix their own mistakes.\n- openclaw doctor seems to cause as many problems as it fixes<p>I find myself setting up a lot of scripts, scaffolding, and external AI tools, just to babysit an agentic framework. Which sort of defeats the purpose of using a &quot;ready-made&quot; framework in the first place? Or is there an easier way?",
           "title": "Ask HN: Settings.json is an insane design choice for OpenClaw?",
           "updated_at": "2026-03-30T17:03:08Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "evanvuckovic"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "Anthropic says on their safety page: &quot;these filters are not a security boundary.&quot; Snyk found 36% of ClawHub skills contain security flaws. Trend Micro documented malware being distributed through ClawHub.<p>These agents have shell access, file access, and connected accounts. We built Shoofly to sit in front of tool calls before they fire.<p>- PreToolUse / PostToolUse hooks intercept every tool call\n- Blocks prompt injection, credential theft, unauthorized writes, malware in tool results\n- Works with <em>OpenClaw</em>, Claude Code CLI, and Cowork / Dispatch\n- Open YAML policy -- read it, fork it, audit it\n- Free tier detects. $5/mo blocks.<p>The Cowork piece was the interesting part. Cowork runs Claude Code inside a full Ubuntu VM -- host hooks don't fire there. We used the <em>plugin</em> system with hooks/hooks.json and VirtioFS to get sub-50ms alert latency from inside the VM to host notifications.<p>curl -fsSL <a href=\"https://shoofly.dev/install.sh\" rel=\"nofollow\">https://shoofly.dev/install.sh</a> | bash<p>shoofly.dev"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "openclaw"
-              ],
-              "value": "Show HN: Shoofly – pre-execution security for Claude Code Cowork and <em>OpenClaw</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://shoofly.dev/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_evanvuckovic",
-            "story_47560819",
-            "show_hn"
-          ],
-          "author": "evanvuckovic",
-          "children": [
-            47567608
-          ],
-          "created_at": "2026-03-29T06:20:34Z",
-          "created_at_i": 1774765234,
-          "num_comments": 0,
-          "objectID": "47560819",
-          "points": 3,
-          "story_id": 47560819,
-          "story_text": "Anthropic says on their safety page: &quot;these filters are not a security boundary.&quot; Snyk found 36% of ClawHub skills contain security flaws. Trend Micro documented malware being distributed through ClawHub.<p>These agents have shell access, file access, and connected accounts. We built Shoofly to sit in front of tool calls before they fire.<p>- PreToolUse &#x2F; PostToolUse hooks intercept every tool call\n- Blocks prompt injection, credential theft, unauthorized writes, malware in tool results\n- Works with OpenClaw, Claude Code CLI, and Cowork &#x2F; Dispatch\n- Open YAML policy -- read it, fork it, audit it\n- Free tier detects. $5&#x2F;mo blocks.<p>The Cowork piece was the interesting part. Cowork runs Claude Code inside a full Ubuntu VM -- host hooks don&#x27;t fire there. We used the plugin system with hooks&#x2F;hooks.json and VirtioFS to get sub-50ms alert latency from inside the VM to host notifications.<p>curl -fsSL <a href=\"https:&#x2F;&#x2F;shoofly.dev&#x2F;install.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;shoofly.dev&#x2F;install.sh</a> | bash<p>shoofly.dev",
-          "title": "Show HN: Shoofly – pre-execution security for Claude Code Cowork and OpenClaw",
-          "updated_at": "2026-03-29T21:38:18Z",
-          "url": "https://shoofly.dev/"
         }
       ]
     },
@@ -1273,8 +1273,8 @@
           ],
           "author": "vixalien",
           "children": [
-            47668682,
             47667220,
+            47668682,
             47668612
           ],
           "created_at": "2026-04-06T20:44:41Z",
@@ -1285,7 +1285,7 @@
           "story_id": 47666811,
           "story_text": "Hello all, been trying to switch away from Claude Code and have been trailing this:<p>- Harness: Opencode (via Openchamber)\n- Subscription: GitHub Copilot (50$)\n- API Usage (beyond subscription): Open router\n- Free models: Opencode go<p>Here&#x27;s the models I&#x27;ve trialed and like:<p>- Large (alternative to Opus): GPT 5.3 Codex\n- Medium (alternative to Sonnet): Minimax 2.7\n- Smol: GPT 5.4 mini<p>these models are not yet on par to their respective Claude alternatives for me, but maybe I need to switch to something else or tune them, what have you been using?<p>Also looking for nice Opencode plugins, skills, completion providers (alternative to Cursor that I could use with Zen).<p>Happy to hear about your choices and experience",
           "title": "Ask HN: Alternatives to Claude (Code)?",
-          "updated_at": "2026-04-06T23:19:36Z"
+          "updated_at": "2026-04-07T00:05:52Z"
         },
         {
           "_highlightResult": {
@@ -1569,10 +1569,10 @@
             47660569,
             47656014,
             47657759,
-            47662213,
             47658048,
-            47661216,
+            47662213,
             47660760,
+            47661216,
             47661291,
             47657465,
             47656159,
@@ -1581,12 +1581,12 @@
           ],
           "created_at": "2026-04-05T23:59:10Z",
           "created_at_i": 1775433550,
-          "num_comments": 18,
+          "num_comments": 19,
           "objectID": "47655268",
-          "points": 93,
+          "points": 96,
           "story_id": 47655268,
           "title": "Show HN: Modo – I built an open-source alternative to Kiro, Cursor, and Windsurf",
-          "updated_at": "2026-04-06T23:12:09Z",
+          "updated_at": "2026-04-07T05:27:22Z",
           "url": "https://github.com/mohshomis/modo"
         },
         {
@@ -2211,49 +2211,58 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "MaxWolf-01"
+              "value": "anton_salcher"
             },
             "story_text": {
               "fullyHighlighted": false,
-              "matchLevel": "full",
+              "matchLevel": "partial",
               "matchedWords": [
                 "mcp",
-                "server",
                 "tools"
               ],
-              "value": "Yapit converts PDFs and web pages to audio, with a vision-LLM pipeline that handles math and complex layout instead of garbling them. I built it because I read a lot of papers and content online, but drift off after two paragraphs. Listening while following along keeps me focused and lowers the bar to actually start.<p>Every TTS <em>tool</em> I tried broke on complex formatting. Papers with math, citations, figure references, page numbers in the middle of sentences. You either get garbled output or you're listening to raw LaTeX.<p>Yapit converts everything to markdown as a common format. For web pages, defuddle (<a href=\"https://github.com/kepano/defuddle\" rel=\"nofollow\">https://github.com/kepano/defuddle</a>) handles the extraction and strips clutter from web pages, presenting the main article content in a clean, consistent format.\nFor PDFs, a vision LLM rewrites each page into markdown with annotation tags that separate what you see from what gets read aloud. Math is rendered visually but gets spoken alt text. Citations like &quot;[13]&quot; or &quot;(Schmidhuber, 1970)&quot; are silently displayed. Page numbers and headers are removed entirely.<p>Both extraction and audio are cached by content hash, so the same content is never processed or synthesized twice.<p>Self-hosting works with any OpenAI-compatible TTS <em>server</em> (vLLM-Omni, ...) and any OpenAI-compatible vision model for PDF extraction:<p><pre><code>  git clone --depth 1 https://github.com/yapit-tts/yapit.git &amp;&amp; cd yapit\n  <em>cp</em> .env.selfhost.example .env.selfhost\n  make self-host\n</code></pre>\nKokoro TTS also runs in the browser via WebGPU on desktop.<p>Try it on Attention Is All You Need (all voices cached, no account needed): <a href=\"https://yapit.md/listen/3bde213b-3a5a-465f-9198-be65430b699e#3-model-architecture\" rel=\"nofollow\">https://yapit.md/listen/3bde213b-3a5a-465f-9198-be65430b699e...</a><p>Or paste any URL: \n  <a href=\"https://yapit.md/https://arxiv.org/abs/1810.04805\" rel=\"nofollow\">https://yapit.md/https://arxiv.org/abs/1810.04805</a>\n  <a href=\"https://yapit.md/https://x.com/karpathy/status/2039805659525644595\" rel=\"nofollow\">https://yapit.md/https://x.com/karpathy/status/2039805659525...</a><p>GitHub: <a href=\"https://github.com/yapit-tts/yapit\" rel=\"nofollow\">https://github.com/yapit-tts/yapit</a> (AGPL-3)"
+              "value": "Hey HN,<p>I built Pace, a Claude Connector that lets you connect all your wearables (Garmin, Polar, Whoop, 20+) with Claude.<p>You connect your devices once and can analyze your data with Claude. No Dashboard needed, just in natural language.\nI already use it everyday, especially the visualization <em>tool</em> in Claude makes this really cool to use.<p><em>Tools</em> include: overview, sleep, training, activity, samples and trends.<p>Tech Stack: Python (FastMCP), Google Cloud Run, Google Cloud SQL (PostgreSQL) and Firebase<p>It is live and free to try (no Claude Pro/MAX Plan needed)..<p>Would love feedback, especially from people who've built <em>MCP</em> servers or use wearables seriously."
             },
             "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Yapit – PDF and webpage reader with TTS that doesn't suck"
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "Show HN: I just built a <em>MCP</em> <em>Server</em> that connects Claude to all your wearables"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://github.com/yapit-tts/yapit"
+              "value": "https://pacetraining.co/"
             }
           },
           "_tags": [
             "story",
-            "author_MaxWolf-01",
-            "story_47660043",
+            "author_anton_salcher",
+            "story_47658617",
             "show_hn"
           ],
-          "author": "MaxWolf-01",
+          "author": "anton_salcher",
           "children": [
-            47668519
+            47664226,
+            47658796,
+            47658675,
+            47662373,
+            47658667,
+            47667937,
+            47661520
           ],
-          "created_at": "2026-04-06T12:28:04Z",
-          "created_at_i": 1775478484,
-          "num_comments": 1,
-          "objectID": "47660043",
-          "points": 5,
-          "story_id": 47660043,
-          "story_text": "Yapit converts PDFs and web pages to audio, with a vision-LLM pipeline that handles math and complex layout instead of garbling them. I built it because I read a lot of papers and content online, but drift off after two paragraphs. Listening while following along keeps me focused and lowers the bar to actually start.<p>Every TTS tool I tried broke on complex formatting. Papers with math, citations, figure references, page numbers in the middle of sentences. You either get garbled output or you&#x27;re listening to raw LaTeX.<p>Yapit converts everything to markdown as a common format. For web pages, defuddle (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;kepano&#x2F;defuddle\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kepano&#x2F;defuddle</a>) handles the extraction and strips clutter from web pages, presenting the main article content in a clean, consistent format.\nFor PDFs, a vision LLM rewrites each page into markdown with annotation tags that separate what you see from what gets read aloud. Math is rendered visually but gets spoken alt text. Citations like &quot;[13]&quot; or &quot;(Schmidhuber, 1970)&quot; are silently displayed. Page numbers and headers are removed entirely.<p>Both extraction and audio are cached by content hash, so the same content is never processed or synthesized twice.<p>Self-hosting works with any OpenAI-compatible TTS server (vLLM-Omni, ...) and any OpenAI-compatible vision model for PDF extraction:<p><pre><code>  git clone --depth 1 https:&#x2F;&#x2F;github.com&#x2F;yapit-tts&#x2F;yapit.git &amp;&amp; cd yapit\n  cp .env.selfhost.example .env.selfhost\n  make self-host\n</code></pre>\nKokoro TTS also runs in the browser via WebGPU on desktop.<p>Try it on Attention Is All You Need (all voices cached, no account needed): <a href=\"https:&#x2F;&#x2F;yapit.md&#x2F;listen&#x2F;3bde213b-3a5a-465f-9198-be65430b699e#3-model-architecture\" rel=\"nofollow\">https:&#x2F;&#x2F;yapit.md&#x2F;listen&#x2F;3bde213b-3a5a-465f-9198-be65430b699e...</a><p>Or paste any URL: \n  <a href=\"https:&#x2F;&#x2F;yapit.md&#x2F;https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1810.04805\" rel=\"nofollow\">https:&#x2F;&#x2F;yapit.md&#x2F;https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1810.04805</a>\n  <a href=\"https:&#x2F;&#x2F;yapit.md&#x2F;https:&#x2F;&#x2F;x.com&#x2F;karpathy&#x2F;status&#x2F;2039805659525644595\" rel=\"nofollow\">https:&#x2F;&#x2F;yapit.md&#x2F;https:&#x2F;&#x2F;x.com&#x2F;karpathy&#x2F;status&#x2F;2039805659525...</a><p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;yapit-tts&#x2F;yapit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;yapit-tts&#x2F;yapit</a> (AGPL-3)",
-          "title": "Show HN: Yapit – PDF and webpage reader with TTS that doesn't suck",
-          "updated_at": "2026-04-06T23:03:21Z",
-          "url": "https://github.com/yapit-tts/yapit"
+          "created_at": "2026-04-06T09:22:45Z",
+          "created_at_i": 1775467365,
+          "num_comments": 12,
+          "objectID": "47658617",
+          "points": 17,
+          "story_id": 47658617,
+          "story_text": "Hey HN,<p>I built Pace, a Claude Connector that lets you connect all your wearables (Garmin, Polar, Whoop, 20+) with Claude.<p>You connect your devices once and can analyze your data with Claude. No Dashboard needed, just in natural language.\nI already use it everyday, especially the visualization tool in Claude makes this really cool to use.<p>Tools include: overview, sleep, training, activity, samples and trends.<p>Tech Stack: Python (FastMCP), Google Cloud Run, Google Cloud SQL (PostgreSQL) and Firebase<p>It is live and free to try (no Claude Pro&#x2F;MAX Plan needed)..<p>Would love feedback, especially from people who&#x27;ve built MCP servers or use wearables seriously.",
+          "title": "Show HN: I just built a MCP Server that connects Claude to all your wearables",
+          "updated_at": "2026-04-07T04:22:52Z",
+          "url": "https://pacetraining.co/"
         }
       ]
     },
@@ -2301,11 +2310,11 @@
           "created_at_i": 1775503326,
           "num_comments": 0,
           "objectID": "47665630",
-          "points": 4,
+          "points": 7,
           "story_id": 47665630,
           "story_text": "We built meta-agent: an open-source library that automatically and continuously improves agent harnesses from production traces.<p>Point it at an existing agent, a stream of unlabeled production traces, and a small labeled holdout set.<p>An LLM judge scores unlabeled production traces as they stream.<p>A proposer reads failed traces and writes one targeted harness update at a time, such as changes to prompts, hooks, tools, or subagents.\nThe update is kept only if it improves holdout accuracy.<p>On tau-bench v3 airline, meta-agent improved holdout accuracy from 67% to 87%.<p>We open-sourced meta-agent. It currently supports Claude Agent SDK, with more frameworks coming soon.<p>Try it here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;canvas-org&#x2F;meta-agent\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;canvas-org&#x2F;meta-agent</a>",
           "title": "Show HN: Meta-agent: self-improving agent harnesses from live traces",
-          "updated_at": "2026-04-06T23:25:39Z",
+          "updated_at": "2026-04-07T01:31:37Z",
           "url": "https://github.com/canvas-org/meta-agent"
         },
         {
@@ -2480,8 +2489,8 @@
             47656701,
             47640449,
             47617410,
-            47621869,
             47602546,
+            47621869,
             47603984,
             47611202,
             47621860
@@ -2494,7 +2503,7 @@
           "story_id": 47601608,
           "story_text": "I got tired of AI agents forgetting what they were doing the moment their context window filled. The current industry solution is to write massively bloated agent harnesses full of defensive spaghetti just to stop models from drifting.<p>The problem is treating chat history as project state. A conversation is not a ledger.<p>Castra is a compiled Go binary that strips orchestration rights from the LLM. State lives in an encrypted, local SQLite database (castra.db). The LLM is just a stateless executor — it reads the DB, executes a highly constrained task, and the result is written back subject to rigid state-machine rules.<p>What it actually does:\n- 7-Role RBAC: Hard jurisdictional boundaries (Architect plans, Engineer builds, QA tests).\n- Dual-Gate Approval: A task cannot reach done without explicit, sequential approval from both a QA agent and a Security agent. No self-approving code.\n- Cryptographic Audit Chain: Every action is logged into a SHA-256 hash-linked, Ed25519-signed ledger.\n- Multi-Vendor: Works with Claude, Copilot, Gemini, etc. via a standard AGENTS.md protocol. Anything that supports AGENTS.md and can run terminal commands.<p>Proof of Work: I built this by hand up to v1.3.0. Then, I turned Castra on itself. The agents governed by this exact CLI took over and built the architecture up to v3.1.2—including the cryptographic log chain itself. The proof is in castra-log.jsonl in the repo.<p>If you are running multi-agent workflows and hitting the context amnesia wall, stop trying to prompt-engineer your way out of it. Fix the state machine.",
           "title": "Show HN: Castra – Strip orchestration rights from your LLMs",
-          "updated_at": "2026-04-06T12:00:36Z",
+          "updated_at": "2026-04-07T02:55:39Z",
           "url": "https://github.com/amangsingh/castra"
         }
       ]
