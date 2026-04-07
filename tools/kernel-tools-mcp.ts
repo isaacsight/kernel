@@ -721,6 +721,20 @@ server.tool(
     }
 )
 
+// ── Global error handling ────────────────────────────────────
+process.on('uncaughtException', (err) => {
+    console.error('[kernel-tools] Uncaught exception:', err.message)
+    process.exit(1)
+})
+
+process.on('unhandledRejection', (reason) => {
+    console.error('[kernel-tools] Unhandled rejection:', reason)
+    process.exit(1)
+})
+
 // ── Start ────────────────────────────────────────────────────
 const transport = new StdioServerTransport()
-await server.connect(transport)
+server.connect(transport).catch((err) => {
+    console.error('[kernel-tools] Failed to connect:', err.message)
+    process.exit(1)
+})

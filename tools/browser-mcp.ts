@@ -323,6 +323,20 @@ server.tool(
   }
 )
 
+// ── Global error handling ────────────────────────────────────
+process.on('uncaughtException', (err) => {
+  console.error('[browser] Uncaught exception:', err.message)
+  process.exit(1)
+})
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[browser] Unhandled rejection:', reason)
+  process.exit(1)
+})
+
 // Start server
 const transport = new StdioServerTransport()
-await server.connect(transport)
+server.connect(transport).catch((err) => {
+  console.error('[browser] Failed to connect:', err.message)
+  process.exit(1)
+})

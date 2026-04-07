@@ -201,7 +201,7 @@ export function PublishPanel({
                 {tags.map(tag => (
                   <span key={tag} className="ka-publish-tag">
                     {tag}
-                    <button className="ka-publish-tag-remove" onClick={() => removeTag(tag)}>&times;</button>
+                    <button className="ka-publish-tag-remove" onClick={() => removeTag(tag)} aria-label="Remove tag">&times;</button>
                   </span>
                 ))}
               </div>

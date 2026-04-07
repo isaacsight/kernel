@@ -118,7 +118,7 @@ export function SocialAdaptPanel({ isOpen, onClose, content, contentId, title }:
         <div className="ka-social-adapt-header">
           <h2>Distribute Content</h2>
           {title && <p className="ka-social-adapt-subtitle">{title}</p>}
-          <button className="ka-social-adapt-close" onClick={onClose}>{'\u2715'}</button>
+          <button className="ka-social-adapt-close" onClick={onClose} aria-label="Close">{'\u2715'}</button>
         </div>
 
         {/* Account selection */}

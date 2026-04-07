@@ -73,7 +73,7 @@ export function KnowledgePanel({ userId, onClose, onToast }: KnowledgePanelProps
       <div className="ka-knowledge-panel">
         <div className="ka-knowledge-header">
           <div className="ka-knowledge-title"><IconBrain size={18} /> <span>Knowledge Base</span></div>
-          <button className="ka-knowledge-close" onClick={onClose}><IconClose size={18} /></button>
+          <button className="ka-knowledge-close" onClick={onClose} aria-label="Close"><IconClose size={18} /></button>
         </div>
         <div className="ka-knowledge-loading">Loading knowledge base...</div>
       </div>
@@ -86,7 +86,7 @@ export function KnowledgePanel({ userId, onClose, onToast }: KnowledgePanelProps
     <div className="ka-knowledge-panel">
       <div className="ka-knowledge-header">
         <div className="ka-knowledge-title"><IconBrain size={18} /> <span>Knowledge Base</span></div>
-        <button className="ka-knowledge-close" onClick={onClose}><IconClose size={18} /></button>
+        <button className="ka-knowledge-close" onClick={onClose} aria-label="Close"><IconClose size={18} /></button>
       </div>
 
       {/* Tab bar */}
@@ -191,6 +191,7 @@ export function KnowledgePanel({ userId, onClose, onToast }: KnowledgePanelProps
               className="ka-knowledge-search-btn"
               onClick={handleSearch}
               disabled={searching || !searchQuery.trim()}
+              aria-label="Search"
             >
               <IconSearch size={16} />
             </button>
@@ -213,7 +214,7 @@ export function KnowledgePanel({ userId, onClose, onToast }: KnowledgePanelProps
                   </div>
                   <div className="ka-knowledge-result-footer">
                     <span className="ka-knowledge-result-source">{item.source_type}{item.source_title ? `: ${item.source_title}` : ''}</span>
-                    <button className="ka-knowledge-result-delete" onClick={() => handleDelete(item.id)} title="Delete">
+                    <button className="ka-knowledge-result-delete" onClick={() => handleDelete(item.id)} title="Delete" aria-label="Delete">
                       <IconTrash size={14} />
                     </button>
                   </div>

@@ -687,9 +687,23 @@ server.tool(
   }
 )
 
+// ── Global error handling ────────────────────────────────────────
+process.on('uncaughtException', (err) => {
+  console.error('[kernel-obsidian] Uncaught exception:', err.message)
+  process.exit(1)
+})
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[kernel-obsidian] Unhandled rejection:', reason)
+  process.exit(1)
+})
+
 // ── Start ────────────────────────────────────────────────────────
 
 ensureAllFolders()
 
 const transport = new StdioServerTransport()
-await server.connect(transport)
+server.connect(transport).catch((err) => {
+  console.error('[kernel-obsidian] Failed to connect:', err.message)
+  process.exit(1)
+})

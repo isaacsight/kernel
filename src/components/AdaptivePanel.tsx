@@ -181,7 +181,7 @@ function ProfileSection({
     <div className="ka-adaptive-section">
       <div className="ka-adaptive-section-header">
         <h3 className="ka-adaptive-section-title">Learned Preferences</h3>
-        <button className="ka-adaptive-refresh" onClick={onRefresh} title="Recalculate">
+        <button className="ka-adaptive-refresh" onClick={onRefresh} title="Recalculate" aria-label="Recalculate">
           <IconRefresh size={14} />
         </button>
       </div>
@@ -349,7 +349,7 @@ function InsightsSection({
     <div className="ka-adaptive-section">
       <div className="ka-adaptive-section-header">
         <h3 className="ka-adaptive-section-title">Discovered Insights</h3>
-        <button className="ka-adaptive-refresh" onClick={onRefresh} title="Refresh insights">
+        <button className="ka-adaptive-refresh" onClick={onRefresh} title="Refresh insights" aria-label="Refresh insights">
           <IconRefresh size={14} />
         </button>
       </div>
@@ -402,7 +402,7 @@ function ExperimentsSection({
     <div className="ka-adaptive-section">
       <div className="ka-adaptive-section-header">
         <h3 className="ka-adaptive-section-title">Experiments</h3>
-        <button className="ka-adaptive-refresh" onClick={onRefresh} title="Refresh experiments">
+        <button className="ka-adaptive-refresh" onClick={onRefresh} title="Refresh experiments" aria-label="Refresh experiments">
           <IconRefresh size={14} />
         </button>
       </div>

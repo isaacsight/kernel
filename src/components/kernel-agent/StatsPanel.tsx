@@ -31,7 +31,7 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
       <div className="stats-panel">
         <div className="stats-header">
           <div className="stats-title"><IconChart size={18} /> <span>{t('stats.title')}</span></div>
-          <button className="stats-close" onClick={onClose}><IconClose size={18} /></button>
+          <button className="stats-close" onClick={onClose} aria-label="Close"><IconClose size={18} /></button>
         </div>
         <div className="stats-loading">{t('stats.loading')}</div>
       </div>
@@ -43,7 +43,7 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
       <div className="stats-panel">
         <div className="stats-header">
           <div className="stats-title"><IconChart size={18} /> <span>{t('stats.title')}</span></div>
-          <button className="stats-close" onClick={onClose}><IconClose size={18} /></button>
+          <button className="stats-close" onClick={onClose} aria-label="Close"><IconClose size={18} /></button>
         </div>
         <div className="stats-loading">{t('stats.loadError')}</div>
       </div>
@@ -62,7 +62,7 @@ export default function StatsPanel({ userId, onClose }: StatsPanelProps) {
     <div className="stats-panel">
       <div className="stats-header">
         <div className="stats-title"><IconChart size={18} /> <span>{t('stats.title')}</span></div>
-        <button className="stats-close" onClick={onClose}><IconClose size={18} /></button>
+        <button className="stats-close" onClick={onClose} aria-label="Close"><IconClose size={18} /></button>
       </div>
 
       {/* Key Metrics */}
