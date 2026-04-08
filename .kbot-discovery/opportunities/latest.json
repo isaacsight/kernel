@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-08T07:22:58.472Z",
+  "timestamp": "2026-04-08T13:37:56.498Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "Project Glasswing: Securing critical software for the AI era",
+      "url": "https://news.ycombinator.com/item?id=47687834",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Taste in the age of AI and LLMs",
       "url": "https://news.ycombinator.com/item?id=47678081",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -80,11 +87,11 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "The cult of vibe coding is dogfooding run amok",
-      "url": "https://news.ycombinator.com/item?id=47676831",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "feat(core): add AGENTS.md to default context filenames",
+      "url": "https://github.com/google-gemini/gemini-cli/pull/24913",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "fix(core): dispose Scheduler to prevent McpProgress listener leak",
       "url": "https://github.com/google-gemini/gemini-cli/pull/24870",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "CallTool passes tool arguments as natural language string enabling prompt injection",
-      "url": "https://github.com/kubestellar/console/issues/5350",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(plugins): normalize Windows ESM import paths #62980",
-      "url": "https://github.com/openclaw/openclaw/pull/63000",
+      "title": "feat(plugins): expose ACP spawn and prompt in plugin runtime",
+      "url": "https://github.com/openclaw/openclaw/pull/63176",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[Feature]: seekdb M0 (m0) as external memory provider plugin",
-      "url": "https://github.com/NousResearch/hermes-agent/issues/6058",
+      "title": "plugin-sdk: split command status surface",
+      "url": "https://github.com/openclaw/openclaw/pull/63174",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Upstream sync: 2026-04-08",
-      "url": "https://github.com/BinyaminEden/claude-combine/pull/13",
+      "title": "🦞 OpenClaw 生态日报 2026-04-08",
+      "url": "https://github.com/rollysys/agents-radar/issues/207",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "AI agent",
+      "url": "https://reddit.com/r/artificial/comments/1sfrert/ai_agent/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "We have an AI agent fragmentation problem",
       "url": "https://reddit.com/r/artificial/comments/1sf9yeq/we_have_an_ai_agent_fragmentation_problem/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Has anyone here switched to TeraBox recently? Is it actually worth it?",
       "url": "https://reddit.com/r/artificial/comments/1sf27xf/has_anyone_here_switched_to_terabox_recently_is/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "The \"Jarvis on day one\" trap: why trying to build one AI agent that does everything costs you months",
-      "url": "https://reddit.com/r/artificial/comments/1seu2cw/the_jarvis_on_day_one_trap_why_trying_to_build/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
