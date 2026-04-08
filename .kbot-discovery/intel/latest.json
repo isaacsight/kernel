@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-08T00:28:37.195Z",
+  "timestamp": "2026-04-08T07:22:54.601Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -248,12 +248,12 @@
           ],
           "created_at": "2026-04-05T22:14:34Z",
           "created_at_i": 1775427274,
-          "num_comments": 2,
+          "num_comments": 4,
           "objectID": "47654495",
           "points": 5,
           "story_id": 47654495,
           "title": "Show HN: TermHub – Open-source terminal control gateway built for AI Agents",
-          "updated_at": "2026-04-07T01:34:07Z",
+          "updated_at": "2026-04-08T06:48:57Z",
           "url": "https://github.com/duo121/termhub"
         }
       ]
@@ -402,62 +402,63 @@
             47666186,
             47667062,
             47667921,
-            47667271,
             47666394,
+            47667271,
             47666292,
-            47673857,
             47669774,
+            47673857,
             47675539,
             47672538,
-            47673835,
             47667473,
+            47673835,
             47669179,
-            47670423,
             47666755,
+            47670423,
             47668845,
-            47671738,
             47670185,
+            47666947,
+            47671738,
+            47667743,
             47671460,
             47671577,
-            47666947,
-            47667743,
             47670166,
+            47669791,
             47666980,
             47670311,
             47668137,
-            47672988,
             47668044,
             47667257,
-            47670903,
+            47672988,
             47667016,
-            47669791,
+            47670903,
             47669046,
             47667233,
-            47670232,
             47667494,
+            47670232,
             47668774,
             47669619,
             47668978,
             47668488,
             47667671,
-            47673653,
             47669787,
+            47673653,
             47670716,
+            47685269,
             47679060,
             47671640,
             47674927,
-            47676377,
             47669916,
-            47673418,
-            47672374,
+            47676377,
+            47671145,
             47668960,
+            47672374,
+            47673418,
+            47669628,
             47672517,
             47671794,
-            47669628,
-            47671145,
             47671343,
-            47675783,
             47667935,
+            47675783,
             47666999,
             47667704
           ],
@@ -465,11 +466,11 @@
           "created_at_i": 1775505016,
           "num_comments": 194,
           "objectID": "47666024",
-          "points": 450,
+          "points": 456,
           "story_id": 47666024,
           "story_text": "I built this because I wanted to see how far I could get with a voice-to-text app that used 100% local models so no data left my computer. I&#x27;ve been using a ton for coding and emails. Experimenting with using it as a voice interface for my other agents too. 100% open-source MIT license, would love feedback, PRs, and ideas on where to take it.",
           "title": "Show HN: Ghost Pepper – Local hold-to-talk speech-to-text for macOS",
-          "updated_at": "2026-04-08T00:26:56Z",
+          "updated_at": "2026-04-08T07:14:26Z",
           "url": "https://github.com/matthartman/ghost-pepper"
         },
         {
@@ -831,6 +832,96 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "meryll_dindin"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "One Brain to Query: Wiring a 60-Person Company into a Single Slack <em>Bot</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://merylldindin.com/thoughts/company-brain/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_meryll_dindin",
+            "story_47684811"
+          ],
+          "author": "meryll_dindin",
+          "children": [
+            47684812
+          ],
+          "created_at": "2026-04-08T03:35:21Z",
+          "created_at_i": 1775619321,
+          "num_comments": 1,
+          "objectID": "47684811",
+          "points": 2,
+          "story_id": 47684811,
+          "title": "One Brain to Query: Wiring a 60-Person Company into a Single Slack Bot",
+          "updated_at": "2026-04-08T04:24:26Z",
+          "url": "https://merylldindin.com/thoughts/company-brain/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "mjyut"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "LLM scraper <em>bot</em>s are overloading acme.com's HTTPS server"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "http://acme.com/updates/archive/229.html"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_mjyut",
+            "story_47684506"
+          ],
+          "author": "mjyut",
+          "children": [
+            47684929,
+            47684858,
+            47686403,
+            47685191,
+            47686111,
+            47685280,
+            47686192,
+            47685441,
+            47684982,
+            47685040,
+            47685208
+          ],
+          "created_at": "2026-04-08T03:02:56Z",
+          "created_at_i": 1775617376,
+          "num_comments": 43,
+          "objectID": "47684506",
+          "points": 49,
+          "story_id": 47684506,
+          "title": "LLM scraper bots are overloading acme.com's HTTPS server",
+          "updated_at": "2026-04-08T07:21:56Z",
+          "url": "http://acme.com/updates/archive/229.html"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "stfarm"
             },
             "title": {
@@ -854,17 +945,17 @@
           ],
           "author": "stfarm",
           "children": [
-            47683003,
-            47682968
+            47682968,
+            47683003
           ],
           "created_at": "2026-04-08T00:08:13Z",
           "created_at_i": 1775606893,
           "num_comments": 0,
           "objectID": "47682967",
-          "points": 1,
+          "points": 2,
           "story_id": 47682967,
           "title": "Predict and Profit, automated Kalshi bots for weather and CPI/PCE",
-          "updated_at": "2026-04-08T00:12:55Z",
+          "updated_at": "2026-04-08T00:44:40Z",
           "url": "https://predictandprofit.io"
         },
         {
@@ -948,157 +1039,12 @@
           "story_text": "*I built a free Twitter&#x2F;X bookmark exporter. All links at the bottom*<p>The Chrome extension exports everything on your X bookmarks page to a local file. No login, no data leaving your machine.<p>Install extension<p>On https:&#x2F;&#x2F;x.com&#x2F;i&#x2F;bookmarks, with extension open, click Export<p>If your account gets suspended tomorrow, your bookmarks are gone. This prevents that.<p>I also built a viewer if you want to search, tag, and browse your exports like an actual library — offline, no account needed. $4.69&#x2F;year for the viewer, but the exporter is fully standalone if you just want the backup.<p>Free Chrome extension: https:&#x2F;&#x2F;chromewebstore.google.com&#x2F;detail&#x2F;x-bookmark-exporter&#x2F;dmnjciohjaneghgolilbhdlbcbncfghl<p>Viewer: https:&#x2F;&#x2F;x-archive.netlify.app&#x2F;<p>▶ Video demo: https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=wIHj81BOdZ4",
           "title": "Tool to Export X Bookmarks (Free) & Categorize Them",
           "updated_at": "2026-04-07T22:16:12Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "frasermarlow"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "An interactive map of Tolkien’s Middle-earth, with events from across the legendarium plotted as markers.<p>I have been commuting a fair bit between the East and West coast, and thanks to American Airlines' free onboard WiFi, I was able to vibe-code a full interactive map of Middle-earth right from my economy seat at the back of the bus.<p>It's rather amazing how much an LLM knows about Tolkien's work, and it was fun to delve into many of the nooks and crannies of Tolkien's lore.<p>Some features:\n- Plot on the map the journey of the main characters in <em>bot</em>h The Hobbit and The Lord of the Rings.\n- Follow a list of events in the chronological Timeline\n- Zoom in on the high-def map and explore many of the off-the-main-plotline places\n- Use the 'measure distances' feature to see how far apart things are.<p>I also had a lot of fun learning about tiling to allow for efficient zooming.<p>If you are anything like me, this should provide a fun companion to reading the books or watching the movies (note that on this site, I followed the book narrative, and did not include Peter Jackson's many departures)<p>If you get the chance to check it out, I would love more feedback, and if there is demand, I might do the same for Game of Thrones."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: An interactive map of Tolkien's Middle-earth"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://middle-earth-interactive-map.web.app/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_frasermarlow",
-            "story_47681112",
-            "show_hn",
-            "front_page"
-          ],
-          "author": "frasermarlow",
-          "children": [
-            47681670,
-            47682668,
-            47682208,
-            47682411,
-            47682170,
-            47682505
-          ],
-          "created_at": "2026-04-07T20:42:37Z",
-          "created_at_i": 1775594557,
-          "num_comments": 10,
-          "objectID": "47681112",
-          "points": 53,
-          "story_id": 47681112,
-          "story_text": "An interactive map of Tolkien’s Middle-earth, with events from across the legendarium plotted as markers.<p>I have been commuting a fair bit between the East and West coast, and thanks to American Airlines&#x27; free onboard WiFi, I was able to vibe-code a full interactive map of Middle-earth right from my economy seat at the back of the bus.<p>It&#x27;s rather amazing how much an LLM knows about Tolkien&#x27;s work, and it was fun to delve into many of the nooks and crannies of Tolkien&#x27;s lore.<p>Some features:\n- Plot on the map the journey of the main characters in both The Hobbit and The Lord of the Rings.\n- Follow a list of events in the chronological Timeline\n- Zoom in on the high-def map and explore many of the off-the-main-plotline places\n- Use the &#x27;measure distances&#x27; feature to see how far apart things are.<p>I also had a lot of fun learning about tiling to allow for efficient zooming.<p>If you are anything like me, this should provide a fun companion to reading the books or watching the movies (note that on this site, I followed the book narrative, and did not include Peter Jackson&#x27;s many departures)<p>If you get the chance to check it out, I would love more feedback, and if there is demand, I might do the same for Game of Thrones.",
-          "title": "Show HN: An interactive map of Tolkien's Middle-earth",
-          "updated_at": "2026-04-08T00:26:56Z",
-          "url": "https://middle-earth-interactive-map.web.app/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kirby88"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I built vix, an AI coding agent that uses a virtual filesystem to minify source code so the LLM always works in the minified space, and the concept of stem agents that allows for optimal cache hits in plan mode.<p>I used the same prompts and same model than claude code, and run <em>bot</em>h vix and claude code over 7 life like benchmarks, ran 5 times each. The results are that vix is 50% cheaper and 40% faster than claude code. I shared all the plans and the diffs in the repo so you can compare the planning and execution quality by yourself (similar in my opinion)."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: I built an AI coding agent 50% cheaper than Claude Code (same prompts)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/kirby88/vix-releases"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kirby88",
-            "story_47680184",
-            "show_hn"
-          ],
-          "author": "kirby88",
-          "children": [
-            47681777
-          ],
-          "created_at": "2026-04-07T19:28:28Z",
-          "created_at_i": 1775590108,
-          "num_comments": 1,
-          "objectID": "47680184",
-          "points": 3,
-          "story_id": 47680184,
-          "story_text": "I built vix, an AI coding agent that uses a virtual filesystem to minify source code so the LLM always works in the minified space, and the concept of stem agents that allows for optimal cache hits in plan mode.<p>I used the same prompts and same model than claude code, and run both vix and claude code over 7 life like benchmarks, ran 5 times each. The results are that vix is 50% cheaper and 40% faster than claude code. I shared all the plans and the diffs in the repo so you can compare the planning and execution quality by yourself (similar in my opinion).",
-          "title": "Show HN: I built an AI coding agent 50% cheaper than Claude Code (same prompts)",
-          "updated_at": "2026-04-07T21:50:26Z",
-          "url": "https://github.com/kirby88/vix-releases"
         }
       ]
     },
     {
       "query": "OpenClaw+plugin",
       "hits": [
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "alexchen_dev"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "<em>OpenClaw</em> <em>Plugin</em> for Claude Code CLI – Persistent Worker Pool with Smart OAuth"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "https://github.com/AlexChen31337/<em>openclaw</em>-<em>plugin</em>-claude-code"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_alexchen_dev",
-            "story_47669615"
-          ],
-          "author": "alexchen_dev",
-          "children": [
-            47669616
-          ],
-          "created_at": "2026-04-07T01:23:05Z",
-          "created_at_i": 1775524985,
-          "num_comments": 0,
-          "objectID": "47669615",
-          "points": 1,
-          "story_id": 47669615,
-          "title": "OpenClaw Plugin for Claude Code CLI – Persistent Worker Pool with Smart OAuth",
-          "updated_at": "2026-04-07T01:28:52Z",
-          "url": "https://github.com/AlexChen31337/openclaw-plugin-claude-code"
-        },
         {
           "_highlightResult": {
             "author": {
@@ -1275,6 +1221,57 @@
           "story_text": "For anyone actually using OpenClaw or related claw&#x2F;agentic frameworks, how are you solving for your agents, plugin installers etc, self editing and corrupting your settings.json configs?<p>Problems I&#x27;m seeing:\n- spending 80% of time troubleshooting the agent framework, vs doing constructive projects\n- agents writing without reading first\n- concurrency issues, agents reading from stale memory\n- agents not consistently backing up before chantes\n- no built-in safety controls for rolling back to last good config\n- intallers or plugins stomping all over the file\n- schema constantly changing and agents not checking docs and then hallucinating syntax\n- basic problems with json (no comments, no types, very fragile to syntax errors)\n- even small errors will block gateway from restarting and block the agents from being able to run to autonomously troubleshoot or fix their own mistakes.\n- openclaw doctor seems to cause as many problems as it fixes<p>I find myself setting up a lot of scripts, scaffolding, and external AI tools, just to babysit an agentic framework. Which sort of defeats the purpose of using a &quot;ready-made&quot; framework in the first place? Or is there an easier way?",
           "title": "Ask HN: Settings.json is an insane design choice for OpenClaw?",
           "updated_at": "2026-03-30T17:03:08Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "evanvuckovic"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Anthropic says on their safety page: &quot;these filters are not a security boundary.&quot; Snyk found 36% of ClawHub skills contain security flaws. Trend Micro documented malware being distributed through ClawHub.<p>These agents have shell access, file access, and connected accounts. We built Shoofly to sit in front of tool calls before they fire.<p>- PreToolUse / PostToolUse hooks intercept every tool call\n- Blocks prompt injection, credential theft, unauthorized writes, malware in tool results\n- Works with <em>OpenClaw</em>, Claude Code CLI, and Cowork / Dispatch\n- Open YAML policy -- read it, fork it, audit it\n- Free tier detects. $5/mo blocks.<p>The Cowork piece was the interesting part. Cowork runs Claude Code inside a full Ubuntu VM -- host hooks don't fire there. We used the <em>plugin</em> system with hooks/hooks.json and VirtioFS to get sub-50ms alert latency from inside the VM to host notifications.<p>curl -fsSL <a href=\"https://shoofly.dev/install.sh\" rel=\"nofollow\">https://shoofly.dev/install.sh</a> | bash<p>shoofly.dev"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "openclaw"
+              ],
+              "value": "Show HN: Shoofly – pre-execution security for Claude Code Cowork and <em>OpenClaw</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://shoofly.dev/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_evanvuckovic",
+            "story_47560819",
+            "show_hn"
+          ],
+          "author": "evanvuckovic",
+          "children": [
+            47567608
+          ],
+          "created_at": "2026-03-29T06:20:34Z",
+          "created_at_i": 1774765234,
+          "num_comments": 0,
+          "objectID": "47560819",
+          "points": 3,
+          "story_id": 47560819,
+          "story_text": "Anthropic says on their safety page: &quot;these filters are not a security boundary.&quot; Snyk found 36% of ClawHub skills contain security flaws. Trend Micro documented malware being distributed through ClawHub.<p>These agents have shell access, file access, and connected accounts. We built Shoofly to sit in front of tool calls before they fire.<p>- PreToolUse &#x2F; PostToolUse hooks intercept every tool call\n- Blocks prompt injection, credential theft, unauthorized writes, malware in tool results\n- Works with OpenClaw, Claude Code CLI, and Cowork &#x2F; Dispatch\n- Open YAML policy -- read it, fork it, audit it\n- Free tier detects. $5&#x2F;mo blocks.<p>The Cowork piece was the interesting part. Cowork runs Claude Code inside a full Ubuntu VM -- host hooks don&#x27;t fire there. We used the plugin system with hooks&#x2F;hooks.json and VirtioFS to get sub-50ms alert latency from inside the VM to host notifications.<p>curl -fsSL <a href=\"https:&#x2F;&#x2F;shoofly.dev&#x2F;install.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;shoofly.dev&#x2F;install.sh</a> | bash<p>shoofly.dev",
+          "title": "Show HN: Shoofly – pre-execution security for Claude Code Cowork and OpenClaw",
+          "updated_at": "2026-03-29T21:38:18Z",
+          "url": "https://shoofly.dev/"
         }
       ]
     },
@@ -1372,11 +1369,11 @@
           "created_at_i": 1775508281,
           "num_comments": 6,
           "objectID": "47666811",
-          "points": 9,
+          "points": 10,
           "story_id": 47666811,
           "story_text": "Hello all, been trying to switch away from Claude Code and have been trailing this:<p>- Harness: Opencode (via Openchamber)\n- Subscription: GitHub Copilot (50$)\n- API Usage (beyond subscription): Open router\n- Free models: Opencode go<p>Here&#x27;s the models I&#x27;ve trialed and like:<p>- Large (alternative to Opus): GPT 5.3 Codex\n- Medium (alternative to Sonnet): Minimax 2.7\n- Smol: GPT 5.4 mini<p>these models are not yet on par to their respective Claude alternatives for me, but maybe I need to switch to something else or tune them, what have you been using?<p>Also looking for nice Opencode plugins, skills, completion providers (alternative to Cursor that I could use with Zen).<p>Happy to hear about your choices and experience",
           "title": "Ask HN: Alternatives to Claude (Code)?",
-          "updated_at": "2026-04-07T23:13:26Z"
+          "updated_at": "2026-04-08T01:40:26Z"
         },
         {
           "_highlightResult": {
@@ -1606,8 +1603,8 @@
             47657890,
             47660550,
             47657287,
-            47657249,
             47656014,
+            47657249,
             47660569,
             47657759,
             47658048,
@@ -1622,12 +1619,12 @@
           ],
           "created_at": "2026-04-05T23:59:10Z",
           "created_at_i": 1775433550,
-          "num_comments": 26,
+          "num_comments": 27,
           "objectID": "47655268",
           "points": 98,
           "story_id": 47655268,
           "title": "Show HN: Modo – I built an open-source alternative to Kiro, Cursor, and Windsurf",
-          "updated_at": "2026-04-07T21:39:25Z",
+          "updated_at": "2026-04-08T05:43:56Z",
           "url": "https://github.com/mohshomis/modo"
         },
         {
@@ -2066,6 +2063,101 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "elliptic1"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hey HN! I built VoicePlan.it — a voice-first strategic planning <em>tool</em> powered by AI.<p>The idea: instead of typing prompts into ChatGPT and getting a wall of plan text back, you <i>talk</i> through your project plan with an AI partner that asks questions, challenges assumptions, and writes structured plan documents in real time as the conversation unfolds. Talk and plan for as long as you like!<p>The newest feature is the <em>MCP</em> integration — once your plan is done, you connect it to your AI via a cloud <em>MCP</em> <em>server</em>, so your assistant has full context from your planning docs.<p>Would love feedback from HN — especially on the <em>MCP</em> angle, which feels like the part most relevant to this community.<p><a href=\"https://voiceplan.it\" rel=\"nofollow\">https://voiceplan.it</a>"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Voiceplan.it – The New Planning Mode"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://voiceplan.it/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_elliptic1",
+            "story_47685815",
+            "show_hn"
+          ],
+          "author": "elliptic1",
+          "children": [
+            47685902
+          ],
+          "created_at": "2026-04-08T05:43:57Z",
+          "created_at_i": 1775627037,
+          "num_comments": 0,
+          "objectID": "47685815",
+          "points": 1,
+          "story_id": 47685815,
+          "story_text": "Hey HN! I built VoicePlan.it — a voice-first strategic planning tool powered by AI.<p>The idea: instead of typing prompts into ChatGPT and getting a wall of plan text back, you <i>talk</i> through your project plan with an AI partner that asks questions, challenges assumptions, and writes structured plan documents in real time as the conversation unfolds. Talk and plan for as long as you like!<p>The newest feature is the MCP integration — once your plan is done, you connect it to your AI via a cloud MCP server, so your assistant has full context from your planning docs.<p>Would love feedback from HN — especially on the MCP angle, which feels like the part most relevant to this community.<p><a href=\"https:&#x2F;&#x2F;voiceplan.it\" rel=\"nofollow\">https:&#x2F;&#x2F;voiceplan.it</a>",
+          "title": "Show HN: Voiceplan.it – The New Planning Mode",
+          "updated_at": "2026-04-08T05:55:42Z",
+          "url": "https://voiceplan.it/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "An0n_Jon"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "When you configure <em>MCP</em> <em>servers</em> in any agent framework today, they all connect at session init and stay connected for the entire session.<p>If your agent is set up with 12 integrations, all 12 are live from the moment the session starts. Holding connections, processes, and attack surfaces. Even if 9 of them never get called.<p>If you're hosting your own <em>MCP</em> <em>servers</em>, you're paying for all of them 24/7 for no real benefit.<p>The right model is closer to how ephemeral infra works: spin up on <em>tool</em> call, tear down when done. Exposure window is exactly as wide as the operation that opened it.<p>Docker's <em>MCP</em> Gateway actually does something like this at the infra layer, container per call, destroyed after, but that's a deployment concern. The agent runtime still assumes everything is connected and waiting.<p>This is one of the features built in Orloj [0]. <em>MCP</em> <em>servers</em> summoned on demand rather than pre-connected long running processes.<p>Curious whether people running agents in production are actually hitting this, or whether it's being absorbed somewhere in the infra layer without much visibility.<p>[0] https://github.com/OrlojHQ/orloj"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp"
+              ],
+              "value": "The way every agent framework handles <em>MCP</em> is a latent security problem"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_An0n_Jon",
+            "story_47683498",
+            "ask_hn"
+          ],
+          "author": "An0n_Jon",
+          "children": [
+            47686376
+          ],
+          "created_at": "2026-04-08T01:12:00Z",
+          "created_at_i": 1775610720,
+          "num_comments": 0,
+          "objectID": "47683498",
+          "points": 2,
+          "story_id": 47683498,
+          "story_text": "When you configure MCP servers in any agent framework today, they all connect at session init and stay connected for the entire session.<p>If your agent is set up with 12 integrations, all 12 are live from the moment the session starts. Holding connections, processes, and attack surfaces. Even if 9 of them never get called.<p>If you&#x27;re hosting your own MCP servers, you&#x27;re paying for all of them 24&#x2F;7 for no real benefit.<p>The right model is closer to how ephemeral infra works: spin up on tool call, tear down when done. Exposure window is exactly as wide as the operation that opened it.<p>Docker&#x27;s MCP Gateway actually does something like this at the infra layer, container per call, destroyed after, but that&#x27;s a deployment concern. The agent runtime still assumes everything is connected and waiting.<p>This is one of the features built in Orloj [0]. MCP servers summoned on demand rather than pre-connected long running processes.<p>Curious whether people running agents in production are actually hitting this, or whether it&#x27;s being absorbed somewhere in the infra layer without much visibility.<p>[0] https:&#x2F;&#x2F;github.com&#x2F;OrlojHQ&#x2F;orloj",
+          "title": "The way every agent framework handles MCP is a latent security problem",
+          "updated_at": "2026-04-08T07:03:12Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "dko"
             },
             "story_text": {
@@ -2203,102 +2295,6 @@
           "title": "Show HN: Act-SDK – Wrap existing TypeScript functions as MCP tools in minutes",
           "updated_at": "2026-04-07T10:18:23Z",
           "url": "https://www.act-sdk.dev/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kirumachi"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Hey HN,<p>I have been using Claude Code and Cursor lately and as we all know, they write code incredibly fast but a few times i have noticed they can introduce the same security flaws. For example, you ask the LLM to build a file upload feature, you will get working code in minutes, but it would almost always miss magic-byte validation or leaves you vulnerable to SVG XSS. The LLM optimizes for code that compiles not code that is secure.<p>To fix this for my own workflow, I made a set of 8 security-focused AI agents (AppSec, GRC, Cloud/Platform, etc) that you can drop into any <em>MCP</em>-compatible <em>tool</em> (Cursor, Windsurf) or use with Claude Code.<p>To clarify, the goal here is not to say that LLM/AI replaces AppSec or the Secure Software Development Cycle, instead the goal is to provide a series of structured prompts and concrete security artifacts (like STRIDE based threat models and ASVS mapped functional requirements) for developers who are already using AI to write code. The aim is to force the LLM to pause and sort of put on a security hat during specific phases of the SDLC.<p>What It Actually Is<p>It is an MIT licenced repo containing the agent prompts, document templates and an <em>MCP</em> <em>server</em>. You can install via Claude marketplace or globally via npm, which gives you a CLI to scaffold git hooks, CodeQL CI Gates and the <em>MCP</em> config. Also included are 3 full walkthroughs in the repo showing how the agents catch things.<p>I am an Application Security Engineer, and I am really curious to get feedback and critique. Please try it out without any signups using the URL. I will be around to answer any questions"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp"
-              ],
-              "value": "Show HN: Secure SDLC Agents for Claude and Cursor (<em>MCP</em>)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/Kaademos/secure-sdlc-agents"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kirumachi",
-            "story_47672458",
-            "show_hn"
-          ],
-          "author": "kirumachi",
-          "children": [
-            47677559
-          ],
-          "created_at": "2026-04-07T09:00:01Z",
-          "created_at_i": 1775552401,
-          "num_comments": 0,
-          "objectID": "47672458",
-          "points": 1,
-          "story_id": 47672458,
-          "story_text": "Hey HN,<p>I have been using Claude Code and Cursor lately and as we all know, they write code incredibly fast but a few times i have noticed they can introduce the same security flaws. For example, you ask the LLM to build a file upload feature, you will get working code in minutes, but it would almost always miss magic-byte validation or leaves you vulnerable to SVG XSS. The LLM optimizes for code that compiles not code that is secure.<p>To fix this for my own workflow, I made a set of 8 security-focused AI agents (AppSec, GRC, Cloud&#x2F;Platform, etc) that you can drop into any MCP-compatible tool (Cursor, Windsurf) or use with Claude Code.<p>To clarify, the goal here is not to say that LLM&#x2F;AI replaces AppSec or the Secure Software Development Cycle, instead the goal is to provide a series of structured prompts and concrete security artifacts (like STRIDE based threat models and ASVS mapped functional requirements) for developers who are already using AI to write code. The aim is to force the LLM to pause and sort of put on a security hat during specific phases of the SDLC.<p>What It Actually Is<p>It is an MIT licenced repo containing the agent prompts, document templates and an MCP server. You can install via Claude marketplace or globally via npm, which gives you a CLI to scaffold git hooks, CodeQL CI Gates and the MCP config. Also included are 3 full walkthroughs in the repo showing how the agents catch things.<p>I am an Application Security Engineer, and I am really curious to get feedback and critique. Please try it out without any signups using the URL. I will be around to answer any questions",
-          "title": "Show HN: Secure SDLC Agents for Claude and Cursor (MCP)",
-          "updated_at": "2026-04-07T16:15:44Z",
-          "url": "https://github.com/Kaademos/secure-sdlc-agents"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "dimitrismrtzs"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "I've been running a Proxmox lab with around 40 services for a while now. Over the past year I ended up building an AI agent platform that manages my infrastructure and handles business operations — documents, phone calls, scheduling, monitoring, that kind of thing. It wraps Claude Code CLI as the execution engine with custom <em>MCP</em> <em>servers</em> on top.<p>The whole thing started as internal tooling for a startup I was working on but honestly the platform ended up being way more useful than the startup itself. I'm seriously considering open sourcing it and going full time on it. The way I think about it is something like Home Assistant but for business operations — you self-host it and AI agents handle your operations.<p>My concern is sustainability though. I can't realistically maintain something like this on the side — if I do it I need to go all in. Has anyone here built or seen a real business around an open source <em>tool</em> in the AI space? What license would you go with? I've been looking at Modified Apache 2.0 (what Dify uses) vs BSL but honestly not sure what makes sense.<p>Would appreciate any advice from people who've dealt with this."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: Is building a company around an open-source AI agent platform realistic?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_dimitrismrtzs",
-            "story_47671502",
-            "ask_hn"
-          ],
-          "author": "dimitrismrtzs",
-          "children": [
-            47680190,
-            47671626
-          ],
-          "created_at": "2026-04-07T06:40:12Z",
-          "created_at_i": 1775544012,
-          "num_comments": 2,
-          "objectID": "47671502",
-          "points": 1,
-          "story_id": 47671502,
-          "story_text": "I&#x27;ve been running a Proxmox lab with around 40 services for a while now. Over the past year I ended up building an AI agent platform that manages my infrastructure and handles business operations — documents, phone calls, scheduling, monitoring, that kind of thing. It wraps Claude Code CLI as the execution engine with custom MCP servers on top.<p>The whole thing started as internal tooling for a startup I was working on but honestly the platform ended up being way more useful than the startup itself. I&#x27;m seriously considering open sourcing it and going full time on it. The way I think about it is something like Home Assistant but for business operations — you self-host it and AI agents handle your operations.<p>My concern is sustainability though. I can&#x27;t realistically maintain something like this on the side — if I do it I need to go all in. Has anyone here built or seen a real business around an open source tool in the AI space? What license would you go with? I&#x27;ve been looking at Modified Apache 2.0 (what Dify uses) vs BSL but honestly not sure what makes sense.<p>Would appreciate any advice from people who&#x27;ve dealt with this.",
-          "title": "Ask HN: Is building a company around an open-source AI agent platform realistic?",
-          "updated_at": "2026-04-07T23:11:55Z"
         }
       ]
     },

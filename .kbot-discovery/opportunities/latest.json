@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-08T00:28:40.575Z",
+  "timestamp": "2026-04-08T07:22:58.472Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,22 +88,22 @@
     },
     {
       "source": "github-issue",
+      "title": "Add Aider hook support",
+      "url": "https://github.com/sprklai/agenttray/issues/7",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "fix(core): dispose Scheduler to prevent McpProgress listener leak",
+      "url": "https://github.com/google-gemini/gemini-cli/pull/24870",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "CallTool passes tool arguments as natural language string enabling prompt injection",
       "url": "https://github.com/kubestellar/console/issues/5350",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat: AI-driven Scrum team orchestration via CrewAI",
-      "url": "https://github.com/socks5-sniffer/picklePi/pull/47",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[BOUNTY: 75 RTC] Miner Status Notification System — Discord/Email/X alerts when your miner goes offline",
-      "url": "https://github.com/Scottcjn/rustchain-bounties/issues/2849",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-08",
-      "url": "https://github.com/DenisZheng/agents-radar/issues/303",
+      "title": "fix(plugins): normalize Windows ESM import paths #62980",
+      "url": "https://github.com/openclaw/openclaw/pull/63000",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw 生态日报 2026-04-08",
-      "url": "https://github.com/DenisZheng/agents-radar/issues/301",
+      "title": "[Feature]: seekdb M0 (m0) as external memory provider plugin",
+      "url": "https://github.com/NousResearch/hermes-agent/issues/6058",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-08",
-      "url": "https://github.com/jstamagal/agents-radar/issues/231",
+      "title": "Upstream sync: 2026-04-08",
+      "url": "https://github.com/BinyaminEden/claude-combine/pull/13",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "ssh late.sh - The Clubhouse is officially OPEN! Take a break, chat, chill, listen to music and play some games! :)",
+      "url": "https://reddit.com/r/commandline/comments/1sf4j1s/ssh_latesh_the_clubhouse_is_officially_open_take/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "I kept cmd-tabbing to Chrome 40 times a day while coding, so I made a search TUI that knows my project",
       "url": "https://reddit.com/r/commandline/comments/1sf0l3m/i_kept_cmdtabbing_to_chrome_40_times_a_day_while/",
       "why": "Discussion in r/commandline about AI agents",
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "yutu — a CLI tool to manage your entire YouTube channel from the terminal",
       "url": "https://reddit.com/r/commandline/comments/1sey6x0/yutu_a_cli_tool_to_manage_your_entire_youtube/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "claude-sessions: CLI for managing multiple Claude Code sessions + phone call voice control",
-      "url": "https://reddit.com/r/commandline/comments/1sep4qz/claudesessions_cli_for_managing_multiple_claude/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },

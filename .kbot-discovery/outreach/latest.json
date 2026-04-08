@@ -1,17 +1,17 @@
 {
-  "timestamp": "2026-04-07T17:58:36.310Z",
+  "timestamp": "2026-04-08T06:13:35.638Z",
   "projects": [
     {
-      "name": "Open-ACP/OpenACP",
-      "url": "https://github.com/Open-ACP/OpenACP",
-      "stars": 54,
-      "description": "Self-hosted bridge that lets you interact with AI coding agents (Claude Code, Codex, etc.) from messaging platforms (Telegram, Discord, etc.) via the Agent Client Protocol (ACP)."
+      "name": "jackwener/opencli",
+      "url": "https://github.com/jackwener/opencli",
+      "stars": 14160,
+      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
     },
     {
-      "name": "clawwork-ai/ClawWork",
-      "url": "https://github.com/clawwork-ai/ClawWork",
-      "stars": 431,
-      "description": "Client for OpenClaw — Connect ClawWork to your own OpenClaw and unlock 10x multi-session productivity."
+      "name": "sonichi/sutando",
+      "url": "https://github.com/sonichi/sutando",
+      "stars": 97,
+      "description": "Summon your AI superpower — voice, vision, and autonomous action"
     },
     {
       "name": "vm0-ai/vm0",
@@ -20,16 +20,10 @@
       "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 374,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
-    },
-    {
-      "name": "Ruya-AI/cozempic",
-      "url": "https://github.com/Ruya-AI/cozempic",
-      "stars": 207,
-      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
+      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "stars": 195,
+      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
     },
     {
       "name": "taylorwilsdon/google_workspace_mcp",
@@ -38,26 +32,32 @@
       "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
     },
     {
+      "name": "ArcadeAI/arcade-mcp",
+      "url": "https://github.com/ArcadeAI/arcade-mcp",
+      "stars": 851,
+      "description": "The best way to create, deploy, and share MCP Servers"
+    },
+    {
+      "name": "onlyfeng/mud-agent",
+      "url": "https://github.com/onlyfeng/mud-agent",
+      "stars": 0,
+      "description": "MUD game assistant — skill for Agent, plugin for OpenClaw"
+    },
+    {
+      "name": "wuyunting555/openclaw-toolbox",
+      "url": "https://github.com/wuyunting555/openclaw-toolbox",
+      "stars": 0,
+      "description": "wenwubei 的 OpenClaw skills、plugins 和工具仓库"
+    },
+    {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
       "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
       "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
-    },
-    {
-      "name": "samber/cc-skills-golang",
-      "url": "https://github.com/samber/cc-skills-golang",
-      "stars": 1049,
-      "description": "🧑‍🎨 A collection of Golang agentic skills that works"
     }
   ],
   "latestPaper": {
-    "title": "Analyzing Symbolic Properties for DRL Agents in Systems and Networking",
-    "summary": "Deep reinforcement learning (DRL) has shown remarkable performance on complex control problems in systems and networking, including adaptive video streaming, wireless resource management, and congestion control. For safe deployment, however, it is critical to reason about how agents behave across the range of system states they encounter in practice. Existing verification-based methods in this domain primarily focus on point properties, defined around fixed input states, which offer limited cove"
+    "title": "Who Governs the Machine? A Machine Identity Governance Taxonomy (MIGT) for AI Systems Operating Across Enterprise and Geopolitical Boundaries",
+    "summary": "The governance of artificial intelligence has a blind spot: the machine identities that AI systems use to act. AI agents, service accounts, API tokens, and automated workflows now outnumber human identities in enterprise environments by ratios exceeding 80 to 1, yet no integrated framework exists to govern them. A single ungoverned automated agent produced $5.4-10 billion in losses in the 2024 CrowdStrike outage; nation-state actors including Silk Typhoon and Salt Typhoon have operationalized un"
   }
 }
