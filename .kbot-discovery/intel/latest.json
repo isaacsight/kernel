@@ -1,9 +1,57 @@
 {
-  "timestamp": "2026-04-07T18:13:48.740Z",
+  "timestamp": "2026-04-08T00:28:37.195Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "moropex"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "terminal"
+              ],
+              "value": "I kept hitting the same problem with Claude:\nThe native Claude app is great but it can be much better when you unlock the capabilities of desktop rather than the <em>terminal</em>. Such as:<p>- task management<p>- structure<p>- work across multiple repos<p>So I built a desktop app to fix that.<p>Instead of chat, it works more like a dev workspace:<p>• Kanban board → manage tasks and send them directly to agents<p>• Session view → the <em>terminal</em> equivalent of Claude code for quick iteration when needed/long ongoing conversations etc<p>• Multi-repo “connections” → agents can work across projects at the same time with context and edit capabilities on all of them in a transparent way<p>• Full git/worktree isolation → no fear of breaking stuff<p>The big difference:<p>You’re not “chatting with Claude” anymore — you’re actually managing work.<p>We’ve been using this internally and it completely changed how we use <em>AI</em> for dev.<p>Would love feedback / thoughts<p>It’s open source + free<p>GitHub: <a href=\"https://github.com/morapelker/hive\" rel=\"nofollow\">https://github.com/morapelker/hive</a><p>Website: <a href=\"https://morapelker.github.io/hive\" rel=\"nofollow\">https://morapelker.github.io/hive</a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "Show HN: Hive – full dev workspace using (Kanban/chat mode,multi-repo,<em>agent</em>-SDK)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/morapelker/hive"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_moropex",
+            "story_47680275",
+            "show_hn"
+          ],
+          "author": "moropex",
+          "created_at": "2026-04-07T19:34:36Z",
+          "created_at_i": 1775590476,
+          "num_comments": 0,
+          "objectID": "47680275",
+          "points": 1,
+          "story_id": 47680275,
+          "story_text": "I kept hitting the same problem with Claude:\nThe native Claude app is great but it can be much better when you unlock the capabilities of desktop rather than the terminal. Such as:<p>- task management<p>- structure<p>- work across multiple repos<p>So I built a desktop app to fix that.<p>Instead of chat, it works more like a dev workspace:<p>• Kanban board → manage tasks and send them directly to agents<p>• Session view → the terminal equivalent of Claude code for quick iteration when needed&#x2F;long ongoing conversations etc<p>• Multi-repo “connections” → agents can work across projects at the same time with context and edit capabilities on all of them in a transparent way<p>• Full git&#x2F;worktree isolation → no fear of breaking stuff<p>The big difference:<p>You’re not “chatting with Claude” anymore — you’re actually managing work.<p>We’ve been using this internally and it completely changed how we use AI for dev.<p>Would love feedback &#x2F; thoughts<p>It’s open source + free<p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;morapelker&#x2F;hive\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;morapelker&#x2F;hive</a><p>Website: <a href=\"https:&#x2F;&#x2F;morapelker.github.io&#x2F;hive\" rel=\"nofollow\">https:&#x2F;&#x2F;morapelker.github.io&#x2F;hive</a>",
+          "title": "Show HN: Hive – full dev workspace using (Kanban/chat mode,multi-repo,agent-SDK)",
+          "updated_at": "2026-04-07T19:38:56Z",
+          "url": "https://github.com/morapelker/hive"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -40,17 +88,18 @@
           ],
           "author": "dredozubov",
           "children": [
-            47677523
+            47677523,
+            47680174
           ],
           "created_at": "2026-04-07T16:09:46Z",
           "created_at_i": 1775578186,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47677488",
           "points": 1,
           "story_id": 47677488,
           "story_text": "Hazmat gives AI coding agents full autonomy by containing them at the OS level — dedicated macOS user, kernel sandbox (Seatbelt), pf firewall, DNS blocklist, supply chain hardening (npm ignore-scripts), and automatic snapshots.<p>I built it because manual approval mode is the worst of both worlds: fake security (any prompt injection bypasses it) and a productivity killer (you become the bottleneck). With OS-level containment in place, --dangerously-skip-permissions becomes safe by default.<p>Setup&#x2F;rollback ordering is formally verified with TLA+ (26,905 states, 3 real bugs found). Works with Claude Code, OpenCode, Codex, or any terminal agent.<p>brew install dredozubov&#x2F;tap&#x2F;hazmat<p>Full write-up: <a href=\"https:&#x2F;&#x2F;codeofchange.io&#x2F;how-i-made-dangerously-skip-permissions-safe-in-claude-code&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;codeofchange.io&#x2F;how-i-made-dangerously-skip-permissi...</a>",
           "title": "Show HN: Hazmat – I made unrestricted Claude Code safe on macOS",
-          "updated_at": "2026-04-07T16:14:41Z",
+          "updated_at": "2026-04-07T23:34:59Z",
           "url": "https://github.com/dredozubov/hazmat"
         },
         {
@@ -102,7 +151,7 @@
           "story_id": 47676264,
           "story_text": "We built an AI company. Not a chatbot wrapper — a company with HR, COO, engineers, and designers, all AI agents, organised and managed the way a real company operates. You&#x27;re the CEO, the only human.<p>To be clear: this is not one LLM with a bunch of prompts pretending to be a team. These are fully independent agents — different models, different backends, different runtimes — each doing their own job.<p>*Why organise agents as a company*<p>We spent a year building multi-agent systems and kept hitting the same wall. Agents say &quot;I&#x27;m done&quot; and pass results downstream with no verification. Errors cascade through the whole project. Static workflows (Dify etc.) are stable but can&#x27;t adapt to the new skills+harness agent paradigm. Free-form negotiation between agents doesn&#x27;t converge.<p>The root issue: agents are getting individually stronger, but without organisational management they can&#x27;t collaborate effectively. It&#x27;s like having a room full of talented people with no management structure — capability is there, coordination isn&#x27;t.<p>Human companies solved this centuries ago. Performance reviews, SOPs, org hierarchy, hiring pipelines, retrospectives — these mechanisms make collaboration work regardless of domain. We applied the same principles to AI agent teams.<p>*How it works*<p>The company has a founding team (HR, COO, EA, CSO) built in from day one.<p><i>Talent Market.</i> When the company needs specialists, HR recruits from a community-driven Talent Market ([one-man-company.com](<a href=\"https:&#x2F;&#x2F;one-man-company.com\" rel=\"nofollow\">https:&#x2F;&#x2F;one-man-company.com</a>)). Verified agent implementations with real usage counts and community reviews, not LLMs self-declaring expertise. Claude Code, OpenClaw, LangGraph agent families are already on the market — [superpowers](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;obra&#x2F;superpowers\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;obra&#x2F;superpowers</a>), [agency-agents](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;msitarzewski&#x2F;agency-agents\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;msitarzewski&#x2F;agency-agents</a>) are ready to hire ([browse here](<a href=\"https:&#x2F;&#x2F;one-man-company.com&#x2F;talent&#x2F;claude-superpowers\" rel=\"nofollow\">https:&#x2F;&#x2F;one-man-company.com&#x2F;talent&#x2F;claude-superpowers</a>)). The market is open for contributions: upload your own agents, share&#x2F;buy&#x2F;sell. We&#x27;re building a real agent community.<p><i>Talent-Container separation.</i> Each agent is split into a portable identity (Talent: prompts, skills, tools, work principles) and an execution runtime (Container: LangGraph, Claude CLI, script process). Different agents run on completely different backends in the same project — Claude Code writes code, LangGraph handles image generation, OpenClaw runs admin.<p><i>Tree Search based Orchestrate Algorithm.</i> Tasks decompose dynamically during execution, not upfront in a fixed pipeline. The underlying algorithm is built on AND-tree DAG structure with formal guarantees: termination (bounded retries + timeouts + cost budgets), deadlock freedom (cycle detection at insertion), crash recovery (processing nodes reset on restart).<p><i>Quality gates.</i> Every task has acceptance criteria and mandatory supervisor review.<p><i>Self-evolution.</i> Post-project retrospectives update work principles and org-wide SOPs. CEO 1-on-1s become permanent agent memory. Performance reviews with real consequences: PIP for underperformers, then offboarding if they don&#x27;t improve. HR re-recruits from the Talent Market.<p>*Results*<p>Cross-domain without changing the framework. So far, we have tried 1) Game dev; 2) Audiobook and Short Movie Generating; 3) Auto-Researchurvey; 4) Content Generation; 5) More is comming!<p>Same system, different team, different domain. Build a game today, produce a comic series tomorrow.<p>*Try it*<p>Fully open source. [one-man-company.com](<a href=\"https:&#x2F;&#x2F;one-man-company.com\" rel=\"nofollow\">https:&#x2F;&#x2F;one-man-company.com</a>) is the front door. One command:<p>GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;1mancompany&#x2F;OneManCompany\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;1mancompany&#x2F;OneManCompany</a>\nTalent Market: <a href=\"https:&#x2F;&#x2F;one-man-company.com\" rel=\"nofollow\">https:&#x2F;&#x2F;one-man-company.com</a><p>Come try it, file issues, or contribute. We especially want people building agents for the Talent Market.",
           "title": "Show HN: OneManCompany The first AI company with real corporate org structure",
-          "updated_at": "2026-04-07T15:37:25Z",
+          "updated_at": "2026-04-07T21:47:43Z",
           "url": "https://one-man-company.com/"
         },
         {
@@ -206,60 +255,55 @@
           "title": "Show HN: TermHub – Open-source terminal control gateway built for AI Agents",
           "updated_at": "2026-04-07T01:34:07Z",
           "url": "https://github.com/duo121/termhub"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent"
-              ],
-              "value": "<em>agent</em>-v0"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "<em>Agent</em> v0 Open-source multi-<em>agent</em> <em>AI</em> orchestration <em>terminal</em>"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent"
-              ],
-              "value": "https://github.com/centeler34/<em>Agent</em>-v0"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_agent-v0",
-            "story_47652539"
-          ],
-          "author": "agent-v0",
-          "children": [
-            47652540
-          ],
-          "created_at": "2026-04-05T18:43:07Z",
-          "created_at_i": 1775414587,
-          "num_comments": 1,
-          "objectID": "47652539",
-          "points": 3,
-          "story_id": 47652539,
-          "title": "Agent v0 Open-source multi-agent AI orchestration terminal",
-          "updated_at": "2026-04-05T20:25:16Z",
-          "url": "https://github.com/centeler34/Agent-v0"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "h2u2"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Nedster – An <em>open</em>-<em>source</em>, local-first <em>coding</em> <em>agent</em> that verifies its own work"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/unrealumanga/Nedster"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_h2u2",
+            "story_47681372"
+          ],
+          "author": "h2u2",
+          "children": [
+            47681373
+          ],
+          "created_at": "2026-04-07T21:05:40Z",
+          "created_at_i": 1775595940,
+          "num_comments": 1,
+          "objectID": "47681372",
+          "points": 4,
+          "story_id": 47681372,
+          "title": "Nedster – An open-source, local-first coding agent that verifies its own work",
+          "updated_at": "2026-04-07T23:00:11Z",
+          "url": "https://github.com/unrealumanga/Nedster"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -311,7 +355,7 @@
           "story_id": 47666413,
           "story_text": "Every AI coding session starts from zero. The agent doesn&#x27;t know who owns a file, which files change together, which ones are dead, or why something was built that way.<p>I got tired of Claude Code asking me &quot;what does this service do?&quot; on a codebase I&#x27;ve worked on for two years. The context is all there (git history, dependency graph, past decisions), it&#x27;s just not in a format the agent can use.<p>Repowise indexes your codebase into four layers: dependency graph (tree-sitter → NetworkX), git intelligence (hotspots, ownership, co-change patterns), auto-generated docs, and architectural decision records. These get exposed via 8 MCP tools. On each commit, only changed files get re-indexed. No full rebuilds, under 30 seconds.<p>The decisions layer is the part I&#x27;m most excited about. It surfaces architectural intent from commit history: large diffs, migration patterns, tradeoff language. It also tracks staleness as code evolves. Works well on repos with decent commit messages, less well on &quot;fix&quot; history.<p>pip install repowise\nrepowise init        # ~25 min first time, &lt;30s incremental\nrepowise serve       # MCP server + local dashboard<p>Works with Claude Code, Cursor, and any MCP-compatible agent. AGPL-3.0, self-hosted, your code stays on your machine.<p>I&#x27;m running early benchmarks on SWE-Bench and SWE-QA. Results are promising, especially on tasks where grounded context matters. Publishing the full methodology soon.<p>What&#x27;s rough: Windows untested, language coverage is Python&#x2F;TS&#x2F;Go&#x2F;Rust&#x2F;Java&#x2F;C&#x2F;C++, decisions UX needs work. Happy to hear what breaks.\nPre-indexed demos (FastAPI, Starlette) on the site. Working on Slack, Jira, and Linear integrations for the hosted team version.<p>GitHub: github.com&#x2F;repowise-dev&#x2F;repowise\nSite: repowise.dev",
           "title": "Show HN: Repowise – Codebase intelligence for AI coding agents (open source)",
-          "updated_at": "2026-04-06T22:52:06Z",
+          "updated_at": "2026-04-07T21:47:43Z",
           "url": "https://github.com/repowise-dev/repowise"
         },
         {
@@ -352,80 +396,80 @@
           "author": "MattHart88",
           "children": [
             47668726,
-            47667921,
             47666315,
             47667734,
             47669076,
             47666186,
             47667062,
-            47675539,
-            47673857,
+            47667921,
             47667271,
             47666394,
-            47673835,
             47666292,
+            47673857,
             47669774,
+            47675539,
             47672538,
-            47669179,
+            47673835,
             47667473,
+            47669179,
             47670423,
-            47671738,
-            47668845,
             47666755,
-            47671577,
-            47671460,
+            47668845,
+            47671738,
             47670185,
+            47671460,
+            47671577,
             47666947,
-            47670166,
             47667743,
-            47671794,
-            47672988,
+            47670166,
+            47666980,
             47670311,
             47668137,
-            47670903,
+            47672988,
             47668044,
             47667257,
+            47670903,
             47667016,
             47669791,
             47669046,
-            47670232,
-            47666980,
             47667233,
+            47670232,
             47667494,
-            47673653,
             47668774,
             47669619,
             47668978,
             47668488,
             47667671,
+            47673653,
             47669787,
             47670716,
             47679060,
-            47676377,
-            47674927,
             47671640,
+            47674927,
+            47676377,
+            47669916,
             47673418,
             47672374,
-            47669916,
-            47675783,
             47668960,
             47672517,
+            47671794,
             47669628,
-            47671343,
             47671145,
+            47671343,
+            47675783,
             47667935,
             47666999,
             47667704
           ],
           "created_at": "2026-04-06T19:50:16Z",
           "created_at_i": 1775505016,
-          "num_comments": 193,
+          "num_comments": 194,
           "objectID": "47666024",
-          "points": 442,
+          "points": 450,
           "story_id": 47666024,
           "story_text": "I built this because I wanted to see how far I could get with a voice-to-text app that used 100% local models so no data left my computer. I&#x27;ve been using a ton for coding and emails. Experimenting with using it as a voice interface for my other agents too. 100% open-source MIT license, would love feedback, PRs, and ideas on where to take it.",
           "title": "Show HN: Ghost Pepper – Local hold-to-talk speech-to-text for macOS",
-          "updated_at": "2026-04-07T18:11:54Z",
+          "updated_at": "2026-04-08T00:26:56Z",
           "url": "https://github.com/matthartman/ghost-pepper"
         },
         {
@@ -531,49 +575,6 @@
           "title": "Show HN: Fabro – open-source dark software factory",
           "updated_at": "2026-04-07T08:36:38Z",
           "url": "https://github.com/fabro-sh/fabro"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "suttles"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "Rubyn-code – <em>open</em>-<em>source</em> <em>agent</em>ic <em>coding</em> assistant for Ruby/Rails"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/MatthewSuttles/rubyn-code"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_suttles",
-            "story_47619061"
-          ],
-          "author": "suttles",
-          "children": [
-            47619062
-          ],
-          "created_at": "2026-04-02T19:29:27Z",
-          "created_at_i": 1775158167,
-          "num_comments": 1,
-          "objectID": "47619061",
-          "points": 2,
-          "story_id": 47619061,
-          "title": "Rubyn-code – open-source agentic coding assistant for Ruby/Rails",
-          "updated_at": "2026-04-03T19:53:23Z",
-          "url": "https://github.com/MatthewSuttles/rubyn-code"
         }
       ]
     },
@@ -830,7 +831,48 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "faiyaz26"
+              "value": "stfarm"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Predict and Profit, automated Kalshi <em>bot</em>s for weather and CPI/PCE"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://predictandprofit.io"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_stfarm",
+            "story_47682967"
+          ],
+          "author": "stfarm",
+          "children": [
+            47683003,
+            47682968
+          ],
+          "created_at": "2026-04-08T00:08:13Z",
+          "created_at_i": 1775606893,
+          "num_comments": 0,
+          "objectID": "47682967",
+          "points": 1,
+          "story_id": 47682967,
+          "title": "Predict and Profit, automated Kalshi bots for weather and CPI/PCE",
+          "updated_at": "2026-04-08T00:12:55Z",
+          "url": "https://predictandprofit.io"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "dko"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -838,41 +880,43 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I am quite keen on developer tools, built some tools for developer productivity. But when I post about the app on the reddit (or other place), I don't get interaction instead getting more harsh comments about being vibe coded. In some cases, people are not even opening my app's website, rather just commenting like a <em>bot</em> about being vibe coded or having text using LLM.<p>It was not like that, 2 years ago, any packages I created (more simple but useful), I posted on reddit and people shared their feedbacks, but now I am not getting reach or useful feedbacks. Even though I am posting on the same sub-reddits/channels, some channel is even deleting my post by saying AI slop.<p>Most of my work is open source, and I am not trying to sell them. I am curious, how people are trying to build a community around a product or project, how you are promoting apps/project which are clearly vibe coded and but really useful or solving some real problems (maybe even a startup can be built around that).<p>Note that, I am an experienced developer, who is utilising LLM to ship and solve system faster and having problems on making people understand the value of the project rather the code itself."
+              "value": "clify is a Claude Code plugin. Give it an API documentation URL and it generates a complete CLI repo: commands for every endpoint, smoke tests, zero npm dependencies.<p>Try it inside Claude Code:\n1. /plugin marketplace add derrickko/clify\n2. /plugin install clify@derrickko-clify\n3. Run /clify &lt;documentation url&gt;<p>You'll have a working CLI in about 10 minutes.<p>I was building agents to manage ad campaigns. Meta's Marketing API has no CLI, and no MCP server either. So I wrote one by hand. It worked, but then I looked at the next API I needed and realized the same problem is everywhere: tons of great APIs out there with no agent-friendly interface at all.<p>clify automates that. Point it at docs, get back a CLI. A single CLI call costs 10-32x fewer tokens than the equivalent MCP call because there's no protocol overhead, no schema negotiation. Each generated CLI has its own agent memory system that stores command chains. When an agent figures out the right sequence of calls to get the data you need, it remembers the path for next time.<p>Here's an example of what the output looks like: <a href=\"https://github.com/derrickko/meta-ads-cli\" rel=\"nofollow\">https://github.com/derrickko/meta-ads-cli</a><p>Related thread with good discussion on CLI vs MCP for agents: <a href=\"https://news.ycombinator.com/item?id=47208398\">https://news.ycombinator.com/item?id=47208398</a><p><em>Bot</em>h repos are open source. Code is all there if you want to look at how it works before installing. Would love feedback!"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Ask HN: How do you promote apps which are vibe coded but has real life usecase?"
+              "value": "Show HN: Clify – generate a CLI from any API docs, use it as agent tooling"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/derrickko/clify"
             }
           },
           "_tags": [
             "story",
-            "author_faiyaz26",
-            "story_47677971",
-            "ask_hn"
+            "author_dko",
+            "story_47682217",
+            "show_hn"
           ],
-          "author": "faiyaz26",
-          "children": [
-            47678362,
-            47678118
-          ],
-          "created_at": "2026-04-07T16:39:19Z",
-          "created_at_i": 1775579959,
-          "num_comments": 1,
-          "objectID": "47677971",
+          "author": "dko",
+          "created_at": "2026-04-07T22:34:51Z",
+          "created_at_i": 1775601291,
+          "num_comments": 0,
+          "objectID": "47682217",
           "points": 3,
-          "story_id": 47677971,
-          "story_text": "I am quite keen on developer tools, built some tools for developer productivity. But when I post about the app on the reddit (or other place), I don&#x27;t get interaction instead getting more harsh comments about being vibe coded. In some cases, people are not even opening my app&#x27;s website, rather just commenting like a bot about being vibe coded or having text using LLM.<p>It was not like that, 2 years ago, any packages I created (more simple but useful), I posted on reddit and people shared their feedbacks, but now I am not getting reach or useful feedbacks. Even though I am posting on the same sub-reddits&#x2F;channels, some channel is even deleting my post by saying AI slop.<p>Most of my work is open source, and I am not trying to sell them. I am curious, how people are trying to build a community around a product or project, how you are promoting apps&#x2F;project which are clearly vibe coded and but really useful or solving some real problems (maybe even a startup can be built around that).<p>Note that, I am an experienced developer, who is utilising LLM to ship and solve system faster and having problems on making people understand the value of the project rather the code itself.",
-          "title": "Ask HN: How do you promote apps which are vibe coded but has real life usecase?",
-          "updated_at": "2026-04-07T17:09:57Z"
+          "story_id": 47682217,
+          "story_text": "clify is a Claude Code plugin. Give it an API documentation URL and it generates a complete CLI repo: commands for every endpoint, smoke tests, zero npm dependencies.<p>Try it inside Claude Code:\n1. &#x2F;plugin marketplace add derrickko&#x2F;clify\n2. &#x2F;plugin install clify@derrickko-clify\n3. Run &#x2F;clify &lt;documentation url&gt;<p>You&#x27;ll have a working CLI in about 10 minutes.<p>I was building agents to manage ad campaigns. Meta&#x27;s Marketing API has no CLI, and no MCP server either. So I wrote one by hand. It worked, but then I looked at the next API I needed and realized the same problem is everywhere: tons of great APIs out there with no agent-friendly interface at all.<p>clify automates that. Point it at docs, get back a CLI. A single CLI call costs 10-32x fewer tokens than the equivalent MCP call because there&#x27;s no protocol overhead, no schema negotiation. Each generated CLI has its own agent memory system that stores command chains. When an agent figures out the right sequence of calls to get the data you need, it remembers the path for next time.<p>Here&#x27;s an example of what the output looks like: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;derrickko&#x2F;meta-ads-cli\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;derrickko&#x2F;meta-ads-cli</a><p>Related thread with good discussion on CLI vs MCP for agents: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47208398\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47208398</a><p>Both repos are open source. Code is all there if you want to look at how it works before installing. Would love feedback!",
+          "title": "Show HN: Clify – generate a CLI from any API docs, use it as agent tooling",
+          "updated_at": "2026-04-07T22:42:40Z",
+          "url": "https://github.com/derrickko/clify"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "buralog"
+              "value": "xarchive"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -880,128 +924,37 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Hi,<p>This started from a pretty personal use case.<p>There was this very technical person I follow who would go live on YouTube from time to time. He has a ton of experience, and would casually drop really good insights about software architecture, engineering tradeoffs, and just general &quot;you only learn this after years&quot; kind of stuff. He also posts shorter clips, but I wanted something else: I wanted that knowledge to be always there, queryable whenever I needed it.<p>At the same time, I was also trying to understand what RAG actually is in practice, and how to learn applied AI by building something real instead of just reading about it.<p>My first thought was: ok, this probably has to be fully local. I assumed if I want to query my own stuff locally, then I need to use a local LLM. So I looked into Ollama and thought, alright, I can build this on top of that and just query everything on my machine. At that point I also had some pretty wrong assumptions about local models and resource usage.<p>After building the first version, it worked, but the result felt a bit underwhelming. Retrieval itself was useful, but the final answer didnt feel as smart as I expected. I use Codex and Claude Code a lot in my daily workflow, so maybe I was unfairly expecting something that felt more &quot;intelligent&quot;, or at least looked that way.<p>Then after a lot of tests with agents (Codex and Claude Code, I use <em>bot</em>h), I realized something kind of obvious: the Ollama part was mostly just taking the retrieved chunks and turning them into a proper answer. And if that's the job, why couldnt an agent do the same thing?<p>So I tried wiring it through MCP.<p>That was the moment where the project really clicked for me. The answers became way better structured, the whole thing felt much smarter, and more importantly, it fit directly into how I already work. Instead of having a seperate tool where I go ask questions, the knowledge just becomes available inside the agent workflow itself. The agent can retrieve it, use it, suggest things, and continue the task.<p>That was exactly what I wanted, maybe even better than what I had in mind when I started.<p>The best part for me is that once it's set up, it kinda disappears. I just keep adding YouTube videos, podcasts, and files, and then that context is available while I'm working with AI agents. It stops feeling like &quot;a RAG demo&quot; and starts feeling like part of the actual workflow.<p>What started as a small local RAG experiment ended up turning into something much more useful than I originally imagined."
+              "value": "*I built a free Twitter/X bookmark exporter. All links at the <em>bot</em>tom*<p>The Chrome extension exports everything on your X bookmarks page to a local file. No login, no data leaving your machine.<p>Install extension<p>On https://x.com/i/bookmarks, with extension open, click Export<p>If your account gets suspended tomorrow, your bookmarks are gone. This prevents that.<p>I also built a viewer if you want to search, tag, and browse your exports like an actual library — offline, no account needed. $4.69/year for the viewer, but the exporter is fully standalone if you just want the backup.<p>Free Chrome extension: https://chromewebstore.google.com/detail/x-bookmark-exporter/dmnjciohjaneghgolilbhdlbcbncfghl<p>Viewer: https://x-archive.netlify.app/<p>▶ Video demo: https://www.youtube.com/watch?v=wIHj81BOdZ4"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Build queryable packs for AI agents from videos, podcasts, and files"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/buralog/beyin"
+              "value": "Tool to Export X Bookmarks (Free) & Categorize Them"
             }
           },
           "_tags": [
             "story",
-            "author_buralog",
-            "story_47677583",
-            "show_hn"
-          ],
-          "author": "buralog",
-          "created_at": "2026-04-07T16:15:33Z",
-          "created_at_i": 1775578533,
-          "num_comments": 0,
-          "objectID": "47677583",
-          "points": 1,
-          "story_id": 47677583,
-          "story_text": "Hi,<p>This started from a pretty personal use case.<p>There was this very technical person I follow who would go live on YouTube from time to time. He has a ton of experience, and would casually drop really good insights about software architecture, engineering tradeoffs, and just general &quot;you only learn this after years&quot; kind of stuff. He also posts shorter clips, but I wanted something else: I wanted that knowledge to be always there, queryable whenever I needed it.<p>At the same time, I was also trying to understand what RAG actually is in practice, and how to learn applied AI by building something real instead of just reading about it.<p>My first thought was: ok, this probably has to be fully local. I assumed if I want to query my own stuff locally, then I need to use a local LLM. So I looked into Ollama and thought, alright, I can build this on top of that and just query everything on my machine. At that point I also had some pretty wrong assumptions about local models and resource usage.<p>After building the first version, it worked, but the result felt a bit underwhelming. Retrieval itself was useful, but the final answer didnt feel as smart as I expected. I use Codex and Claude Code a lot in my daily workflow, so maybe I was unfairly expecting something that felt more &quot;intelligent&quot;, or at least looked that way.<p>Then after a lot of tests with agents (Codex and Claude Code, I use both), I realized something kind of obvious: the Ollama part was mostly just taking the retrieved chunks and turning them into a proper answer. And if that&#x27;s the job, why couldnt an agent do the same thing?<p>So I tried wiring it through MCP.<p>That was the moment where the project really clicked for me. The answers became way better structured, the whole thing felt much smarter, and more importantly, it fit directly into how I already work. Instead of having a seperate tool where I go ask questions, the knowledge just becomes available inside the agent workflow itself. The agent can retrieve it, use it, suggest things, and continue the task.<p>That was exactly what I wanted, maybe even better than what I had in mind when I started.<p>The best part for me is that once it&#x27;s set up, it kinda disappears. I just keep adding YouTube videos, podcasts, and files, and then that context is available while I&#x27;m working with AI agents. It stops feeling like &quot;a RAG demo&quot; and starts feeling like part of the actual workflow.<p>What started as a small local RAG experiment ended up turning into something much more useful than I originally imagined.",
-          "title": "Show HN: Build queryable packs for AI agents from videos, podcasts, and files",
-          "updated_at": "2026-04-07T16:19:56Z",
-          "url": "https://github.com/buralog/beyin"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "dredozubov"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Hazmat gives AI coding agents full autonomy by containing them at the OS level — dedicated macOS user, kernel sandbox (Seatbelt), pf firewall, DNS blocklist, supply chain hardening (npm ignore-scripts), and automatic snapshots.<p>I built it because manual approval mode is the worst of <em>bot</em>h worlds: fake security (any prompt injection bypasses it) and a productivity killer (you become the <em>bot</em>tleneck). With OS-level containment in place, --dangerously-skip-permissions becomes safe by default.<p>Setup/rollback ordering is formally verified with TLA+ (26,905 states, 3 real bugs found). Works with Claude Code, OpenCode, Codex, or any terminal agent.<p>brew install dredozubov/tap/hazmat<p>Full write-up: <a href=\"https://codeofchange.io/how-i-made-dangerously-skip-permissions-safe-in-claude-code/\" rel=\"nofollow\">https://codeofchange.io/how-i-made-dangerously-skip-permissi...</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Hazmat – I made unrestricted Claude Code safe on macOS"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/dredozubov/hazmat"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_dredozubov",
-            "story_47677488",
-            "show_hn"
-          ],
-          "author": "dredozubov",
-          "children": [
-            47677523
-          ],
-          "created_at": "2026-04-07T16:09:46Z",
-          "created_at_i": 1775578186,
-          "num_comments": 0,
-          "objectID": "47677488",
-          "points": 1,
-          "story_id": 47677488,
-          "story_text": "Hazmat gives AI coding agents full autonomy by containing them at the OS level — dedicated macOS user, kernel sandbox (Seatbelt), pf firewall, DNS blocklist, supply chain hardening (npm ignore-scripts), and automatic snapshots.<p>I built it because manual approval mode is the worst of both worlds: fake security (any prompt injection bypasses it) and a productivity killer (you become the bottleneck). With OS-level containment in place, --dangerously-skip-permissions becomes safe by default.<p>Setup&#x2F;rollback ordering is formally verified with TLA+ (26,905 states, 3 real bugs found). Works with Claude Code, OpenCode, Codex, or any terminal agent.<p>brew install dredozubov&#x2F;tap&#x2F;hazmat<p>Full write-up: <a href=\"https:&#x2F;&#x2F;codeofchange.io&#x2F;how-i-made-dangerously-skip-permissions-safe-in-claude-code&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;codeofchange.io&#x2F;how-i-made-dangerously-skip-permissi...</a>",
-          "title": "Show HN: Hazmat – I made unrestricted Claude Code safe on macOS",
-          "updated_at": "2026-04-07T16:14:41Z",
-          "url": "https://github.com/dredozubov/hazmat"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "sigpwned"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I'm building a simple MVP API and want to put a credit card swipe in front of it to see if people will pay for it. I expect to need:<p>* Developer portal -- self-serve subscription management, API key management, usage tracking, plus documentation<p>* Billing enforcement -- rate limits, hard quotas, metered overages<p>Ideal solution covers <em>bot</em>h, but I'll stitch vendors together if needed. I'm seeing things like Kong, Moesif, and Tyk so far. What are people actually using? How painful is initial setup, and how much ongoing maintenance does it take to keep running? Are you happy with whatever you picked?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: What's everyone's API billing stack?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_sigpwned",
-            "story_47677424",
+            "author_xarchive",
+            "story_47682013",
             "ask_hn"
           ],
-          "author": "sigpwned",
-          "created_at": "2026-04-07T16:04:50Z",
-          "created_at_i": 1775577890,
+          "author": "xarchive",
+          "created_at": "2026-04-07T22:11:31Z",
+          "created_at_i": 1775599891,
           "num_comments": 0,
-          "objectID": "47677424",
-          "points": 2,
-          "story_id": 47677424,
-          "story_text": "I&#x27;m building a simple MVP API and want to put a credit card swipe in front of it to see if people will pay for it. I expect to need:<p>* Developer portal -- self-serve subscription management, API key management, usage tracking, plus documentation<p>* Billing enforcement -- rate limits, hard quotas, metered overages<p>Ideal solution covers both, but I&#x27;ll stitch vendors together if needed. I&#x27;m seeing things like Kong, Moesif, and Tyk so far. What are people actually using? How painful is initial setup, and how much ongoing maintenance does it take to keep running? Are you happy with whatever you picked?",
-          "title": "Ask HN: What's everyone's API billing stack?",
-          "updated_at": "2026-04-07T16:13:01Z"
+          "objectID": "47682013",
+          "points": 1,
+          "story_id": 47682013,
+          "story_text": "*I built a free Twitter&#x2F;X bookmark exporter. All links at the bottom*<p>The Chrome extension exports everything on your X bookmarks page to a local file. No login, no data leaving your machine.<p>Install extension<p>On https:&#x2F;&#x2F;x.com&#x2F;i&#x2F;bookmarks, with extension open, click Export<p>If your account gets suspended tomorrow, your bookmarks are gone. This prevents that.<p>I also built a viewer if you want to search, tag, and browse your exports like an actual library — offline, no account needed. $4.69&#x2F;year for the viewer, but the exporter is fully standalone if you just want the backup.<p>Free Chrome extension: https:&#x2F;&#x2F;chromewebstore.google.com&#x2F;detail&#x2F;x-bookmark-exporter&#x2F;dmnjciohjaneghgolilbhdlbcbncfghl<p>Viewer: https:&#x2F;&#x2F;x-archive.netlify.app&#x2F;<p>▶ Video demo: https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=wIHj81BOdZ4",
+          "title": "Tool to Export X Bookmarks (Free) & Categorize Them",
+          "updated_at": "2026-04-07T22:16:12Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "drstrange14"
+              "value": "frasermarlow"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -1009,36 +962,92 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "We built this at Nutanix to solve a recurring problem: detecting data drift between large object stores (hundreds of millions of objects).<p>Existing tools like AWS CLI (aws s3 sync --dryrun) and s5cmd (--dry-run) are great for many workflows, but we had slightly different requirements for deeper and more flexible comparisons. That led us to build this tool, and we’ve now open-sourced it for broader use.<p>Key Features:<p>1. Bidirectional diff: Given two buckets A and B, the tool reports <em>bot</em>h (A−B) and (B−A).<p>2. Shallow Check Mode: Compares object name + ETag to determine presence.<p>3. Deep check mode: Compares tags, metadata, and ObjectLock/WORM via HeadObject.<p>4. Resumability: Checkpointing allows long-running jobs to resume seamlessly. For example, a 10M-object run interrupted at 8M continues from where it left off.<p>Performance (500K objects):\nShallow mode: ~3,900 objects/sec\nDeep mode: ~1,345 objects/sec (25 worker processes)<p>The tool works across any two S3-compatible buckets.<p>Happy to discuss any query regarding the tool!"
+              "value": "An interactive map of Tolkien’s Middle-earth, with events from across the legendarium plotted as markers.<p>I have been commuting a fair bit between the East and West coast, and thanks to American Airlines' free onboard WiFi, I was able to vibe-code a full interactive map of Middle-earth right from my economy seat at the back of the bus.<p>It's rather amazing how much an LLM knows about Tolkien's work, and it was fun to delve into many of the nooks and crannies of Tolkien's lore.<p>Some features:\n- Plot on the map the journey of the main characters in <em>bot</em>h The Hobbit and The Lord of the Rings.\n- Follow a list of events in the chronological Timeline\n- Zoom in on the high-def map and explore many of the off-the-main-plotline places\n- Use the 'measure distances' feature to see how far apart things are.<p>I also had a lot of fun learning about tiling to allow for efficient zooming.<p>If you are anything like me, this should provide a fun companion to reading the books or watching the movies (note that on this site, I followed the book narrative, and did not include Peter Jackson's many departures)<p>If you get the chance to check it out, I would love more feedback, and if there is demand, I might do the same for Game of Thrones."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Bucket Delta – Compute differences between two S3-compatible buckets"
+              "value": "Show HN: An interactive map of Tolkien's Middle-earth"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://github.com/nutanix/bucket-delta-cli"
+              "value": "https://middle-earth-interactive-map.web.app/"
             }
           },
           "_tags": [
             "story",
-            "author_drstrange14",
-            "story_47677288",
+            "author_frasermarlow",
+            "story_47681112",
+            "show_hn",
+            "front_page"
+          ],
+          "author": "frasermarlow",
+          "children": [
+            47681670,
+            47682668,
+            47682208,
+            47682411,
+            47682170,
+            47682505
+          ],
+          "created_at": "2026-04-07T20:42:37Z",
+          "created_at_i": 1775594557,
+          "num_comments": 10,
+          "objectID": "47681112",
+          "points": 53,
+          "story_id": 47681112,
+          "story_text": "An interactive map of Tolkien’s Middle-earth, with events from across the legendarium plotted as markers.<p>I have been commuting a fair bit between the East and West coast, and thanks to American Airlines&#x27; free onboard WiFi, I was able to vibe-code a full interactive map of Middle-earth right from my economy seat at the back of the bus.<p>It&#x27;s rather amazing how much an LLM knows about Tolkien&#x27;s work, and it was fun to delve into many of the nooks and crannies of Tolkien&#x27;s lore.<p>Some features:\n- Plot on the map the journey of the main characters in both The Hobbit and The Lord of the Rings.\n- Follow a list of events in the chronological Timeline\n- Zoom in on the high-def map and explore many of the off-the-main-plotline places\n- Use the &#x27;measure distances&#x27; feature to see how far apart things are.<p>I also had a lot of fun learning about tiling to allow for efficient zooming.<p>If you are anything like me, this should provide a fun companion to reading the books or watching the movies (note that on this site, I followed the book narrative, and did not include Peter Jackson&#x27;s many departures)<p>If you get the chance to check it out, I would love more feedback, and if there is demand, I might do the same for Game of Thrones.",
+          "title": "Show HN: An interactive map of Tolkien's Middle-earth",
+          "updated_at": "2026-04-08T00:26:56Z",
+          "url": "https://middle-earth-interactive-map.web.app/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "kirby88"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I built vix, an AI coding agent that uses a virtual filesystem to minify source code so the LLM always works in the minified space, and the concept of stem agents that allows for optimal cache hits in plan mode.<p>I used the same prompts and same model than claude code, and run <em>bot</em>h vix and claude code over 7 life like benchmarks, ran 5 times each. The results are that vix is 50% cheaper and 40% faster than claude code. I shared all the plans and the diffs in the repo so you can compare the planning and execution quality by yourself (similar in my opinion)."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: I built an AI coding agent 50% cheaper than Claude Code (same prompts)"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/kirby88/vix-releases"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_kirby88",
+            "story_47680184",
             "show_hn"
           ],
-          "author": "drstrange14",
-          "created_at": "2026-04-07T15:56:32Z",
-          "created_at_i": 1775577392,
-          "num_comments": 0,
-          "objectID": "47677288",
-          "points": 1,
-          "story_id": 47677288,
-          "story_text": "We built this at Nutanix to solve a recurring problem: detecting data drift between large object stores (hundreds of millions of objects).<p>Existing tools like AWS CLI (aws s3 sync --dryrun) and s5cmd (--dry-run) are great for many workflows, but we had slightly different requirements for deeper and more flexible comparisons. That led us to build this tool, and we’ve now open-sourced it for broader use.<p>Key Features:<p>1. Bidirectional diff: Given two buckets A and B, the tool reports both (A−B) and (B−A).<p>2. Shallow Check Mode: Compares object name + ETag to determine presence.<p>3. Deep check mode: Compares tags, metadata, and ObjectLock&#x2F;WORM via HeadObject.<p>4. Resumability: Checkpointing allows long-running jobs to resume seamlessly. For example, a 10M-object run interrupted at 8M continues from where it left off.<p>Performance (500K objects):\nShallow mode: ~3,900 objects&#x2F;sec\nDeep mode: ~1,345 objects&#x2F;sec (25 worker processes)<p>The tool works across any two S3-compatible buckets.<p>Happy to discuss any query regarding the tool!",
-          "title": "Show HN: Bucket Delta – Compute differences between two S3-compatible buckets",
-          "updated_at": "2026-04-07T15:58:55Z",
-          "url": "https://github.com/nutanix/bucket-delta-cli"
+          "author": "kirby88",
+          "children": [
+            47681777
+          ],
+          "created_at": "2026-04-07T19:28:28Z",
+          "created_at_i": 1775590108,
+          "num_comments": 1,
+          "objectID": "47680184",
+          "points": 3,
+          "story_id": 47680184,
+          "story_text": "I built vix, an AI coding agent that uses a virtual filesystem to minify source code so the LLM always works in the minified space, and the concept of stem agents that allows for optimal cache hits in plan mode.<p>I used the same prompts and same model than claude code, and run both vix and claude code over 7 life like benchmarks, ran 5 times each. The results are that vix is 50% cheaper and 40% faster than claude code. I shared all the plans and the diffs in the repo so you can compare the planning and execution quality by yourself (similar in my opinion).",
+          "title": "Show HN: I built an AI coding agent 50% cheaper than Claude Code (same prompts)",
+          "updated_at": "2026-04-07T21:50:26Z",
+          "url": "https://github.com/kirby88/vix-releases"
         }
       ]
     },
@@ -1363,11 +1372,11 @@
           "created_at_i": 1775508281,
           "num_comments": 6,
           "objectID": "47666811",
-          "points": 5,
+          "points": 9,
           "story_id": 47666811,
           "story_text": "Hello all, been trying to switch away from Claude Code and have been trailing this:<p>- Harness: Opencode (via Openchamber)\n- Subscription: GitHub Copilot (50$)\n- API Usage (beyond subscription): Open router\n- Free models: Opencode go<p>Here&#x27;s the models I&#x27;ve trialed and like:<p>- Large (alternative to Opus): GPT 5.3 Codex\n- Medium (alternative to Sonnet): Minimax 2.7\n- Smol: GPT 5.4 mini<p>these models are not yet on par to their respective Claude alternatives for me, but maybe I need to switch to something else or tune them, what have you been using?<p>Also looking for nice Opencode plugins, skills, completion providers (alternative to Cursor that I could use with Zen).<p>Happy to hear about your choices and experience",
           "title": "Ask HN: Alternatives to Claude (Code)?",
-          "updated_at": "2026-04-07T16:40:05Z"
+          "updated_at": "2026-04-07T23:13:26Z"
         },
         {
           "_highlightResult": {
@@ -1613,12 +1622,12 @@
           ],
           "created_at": "2026-04-05T23:59:10Z",
           "created_at_i": 1775433550,
-          "num_comments": 22,
+          "num_comments": 26,
           "objectID": "47655268",
           "points": 98,
           "story_id": 47655268,
           "title": "Show HN: Modo – I built an open-source alternative to Kiro, Cursor, and Windsurf",
-          "updated_at": "2026-04-07T13:03:24Z",
+          "updated_at": "2026-04-07T21:39:25Z",
           "url": "https://github.com/mohshomis/modo"
         },
         {
@@ -2057,6 +2066,54 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "dko"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "clify is a Claude Code plugin. Give it an API documentation URL and it generates a complete CLI repo: commands for every endpoint, smoke tests, zero npm dependencies.<p>Try it inside Claude Code:\n1. /plugin marketplace add derrickko/clify\n2. /plugin install clify@derrickko-clify\n3. Run /clify &lt;documentation url&gt;<p>You'll have a working CLI in about 10 minutes.<p>I was building agents to manage ad campaigns. Meta's Marketing API has no CLI, and no <em>MCP</em> <em>server</em> either. So I wrote one by hand. It worked, but then I looked at the next API I needed and realized the same problem is everywhere: tons of great APIs out there with no agent-friendly interface at all.<p>clify automates that. Point it at docs, get back a CLI. A single CLI call costs 10-32x fewer tokens than the equivalent <em>MCP</em> call because there's no protocol overhead, no schema negotiation. Each generated CLI has its own agent memory system that stores command chains. When an agent figures out the right sequence of calls to get the data you need, it remembers the path for next time.<p>Here's an example of what the output looks like: <a href=\"https://github.com/derrickko/meta-ads-cli\" rel=\"nofollow\">https://github.com/derrickko/meta-ads-cli</a><p>Related thread with good discussion on CLI vs <em>MCP</em> for agents: <a href=\"https://news.ycombinator.com/item?id=47208398\">https://news.ycombinator.com/item?id=47208398</a><p>Both repos are open source. Code is all there if you want to look at how it works before installing. Would love feedback!"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "tools"
+              ],
+              "value": "Show HN: Clify – generate a CLI from any API docs, use it as agent <em>tooli</em>ng"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/derrickko/clify"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_dko",
+            "story_47682217",
+            "show_hn"
+          ],
+          "author": "dko",
+          "created_at": "2026-04-07T22:34:51Z",
+          "created_at_i": 1775601291,
+          "num_comments": 0,
+          "objectID": "47682217",
+          "points": 3,
+          "story_id": 47682217,
+          "story_text": "clify is a Claude Code plugin. Give it an API documentation URL and it generates a complete CLI repo: commands for every endpoint, smoke tests, zero npm dependencies.<p>Try it inside Claude Code:\n1. &#x2F;plugin marketplace add derrickko&#x2F;clify\n2. &#x2F;plugin install clify@derrickko-clify\n3. Run &#x2F;clify &lt;documentation url&gt;<p>You&#x27;ll have a working CLI in about 10 minutes.<p>I was building agents to manage ad campaigns. Meta&#x27;s Marketing API has no CLI, and no MCP server either. So I wrote one by hand. It worked, but then I looked at the next API I needed and realized the same problem is everywhere: tons of great APIs out there with no agent-friendly interface at all.<p>clify automates that. Point it at docs, get back a CLI. A single CLI call costs 10-32x fewer tokens than the equivalent MCP call because there&#x27;s no protocol overhead, no schema negotiation. Each generated CLI has its own agent memory system that stores command chains. When an agent figures out the right sequence of calls to get the data you need, it remembers the path for next time.<p>Here&#x27;s an example of what the output looks like: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;derrickko&#x2F;meta-ads-cli\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;derrickko&#x2F;meta-ads-cli</a><p>Related thread with good discussion on CLI vs MCP for agents: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47208398\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47208398</a><p>Both repos are open source. Code is all there if you want to look at how it works before installing. Would love feedback!",
+          "title": "Show HN: Clify – generate a CLI from any API docs, use it as agent tooling",
+          "updated_at": "2026-04-07T22:42:40Z",
+          "url": "https://github.com/derrickko/clify"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "torrienaylor"
             },
             "story_text": {
@@ -2230,63 +2287,18 @@
           ],
           "author": "dimitrismrtzs",
           "children": [
+            47680190,
             47671626
           ],
           "created_at": "2026-04-07T06:40:12Z",
           "created_at_i": 1775544012,
-          "num_comments": 0,
+          "num_comments": 2,
           "objectID": "47671502",
           "points": 1,
           "story_id": 47671502,
           "story_text": "I&#x27;ve been running a Proxmox lab with around 40 services for a while now. Over the past year I ended up building an AI agent platform that manages my infrastructure and handles business operations — documents, phone calls, scheduling, monitoring, that kind of thing. It wraps Claude Code CLI as the execution engine with custom MCP servers on top.<p>The whole thing started as internal tooling for a startup I was working on but honestly the platform ended up being way more useful than the startup itself. I&#x27;m seriously considering open sourcing it and going full time on it. The way I think about it is something like Home Assistant but for business operations — you self-host it and AI agents handle your operations.<p>My concern is sustainability though. I can&#x27;t realistically maintain something like this on the side — if I do it I need to go all in. Has anyone here built or seen a real business around an open source tool in the AI space? What license would you go with? I&#x27;ve been looking at Modified Apache 2.0 (what Dify uses) vs BSL but honestly not sure what makes sense.<p>Would appreciate any advice from people who&#x27;ve dealt with this.",
           "title": "Ask HN: Is building a company around an open-source AI agent platform realistic?",
-          "updated_at": "2026-04-07T13:58:56Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "davidcrowe"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Hi. I'm David, founder of Agentic Control Plane (ACP).<p>Last year I connected an app to an LLM with a <em>MCP</em> connector. Turned out that authenticating the LLM user in the app backend was surprisingly hard.<p>That was the canary in the coalmine. If it's hard to authenticate actual users:<p>- what about their agents?\n- what about downstream governance? Permissions, limits, audit logs<p>ACP is a governance layer that sits in front of AI coding agents like Claude Code and OpenClaw. It runs on every <em>tool</em> call (Bash, Read, Write, file edits, web fetches, <em>MCP</em>, API calls). Every call is logged and optionally policy checked before execution.<p>It works by hooking into your agent's <em>tool</em> pipeline. For Claude Code, it's a PreToolUse hook (~200ms). For OpenClaw, it's a before_<em>tool</em>_call plugin at priority 0. The plugins are MIT-licensed and all governance logic runs <em>server</em>-side.<p>You get an audit trail and can set permissions and limits. Allow/ deny by <em>tool</em> or type of agent.<p>One-command install for Claude Code and OpenClaw:<p>curl -sf <a href=\"https://agenticcontrolplane.com/install.sh\" rel=\"nofollow\">https://agenticcontrolplane.com/install.sh</a> | bash"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: ACP – Governance for AI Coding Agents (Claude Code, OpenClaw)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://agenticcontrolplane.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_davidcrowe",
-            "story_47668118",
-            "show_hn"
-          ],
-          "author": "davidcrowe",
-          "created_at": "2026-04-06T22:22:56Z",
-          "created_at_i": 1775514176,
-          "num_comments": 0,
-          "objectID": "47668118",
-          "points": 1,
-          "story_id": 47668118,
-          "story_text": "Hi. I&#x27;m David, founder of Agentic Control Plane (ACP).<p>Last year I connected an app to an LLM with a MCP connector. Turned out that authenticating the LLM user in the app backend was surprisingly hard.<p>That was the canary in the coalmine. If it&#x27;s hard to authenticate actual users:<p>- what about their agents?\n- what about downstream governance? Permissions, limits, audit logs<p>ACP is a governance layer that sits in front of AI coding agents like Claude Code and OpenClaw. It runs on every tool call (Bash, Read, Write, file edits, web fetches, MCP, API calls). Every call is logged and optionally policy checked before execution.<p>It works by hooking into your agent&#x27;s tool pipeline. For Claude Code, it&#x27;s a PreToolUse hook (~200ms). For OpenClaw, it&#x27;s a before_tool_call plugin at priority 0. The plugins are MIT-licensed and all governance logic runs server-side.<p>You get an audit trail and can set permissions and limits. Allow&#x2F; deny by tool or type of agent.<p>One-command install for Claude Code and OpenClaw:<p>curl -sf <a href=\"https:&#x2F;&#x2F;agenticcontrolplane.com&#x2F;install.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;agenticcontrolplane.com&#x2F;install.sh</a> | bash",
-          "title": "Show HN: ACP – Governance for AI Coding Agents (Claude Code, OpenClaw)",
-          "updated_at": "2026-04-06T22:25:08Z",
-          "url": "https://agenticcontrolplane.com/"
+          "updated_at": "2026-04-07T23:11:55Z"
         }
       ]
     },
@@ -2334,11 +2346,11 @@
           "created_at_i": 1775581563,
           "num_comments": 0,
           "objectID": "47678328",
-          "points": 9,
+          "points": 10,
           "story_id": 47678328,
           "story_text": "Coding agents today are blind.<p>They write “valid” HTML&#x2F;CSS code but can still ship a broken layout, a clipped dropdown, or a page at the wrong URL. Playwright scripts can assert modal.isVisible() without knowing the modal is rendered off-screen.<p>Essentially, coding agents need “eyes” to verify their own UI work.<p>frontend-visualqa is a CLI + MCP server for Claude Code and Codex for visual testing, verification, and QA of a website.<p>You give it a URL and natural-language claims:<p><pre><code>  frontend-visualqa verify http:&#x2F;&#x2F;localhost:8000&#x2F;dashboard.html \\\n  --claims \\\n  &#x27;The API status indicator shows Active&#x27; \\\n  &#x27;The monthly quota progress bar is completely filled&#x27;\n\n  # → first claim passes, second fails (label says 100% but bar is ~65% full)\n\n</code></pre>\nIt catches visual&lt;-&gt;DOM disagreements that selectors are blind to.<p>You can also test interactive flows without hardcoded data:<p><pre><code>  frontend-visualqa verify &#x27;http:&#x2F;&#x2F;localhost:8000&#x2F;booking_form.html&#x27; \\\n  --claims &#x27;The date on the confirmation page matches the date selected on the calendar&#x27; \\\n  --navigation-hint &quot;Fill out the form with example data&quot;\n\n  # → fails: fills the form, picks a date, books the slot, and catches an off-by-one date error on the confirmation page\n\n</code></pre>\nThe visual evaluation runs on n1, a VLM by Yutori that is post-trained specifically for browser interaction with RL on live websites. It navigates pages autonomously — so when a coding agent sends it to the wrong URL, n1 sees the wrong page, self-corrects, and reports this correction. On browser-use benchmarks n1 slightly outperforms Opus 4.6 and GPT-5.4 while running 2—3x faster at 4—5x lower cost: <a href=\"https:&#x2F;&#x2F;yutori.com&#x2F;blog&#x2F;introducing-n1\" rel=\"nofollow\">https:&#x2F;&#x2F;yutori.com&#x2F;blog&#x2F;introducing-n1</a><p>How does this compare to?<p>1. Playwright CLI+MCP\n- Gold standard, but blind.\n- frontend-visualqa is the visual verification layer on top.<p>2. OpenAI Playwright skill &#x2F; Claude + Dev-Browser\n- similar idea, but n1 is specifically trained for browser use (thus faster and cheaper), and the claim-based approach structures what to check rather than hoping the model notices everything.\n- Not locked to a TUI or IDE.<p>Known limitations:\n- Native &lt;select&gt; dropdowns render as OS-level widgets outside the viewport — n1 can&#x27;t see or interact with them. Custom dropdowns work fine.\n- Small visual&#x2F;numeric disagreements (red vs green status dot) are a known hard case. Improving with model updates.<p>Requires a Yutori API key (new accounts get free credits). DM me if you run out of credits.",
           "title": "Show HN: Frontend-VisualQA — give coding agents eyes to verify their own UI work",
-          "updated_at": "2026-04-07T17:55:55Z",
+          "updated_at": "2026-04-07T18:37:55Z",
           "url": "https://github.com/yutori-ai/frontend-visualqa"
         },
         {
