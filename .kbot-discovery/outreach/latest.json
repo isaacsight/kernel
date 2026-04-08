@@ -1,10 +1,16 @@
 {
-  "timestamp": "2026-04-08T06:13:35.638Z",
+  "timestamp": "2026-04-08T18:14:41.784Z",
   "projects": [
     {
-      "name": "jackwener/opencli",
-      "url": "https://github.com/jackwener/opencli",
-      "stars": 14160,
+      "name": "dcostenco/prism-mcp",
+      "url": "https://github.com/dcostenco/prism-mcp",
+      "stars": 111,
+      "description": "The Mind Palace for AI Agents — Autonomous Cognitive OS with affect-tagged memory (valence engine), token-economic RL (surprisal gate + UBI), Hebbian learning, ACT-R spreading activation, Synapse Engine (GraphRAG), adversarial evaluation (anti-sycophancy), fail-closed Dark Factory pipelines. Zero-config local mode."
+    },
+    {
+      "name": "jackwener/OpenCLI",
+      "url": "https://github.com/jackwener/OpenCLI",
+      "stars": 14388,
       "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
     },
     {
@@ -14,46 +20,40 @@
       "description": "Summon your AI superpower — voice, vision, and autonomous action"
     },
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1060,
-      "description": "the easiest way to run natural language-described workflows automatically"
+      "name": "Ar9av/obsidian-wiki",
+      "url": "https://github.com/Ar9av/obsidian-wiki",
+      "stars": 216,
+      "description": "Framework for AI agents to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern"
     },
     {
-      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 195,
-      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 376,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "taylorwilsdon/google_workspace_mcp",
-      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
-      "stars": 2053,
-      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
+      "name": "Ruya-AI/cozempic",
+      "url": "https://github.com/Ruya-AI/cozempic",
+      "stars": 213,
+      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
     },
     {
-      "name": "ArcadeAI/arcade-mcp",
-      "url": "https://github.com/ArcadeAI/arcade-mcp",
-      "stars": 851,
-      "description": "The best way to create, deploy, and share MCP Servers"
+      "name": "getbeton/openclaw-gtm-skills",
+      "url": "https://github.com/getbeton/openclaw-gtm-skills",
+      "stars": 4,
+      "description": "OpenClaw plugin for B2B company research and outbound GTM intelligence"
     },
     {
-      "name": "onlyfeng/mud-agent",
-      "url": "https://github.com/onlyfeng/mud-agent",
-      "stars": 0,
-      "description": "MUD game assistant — skill for Agent, plugin for OpenClaw"
+      "name": "samber/cc-skills",
+      "url": "https://github.com/samber/cc-skills",
+      "stars": 51,
+      "description": "🧑‍🎨 A collection of agentic skills that works"
     },
     {
-      "name": "wuyunting555/openclaw-toolbox",
-      "url": "https://github.com/wuyunting555/openclaw-toolbox",
-      "stars": 0,
-      "description": "wenwubei 的 OpenClaw skills、plugins 和工具仓库"
-    },
-    {
-      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
-      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
-      "stars": 0,
-      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+      "name": "samber/cc-skills-golang",
+      "url": "https://github.com/samber/cc-skills-golang",
+      "stars": 1074,
+      "description": "🧑‍🎨 A collection of Golang agentic skills that works"
     }
   ],
   "latestPaper": {
