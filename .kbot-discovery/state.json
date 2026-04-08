@@ -1,18 +1,18 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-04-08T07:22:50.828Z",
-    "intel": "2026-04-08T07:22:54.579Z",
+    "pulse": "2026-04-08T09:52:50.798Z",
+    "intel": "2026-04-08T07:22:54.604Z",
     "outreach": "2026-04-08T06:13:35.640Z",
     "writing": "2026-04-07T19:13:38.423Z",
     "evolution": "2026-04-07T17:30:08.652Z",
-    "opportunities": "2026-04-08T07:22:58.513Z",
+    "opportunities": "2026-04-08T07:22:59.954Z",
     "actions": "2026-04-08T03:58:46.074Z",
-    "synthesis": "2026-04-08T07:22:51.343Z",
+    "synthesis": "2026-04-08T09:52:51.088Z",
     "obsidian": "2026-04-08T06:13:35.717Z"
   },
   "stats": {
-    "totalRuns": 2199,
-    "totalPulses": 861,
+    "totalRuns": 2214,
+    "totalPulses": 866,
     "totalIntel": 91,
     "totalOutreach": 41,
     "totalWriting": 21,
@@ -24,11 +24,11 @@
     "postsFlagged": 0,
     "evolutionSuccesses": 2,
     "evolutionFailures": 13,
-    "totalSynthesis": 655,
+    "totalSynthesis": 660,
     "totalObsidianSyncs": 24
   },
   "knownStars": 11,
-  "knownDownloads": 346,
+  "knownDownloads": 140,
   "hnScore": 1,
   "hnComments": 0,
   "feedback": [
@@ -50,7 +50,7 @@
       "title": "Show HN: Output.ai - OSS framework we extracted from 500+ production AI agents",
       "scoreAtPost": 1,
       "commentsAtPost": 0,
-      "lastCheckedAt": "2026-04-08T07:22:50.828Z",
+      "lastCheckedAt": "2026-04-08T09:52:50.797Z",
       "currentScore": 0,
       "currentComments": 0,
       "repliesReceived": 0,
