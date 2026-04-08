@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-08T13:37:56.498Z",
+  "timestamp": "2026-04-08T19:44:47.971Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,43 +67,43 @@
     },
     {
       "source": "hn-comment",
+      "title": "Show HN: TUI-use: Let AI agents control interactive terminal programs",
+      "url": "https://news.ycombinator.com/item?id=47695010",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
+      "url": "https://news.ycombinator.com/item?id=47692725",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Project Glasswing: Securing critical software for the AI era",
-      "url": "https://news.ycombinator.com/item?id=47687834",
+      "url": "https://news.ycombinator.com/item?id=47688863",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Taste in the age of AI and LLMs",
-      "url": "https://news.ycombinator.com/item?id=47678081",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "New Skill: Maester Test Expert",
+      "url": "https://github.com/maester365/maester/pull/1608",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
-      "source": "hn-comment",
-      "title": "The cult of vibe coding is dogfooding run amok",
-      "url": "https://news.ycombinator.com/item?id=47676846",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "Poison steps, dead-letter handling, and human-in-the-loop escalation after failed recovery",
+      "url": "https://github.com/rahulpuri14493/sandhi_ai/issues/88",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
       "title": "feat(core): add AGENTS.md to default context filenames",
       "url": "https://github.com/google-gemini/gemini-cli/pull/24913",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add Aider hook support",
-      "url": "https://github.com/sprklai/agenttray/issues/7",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(core): dispose Scheduler to prevent McpProgress listener leak",
-      "url": "https://github.com/google-gemini/gemini-cli/pull/24870",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "feat(plugins): expose ACP spawn and prompt in plugin runtime",
-      "url": "https://github.com/openclaw/openclaw/pull/63176",
+      "title": "Claude Code memory integration: BM as complementary knowledge graph layer",
+      "url": "https://github.com/basicmachines-co/basic-memory/issues/730",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "plugin-sdk: split command status surface",
-      "url": "https://github.com/openclaw/openclaw/pull/63174",
+      "title": "docs(support): align platform status with PRD and tested matrix",
+      "url": "https://github.com/NVIDIA/NemoClaw/pull/1619",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw 生态日报 2026-04-08",
-      "url": "https://github.com/rollysys/agents-radar/issues/207",
+      "title": "feat(ui): add dreaming diary controls and navigation",
+      "url": "https://github.com/openclaw/openclaw/pull/63298",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
