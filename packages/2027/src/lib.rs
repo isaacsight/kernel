@@ -1,27 +1,59 @@
 //! # 2027 — Agentic Synthesizer
 //!
-//! A VST3/CLAP wavetable synthesizer designed for AI-driven control.
+//! A VST3/CLAP synthesizer designed for AI-driven control.
 //! Built with nih-plug.
 //!
 //! - 16-voice polyphony with oldest-voice stealing
-//! - Wavetable oscillator: 2048-sample frames, 256-frame table, linear interpolation
+//! - 3 oscillator modes: Wavetable, FM (4-operator through-zero), Granular
 //! - ZDF State Variable Filter (Zavalishin TPT): LP/HP/BP/Notch
 //! - Exponential ADSR envelope
+//! - 4 LFOs (sine, tri, saw, square, S&H, Lorenz chaos)
+//! - 32-slot modulation matrix with via (mod-of-mod)
+//! - Musical intelligence: chord/scale detection, energy tracking
+//! - Agent brain: maps musical context to AgentX/AgentY modulation
 //! - Stereo output
 
 use nih_plug::prelude::*;
 use std::sync::Arc;
 
+mod context;
 mod dsp;
 mod params;
 
+use context::agent::{int_to_agent_mode, Agent};
+use context::chord_detector::ChordDetector;
+use context::energy_tracker::EnergyTracker;
+use context::musical_context::MusicalContext;
+use context::scale_detector::ScaleDetector;
 use dsp::envelope::Adsr;
 use dsp::filter::{FilterMode, ZdfSvf};
+use dsp::fm::FmOscillator;
+use dsp::granular::GranularEngine;
+use dsp::lfo::LfoBank;
+use dsp::mod_matrix::{ModDest, ModMatrix, ModSource, ModSourceValues};
 use dsp::wavetable::{Wavetable, WavetableOscillator};
 use params::SynthParams;
 
 /// Maximum number of simultaneous voices.
 const MAX_VOICES: usize = 16;
+
+/// Oscillator mode enum (matches the osc_mode IntParam: 0/1/2).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum OscMode {
+    Wavetable,
+    Fm,
+    Granular,
+}
+
+impl OscMode {
+    fn from_int(v: i32) -> Self {
+        match v {
+            1 => OscMode::Fm,
+            2 => OscMode::Granular,
+            _ => OscMode::Wavetable,
+        }
+    }
+}
 
 /// A single synth voice.
 struct Voice {
@@ -35,6 +67,10 @@ struct Voice {
     velocity: f32,
     /// Wavetable oscillator.
     oscillator: WavetableOscillator,
+    /// FM oscillator (4-operator through-zero).
+    fm_osc: FmOscillator,
+    /// Granular synthesis engine.
+    granular: GranularEngine,
     /// Amplitude envelope.
     envelope: Adsr,
     /// Per-voice filter.
@@ -51,6 +87,8 @@ impl Voice {
             note_id: 0,
             velocity: 0.0,
             oscillator: WavetableOscillator::new(),
+            fm_osc: FmOscillator::new(sample_rate),
+            granular: GranularEngine::new(sample_rate),
             envelope: Adsr::new(sample_rate),
             filter: ZdfSvf::new(sample_rate),
             age: 0,
@@ -60,6 +98,8 @@ impl Voice {
     fn set_sample_rate(&mut self, sample_rate: f32) {
         self.envelope.set_sample_rate(sample_rate);
         self.filter.set_sample_rate(sample_rate);
+        self.fm_osc.set_sample_rate(sample_rate);
+        self.granular.set_sample_rate(sample_rate);
     }
 }
 
@@ -70,8 +110,26 @@ pub struct TwentyTwentySeven {
     wavetable: Wavetable,
     /// Polyphonic voice pool.
     voices: Vec<Voice>,
+    /// LFO bank (4 LFOs, shared across all voices).
+    lfo_bank: LfoBank,
+    /// Modulation matrix (32 routing slots).
+    mod_matrix: ModMatrix,
     /// Sample rate, set during initialization.
     sample_rate: f32,
+    /// Tracks the last FM algorithm value to detect changes.
+    last_fm_algo: i32,
+
+    // --- Musical intelligence (Phase 3) ---
+    /// Real-time chord detector.
+    chord_detector: ChordDetector,
+    /// Scale/key detector.
+    scale_detector: ScaleDetector,
+    /// Energy/intensity tracker.
+    energy_tracker: EnergyTracker,
+    /// Agent brain — maps musical context to modulation outputs.
+    agent: Agent,
+    /// Combined musical context state, updated each buffer.
+    musical_context: MusicalContext,
 }
 
 impl Default for TwentyTwentySeven {
@@ -79,16 +137,36 @@ impl Default for TwentyTwentySeven {
         let mut wavetable = Wavetable::new();
         wavetable.init_default();
 
+        let default_sr = 44100.0;
+        let default_buf = 512;
+
         let mut voices = Vec::with_capacity(MAX_VOICES);
         for _ in 0..MAX_VOICES {
-            voices.push(Voice::new(44100.0));
+            voices.push(Voice::new(default_sr));
         }
+
+        // Set up default modulation routes:
+        // Slot 0: LFO1 → FilterCutoff (amount controlled by lfo1_depth param)
+        // Slot 1: AgentX → FmDepth (AI-driven FM intensity)
+        // Slot 2: AgentY → GrainDensity (AI-driven granular density)
+        let mut mod_matrix = ModMatrix::new();
+        mod_matrix.set_route(0, ModSource::Lfo1, ModDest::FilterCutoff, 0.0, ModSource::None);
+        mod_matrix.set_route(1, ModSource::AgentX, ModDest::FmDepth, 1.0, ModSource::None);
+        mod_matrix.set_route(2, ModSource::AgentY, ModDest::GrainDensity, 1.0, ModSource::None);
 
         Self {
             params: Arc::new(SynthParams::default()),
             wavetable,
             voices,
-            sample_rate: 44100.0,
+            lfo_bank: LfoBank::new(default_sr),
+            mod_matrix,
+            sample_rate: default_sr,
+            last_fm_algo: -1, // Force initial algorithm setup
+            chord_detector: ChordDetector::new(default_sr, default_buf),
+            scale_detector: ScaleDetector::new(default_sr, default_buf, 120.0),
+            energy_tracker: EnergyTracker::new(default_sr, default_buf),
+            agent: Agent::new(default_sr, default_buf),
+            musical_context: MusicalContext::default(),
         }
     }
 }
@@ -114,7 +192,12 @@ impl TwentyTwentySeven {
     }
 
     /// Handle a note-on event.
-    fn note_on(&mut self, note: u8, velocity: f32, note_id: i32) {
+    fn note_on(&mut self, note: u8, velocity: f32, note_id: i32, sample_offset: u32) {
+        // Feed musical intelligence detectors
+        self.chord_detector.note_on(note, velocity);
+        self.scale_detector.note_on(note, velocity);
+        self.energy_tracker.note_on(note, velocity, sample_offset);
+
         let idx = self.allocate_voice();
         let voice = &mut self.voices[idx];
 
@@ -129,14 +212,23 @@ impl TwentyTwentySeven {
         let fine_cents = self.params.osc_fine.value();
         let freq = midi_note_to_freq(note, pitch_offset, fine_cents);
 
+        // Reset all oscillator types (whichever mode is active will be used)
         voice.oscillator.reset();
         voice.oscillator.set_frequency(freq, self.sample_rate);
+        voice.fm_osc.reset();
+        voice.granular.reset();
         voice.envelope.gate_on();
         voice.filter.reset();
+
+        // Trigger key-triggered LFOs
+        self.lfo_bank.note_on();
     }
 
     /// Handle a note-off event.
     fn note_off(&mut self, note: u8, note_id: i32) {
+        // Feed energy tracker
+        self.energy_tracker.note_off(note);
+
         for voice in self.voices.iter_mut() {
             if voice.active && voice.note == note {
                 // If note_id is >= 0, match it too (nih-plug convention)
@@ -199,10 +291,22 @@ impl Plugin for TwentyTwentySeven {
         _context: &mut impl InitContext<Self>,
     ) -> bool {
         self.sample_rate = buffer_config.sample_rate;
+        let buf_size = buffer_config.max_buffer_size as usize;
 
         for voice in self.voices.iter_mut() {
             voice.set_sample_rate(self.sample_rate);
         }
+
+        self.lfo_bank.set_sample_rate(self.sample_rate);
+
+        // Initialize musical intelligence with host sample rate and buffer size
+        self.chord_detector
+            .set_sample_rate(self.sample_rate, buf_size);
+        self.scale_detector
+            .set_sample_rate(self.sample_rate, buf_size);
+        self.energy_tracker
+            .set_sample_rate(self.sample_rate, buf_size);
+        self.agent.set_sample_rate(self.sample_rate, buf_size);
 
         true
     }
@@ -213,8 +317,20 @@ impl Plugin for TwentyTwentySeven {
             voice.envelope.reset();
             voice.filter.reset();
             voice.oscillator.reset();
+            voice.fm_osc.reset();
+            voice.granular.reset();
             voice.age = 0;
         }
+
+        self.lfo_bank.reset();
+        self.last_fm_algo = -1;
+
+        // Reset musical intelligence
+        self.chord_detector.reset();
+        self.scale_detector.reset();
+        self.energy_tracker.reset();
+        self.agent.reset();
+        self.musical_context = MusicalContext::default();
     }
 
     fn process(
@@ -223,6 +339,20 @@ impl Plugin for TwentyTwentySeven {
         _aux: &mut AuxiliaryBuffers,
         context: &mut impl ProcessContext<Self>,
     ) -> ProcessStatus {
+        // --- Update agent mode and reactivity from params (once per buffer) ---
+        let agent_mode = int_to_agent_mode(self.params.agent_mode.value());
+        self.agent.set_mode(agent_mode);
+        self.agent
+            .set_reactivity(self.params.agent_reactivity.value() / 100.0);
+
+        // Get tempo from host transport (if available)
+        let transport = context.transport();
+        if let Some(tempo) = transport.tempo {
+            self.musical_context.tempo = tempo;
+            self.scale_detector.set_tempo(self.sample_rate, tempo);
+            self.lfo_bank.set_host_bpm(tempo as f32);
+        }
+
         let mut next_event = context.next_event();
 
         for (sample_idx, channel_samples) in buffer.iter_samples().enumerate() {
@@ -237,9 +367,10 @@ impl Plugin for TwentyTwentySeven {
                         note,
                         velocity,
                         voice_id,
+                        timing,
                         ..
                     } => {
-                        self.note_on(note, velocity, voice_id.unwrap_or(-1));
+                        self.note_on(note, velocity, voice_id.unwrap_or(-1), timing);
                     }
                     NoteEvent::NoteOff {
                         note, voice_id, ..
@@ -255,19 +386,94 @@ impl Plugin for TwentyTwentySeven {
             // --- Read smoothed parameters ---
             let master_gain =
                 nih_plug::util::db_to_gain_fast(self.params.master_volume.smoothed.next());
-            let wt_position = self.params.wt_position.smoothed.next() / 100.0; // 0..100% → 0..1
+            let wt_position = self.params.wt_position.smoothed.next() / 100.0;
             let filter_cutoff = self.params.filter_cutoff.smoothed.next();
-            let filter_reso = self.params.filter_resonance.smoothed.next() / 100.0; // 0..100% → 0..1
+            let filter_reso = self.params.filter_resonance.smoothed.next() / 100.0;
             let filter_mode = int_to_filter_mode(self.params.filter_mode.value());
 
             let env_attack = self.params.env_attack.value();
             let env_decay = self.params.env_decay.value();
-            let env_sustain = self.params.env_sustain.value() / 100.0; // 0..100% → 0..1
+            let env_sustain = self.params.env_sustain.value() / 100.0;
             let env_release = self.params.env_release.value();
 
-            // Pitch parameters (applied per-sample for pitch bend responsiveness)
             let pitch_offset = self.params.osc_pitch.value() as f32;
             let fine_cents = self.params.osc_fine.value();
+
+            let osc_mode = OscMode::from_int(self.params.osc_mode.value());
+
+            // FM parameters
+            let fm_depth = self.params.fm_depth.smoothed.next();
+            let fm_algo = self.params.fm_algorithm.value();
+            let fm_ratios = [
+                self.params.fm_ratio1.value(),
+                self.params.fm_ratio2.value(),
+                self.params.fm_ratio3.value(),
+                self.params.fm_ratio4.value(),
+            ];
+            let fm_levels = [
+                self.params.fm_level1.value(),
+                self.params.fm_level2.value(),
+                self.params.fm_level3.value(),
+                self.params.fm_level4.value(),
+            ];
+
+            // Granular parameters
+            let grain_pos = self.params.grain_position.smoothed.next() / 100.0;
+            let grain_size = self.params.grain_size.value() / 1000.0; // ms to seconds
+            let grain_density = self.params.grain_density.value();
+            let grain_pitch = self.params.grain_pitch.value();
+            let grain_spread = self.params.grain_spread.value() / 100.0;
+
+            // Agent X/Y params (can be driven by host automation or the agent brain)
+            let agent_x = self.params.agent_x.smoothed.next();
+            let agent_y = self.params.agent_y.smoothed.next();
+
+            // LFO parameters
+            let lfo1_rate = self.params.lfo1_rate.value();
+            let lfo1_depth = self.params.lfo1_depth.value() / 100.0;
+
+            // --- Process LFOs ---
+            self.lfo_bank.lfos[0].rate = lfo1_rate;
+            let lfo_outputs = self.lfo_bank.process();
+
+            // --- Update LFO1→FilterCutoff route amount from lfo1_depth ---
+            self.mod_matrix.slots[0].amount = lfo1_depth;
+
+            // --- Combine agent brain output with agent params ---
+            // The agent brain provides context-aware values; the params allow
+            // host automation override. Sum them (clamped later).
+            let agent_out = self.agent.output();
+            let combined_agent_x = (agent_x + agent_out.x).clamp(-1.0, 1.0);
+            let combined_agent_y = (agent_y + agent_out.y).clamp(-1.0, 1.0);
+
+            // --- Build modulation source values ---
+            let mod_sources = ModSourceValues {
+                lfo: lfo_outputs,
+                env: [0.0; 4], // Env2-4 not yet wired; Env1 is the amp env (used directly)
+                velocity: 0.0, // Set per-voice below (TODO: per-voice mod processing)
+                key_track: 0.0,
+                mod_wheel: 0.0,
+                aftertouch: 0.0,
+                agent_x: combined_agent_x,
+                agent_y: combined_agent_y,
+            };
+
+            // --- Process modulation matrix ---
+            let mod_offsets = self.mod_matrix.process(&mod_sources);
+
+            // --- Apply FM algorithm if it changed ---
+            if fm_algo != self.last_fm_algo {
+                for voice in self.voices.iter_mut() {
+                    voice.fm_osc.set_algorithm(fm_algo as u8, fm_depth);
+                }
+                self.last_fm_algo = fm_algo;
+            }
+
+            // --- Compute modulated filter cutoff ---
+            // mod_offsets.filter_cutoff scaled to semitones of cutoff shift
+            let cutoff_mod_semitones = mod_offsets.filter_cutoff * 48.0;
+            let cutoff_mod_factor = 2.0f32.powf(cutoff_mod_semitones / 12.0);
+            let modulated_cutoff = (filter_cutoff * cutoff_mod_factor).clamp(20.0, 20_000.0);
 
             // --- Sum all active voices ---
             let mut mix = 0.0f32;
@@ -282,15 +488,59 @@ impl Plugin for TwentyTwentySeven {
                     .envelope
                     .set_params(env_attack, env_decay, env_sustain, env_release);
 
-                // Update oscillator frequency (pitch knob changes affect playing notes)
-                let freq = midi_note_to_freq(voice.note, pitch_offset, fine_cents);
-                voice.oscillator.set_frequency(freq, self.sample_rate);
+                // Compute base frequency with pitch modulation from mod matrix
+                let base_freq = midi_note_to_freq(voice.note, pitch_offset, fine_cents);
+                let pitch_mod_semitones = mod_offsets.osc_pitch;
+                let modulated_freq =
+                    base_freq * 2.0f32.powf(pitch_mod_semitones / 12.0);
 
-                // Update filter
-                voice.filter.set_params(filter_cutoff, filter_reso);
+                // Update filter with modulated cutoff + resonance
+                let reso_mod = (filter_reso + mod_offsets.filter_resonance).clamp(0.0, 1.0);
+                voice.filter.set_params(modulated_cutoff, reso_mod);
 
-                // Generate oscillator sample
-                let osc_out = voice.oscillator.next_sample(&self.wavetable, wt_position);
+                // --- Generate oscillator sample based on mode ---
+                let osc_out = match osc_mode {
+                    OscMode::Wavetable => {
+                        voice
+                            .oscillator
+                            .set_frequency(modulated_freq, self.sample_rate);
+                        let wt_pos_mod =
+                            (wt_position + mod_offsets.wt_position).clamp(0.0, 1.0);
+                        voice.oscillator.next_sample(&self.wavetable, wt_pos_mod)
+                    }
+                    OscMode::Fm => {
+                        // Update FM operator params from plugin params + mod matrix
+                        let effective_depth = (fm_depth + mod_offsets.fm_depth).max(0.0);
+                        for (i, op) in voice.fm_osc.params.iter_mut().enumerate() {
+                            op.ratio = (fm_ratios[i] + mod_offsets.fm_ratio[i]).max(0.001);
+                            op.output_level = fm_levels[i];
+                            op.feedback =
+                                (op.feedback + mod_offsets.fm_feedback[i]).clamp(0.0, 1.0);
+                        }
+                        // Scale mod matrix depths by global FM depth
+                        for src in 0..4 {
+                            for dst in 0..4 {
+                                let base = voice.fm_osc.mod_matrix[src][dst];
+                                if base != 0.0 {
+                                    voice.fm_osc.mod_matrix[src][dst] =
+                                        base.signum() * effective_depth;
+                                }
+                            }
+                        }
+                        voice.fm_osc.process(modulated_freq)
+                    }
+                    OscMode::Granular => {
+                        voice.granular.params.position =
+                            (grain_pos + mod_offsets.grain_position).clamp(0.0, 1.0);
+                        voice.granular.params.size =
+                            (grain_size + mod_offsets.grain_size).max(0.001);
+                        voice.granular.params.density =
+                            (grain_density + mod_offsets.grain_density).max(0.1);
+                        voice.granular.params.pitch = grain_pitch;
+                        voice.granular.params.spread = grain_spread;
+                        voice.granular.process()
+                    }
+                };
 
                 // Apply filter
                 let filtered = voice.filter.process_mode(osc_out, filter_mode);
@@ -304,7 +554,9 @@ impl Plugin for TwentyTwentySeven {
                     continue;
                 }
 
-                mix += filtered * env_val * voice.velocity;
+                // Apply volume modulation from mod matrix
+                let vol_mod = (1.0 + mod_offsets.volume).max(0.0);
+                mix += filtered * env_val * voice.velocity * vol_mod;
                 voice.age += 1;
             }
 
@@ -315,6 +567,32 @@ impl Plugin for TwentyTwentySeven {
             }
         }
 
+        // --- End-of-buffer: update musical intelligence ---
+
+        // Decay detectors (age out old data)
+        self.chord_detector.decay();
+        self.scale_detector.decay();
+
+        // Detect chord and scale
+        self.musical_context.chord = self
+            .chord_detector
+            .detect()
+            .map(|r| (r.root, r.quality, r.confidence));
+        self.musical_context.scale = self
+            .scale_detector
+            .detect()
+            .map(|r| (r.root, r.scale_type, r.confidence));
+
+        // Update energy tracker and read state
+        self.energy_tracker.process_buffer();
+        let energy_state = self.energy_tracker.state();
+        self.musical_context.energy = energy_state.energy;
+        self.musical_context.note_density = energy_state.note_density;
+        self.musical_context.velocity_avg = energy_state.velocity_avg;
+
+        // Run the agent brain — its output feeds AgentX/AgentY next buffer
+        self.agent.process(&self.musical_context);
+
         ProcessStatus::KeepAlive
     }
 }
@@ -322,7 +600,7 @@ impl Plugin for TwentyTwentySeven {
 impl ClapPlugin for TwentyTwentySeven {
     const CLAP_ID: &'static str = "chat.kernel.2027";
     const CLAP_DESCRIPTION: Option<&'static str> =
-        Some("Agentic wavetable synthesizer designed for AI control");
+        Some("Agentic synthesizer designed for AI control");
     const CLAP_MANUAL_URL: Option<&'static str> = Some("https://kernel.chat");
     const CLAP_SUPPORT_URL: Option<&'static str> = None;
     const CLAP_FEATURES: &'static [ClapFeature] = &[
