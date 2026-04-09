@@ -1,0 +1,13 @@
+[package]
+name = "twenty-twenty-seven"
+version = "0.1.0"
+edition = "2021"
+authors = ["kernel.chat"]
+license = "MIT"
+description = "2027 — an agentic synthesizer built for AI control"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git", features = ["assert_process_allocs"] }
