@@ -139,7 +139,7 @@ export function banner(version?: string): string {
     ? gradient('kbot', [167, 139, 250], [103, 232, 249])
     : ACCENT('kbot')
   const title = `  ${bannerText}${v}`
-  const features = DIM('  Web search: free • 35 agents • 764+ tools • bring your own key')
+  const features = DIM('  Web search: free • 35 agents • 787+ tools • bring your own key')
   return `\n${grid}\n${title}\n${features}\n`
 }
 
@@ -320,7 +320,7 @@ export function printHelp(): void {
     `  ${CYAN('https://kernel.chat')}             ${DIM('Web companion')}`,
     `  ${CYAN('https://github.com/isaacsight/kernel')} ${DIM('GitHub')}`,
     '',
-    `  ${DIM('35 specialist agents. 764+ tools. Type anything to get started.')}`,
+    `  ${DIM('35 specialist agents. 787+ tools. Type anything to get started.')}`,
     '',
   ]
   status(lines.join('\n'))

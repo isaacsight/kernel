@@ -1,5 +1,5 @@
 # kbot Hero Demo — The 30-second pitch
-# Shows: install → first query → agent routing → learning
+# Shows: install → first query → agent routing → tool forging
 # Run: vhs tools/video-assets/demo-hero.tape
 
 Output tools/video-assets/demo-hero.gif
@@ -13,35 +13,30 @@ Set Padding 24
 Set TypingSpeed 35ms
 Set PlaybackSpeed 1
 
-# Clean start
-Type "# The Kernel Stack — Claude thinks. kbot acts. Both learn."
-Enter
-Sleep 1.2s
-
 # Install
 Type "npm install -g @kernel.chat/kbot"
 Enter
 Sleep 2s
 
-# First query — show agent routing
-Type `kbot "explain this repo"`
+# First query — show it just works
+Type `kbot "fix the auth bug in src/auth.ts"`
 Sleep 300ms
 Enter
 Sleep 8s
 
-# Show it learned something
-Type `kbot insights`
+# Show agent routing
+Type `kbot --agent researcher "latest papers on LLM agents"`
+Sleep 300ms
+Enter
+Sleep 6s
+
+# Show it builds its own tools
+Type `kbot forge "lint Dockerfile for best practices"`
 Sleep 300ms
 Enter
 Sleep 5s
 
-# Show agent selection
-Type `kbot --agent researcher "latest papers on active inference"`
-Sleep 300ms
-Enter
-Sleep 8s
-
-# Finish with the tagline
-Type "# 350+ tools. 26 agents. Learns from every session. $0 local."
+# Finish
+Type "# 787+ tools. 35 agents. Dreams. Learns. $0 local. MIT."
 Enter
 Sleep 2s

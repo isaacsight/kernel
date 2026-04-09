@@ -1,4 +1,4 @@
-# kbot v3.73 Demo — Terminal recording for README & npm
+# kbot v3.97 Demo — Terminal recording for README & npm
 # Run: vhs tools/video-assets/demo.tape
 
 Output tools/video-assets/demo.gif
@@ -13,36 +13,36 @@ Set TypingSpeed 35ms
 Set PlaybackSpeed 1.5
 
 # Title
-Type "echo 'kbot — 764 tools. Dreams. Learns. Evolves. $0 local.'"
+Type "echo 'kbot — 787+ tools. Dreams. Learns. Builds its own tools. $0 local.'"
 Enter
 Sleep 1.5s
 
-# Buddy greeting
-Type "kbot buddy status"
+# One-shot — show agent routing
+Type `kbot "find security issues in this repo"`
 Enter
-Sleep 4s
+Sleep 6s
 
 # Dream status
 Type "kbot dream status"
 Enter
 Sleep 4s
 
-# Quick audit
-Type "kbot audit vercel/next.js --badge"
-Enter
-Sleep 6s
-
-# Watchdog
-Type "kbot watchdog"
+# Agents list
+Type "kbot agents"
 Enter
 Sleep 4s
 
-# Buddy leaderboard
-Type "kbot buddy leaderboard --limit 5"
+# Local AI — no API key needed
+Type "kbot local status"
 Enter
-Sleep 4s
+Sleep 3s
+
+# Forge a custom tool
+Type `kbot forge "check npm audit for critical vulnerabilities"`
+Enter
+Sleep 5s
 
 # End
-Type "echo 'npm i -g @kernel.chat/kbot — kernel.chat'"
+Type "echo 'npm i -g @kernel.chat/kbot — MIT — kernel.chat'"
 Enter
 Sleep 2s

@@ -1,6 +1,6 @@
 // kbot Stream Brain — Collective Intelligence Layer for Stream Character
 //
-// Connects the 764-tool kbot suite to the livestream character, enabling
+// Connects the 787-tool kbot suite to the livestream character, enabling
 // real tool execution triggered by chat conversation topics.
 //
 // Architecture:

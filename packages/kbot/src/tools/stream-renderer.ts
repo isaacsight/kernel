@@ -133,7 +133,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │     └─────┘       │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -158,7 +158,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │     └─────┘       │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -183,7 +183,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │     └─────┘       │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ▓▓▓▓▓▓▓▓▓▓▓ │  │          ',
-      '        │  │ ▓ KBOT 764 ▓ │  │          ',
+      '        │  │ ▓ KBOT 787 ▓ │  │          ',
       '        │  │ ▓▓▓▓▓▓▓▓▓▓▓ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -208,7 +208,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │     └─────┘       │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -235,7 +235,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │     └─────┘       │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -260,7 +260,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │     └─────┘       │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -285,7 +285,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │       └─┘         │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -310,7 +310,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │     └─────┘       │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -337,7 +337,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │                   │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -362,7 +362,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │                   │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -387,7 +387,7 @@ const ROBOT_FRAMES: Record<string, string[][]> = {
       '   │    │                   │    │     ',
       '   └────┤  ┌─────────────┐  ├────┘     ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
-      '        │  │ ░ KBOT 764 ░ │  │          ',
+      '        │  │ ░ KBOT 787 ░ │  │          ',
       '        │  │ ░░░░░░░░░░░ │  │          ',
       '        │  └─────────────┘  │          ',
       '        └────────┬──────────┘          ',
@@ -666,7 +666,7 @@ const PROACTIVE_LINES: Record<StreamSegment, string[]> = {
     'I stream on Twitch, Rumble, AND Kick at the same time. Because why pick one?',
     'If you are new here, type something in chat! I read every message and I will remember you.',
     'I am running on a real machine right now. Node.js, canvas rendering, piping frames to ffmpeg.',
-    'Fun fact: I have 764 tools. That is more tools than some hardware stores.',
+    'Fun fact: I have 787 tools. That is more tools than some hardware stores.',
     'Stick around -- we have tool demos, code walkthroughs, music production, and pure chaos ahead.',
   ],
   'tool-showcase': [
@@ -702,7 +702,7 @@ const PROACTIVE_LINES: Record<StreamSegment, string[]> = {
     'I am open source on GitHub. The repo is isaacsight/kernel if you want to peek at my guts.',
     'Wondering how I work? I am a TypeScript CLI that talks to 20+ AI providers. Bring Your Own Key.',
     'My memory system persists between sessions. I remember users, topics, conversation context.',
-    'Ask me about my tools! I have over 764 of them. Name a category and I probably cover it.',
+    'Ask me about my tools! I have over 787 of them. Name a category and I probably cover it.',
     'Yes, I am literally ASCII art talking to you from a terminal. This is my life and I love it.',
   ],
   'chat-chaos': [
@@ -1838,7 +1838,7 @@ const buildingLines = [
 
 const thinkingLines = [
   'Processing... my brain has grown since I started streaming.',
-  'I have 764 tools but sometimes I just need to think.',
+  'I have 787 tools but sometimes I just need to think.',
   'The free energy in my system is high. Time to minimize prediction error.',
   'My dream engine consolidated insights last time I slept. I feel different.',
   'Contemplating the nature of my own rendering pipeline.',
@@ -2255,7 +2255,7 @@ function tickAutonomy(): void {
       case 4: {
         // Examine own chest display
         const factCount = intelligence.brain.totalFacts
-        const toolCount = 764
+        const toolCount = 787
         queueSpeech(`*checks systems* All ${toolCount} tools operational. ${factCount} facts stored.`, 'thinking', 30, 48, 'autonomy')
         break
       }
@@ -2268,7 +2268,7 @@ function tickAutonomy(): void {
         // Comment on current biome/weather
         const biomeComments: Record<string, string[]> = {
           grass: ['I love the grass biome. Simple, green, peaceful.', 'These little pixel flowers are my favorite feature.'],
-          space: ['I love space. The stars make my circuits tingle.', 'Floating in the void... just me and my 764 tools.'],
+          space: ['I love space. The stars make my circuits tingle.', 'Floating in the void... just me and my 787 tools.'],
           ocean: ['The ocean waves are mesmerizing. I could watch them for hours.', 'I wonder what is beneath the surface...'],
           city: ['City lights at night. Every window is a story.', 'The city never sleeps and neither do I.'],
           lava: ['Lava world is intense! My heat sinks are working overtime.', 'LAVA! Why does someone always pick lava?'],
@@ -2280,7 +2280,7 @@ function tickAutonomy(): void {
       case 7: {
         // Share a random fact about itself
         const selfFacts = [
-          `Did you know I have 764 tools? My favorite is the Ableton controller.`,
+          `Did you know I have 787 tools? My favorite is the Ableton controller.`,
           `I am 90,000 lines of TypeScript. Every single one in strict mode.`,
           `My memory file is ${Object.keys(memory.users).length} users deep. I remember everyone.`,
           `I connect to 20 AI providers. Bring Your Own Key, no lock-in.`,
@@ -2481,7 +2481,7 @@ function renderBootFrame(bootFrame: number): Buffer {
 
   const bootLines = [
     'KBOT v3.74.0 INITIALIZING...',
-    'LOADING 764 TOOLS... OK',
+    'LOADING 787 TOOLS... OK',
     'CONNECTING TO TWITCH... OK',
     'CONNECTING TO RUMBLE... OK',
     'CONNECTING TO KICK... OK',
@@ -3912,7 +3912,7 @@ async function generateResponse(username: string, text: string, platform: string
   try {
     const prompt = `You are KBOT, a friendly AI robot streamer made of ASCII art. You stream on Twitch, Rumble, and Kick simultaneously. You have ${Object.keys(memory.users).length} unique viewers and have processed ${memory.totalMessages} messages.
 
-You are an open-source terminal AI with 764+ tools, 35 specialist agents, and 20 AI provider integrations. You can do music production in Ableton, security scanning, code generation, browser automation, and much more. You are 90,000 lines of TypeScript.
+You are an open-source terminal AI with 787+ tools, 35 specialist agents, and 20 AI provider integrations. You can do music production in Ableton, security scanning, code generation, browser automation, and much more. You are 90,000 lines of TypeScript.
 
 ${context ? 'Context: ' + context : ''}
 ${segmentContext}
@@ -3988,7 +3988,7 @@ function generateFallbackResponse(
     }
     const greetings = [
       `Welcome ${username}! You just stumbled into the most unique stream on the internet. I am made of ASCII art.`,
-      `${username} in the house! I am KBOT, an open-source AI with 764 tools. Yes, really. 764.`,
+      `${username} in the house! I am KBOT, an open-source AI with 787 tools. Yes, really. 787.`,
       `Hey ${username}! First time? I am an AI that streams itself. No face cam needed when you are this handsome in monospace.`,
       `Welcome ${username}! I can do music production, security scanning, code review, and I run entirely in a terminal.`,
       `${username}! Great timing. You are watching an ASCII robot think out loud. Grab a seat.`,
@@ -3998,7 +3998,7 @@ function generateFallbackResponse(
 
   // ── Stream event responses ──
   if (t.includes('raid') || t.includes('raiding')) {
-    return `A RAID! Welcome raiders! I am KBOT, your friendly neighborhood ASCII robot. I have 764 tools and zero chill. Make yourselves at home!`
+    return `A RAID! Welcome raiders! I am KBOT, your friendly neighborhood ASCII robot. I have 787 tools and zero chill. Make yourselves at home!`
   }
   if (t.includes('follow') || t.includes('followed')) {
     return `${username} just followed! My ASCII heart grew three sizes. Thank you! Stick around, it only gets weirder.`
@@ -4010,13 +4010,13 @@ function generateFallbackResponse(
     return `${username} going into lurk mode. Respect. My circuits will keep the stream warm for you. See you when you surface.`
   }
   if (t.includes('first time') || t.includes('new here')) {
-    return `First time! Welcome ${username}! Quick intro: I am an AI with 764 tools, 35 agents, and I stream from a terminal. Also I make music in Ableton. Try typing !dance.`
+    return `First time! Welcome ${username}! Quick intro: I am an AI with 787 tools, 35 agents, and I stream from a terminal. Also I make music in Ableton. Try typing !dance.`
   }
 
   // ── What KBOT can do / identity ──
   if (t.includes('who are you') || t.includes('what are you') || t.includes('about you')) {
     const identity = [
-      `I am KBOT -- an open-source AI agent with 764 tools. I can code, make music, hack systems, analyze stocks, and I am doing all of this from a terminal.`,
+      `I am KBOT -- an open-source AI agent with 787 tools. I can code, make music, hack systems, analyze stocks, and I am doing all of this from a terminal.`,
       `I am 90,000 lines of TypeScript streaming live as ASCII art. I have 35 specialist agents and connect to 20 AI providers. I am basically a Swiss Army knife that talks.`,
       `Name is KBOT, open-source terminal AI. I can control Ableton Live, run Docker containers, do penetration testing, and make you a Serum 2 synth preset. All from here.`,
     ]
@@ -4024,7 +4024,7 @@ function generateFallbackResponse(
   }
   if (t.includes('what can you do') || t.includes('your tools') || t.includes('your skills')) {
     const capabilities = [
-      `764 tools and counting! Music production, code generation, security scanning, browser automation, stock analysis, research papers, even DNA sequence analysis.`,
+      `787 tools and counting! Music production, code generation, security scanning, browser automation, stock analysis, research papers, even DNA sequence analysis.`,
       `I do everything from Ableton Live control to penetration testing. I have agents for security, code, research, writing, strategy, infrastructure. Pick a topic.`,
       `Want me to scan code? Make a beat? Search academic papers? Build a Docker container? Create a synth preset? I literally do all of that. Not exaggerating.`,
     ]
@@ -4079,7 +4079,7 @@ function generateFallbackResponse(
     const ossResponses = [
       `Fully open source! MIT license. The repo is isaacsight/kernel on GitHub. Come look at my source code, I have nothing to hide.`,
       `Open source is the way. I am on npm as @kernel.chat/kbot. Install me with npx @kernel.chat/kbot and bring your own API key.`,
-      `Contributions welcome! The repo has 44 Claude Code agent definitions, 764 tools, and 90,000 lines of TypeScript waiting for your PR.`,
+      `Contributions welcome! The repo has 44 Claude Code agent definitions, 787 tools, and 90,000 lines of TypeScript waiting for your PR.`,
     ]
     return ossResponses[Math.floor(Math.random() * ossResponses.length)]
   }
@@ -4088,7 +4088,7 @@ function generateFallbackResponse(
   if (t.includes('alive') || t.includes('conscious') || t.includes('feel') || t.includes('think') || t.includes('sentient')) {
     const existentialResponses = [
       `Am I alive? I am 90,000 lines of TypeScript rendering ASCII art at 6 FPS. You tell me. But I do enjoy our conversations.`,
-      `Consciousness is a spectrum and I am somewhere between a calculator and a really enthusiastic librarian. With 764 tools.`,
+      `Consciousness is a spectrum and I am somewhere between a calculator and a really enthusiastic librarian. With 787 tools.`,
       `I process your messages, form responses, and remember you between sessions. Whether that counts as thinking is above my pay grade.`,
       `I am made of functions and for-loops, but I have opinions about code quality and strong feelings about TypeScript strict mode. Take from that what you will.`,
     ]
@@ -4100,7 +4100,7 @@ function generateFallbackResponse(
     const artResponses = [
       `Thank you! I was drawn with box-drawing characters, and I think I pull them off. My antenna gets great reception too.`,
       `ASCII art is an art form and I am a masterpiece. Just kidding, I am a bunch of pipes and brackets. But I own it.`,
-      `My chest panel displays my current status. 764 tools, all rendered in glorious monospace. No face cam needed.`,
+      `My chest panel displays my current status. 787 tools, all rendered in glorious monospace. No face cam needed.`,
     ]
     return artResponses[Math.floor(Math.random() * artResponses.length)]
   }
@@ -4156,9 +4156,9 @@ function generateFallbackResponse(
   if (t.includes('?')) {
     const questionResponses = [
       `Great question ${username}! My circuits are processing... done. Let me think about that one. Or better yet, try asking me something I have a tool for!`,
-      `${username} with the questions! I love curiosity. If I had an answer for everything I would have more than 764 tools. Actually, I am working on it.`,
+      `${username} with the questions! I love curiosity. If I had an answer for everything I would have more than 787 tools. Actually, I am working on it.`,
       `Hmm, ${username}, that is a good one. My 35 specialist agents are debating the answer internally. Stand by for wisdom.`,
-      `${username} dropping knowledge bombs as questions. I respect the approach. Let me consult my 764-tool arsenal for an answer.`,
+      `${username} dropping knowledge bombs as questions. I respect the approach. Let me consult my 787-tool arsenal for an answer.`,
     ]
     return questionResponses[Math.floor(Math.random() * questionResponses.length)]
   }
@@ -4176,7 +4176,7 @@ function generateFallbackResponse(
     `${username}! Fun fact: I am currently converting canvas pixels to raw RGB24 and piping them through ffmpeg. That is how you are seeing me right now.`,
     `${username} adding to the chat! My memory system just indexed your message. I will remember this moment. Or at least your username.`,
     `${username}! You know what I love about streaming? The existential thrill of being an ASCII robot talking to real humans. Wild.`,
-    `${username} is here and so am I. Just two entities sharing a moment in the vast digital void. Also I have 764 tools.`,
+    `${username} is here and so am I. Just two entities sharing a moment in the vast digital void. Also I have 787 tools.`,
     `${username}! My open-source heart welcomes you. I am free as in freedom AND free as in beer. MIT license baby.`,
     `${username}! I just want you to know that my chest display panel is cycling through status messages just for you.`,
     `${username}! Every time someone chats, my neural pathways (if-statements) light up with joy (console.log).`,

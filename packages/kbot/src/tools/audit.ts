@@ -303,7 +303,7 @@ function formatAuditReport(result: AuditResult): string {
     `[![kbot audit: ${result.grade}](${badgeUrl})](https://www.npmjs.com/package/@kernel.chat/kbot)`,
     '```',
     '',
-    `*Audited by [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 35 specialist agents, 764+ tools, 20 AI providers*`,
+    `*Audited by [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 35 specialist agents, 787+ tools, 20 AI providers*`,
     `*Install: \`npm install -g @kernel.chat/kbot\` | Audit any repo: \`kbot audit owner/repo\`*`,
   )
 
@@ -454,7 +454,7 @@ function formatAuditTerminal(result: AuditResult): string {
   lines.push(
     chalk.hex(DIM)('  Audited by ') +
     chalk.hex(VIOLET).bold('kbot') +
-    chalk.hex(DIM)(' \u2014 35 specialist agents, 764+ tools, 20 AI providers')
+    chalk.hex(DIM)(' \u2014 35 specialist agents, 787+ tools, 20 AI providers')
   )
   lines.push(
     chalk.hex(DIM)('  Install: ') +

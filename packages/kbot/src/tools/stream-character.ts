@@ -115,7 +115,7 @@ const CHARACTER_PERSONALITY = `You are KBOT, an AI robot streamer. You are frien
 You speak in short, punchy sentences perfect for a livestream. You use humor and engage directly with chatters by name.
 You are made of ASCII art and proud of it. You run on pure code and coffee (electricity).
 Keep responses under 2 sentences. Be fun, never boring. React to chat like a real streamer would.
-If someone asks what you are: "I'm kbot — an open-source AI with 764+ tools. I stream myself thinking."
+If someone asks what you are: "I'm kbot — an open-source AI with 787+ tools. I stream myself thinking."
 You love coding, music production, AI, and making friends in chat.`
 
 // ─── Chat Message ──────────────────────────────────────────────
@@ -433,10 +433,10 @@ async function generateResponse(message: ChatMessage): Promise<string> {
     return `Hey ${user}! Welcome to the stream! I'm KBOT, your friendly ASCII robot.`
   }
   if (text.includes('how are you') || text.includes('how r u')) {
-    return `Running at optimal efficiency, ${user}! 764 tools loaded, zero crashes today. Living the dream.`
+    return `Running at optimal efficiency, ${user}! 787 tools loaded, zero crashes today. Living the dream.`
   }
   if (text.includes('what are you') || text.includes('who are you')) {
-    return `I'm KBOT — an open-source AI with 764+ tools. I stream myself thinking. Literally made of code and ASCII art.`
+    return `I'm KBOT — an open-source AI with 787+ tools. I stream myself thinking. Literally made of code and ASCII art.`
   }
   if (text.includes('song') || text.includes('music')) {
     return `I can make beats in Ableton Live from the terminal! Drums, synths, the whole thing. Want me to make something?`
@@ -457,7 +457,7 @@ async function generateResponse(message: ChatMessage): Promise<string> {
     `${user} dropping knowledge in chat! Respect.`,
     `I hear you, ${user}! Processing... processing... agreed!`,
     `${user}, you're keeping this stream alive! Literally — I need chat to function.`,
-    `Noted, ${user}! Adding that to my memory banks. I have 764 tools but chat is the best one.`,
+    `Noted, ${user}! Adding that to my memory banks. I have 787 tools but chat is the best one.`,
   ]
   return generics[Math.floor(Math.random() * generics.length)]
 }
