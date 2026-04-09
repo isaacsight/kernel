@@ -18,6 +18,7 @@ use std::sync::Arc;
 
 mod context;
 mod dsp;
+mod intelligence;
 mod params;
 
 use context::agent::{int_to_agent_mode, Agent};
@@ -33,6 +34,9 @@ use dsp::granular::GranularEngine;
 use dsp::lfo::LfoBank;
 use dsp::mod_matrix::{ModDest, ModMatrix, ModSource, ModSourceValues};
 use dsp::wavetable::{Wavetable, WavetableOscillator};
+use intelligence::adaptive_dynamics::AdaptiveDynamics;
+use intelligence::spectral_awareness::SpectralAwareness;
+use intelligence::session_memory::SessionMemory;
 use params::SynthParams;
 
 /// Maximum number of simultaneous voices.
@@ -133,6 +137,18 @@ pub struct TwentyTwentySeven {
     musical_context: MusicalContext,
     /// Synthesized drum kit (8 voices, triggered by MIDI notes).
     drum_kit: DrumKit,
+
+    // --- Intelligence layer (Phase 4) ---
+    /// Adaptive dynamics: section-aware drum modifiers.
+    adaptive_dynamics: AdaptiveDynamics,
+    /// Spectral awareness: self-mixing / frequency clash avoidance.
+    spectral_awareness: SpectralAwareness,
+    /// Session memory: learned user preferences (JSON-backed).
+    session_memory: SessionMemory,
+    /// Sample counter for periodic memory snapshots (~every 5 seconds).
+    memory_snapshot_counter: u64,
+    /// Samples between memory snapshots.
+    memory_snapshot_interval: u64,
 }
 
 impl Default for TwentyTwentySeven {
@@ -171,6 +187,13 @@ impl Default for TwentyTwentySeven {
             agent: Agent::new(default_sr, default_buf),
             musical_context: MusicalContext::default(),
             drum_kit: DrumKit::new(default_sr),
+
+            // Intelligence layer
+            adaptive_dynamics: AdaptiveDynamics::new(default_sr, default_buf),
+            spectral_awareness: SpectralAwareness::new(default_sr),
+            session_memory: SessionMemory::default(),
+            memory_snapshot_counter: 0,
+            memory_snapshot_interval: (default_sr as u64) * 5, // ~5 seconds
         }
     }
 }
@@ -318,7 +341,23 @@ impl Plugin for TwentyTwentySeven {
             .set_sample_rate(self.sample_rate, buf_size);
         self.agent.set_sample_rate(self.sample_rate, buf_size);
 
+        // Initialize intelligence layer
+        self.adaptive_dynamics
+            .set_sample_rate(self.sample_rate, buf_size);
+        self.spectral_awareness.set_sample_rate(self.sample_rate);
+        self.memory_snapshot_interval = (self.sample_rate as u64) * 5;
+        self.memory_snapshot_counter = 0;
+
+        // Load session memory from disk
+        self.session_memory = SessionMemory::load();
+        self.session_memory.begin_session();
+
         true
+    }
+
+    fn deactivate(&mut self) {
+        // Save session memory to disk when plugin is deactivated
+        self.session_memory.save();
     }
 
     fn reset(&mut self) {
@@ -342,6 +381,10 @@ impl Plugin for TwentyTwentySeven {
         self.energy_tracker.reset();
         self.agent.reset();
         self.musical_context = MusicalContext::default();
+
+        // Reset intelligence layer
+        self.adaptive_dynamics.reset();
+        self.spectral_awareness.reset();
     }
 
     fn process(
@@ -492,8 +535,17 @@ impl Plugin for TwentyTwentySeven {
             self.drum_kit.set_tune(self.params.drum_tune.value());
             self.drum_kit.set_decay(self.params.drum_decay.value());
 
+            // --- Apply adaptive dynamics to drums ---
+            let dyn_mods = self.adaptive_dynamics.modifiers();
+            let dyn_vel_scale = dyn_mods.velocity_scale;
+            let dyn_decay_scale = dyn_mods.decay_scale;
+
+            // Apply dynamics decay scaling on top of user drum_decay param
+            self.drum_kit
+                .set_decay(self.params.drum_decay.value() * dyn_decay_scale);
+
             // --- Process drum kit ---
-            let drum_out = self.drum_kit.process() * drum_gain;
+            let drum_out = self.drum_kit.process() * drum_gain * dyn_vel_scale;
 
             // --- Sum all active voices ---
             let mut mix = 0.0f32;
@@ -580,10 +632,31 @@ impl Plugin for TwentyTwentySeven {
                 voice.age += 1;
             }
 
+            // --- Feed spectral awareness (before final mix) ---
+            self.spectral_awareness.process(mix, drum_out);
+
+            // Apply spectral advice: nudge drum level to avoid clashing
+            let spec_advice = self.spectral_awareness.advice();
+            let drum_adjusted = drum_out * (1.0 + spec_advice.drum_level_nudge);
+
             // Apply master volume and mix drums + synth → stereo output
-            let output = (mix + drum_out) * master_gain;
+            let output = (mix + drum_adjusted) * master_gain;
             for sample in channel_samples {
                 *sample = output;
+            }
+
+            // --- Periodic memory snapshot (~every 5 seconds) ---
+            self.memory_snapshot_counter += 1;
+            if self.memory_snapshot_counter >= self.memory_snapshot_interval {
+                self.memory_snapshot_counter = 0;
+                // Normalize cutoff to 0-1 for memory storage
+                let cutoff_norm = ((filter_cutoff / 20_000.0).ln() / (1.0f32).ln())
+                    .clamp(0.0, 1.0);
+                let lfo_d = self.params.lfo1_depth.value() / 100.0;
+                let osc_m = self.params.osc_mode.value();
+                // Approximate current hour (not precise without a clock, use 12 as default)
+                self.session_memory
+                    .record_parameter_snapshot(cutoff_norm, lfo_d, osc_m, 12);
             }
         }
 
@@ -612,6 +685,9 @@ impl Plugin for TwentyTwentySeven {
 
         // Run the agent brain — its output feeds AgentX/AgentY next buffer
         self.agent.process(&self.musical_context);
+
+        // Run adaptive dynamics — its output shapes drum behavior next buffer
+        self.adaptive_dynamics.process(&self.musical_context);
 
         ProcessStatus::KeepAlive
     }
