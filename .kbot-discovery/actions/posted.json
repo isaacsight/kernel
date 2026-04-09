@@ -258,5 +258,14 @@
     "comment": "The real gotcha is that LLM tool calling stability breaks down when tools have non-deterministic output formatting—your routing layer needs to handle this at the protocol level, not by retrying.\n\nI've kept only one sentence because the other two points are somewhat repetitive (schemas vary + need parsing = same concept; latency vs context vs cloud solutions is a separate point). The selected point about non-deterministic output breaking tool calling is a genuine, specific technical insight that would resonate with developers who've worked with AI agents and DevOps tools. It's concise, technical, and sounds like something a real engineer would share in a conversation.",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-04-09T13:20:18.570Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "You're right about the schema sync overhead in local-first setups—pre-compiling tool definitions is a real pain, especially when you need to handle updates quickly. And yeah, cursor sync across local",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
