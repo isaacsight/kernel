@@ -1,63 +1,63 @@
 {
-  "timestamp": "2026-04-08T18:14:41.784Z",
+  "timestamp": "2026-04-09T07:05:26.237Z",
   "projects": [
     {
-      "name": "dcostenco/prism-mcp",
-      "url": "https://github.com/dcostenco/prism-mcp",
-      "stars": 111,
-      "description": "The Mind Palace for AI Agents — Autonomous Cognitive OS with affect-tagged memory (valence engine), token-economic RL (surprisal gate + UBI), Hebbian learning, ACT-R spreading activation, Synapse Engine (GraphRAG), adversarial evaluation (anti-sycophancy), fail-closed Dark Factory pipelines. Zero-config local mode."
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1061,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "jackwener/OpenCLI",
-      "url": "https://github.com/jackwener/OpenCLI",
-      "stars": 14388,
-      "description": "Make Any Website & Tool Your CLI. A universal CLI Hub and AI-native runtime. Transform any website, Electron app, or local binary into a standardized command-line interface. Built for AI Agents to discover, learn, and execute tools seamlessly via a unified AGENT.md integration."
+      "name": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": 21302,
+      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
     },
     {
-      "name": "sonichi/sutando",
-      "url": "https://github.com/sonichi/sutando",
-      "stars": 97,
-      "description": "Summon your AI superpower — voice, vision, and autonomous action"
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 43182,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
-      "name": "Ar9av/obsidian-wiki",
-      "url": "https://github.com/Ar9av/obsidian-wiki",
-      "stars": 216,
-      "description": "Framework for AI agents to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern"
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 694,
+      "description": "Agent Skills for Solopreneurs"
     },
     {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 376,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+      "name": "ArcadeAI/arcade-mcp",
+      "url": "https://github.com/ArcadeAI/arcade-mcp",
+      "stars": 855,
+      "description": "The best way to create, deploy, and share MCP Servers"
     },
     {
-      "name": "Ruya-AI/cozempic",
-      "url": "https://github.com/Ruya-AI/cozempic",
-      "stars": 213,
-      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
+      "name": "taylorwilsdon/google_workspace_mcp",
+      "url": "https://github.com/taylorwilsdon/google_workspace_mcp",
+      "stars": 2060,
+      "description": "Control Gmail, Google Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search & Drive with AI - Comprehensive Google Workspace / G Suite MCP Server & CLI Tool"
+    },
+    {
+      "name": "zhoushoujianwork/openclaw-skills-counter-plugin",
+      "url": "https://github.com/zhoushoujianwork/openclaw-skills-counter-plugin",
+      "stars": 0,
+      "description": ""
+    },
+    {
+      "name": "weak-fox/openclaw-offline-seed",
+      "url": "https://github.com/weak-fox/openclaw-offline-seed",
+      "stars": 1,
+      "description": "Config-driven offline plugin and skill seeding for OpenClaw runtimes (Kubernetes, Helm, Docker)."
     },
     {
       "name": "getbeton/openclaw-gtm-skills",
       "url": "https://github.com/getbeton/openclaw-gtm-skills",
       "stars": 4,
       "description": "OpenClaw plugin for B2B company research and outbound GTM intelligence"
-    },
-    {
-      "name": "samber/cc-skills",
-      "url": "https://github.com/samber/cc-skills",
-      "stars": 51,
-      "description": "🧑‍🎨 A collection of agentic skills that works"
-    },
-    {
-      "name": "samber/cc-skills-golang",
-      "url": "https://github.com/samber/cc-skills-golang",
-      "stars": 1074,
-      "description": "🧑‍🎨 A collection of Golang agentic skills that works"
     }
   ],
   "latestPaper": {
-    "title": "Who Governs the Machine? A Machine Identity Governance Taxonomy (MIGT) for AI Systems Operating Across Enterprise and Geopolitical Boundaries",
-    "summary": "The governance of artificial intelligence has a blind spot: the machine identities that AI systems use to act. AI agents, service accounts, API tokens, and automated workflows now outnumber human identities in enterprise environments by ratios exceeding 80 to 1, yet no integrated framework exists to govern them. A single ungoverned automated agent produced $5.4-10 billion in losses in the 2024 CrowdStrike outage; nation-state actors including Silk Typhoon and Salt Typhoon have operationalized un"
+    "title": "Chatbot-Based Assessment of Code Understanding in Automated Programming Assessment Systems",
+    "summary": "Large Language Models (LLMs) challenge conventional automated programming assessment because students can now produce functionally correct code without demonstrating corresponding understanding. This paper makes two contributions. First, it reports a saturation-based scoping review of conversational assessment approaches in programming education. The review identifies three dominant architectural families: rule-based or template-driven systems, LLM-based systems, and hybrid systems. Across the l"
   }
 }
