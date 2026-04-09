@@ -1,0 +1,180 @@
+{
+  "name": "Kaytranada Bounce",
+  "genre": "funky-house",
+  "bpm": 112,
+  "key": "Gm",
+  "swing": 0.15,
+
+  "drums": {
+    "pattern_length": 16,
+    "steps": [
+      {"step": 0,  "voice": "kick",      "velocity": 110},
+      {"step": 5,  "voice": "kick",      "velocity": 95},
+      {"step": 0,  "voice": "shaker",    "velocity": 50},
+      {"step": 1,  "voice": "shaker",    "velocity": 45},
+      {"step": 2,  "voice": "shaker",    "velocity": 50},
+      {"step": 3,  "voice": "shaker",    "velocity": 45},
+      {"step": 4,  "voice": "shaker",    "velocity": 55},
+      {"step": 5,  "voice": "shaker",    "velocity": 45},
+      {"step": 6,  "voice": "shaker",    "velocity": 50},
+      {"step": 7,  "voice": "shaker",    "velocity": 45},
+      {"step": 8,  "voice": "shaker",    "velocity": 50},
+      {"step": 9,  "voice": "shaker",    "velocity": 45},
+      {"step": 10, "voice": "shaker",    "velocity": 50},
+      {"step": 11, "voice": "shaker",    "velocity": 45},
+      {"step": 12, "voice": "shaker",    "velocity": 55},
+      {"step": 13, "voice": "shaker",    "velocity": 45},
+      {"step": 14, "voice": "shaker",    "velocity": 50},
+      {"step": 15, "voice": "shaker",    "velocity": 45},
+      {"step": 4,  "voice": "clap",      "velocity": 100},
+      {"step": 12, "voice": "clap",      "velocity": 105},
+      {"step": 9,  "voice": "snare",     "velocity": 40},
+      {"step": 8,  "voice": "rim",       "velocity": 55},
+      {"step": 0,  "voice": "hihat_closed", "velocity": 70},
+      {"step": 1,  "voice": "hihat_closed", "velocity": 50},
+      {"step": 2,  "voice": "hihat_closed", "velocity": 75},
+      {"step": 3,  "voice": "hihat_closed", "velocity": 50},
+      {"step": 4,  "voice": "hihat_closed", "velocity": 70},
+      {"step": 5,  "voice": "hihat_closed", "velocity": 55},
+      {"step": 6,  "voice": "hihat_closed", "velocity": 75},
+      {"step": 7,  "voice": "hihat_closed", "velocity": 50},
+      {"step": 8,  "voice": "hihat_closed", "velocity": 70},
+      {"step": 9,  "voice": "hihat_closed", "velocity": 50},
+      {"step": 10, "voice": "hihat_closed", "velocity": 75},
+      {"step": 11, "voice": "hihat_closed", "velocity": 50},
+      {"step": 12, "voice": "hihat_closed", "velocity": 70},
+      {"step": 13, "voice": "hihat_closed", "velocity": 55},
+      {"step": 14, "voice": "hihat_open",   "velocity": 80},
+      {"step": 15, "voice": "hihat_closed", "velocity": 50}
+    ],
+    "synth_settings": {
+      "kick_tune": -2,
+      "kick_decay": 1.4,
+      "snare_tune": 3,
+      "hat_tune": 0,
+      "hat_decay": 0.6
+    }
+  },
+
+  "bass": {
+    "bars": 4,
+    "notes": [
+      {"bar": 0, "beat": 0.0,   "note": "G2",  "duration": 0.375, "velocity": 100},
+      {"bar": 0, "beat": 0.5,   "note": "G2",  "duration": 0.125, "velocity": 75},
+      {"bar": 0, "beat": 0.75,  "note": "Bb2", "duration": 0.25,  "velocity": 90},
+      {"bar": 0, "beat": 1.25,  "note": "C3",  "duration": 0.25,  "velocity": 85},
+      {"bar": 0, "beat": 1.75,  "note": "D3",  "duration": 0.5,   "velocity": 95},
+      {"bar": 0, "beat": 2.5,   "note": "C3",  "duration": 0.25,  "velocity": 80},
+      {"bar": 0, "beat": 3.0,   "note": "Bb2", "duration": 0.375, "velocity": 90},
+      {"bar": 0, "beat": 3.5,   "note": "G2",  "duration": 0.25,  "velocity": 70},
+
+      {"bar": 1, "beat": 0.0,   "note": "C3",  "duration": 0.375, "velocity": 100},
+      {"bar": 1, "beat": 0.5,   "note": "C3",  "duration": 0.125, "velocity": 70},
+      {"bar": 1, "beat": 0.75,  "note": "Eb3", "duration": 0.25,  "velocity": 85},
+      {"bar": 1, "beat": 1.25,  "note": "G3",  "duration": 0.375, "velocity": 90},
+      {"bar": 1, "beat": 2.0,   "note": "Bb2", "duration": 0.25,  "velocity": 85},
+      {"bar": 1, "beat": 2.5,   "note": "C3",  "duration": 0.5,   "velocity": 90},
+      {"bar": 1, "beat": 3.25,  "note": "D3",  "duration": 0.25,  "velocity": 75},
+      {"bar": 1, "beat": 3.75,  "note": "C3",  "duration": 0.25,  "velocity": 70},
+
+      {"bar": 2, "beat": 0.0,   "note": "D3",  "duration": 0.5,   "velocity": 100},
+      {"bar": 2, "beat": 0.75,  "note": "F3",  "duration": 0.25,  "velocity": 85},
+      {"bar": 2, "beat": 1.25,  "note": "A3",  "duration": 0.375, "velocity": 90},
+      {"bar": 2, "beat": 2.0,   "note": "D3",  "duration": 0.25,  "velocity": 80},
+      {"bar": 2, "beat": 2.5,   "note": "C3",  "duration": 0.5,   "velocity": 85},
+      {"bar": 2, "beat": 3.25,  "note": "Bb2", "duration": 0.375, "velocity": 80},
+
+      {"bar": 3, "beat": 0.0,   "note": "Eb3", "duration": 0.375, "velocity": 95},
+      {"bar": 3, "beat": 0.5,   "note": "Eb3", "duration": 0.125, "velocity": 70},
+      {"bar": 3, "beat": 0.75,  "note": "D3",  "duration": 0.25,  "velocity": 85},
+      {"bar": 3, "beat": 1.25,  "note": "Bb2", "duration": 0.5,   "velocity": 90},
+      {"bar": 3, "beat": 2.0,   "note": "G2",  "duration": 0.25,  "velocity": 80},
+      {"bar": 3, "beat": 2.5,   "note": "A2",  "duration": 0.25,  "velocity": 75},
+      {"bar": 3, "beat": 3.0,   "note": "Bb2", "duration": 0.5,   "velocity": 85},
+      {"bar": 3, "beat": 3.75,  "note": "D3",  "duration": 0.25,  "velocity": 70}
+    ],
+    "synth_2027": {
+      "osc_mode": "wavetable",
+      "wt_position": 30,
+      "filter_cutoff": 450,
+      "filter_resonance": 25,
+      "filter_mode": "lowpass",
+      "env_attack": 5,
+      "env_decay": 150,
+      "env_sustain": 55,
+      "env_release": 80,
+      "description": "warm funky sub bass — wavetable with gentle lowpass, medium sustain"
+    }
+  },
+
+  "chords": {
+    "bars": 4,
+    "progression": [
+      {"bar": 0, "chord": "Gm7",    "notes": ["G3","Bb3","D4","F4"],   "duration": 4.0},
+      {"bar": 1, "chord": "Cm9",    "notes": ["C3","Eb3","G3","Bb3","D4"], "duration": 4.0},
+      {"bar": 2, "chord": "Dm7",    "notes": ["D3","F3","A3","C4"],    "duration": 4.0},
+      {"bar": 3, "chord": "EbMaj7", "notes": ["Eb3","G3","Bb3","D4"],  "duration": 4.0}
+    ],
+    "rhythm": "offbeat_stabs",
+    "stab_beats": [0.5, 1.5, 2.5, 3.5],
+    "stab_velocity": 65,
+    "stab_duration": 0.2,
+    "synth_2027": {
+      "osc_mode": "fm",
+      "fm_algorithm": 2,
+      "fm_depth": 15,
+      "filter_cutoff": 800,
+      "filter_resonance": 10,
+      "filter_mode": "lowpass",
+      "env_attack": 40,
+      "env_decay": 150,
+      "env_sustain": 70,
+      "env_release": 200,
+      "lfo1_rate": 0.3,
+      "lfo1_depth": 8,
+      "description": "warm rhodes EP — FM with gentle lowpass, slow shimmer LFO, offbeat stabs"
+    }
+  },
+
+  "melody": {
+    "bars": 2,
+    "loop": true,
+    "notes": [
+      {"bar": 0, "beat": 0.5,  "note": "Bb4", "duration": 0.5, "velocity": 60},
+      {"bar": 0, "beat": 1.5,  "note": "D5",  "duration": 0.75, "velocity": 55},
+      {"bar": 0, "beat": 3.0,  "note": "G4",  "duration": 0.5, "velocity": 50},
+      {"bar": 1, "beat": 1.0,  "note": "A4",  "duration": 0.5, "velocity": 55},
+      {"bar": 1, "beat": 2.5,  "note": "Bb4", "duration": 1.0, "velocity": 50}
+    ],
+    "synth_2027": {
+      "osc_mode": "wavetable",
+      "wt_position": 60,
+      "filter_cutoff": 2500,
+      "filter_resonance": 15,
+      "filter_mode": "lowpass",
+      "env_attack": 30,
+      "env_decay": 200,
+      "env_sustain": 45,
+      "env_release": 400,
+      "lfo1_rate": 2.0,
+      "lfo1_depth": 5,
+      "agent_mode": "breathe",
+      "agent_reactivity": 30,
+      "description": "dreamy pluck lead — wavetable, gentle filter, breathe mode for organic movement"
+    }
+  },
+
+  "arrangement": [
+    {"section": "intro",    "start_bar": 0,  "end_bar": 4,  "active": ["drums"]},
+    {"section": "buildup",  "start_bar": 4,  "end_bar": 8,  "active": ["drums", "bass"]},
+    {"section": "verse",    "start_bar": 8,  "end_bar": 16, "active": ["drums", "bass", "chords"]},
+    {"section": "hook",     "start_bar": 16, "end_bar": 24, "active": ["drums", "bass", "chords", "melody"]},
+    {"section": "verse2",   "start_bar": 24, "end_bar": 32, "active": ["drums", "bass", "chords"]},
+    {"section": "hook2",    "start_bar": 32, "end_bar": 40, "active": ["drums", "bass", "chords", "melody"]},
+    {"section": "breakdown","start_bar": 40, "end_bar": 44, "active": ["chords", "melody"]},
+    {"section": "drop",     "start_bar": 44, "end_bar": 52, "active": ["drums", "bass", "chords", "melody"]},
+    {"section": "outro",    "start_bar": 52, "end_bar": 56, "active": ["drums", "bass"]}
+  ],
+
+  "mix_notes": "Sidechain the bass to the kick (-3dB, 50ms release). Add plate reverb to chords (1.5s decay). Short delay on melody (dotted 8th, 20% wet). Subtle chorus on the rhodes chords."
+}
