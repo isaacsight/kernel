@@ -4,7 +4,7 @@ import './BenchPage.css'
 // ── Data ──
 
 const HERO_STATS = [
-  { value: '764+', label: 'Tools', desc: 'Built-in capabilities' },
+  { value: '787+', label: 'Tools', desc: 'Built-in capabilities' },
   { value: '35', label: 'Agents', desc: 'Specialist intelligence' },
   { value: '690', label: 'Tests', desc: 'Automated coverage' },
   { value: '20', label: 'Providers', desc: 'LLM integrations' },
@@ -21,7 +21,7 @@ interface CompetitorRow {
 }
 
 const COMPARISON: CompetitorRow[] = [
-  { feature: 'Built-in tools',       kbot: '764+', claudeCode: '~15',  codexCli: '~10', openCode: '~12', aider: '~8',  cline: '~20' },
+  { feature: 'Built-in tools',       kbot: '787+', claudeCode: '~15',  codexCli: '~10', openCode: '~12', aider: '~8',  cline: '~20' },
   { feature: 'Specialist agents',    kbot: 35,     claudeCode: 1,      codexCli: 1,     openCode: 1,     aider: 1,     cline: 1 },
   { feature: 'LLM providers',        kbot: 20,     claudeCode: 1,      codexCli: 1,     openCode: 3,     aider: 10,    cline: 5 },
   { feature: 'Local / offline',      kbot: 'Yes',  claudeCode: 'No',   codexCli: 'No',  openCode: 'Yes', aider: 'Yes', cline: 'No' },
@@ -217,7 +217,7 @@ export default function BenchPage() {
               Running 690 tests across 8 categories...
             </div>
             <div className="ka-bench-line ka-bench-dim">
-              {'\u2713'} Tool breadth: 764+ tools registered
+              {'\u2713'} Tool breadth: 787+ tools registered
             </div>
             <div className="ka-bench-line ka-bench-dim">
               {'\u2713'} Agent routing: 35 specialists loaded

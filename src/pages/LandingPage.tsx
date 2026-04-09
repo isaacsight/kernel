@@ -214,7 +214,7 @@ export function LandingPage() {
           The AI that gets smarter every time anyone uses it.
         </p>
         <p className="ka-landing-tagline ka-hero-anim" style={{ animationDelay: '0.55s' }}>
-          Terminal AI agent. 764+ tools. 35 specialists. Science lab. Runs offline.
+          Terminal AI agent. 787+ tools. 35 specialists. Science lab. Runs offline.
           {downloads && <><br />{downloads.toLocaleString()} downloads this week.</>}
         </p>
 
@@ -256,7 +256,7 @@ export function LandingPage() {
             <div className="ka-landing-line" style={{ marginTop: 12 }}>
               This is a TypeScript monorepo with a React frontend and<br />
               Supabase backend. The main product is kbot, a terminal AI<br />
-              agent in packages/kbot/ with 764+ tools across 80+ modules...
+              agent in packages/kbot/ with 787+ tools across 80+ modules...
             </div>
             <div className="ka-landing-line ka-landing-dim" style={{ marginTop: 8 }}>
               3 tool calls &middot; 847 tokens &middot; $0.003
@@ -331,7 +331,7 @@ export function LandingPage() {
               <tr><td>Builds own tools</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
               <tr><td>Cognitive modules</td><td>11</td><td>0</td><td>0</td><td>0</td></tr>
               <tr><td>AI providers</td><td>20</td><td>1</td><td>4</td><td>100+</td></tr>
-              <tr><td>Built-in tools</td><td>764+</td><td>~15</td><td>~10</td><td>~10</td></tr>
+              <tr><td>Built-in tools</td><td>787+</td><td>~15</td><td>~10</td><td>~10</td></tr>
               <tr><td>Runs offline</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td></tr>
               <tr><td>Open source</td><td>MIT</td><td>No</td><td>No</td><td>Apache</td></tr>
               <tr><td>Cost</td><td>$0 local</td><td>$20+/mo</td><td>$20/mo</td><td>BYOK</td></tr>
