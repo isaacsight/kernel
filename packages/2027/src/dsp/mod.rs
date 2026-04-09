@@ -8,6 +8,7 @@
 //! - `lfo`: Low-frequency oscillators (sine, tri, saw, square, S&H, chaos)
 //! - `mod_matrix`: Modulation routing matrix (32 slots, source → destination)
 
+pub mod drums;
 pub mod envelope;
 pub mod filter;
 pub mod fm;

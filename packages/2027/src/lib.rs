@@ -25,6 +25,7 @@ use context::chord_detector::ChordDetector;
 use context::energy_tracker::EnergyTracker;
 use context::musical_context::MusicalContext;
 use context::scale_detector::ScaleDetector;
+use dsp::drums::DrumKit;
 use dsp::envelope::Adsr;
 use dsp::filter::{FilterMode, ZdfSvf};
 use dsp::fm::FmOscillator;
@@ -130,6 +131,8 @@ pub struct TwentyTwentySeven {
     agent: Agent,
     /// Combined musical context state, updated each buffer.
     musical_context: MusicalContext,
+    /// Synthesized drum kit (8 voices, triggered by MIDI notes).
+    drum_kit: DrumKit,
 }
 
 impl Default for TwentyTwentySeven {
@@ -167,6 +170,7 @@ impl Default for TwentyTwentySeven {
             energy_tracker: EnergyTracker::new(default_sr, default_buf),
             agent: Agent::new(default_sr, default_buf),
             musical_context: MusicalContext::default(),
+            drum_kit: DrumKit::new(default_sr),
         }
     }
 }
@@ -197,6 +201,11 @@ impl TwentyTwentySeven {
         self.chord_detector.note_on(note, velocity);
         self.scale_detector.note_on(note, velocity);
         self.energy_tracker.note_on(note, velocity, sample_offset);
+
+        // Route drum notes to the drum kit
+        if self.drum_kit.note_on(note, velocity) {
+            return;
+        }
 
         let idx = self.allocate_voice();
         let voice = &mut self.voices[idx];
@@ -298,6 +307,7 @@ impl Plugin for TwentyTwentySeven {
         }
 
         self.lfo_bank.set_sample_rate(self.sample_rate);
+        self.drum_kit.set_sample_rate(self.sample_rate);
 
         // Initialize musical intelligence with host sample rate and buffer size
         self.chord_detector
@@ -323,6 +333,7 @@ impl Plugin for TwentyTwentySeven {
         }
 
         self.lfo_bank.reset();
+        self.drum_kit.reset();
         self.last_fm_algo = -1;
 
         // Reset musical intelligence
@@ -386,6 +397,8 @@ impl Plugin for TwentyTwentySeven {
             // --- Read smoothed parameters ---
             let master_gain =
                 nih_plug::util::db_to_gain_fast(self.params.master_volume.smoothed.next());
+            let drum_gain =
+                nih_plug::util::db_to_gain_fast(self.params.drum_level.smoothed.next());
             let wt_position = self.params.wt_position.smoothed.next() / 100.0;
             let filter_cutoff = self.params.filter_cutoff.smoothed.next();
             let filter_reso = self.params.filter_resonance.smoothed.next() / 100.0;
@@ -475,6 +488,13 @@ impl Plugin for TwentyTwentySeven {
             let cutoff_mod_factor = 2.0f32.powf(cutoff_mod_semitones / 12.0);
             let modulated_cutoff = (filter_cutoff * cutoff_mod_factor).clamp(20.0, 20_000.0);
 
+            // --- Update drum kit parameters ---
+            self.drum_kit.set_tune(self.params.drum_tune.value());
+            self.drum_kit.set_decay(self.params.drum_decay.value());
+
+            // --- Process drum kit ---
+            let drum_out = self.drum_kit.process() * drum_gain;
+
             // --- Sum all active voices ---
             let mut mix = 0.0f32;
 
@@ -560,8 +580,8 @@ impl Plugin for TwentyTwentySeven {
                 voice.age += 1;
             }
 
-            // Apply master volume and write to all output channels (mono → stereo)
-            let output = mix * master_gain;
+            // Apply master volume and mix drums + synth → stereo output
+            let output = (mix + drum_out) * master_gain;
             for sample in channel_samples {
                 *sample = output;
             }

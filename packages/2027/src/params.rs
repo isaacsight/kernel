@@ -136,6 +136,19 @@ pub struct SynthParams {
     #[id = "env_r"]
     pub env_release: FloatParam,
 
+    // --- Drums ---
+    /// Drum kit output level in dB (-30 to +6).
+    #[id = "drum_level"]
+    pub drum_level: FloatParam,
+
+    /// Drum kit global tune offset in semitones (-24 to +24).
+    #[id = "drum_tune"]
+    pub drum_tune: FloatParam,
+
+    /// Drum kit global decay multiplier (0.1 to 2.0).
+    #[id = "drum_decay"]
+    pub drum_decay: FloatParam,
+
     // --- Master ---
     /// Master output volume in dB.
     #[id = "master"]
@@ -461,6 +474,40 @@ impl Default for SynthParams {
             )
             .with_unit(" s")
             .with_step_size(0.001),
+
+            // Drums
+            drum_level: FloatParam::new(
+                "Drum Level",
+                0.0,
+                FloatRange::Linear {
+                    min: -30.0,
+                    max: 6.0,
+                },
+            )
+            .with_smoother(SmoothingStyle::Linear(5.0))
+            .with_unit(" dB")
+            .with_step_size(0.1),
+
+            drum_tune: FloatParam::new(
+                "Drum Tune",
+                0.0,
+                FloatRange::Linear {
+                    min: -24.0,
+                    max: 24.0,
+                },
+            )
+            .with_unit(" st")
+            .with_step_size(0.1),
+
+            drum_decay: FloatParam::new(
+                "Drum Decay",
+                1.0,
+                FloatRange::Linear {
+                    min: 0.1,
+                    max: 2.0,
+                },
+            )
+            .with_step_size(0.01),
 
             // Master
             master_volume: FloatParam::new(
