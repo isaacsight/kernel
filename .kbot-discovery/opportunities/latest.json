@@ -1,14 +1,7 @@
 {
-  "timestamp": "2026-04-08T19:44:47.971Z",
+  "timestamp": "2026-04-09T07:04:08.869Z",
   "count": 30,
   "opportunities": [
-    {
-      "source": "hn-comment",
-      "title": "Show HN: Output.ai - OSS framework we extracted from 500+ production AI agents",
-      "url": "https://news.ycombinator.com/item?id=47676224",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
     {
       "source": "hn-comment",
       "title": "Schedule tasks on the web",
@@ -20,6 +13,13 @@
       "source": "hn-comment",
       "title": "Show HN: An open-source safety net for home hemodialysis",
       "url": "https://news.ycombinator.com/item?id=47460486",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Show HN: Soros – AI for geopolitical macro investing",
+      "url": "https://news.ycombinator.com/item?id=47418557",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -67,13 +67,6 @@
     },
     {
       "source": "hn-comment",
-      "title": "Show HN: TUI-use: Let AI agents control interactive terminal programs",
-      "url": "https://news.ycombinator.com/item?id=47695010",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
       "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
       "url": "https://news.ycombinator.com/item?id=47692725",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -82,28 +75,35 @@
     {
       "source": "hn-comment",
       "title": "Project Glasswing: Securing critical software for the AI era",
-      "url": "https://news.ycombinator.com/item?id=47688863",
+      "url": "https://news.ycombinator.com/item?id=47687834",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "The cult of vibe coding is dogfooding run amok",
+      "url": "https://news.ycombinator.com/item?id=47676831",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "github-issue",
-      "title": "New Skill: Maester Test Expert",
-      "url": "https://github.com/maester365/maester/pull/1608",
+      "title": "Research: framing & bounding — the thesis behind code-translation-skills",
+      "url": "https://github.com/redhat-ai-americas/code-translation-skills/issues/26",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Poison steps, dead-letter handling, and human-in-the-loop escalation after failed recovery",
-      "url": "https://github.com/rahulpuri14493/sandhi_ai/issues/88",
+      "title": "[BOUNTY: 30 RTC] Build a VS Code Extension — RustChain Wallet & Miner Dashboard",
+      "url": "https://github.com/Scottcjn/rustchain-bounties/issues/2868",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(core): add AGENTS.md to default context filenames",
-      "url": "https://github.com/google-gemini/gemini-cli/pull/24913",
+      "title": "[BOUNTY: 100 RTC] Security Audit — Find Critical Vulnerabilities in RustChain Node",
+      "url": "https://github.com/Scottcjn/rustchain-bounties/issues/2867",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Claude Code memory integration: BM as complementary knowledge graph layer",
-      "url": "https://github.com/basicmachines-co/basic-memory/issues/730",
+      "title": "chore: release v9.20.1 — Fix orchestrate.sh path resolution",
+      "url": "https://github.com/nyldn/claude-octopus/pull/252",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "docs(support): align platform status with PRD and tested matrix",
-      "url": "https://github.com/NVIDIA/NemoClaw/pull/1619",
+      "title": "Upstream sync: 2026-04-09",
+      "url": "https://github.com/BinyaminEden/claude-combine/pull/14",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(ui): add dreaming diary controls and navigation",
-      "url": "https://github.com/openclaw/openclaw/pull/63298",
+      "title": "fix(plugins): ignore non-allowlisted load errors #63575",
+      "url": "https://github.com/openclaw/openclaw/pull/63586",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,23 +172,30 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "tennis update. more tennis. probably too much tennis.",
+      "url": "https://reddit.com/r/commandline/comments/1sgfqq5/tennis_update_more_tennis_probably_too_much_tennis/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
+      "title": "`ruah` — a CLI for orchestrating parallel coding tasks with Git worktree isolation and file locking",
+      "url": "https://reddit.com/r/commandline/comments/1sg6ajz/ruah_a_cli_for_orchestrating_parallel_coding/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "ssh late.sh - The Clubhouse is officially OPEN! Take a break, chat, chill, listen to music and play some games! :)",
       "url": "https://reddit.com/r/commandline/comments/1sf4j1s/ssh_latesh_the_clubhouse_is_officially_open_take/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "I kept cmd-tabbing to Chrome 40 times a day while coding, so I made a search TUI that knows my project",
-      "url": "https://reddit.com/r/commandline/comments/1sf0l3m/i_kept_cmdtabbing_to_chrome_40_times_a_day_while/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "yutu — a CLI tool to manage your entire YouTube channel from the terminal",
-      "url": "https://reddit.com/r/commandline/comments/1sey6x0/yutu_a_cli_tool_to_manage_your_entire_youtube/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "Alternative to NotebookLM with no data limits",
+      "url": "https://reddit.com/r/artificial/comments/1sgf2f1/alternative_to_notebooklm_with_no_data_limits/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "We have an AI agent fragmentation problem",
       "url": "https://reddit.com/r/artificial/comments/1sf9yeq/we_have_an_ai_agent_fragmentation_problem/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Has anyone here switched to TeraBox recently? Is it actually worth it?",
-      "url": "https://reddit.com/r/artificial/comments/1sf27xf/has_anyone_here_switched_to_terabox_recently_is/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
