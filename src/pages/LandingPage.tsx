@@ -2,12 +2,12 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import './LandingPage.css'
 
 const FEATURES = [
-  { title: 'Learns from you', desc: 'Bayesian skill ratings + pattern extraction. Gets faster every session.' },
-  { title: 'Learns from everyone', desc: 'Opt-in collective intelligence. The 1,000th user starts smarter than the 1st.' },
-  { title: 'Builds its own tools', desc: 'forge_tool creates new capabilities at runtime. Sandboxed, persisted, shareable.' },
-  { title: '11 cognitive modules', desc: 'Free Energy, Predictive Processing, Strange Loops — peer-reviewed research, running TypeScript.' },
-  { title: '20 providers, zero lock-in', desc: 'Claude, GPT, Gemini, Ollama, embedded llama.cpp. Switch with one command.' },
-  { title: 'Runs fully offline', desc: 'Embedded model, no API key, no data leaves your machine. $0.' },
+  { title: 'Learns from you', desc: 'Bayesian skill ratings + pattern extraction. Gets faster every session. Your 100th prompt is handled better than your 1st.' },
+  { title: 'Learns from everyone', desc: 'Opt-in collective intelligence. The 1,000th user starts smarter than the 1st. A network effect no other CLI agent has.' },
+  { title: 'Builds its own tools', desc: 'forge_tool creates new capabilities at runtime. If kbot can\'t do something, it builds the tool for it. Sandboxed, persisted, shareable.' },
+  { title: 'Dream engine', desc: 'After each session, kbot consolidates what it learned about you using local AI. Your preferences, patterns, and project context — all remembered.' },
+  { title: '20 providers, zero lock-in', desc: 'Claude, GPT, Gemini, Grok, DeepSeek, Ollama, embedded llama.cpp. Switch with one command. Bring your own key.' },
+  { title: 'Runs fully offline', desc: 'Embedded model, no API key required, no data leaves your machine. $0 cost. Fully private.' },
 ]
 
 const AGENTS = [
@@ -211,11 +211,11 @@ export function LandingPage() {
         <div className="ka-landing-badge ka-hero-anim" style={{ animationDelay: '0.1s' }}>Open Source &middot; MIT Licensed</div>
         <h1 className="ka-landing-title ka-hero-anim" style={{ animationDelay: '0.25s' }}>kbot</h1>
         <p className="ka-landing-subtitle ka-hero-anim" style={{ animationDelay: '0.4s' }}>
-          The AI that gets smarter every time anyone uses it.
+          The terminal AI agent that learns, dreams, and builds its own tools.
         </p>
         <p className="ka-landing-tagline ka-hero-anim" style={{ animationDelay: '0.55s' }}>
-          Terminal AI agent. 787+ tools. 35 specialists. Science lab. Runs offline.
-          {downloads && <><br />{downloads.toLocaleString()} downloads this week.</>}
+          787+ tools. 35 specialist agents. 20 AI providers. Runs fully offline. $0.
+          {downloads && <><br />{downloads.toLocaleString()} weekly installs.</>}
         </p>
 
         <div className="ka-landing-install ka-hero-anim" style={{ animationDelay: '0.7s' }} onClick={copyInstall}>
@@ -246,20 +246,21 @@ export function LandingPage() {
             <span className="ka-landing-terminal-title">kbot</span>
           </div>
           <div className="ka-landing-terminal-body">
-            <div className="ka-landing-line"><span className="ka-landing-prompt">$</span> kbot "explain this codebase"</div>
+            <div className="ka-landing-line"><span className="ka-landing-prompt">$</span> kbot "find and fix the auth bug"</div>
             <div className="ka-landing-line ka-landing-dim">
-              <span className="ka-landing-agent">&#9673; coder</span> Reading project structure...
+              <span className="ka-landing-agent">&#9673; coder</span> Investigating auth flow...
             </div>
-            <div className="ka-landing-line ka-landing-dim">&nbsp;&nbsp;&#9656; read_file package.json</div>
-            <div className="ka-landing-line ka-landing-dim">&nbsp;&nbsp;&#9656; glob src/**/*.ts</div>
-            <div className="ka-landing-line ka-landing-dim">&nbsp;&nbsp;&#9656; grep "export function" src/</div>
+            <div className="ka-landing-line ka-landing-dim">&nbsp;&nbsp;&#9656; grep "authenticate" src/ &mdash; 3 matches</div>
+            <div className="ka-landing-line ka-landing-dim">&nbsp;&nbsp;&#9656; read_file src/auth.ts</div>
+            <div className="ka-landing-line ka-landing-dim">&nbsp;&nbsp;&#9656; edit_file src/auth.ts &mdash; fixed token expiry check</div>
+            <div className="ka-landing-line ka-landing-dim">&nbsp;&nbsp;&#9656; run_tests &mdash; 47 passed</div>
             <div className="ka-landing-line" style={{ marginTop: 12 }}>
-              This is a TypeScript monorepo with a React frontend and<br />
-              Supabase backend. The main product is kbot, a terminal AI<br />
-              agent in packages/kbot/ with 787+ tools across 80+ modules...
+              Found the bug: token expiry was compared as string<br />
+              instead of timestamp. Fixed and tests pass. The change<br />
+              is staged &mdash; run <code>git diff</code> to review.
             </div>
             <div className="ka-landing-line ka-landing-dim" style={{ marginTop: 8 }}>
-              3 tool calls &middot; 847 tokens &middot; $0.003
+              4 tool calls &middot; 1,203 tokens &middot; $0.005
             </div>
           </div>
         </div>

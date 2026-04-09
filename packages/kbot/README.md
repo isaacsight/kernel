@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>kbot</strong><br>
-  Open-source terminal AI agent. 764+ tools. 35 agents. 20 providers. Dreams, learns, watches your system, controls your phone. $0 local.
+  Open-source terminal AI agent. 787+ tools. 35 agents. 20 providers. Dreams, learns, watches your system, controls your phone. $0 local.
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **Runs fully offline** — Embedded llama.cpp, Ollama, LM Studio, or Jan. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster over time.
 - **35 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, quant, and 30 more).
-- **764+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, music production, iPhone control, and more.
+- **787+ tools** — files, bash, git, GitHub, web search, deploy, database, game dev, VFX, research, science, finance, security, music production, iPhone control, and more.
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
 
@@ -142,7 +142,7 @@ Checks security, documentation, code quality, CI/CD, community health, and DevOp
 |---|---|---|---|---|---|
 | AI providers | 20 | 1 | 1 | 6 | 75+ |
 | Specialist agents | 35 | 0 | 0 | 0 | 0 |
-| Built-in tools | 764+ | ~20 | ~15 | ~10 | ~15 |
+| Built-in tools | 787+ | ~20 | ~15 | ~10 | ~15 |
 | Science tools | 114 | 0 | 0 | 0 | 0 |
 | Memory system | 7-tier bidirectional | File-based | No | No | No |
 | Dream engine | Yes ($0 local) | Cloud API | No | No | No |
