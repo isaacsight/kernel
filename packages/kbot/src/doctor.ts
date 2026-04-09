@@ -595,11 +595,12 @@ export async function runDoctor(): Promise<DoctorReport> {
 
 // Color palette matching ui.ts
 const useColor = !process.env.NO_COLOR && process.stdout.isTTY !== false
-const GREEN = useColor ? chalk.hex('#4ADE80') : chalk
-const RED = useColor ? chalk.hex('#F87171') : chalk
-const YELLOW = useColor ? chalk.hex('#FBBF24') : chalk
+const hex = typeof chalk.hex === 'function' ? (c: string) => chalk.hex(c) : () => ((s: string) => s)
+const GREEN = useColor ? hex('#4ADE80') : ((s: string) => s)
+const RED = useColor ? hex('#F87171') : ((s: string) => s)
+const YELLOW = useColor ? hex('#FBBF24') : ((s: string) => s)
 const DIM = useColor ? chalk.dim : ((s: string) => s)
-const ACCENT = useColor ? chalk.hex('#A78BFA') : chalk
+const ACCENT = useColor ? hex('#A78BFA') : ((s: string) => s)
 
 const STATUS_ICON: Record<CheckStatus, string> = {
   pass: GREEN('✓'),

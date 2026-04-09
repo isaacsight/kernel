@@ -9,7 +9,7 @@
 
 import chalk from 'chalk'
 
-const ACCENT_DIM = chalk.hex('#7C6CB0')
+const ACCENT_DIM = typeof chalk.hex === 'function' ? chalk.hex('#7C6CB0') : chalk.dim
 const THINKING_COLOR = chalk.dim.italic
 
 /** Max accumulated content size during streaming (5MB) to prevent OOM */

@@ -900,7 +900,7 @@ export function registerCoordinatorTools(): void {
 // 4. Synthesizes results into a final output
 // 5. Learns from the execution for next time
 
-const COORD_AMETHYST = chalk.hex('#6B5B95')
+const COORD_AMETHYST = typeof chalk.hex === 'function' ? chalk.hex('#6B5B95') : ((s: string) => s)
 
 export interface Task {
   id: string

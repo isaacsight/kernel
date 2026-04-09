@@ -32,33 +32,35 @@ export const content = (...args: unknown[]) => console.log(...args)
 
 // ── Color palette ──
 // Subtle, dark-mode-friendly. One accent color, everything else is gray.
-const ACCENT = useColor ? chalk.hex('#A78BFA') : chalk       // soft violet (primary)
-const ACCENT_DIM = useColor ? chalk.hex('#7C6CB0') : chalk   // muted violet
-const GREEN = useColor ? chalk.hex('#4ADE80') : chalk        // success
-const RED = useColor ? chalk.hex('#F87171') : chalk          // error
-const YELLOW = useColor ? chalk.hex('#FBBF24') : chalk       // warning
-const CYAN = useColor ? chalk.hex('#67E8F9') : chalk         // code/paths
+const noop = (s: string) => s
+const hex = typeof chalk.hex === 'function' ? (c: string) => chalk.hex(c) : () => noop
+const ACCENT = useColor ? hex('#A78BFA') : noop       // soft violet (primary)
+const ACCENT_DIM = useColor ? hex('#7C6CB0') : noop   // muted violet
+const GREEN = useColor ? hex('#4ADE80') : noop        // success
+const RED = useColor ? hex('#F87171') : noop          // error
+const YELLOW = useColor ? hex('#FBBF24') : noop       // warning
+const CYAN = useColor ? hex('#67E8F9') : noop         // code/paths
 const DIM = useColor ? chalk.dim : ((s: string) => s)        // secondary text
 
 /** Agent color map */
 const AGENT_COLORS: Record<string, (text: string) => string> = {
   kernel: ACCENT,
-  researcher: chalk.hex('#60A5FA'),
-  coder: chalk.hex('#4ADE80'),
-  writer: chalk.hex('#FB923C'),
-  analyst: chalk.hex('#F472B6'),
-  aesthete: chalk.hex('#C4956A'),
-  guardian: chalk.hex('#8B4513'),
-  curator: chalk.hex('#708090'),
-  strategist: chalk.hex('#DAA520'),
-  creative: chalk.hex('#E879F9'),
-  developer: chalk.hex('#38BDF8'),
+  researcher: hex('#60A5FA'),
+  coder: hex('#4ADE80'),
+  writer: hex('#FB923C'),
+  analyst: hex('#F472B6'),
+  aesthete: hex('#C4956A'),
+  guardian: hex('#8B4513'),
+  curator: hex('#708090'),
+  strategist: hex('#DAA520'),
+  creative: hex('#E879F9'),
+  developer: hex('#38BDF8'),
   local: DIM,
 }
 
 /** Register a custom agent's color (for matrix agents) */
 export function registerAgentVisuals(id: string, _icon: string, color: string): void {
-  AGENT_COLORS[id] = chalk.hex(color)
+  AGENT_COLORS[id] = hex(color)
 }
 
 export function agentColor(agentId: string): (text: string) => string {
@@ -95,9 +97,9 @@ function particleGridArt(): string {
   // Uses the same Rubin palette: amethyst particles, mauve links, warm brown field
   const P = ACCENT           // particle core (amethyst ●)
   const L = ACCENT_DIM       // link lines (muted violet)
-  const F = useColor ? chalk.hex('#B8875C') : chalk  // field haze (warm brown)
+  const F = useColor ? hex('#B8875C') : noop  // field haze (warm brown)
   const G = DIM              // grid lines
-  const R = useColor ? chalk.hex('#E8E6DC') : chalk  // registration marks
+  const R = useColor ? hex('#E8E6DC') : noop  // registration marks
 
   const dot = P('●')
   const sm = F('◦')
