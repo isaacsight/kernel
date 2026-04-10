@@ -1,8 +1,63 @@
 {
-  "timestamp": "2026-04-10T08:11:28.698Z",
-  "projects": [],
+  "timestamp": "2026-04-10T20:23:16.851Z",
+  "projects": [
+    {
+      "name": "rcarmo/piclaw",
+      "url": "https://github.com/rcarmo/piclaw",
+      "stars": 465,
+      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
+    },
+    {
+      "name": "CopilotKit/CopilotKit",
+      "url": "https://github.com/CopilotKit/CopilotKit",
+      "stars": 30126,
+      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+    },
+    {
+      "name": "dcostenco/prism-mcp",
+      "url": "https://github.com/dcostenco/prism-mcp",
+      "stars": 115,
+      "description": "The Mind Palace for AI Agents — Autonomous Cognitive OS with affect-tagged memory (valence engine), token-economic RL (surprisal gate + UBI), Hebbian learning, ACT-R spreading activation, Synapse Engine (GraphRAG), adversarial evaluation (anti-sycophancy), fail-closed Dark Factory pipelines. Zero-config local mode."
+    },
+    {
+      "name": "Mirascope/mirascope",
+      "url": "https://github.com/Mirascope/mirascope",
+      "stars": 1455,
+      "description": "The LLM Anti-Framework"
+    },
+    {
+      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "stars": 204,
+      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+    },
+    {
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 379,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+    },
+    {
+      "name": "samber/cc-skills",
+      "url": "https://github.com/samber/cc-skills",
+      "stars": 56,
+      "description": "🧑‍🎨 A collection of agentic skills that works"
+    },
+    {
+      "name": "luxiaolei/claude-code-via-ccr",
+      "url": "https://github.com/luxiaolei/claude-code-via-ccr",
+      "stars": 0,
+      "description": "Claude Code via CCR skill for OpenClaw/OpenCloud with qwen3.6-plus, Codex Plugin, and gstack"
+    },
+    {
+      "name": "gybob/openclaw-aai-gateway-plugin",
+      "url": "https://github.com/gybob/openclaw-aai-gateway-plugin",
+      "stars": 0,
+      "description": "OpenClaw plugin for AAI Gateway — exposes MCP servers, Skills, and ACP agents as native OpenClaw agent tools"
+    }
+  ],
   "latestPaper": {
-    "title": "unknown",
-    "summary": "unknown"
+    "title": "Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic Multimodal Models",
+    "summary": "The advent of agentic multimodal models has empowered systems to actively interact with external environments. However, current agents suffer from a profound meta-cognitive deficit: they struggle to arbitrate between leveraging internal knowledge and querying external utilities. Consequently, they frequently fall prey to blind tool invocation, resorting to reflexive tool execution even when queries are resolvable from the raw visual context. This pathological behavior precipitates severe latency"
   }
 }
