@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T15:33:43.039Z",
+  "timestamp": "2026-04-11T15:49:34.011Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "Priority diseases to curate (huge EPIC, CZI)",
+      "url": "https://github.com/monarch-initiative/dismech/issues/1079",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Update README to include new scripts for landscape data integrity audit and comparison with other data sources",
       "url": "https://github.com/cncf/automation/pull/307",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "feature: add a conversation signal family for multi-turn and tool-aware routing",
       "url": "https://github.com/vllm-project/semantic-router/issues/1756",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Detect unbounded loops with tool calls",
-      "url": "https://github.com/Diplomat-ai/diplomat-agent/issues/4",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
