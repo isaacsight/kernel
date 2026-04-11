@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-11T18:42:23.636Z",
-  "count": 27,
+  "timestamp": "2026-04-11T19:19:53.363Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix: repair provider transport and channel registry CI regressions",
-      "url": "https://github.com/openclaw/openclaw/pull/64969",
+      "title": "refactor(legreffier-cli): migrate CLI dispatch to citty (#765)",
+      "url": "https://github.com/getlarge/themoltnet/pull/772",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "ci(release): infer recover-cli inputs from release PR number",
-      "url": "https://github.com/getlarge/themoltnet/pull/769",
+      "title": "feat(evals): dogfood context packs — gap-test rewrites + legreffier-eval skill",
+      "url": "https://github.com/getlarge/themoltnet/pull/771",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Add Gradium text to speech integration",
-      "url": "https://github.com/openclaw/openclaw/pull/64958",
+      "title": "deps(node): bump the minor group across 1 directory with 12 updates",
+      "url": "https://github.com/nnlgsakib/clawstation/pull/11",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -189,6 +189,27 @@
       "title": "tennis update. more tennis. probably too much tennis.",
       "url": "https://reddit.com/r/commandline/comments/1sgfqq5/tennis_update_more_tennis_probably_too_much_tennis/",
       "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Cloudflare just turned Browser Rendering into a lot more powerful MCP infrastructure",
+      "url": "https://reddit.com/r/artificial/comments/1sieggh/cloudflare_just_turned_browser_rendering_into_a/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Anthropic launches Claude Managed Agents — composable APIs for shipping production AI agents 10x faster. Notion, Rakuten, Asana, and Sentry already in production.",
+      "url": "https://reddit.com/r/artificial/comments/1si5evu/anthropic_launches_claude_managed_agents/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Presenting: (dyn) AEP (Agent Element Protocol) - World's first zero-hallucination frontend AI build protocol for coding agents",
+      "url": "https://reddit.com/r/artificial/comments/1si4936/presenting_dyn_aep_agent_element_protocol_worlds/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
   ]

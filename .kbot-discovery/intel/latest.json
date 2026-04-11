@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T18:42:18.703Z",
+  "timestamp": "2026-04-11T19:19:49.688Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -349,8 +349,8 @@
             47727825,
             47726441,
             47729997,
-            47728452,
             47724790,
+            47728452,
             47721827,
             47721911,
             47723053,
@@ -380,7 +380,7 @@
           "story_id": 47720418,
           "story_text": "Hey HN, we&#x27;re Willy and Dan, co-founders of Twill.ai (<a href=\"https:&#x2F;&#x2F;twill.ai&#x2F;\">https:&#x2F;&#x2F;twill.ai&#x2F;</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that both touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don&#x27;t scale past a couple of tasks.<p>2. Persistence: close your laptop and the agent stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous agent full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the agents to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same agent, each in their own thread. Then memory, so &quot;use the existing logger in lib&#x2F;log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own coding products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud agents on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their coding harness, Twill picks up the improvement automatically.<p>We’re also open-sourcing agentbox-sdk, <a href=\"https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk</a>, an SDK for running and interacting with agent CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel&#x27;s Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50&#x2F;month for 50 credits, with BYOK support on higher tiers. Free pro tier for open-source projects.<p>We’d love to hear how cloud coding agents fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing.",
           "title": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs",
-          "updated_at": "2026-04-11T18:32:55Z",
+          "updated_at": "2026-04-11T19:02:25Z",
           "url": "https://twill.ai"
         },
         {
@@ -820,10 +820,10 @@
           "created_at_i": 1775925506,
           "num_comments": 0,
           "objectID": "47731953",
-          "points": 1,
+          "points": 2,
           "story_id": 47731953,
           "title": "Exploration of Consciousness in Insects",
-          "updated_at": "2026-04-11T16:39:10Z",
+          "updated_at": "2026-04-11T18:50:10Z",
           "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12612707/"
         },
         {
@@ -860,19 +860,19 @@
             47732663,
             47732442,
             47732144,
-            47732910,
             47732509,
             47732081,
+            47732910,
             47732110
           ],
           "created_at": "2026-04-11T16:04:52Z",
           "created_at_i": 1775923492,
-          "num_comments": 23,
+          "num_comments": 29,
           "objectID": "47731707",
-          "points": 37,
+          "points": 50,
           "story_id": 47731707,
           "title": "Rockstar Games Hacked, Hackers Threaten a Massive Data Leak If Not Paid Ransom",
-          "updated_at": "2026-04-11T18:41:55Z",
+          "updated_at": "2026-04-11T19:19:40Z",
           "url": "https://kotaku.com/rockstar-games-reportedly-hacked-massive-data-leak-ransom-gta-6-shinyhunters-2000686858"
         },
         {
@@ -2108,17 +2108,18 @@
           ],
           "author": "sohaibtariq",
           "children": [
+            47732967,
             47704819
           ],
           "created_at": "2026-04-09T15:06:54Z",
           "created_at_i": 1775747214,
-          "num_comments": 2,
+          "num_comments": 3,
           "objectID": "47704728",
           "points": 5,
           "story_id": 47704728,
           "story_text": "Hi, we&#x27;re Sohaib and Hannan from APIMatic. We&#x27;ve been building tools to help Developers integrate with APIs for 5+ years at APIMatic. We&#x27;re now trying to help AI agents do the same.<p>This started from a conversation at PayPal DevDay 2025. The PayPal developer experience team were monitoring developers using AI agents to integrate PayPal APIs, and the agents kept reaching for outdated docs and deprecated SDK versions, often falling back to training data instead of reading the current API documentation.<p>We tested this ourselves with Cursor. Across multiple iterations, 87% of runs fetched outdated reference docs using web search, and 13% of implementations used a deprecated SDK version.<p>What we built:<p>We built Context Plugins - given an OpenAPI spec, we generate SDKs and a remote MCP server that exposes language-specific API context (auth flows, method signatures, error handling, pagination, integration patterns from the API team) packaged and optimised for LLM consumption. Instead of guessing from training data or relying on web search, coding agents get the correct SDK methods and integration patterns they need to build API integrations.<p>We&#x27;ve just launched in Beta with PayPal: <a href=\"https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F;how-to-get-started&#x2F;?ide=claudeCode&amp;isContextPlugin=true\" rel=\"nofollow\">https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F;...</a><p>We benchmarked Context Plugins on two codebases, nopCommerce (a mature ASP.NET e-commerce platform) and Microsoft&#x27;s eShop reference app, and saw 2x faster integration time, 65% lower token usage, and near-zero hallucinations.<p>Getting started:<p>- We&#x27;ve published ready-to-use Context Plugins for Spotify, Twilio, Slack, and other APIs; the Show HN link takes you to our product showcase with one-click install for popular AI agents.<p>- Want to generate Context Plugins from your own spec? Sign up for a free 2-week trial on the APIMatic website, no credit card required.<p>- Want to dive deeper into the data? Read more here <a href=\"https:&#x2F;&#x2F;www.apimatic.io&#x2F;product&#x2F;context-plugins&#x2F;case-study\" rel=\"nofollow\">https:&#x2F;&#x2F;www.apimatic.io&#x2F;product&#x2F;context-plugins&#x2F;case-study</a><p>We&#x27;re really looking forward to hearing the community&#x27;s feedback on this. We&#x27;re particularly interested in hearing from API platform teams seeing this problem with their users, developers who&#x27;ve fought this problem manually or anyone who&#x27;s tried building something similar.<p>What are we missing? What would make this more useful?",
           "title": "Show HN: AI agents are bad at API integrations – we fixed it",
-          "updated_at": "2026-04-11T18:37:10Z",
+          "updated_at": "2026-04-11T18:43:44Z",
           "url": "https://www.apimatic.io/product/context-plugins/showcase"
         },
         {
@@ -2269,6 +2270,7 @@
           ],
           "author": "behat",
           "children": [
+            47733080,
             47707518,
             47713938,
             47726320,
@@ -2287,13 +2289,13 @@
           ],
           "created_at": "2026-04-09T12:11:56Z",
           "created_at_i": 1775736716,
-          "num_comments": 24,
+          "num_comments": 25,
           "objectID": "47702647",
           "points": 48,
           "story_id": 47702647,
           "story_text": "Hey HN! We are Bharath, and Simranjit from Relvy AI (<a href=\"https:&#x2F;&#x2F;www.relvy.ai\">https:&#x2F;&#x2F;www.relvy.ai</a>). Relvy automates on-call runbooks for software engineering teams. It is an AI agent equipped with tools that can analyze telemetry data and code at scale, helping teams debug and resolve production issues in minutes. Here’s a video: [[[<a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=BXr4_XlWXc0\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=BXr4_XlWXc0</a>]]]<p>A lot of teams are using AI in some form to reduce their on-call burden. You may be pasting logs into Cursor, or using Claude Code with Datadog’s MCP server to help debug. What we’ve seen is that autonomous root cause analysis is a hard problem for AI. This shows up in benchmarks - Claude Opus 4.6 is currently at 36% accuracy on the OpenRCA dataset, in contrast to coding tasks.<p>There are three main reasons for this: (1) Telemetry data volume can drown the model in noise; (2) Data interpretation &#x2F; reasoning is enterprise context dependent; (3) On-call is a time-constrained, high-stakes problem, with little room for AI to explore during investigation time. Errors that send the user down the wrong path are not easily forgiven.<p>At Relvy, we are tackling these problems by building specialized tools for telemetry data analysis. Our tools can detect anomalies and identify problem slices from dense time series data, do log pattern search, and reason about span trees, all without overwhelming the agent context.<p>Anchoring the agent around runbooks leads to less agentic exploration and more deterministic steps that reflect the most useful steps that an experienced engineer would take. That results in faster analysis, and less cognitive load on engineers to review and understand what the AI did.<p>How it works: Relvy is installed on a local machine via docker-compose (or via helm charts, or sign up on our cloud), connect your stack (observability and code), create your first runbook and have Relvy investigate a recent alert.<p>Each investigation is presented as a notebook in our web UI, with data visualizations that help engineers verify and build trust with the AI. From there on, Relvy can be configured to automatically respond to alerts from Slack<p>Some example runbook steps that Relvy automates: - Check so-and-so dashboard, see if the errors are isolated to a specific shard. - Check if there’s a throughput surge on the APM page, and if so, is it from a few IPs? - Check recent commits to see if anything changed for this endpoint.<p>You can also configure AWS CLI commands that Relvy can run to automate mitigation actions, with human approval.<p>A little bit about us - We did YC back in fall 2024. We started our journey experimenting with continuous log monitoring with small language models - that was too slow. We then invested deeply into solving root cause analysis effectively, and our product today is the result of about a year of work with our early customers.<p>Give us a try today. Happy to hear feedback, or about how you are tackling on-call burden at your company. Appreciate any comments or suggestions!",
           "title": "Launch HN: Relvy (YC F24) – On-call runbooks, automated",
-          "updated_at": "2026-04-11T16:34:25Z",
+          "updated_at": "2026-04-11T18:58:11Z",
           "url": "https://www.relvy.ai"
         }
       ]
