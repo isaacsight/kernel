@@ -267,5 +267,13 @@
     "comment": "You're right about the schema sync overhead in local-first setups—pre-compiling tool definitions is a real pain, especially when you need to handle updates quickly. And yeah, cursor sync across local",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-04-11T04:36:55.687Z",
+    "source": "github-issue",
+    "url": "https://github.com/arran4/arran4/pull/99",
+    "title": "Update repo table",
+    "comment": "Versioning the schema feels right as complexity grows. Have you considered how changes to the table structure will impact existing integrations, or is it mostly internal consumers? It's a trade-off, but potentially worth it to avoid future breakage.",
+    "success": true
   }
 ]
