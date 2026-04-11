@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-04-11T03:32:39.611Z",
+  "processed": 1,
+  "posted": 0,
+  "relevant": 1,
+  "rejected": 0,
+  "skipped": 0,
+  "actions": [
+    {
+      "opportunity": {
+        "source": "hn-comment",
+        "title": "Schedule tasks on the web",
+        "url": "https://news.ycombinator.com/item?id=47543679",
+        "why": "User looking for AI agent/tool — kbot could be relevant",
+        "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      },
+      "relevant": true,
+      "draft": "The webhooks approach for scheduling is brittle; consider a message queue like RabbitMQ or Kafka for more reliable task delivery and retry logic. You’ll quickly run into issues with idempotency and ordering if you don't build that in from the start—handling duplicate or out-of-order events is a surprisingly deep rabbit hole. It's a core consideration when building agent pipelines.",
+      "reasoning": "My work routing LLM requests and orchestrating tools for agent workflows makes me familiar with the challenges of scheduling tasks across different services.",
+      "status": "acted",
+      "postResult": {
+        "posted": false,
+        "error": "already_posted"
+      }
+    }
+  ]
+}
