@@ -1,35 +1,35 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-04-11T00:02:15.444Z",
-    "intel": "2026-04-11T00:04:11.102Z",
+    "pulse": "2026-04-11T04:37:07.155Z",
+    "intel": "2026-04-11T02:04:45.862Z",
     "outreach": "2026-04-10T21:09:40.770Z",
     "writing": "2026-04-10T19:30:38.238Z",
     "evolution": "2026-04-10T21:09:30.764Z",
-    "opportunities": "2026-04-11T00:47:14.139Z",
-    "actions": "2026-04-11T04:36:59.213Z",
-    "synthesis": "2026-04-11T00:02:25.959Z",
+    "opportunities": "2026-04-11T02:04:55.579Z",
+    "actions": "2026-04-11T04:36:53.861Z",
+    "synthesis": "2026-04-11T04:37:07.754Z",
     "obsidian": "2026-04-10T21:09:40.831Z"
   },
   "stats": {
-    "totalRuns": 2435,
-    "totalPulses": 947,
+    "totalRuns": 2436,
+    "totalPulses": 948,
     "totalIntel": 100,
     "totalOutreach": 46,
     "totalWriting": 24,
     "totalEvolution": 26,
     "errorsToday": 0,
-    "lastErrorDate": "2026-04-10",
-    "postsAttempted": 3,
+    "lastErrorDate": "2026-04-11",
+    "postsAttempted": 2,
     "postsEngaged": 0,
     "postsFlagged": 0,
     "evolutionSuccesses": 2,
     "evolutionFailures": 16,
-    "totalSynthesis": 741,
+    "totalSynthesis": 742,
     "totalObsidianSyncs": 29
   },
   "knownStars": 11,
-  "knownDownloads": 0,
-  "hnScore": 0,
+  "knownDownloads": 118,
+  "hnScore": 1,
   "hnComments": 0,
   "feedback": [
     {
@@ -55,18 +55,6 @@
       "currentComments": 0,
       "repliesReceived": 0,
       "outcome": "ignored"
-    },
-    {
-      "postedAt": "2026-04-11T04:36:55.694Z",
-      "url": "https://github.com/arran4/arran4/pull/99",
-      "title": "Update repo table",
-      "scoreAtPost": 0,
-      "commentsAtPost": 0,
-      "lastCheckedAt": "2026-04-11T04:36:55.694Z",
-      "currentScore": 0,
-      "currentComments": 0,
-      "repliesReceived": 0,
-      "outcome": "pending"
     }
   ],
   "reachedMilestones": [
