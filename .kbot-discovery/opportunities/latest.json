@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T16:52:06.880Z",
+  "timestamp": "2026-04-11T17:22:15.218Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(feishu): route topic-group messages through per-thread sequential lanes",
+      "url": "https://github.com/openclaw/openclaw/pull/64920",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Change service plan to free and update env vars",
       "url": "https://github.com/openclaw/openclaw/pull/64915",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "Plugin SDK: add canonical tool result hook",
       "url": "https://github.com/openclaw/openclaw/pull/64907",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "refactor: evolution worker decomposition & boundary contract hardening (v1.13-v1.14)",
-      "url": "https://github.com/csuzngjh/principles/pull/245",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
