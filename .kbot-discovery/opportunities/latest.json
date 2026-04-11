@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-11T20:37:19.047Z",
-  "count": 30,
+  "timestamp": "2026-04-11T23:20:00.742Z",
+  "count": 27,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "Small models also found the vulnerabilities that Mythos found",
+      "url": "https://news.ycombinator.com/item?id=47733915",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
       "url": "https://news.ycombinator.com/item?id=47692725",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -76,13 +83,6 @@
       "source": "hn-comment",
       "title": "The cult of vibe coding is dogfooding run amok",
       "url": "https://news.ycombinator.com/item?id=47675718",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Ask HN: Who is hiring? (April 2026)",
-      "url": "https://news.ycombinator.com/item?id=47663311",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -109,43 +109,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Add configuration files for Agent Monitor integration & Claude Code plugin marketplace",
-      "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/63",
+      "title": "merge: integrate upstream/main (295 commits, 2026-04-11)",
+      "url": "https://github.com/Tempuskg/NemoClaw/pull/2",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Make plugin descriptions in marketplace.json more user-friendly",
-      "url": "https://github.com/2389-research/claude-plugins/issues/29",
+      "title": "fix(memory-core): preserve public artifact visibility through loader cache restore",
+      "url": "https://github.com/openclaw/openclaw/pull/65012",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Amp Agent Plugin",
-      "url": "https://github.com/ComposioHQ/agent-orchestrator/issues/1016",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(you): add You.com plugin for web search, research, and content extraction",
-      "url": "https://github.com/openclaw/openclaw/pull/64989",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "refactor(legreffier-cli): migrate CLI dispatch to citty (#765)",
-      "url": "https://github.com/getlarge/themoltnet/pull/772",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(evals): dogfood context packs — gap-test rewrites + legreffier-eval skill",
-      "url": "https://github.com/getlarge/themoltnet/pull/771",
+      "title": "[AI] docs(skill-builder): clarify install routing guidance",
+      "url": "https://github.com/jscraik/Agent-Skills/pull/108",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -179,15 +158,15 @@
     },
     {
       "source": "reddit-commandline",
-      "title": "Meet AgentPlex, an open-source visual terminal multiplexer for Coding Agents / CLIs",
-      "url": "https://reddit.com/r/commandline/comments/1sgkqng/meet_agentplex_an_opensource_visual_terminal/",
+      "title": "tennis update. more tennis. probably too much tennis.",
+      "url": "https://reddit.com/r/commandline/comments/1sgfqq5/tennis_update_more_tennis_probably_too_much_tennis/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-commandline",
-      "title": "tennis update. more tennis. probably too much tennis.",
-      "url": "https://reddit.com/r/commandline/comments/1sgfqq5/tennis_update_more_tennis_probably_too_much_tennis/",
+      "title": "`ruah` — a CLI for orchestrating parallel coding tasks with Git worktree isolation and file locking",
+      "url": "https://reddit.com/r/commandline/comments/1sg6ajz/ruah_a_cli_for_orchestrating_parallel_coding/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
