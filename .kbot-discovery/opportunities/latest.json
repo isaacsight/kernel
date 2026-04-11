@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-11T00:47:24.240Z",
-  "count": 27,
+  "timestamp": "2026-04-11T00:56:33.006Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -109,6 +109,34 @@
     },
     {
       "source": "github-issue",
+      "title": "Make plugin descriptions in marketplace.json more user-friendly",
+      "url": "https://github.com/2389-research/claude-plugins/issues/29",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Amp Agent Plugin",
+      "url": "https://github.com/ComposioHQ/agent-orchestrator/issues/1016",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Enhance observability & DevSecOps stack with Splunk and OTEL",
+      "url": "https://github.com/hoangsonww/AI-Gov-Content-Curator/pull/117",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "fix(plugins): emit message_received hook for queued inbound messages (#64525)",
+      "url": "https://github.com/openclaw/openclaw/pull/64559",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Update repo table",
       "url": "https://github.com/arran4/arran4/pull/99",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -118,13 +146,6 @@
       "source": "github-issue",
       "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
       "url": "https://github.com/DenisZheng/agents-radar/issues/333",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
-      "url": "https://github.com/jstamagal/agents-radar/issues/263",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
