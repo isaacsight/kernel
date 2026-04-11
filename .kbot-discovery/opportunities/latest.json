@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T01:12:21.203Z",
+  "timestamp": "2026-04-11T01:38:48.444Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
+      "url": "https://github.com/yinwm/agents-radar/issues/212",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "chore(main): release 1.6.0",
+      "url": "https://github.com/lobu-ai/owletto/pull/66",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "chore((main)): release  1.6.0",
       "url": "https://github.com/lobu-ai/owletto/pull/64",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "chore(deps): update ghcr.io/openclaw/openclaw docker tag to v2026.4.9",
-      "url": "https://github.com/SvenKirschbaum/Dockerfiles/pull/108",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "chore: release main",
-      "url": "https://github.com/lobu-ai/owletto/pull/62",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Anthropic launches Claude Managed Agents — composable APIs for shipping production AI agents 10x faster. Notion, Rakuten, Asana, and Sentry already in production.",
+      "url": "https://reddit.com/r/artificial/comments/1si5evu/anthropic_launches_claude_managed_agents/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Presenting: (dyn) AEP (Agent Element Protocol) - World's first zero-hallucination frontend AI build protocol for coding agents",
       "url": "https://reddit.com/r/artificial/comments/1si4936/presenting_dyn_aep_agent_element_protocol_worlds/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "persistent memory system for AI agents — single SQLite file, no external server, no API keys. free and opensource - BrainCTL",
       "url": "https://reddit.com/r/artificial/comments/1si05zo/persistent_memory_system_for_ai_agents_single/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "How do I process the fact that civilisation will (likely?) be wiped out in a few years?",
-      "url": "https://reddit.com/r/artificial/comments/1shv5cy/how_do_i_process_the_fact_that_civilisation_will/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
