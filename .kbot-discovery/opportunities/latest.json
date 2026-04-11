@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T02:05:01.362Z",
+  "timestamp": "2026-04-11T02:24:46.405Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,22 +67,22 @@
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN: Hiring in the age of AI-assisted coding: what works?",
-      "url": "https://news.ycombinator.com/item?id=47722210",
+      "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
+      "url": "https://news.ycombinator.com/item?id=47692725",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "DRAM has a design flaw from 1966. I bypassed it [video]",
-      "url": "https://news.ycombinator.com/item?id=47721772",
+      "title": "The cult of vibe coding is dogfooding run amok",
+      "url": "https://news.ycombinator.com/item?id=47675718",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "Moving from WordPress to Jekyll (and static site generators in general)",
-      "url": "https://news.ycombinator.com/item?id=47714022",
+      "title": "Ask HN: Who is hiring? (April 2026)",
+      "url": "https://news.ycombinator.com/item?id=47663311",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
+      "url": "https://github.com/duanyytop/agents-radar/issues/530",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Claude/optimistic ptolemy",
       "url": "https://github.com/openclaw/openclaw/pull/64584",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -137,15 +144,8 @@
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
-      "url": "https://github.com/yinwm/agents-radar/issues/212",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "chore(main): release 1.6.0",
-      "url": "https://github.com/lobu-ai/owletto/pull/66",
+      "title": "fix: allow plugin commands on Slack when channel supports native commands",
+      "url": "https://github.com/openclaw/openclaw/pull/64578",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
