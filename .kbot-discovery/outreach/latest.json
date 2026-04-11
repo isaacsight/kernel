@@ -1,23 +1,29 @@
 {
-  "timestamp": "2026-04-10T20:23:16.851Z",
+  "timestamp": "2026-04-10T21:09:40.754Z",
   "projects": [
     {
-      "name": "rcarmo/piclaw",
-      "url": "https://github.com/rcarmo/piclaw",
-      "stars": 465,
-      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
+      "name": "joshuaswarren/remnic",
+      "url": "https://github.com/joshuaswarren/remnic",
+      "stars": 53,
+      "description": "Local-first memory plugin for OpenClaw AI agents. LLM-powered extraction, plain markdown storage, hybrid search via QMD. Gives agents persistent long-term memory across conversations."
+    },
+    {
+      "name": "inkeep/agents",
+      "url": "https://github.com/inkeep/agents",
+      "stars": 1068,
+      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
     },
     {
       "name": "CopilotKit/CopilotKit",
       "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 30126,
+      "stars": 30129,
       "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
     },
     {
-      "name": "dcostenco/prism-mcp",
-      "url": "https://github.com/dcostenco/prism-mcp",
-      "stars": 115,
-      "description": "The Mind Palace for AI Agents — Autonomous Cognitive OS with affect-tagged memory (valence engine), token-economic RL (surprisal gate + UBI), Hebbian learning, ACT-R spreading activation, Synapse Engine (GraphRAG), adversarial evaluation (anti-sycophancy), fail-closed Dark Factory pipelines. Zero-config local mode."
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 380,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
       "name": "Mirascope/mirascope",
@@ -32,10 +38,10 @@
       "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
     },
     {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 379,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+      "name": "colygon/openclaw-nebius",
+      "url": "https://github.com/colygon/openclaw-nebius",
+      "stars": 0,
+      "description": "OpenClaw + Nebius: provider plugin, deployment UI, and Claude Code skill"
     },
     {
       "name": "samber/cc-skills",
@@ -48,12 +54,6 @@
       "url": "https://github.com/luxiaolei/claude-code-via-ccr",
       "stars": 0,
       "description": "Claude Code via CCR skill for OpenClaw/OpenCloud with qwen3.6-plus, Codex Plugin, and gstack"
-    },
-    {
-      "name": "gybob/openclaw-aai-gateway-plugin",
-      "url": "https://github.com/gybob/openclaw-aai-gateway-plugin",
-      "stars": 0,
-      "description": "OpenClaw plugin for AAI Gateway — exposes MCP servers, Skills, and ACP agents as native OpenClaw agent tools"
     }
   ],
   "latestPaper": {
