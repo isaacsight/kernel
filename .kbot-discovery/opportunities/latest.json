@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T08:48:13.138Z",
+  "timestamp": "2026-04-11T15:15:48.021Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "feat(runtime): add beads runtime completion plumbing",
-      "url": "https://github.com/code-yeongyu/oh-my-openagent/pull/3336",
+      "title": "fix(cli): stop misclassifying help/tool as plugin-gated",
+      "url": "https://github.com/openclaw/openclaw/pull/64859",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "NanoClaw Radar - 2026-04-11",
-      "url": "https://github.com/happydog-intj/NanoClawRadar/issues/39",
+      "title": "Add OpenClaw Feishu integration skill",
+      "url": "https://github.com/ComposioHQ/awesome-claude-skills/pull/642",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Captureiq gateway",
-      "url": "https://github.com/TheophilusChinomona/openclaw/pull/1",
+      "title": "chore(deps): bump mem0ai from 1.0.5 to 1.0.11",
+      "url": "https://github.com/arrase/ollama-agent/pull/48",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Cloudflare just turned Browser Rendering into a lot more powerful MCP infrastructure",
+      "url": "https://reddit.com/r/artificial/comments/1sieggh/cloudflare_just_turned_browser_rendering_into_a/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Anthropic launches Claude Managed Agents — composable APIs for shipping production AI agents 10x faster. Notion, Rakuten, Asana, and Sentry already in production.",
       "url": "https://reddit.com/r/artificial/comments/1si5evu/anthropic_launches_claude_managed_agents/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Presenting: (dyn) AEP (Agent Element Protocol) - World's first zero-hallucination frontend AI build protocol for coding agents",
       "url": "https://reddit.com/r/artificial/comments/1si4936/presenting_dyn_aep_agent_element_protocol_worlds/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "persistent memory system for AI agents — single SQLite file, no external server, no API keys. free and opensource - BrainCTL",
-      "url": "https://reddit.com/r/artificial/comments/1si05zo/persistent_memory_system_for_ai_agents_single/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

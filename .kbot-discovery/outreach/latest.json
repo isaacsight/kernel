@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-04-10T21:09:40.754Z",
+  "timestamp": "2026-04-11T11:02:35.912Z",
   "projects": [
     {
-      "name": "joshuaswarren/remnic",
-      "url": "https://github.com/joshuaswarren/remnic",
-      "stars": 53,
-      "description": "Local-first memory plugin for OpenClaw AI agents. LLM-powered extraction, plain markdown storage, hybrid search via QMD. Gives agents persistent long-term memory across conversations."
+      "name": "rcarmo/piclaw",
+      "url": "https://github.com/rcarmo/piclaw",
+      "stars": 466,
+      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
     },
     {
-      "name": "inkeep/agents",
-      "url": "https://github.com/inkeep/agents",
-      "stars": 1068,
-      "description": "Create AI Agents in a No-Code Visual Builder or TypeScript SDK with full 2-way sync. For shipping AI assistants and multi-agent AI workflows."
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 43298,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 30129,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1062,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
       "name": "mensfeld/code-on-incus",
@@ -26,38 +26,38 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "Mirascope/mirascope",
-      "url": "https://github.com/Mirascope/mirascope",
-      "stars": 1455,
-      "description": "The LLM Anti-Framework"
+      "name": "Ar9av/obsidian-wiki",
+      "url": "https://github.com/Ar9av/obsidian-wiki",
+      "stars": 283,
+      "description": "Framework for AI agents to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern"
     },
     {
-      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 204,
-      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 700,
+      "description": "Agent Skills for Solopreneurs"
     },
     {
-      "name": "colygon/openclaw-nebius",
-      "url": "https://github.com/colygon/openclaw-nebius",
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
-      "description": "OpenClaw + Nebius: provider plugin, deployment UI, and Claude Code skill"
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     },
     {
-      "name": "samber/cc-skills",
-      "url": "https://github.com/samber/cc-skills",
-      "stars": 56,
-      "description": "🧑‍🎨 A collection of agentic skills that works"
-    },
-    {
-      "name": "luxiaolei/claude-code-via-ccr",
-      "url": "https://github.com/luxiaolei/claude-code-via-ccr",
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
-      "description": "Claude Code via CCR skill for OpenClaw/OpenCloud with qwen3.6-plus, Codex Plugin, and gstack"
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    },
+    {
+      "name": "philipbankier/awesome-agent-skills",
+      "url": "https://github.com/philipbankier/awesome-agent-skills",
+      "stars": 2,
+      "description": "A curated directory of skills, tools, and plugins for AI coding agents — across every platform. MCP servers, Agent Skills, Cursor rules, and more."
     }
   ],
   "latestPaper": {
-    "title": "Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic Multimodal Models",
-    "summary": "The advent of agentic multimodal models has empowered systems to actively interact with external environments. However, current agents suffer from a profound meta-cognitive deficit: they struggle to arbitrate between leveraging internal knowledge and querying external utilities. Consequently, they frequently fall prey to blind tool invocation, resorting to reflexive tool execution even when queries are resolvable from the raw visual context. This pathological behavior precipitates severe latency"
+    "title": "unknown",
+    "summary": "unknown"
   }
 }
