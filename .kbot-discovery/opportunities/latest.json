@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-11T18:08:00.924Z",
-  "count": 27,
+  "timestamp": "2026-04-11T18:42:19.962Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -46,6 +46,27 @@
     },
     {
       "source": "hn-comment",
+      "title": "OpenCode – Open source AI coding agent",
+      "url": "https://news.ycombinator.com/item?id=47470368",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "[dead]",
+      "url": "https://news.ycombinator.com/item?id=47242248",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Show HN: ScrapAI – We scrape 500 sites. AI runs once per site, not per page",
+      "url": "https://news.ycombinator.com/item?id=47233229",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
       "url": "https://news.ycombinator.com/item?id=47692725",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -67,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "[Epic] Push test coverage to ≥95% across all components",
+      "url": "https://github.com/Agent-Field/agentfield/issues/387",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Add Telegram Bot Connector for Community Contribution",
       "url": "https://github.com/AleksNeStu/ai-real-estate-assistant/issues/33",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -76,13 +104,6 @@
       "source": "github-issue",
       "title": "Add configuration files for Agent Monitor integration & Claude Code plugin marketplace",
       "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/63",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Priority diseases to curate (huge EPIC, CZI)",
-      "url": "https://github.com/monarch-initiative/dismech/issues/1079",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -109,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(feishu): route topic-group messages through per-thread sequential lanes",
-      "url": "https://github.com/openclaw/openclaw/pull/64920",
+      "title": "fix: repair provider transport and channel registry CI regressions",
+      "url": "https://github.com/openclaw/openclaw/pull/64969",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Change service plan to free and update env vars",
-      "url": "https://github.com/openclaw/openclaw/pull/64915",
+      "title": "ci(release): infer recover-cli inputs from release PR number",
+      "url": "https://github.com/getlarge/themoltnet/pull/769",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Plugin SDK: add canonical tool result hook",
-      "url": "https://github.com/openclaw/openclaw/pull/64907",
+      "title": "Add Gradium text to speech integration",
+      "url": "https://github.com/openclaw/openclaw/pull/64958",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
