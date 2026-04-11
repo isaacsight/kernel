@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T15:15:48.021Z",
+  "timestamp": "2026-04-11T15:33:43.039Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "feat(guardrails): add provider-based pre-tool-call authorization",
+      "url": "https://github.com/openclaw/openclaw/pull/64868",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "fix(cli): stop misclassifying help/tool as plugin-gated",
       "url": "https://github.com/openclaw/openclaw/pull/64859",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "Add OpenClaw Feishu integration skill",
       "url": "https://github.com/ComposioHQ/awesome-claude-skills/pull/642",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "chore(deps): bump mem0ai from 1.0.5 to 1.0.11",
-      "url": "https://github.com/arrase/ollama-agent/pull/48",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
