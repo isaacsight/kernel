@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T17:22:15.218Z",
+  "timestamp": "2026-04-11T17:50:27.104Z",
   "count": 30,
   "opportunities": [
     {
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "I made a Ghostty-based terminal workspace for parallel workflows",
+      "url": "https://reddit.com/r/commandline/comments/1sgrfvh/i_made_a_ghosttybased_terminal_workspace_for/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "Meet AgentPlex, an open-source visual terminal multiplexer for Coding Agents / CLIs",
       "url": "https://reddit.com/r/commandline/comments/1sgkqng/meet_agentplex_an_opensource_visual_terminal/",
       "why": "Discussion in r/commandline about AI agents",
@@ -181,13 +188,6 @@
       "source": "reddit-commandline",
       "title": "tennis update. more tennis. probably too much tennis.",
       "url": "https://reddit.com/r/commandline/comments/1sgfqq5/tennis_update_more_tennis_probably_too_much_tennis/",
-      "why": "Discussion in r/commandline about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-commandline",
-      "title": "`ruah` — a CLI for orchestrating parallel coding tasks with Git worktree isolation and file locking",
-      "url": "https://reddit.com/r/commandline/comments/1sg6ajz/ruah_a_cli_for_orchestrating_parallel_coding/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
