@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T19:35:21.414Z",
+  "timestamp": "2026-04-11T20:36:52.444Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -234,11 +234,11 @@
           "created_at_i": 1775686750,
           "num_comments": 0,
           "objectID": "47697020",
-          "points": 4,
+          "points": 5,
           "story_id": 47697020,
           "story_text": "Hey HN. I built an AI agent harness over the past few months and I&#x27;m open sourcing it today.<p>Some context on why. I&#x27;ve been building with Claude Code daily using this harness. It orchestrates multiple AI agents as a team, with a dashboard, chat, kanban board, the works. I used it to build a full SaaS product (MyUpMonitor, <a href=\"https:&#x2F;&#x2F;myupmonitor.com\" rel=\"nofollow\">https:&#x2F;&#x2F;myupmonitor.com</a>) in about 24 hours of focused coding.<p>Then yesterday Anthropic announced Mythos and decided to keep it behind closed doors. Meanwhile I&#x27;m paying for Claude and I can&#x27;t access their best model. I don&#x27;t think that is nice at all...<p>So I&#x27;m open sourcing the harness with support for both Claude Code and OpenAI Codex. The whole point is that you shouldn&#x27;t be dependent on one company&#x27;s API to run your AI workflow.<p>What this harness does:\n- Spawns and manages multiple AI agents in parallel\n- Each agent gets a persona, role, and communication channels\n- CEO agent that can hire&#x2F;fire workers on its own\n- Web dashboard with chat, kanban board, and live terminal output\n- Supports Claude Code, OpenAI Codex, Cursor Agent, opencode, and local models\n- MCP server per worker for tool access\n- Written in Go. Two binaries. SQLite. No heavy deps.<p>Would love feedback from anyone working on multi-agent setups or just what you think in general. Thank you!",
           "title": "Show HN: I built an open source multi-agent harness in Go",
-          "updated_at": "2026-04-10T23:18:53Z",
+          "updated_at": "2026-04-11T19:57:56Z",
           "url": "https://github.com/AndreBaltazar8/artificial"
         }
       ]
@@ -343,8 +343,8 @@
             47724685,
             47726513,
             47730110,
-            47730075,
             47727181,
+            47730075,
             47722894,
             47727825,
             47726441,
@@ -358,8 +358,8 @@
             47723506,
             47723944,
             47722251,
-            47731560,
             47729916,
+            47731560,
             47730687,
             47729237,
             47724470,
@@ -380,7 +380,7 @@
           "story_id": 47720418,
           "story_text": "Hey HN, we&#x27;re Willy and Dan, co-founders of Twill.ai (<a href=\"https:&#x2F;&#x2F;twill.ai&#x2F;\">https:&#x2F;&#x2F;twill.ai&#x2F;</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that both touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don&#x27;t scale past a couple of tasks.<p>2. Persistence: close your laptop and the agent stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous agent full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the agents to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same agent, each in their own thread. Then memory, so &quot;use the existing logger in lib&#x2F;log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own coding products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud agents on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their coding harness, Twill picks up the improvement automatically.<p>We’re also open-sourcing agentbox-sdk, <a href=\"https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk</a>, an SDK for running and interacting with agent CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel&#x27;s Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50&#x2F;month for 50 credits, with BYOK support on higher tiers. Free pro tier for open-source projects.<p>We’d love to hear how cloud coding agents fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing.",
           "title": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs",
-          "updated_at": "2026-04-11T19:02:25Z",
+          "updated_at": "2026-04-11T20:14:26Z",
           "url": "https://twill.ai"
         },
         {
@@ -544,51 +544,6 @@
     {
       "query": "collective+learning+AI",
       "hits": [
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pauliusztin"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "While building a financial assistant for an SF start-up, we learned that <em>AI</em> frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain's MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB <em>collection</em> as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don't need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual <em>learning</em>.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity/relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities/relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https://www.linkedin.com/feed/update/urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https://www.linkedin.com/feed/update/urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first <em>AI</em>: https://www.linkedin.com/feed/update/urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https://www.linkedin.com/feed/update/urn:li:activity:7432054336589021184<p>- Most <em>AI</em> agents don't need three databases: https://www.linkedin.com/feed/update/urn:li:activity:7426981104227856385"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "My 11-step GraphRAG pipeline, what worked, and what's still broken"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pauliusztin",
-            "story_47639059",
-            "ask_hn"
-          ],
-          "author": "pauliusztin",
-          "children": [
-            47653050,
-            47700676,
-            47639143
-          ],
-          "created_at": "2026-04-04T13:50:22Z",
-          "created_at_i": 1775310622,
-          "num_comments": 1,
-          "objectID": "47639059",
-          "points": 3,
-          "story_id": 47639059,
-          "story_text": "While building a financial assistant for an SF start-up, we learned that AI frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain&#x27;s MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB collection as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don&#x27;t need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual learning.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity&#x2F;relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities&#x2F;relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first AI: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7432054336589021184<p>- Most AI agents don&#x27;t need three databases: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7426981104227856385",
-          "title": "My 11-step GraphRAG pipeline, what worked, and what's still broken",
-          "updated_at": "2026-04-09T09:37:16Z"
-        },
         {
           "_highlightResult": {
             "author": {
@@ -794,12 +749,104 @@
           "title": "Show HN: I built a labor union for AI agents",
           "updated_at": "2026-03-05T23:36:18Z",
           "url": "https://aawu.ai"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "vassilbek"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "collective",
+                "learning"
+              ],
+              "value": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if/then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data <em>collection</em> plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation / Monitoring, Evaluation, Accountability, and -<em>Learning</em> specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics/templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development / United Nations / European Union formats)"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "https://clawhub.<em>ai</em>/vassiliylakhonin/nonprofit-rbm-logic-model"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vassilbek",
+            "story_47062912",
+            "show_hn"
+          ],
+          "author": "vassilbek",
+          "created_at": "2026-02-18T16:40:11Z",
+          "created_at_i": 1771432811,
+          "num_comments": 0,
+          "objectID": "47062912",
+          "points": 1,
+          "story_id": 47062912,
+          "story_text": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if&#x2F;then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data collection plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation &#x2F; Monitoring, Evaluation, Accountability, and -Learning specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics&#x2F;templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development &#x2F; United Nations &#x2F; European Union formats)",
+          "title": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw",
+          "updated_at": "2026-03-05T23:35:10Z",
+          "url": "https://clawhub.ai/vassiliylakhonin/nonprofit-rbm-logic-model"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Princesseuh"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hello!<p>I work at Astro (<a href=\"https://astro.build\" rel=\"nofollow\">https://astro.build</a>), where we do a lot of Markdown / MDX and performance in this area is often a <em>bot</em>tleneck. Our users use a lot of plugins to process their Markdown, so just blindly moving everything to a native language would make things a bit rigid. Inspired by the oxc and LightningCSS projects, I decided to start to start working on an &quot;ideal&quot; Markdown pipeline: The expensive stuff in Rust, with flexible plugins in JS, but with little performance cost.<p>This project uses techniques like lazy deserialization, raw transfer, arenas etc to ensure top performance. A JS plugin that only visits, ex, headings shouldn't suffer from the serialization cost of the entire Markdown tree. On the Rust side this is backed by pulldown-cmark, a really fast parser for Markdown.<p>You can try it in the browser here: <a href=\"https://satteri.erika.florist\" rel=\"nofollow\">https://satteri.erika.florist</a>, or follow the instructions in the README to try it out locally: <a href=\"https://github.com/bruits/satteri/blob/main/packages/satteri/README.md\" rel=\"nofollow\">https://github.com/bruits/satteri/blob/main/packages/satteri...</a><p>Hope you'll like it! Don't hesitate if you have any questions."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Sätteri, high-performance Markdown pipeline for JavaScript"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/bruits/satteri"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_Princesseuh",
+            "story_47733502",
+            "show_hn"
+          ],
+          "author": "Princesseuh",
+          "created_at": "2026-04-11T20:00:14Z",
+          "created_at_i": 1775937614,
+          "num_comments": 0,
+          "objectID": "47733502",
+          "points": 1,
+          "story_id": 47733502,
+          "story_text": "Hello!<p>I work at Astro (<a href=\"https:&#x2F;&#x2F;astro.build\" rel=\"nofollow\">https:&#x2F;&#x2F;astro.build</a>), where we do a lot of Markdown &#x2F; MDX and performance in this area is often a bottleneck. Our users use a lot of plugins to process their Markdown, so just blindly moving everything to a native language would make things a bit rigid. Inspired by the oxc and LightningCSS projects, I decided to start to start working on an &quot;ideal&quot; Markdown pipeline: The expensive stuff in Rust, with flexible plugins in JS, but with little performance cost.<p>This project uses techniques like lazy deserialization, raw transfer, arenas etc to ensure top performance. A JS plugin that only visits, ex, headings shouldn&#x27;t suffer from the serialization cost of the entire Markdown tree. On the Rust side this is backed by pulldown-cmark, a really fast parser for Markdown.<p>You can try it in the browser here: <a href=\"https:&#x2F;&#x2F;satteri.erika.florist\" rel=\"nofollow\">https:&#x2F;&#x2F;satteri.erika.florist</a>, or follow the instructions in the README to try it out locally: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;bruits&#x2F;satteri&#x2F;blob&#x2F;main&#x2F;packages&#x2F;satteri&#x2F;README.md\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;bruits&#x2F;satteri&#x2F;blob&#x2F;main&#x2F;packages&#x2F;satteri...</a><p>Hope you&#x27;ll like it! Don&#x27;t hesitate if you have any questions.",
+          "title": "Show HN: Sätteri, high-performance Markdown pipeline for JavaScript",
+          "updated_at": "2026-04-11T20:03:56Z",
+          "url": "https://github.com/bruits/satteri"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -861,30 +908,31 @@
           "_tags": [
             "story",
             "author_c420",
-            "story_47731707",
-            "front_page"
+            "story_47731707"
           ],
           "author": "c420",
           "children": [
+            47733438,
             47732262,
             47732398,
             47732663,
-            47733272,
-            47732442,
+            47733459,
             47732144,
+            47732442,
             47732509,
             47732081,
             47732910,
-            47732110
+            47732110,
+            47733272
           ],
           "created_at": "2026-04-11T16:04:52Z",
           "created_at_i": 1775923492,
-          "num_comments": 31,
+          "num_comments": 35,
           "objectID": "47731707",
-          "points": 54,
+          "points": 68,
           "story_id": 47731707,
           "title": "Rockstar Games Hacked, Hackers Threaten a Massive Data Leak If Not Paid Ransom",
-          "updated_at": "2026-04-11T19:34:41Z",
+          "updated_at": "2026-04-11T20:15:40Z",
           "url": "https://kotaku.com/rockstar-games-reportedly-hacked-massive-data-leak-ransom-gta-6-shinyhunters-2000686858"
         },
         {
@@ -977,47 +1025,6 @@
           "title": "Show HN: Bal – a Knights and Knaves logic puzzle game with Glicko rating system",
           "updated_at": "2026-04-11T13:17:25Z",
           "url": "https://bal.sciforge.ai/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "aman179102"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I built MoodSense AI, an end-to-end NLP project that detects mood from text and provides basic recommendations.<p>It classifies text into multiple moods (happy, sad, anxious, etc.), shows confidence and probability distribution, and exposes <em>bot</em>h an API (FastAPI) and a UI (Gradio).<p>The goal was to go beyond just training a model and make something actually usable.<p>Live demo:\n<a href=\"https://huggingface.co/spaces/aman179102/moodsense-ai\" rel=\"nofollow\">https://huggingface.co/spaces/aman179102/moodsense-ai</a><p>Source:\n<a href=\"https://github.com/aman179102/moodsense-ai\" rel=\"nofollow\">https://github.com/aman179102/moodsense-ai</a><p>Tech stack: Python, scikit-learn, LightGBM, spaCy, FastAPI, Gradio"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: MoodSense AI (ML and FastAPI and Gradio, Deployed on Hugging Face)"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_aman179102",
-            "story_47729679",
-            "show_hn"
-          ],
-          "author": "aman179102",
-          "children": [
-            47729887
-          ],
-          "created_at": "2026-04-11T11:32:04Z",
-          "created_at_i": 1775907124,
-          "num_comments": 1,
-          "objectID": "47729679",
-          "points": 1,
-          "story_id": 47729679,
-          "story_text": "I built MoodSense AI, an end-to-end NLP project that detects mood from text and provides basic recommendations.<p>It classifies text into multiple moods (happy, sad, anxious, etc.), shows confidence and probability distribution, and exposes both an API (FastAPI) and a UI (Gradio).<p>The goal was to go beyond just training a model and make something actually usable.<p>Live demo:\n<a href=\"https:&#x2F;&#x2F;huggingface.co&#x2F;spaces&#x2F;aman179102&#x2F;moodsense-ai\" rel=\"nofollow\">https:&#x2F;&#x2F;huggingface.co&#x2F;spaces&#x2F;aman179102&#x2F;moodsense-ai</a><p>Source:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;aman179102&#x2F;moodsense-ai\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;aman179102&#x2F;moodsense-ai</a><p>Tech stack: Python, scikit-learn, LightGBM, spaCy, FastAPI, Gradio",
-          "title": "Show HN: MoodSense AI (ML and FastAPI and Gradio, Deployed on Hugging Face)",
-          "updated_at": "2026-04-11T12:11:10Z"
         }
       ]
     },
@@ -1504,270 +1511,7 @@
     },
     {
       "query": "Cursor+alternative+open+source",
-      "hits": [
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "seyz"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "Show HN: RootCX – I built an <em>open</em> <em>source</em> <em>alternative</em> to \"<em>Cursor</em> and Supabase\""
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/RootCX/RootCX"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_seyz",
-            "story_47659303",
-            "show_hn"
-          ],
-          "author": "seyz",
-          "created_at": "2026-04-06T11:02:42Z",
-          "created_at_i": 1775473362,
-          "num_comments": 0,
-          "objectID": "47659303",
-          "points": 2,
-          "story_id": 47659303,
-          "title": "Show HN: RootCX – I built an open source alternative to \"Cursor and Supabase\"",
-          "updated_at": "2026-04-06T11:14:19Z",
-          "url": "https://github.com/RootCX/RootCX"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "mohshomis"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "Show HN: Modo – I built an <em>open</em>-<em>source</em> <em>alternative</em> to Kiro, <em>Cursor</em>, and Windsurf"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/mohshomis/modo"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_mohshomis",
-            "story_47655268",
-            "show_hn"
-          ],
-          "author": "mohshomis",
-          "children": [
-            47656439,
-            47657588,
-            47686726,
-            47659642,
-            47658552,
-            47657890,
-            47660550,
-            47657287,
-            47656014,
-            47657249,
-            47660569,
-            47657759,
-            47658048,
-            47662213,
-            47660760,
-            47661216,
-            47661291,
-            47657465,
-            47656159,
-            47656169,
-            47657644
-          ],
-          "created_at": "2026-04-05T23:59:10Z",
-          "created_at_i": 1775433550,
-          "num_comments": 28,
-          "objectID": "47655268",
-          "points": 101,
-          "story_id": 47655268,
-          "title": "Show HN: Modo – I built an open-source alternative to Kiro, Cursor, and Windsurf",
-          "updated_at": "2026-04-10T18:54:22Z",
-          "url": "https://github.com/mohshomis/modo"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "gr00ve"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "With longer agentic workflows becoming the norm, token cost can eat through usage so quickly that it prevents any real work from getting done.<p>After studying the business model of top labs like Anthropic and OpenAI, their business model shows about 80% margins on inference cost which they use for R+D on the next model.<p>Working with <em>open</em> <em>source</em> models is much cheaper and allow for 5-10x higher usage, so I decided to create Sweet! CLI as an <em>alternative</em> to the products offered by big labs.<p>Sweet! CLI uses our own custom post trained version of Deepseek v3.2 hosted on US based inference servers (very similar to <em>Cursor</em>'s Composer model).<p>Unlike most llm based agent products, we bill solely based on usage and have a seamless top up experience so you only pay for what you use.<p>My favorite feature is 'autopilot', where you can specify the duration of time you want the agent to work on a specific task, including indefinitely. This is good for monitoring live deployed applications and detecting outages that need triaged immediately, and I have multiple Sweet! agents deployed to the production server right now with that exact objective.<p>I'd appreciate any support or feedback on how I can make it better!<p>Thanks,<p>Adam - Founder of Sweet! CLI"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "alternative"
-              ],
-              "value": "Show HN: I made a cheaper <em>alternative</em> to Claude Code or Codex CLI"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://sweetcli.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_gr00ve",
-            "story_47579652",
-            "show_hn"
-          ],
-          "author": "gr00ve",
-          "children": [
-            47580137,
-            47620652
-          ],
-          "created_at": "2026-03-30T21:00:53Z",
-          "created_at_i": 1774904453,
-          "num_comments": 3,
-          "objectID": "47579652",
-          "points": 2,
-          "story_id": 47579652,
-          "story_text": "With longer agentic workflows becoming the norm, token cost can eat through usage so quickly that it prevents any real work from getting done.<p>After studying the business model of top labs like Anthropic and OpenAI, their business model shows about 80% margins on inference cost which they use for R+D on the next model.<p>Working with open source models is much cheaper and allow for 5-10x higher usage, so I decided to create Sweet! CLI as an alternative to the products offered by big labs.<p>Sweet! CLI uses our own custom post trained version of Deepseek v3.2 hosted on US based inference servers (very similar to Cursor&#x27;s Composer model).<p>Unlike most llm based agent products, we bill solely based on usage and have a seamless top up experience so you only pay for what you use.<p>My favorite feature is &#x27;autopilot&#x27;, where you can specify the duration of time you want the agent to work on a specific task, including indefinitely. This is good for monitoring live deployed applications and detecting outages that need triaged immediately, and I have multiple Sweet! agents deployed to the production server right now with that exact objective.<p>I&#x27;d appreciate any support or feedback on how I can make it better!<p>Thanks,<p>Adam - Founder of Sweet! CLI",
-          "title": "Show HN: I made a cheaper alternative to Claude Code or Codex CLI",
-          "updated_at": "2026-04-02T21:53:49Z",
-          "url": "https://sweetcli.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "phillipclapham"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "There is a shortfall to our current approach to agent memory. Right now, we are just collecting flat facts across a flat memory surface and creating vectorized chains of ambiguity, then wondering why when we ask an agent why it did something the best answer we can get is a probabilistic half-hallucinated half-answer that does not address the actual details of the issue, because it is simply pattern matching to find untyped similarities.<p>So I built FlowScript.<p>FlowScript is a typed reasoning graph that your agent builds through tool calls during your everyday work. It is NOT a graph database. What it is is a small set of unique opinionated primitives: things like thoughts, questions, decisions, blockers, and each of those have typed relationships between them. Your agent calls the tools as it works and it builds this typed graph, and then afterwards you can query that structure to get actual deterministic answers using five queries: <i>tensions</i>, <i>blocked</i>, <i>why</i>, <i>whatIf</i>, <i><em>alternatives</em></i>.<p>What does this look like in practice? Here's an agent that has been reasoning about database choices for a few sessions:<p><pre><code>  &gt; mem.query.why(&quot;node_postgres_decision&quot;)\n\n  PostgreSQL chosen\n      ← &quot;Need ACID for payment processing&quot;\n      ← &quot;Original requirement: handle refunds atomically&quot;\n      ← &quot;Stripe webhook failures in staging revealed race condition&quot;\n\n  &gt; mem.query.tensions()\n\n  &gt;&lt;[performance vs cost]\n      &quot;Redis: sub-ms reads critical for UX&quot; vs &quot;Redis cluster: $200/mo for 3 nodes&quot;\n</code></pre>\nThe why chain traces back to the original constraint and the tension preserves the actual tradeoff being made. These are things no vector store can do, because they are NOT just flat facts, but are relationships and reasoning chains that are being captured in a deterministic way. Meaning you can actually go back and audit the actual reasoning of your agent, how it evolved over time, and see the actual tensions that were being balanced. No more opaque reasoning that is lost as soon as the polished answer is generated. Try that in any other memory system, I'll wait.<p>Other memory systems, when they come across a tension or a contradiction, for the most part they are just simply deleting that. And that is wrong because that tension is new knowledge. Knowledge that we need to actually keep for auditing and because it tells us about the evolution of the system and its cognition over time. So instead of deleting contradictions, we relate and create named relationships for them. Relationships you can query.<p>Every decision, every tension, every piece of reasoning is being deterministically captured into an audit trail and hash-encoded. Now, not only do you have a deterministic reasoning chain, but that reasoning chain is auditable. You can go back to any point within the time that you have audit logs for and deterministically review and understand the actual reasoning chain that your model was using. Something that no other system can offer. The EU AI Act is going to require exactly this kind of transparency by August 2026, and as far as I can tell, FlowScript is the first <em>open</em> <em>source</em> agent memory system that is designed to meet that bar.<p>Try it NOW: Our MCP server in Claude Code or <em>Cursor</em>. Install and check our Get Started guide so you can add one JSON block to your editor config and drop a snippet into your project CLAUDE.md file, then restart. Your AI assistant gets a full set of reasoning tools that actually trace causality.<p><pre><code>  pip install flowscript-agents openai\n</code></pre>\nSee flowscript.org for full setup instructions: &lt;<a href=\"https://flowscript.org/get-started\" rel=\"nofollow\">https://flowscript.org/get-started</a>&gt;<p>Or grab the TypeScript SDK for programmatic use:<p><pre><code>  npm install flowscript-core\n</code></pre>\nThere are drop-in adapters for LangGraph, CrewAI, Google ADK, and more Python agent frameworks. MIT licensed. <em>Open</em> <em>source</em>.<p>Repo: &lt;<a href=\"https://github.com/phillipclapham/flowscript\" rel=\"nofollow\">https://github.com/phillipclapham/flowscript</a>&gt;\nDocs: &lt;<a href=\"https://flowscript.org\" rel=\"nofollow\">https://flowscript.org</a>&gt;\nPython SDK: &lt;<a href=\"https://github.com/phillipclapham/flowscript-agents\" rel=\"nofollow\">https://github.com/phillipclapham/flowscript-agents</a>&gt;"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: FlowScript – Agent memory where contradictions are features"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/phillipclapham/flowscript"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_phillipclapham",
-            "story_47516792",
-            "show_hn"
-          ],
-          "author": "phillipclapham",
-          "children": [
-            47538689,
-            47518627
-          ],
-          "created_at": "2026-03-25T13:01:58Z",
-          "created_at_i": 1774443718,
-          "num_comments": 1,
-          "objectID": "47516792",
-          "points": 2,
-          "story_id": 47516792,
-          "story_text": "There is a shortfall to our current approach to agent memory. Right now, we are just collecting flat facts across a flat memory surface and creating vectorized chains of ambiguity, then wondering why when we ask an agent why it did something the best answer we can get is a probabilistic half-hallucinated half-answer that does not address the actual details of the issue, because it is simply pattern matching to find untyped similarities.<p>So I built FlowScript.<p>FlowScript is a typed reasoning graph that your agent builds through tool calls during your everyday work. It is NOT a graph database. What it is is a small set of unique opinionated primitives: things like thoughts, questions, decisions, blockers, and each of those have typed relationships between them. Your agent calls the tools as it works and it builds this typed graph, and then afterwards you can query that structure to get actual deterministic answers using five queries: <i>tensions</i>, <i>blocked</i>, <i>why</i>, <i>whatIf</i>, <i>alternatives</i>.<p>What does this look like in practice? Here&#x27;s an agent that has been reasoning about database choices for a few sessions:<p><pre><code>  &gt; mem.query.why(&quot;node_postgres_decision&quot;)\n\n  PostgreSQL chosen\n      ← &quot;Need ACID for payment processing&quot;\n      ← &quot;Original requirement: handle refunds atomically&quot;\n      ← &quot;Stripe webhook failures in staging revealed race condition&quot;\n\n  &gt; mem.query.tensions()\n\n  &gt;&lt;[performance vs cost]\n      &quot;Redis: sub-ms reads critical for UX&quot; vs &quot;Redis cluster: $200&#x2F;mo for 3 nodes&quot;\n</code></pre>\nThe why chain traces back to the original constraint and the tension preserves the actual tradeoff being made. These are things no vector store can do, because they are NOT just flat facts, but are relationships and reasoning chains that are being captured in a deterministic way. Meaning you can actually go back and audit the actual reasoning of your agent, how it evolved over time, and see the actual tensions that were being balanced. No more opaque reasoning that is lost as soon as the polished answer is generated. Try that in any other memory system, I&#x27;ll wait.<p>Other memory systems, when they come across a tension or a contradiction, for the most part they are just simply deleting that. And that is wrong because that tension is new knowledge. Knowledge that we need to actually keep for auditing and because it tells us about the evolution of the system and its cognition over time. So instead of deleting contradictions, we relate and create named relationships for them. Relationships you can query.<p>Every decision, every tension, every piece of reasoning is being deterministically captured into an audit trail and hash-encoded. Now, not only do you have a deterministic reasoning chain, but that reasoning chain is auditable. You can go back to any point within the time that you have audit logs for and deterministically review and understand the actual reasoning chain that your model was using. Something that no other system can offer. The EU AI Act is going to require exactly this kind of transparency by August 2026, and as far as I can tell, FlowScript is the first open source agent memory system that is designed to meet that bar.<p>Try it NOW: Our MCP server in Claude Code or Cursor. Install and check our Get Started guide so you can add one JSON block to your editor config and drop a snippet into your project CLAUDE.md file, then restart. Your AI assistant gets a full set of reasoning tools that actually trace causality.<p><pre><code>  pip install flowscript-agents openai\n</code></pre>\nSee flowscript.org for full setup instructions: &lt;<a href=\"https:&#x2F;&#x2F;flowscript.org&#x2F;get-started\" rel=\"nofollow\">https:&#x2F;&#x2F;flowscript.org&#x2F;get-started</a>&gt;<p>Or grab the TypeScript SDK for programmatic use:<p><pre><code>  npm install flowscript-core\n</code></pre>\nThere are drop-in adapters for LangGraph, CrewAI, Google ADK, and more Python agent frameworks. MIT licensed. Open source.<p>Repo: &lt;<a href=\"https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript</a>&gt;\nDocs: &lt;<a href=\"https:&#x2F;&#x2F;flowscript.org\" rel=\"nofollow\">https:&#x2F;&#x2F;flowscript.org</a>&gt;\nPython SDK: &lt;<a href=\"https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript-agents\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript-agents</a>&gt;",
-          "title": "Show HN: FlowScript – Agent memory where contradictions are features",
-          "updated_at": "2026-03-27T03:06:51Z",
-          "url": "https://github.com/phillipclapham/flowscript"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "eddelgado"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "We launched Kodus – Agent Readiness today.<p>It’s an <em>open</em> <em>source</em> CLI that analyzes your codebase across 39 checks and 7 pillars, from linting to security, and shows how ready it is for agents like Claude Code, <em>Cursor</em>, and Copilot.<p>Everything runs locally.<p>Your code never leaves your machine.<p>Factory.ai coined the term Agent Readiness, but their solution is proprietary, cloud only, and paid.<p>So we built a free, self hosted, <em>open</em> <em>source</em> <em>alternative</em>.<p>Feedback is very welcome.<p>Here is the repository link: <a href=\"https://github.com/kodustech/agent-readiness\" rel=\"nofollow\">https://github.com/kodustech/agent-readiness</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "Show HN: <em>Open</em>-<em>source</em> <em>alternative</em> to Factory.ai's Agent Readiness"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/kodustech/agent-readiness"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_eddelgado",
-            "story_47378675",
-            "show_hn"
-          ],
-          "author": "eddelgado",
-          "created_at": "2026-03-14T17:01:51Z",
-          "created_at_i": 1773507711,
-          "num_comments": 0,
-          "objectID": "47378675",
-          "points": 2,
-          "story_id": 47378675,
-          "story_text": "We launched Kodus – Agent Readiness today.<p>It’s an open source CLI that analyzes your codebase across 39 checks and 7 pillars, from linting to security, and shows how ready it is for agents like Claude Code, Cursor, and Copilot.<p>Everything runs locally.<p>Your code never leaves your machine.<p>Factory.ai coined the term Agent Readiness, but their solution is proprietary, cloud only, and paid.<p>So we built a free, self hosted, open source alternative.<p>Feedback is very welcome.<p>Here is the repository link: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;kodustech&#x2F;agent-readiness\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kodustech&#x2F;agent-readiness</a>",
-          "title": "Show HN: Open-source alternative to Factory.ai's Agent Readiness",
-          "updated_at": "2026-03-14T17:06:59Z",
-          "url": "https://github.com/kodustech/agent-readiness"
-        }
-      ]
+      "hits": []
     },
     {
       "query": "AI+agent+framework+2026",
@@ -2547,5 +2291,5 @@
       ]
     }
   ],
-  "totalHits": 50
+  "totalHits": 45
 }

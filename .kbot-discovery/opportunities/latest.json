@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T19:35:29.371Z",
+  "timestamp": "2026-04-11T20:36:56.120Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "feat(you): add You.com plugin for web search, research, and content extraction",
+      "url": "https://github.com/openclaw/openclaw/pull/64989",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "refactor(legreffier-cli): migrate CLI dispatch to citty (#765)",
       "url": "https://github.com/getlarge/themoltnet/pull/772",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "feat(evals): dogfood context packs — gap-test rewrites + legreffier-eval skill",
       "url": "https://github.com/getlarge/themoltnet/pull/771",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "deps(node): bump the minor group across 1 directory with 12 updates",
-      "url": "https://github.com/nnlgsakib/clawstation/pull/11",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "AMD's GAIA now allows building custom AI agents via chat, becomes \"true desktop app\"",
+      "url": "https://reddit.com/r/artificial/comments/1sitbvu/amds_gaia_now_allows_building_custom_ai_agents/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Cloudflare just turned Browser Rendering into a lot more powerful MCP infrastructure",
       "url": "https://reddit.com/r/artificial/comments/1sieggh/cloudflare_just_turned_browser_rendering_into_a/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Anthropic launches Claude Managed Agents — composable APIs for shipping production AI agents 10x faster. Notion, Rakuten, Asana, and Sentry already in production.",
       "url": "https://reddit.com/r/artificial/comments/1si5evu/anthropic_launches_claude_managed_agents/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Presenting: (dyn) AEP (Agent Element Protocol) - World's first zero-hallucination frontend AI build protocol for coding agents",
-      "url": "https://reddit.com/r/artificial/comments/1si4936/presenting_dyn_aep_agent_element_protocol_worlds/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
