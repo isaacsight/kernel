@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T23:20:00.742Z",
+  "timestamp": "2026-04-11T23:35:12.915Z",
   "count": 27,
   "opportunities": [
     {
@@ -109,6 +109,13 @@
     },
     {
       "source": "github-issue",
+      "title": "Integration/upstream sync 2026 04 11",
+      "url": "https://github.com/NVIDIA/NemoClaw/pull/1792",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "merge: integrate upstream/main (295 commits, 2026-04-11)",
       "url": "https://github.com/Tempuskg/NemoClaw/pull/2",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -118,13 +125,6 @@
       "source": "github-issue",
       "title": "fix(memory-core): preserve public artifact visibility through loader cache restore",
       "url": "https://github.com/openclaw/openclaw/pull/65012",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[AI] docs(skill-builder): clarify install routing guidance",
-      "url": "https://github.com/jscraik/Agent-Skills/pull/108",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
