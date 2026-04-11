@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T15:49:35.060Z",
+  "timestamp": "2026-04-11T16:15:54.758Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "Add configuration files for Agent Monitor integration & Claude Code plugin marketplace",
+      "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/63",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Priority diseases to curate (huge EPIC, CZI)",
       "url": "https://github.com/monarch-initiative/dismech/issues/1079",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -102,8 +109,8 @@
     },
     {
       "source": "github-issue",
-      "title": "feature: add a conversation signal family for multi-turn and tool-aware routing",
-      "url": "https://github.com/vllm-project/semantic-router/issues/1756",
+      "title": "Add configuration files for Agent Monitor integration & Claude Code plugin marketplace",
+      "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/63",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -123,8 +130,8 @@
     },
     {
       "source": "github-issue",
-      "title": "Enhance observability & DevSecOps stack with Splunk and OTEL",
-      "url": "https://github.com/hoangsonww/AI-Gov-Content-Curator/pull/117",
+      "title": "refactor: evolution worker decomposition & boundary contract hardening (v1.13-v1.14)",
+      "url": "https://github.com/csuzngjh/principles/pull/245",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "fix(cli): stop misclassifying help/tool as plugin-gated",
       "url": "https://github.com/openclaw/openclaw/pull/64859",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Add OpenClaw Feishu integration skill",
-      "url": "https://github.com/ComposioHQ/awesome-claude-skills/pull/642",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
