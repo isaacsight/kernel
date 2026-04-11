@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T00:56:33.908Z",
+  "timestamp": "2026-04-11T01:12:20.861Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(plugins): emit message_received hook for queued inbound messages (#64525)",
-      "url": "https://github.com/openclaw/openclaw/pull/64559",
+      "title": "chore((main)): release  1.6.0",
+      "url": "https://github.com/lobu-ai/owletto/pull/64",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Update repo table",
-      "url": "https://github.com/arran4/arran4/pull/99",
+      "title": "chore(deps): update ghcr.io/openclaw/openclaw docker tag to v2026.4.9",
+      "url": "https://github.com/SvenKirschbaum/Dockerfiles/pull/108",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
-      "url": "https://github.com/DenisZheng/agents-radar/issues/333",
+      "title": "chore: release main",
+      "url": "https://github.com/lobu-ai/owletto/pull/62",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
