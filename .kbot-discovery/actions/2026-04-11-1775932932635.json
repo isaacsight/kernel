@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-04-11T18:42:12.635Z",
+  "processed": 1,
+  "posted": 0,
+  "relevant": 1,
+  "rejected": 0,
+  "skipped": 0,
+  "actions": [
+    {
+      "opportunity": {
+        "source": "hn-comment",
+        "title": "Schedule tasks on the web",
+        "url": "https://news.ycombinator.com/item?id=47543679",
+        "why": "User looking for AI agent/tool — kbot could be relevant",
+        "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      },
+      "relevant": true,
+      "draft": "The challenge with web-scheduled tasks often isn't the scheduling itself, but ensuring idempotency across providers—a failed task retried on a different system can cause unexpected side effects. Consider a \"mutation ID\" pattern alongside your scheduling to track and prevent duplicate actions, especially when dealing with eventual consistency. It's a surprisingly common gotcha.",
+      "reasoning": "My experience building AI agents with task scheduling and routing directly aligns with the core concepts discussed in the post.",
+      "status": "acted",
+      "postResult": {
+        "posted": false,
+        "error": "already_posted"
+      }
+    }
+  ]
+}
