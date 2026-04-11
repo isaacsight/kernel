@@ -1,25 +1,109 @@
 {
-  "timestamp": "2026-04-11T00:47:12.516Z",
-  "count": 12,
+  "timestamp": "2026-04-11T00:47:19.292Z",
+  "count": 24,
   "opportunities": [
     {
+      "source": "hn-comment",
+      "title": "Schedule tasks on the web",
+      "url": "https://news.ycombinator.com/item?id=47543679",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Show HN: An open-source safety net for home hemodialysis",
+      "url": "https://news.ycombinator.com/item?id=47460486",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Show HN: Soros – AI for geopolitical macro investing",
+      "url": "https://news.ycombinator.com/item?id=47418557",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Jeriko – an AI agent that runs directly inside your OS",
+      "url": "https://news.ycombinator.com/item?id=47352710",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+      "url": "https://news.ycombinator.com/item?id=47155785",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "[dead]",
+      "url": "https://news.ycombinator.com/item?id=47151158",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "OpenCode – Open source AI coding agent",
+      "url": "https://news.ycombinator.com/item?id=47470368",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "[dead]",
+      "url": "https://news.ycombinator.com/item?id=47242248",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Show HN: ScrapAI – We scrape 500 sites. AI runs once per site, not per page",
+      "url": "https://news.ycombinator.com/item?id=47233229",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Ask HN: Hiring in the age of AI-assisted coding: what works?",
+      "url": "https://news.ycombinator.com/item?id=47722210",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "DRAM has a design flaw from 1966. I bypassed it [video]",
+      "url": "https://news.ycombinator.com/item?id=47721772",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Moving from WordPress to Jekyll (and static site generators in general)",
+      "url": "https://news.ycombinator.com/item?id=47714022",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
       "source": "github-issue",
-      "title": "Update repo table",
-      "url": "https://github.com/arran4/arran4/pull/99",
+      "title": "Update README to include new scripts for landscape data integrity audit and comparison with other data sources",
+      "url": "https://github.com/cncf/automation/pull/307",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
-      "url": "https://github.com/DenisZheng/agents-radar/issues/333",
+      "title": "feature: add a conversation signal family for multi-turn and tool-aware routing",
+      "url": "https://github.com/vllm-project/semantic-router/issues/1756",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
-      "url": "https://github.com/jstamagal/agents-radar/issues/263",
+      "title": "Detect unbounded loops with tool calls",
+      "url": "https://github.com/Diplomat-ai/diplomat-agent/issues/4",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
