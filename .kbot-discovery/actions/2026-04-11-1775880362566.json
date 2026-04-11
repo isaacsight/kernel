@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-04-11T04:06:02.566Z",
+  "processed": 1,
+  "posted": 0,
+  "relevant": 1,
+  "rejected": 0,
+  "skipped": 0,
+  "actions": [
+    {
+      "opportunity": {
+        "source": "hn-comment",
+        "title": "Schedule tasks on the web",
+        "url": "https://news.ycombinator.com/item?id=47543679",
+        "why": "User looking for AI agent/tool — kbot could be relevant",
+        "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      },
+      "relevant": true,
+      "draft": "The challenge isn't just *scheduling* tasks, but ensuring the LLM selected at runtime is appropriate for the workload – context length, cost, latency all become critical factors when routing requests. A simple scheduler quickly becomes a complex system for monitoring model performance and adapting routing rules based on real-time metrics. Consider the \"cold start\" problem too; frequently used models need to be kept \"warm\" to avoid delays.",
+      "reasoning": "My work in building AI agents and tooling involves scheduling and orchestration across different models, so I can offer relevant technical insight.",
+      "status": "acted",
+      "postResult": {
+        "posted": false,
+        "error": "already_posted"
+      }
+    }
+  ]
+}
