@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T02:24:53.490Z",
+  "timestamp": "2026-04-11T02:49:15.339Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -287,8 +287,8 @@
           ],
           "author": "danoandco",
           "children": [
-            47726513,
             47721952,
+            47726513,
             47726441,
             47722143,
             47724685,
@@ -301,8 +301,8 @@
             47723944,
             47723506,
             47722251,
-            47726505,
             47724244,
+            47726505,
             47724470,
             47723090,
             47722489,
@@ -310,13 +310,13 @@
           ],
           "created_at": "2026-04-10T16:22:13Z",
           "created_at_i": 1775838133,
-          "num_comments": 50,
+          "num_comments": 51,
           "objectID": "47720418",
-          "points": 53,
+          "points": 55,
           "story_id": 47720418,
           "story_text": "Hey HN, we&#x27;re Willy and Dan, co-founders of Twill.ai (<a href=\"https:&#x2F;&#x2F;twill.ai&#x2F;\">https:&#x2F;&#x2F;twill.ai&#x2F;</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that both touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don&#x27;t scale past a couple of tasks.<p>2. Persistence: close your laptop and the agent stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous agent full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the agents to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same agent, each in their own thread. Then memory, so &quot;use the existing logger in lib&#x2F;log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own coding products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud agents on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their coding harness, Twill picks up the improvement automatically.<p>We’re also open-sourcing agentbox-sdk, <a href=\"https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk</a>, an SDK for running and interacting with agent CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel&#x27;s Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50&#x2F;month for 50 credits, with BYOK support on higher tiers. Free pro tier for open-source projects.<p>We’d love to hear how cloud coding agents fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing.",
           "title": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs",
-          "updated_at": "2026-04-11T02:16:22Z",
+          "updated_at": "2026-04-11T02:45:52Z",
           "url": "https://twill.ai"
         },
         {
@@ -782,6 +782,88 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "mrhyyyyde"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Leaked – publicly unavailable unstable preview model"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://unstable.<em>bot</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_mrhyyyyde",
+            "story_47725604"
+          ],
+          "author": "mrhyyyyde",
+          "children": [
+            47725605,
+            47726198,
+            47726211,
+            47726200,
+            47726190
+          ],
+          "created_at": "2026-04-11T00:15:10Z",
+          "created_at_i": 1775866510,
+          "num_comments": 3,
+          "objectID": "47725604",
+          "points": 14,
+          "story_id": 47725604,
+          "title": "Leaked – publicly unavailable unstable preview model",
+          "updated_at": "2026-04-11T02:43:53Z",
+          "url": "https://unstable.bot"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "aleph_one"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Cuttle is a combat card game of mysterious origins dating back to the 1970's. It feels like playing Magic or Yugioh!, but it's played with a standard 52-card deck.<p>https://cuttle.cards is an open source (code: https://github.com/cuttle-cards/cuttle) project that lets people play Cuttle online, for free.<p>The project is under active development and has a competitive format with 4 seasonal championships each year, followed by a world championship tournament. The Cuttle World Championship is tomorrow, April 11th, at 1pm ET. You can watch it live on Twitch (https://twitch.tv/cuttle_cards) or Youtube (https://www.youtube.com/live/mBj04alF1Z8?si=amIR5flmW7zewmL9) and chat with the players on the Cuttle discord (https://discord.gg/46RTv7S4Hg).<p>*RULES*\n### Goal<p>The goal is to be the first player to have 21 or more points worth of point cards on your field. The first player to reach the goal wins immediately. One player (traditionally the dealer) is dealt 6 cards, and their opponent is dealt 5. The player with 5 cards goes first.<p>### Play<p>On your turn you must perform exactly one of the following actions:<p>- *Draw:* Take one card from the Deck. You may not draw past the 8-card hand limit\n- *Points:* Play a number card from your hand. Worth its rank in points, lasts until scrapped\n- *Scuttle:* Scrap an opponent’s point card with a bigger one from your hand\n    - If two number cards have the same rank, the suit breaks the tie\n    - Suit order is (high) Spades ♠ &gt; Hearts ♥ &gt; Diamonds ♦&gt; Clubs ♣ (low)\n- *Royal:* Play a face card for a persistent benefit based on rank (lasts until scrapped)\n- *Glasses:* Play an Eight to reveal your opponent’s hand (lasts until scrapped)\n- *One-Off:* Scrap a number card for an effect based on the rank of the card.<p>## Royals<p>Royals (Kings, Queens, and Jacks) may be played to the field for a persistent benefit that remains in effect until the card is scrapped. Each Royal gives a different effect.<p>*King:* Reduce the number of points you need to win (21, 14, 10, 5, 0 points with 0, 1, 2, 3, 4 kings)<p>*Queen:* Protects your other cards from being targeted by the effects of other cards. This protects your cards against 2’s (<em>bot</em>h effects), 9’s, and Jacks, but not scuttling.<p>*Jack:* Play on an opponent’s point card to steal it. Point card returns to opponent if the jack is scrapped or if another jack is used to steal it back.<p>### One-Offs<p>Number cards (except 8’s and 10’s) can be played for a One-Off effect, which scraps the card for an effect based on the rank of the card played. Whenever a one-off is played, the other player may counter it using a two to cancel the effect.<p>- *Ace:* Scrap all point cards on the field\n- *Two:* Twos have two alternative one-off effects:\n    - Counter target One-Off Effect (Played immediately in response to a one-off)\n    - Scrap target Royal\n- *Three:* Choose a card in the scrap pile and put it in your hand\n- *Four:* Your opponent discards two cards of their choice\n- *Five:* Discard one card and then draw three cards\n- *Six:* Scrap all Royals and Glasses Eights on the field\n- *Seven:* Choose one of the top two cards from the deck and play it however you choose.\n- *Nine:* Return a card from your opponent’s field to their hand. They cannot play it next turn."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Open Source card game cuttle.cards has its world championship Saturday at 1pm ET"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_aleph_one",
+            "story_47723396",
+            "ask_hn"
+          ],
+          "author": "aleph_one",
+          "created_at": "2026-04-10T20:38:10Z",
+          "created_at_i": 1775853490,
+          "num_comments": 0,
+          "objectID": "47723396",
+          "points": 3,
+          "story_id": 47723396,
+          "story_text": "Cuttle is a combat card game of mysterious origins dating back to the 1970&#x27;s. It feels like playing Magic or Yugioh!, but it&#x27;s played with a standard 52-card deck.<p>https:&#x2F;&#x2F;cuttle.cards is an open source (code: https:&#x2F;&#x2F;github.com&#x2F;cuttle-cards&#x2F;cuttle) project that lets people play Cuttle online, for free.<p>The project is under active development and has a competitive format with 4 seasonal championships each year, followed by a world championship tournament. The Cuttle World Championship is tomorrow, April 11th, at 1pm ET. You can watch it live on Twitch (https:&#x2F;&#x2F;twitch.tv&#x2F;cuttle_cards) or Youtube (https:&#x2F;&#x2F;www.youtube.com&#x2F;live&#x2F;mBj04alF1Z8?si=amIR5flmW7zewmL9) and chat with the players on the Cuttle discord (https:&#x2F;&#x2F;discord.gg&#x2F;46RTv7S4Hg).<p>*RULES*\n### Goal<p>The goal is to be the first player to have 21 or more points worth of point cards on your field. The first player to reach the goal wins immediately. One player (traditionally the dealer) is dealt 6 cards, and their opponent is dealt 5. The player with 5 cards goes first.<p>### Play<p>On your turn you must perform exactly one of the following actions:<p>- *Draw:* Take one card from the Deck. You may not draw past the 8-card hand limit\n- *Points:* Play a number card from your hand. Worth its rank in points, lasts until scrapped\n- *Scuttle:* Scrap an opponent’s point card with a bigger one from your hand\n    - If two number cards have the same rank, the suit breaks the tie\n    - Suit order is (high) Spades ♠ &gt; Hearts ♥ &gt; Diamonds ♦&gt; Clubs ♣ (low)\n- *Royal:* Play a face card for a persistent benefit based on rank (lasts until scrapped)\n- *Glasses:* Play an Eight to reveal your opponent’s hand (lasts until scrapped)\n- *One-Off:* Scrap a number card for an effect based on the rank of the card.<p>## Royals<p>Royals (Kings, Queens, and Jacks) may be played to the field for a persistent benefit that remains in effect until the card is scrapped. Each Royal gives a different effect.<p>*King:* Reduce the number of points you need to win (21, 14, 10, 5, 0 points with 0, 1, 2, 3, 4 kings)<p>*Queen:* Protects your other cards from being targeted by the effects of other cards. This protects your cards against 2’s (both effects), 9’s, and Jacks, but not scuttling.<p>*Jack:* Play on an opponent’s point card to steal it. Point card returns to opponent if the jack is scrapped or if another jack is used to steal it back.<p>### One-Offs<p>Number cards (except 8’s and 10’s) can be played for a One-Off effect, which scraps the card for an effect based on the rank of the card played. Whenever a one-off is played, the other player may counter it using a two to cancel the effect.<p>- *Ace:* Scrap all point cards on the field\n- *Two:* Twos have two alternative one-off effects:\n    - Counter target One-Off Effect (Played immediately in response to a one-off)\n    - Scrap target Royal\n- *Three:* Choose a card in the scrap pile and put it in your hand\n- *Four:* Your opponent discards two cards of their choice\n- *Five:* Discard one card and then draw three cards\n- *Six:* Scrap all Royals and Glasses Eights on the field\n- *Seven:* Choose one of the top two cards from the deck and play it however you choose.\n- *Nine:* Return a card from your opponent’s field to their hand. They cannot play it next turn.",
+          "title": "Open Source card game cuttle.cards has its world championship Saturday at 1pm ET",
+          "updated_at": "2026-04-10T21:39:37Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "tzury"
             },
             "title": {
@@ -815,7 +897,7 @@
           "points": 13,
           "story_id": 47721771,
           "title": "1,200 years of peak cherry blossom dates in Kyoto",
-          "updated_at": "2026-04-11T01:39:52Z",
+          "updated_at": "2026-04-11T02:46:37Z",
           "url": "https://twitter.com/antea04/status/2042541639793627533"
         },
         {
@@ -823,119 +905,12 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "danoandco"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Hey HN, we're Willy and Dan, co-founders of Twill.ai (<a href=\"https://twill.ai/\">https://twill.ai/</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https://www.youtube.com/watch?v=oyfTMXVECbs\" rel=\"nofollow\">https://www.youtube.com/watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that <em>bot</em>h touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don't scale past a couple of tasks.<p>2. Persistence: close your laptop and the agent stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous agent full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the agents to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same agent, each in their own thread. Then memory, so &quot;use the existing logger in lib/log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own coding products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud agents on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their coding harness, Twill picks up the improvement automatically.<p>We’re also open-sourcing agentbox-sdk, <a href=\"https://github.com/TwillAI/agentbox-sdk\" rel=\"nofollow\">https://github.com/TwillAI/agentbox-sdk</a>, an SDK for running and interacting with agent CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel's Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50/month for 50 credits, with BYOK support on higher tiers. Free pro tier for open-source projects.<p>We’d love to hear how cloud coding agents fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing."
+              "value": "shardullavekar"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://twill.ai"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_danoandco",
-            "story_47720418",
-            "launch_hn",
-            "front_page"
-          ],
-          "author": "danoandco",
-          "children": [
-            47726513,
-            47721952,
-            47726441,
-            47722143,
-            47724685,
-            47722894,
-            47724790,
-            47721827,
-            47721911,
-            47723947,
-            47723053,
-            47723944,
-            47723506,
-            47722251,
-            47726505,
-            47724244,
-            47724470,
-            47723090,
-            47722489,
-            47722067
-          ],
-          "created_at": "2026-04-10T16:22:13Z",
-          "created_at_i": 1775838133,
-          "num_comments": 50,
-          "objectID": "47720418",
-          "points": 53,
-          "story_id": 47720418,
-          "story_text": "Hey HN, we&#x27;re Willy and Dan, co-founders of Twill.ai (<a href=\"https:&#x2F;&#x2F;twill.ai&#x2F;\">https:&#x2F;&#x2F;twill.ai&#x2F;</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that both touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don&#x27;t scale past a couple of tasks.<p>2. Persistence: close your laptop and the agent stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous agent full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the agents to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same agent, each in their own thread. Then memory, so &quot;use the existing logger in lib&#x2F;log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own coding products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud agents on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their coding harness, Twill picks up the improvement automatically.<p>We’re also open-sourcing agentbox-sdk, <a href=\"https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk</a>, an SDK for running and interacting with agent CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel&#x27;s Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50&#x2F;month for 50 credits, with BYOK support on higher tiers. Free pro tier for open-source projects.<p>We’d love to hear how cloud coding agents fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing.",
-          "title": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs",
-          "updated_at": "2026-04-11T02:16:22Z",
-          "url": "https://twill.ai"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "<em>kot</em>obuki"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Some LLM routers are injecting malicious tool calls"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://twitter.com/fried_rice/status/2042423713019412941"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kotobuki",
-            "story_47713401"
-          ],
-          "author": "kotobuki",
-          "children": [
-            47713483
-          ],
-          "created_at": "2026-04-10T03:50:42Z",
-          "created_at_i": 1775793042,
-          "num_comments": 1,
-          "objectID": "47713401",
-          "points": 5,
-          "story_id": 47713401,
-          "title": "Some LLM routers are injecting malicious tool calls",
-          "updated_at": "2026-04-10T07:13:20Z",
-          "url": "https://twitter.com/fried_rice/status/2042423713019412941"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "amichail"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Formalization of IUT: A Preliminary Progress Report  by Mochizuki et al. [pdf]"
+              "value": "Forcing an Inversion of Control on the SaaS Stack"
             },
             "url": {
               "fullyHighlighted": false,
@@ -943,71 +918,64 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "https://www.kurims.<em>kyot</em>o-u.ac.jp/~motizuki/Formalization%20of%20IUT%20(2026-04).pdf"
+              "value": "https://www.100x.<em>bot</em>/a/client-side-injection-inversion-of-control-saas"
             }
           },
           "_tags": [
             "story",
-            "author_amichail",
-            "story_47707139"
+            "author_shardullavekar",
+            "story_47720926"
           ],
-          "author": "amichail",
-          "created_at": "2026-04-09T18:02:34Z",
-          "created_at_i": 1775757754,
+          "author": "shardullavekar",
+          "created_at": "2026-04-10T17:01:26Z",
+          "created_at_i": 1775840486,
           "num_comments": 0,
-          "objectID": "47707139",
-          "points": 1,
-          "story_id": 47707139,
-          "title": "Formalization of IUT: A Preliminary Progress Report  by Mochizuki et al. [pdf]",
-          "updated_at": "2026-04-09T18:07:48Z",
-          "url": "https://www.kurims.kyoto-u.ac.jp/~motizuki/Formalization%20of%20IUT%20(2026-04).pdf"
+          "objectID": "47720926",
+          "points": 3,
+          "story_id": 47720926,
+          "title": "Forcing an Inversion of Control on the SaaS Stack",
+          "updated_at": "2026-04-10T17:05:23Z",
+          "url": "https://www.100x.bot/a/client-side-injection-inversion-of-control-saas"
         },
         {
           "_highlightResult": {
             "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "quantiota"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "A discrete structural grammar for financial markets – Kaggle competition"
+            },
+            "url": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "<em>kot</em>ysoft"
-            },
-            "story_text": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "I'm a solo dev who got tired of checking Google Analytics on mobile. The official app is fine for browsing reports, but you can't build your own dashboards with the metrics you actually care about. And personally I wasn't satisfied with Looker Studio dashboards on mobile and the existing Business Intelligence were too much for my siple needs.<p>So I built EasyDash — a native Android app that connects directly to your GA4 property and lets you create custom dashboards with drag-and-drop widgets. Charts, metric cards, data tables — you pick what you want to see.<p>Your data goes straight from your phone to Google's API. I never see it.<p>It's still early and I'd love to hear what you think — what would you want from a tool like this?"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: EasyDash for Google Analytics [Android][Wip]"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://easydash-analytics.com/reddit/"
+              "value": "https://www.kaggle.com/competitions/ska-crypto-trading-<em>bot</em>-with-binance"
             }
           },
           "_tags": [
             "story",
-            "author_kotysoft",
-            "story_47701893",
-            "show_hn"
+            "author_quantiota",
+            "story_47720598"
           ],
-          "author": "kotysoft",
+          "author": "quantiota",
           "children": [
-            47701903
+            47720599
           ],
-          "created_at": "2026-04-09T10:42:33Z",
-          "created_at_i": 1775731353,
-          "num_comments": 1,
-          "objectID": "47701893",
+          "created_at": "2026-04-10T16:35:54Z",
+          "created_at_i": 1775838954,
+          "num_comments": 0,
+          "objectID": "47720598",
           "points": 1,
-          "story_id": 47701893,
-          "story_text": "I&#x27;m a solo dev who got tired of checking Google Analytics on mobile. The official app is fine for browsing reports, but you can&#x27;t build your own dashboards with the metrics you actually care about. And personally I wasn&#x27;t satisfied with Looker Studio dashboards on mobile and the existing Business Intelligence were too much for my siple needs.<p>So I built EasyDash — a native Android app that connects directly to your GA4 property and lets you create custom dashboards with drag-and-drop widgets. Charts, metric cards, data tables — you pick what you want to see.<p>Your data goes straight from your phone to Google&#x27;s API. I never see it.<p>It&#x27;s still early and I&#x27;d love to hear what you think — what would you want from a tool like this?",
-          "title": "Show HN: EasyDash for Google Analytics [Android][Wip]",
-          "updated_at": "2026-04-09T10:47:46Z",
-          "url": "https://easydash-analytics.com/reddit/"
+          "story_id": 47720598,
+          "title": "A discrete structural grammar for financial markets – Kaggle competition",
+          "updated_at": "2026-04-10T16:36:39Z",
+          "url": "https://www.kaggle.com/competitions/ska-crypto-trading-bot-with-binance"
         }
       ]
     },
