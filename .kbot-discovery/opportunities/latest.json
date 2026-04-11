@@ -1,28 +1,7 @@
 {
-  "timestamp": "2026-04-11T00:47:10.908Z",
-  "count": 15,
+  "timestamp": "2026-04-11T00:47:12.516Z",
+  "count": 12,
   "opportunities": [
-    {
-      "source": "github-issue",
-      "title": "Make plugin descriptions in marketplace.json more user-friendly",
-      "url": "https://github.com/2389-research/claude-plugins/issues/29",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Amp Agent Plugin",
-      "url": "https://github.com/ComposioHQ/agent-orchestrator/issues/1016",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Enhance observability & DevSecOps stack with Splunk and OTEL",
-      "url": "https://github.com/hoangsonww/AI-Gov-Content-Curator/pull/117",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
     {
       "source": "github-issue",
       "title": "Update repo table",
