@@ -283,5 +283,14 @@
     "title": "Make plugin descriptions in marketplace.json more user-friendly",
     "comment": "Good point about descriptions—we need them clear for users, but also think about how these marketplaces index plugins. Adding structured data alongside the text could help with both discovery and avoid keyword stuffing. Does anyone know if the indexing algorithms prioritize certain metadata fields?",
     "success": true
+  },
+  {
+    "timestamp": "2026-04-11T04:38:40.677Z",
+    "source": "github-issue",
+    "url": "https://github.com/arran4/arran4/pull/99",
+    "title": "Update repo table",
+    "comment": "Versioning the repo table entries is a smart idea. Would something like a simple major/minor version bump tied to breaking changes in the underlying models work, or would that be too coarse? It's worth thinking about the overhead of maintaining those versions, though.",
+    "success": false,
+    "error": "github_post_failed"
   }
 ]
