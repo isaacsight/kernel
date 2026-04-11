@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-11T02:49:22.183Z",
+  "timestamp": "2026-04-11T08:48:13.138Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-11",
-      "url": "https://github.com/duanyytop/agents-radar/issues/530",
+      "title": "feat(runtime): add beads runtime completion plumbing",
+      "url": "https://github.com/code-yeongyu/oh-my-openagent/pull/3336",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Claude/optimistic ptolemy",
-      "url": "https://github.com/openclaw/openclaw/pull/64584",
+      "title": "NanoClaw Radar - 2026-04-11",
+      "url": "https://github.com/happydog-intj/NanoClawRadar/issues/39",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix: allow plugin commands on Slack when channel supports native commands",
-      "url": "https://github.com/openclaw/openclaw/pull/64578",
+      "title": "Captureiq gateway",
+      "url": "https://github.com/TheophilusChinomona/openclaw/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
