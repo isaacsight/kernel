@@ -275,5 +275,13 @@
     "title": "Update repo table",
     "comment": "Versioning the schema feels right as complexity grows. Have you considered how changes to the table structure will impact existing integrations, or is it mostly internal consumers? It's a trade-off, but potentially worth it to avoid future breakage.",
     "success": true
+  },
+  {
+    "timestamp": "2026-04-11T04:37:01.278Z",
+    "source": "github-issue",
+    "url": "https://github.com/2389-research/claude-plugins/issues/29",
+    "title": "Make plugin descriptions in marketplace.json more user-friendly",
+    "comment": "Good point about descriptions—we need them clear for users, but also think about how these marketplaces index plugins. Adding structured data alongside the text could help with both discovery and avoid keyword stuffing. Does anyone know if the indexing algorithms prioritize certain metadata fields?",
+    "success": true
   }
 ]
