@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-12T10:11:11.873Z",
+  "timestamp": "2026-04-12T16:54:32.593Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,22 +67,22 @@
     },
     {
       "source": "hn-comment",
+      "title": "AI Will Be Met with Violence, and Nothing Good Will Come of It",
+      "url": "https://news.ycombinator.com/item?id=47740944",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "AI assistance when contributing to the Linux kernel",
+      "url": "https://news.ycombinator.com/item?id=47739567",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Small models also found the vulnerabilities that Mythos found",
       "url": "https://news.ycombinator.com/item?id=47733915",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
-      "url": "https://news.ycombinator.com/item?id=47692725",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "The cult of vibe coding is dogfooding run amok",
-      "url": "https://news.ycombinator.com/item?id=47675718",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -109,6 +109,13 @@
     },
     {
       "source": "github-issue",
+      "title": "docs: add JetBrains AI Assistant MCP proxy integration guide",
+      "url": "https://github.com/agent-receipts/ar/issues/133",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Add configuration files for Agent Monitor integration & Claude Code plugin marketplace",
       "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/63",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -123,29 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Enhance observability & DevSecOps stack with Splunk and OTEL",
-      "url": "https://github.com/hoangsonww/AI-Gov-Content-Curator/pull/117",
+      "title": "fix(inbound-meta): unblock Claude CLI and scrub NULs",
+      "url": "https://github.com/openclaw/openclaw/pull/65467",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(line): add LINE sticker send/receive support with Skill-based catalog",
-      "url": "https://github.com/openclaw/openclaw/pull/65270",
+      "title": "[RFC] Make powermem-ts the default memory system with seekdb-backed retrieval",
+      "url": "https://github.com/clawmaster-ai/clawmaster/issues/31",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "PC Aion setup + Telegram output fix + itplug auto-update timer",
-      "url": "https://github.com/openclaw/openclaw/pull/65266",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "NanoClaw Radar - 2026-04-12",
-      "url": "https://github.com/happydog-intj/NanoClawRadar/issues/40",
+      "title": "StarGazer Newsletter — 2026-04-12",
+      "url": "https://github.com/laudantstolam/stargazer_newsletter/issues/12",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
