@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-04-12T05:00:43.949Z",
+  "timestamp": "2026-04-12T05:35:46.466Z",
   "projects": [
+    {
+      "name": "lucasygu/redbook",
+      "url": "https://github.com/lucasygu/redbook",
+      "stars": 228,
+      "description": "小红书 CLI — 搜索、分析、自动化 Xiaohongshu content. Built for AI agents."
+    },
+    {
+      "name": "claude-world/claude-world-studio",
+      "url": "https://github.com/claude-world/claude-world-studio",
+      "stars": 57,
+      "description": "AI-powered content pipeline: trend discovery → research → social publishing. Built with Claude Agent SDK + MCP."
+    },
     {
       "name": "iOfficeAI/AionUi",
       "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 21541,
+      "stars": 21542,
       "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
-    },
-    {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1062,
-      "description": "the easiest way to run natural language-described workflows automatically"
-    },
-    {
-      "name": "sonichi/sutando",
-      "url": "https://github.com/sonichi/sutando",
-      "stars": 113,
-      "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
     },
     {
       "name": "detroittommy879/aicodeprep-gui",
@@ -38,6 +38,12 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
+      "name": "colygon/openclaw-nebius",
+      "url": "https://github.com/colygon/openclaw-nebius",
+      "stars": 0,
+      "description": "OpenClaw + Nebius: provider plugin, deployment UI, and Claude Code skill"
+    },
+    {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
       "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
@@ -48,12 +54,6 @@
       "url": "https://github.com/ericmey/openclaw-skills",
       "stars": 0,
       "description": "OpenClaw skill plugins — ComfyUI rendering, Immich search, academy bridge, and image evaluation"
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     }
   ],
   "latestPaper": {
