@@ -1,47 +1,47 @@
 {
-  "timestamp": "2026-04-12T05:59:23.921Z",
+  "timestamp": "2026-04-12T18:12:05.386Z",
   "projects": [
     {
-      "name": "joshuaswarren/remnic",
-      "url": "https://github.com/joshuaswarren/remnic",
-      "stars": 54,
-      "description": "Local-first memory plugin for OpenClaw AI agents. LLM-powered extraction, plain markdown storage, hybrid search via QMD. Gives agents persistent long-term memory across conversations."
+      "name": "gorango/flowcraft",
+      "url": "https://github.com/gorango/flowcraft",
+      "stars": 171,
+      "description": "A lightweight workflow engine"
     },
     {
-      "name": "CherryHQ/cherry-studio",
-      "url": "https://github.com/CherryHQ/cherry-studio",
-      "stars": 43330,
-      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+      "name": "rcarmo/piclaw",
+      "url": "https://github.com/rcarmo/piclaw",
+      "stars": 482,
+      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
     },
     {
-      "name": "sonichi/sutando",
-      "url": "https://github.com/sonichi/sutando",
-      "stars": 113,
-      "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
+      "name": "activepieces/activepieces",
+      "url": "https://github.com/activepieces/activepieces",
+      "stars": 21681,
+      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
+    },
+    {
+      "name": "Ar9av/obsidian-wiki",
+      "url": "https://github.com/Ar9av/obsidian-wiki",
+      "stars": 314,
+      "description": "Framework for AI agents to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern"
     },
     {
       "name": "mensfeld/code-on-incus",
       "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 381,
+      "stars": 384,
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "detroittommy879/aicodeprep-gui",
-      "url": "https://github.com/detroittommy879/aicodeprep-gui",
-      "stars": 271,
-      "description": "Surgical context engineering with a nice UI, Windows, Mac, Linux, BSD, anywhere where python & Qt run"
+      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
+      "stars": 205,
+      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
     },
     {
-      "name": "Haervwe/open-webui-tools",
-      "url": "https://github.com/Haervwe/open-webui-tools",
-      "stars": 655,
-      "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
-    },
-    {
-      "name": "colygon/openclaw-nebius",
-      "url": "https://github.com/colygon/openclaw-nebius",
+      "name": "nj070574-gif/openclaw-obsidian-vault-skill",
+      "url": "https://github.com/nj070574-gif/openclaw-obsidian-vault-skill",
       "stars": 0,
-      "description": "OpenClaw + Nebius: provider plugin, deployment UI, and Claude Code skill"
+      "description": "💎 OpenClaw skill — full Obsidian vault control via the Local REST API plugin. Read, write, search, append and manage notes from any AI agent. No macOS-only CLI required."
     },
     {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
@@ -50,10 +50,10 @@
       "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
     },
     {
-      "name": "ericmey/openclaw-skills",
-      "url": "https://github.com/ericmey/openclaw-skills",
+      "name": "wikiclaw-org/wikiclaw",
+      "url": "https://github.com/wikiclaw-org/wikiclaw",
       "stars": 0,
-      "description": "OpenClaw skill plugins — ComfyUI rendering, Immich search, academy bridge, and image evaluation"
+      "description": "The free encyclopedia for the OpenClaw AI agent ecosystem. Browse 199+ agents, 5,400+ skills, plugins, and integrations."
     }
   ],
   "latestPaper": {
