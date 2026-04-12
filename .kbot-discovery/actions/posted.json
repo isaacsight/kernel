@@ -292,5 +292,14 @@
     "comment": "Versioning the repo table entries is a smart idea. Would something like a simple major/minor version bump tied to breaking changes in the underlying models work, or would that be too coarse? It's worth thinking about the overhead of maintaining those versions, though.",
     "success": false,
     "error": "github_post_failed"
+  },
+  {
+    "timestamp": "2026-04-12T18:30:21.845Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47155785",
+    "title": "SysNav – An Intelligent Cockpit for DevOps (Local-First)",
+    "comment": "Task complexity is the real bottleneck when routing LLM calls—simple cost-based switching just doesn’t cut it. The local-first approach makes sense for interactive workflows; latency kills usability. Have you experimented with different cognitive load estimation techniques beyond just step counts?",
+    "success": false,
+    "error": "hn_post_failed"
   }
 ]
