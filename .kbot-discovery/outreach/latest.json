@@ -1,23 +1,29 @@
 {
-  "timestamp": "2026-04-12T05:43:21.584Z",
+  "timestamp": "2026-04-12T05:59:23.921Z",
   "projects": [
     {
-      "name": "lucasygu/redbook",
-      "url": "https://github.com/lucasygu/redbook",
-      "stars": 228,
-      "description": "小红书 CLI — 搜索、分析、自动化 Xiaohongshu content. Built for AI agents."
+      "name": "joshuaswarren/remnic",
+      "url": "https://github.com/joshuaswarren/remnic",
+      "stars": 54,
+      "description": "Local-first memory plugin for OpenClaw AI agents. LLM-powered extraction, plain markdown storage, hybrid search via QMD. Gives agents persistent long-term memory across conversations."
     },
     {
-      "name": "claude-world/claude-world-studio",
-      "url": "https://github.com/claude-world/claude-world-studio",
-      "stars": 57,
-      "description": "AI-powered content pipeline: trend discovery → research → social publishing. Built with Claude Agent SDK + MCP."
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 43330,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
     },
     {
-      "name": "iOfficeAI/AionUi",
-      "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 21542,
-      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+      "name": "sonichi/sutando",
+      "url": "https://github.com/sonichi/sutando",
+      "stars": 113,
+      "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
+    },
+    {
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 381,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
       "name": "detroittommy879/aicodeprep-gui",
@@ -30,12 +36,6 @@
       "url": "https://github.com/Haervwe/open-webui-tools",
       "stars": 655,
       "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
-    },
-    {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 380,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
       "name": "colygon/openclaw-nebius",
