@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-12T00:46:13.841Z",
+  "timestamp": "2026-04-12T01:03:08.720Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -973,7 +973,7 @@
           "points": 91,
           "story_id": 47731707,
           "title": "Rockstar Games Hacked, Hackers Threaten a Massive Data Leak If Not Paid Ransom",
-          "updated_at": "2026-04-12T00:45:57Z",
+          "updated_at": "2026-04-12T00:59:27Z",
           "url": "https://kotaku.com/rockstar-games-reportedly-hacked-massive-data-leak-ransom-gta-6-shinyhunters-2000686858"
         },
         {
@@ -1605,10 +1605,10 @@
           "created_at_i": 1775433550,
           "num_comments": 28,
           "objectID": "47655268",
-          "points": 101,
+          "points": 102,
           "story_id": 47655268,
           "title": "Show HN: Modo – I built an open-source alternative to Kiro, Cursor, and Windsurf",
-          "updated_at": "2026-04-11T22:14:11Z",
+          "updated_at": "2026-04-12T00:52:56Z",
           "url": "https://github.com/mohshomis/modo"
         },
         {
