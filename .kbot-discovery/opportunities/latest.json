@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-12T00:29:57.202Z",
+  "timestamp": "2026-04-12T00:46:17.753Z",
   "count": 30,
   "opportunities": [
     {
@@ -131,6 +131,13 @@
     {
       "source": "github-issue",
       "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
+      "url": "https://github.com/duanyytop/agents-radar/issues/544",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
       "url": "https://github.com/DenisZheng/agents-radar/issues/341",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
       "url": "https://github.com/jstamagal/agents-radar/issues/273",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Integration/upstream sync 2026 04 11",
-      "url": "https://github.com/NVIDIA/NemoClaw/pull/1792",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
