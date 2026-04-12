@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-12T18:12:22.923Z",
+  "timestamp": "2026-04-12T18:57:02.492Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "False positive: rewind-memory flagged as Suspicious by VirusTotal",
+      "url": "https://github.com/openclaw/clawhub/issues/1641",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "CLI: detect env-backed audio providers",
       "url": "https://github.com/openclaw/openclaw/pull/65491",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "session: add maxAgeHours, maxContextTokens, createdAt controls",
       "url": "https://github.com/rhinoroo/openclaw/pull/1",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Fix OpenClaw plugin integration issues",
-      "url": "https://github.com/fajarhide/omni/pull/58",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },

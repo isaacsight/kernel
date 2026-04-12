@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-04-12T18:30:24.063Z",
+  "timestamp": "2026-04-12T18:44:08.459Z",
   "projects": [
     {
-      "name": "rcarmo/piclaw",
-      "url": "https://github.com/rcarmo/piclaw",
-      "stars": 482,
-      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
+      "name": "sonichi/sutando",
+      "url": "https://github.com/sonichi/sutando",
+      "stars": 114,
+      "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
     },
     {
       "name": "gorango/flowcraft",
@@ -14,10 +14,10 @@
       "description": "A lightweight workflow engine"
     },
     {
-      "name": "activepieces/activepieces",
-      "url": "https://github.com/activepieces/activepieces",
-      "stars": 21681,
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
+      "name": "BlockRunAI/Franklin",
+      "url": "https://github.com/BlockRunAI/Franklin",
+      "stars": 279,
+      "description": "Franklin — The AI agent with a wallet. The first AI agent that can actually spend USDC to get real work done. Pay per action, no subscriptions."
     },
     {
       "name": "Ar9av/obsidian-wiki",
