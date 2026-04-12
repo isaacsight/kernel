@@ -1,17 +1,17 @@
 {
-  "timestamp": "2026-04-12T18:12:05.386Z",
+  "timestamp": "2026-04-12T18:30:24.063Z",
   "projects": [
-    {
-      "name": "gorango/flowcraft",
-      "url": "https://github.com/gorango/flowcraft",
-      "stars": 171,
-      "description": "A lightweight workflow engine"
-    },
     {
       "name": "rcarmo/piclaw",
       "url": "https://github.com/rcarmo/piclaw",
       "stars": 482,
       "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
+    },
+    {
+      "name": "gorango/flowcraft",
+      "url": "https://github.com/gorango/flowcraft",
+      "stars": 171,
+      "description": "A lightweight workflow engine"
     },
     {
       "name": "activepieces/activepieces",
@@ -38,22 +38,22 @@
       "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
     },
     {
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "stars": 0,
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+    },
+    {
+      "name": "orbio-api/orbio-openclaw",
+      "url": "https://github.com/orbio-api/orbio-openclaw",
+      "stars": 0,
+      "description": "Official Orbio plugin + skill for OpenClaw to discover Brazilian B2B accounts and export pipeline-ready lists in chat."
+    },
+    {
       "name": "nj070574-gif/openclaw-obsidian-vault-skill",
       "url": "https://github.com/nj070574-gif/openclaw-obsidian-vault-skill",
       "stars": 0,
       "description": "💎 OpenClaw skill — full Obsidian vault control via the Local REST API plugin. Read, write, search, append and manage notes from any AI agent. No macOS-only CLI required."
-    },
-    {
-      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
-      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
-      "stars": 0,
-      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
-    },
-    {
-      "name": "wikiclaw-org/wikiclaw",
-      "url": "https://github.com/wikiclaw-org/wikiclaw",
-      "stars": 0,
-      "description": "The free encyclopedia for the OpenClaw AI agent ecosystem. Browse 199+ agents, 5,400+ skills, plugins, and integrations."
     }
   ],
   "latestPaper": {
