@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-12T17:37:50.846Z",
-  "count": 27,
+  "timestamp": "2026-04-12T18:11:58.457Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -88,6 +88,27 @@
     },
     {
       "source": "github-issue",
+      "title": "feat: AutoGen PolicyEnforcingAgent — compliance wrapper for AutoGen conversations",
+      "url": "https://github.com/ashutoshrana/regulated-ai-governance/issues/6",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Backend extraction pipeline is painfully slow — need architectural overhaul",
+      "url": "https://github.com/TINKPA/receipt-assistant/issues/6",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "[Epic] Push test coverage to ≥95% across all components",
+      "url": "https://github.com/Agent-Field/agentfield/issues/387",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "docs: add JetBrains AI Assistant MCP proxy integration guide",
       "url": "https://github.com/agent-receipts/ar/issues/133",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -109,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(update-cli): respawn plugin refresh after self-update",
-      "url": "https://github.com/openclaw/openclaw/pull/65471",
+      "title": "CLI: detect env-backed audio providers",
+      "url": "https://github.com/openclaw/openclaw/pull/65491",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(inbound-meta): unblock Claude CLI and scrub NULs",
-      "url": "https://github.com/openclaw/openclaw/pull/65467",
+      "title": "session: add maxAgeHours, maxContextTokens, createdAt controls",
+      "url": "https://github.com/rhinoroo/openclaw/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "[RFC] Make powermem-ts the default memory system with seekdb-backed retrieval",
-      "url": "https://github.com/clawmaster-ai/clawmaster/issues/31",
+      "title": "Fix OpenClaw plugin integration issues",
+      "url": "https://github.com/fajarhide/omni/pull/58",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
