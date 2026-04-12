@@ -1,28 +1,34 @@
 {
-  "timestamp": "2026-04-12T01:03:28.621Z",
+  "timestamp": "2026-04-12T04:07:11.938Z",
   "projects": [
     {
-      "name": "Bitterbot-AI/bitterbot-desktop",
-      "url": "https://github.com/Bitterbot-AI/bitterbot-desktop",
-      "stars": 159,
-      "description": "A local-first AI agent with persistent memory, emotional intelligence, and a peer-to-peer skills economy."
+      "name": "YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill",
+      "url": "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill",
+      "stars": 1413,
+      "description": "AI skill for OpenClaw & Claude Code — recommend from 10000+ Nano Banana Pro (Gemini) image prompts. Smart search by use case, content remix, sample images."
     },
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1062,
-      "description": "the easiest way to run natural language-described workflows automatically"
+      "name": "sonichi/sutando",
+      "url": "https://github.com/sonichi/sutando",
+      "stars": 112,
+      "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
     },
     {
-      "name": "joshuaswarren/remnic",
-      "url": "https://github.com/joshuaswarren/remnic",
-      "stars": 54,
-      "description": "Local-first memory plugin for OpenClaw AI agents. LLM-powered extraction, plain markdown storage, hybrid search via QMD. Gives agents persistent long-term memory across conversations."
+      "name": "BlockRunAI/Franklin",
+      "url": "https://github.com/BlockRunAI/Franklin",
+      "stars": 278,
+      "description": "Franklin — The AI agent with a wallet. The first AI agent that can actually spend USDC to get real work done. Pay per action, no subscriptions."
+    },
+    {
+      "name": "detroittommy879/aicodeprep-gui",
+      "url": "https://github.com/detroittommy879/aicodeprep-gui",
+      "stars": 271,
+      "description": "Surgical context engineering with a nice UI, Windows, Mac, Linux, BSD, anywhere where python & Qt run"
     },
     {
       "name": "Haervwe/open-webui-tools",
       "url": "https://github.com/Haervwe/open-webui-tools",
-      "stars": 654,
+      "stars": 655,
       "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
     },
     {
@@ -32,28 +38,22 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "Ar9av/obsidian-wiki",
-      "url": "https://github.com/Ar9av/obsidian-wiki",
-      "stars": 299,
-      "description": "Framework for AI agents to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern"
+      "name": "ericmey/openclaw-skills",
+      "url": "https://github.com/ericmey/openclaw-skills",
+      "stars": 0,
+      "description": "OpenClaw skill plugins — ComfyUI rendering, Immich search, academy bridge, and image evaluation"
     },
     {
-      "name": "Galliard7/anchors",
-      "url": "https://github.com/Galliard7/anchors",
+      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
+      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
-      "description": "Persistent daily goals skill for OpenClaw — checkmarks reset at midnight, items never auto-remove, dispatched via the jot-dispatch plugin"
+      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     },
     {
-      "name": "Galliard7/jot",
-      "url": "https://github.com/Galliard7/jot",
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
       "stars": 0,
-      "description": "Ad-hoc quick list skill for OpenClaw — active view + 7-day archive, dispatched deterministically via the jot-dispatch plugin"
-    },
-    {
-      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
-      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
-      "stars": 0,
-      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     }
   ],
   "latestPaper": {
