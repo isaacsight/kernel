@@ -1,8 +1,12 @@
 {
-  "timestamp": "2026-04-12T16:54:22.383Z",
+  "timestamp": "2026-04-12T17:29:31.805Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
+      "hits": []
+    },
+    {
+      "query": "open+source+coding+agent",
       "hits": [
         {
           "_highlightResult": {
@@ -13,18 +17,22 @@
             },
             "story_text": {
               "fullyHighlighted": false,
-              "matchLevel": "full",
+              "matchLevel": "partial",
               "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
+                "coding",
+                "agent"
               ],
-              "value": "I built a tool to run multiple <em>AI</em> coding <em>agents</em> in parallel across projects.<p>NeZha is a character from Chinese mythology, famous for having three heads and six arms — which feels like the perfect metaphor for running <em>AI</em> coding <em>agents</em> across multiple projects at once.<p>Claude Code + Codex + Git + Editor, all in one place.<p>Managing sessions in the <em>terminal</em> was getting painful — especially across projects."
+              "value": "I built a tool to run multiple AI <em>coding</em> <em>agent</em>s in parallel across projects.<p>NeZha is a character from Chinese mythology, famous for having three heads and six arms — which feels like the perfect metaphor for running AI <em>coding</em> <em>agent</em>s across multiple projects at once.<p>Claude Code + Codex + Git + Editor, all in one place.<p>Managing sessions in the terminal was getting painful — especially across projects."
             },
             "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: NeZha – An Open-Source Agentic Development Environment (ADE)"
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "open",
+                "source",
+                "agent"
+              ],
+              "value": "Show HN: NeZha – An <em>Open</em>-<em>Source</em> <em>Agent</em>ic Development Environment (ADE)"
             },
             "url": {
               "matchLevel": "none",
@@ -55,194 +63,242 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "vab97"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai",
-                "terminal"
-              ],
-              "value": "I built skillstui, a <em>terminal</em> UI for search and installing skills from skills.sh into your <em>AI</em> coding agents.<p>skillstui solves this:\n- Search the skills.sh catalog from the <em>terminal</em>\n- Select the skills you want\n- Choose the agents you want\n- Press Ctrl+G — it runs `npx skills add` for each skill across whichever agents you use\n- or Ctrl+Y to copy the install command to your clipboard<p>It supports 30+ agents including Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Cline, OpenHands, Goose, and more.<p>try it out: npx skillstui<p>Built with Bun + ink (imperative <em>terminal</em> renderer, no React).<p><a href=\"https://skillstui.sh/\" rel=\"nofollow\">https://skillstui.sh/</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent"
-              ],
-              "value": "Show HN: I build skillstui – TUI to search-install <em>agent</em> skills from skills.sh"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://skillstui.sh"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_vab97",
-            "story_47717687",
-            "show_hn"
-          ],
-          "author": "vab97",
-          "created_at": "2026-04-10T13:15:51Z",
-          "created_at_i": 1775826951,
-          "num_comments": 0,
-          "objectID": "47717687",
-          "points": 2,
-          "story_id": 47717687,
-          "story_text": "I built skillstui, a terminal UI for search and installing skills from skills.sh into your AI coding agents.<p>skillstui solves this:\n- Search the skills.sh catalog from the terminal\n- Select the skills you want\n- Choose the agents you want\n- Press Ctrl+G — it runs `npx skills add` for each skill across whichever agents you use\n- or Ctrl+Y to copy the install command to your clipboard<p>It supports 30+ agents including Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Cline, OpenHands, Goose, and more.<p>try it out: npx skillstui<p>Built with Bun + ink (imperative terminal renderer, no React).<p><a href=\"https:&#x2F;&#x2F;skillstui.sh&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;skillstui.sh&#x2F;</a>",
-          "title": "Show HN: I build skillstui – TUI to search-install agent skills from skills.sh",
-          "updated_at": "2026-04-10T13:29:20Z",
-          "url": "https://skillstui.sh"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "chtefi"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "Stream your <em>terminal</em>. Watch <em>AI</em> <em>agents</em> work. Like Twitch, for shells"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "terminal"
-              ],
-              "value": "https://github.com/sderosiaux/twitch-<em>terminal</em>"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_chtefi",
-            "story_47711942"
-          ],
-          "author": "chtefi",
-          "created_at": "2026-04-10T00:07:59Z",
-          "created_at_i": 1775779679,
-          "num_comments": 0,
-          "objectID": "47711942",
-          "points": 3,
-          "story_id": 47711942,
-          "title": "Stream your terminal. Watch AI agents work. Like Twitch, for shells",
-          "updated_at": "2026-04-10T02:50:49Z",
-          "url": "https://github.com/sderosiaux/twitch-terminal"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "amoriodi"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai",
-                "agent"
-              ],
-              "value": "My path over the last year or so:<p><pre><code>  Cursor → Windsurf → VSCode + Claude → Warp → cmux → nvim + Claude Code\n </code></pre>\nShort version of what didn't stick:<p>- Cursor: felt like a worse VSCode with <em>AI</em> bolted on<p>- Windsurf: laggy enough to break flow<p>- VSCode + Claude extension: actually the best of the bunch for\n  a while, but started feeling like overkill once I realized\n  90% of what I used was the editor + chat sidebar<p>- Warp: opinionated block UI and telemetry never sat right<p>- cmux: lags unbearably, and I ended up babysitting parallel\n  <em>agents</em> more than coding<p>Dropped all the way down to nvim with Claude Code as a sidebar and that's been the stickiest by a wide margin. Feels closer to pair programming than to orchestration or autocomplete.<p>Current stack:<p>- Ghostty (native splits, no multiplexer) + moonfly theme<p>- zsh + Starship, zoxide/eza/bat/fd/rg, fzf history<p>- Neovim on kickstart.nvim with lualine, neo-tree, telescope<p>- Claude Code as an nvim sidebar, via subscription (not API)<p>Dotfiles: https://github.com/Doldrums/dotfiles<p>Questions:<p>1. Anyone else went through the carousel and came back to a plain editor? Or did one of them actually stick?<p>2. Sidebar chat vs inline Cursor-style vs ghost autocomplete which mode of <em>AI</em> actually helps you ship?<p>3. For people still on VSCode + Claude extension, am I missing something by dropping to nvim, or is it really just taste?<p>4. Anything I haven't tried that I should? Helix, Zed, Aider, Continue, I keep seeing these mentioned but haven't made the jump.<p>What did you try that didn't stick?"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai",
-                "terminal"
-              ],
-              "value": "Ask HN: Anyone else went through the <em>AI</em>-editor carousel back to the <em>terminal</em>?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_amoriodi",
-            "story_47709343",
-            "ask_hn"
-          ],
-          "author": "amoriodi",
-          "children": [
-            47712490
-          ],
-          "created_at": "2026-04-09T20:23:06Z",
-          "created_at_i": 1775766186,
-          "num_comments": 1,
-          "objectID": "47709343",
-          "points": 3,
-          "story_id": 47709343,
-          "story_text": "My path over the last year or so:<p><pre><code>  Cursor → Windsurf → VSCode + Claude → Warp → cmux → nvim + Claude Code\n </code></pre>\nShort version of what didn&#x27;t stick:<p>- Cursor: felt like a worse VSCode with AI bolted on<p>- Windsurf: laggy enough to break flow<p>- VSCode + Claude extension: actually the best of the bunch for\n  a while, but started feeling like overkill once I realized\n  90% of what I used was the editor + chat sidebar<p>- Warp: opinionated block UI and telemetry never sat right<p>- cmux: lags unbearably, and I ended up babysitting parallel\n  agents more than coding<p>Dropped all the way down to nvim with Claude Code as a sidebar and that&#x27;s been the stickiest by a wide margin. Feels closer to pair programming than to orchestration or autocomplete.<p>Current stack:<p>- Ghostty (native splits, no multiplexer) + moonfly theme<p>- zsh + Starship, zoxide&#x2F;eza&#x2F;bat&#x2F;fd&#x2F;rg, fzf history<p>- Neovim on kickstart.nvim with lualine, neo-tree, telescope<p>- Claude Code as an nvim sidebar, via subscription (not API)<p>Dotfiles: https:&#x2F;&#x2F;github.com&#x2F;Doldrums&#x2F;dotfiles<p>Questions:<p>1. Anyone else went through the carousel and came back to a plain editor? Or did one of them actually stick?<p>2. Sidebar chat vs inline Cursor-style vs ghost autocomplete which mode of AI actually helps you ship?<p>3. For people still on VSCode + Claude extension, am I missing something by dropping to nvim, or is it really just taste?<p>4. Anything I haven&#x27;t tried that I should? Helix, Zed, Aider, Continue, I keep seeing these mentioned but haven&#x27;t made the jump.<p>What did you try that didn&#x27;t stick?",
-          "title": "Ask HN: Anyone else went through the AI-editor carousel back to the terminal?",
-          "updated_at": "2026-04-10T01:32:04Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "mrxdev"
+              "value": "Contrails"
             },
             "story_text": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
+                "open",
+                "source",
+                "coding",
+                "agent"
               ],
-              "value": "For anyone using Obsidian, thought I'd share an Open Source plugin that I built to really streamline my workflow, and so far it has worked very well for me:<p><a href=\"https://github.com/spencermarx/obsidian-ai\" rel=\"nofollow\">https://github.com/spencermarx/obsidian-<em>ai</em></a><p>Yes, I'm the creator of this, so take all this with a grain of salt.<p>The plugin essentially allows you to run your <em>AI</em> <em>Agent</em> CLI of choice within the Obsidian UI. It detects whatever agentic CLIs you have available on your machine, gives you the ability to pick which one you want to work with, and wraps this up in a pretty standard little UI chat sidebar with all the standard <em>AI</em> chat features (pulls in your slash commands, your Vault's tags, as well as file references and allows for image drag-n-drop). Pretty straightforward, just rigged up to launch inside your Obsidian UI.<p>For me, it's been super convenient to have Claude Code available directly in Obsidian as it saves me from having to switch between the vault UI and a <em>terminal</em>/IDE for running Claude Code against the same vault files. This might not make a big difference to some people, but for me the context switching savings and ease of use have paid off.<p>The plugin is still awaiting approval to move into the Community Plugins directory, but in the meantime, the repo walks you through how to get set up on your own.<p>And of course, all of this is Open Source, FREE (no catches), and for the benefit of the builder community.<p>Would love feedback on this (good, bad, ugly) for those of you interested on trying it out! And if you do find it valuable, would appreciate a share/github star to increase visibility and accelerate feedback/refinement.<p>Thanks and happy building!"
+              "value": "## Description\nI made an app that watches <em>coding</em> <em>agents</em> sessions, and saves them to your repo as markdown\nSo that you can reference one chat in another chat, share what you and the <em>agent</em> did (e.g., when contributing to a project), or keeping full trails of what was worked on.<p>GitHub (stars appreciated): <a href=\"https://github.com/ThreePalmTrees/Contrails\" rel=\"nofollow\">https://github.com/ThreePalmTrees/Contrails</a>\nWebsite: <a href=\"https://getcontrails.com\" rel=\"nofollow\">https://getcontrails.com</a><p>## Backstory\nI was fixing a bug, and the <em>agent</em> did some changes, then it discovered that it’s the wrong approach, and corrected the approach.\nI wanted to save what happened so that I can reference it later\nSo I asked the <em>agent</em> in the same chat &quot;Read the full conversation again, and output your thought process to a thoughts_process file&quot;<p>This worked fine, but:\n1. It consumes tokens\n2. I need to remember to ask for it<p>So I looked where the <em>agent</em> stores chats, and made this app (technical details in the repo’s README)\nNow I just <em>open</em> it, minimize it, and work normally with the <em>agent</em> (I personally use Claude). All conversations will automatically be saved in real-time as they happen.<p>It works with Claude Code, GitHub Copilot, Cursor. I tried supporting Google's Antigravity, but they make it very hard to get the conversations, so it wasn’t worth it.\nI focused on the three most popular ones first, PRs for others are welcome.<p>The project is <em>open</em> <em>source</em>, you can see exactly what it does, and the README has technical details for anyone interested.<p>On a different note, the app works on Mac, Windows, and Linux. I tested it on Mac and Windows, but I don’t own a Linux device, so if anyone can check it out on Linux, that would be very helpful."
             },
             "title": {
               "fullyHighlighted": false,
               "matchLevel": "partial",
               "matchedWords": [
-                "ai"
+                "coding",
+                "agent"
               ],
-              "value": "Show HN: Obsidian <em>AI</em> Copilot – Bring Claude Code, OpenCode, etc. into Obsidian"
+              "value": "Show HN: Contrails – App to watch <em>coding</em> <em>agents</em> chats and save them to your repo"
             },
             "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "https://github.com/spencermarx/obsidian-<em>ai</em>"
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/ThreePalmTrees/Contrails"
             }
           },
           "_tags": [
             "story",
-            "author_mrxdev",
-            "story_47701711",
+            "author_Contrails",
+            "story_47738195",
             "show_hn"
           ],
-          "author": "mrxdev",
-          "created_at": "2026-04-09T10:23:43Z",
-          "created_at_i": 1775730223,
+          "author": "Contrails",
+          "created_at": "2026-04-12T10:46:19Z",
+          "created_at_i": 1775990779,
           "num_comments": 0,
-          "objectID": "47701711",
+          "objectID": "47738195",
           "points": 1,
-          "story_id": 47701711,
-          "story_text": "For anyone using Obsidian, thought I&#x27;d share an Open Source plugin that I built to really streamline my workflow, and so far it has worked very well for me:<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;spencermarx&#x2F;obsidian-ai\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;spencermarx&#x2F;obsidian-ai</a><p>Yes, I&#x27;m the creator of this, so take all this with a grain of salt.<p>The plugin essentially allows you to run your AI Agent CLI of choice within the Obsidian UI. It detects whatever agentic CLIs you have available on your machine, gives you the ability to pick which one you want to work with, and wraps this up in a pretty standard little UI chat sidebar with all the standard AI chat features (pulls in your slash commands, your Vault&#x27;s tags, as well as file references and allows for image drag-n-drop). Pretty straightforward, just rigged up to launch inside your Obsidian UI.<p>For me, it&#x27;s been super convenient to have Claude Code available directly in Obsidian as it saves me from having to switch between the vault UI and a terminal&#x2F;IDE for running Claude Code against the same vault files. This might not make a big difference to some people, but for me the context switching savings and ease of use have paid off.<p>The plugin is still awaiting approval to move into the Community Plugins directory, but in the meantime, the repo walks you through how to get set up on your own.<p>And of course, all of this is Open Source, FREE (no catches), and for the benefit of the builder community.<p>Would love feedback on this (good, bad, ugly) for those of you interested on trying it out! And if you do find it valuable, would appreciate a share&#x2F;github star to increase visibility and accelerate feedback&#x2F;refinement.<p>Thanks and happy building!",
-          "title": "Show HN: Obsidian AI Copilot – Bring Claude Code, OpenCode, etc. into Obsidian",
-          "updated_at": "2026-04-09T10:26:46Z",
-          "url": "https://github.com/spencermarx/obsidian-ai"
+          "story_id": 47738195,
+          "story_text": "## Description\nI made an app that watches coding agents sessions, and saves them to your repo as markdown\nSo that you can reference one chat in another chat, share what you and the agent did (e.g., when contributing to a project), or keeping full trails of what was worked on.<p>GitHub (stars appreciated): <a href=\"https:&#x2F;&#x2F;github.com&#x2F;ThreePalmTrees&#x2F;Contrails\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;ThreePalmTrees&#x2F;Contrails</a>\nWebsite: <a href=\"https:&#x2F;&#x2F;getcontrails.com\" rel=\"nofollow\">https:&#x2F;&#x2F;getcontrails.com</a><p>## Backstory\nI was fixing a bug, and the agent did some changes, then it discovered that it’s the wrong approach, and corrected the approach.\nI wanted to save what happened so that I can reference it later\nSo I asked the agent in the same chat &quot;Read the full conversation again, and output your thought process to a thoughts_process file&quot;<p>This worked fine, but:\n1. It consumes tokens\n2. I need to remember to ask for it<p>So I looked where the agent stores chats, and made this app (technical details in the repo’s README)\nNow I just open it, minimize it, and work normally with the agent (I personally use Claude). All conversations will automatically be saved in real-time as they happen.<p>It works with Claude Code, GitHub Copilot, Cursor. I tried supporting Google&#x27;s Antigravity, but they make it very hard to get the conversations, so it wasn’t worth it.\nI focused on the three most popular ones first, PRs for others are welcome.<p>The project is open source, you can see exactly what it does, and the README has technical details for anyone interested.<p>On a different note, the app works on Mac, Windows, and Linux. I tested it on Mac and Windows, but I don’t own a Linux device, so if anyone can check it out on Linux, that would be very helpful.",
+          "title": "Show HN: Contrails – App to watch coding agents chats and save them to your repo",
+          "updated_at": "2026-04-12T12:41:13Z",
+          "url": "https://github.com/ThreePalmTrees/Contrails"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "try-working"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "recursive-mode is an installable skill package for <em>coding</em> <em>agents</em>. It gives your <em>agent</em> a file-backed workflow for requirements, planning, implementation, testing, review, closeout, and memory, instead of leaving the whole process scattered in context.<p>Long-running <em>agent</em> work has a common failure mode: requirements, decisions, and plans live in the conversation. Once the session ends or the context window overflows, the <em>agent</em> loses track of what was decided, what was implemented, and why.<p>recursive-mode solves context rot by making repository documents the <em>source</em> of truth for every phase. Requirements, plans, evidence, state, and decisions live in files that persist across sessions, contributors, and repositories. Prompts become short commands, not full specs.<p>The workflow is built on a few simple rules. Each development phase produces one locked output document. Each phase uses earlier phase outputs as input. Before the <em>agent</em> can exit a phase and move forward, it must satisfy defined criteria based on the workflow and prior docs.<p>It is called recursive-mode because the workflow keeps revisiting its own outputs. Later phases consume earlier artifacts. Audited phases loop through draft, audit, repair, and re-audit until the work is actually ready. Closeout feeds validated lessons back into decisions, state.<p>The generated docs are both human-readable and machine-readable. They give strong traceability for what was built, why it was built that way, what changed, and how it was validated. Instead of reconstructing rationale from chat logs, you can point directly to the repo artifacts.<p>That also makes recursive-mode useful beyond day-to-day development. The run docs, together with code diffs in the worktrees, form a high-quality dataset for fine-tuning, auto-training, or self-distillation against your own codebase and engineering process.<p>Chat is treated more like a CLI. You use it for commands, not as the place where critical project knowledge lives. You can refine a plan with the <em>agent</em>, ask it to turn that plan into a new recursive run, or create the run folder and requirements doc yourself, and tell the <em>agent</em> to &quot;implement run 01&quot; to start the run.<p>recursive-mode is a free <em>open</em> <em>source</em> alternative to Missions. It is for developers and teams who want auditable <em>agent</em> runs, recorded evidence, and long or resumable work that can continue without losing context.<p>Installation:<p>npx skills add try-works/recursive-mode --skill '*' --full-depth<p>skills.sh:<p><a href=\"https://skills.sh/try-works/recursive-mode/recursive-mode\" rel=\"nofollow\">https://skills.sh/try-works/recursive-mode/recursive-mode</a><p>GitHub:<p><a href=\"https://github.com/try-works/recursive-mode\" rel=\"nofollow\">https://github.com/try-works/recursive-mode</a><p>For detailed documentation:<p><a href=\"https://recursive-mode.dev/\" rel=\"nofollow\">https://recursive-mode.dev/</a><p>Write-up with benchmark:<p><a href=\"https://try.works/recursive-mode-for-coding-agents\" rel=\"nofollow\">https://try.works/recursive-mode-for-<em>coding</em>-<em>agents</em></a>"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "coding",
+                "agent"
+              ],
+              "value": "Show HN: Recursive-Mode for <em>Coding</em> <em>Agents</em>"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://recursive-mode.dev/introduction"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_try-working",
+            "story_47731307",
+            "show_hn"
+          ],
+          "author": "try-working",
+          "created_at": "2026-04-11T15:12:23Z",
+          "created_at_i": 1775920343,
+          "num_comments": 0,
+          "objectID": "47731307",
+          "points": 5,
+          "story_id": 47731307,
+          "story_text": "recursive-mode is an installable skill package for coding agents. It gives your agent a file-backed workflow for requirements, planning, implementation, testing, review, closeout, and memory, instead of leaving the whole process scattered in context.<p>Long-running agent work has a common failure mode: requirements, decisions, and plans live in the conversation. Once the session ends or the context window overflows, the agent loses track of what was decided, what was implemented, and why.<p>recursive-mode solves context rot by making repository documents the source of truth for every phase. Requirements, plans, evidence, state, and decisions live in files that persist across sessions, contributors, and repositories. Prompts become short commands, not full specs.<p>The workflow is built on a few simple rules. Each development phase produces one locked output document. Each phase uses earlier phase outputs as input. Before the agent can exit a phase and move forward, it must satisfy defined criteria based on the workflow and prior docs.<p>It is called recursive-mode because the workflow keeps revisiting its own outputs. Later phases consume earlier artifacts. Audited phases loop through draft, audit, repair, and re-audit until the work is actually ready. Closeout feeds validated lessons back into decisions, state.<p>The generated docs are both human-readable and machine-readable. They give strong traceability for what was built, why it was built that way, what changed, and how it was validated. Instead of reconstructing rationale from chat logs, you can point directly to the repo artifacts.<p>That also makes recursive-mode useful beyond day-to-day development. The run docs, together with code diffs in the worktrees, form a high-quality dataset for fine-tuning, auto-training, or self-distillation against your own codebase and engineering process.<p>Chat is treated more like a CLI. You use it for commands, not as the place where critical project knowledge lives. You can refine a plan with the agent, ask it to turn that plan into a new recursive run, or create the run folder and requirements doc yourself, and tell the agent to &quot;implement run 01&quot; to start the run.<p>recursive-mode is a free open source alternative to Missions. It is for developers and teams who want auditable agent runs, recorded evidence, and long or resumable work that can continue without losing context.<p>Installation:<p>npx skills add try-works&#x2F;recursive-mode --skill &#x27;*&#x27; --full-depth<p>skills.sh:<p><a href=\"https:&#x2F;&#x2F;skills.sh&#x2F;try-works&#x2F;recursive-mode&#x2F;recursive-mode\" rel=\"nofollow\">https:&#x2F;&#x2F;skills.sh&#x2F;try-works&#x2F;recursive-mode&#x2F;recursive-mode</a><p>GitHub:<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;try-works&#x2F;recursive-mode\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;try-works&#x2F;recursive-mode</a><p>For detailed documentation:<p><a href=\"https:&#x2F;&#x2F;recursive-mode.dev&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;recursive-mode.dev&#x2F;</a><p>Write-up with benchmark:<p><a href=\"https:&#x2F;&#x2F;try.works&#x2F;recursive-mode-for-coding-agents\" rel=\"nofollow\">https:&#x2F;&#x2F;try.works&#x2F;recursive-mode-for-coding-agents</a>",
+          "title": "Show HN: Recursive-Mode for Coding Agents",
+          "updated_at": "2026-04-11T22:52:40Z",
+          "url": "https://recursive-mode.dev/introduction"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "danoandco"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Hey HN, we're Willy and Dan, co-founders of Twill.ai (<a href=\"https://twill.ai/\">https://twill.ai/</a>). Twill runs <em>coding</em> CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https://www.youtube.com/watch?v=oyfTMXVECbs\" rel=\"nofollow\">https://www.youtube.com/watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that both touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don't scale past a couple of tasks.<p>2. Persistence: close your laptop and the <em>agent</em> stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous <em>agent</em> full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the <em>agents</em> to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same <em>agent</em>, each in their own thread. Then memory, so &quot;use the existing logger in lib/log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own <em>coding</em> products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud <em>agents</em> on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their <em>coding</em> harness, Twill picks up the improvement automatically.<p>We’re also <em>open</em>-sourcing agentbox-sdk, <a href=\"https://github.com/TwillAI/agentbox-sdk\" rel=\"nofollow\">https://github.com/TwillAI/agentbox-sdk</a>, an SDK for running and interacting with <em>agent</em> CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel's Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50/month for 50 credits, with BYOK support on higher tiers. Free pro tier for <em>open</em>-<em>source</em> projects.<p>We’d love to hear how cloud <em>coding</em> <em>agents</em> fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent"
+              ],
+              "value": "Launch HN: Twill.ai (YC S25) – Delegate to cloud <em>agents</em>, get back PRs"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://twill.ai"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_danoandco",
+            "story_47720418",
+            "launch_hn"
+          ],
+          "author": "danoandco",
+          "children": [
+            47721952,
+            47722143,
+            47729698,
+            47724685,
+            47739774,
+            47726513,
+            47734885,
+            47722894,
+            47727181,
+            47727825,
+            47726441,
+            47730110,
+            47728452,
+            47730075,
+            47724790,
+            47721827,
+            47721911,
+            47729997,
+            47723053,
+            47723947,
+            47723506,
+            47723944,
+            47722251,
+            47729916,
+            47730687,
+            47724470,
+            47731560,
+            47724244,
+            47729237,
+            47723090,
+            47722489,
+            47729750,
+            47728129,
+            47728671,
+            47726505,
+            47722067
+          ],
+          "created_at": "2026-04-10T16:22:13Z",
+          "created_at_i": 1775838133,
+          "num_comments": 87,
+          "objectID": "47720418",
+          "points": 77,
+          "story_id": 47720418,
+          "story_text": "Hey HN, we&#x27;re Willy and Dan, co-founders of Twill.ai (<a href=\"https:&#x2F;&#x2F;twill.ai&#x2F;\">https:&#x2F;&#x2F;twill.ai&#x2F;</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that both touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don&#x27;t scale past a couple of tasks.<p>2. Persistence: close your laptop and the agent stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous agent full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the agents to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same agent, each in their own thread. Then memory, so &quot;use the existing logger in lib&#x2F;log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own coding products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud agents on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their coding harness, Twill picks up the improvement automatically.<p>We’re also open-sourcing agentbox-sdk, <a href=\"https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk</a>, an SDK for running and interacting with agent CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel&#x27;s Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50&#x2F;month for 50 credits, with BYOK support on higher tiers. Free pro tier for open-source projects.<p>We’d love to hear how cloud coding agents fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing.",
+          "title": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs",
+          "updated_at": "2026-04-12T17:29:16Z",
+          "url": "https://twill.ai"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "sijieg"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "We <em>open</em>-sourced the TLA+ and Fizzbee verified spec behind Ursa's storage engine. Verification across ~200K states caught a design bug that years of production missed. We then handed the spec to Claude Code — it produced a working Rust implementation (concurrent producers, compaction, fencing) without back-and-forth. We think verified specs are the best harness for <em>coding</em> <em>agents</em>: <em>open</em>-<em>source</em> the spec, let anyone implement it."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Formally Verified Leaderless Log Protocol for Kafka"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/lakestream-io/leaderless-log-protocol"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_sijieg",
+            "story_47720094",
+            "show_hn"
+          ],
+          "author": "sijieg",
+          "children": [
+            47720121
+          ],
+          "created_at": "2026-04-10T16:00:04Z",
+          "created_at_i": 1775836804,
+          "num_comments": 1,
+          "objectID": "47720094",
+          "points": 5,
+          "story_id": 47720094,
+          "story_text": "We open-sourced the TLA+ and Fizzbee verified spec behind Ursa&#x27;s storage engine. Verification across ~200K states caught a design bug that years of production missed. We then handed the spec to Claude Code — it produced a working Rust implementation (concurrent producers, compaction, fencing) without back-and-forth. We think verified specs are the best harness for coding agents: open-source the spec, let anyone implement it.",
+          "title": "Show HN: Formally Verified Leaderless Log Protocol for Kafka",
+          "updated_at": "2026-04-11T10:55:39Z",
+          "url": "https://github.com/lakestream-io/leaderless-log-protocol"
         }
       ]
-    },
-    {
-      "query": "open+source+coding+agent",
-      "hits": []
     },
     {
       "query": "collective+learning+AI",
@@ -521,6 +577,8 @@
           ],
           "author": "florianleibert",
           "children": [
+            47742198,
+            47742078,
             47741770,
             47740902,
             47740882,
@@ -530,13 +588,13 @@
           ],
           "created_at": "2026-04-12T15:03:11Z",
           "created_at_i": 1776006191,
-          "num_comments": 8,
+          "num_comments": 10,
           "objectID": "47740552",
           "points": 5,
           "story_id": 47740552,
           "story_text": "For years, the lock-in was dead simple: CUDA.<p>Want top-tier performance? You wrote CUDA. Do that once, and you were all-in on NVIDIA. The ecosystem compounded—libraries, tooling, docs, talent—everything reinforcing the same gravity well.<p>That world is starting to crack.<p>We’re entering a phase where low-level code isn’t a rare skill anymore. Models are capable at generating kernels, bindings, and glue code. Good enough to get a first version running fast and iterate from there. The switching cost to a new accelerator is dropping quickly. What used to require a dedicated team now often looks like a decent prompt plus a few review passes.<p>There’s an old David Wheeler line: All problems in computer science can be solved by another level of indirection. AI Codegen is an abstraction and more.<p>At the same time, the economics are shifting.<p>For many real workloads—especially inference—VRAM matters more than peak FLOPS. You want models resident in memory, batching cleanly, with predictable latency. On a dollars-per-GB basis, AMD is starting to look compelling. Newer cards bring stronger low-precision throughput (FP8&#x2F;INT4), structured sparsity, and significantly more memory on mainstream SKUs. If you’re running open models and care about cost&#x2F;throughput, you’re at least evaluating them.<p>Intel is entering the mix as well. Battlemage (Arc Pro B-series) pushes high VRAM configurations with competitive price&#x2F;perf for local inference. Not dominant, but another viable option that didn’t exist in the CUDA-only world.<p>Then there’s supply.<p>NVIDIA has built enormous demand and maintained pricing power. But scarcity cuts both ways. If you can’t get hardware—or only at extreme prices—people explore alternatives. Startups take what they can get. Infra teams design for heterogeneity. Open source adapts to whatever is available.<p>This is how moats erode: not via a single replacement, but through many small workarounds that become standard.<p>Two datapoints from actually standing up a modern model serving stack:<p>1. In my recent GLM 5.1 deployment on 8xB200s, getting a novel model to serve reliably was painful. It took me ~12–13 minutes of cold starts (many!), random restarts, non-obvious flags, kernel warmups, and graph captures just to reach a stable baseline. Most of that wasn’t “AI”—it was infra whack-a-mole across memory limits, runtimes, and config quirks.<p>2. Even once it was running, it was fragile. I kept hitting issues like streaming tool calls producing invalid JSON because the model output, server parser, and client SDK were out of sync. Fixing it required patches across multiple layers just to get to consistent outputs. Real systems are leaky—far from clean abstractions.<p>That’s the actual moat: not CUDA, but the entire stack—libraries, compilers, interconnects, and years of ops knowledge.<p>But, it’s early.<p>CUDA isn’t just a platform; it’s a decade-plus of battle-tested infra. Getting something to run is one thing. Getting it to run great at scale is still difficult, performance cliffs in exactly the wrong places.<p>And NVIDIA is moving up the stack aggressively—higher-level APIs, inference tooling, tighter framework integration. Blackwell-class hardware pushes further efficiency (e.g., low-precision compute like FP4) and targets memory-bound inference directly. If abstractions become the battlefield, they’re positioning to control that layer too.<p>So what happens:<p>* Near term: NVIDIA continues to dominate. Demand is still growing fast and they remain the default.\n* Medium term: the edges fray. Inference becomes more heterogeneous. AMD and Intel pick up share where cost and memory dominate.\n* Long term: value shifts upward—to models, data, orchestration. Hardware still matters, but becomes more interchangeable at the margin.<p>Bottom line: CUDA used to be a wall. Now it’s closer to a speed bump. AI didn’t remove the moat—it just made it much easier to cross when there’s a reason to.",
           "title": "Nvidia's moat is not what it used to be",
-          "updated_at": "2026-04-12T16:45:45Z"
+          "updated_at": "2026-04-12T17:25:59Z"
         },
         {
           "_highlightResult": {
@@ -961,6 +1019,56 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "halfwhey"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "claude",
+                "code",
+                "alternative"
+              ],
+              "value": "Hello everyone.<p>Claudraband wraps a <em>Claude</em> <em>Code</em> TUI in a controlled terminal to enable extended workflows. It uses tmux for visible controlled sessions or xterm.js for headless sessions (a little slower), but everything is mediated by an actual <em>Claude</em> <em>Code</em> TUI.<p>One example of a workflow I use now is having my current <em>Claude</em> <em>Code</em> interrogate older sessions for certain decisions it made: <a href=\"https://github.com/halfwhey/claudraband?tab=readme-ov-file#self-interrogation\" rel=\"nofollow\">https://github.com/halfwhey/claudraband?tab=readme-ov-file#s...</a><p>This project provides:<p>- Resumable non-interactive workflows. Essentially `<em>claude</em> -p` with session support: `cband continue &lt;session-id&gt; 'what was the result of the research?'`\n- HTTP server to remotely control a <em>Claude</em> <em>Code</em> session: `cband serve --port 8123`\n- ACP server to use with <em>alternative</em> frontends such as Zed or Toad (<a href=\"https://github.com/batrachianai/toad\" rel=\"nofollow\">https://github.com/batrachianai/toad</a>): `cband acp --model haiku`.\n- TypeScript library so you can integrate these workflows into your own application.<p>This exists cause I was using `tmux send-keys` heavily in a lot of my <em>Claude</em> <em>Code</em> workflows, but I wanted to streamline it."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "claude",
+                "code"
+              ],
+              "value": "Show HN: Claudraband – <em>Claude</em> <em>Code</em> for the Power User"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/halfwhey/claudraband"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_halfwhey",
+            "story_47741889",
+            "show_hn"
+          ],
+          "author": "halfwhey",
+          "created_at": "2026-04-12T16:55:20Z",
+          "created_at_i": 1776012920,
+          "num_comments": 0,
+          "objectID": "47741889",
+          "points": 4,
+          "story_id": 47741889,
+          "story_text": "Hello everyone.<p>Claudraband wraps a Claude Code TUI in a controlled terminal to enable extended workflows. It uses tmux for visible controlled sessions or xterm.js for headless sessions (a little slower), but everything is mediated by an actual Claude Code TUI.<p>One example of a workflow I use now is having my current Claude Code interrogate older sessions for certain decisions it made: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;halfwhey&#x2F;claudraband?tab=readme-ov-file#self-interrogation\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;halfwhey&#x2F;claudraband?tab=readme-ov-file#s...</a><p>This project provides:<p>- Resumable non-interactive workflows. Essentially `claude -p` with session support: `cband continue &lt;session-id&gt; &#x27;what was the result of the research?&#x27;`\n- HTTP server to remotely control a Claude Code session: `cband serve --port 8123`\n- ACP server to use with alternative frontends such as Zed or Toad (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;batrachianai&#x2F;toad\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;batrachianai&#x2F;toad</a>): `cband acp --model haiku`.\n- TypeScript library so you can integrate these workflows into your own application.<p>This exists cause I was using `tmux send-keys` heavily in a lot of my Claude Code workflows, but I wanted to streamline it.",
+          "title": "Show HN: Claudraband – Claude Code for the Power User",
+          "updated_at": "2026-04-12T17:06:30Z",
+          "url": "https://github.com/halfwhey/claudraband"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "adinhitlore"
             },
             "story_text": {
@@ -1143,52 +1251,6 @@
           "title": "Build an OpenClaw Alternative with Arcade + Claude Code",
           "updated_at": "2026-04-03T03:14:05Z",
           "url": "https://www.arcade.dev/blog/secure-openclaw-alternative-arcade-claude-code/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "abbadadda"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "claude",
-                "code",
-                "alternative"
-              ],
-              "value": "ComputerPoker.ai is a website where users can play simulated poker tournaments against GTO Bots to learn GTO poker strategy in a fun and low-risk environment.<p>My motivation for creating CompterPoker.ai was feeling a bit overwhelmed by some of the professional poker tools out there for learning GTO play. For some tools, learning how to simply operate the tool itself felt like a second job. With ComputerPoker.ai players can play against bots themselves simulating GTO play to learn what it &quot;feels like&quot; to play GTO vs. GTO opponents without having to turn any knobs or dials (feedback is real-time as you play).<p>The Beta tester <em>code</em> for HN Users is: HackerNews2026. All feedback is welcome! Please send suggestions for improvement or bugs to contact@computerpoker.ai or <em>alternative</em>ly leave a comment below. Any questions I will do my best to answer.<p>As for the product offering the website is designed to teach players how to play optimal poker strategy (GTO) in simulated Texas Hold 'Em poker tournaments. Our value proposition is that if you can consistently beat the bots then you will fare well in live poker tournaments (of course adjusting for your opponents' play).<p>In addition to GTO pre-flop quizzes and pre-flop charts, users have the ability to simulate poker tournaments from start-to-finish and get feedback on their decisions _in real-time_ in a fun and low-risk environment.<p>For those interested the tech stack is Django deployed on AWS via Terraform and SaltStack, the database uses a Postgres RDS backend, and the frontend uses HTMX with WebSockets via Django Channels and Redis (Nginx serving as reverse proxy with CloudFlare DNS and SSL). During the project I used <em>Claude</em> <em>Code</em> to aid with various boilerplate aspects of the <em>code</em> base including building out the repos for Terraform and SaltSack and of course speeding up Django development.<p>Users are graded pre-flop based on the covered pre-flop scenarios (two-ways only for now). Post-flop users are graded on a residual MLP PyTorch model. We have built an in-house solver in Rust using the discontented CFR++ algorithm. The PyTorch model approximates GTO play post-flop (again only two-ways currently) based on training data with raises, EV, and realistic ranges for OOP and IP players. Because the post-flop decisions are based on a model that will always be a work in progress I refer to these decisions as GTOA (or &quot;GTO Approximate&quot;).<p>Version 8 of the PyTorch model is the first one that I am happy with and actually find it quite difficult to play against. If you manage to beat the bots please do let me know how many tries it took! For those curious the PyTorch params for the most recent run are below (I trained on a gaming PC via Linux WSL2 using an AMD GPU):<p>```\n(venv_rocm_native) $   python3 pytorch_model.py\n      --data-dir unified_v8_raises/\n      --aggression-embed --predict-ev\n      --d-card 64 --d-model 256\n      --n-attn-layers 3 --n-trunk-layers 4\n      --dropout 0.2 --weight-decay 0.05\n      --epochs 30 --batch-size 4096 --lr 3e-4\n      --steps-per-epoch 10000 --output gto_model_v8.pt<p>Training on cuda\n… … … _30 epochs later_\n       Saved best model (val_loss=0.3865)\nTraining complete!\nBest model saved to gto_model_v8.pt\n```<p>The website is live in Beta mode as I gather feedback on how things are structured and work out any bugs/kinks. If you have any suggestions for improvements I’d love to hear them. Subscriptions are live so if anyone wanted to test the Stripe payment processing flow I certainly wouldn’t mind! ;-)<p>p.s. This is a side gig for me. I am currently looking for full-time work either fully remote or on-site based in London, UK (this LLC that runs ComputerPoker.ai operates out of USA but I am based full-time in the UK and authorized to work in both UK and USA). If you or someone you know is looking for a SRE with strong software engineering skills please let me know!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: ComputerPoker.ai – Learn GTO tournament poker strategy vs. GTO bots"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://computerpoker.ai"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_abbadadda",
-            "story_47604325",
-            "show_hn"
-          ],
-          "author": "abbadadda",
-          "created_at": "2026-04-01T18:03:39Z",
-          "created_at_i": 1775066619,
-          "num_comments": 0,
-          "objectID": "47604325",
-          "points": 1,
-          "story_id": 47604325,
-          "story_text": "ComputerPoker.ai is a website where users can play simulated poker tournaments against GTO Bots to learn GTO poker strategy in a fun and low-risk environment.<p>My motivation for creating CompterPoker.ai was feeling a bit overwhelmed by some of the professional poker tools out there for learning GTO play. For some tools, learning how to simply operate the tool itself felt like a second job. With ComputerPoker.ai players can play against bots themselves simulating GTO play to learn what it &quot;feels like&quot; to play GTO vs. GTO opponents without having to turn any knobs or dials (feedback is real-time as you play).<p>The Beta tester code for HN Users is: HackerNews2026. All feedback is welcome! Please send suggestions for improvement or bugs to contact@computerpoker.ai or alternatively leave a comment below. Any questions I will do my best to answer.<p>As for the product offering the website is designed to teach players how to play optimal poker strategy (GTO) in simulated Texas Hold &#x27;Em poker tournaments. Our value proposition is that if you can consistently beat the bots then you will fare well in live poker tournaments (of course adjusting for your opponents&#x27; play).<p>In addition to GTO pre-flop quizzes and pre-flop charts, users have the ability to simulate poker tournaments from start-to-finish and get feedback on their decisions _in real-time_ in a fun and low-risk environment.<p>For those interested the tech stack is Django deployed on AWS via Terraform and SaltStack, the database uses a Postgres RDS backend, and the frontend uses HTMX with WebSockets via Django Channels and Redis (Nginx serving as reverse proxy with CloudFlare DNS and SSL). During the project I used Claude Code to aid with various boilerplate aspects of the code base including building out the repos for Terraform and SaltSack and of course speeding up Django development.<p>Users are graded pre-flop based on the covered pre-flop scenarios (two-ways only for now). Post-flop users are graded on a residual MLP PyTorch model. We have built an in-house solver in Rust using the discontented CFR++ algorithm. The PyTorch model approximates GTO play post-flop (again only two-ways currently) based on training data with raises, EV, and realistic ranges for OOP and IP players. Because the post-flop decisions are based on a model that will always be a work in progress I refer to these decisions as GTOA (or &quot;GTO Approximate&quot;).<p>Version 8 of the PyTorch model is the first one that I am happy with and actually find it quite difficult to play against. If you manage to beat the bots please do let me know how many tries it took! For those curious the PyTorch params for the most recent run are below (I trained on a gaming PC via Linux WSL2 using an AMD GPU):<p>```\n(venv_rocm_native) $   python3 pytorch_model.py\n      --data-dir unified_v8_raises&#x2F;\n      --aggression-embed --predict-ev\n      --d-card 64 --d-model 256\n      --n-attn-layers 3 --n-trunk-layers 4\n      --dropout 0.2 --weight-decay 0.05\n      --epochs 30 --batch-size 4096 --lr 3e-4\n      --steps-per-epoch 10000 --output gto_model_v8.pt<p>Training on cuda\n… … … _30 epochs later_\n       Saved best model (val_loss=0.3865)\nTraining complete!\nBest model saved to gto_model_v8.pt\n```<p>The website is live in Beta mode as I gather feedback on how things are structured and work out any bugs&#x2F;kinks. If you have any suggestions for improvements I’d love to hear them. Subscriptions are live so if anyone wanted to test the Stripe payment processing flow I certainly wouldn’t mind! ;-)<p>p.s. This is a side gig for me. I am currently looking for full-time work either fully remote or on-site based in London, UK (this LLC that runs ComputerPoker.ai operates out of USA but I am based full-time in the UK and authorized to work in both UK and USA). If you or someone you know is looking for a SRE with strong software engineering skills please let me know!",
-          "title": "Show HN: ComputerPoker.ai – Learn GTO tournament poker strategy vs. GTO bots",
-          "updated_at": "2026-04-01T18:49:16Z",
-          "url": "https://computerpoker.ai"
         }
       ]
     },
@@ -1973,8 +2035,8 @@
           ],
           "author": "behat",
           "children": [
-            47733080,
             47707518,
+            47733080,
             47713938,
             47726320,
             47702783,
@@ -1998,7 +2060,7 @@
           "story_id": 47702647,
           "story_text": "Hey HN! We are Bharath, and Simranjit from Relvy AI (<a href=\"https:&#x2F;&#x2F;www.relvy.ai\">https:&#x2F;&#x2F;www.relvy.ai</a>). Relvy automates on-call runbooks for software engineering teams. It is an AI agent equipped with tools that can analyze telemetry data and code at scale, helping teams debug and resolve production issues in minutes. Here’s a video: [[[<a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=BXr4_XlWXc0\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=BXr4_XlWXc0</a>]]]<p>A lot of teams are using AI in some form to reduce their on-call burden. You may be pasting logs into Cursor, or using Claude Code with Datadog’s MCP server to help debug. What we’ve seen is that autonomous root cause analysis is a hard problem for AI. This shows up in benchmarks - Claude Opus 4.6 is currently at 36% accuracy on the OpenRCA dataset, in contrast to coding tasks.<p>There are three main reasons for this: (1) Telemetry data volume can drown the model in noise; (2) Data interpretation &#x2F; reasoning is enterprise context dependent; (3) On-call is a time-constrained, high-stakes problem, with little room for AI to explore during investigation time. Errors that send the user down the wrong path are not easily forgiven.<p>At Relvy, we are tackling these problems by building specialized tools for telemetry data analysis. Our tools can detect anomalies and identify problem slices from dense time series data, do log pattern search, and reason about span trees, all without overwhelming the agent context.<p>Anchoring the agent around runbooks leads to less agentic exploration and more deterministic steps that reflect the most useful steps that an experienced engineer would take. That results in faster analysis, and less cognitive load on engineers to review and understand what the AI did.<p>How it works: Relvy is installed on a local machine via docker-compose (or via helm charts, or sign up on our cloud), connect your stack (observability and code), create your first runbook and have Relvy investigate a recent alert.<p>Each investigation is presented as a notebook in our web UI, with data visualizations that help engineers verify and build trust with the AI. From there on, Relvy can be configured to automatically respond to alerts from Slack<p>Some example runbook steps that Relvy automates: - Check so-and-so dashboard, see if the errors are isolated to a specific shard. - Check if there’s a throughput surge on the APM page, and if so, is it from a few IPs? - Check recent commits to see if anything changed for this endpoint.<p>You can also configure AWS CLI commands that Relvy can run to automate mitigation actions, with human approval.<p>A little bit about us - We did YC back in fall 2024. We started our journey experimenting with continuous log monitoring with small language models - that was too slow. We then invested deeply into solving root cause analysis effectively, and our product today is the result of about a year of work with our early customers.<p>Give us a try today. Happy to hear feedback, or about how you are tackling on-call burden at your company. Appreciate any comments or suggestions!",
           "title": "Launch HN: Relvy (YC F24) – On-call runbooks, automated",
-          "updated_at": "2026-04-12T01:32:41Z",
+          "updated_at": "2026-04-12T17:20:15Z",
           "url": "https://www.relvy.ai"
         }
       ]
