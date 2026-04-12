@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-11T23:35:12.915Z",
-  "count": 27,
+  "timestamp": "2026-04-12T00:29:56.895Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "Backend extraction pipeline is painfully slow — need architectural overhaul",
+      "url": "https://github.com/TINKPA/receipt-assistant/issues/6",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "[Epic] Push test coverage to ≥95% across all components",
       "url": "https://github.com/Agent-Field/agentfield/issues/387",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -109,22 +116,36 @@
     },
     {
       "source": "github-issue",
+      "title": "Make plugin descriptions in marketplace.json more user-friendly",
+      "url": "https://github.com/2389-research/claude-plugins/issues/29",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Amp Agent Plugin",
+      "url": "https://github.com/ComposioHQ/agent-orchestrator/issues/1016",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
+      "url": "https://github.com/DenisZheng/agents-radar/issues/341",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
+      "url": "https://github.com/jstamagal/agents-radar/issues/273",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Integration/upstream sync 2026 04 11",
       "url": "https://github.com/NVIDIA/NemoClaw/pull/1792",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "merge: integrate upstream/main (295 commits, 2026-04-11)",
-      "url": "https://github.com/Tempuskg/NemoClaw/pull/2",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(memory-core): preserve public artifact visibility through loader cache restore",
-      "url": "https://github.com/openclaw/openclaw/pull/65012",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "Alibaba-linked AI agent hijacked GPUs for unauthorized crypto mining, researchers say",
+      "url": "https://reddit.com/r/artificial/comments/1sizjz7/alibabalinked_ai_agent_hijacked_gpus_for/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "AMD's GAIA now allows building custom AI agents via chat, becomes \"true desktop app\"",
       "url": "https://reddit.com/r/artificial/comments/1sitbvu/amds_gaia_now_allows_building_custom_ai_agents/",
       "why": "Discussion in r/artificial about AI agents",
@@ -181,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Cloudflare just turned Browser Rendering into a lot more powerful MCP infrastructure",
       "url": "https://reddit.com/r/artificial/comments/1sieggh/cloudflare_just_turned_browser_rendering_into_a/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Anthropic launches Claude Managed Agents — composable APIs for shipping production AI agents 10x faster. Notion, Rakuten, Asana, and Sentry already in production.",
-      "url": "https://reddit.com/r/artificial/comments/1si5evu/anthropic_launches_claude_managed_agents/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
