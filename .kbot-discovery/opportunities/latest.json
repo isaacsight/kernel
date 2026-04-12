@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-12T01:03:18.236Z",
+  "timestamp": "2026-04-12T02:57:24.509Z",
   "count": 30,
   "opportunities": [
     {
@@ -131,21 +131,21 @@
     {
       "source": "github-issue",
       "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
+      "url": "https://github.com/yinwm/agents-radar/issues/220",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "fix(slack): keep reply suppression thread-aware",
+      "url": "https://github.com/openclaw/openclaw/pull/65077",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
       "url": "https://github.com/duanyytop/agents-radar/issues/544",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
-      "url": "https://github.com/DenisZheng/agents-radar/issues/341",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-12",
-      "url": "https://github.com/jstamagal/agents-radar/issues/273",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
