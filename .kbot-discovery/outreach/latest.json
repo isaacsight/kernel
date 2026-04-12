@@ -1,12 +1,6 @@
 {
-  "timestamp": "2026-04-12T00:30:06.992Z",
+  "timestamp": "2026-04-12T00:46:25.608Z",
   "projects": [
-    {
-      "name": "rcarmo/piclaw",
-      "url": "https://github.com/rcarmo/piclaw",
-      "stars": 468,
-      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
-    },
     {
       "name": "Bitterbot-AI/bitterbot-desktop",
       "url": "https://github.com/Bitterbot-AI/bitterbot-desktop",
@@ -14,10 +8,16 @@
       "description": "A local-first AI agent with persistent memory, emotional intelligence, and a peer-to-peer skills economy."
     },
     {
-      "name": "activepieces/activepieces",
-      "url": "https://github.com/activepieces/activepieces",
-      "stars": 21672,
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1062,
+      "description": "the easiest way to run natural language-described workflows automatically"
+    },
+    {
+      "name": "joshuaswarren/remnic",
+      "url": "https://github.com/joshuaswarren/remnic",
+      "stars": 54,
+      "description": "Local-first memory plugin for OpenClaw AI agents. LLM-powered extraction, plain markdown storage, hybrid search via QMD. Gives agents persistent long-term memory across conversations."
     },
     {
       "name": "Haervwe/open-webui-tools",
