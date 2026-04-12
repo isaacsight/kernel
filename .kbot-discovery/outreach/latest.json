@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-04-12T04:07:11.938Z",
+  "timestamp": "2026-04-12T05:00:43.949Z",
   "projects": [
     {
-      "name": "YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill",
-      "url": "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill",
-      "stars": 1413,
-      "description": "AI skill for OpenClaw & Claude Code — recommend from 10000+ Nano Banana Pro (Gemini) image prompts. Smart search by use case, content remix, sample images."
+      "name": "iOfficeAI/AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": 21541,
+      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+    },
+    {
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1062,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
       "name": "sonichi/sutando",
       "url": "https://github.com/sonichi/sutando",
-      "stars": 112,
+      "stars": 113,
       "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
-    },
-    {
-      "name": "BlockRunAI/Franklin",
-      "url": "https://github.com/BlockRunAI/Franklin",
-      "stars": 278,
-      "description": "Franklin — The AI agent with a wallet. The first AI agent that can actually spend USDC to get real work done. Pay per action, no subscriptions."
     },
     {
       "name": "detroittommy879/aicodeprep-gui",
@@ -38,6 +38,12 @@
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
+      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
+      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
+      "stars": 0,
+      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+    },
+    {
       "name": "ericmey/openclaw-skills",
       "url": "https://github.com/ericmey/openclaw-skills",
       "stars": 0,
@@ -48,12 +54,6 @@
       "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
       "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
-    },
-    {
-      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "stars": 0,
-      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     }
   ],
   "latestPaper": {
