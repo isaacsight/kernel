@@ -2632,4 +2632,256 @@ export function registerLabPhysicsTools(): void {
       return lines.join('\n')
     },
   })
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 11. QUANTUM MAGNETOMETRY
+  // ═══════════════════════════════════════════════════════════════════════════
+  //
+  // Quantum magnetometers measure magnetic fields by exploiting the quantum
+  // properties of atoms, nuclei, or solid-state spin defects. This tool
+  // covers the dominant platforms:
+  //
+  //   • NV  — Nitrogen-Vacancy centers in diamond (ODMR, room-temperature)
+  //   • SQUID — Superconducting Quantum Interference Device (flux-quantized)
+  //   • OPM — Optically Pumped atomic Magnetometer (Cs/Rb/K vapor, SERF regime)
+  //   • Zeeman — Zeeman splitting / Larmor precession for any spin species
+  //   • Sensitivity — Shot-noise / standard-quantum-limit (SQL) sensitivity
+  //
+  // References: Degen et al., Rev. Mod. Phys. 89, 035002 (2017);
+  //             Budker & Romalis, Nat. Phys. 3, 227 (2007);
+  //             Taylor et al., Nat. Phys. 4, 810 (2008).
+
+  registerTool({
+    name: 'quantum_magnetometry',
+    description: 'Quantum magnetometry calculations: NV-diamond ODMR sensitivity, SQUID flux quantization, OPM/SERF atomic magnetometer sensitivity, Zeeman splitting / Larmor frequency, and shot-noise / standard-quantum-limit (SQL) sensitivity for any spin sensor.',
+    parameters: {
+      mode: { type: 'string', description: 'Calculation: nv, squid, opm, zeeman, sensitivity', required: true },
+      field_T: { type: 'number', description: 'Magnetic field magnitude in Tesla (for zeeman/larmor).', required: false },
+      species: { type: 'string', description: 'Spin species for zeeman/opm: nv, electron, proton, neutron, cs, rb87, rb85, k39, xe129, he3', required: false },
+      n_spins: { type: 'number', description: 'Number of sensing spins (NV ensemble size, atom number in vapor cell).', required: false },
+      t2_s: { type: 'number', description: 'Spin coherence time T2 or T2* in seconds.', required: false },
+      readout_fidelity: { type: 'number', description: 'Spin-readout contrast / fidelity (0-1). Typical NV single-shot: 0.03; SERF OPM: ~1.', required: false },
+      integration_s: { type: 'number', description: 'Integration / averaging time in seconds (default 1 s).', required: false },
+      pickup_area_m2: { type: 'number', description: 'SQUID pickup-loop area in m^2.', required: false },
+      flux_noise_phi0_rthz: { type: 'number', description: 'SQUID flux noise in units of Phi_0 / sqrt(Hz). Typical: 1e-6.', required: false },
+      vapor_density_m3: { type: 'number', description: 'OPM alkali atom number density in atoms/m^3. Typical Rb SERF cell: 1e20.', required: false },
+      cell_volume_m3: { type: 'number', description: 'OPM vapor cell volume in m^3. Typical: 1e-6 (1 cm^3).', required: false },
+    },
+    tier: 'free',
+    async execute(args) {
+      const mode = String(args.mode || '').toLowerCase()
+
+      // Gyromagnetic ratios gamma/(2*pi) in Hz/T  (sign dropped; absolute value)
+      const GAMMA: Record<string, { gamma: number; label: string; spin: string }> = {
+        nv:       { gamma: 28.024e9,  label: 'NV center (electron-like, |ms=0> ↔ |ms=±1>)', spin: 'S=1' },
+        electron: { gamma: 28.024e9,  label: 'Free electron',                               spin: 'S=1/2' },
+        proton:   { gamma: 42.577478e6, label: 'Proton (1H)',                              spin: 'I=1/2' },
+        neutron:  { gamma: 29.1646931e6, label: 'Neutron',                                 spin: 'I=1/2' },
+        cs:       { gamma: 3.4986e9,  label: 'Cesium-133 (F=4)',                           spin: 'F=4' },
+        rb87:     { gamma: 6.9958e9,  label: 'Rubidium-87 (F=2)',                          spin: 'F=2' },
+        rb85:     { gamma: 4.6674e9,  label: 'Rubidium-85 (F=3)',                          spin: 'F=3' },
+        k39:      { gamma: 7.0046e9,  label: 'Potassium-39 (F=2)',                         spin: 'F=2' },
+        xe129:    { gamma: 11.777e6,  label: 'Xenon-129 (nuclear)',                        spin: 'I=1/2' },
+        he3:      { gamma: 32.434e6,  label: 'Helium-3 (nuclear)',                         spin: 'I=1/2' },
+      }
+
+      const lines: string[] = []
+
+      // ── 1) Zeeman / Larmor ────────────────────────────────────────────────
+      if (mode === 'zeeman' || mode === 'larmor') {
+        const B = Number(args.field_T)
+        const sp = String(args.species || 'electron').toLowerCase()
+        const g = GAMMA[sp]
+        if (!Number.isFinite(B)) return `**Error**: zeeman mode requires field_T.`
+        if (!g) return `**Error**: unknown species "${sp}". Options: ${Object.keys(GAMMA).join(', ')}`
+
+        const f_Larmor = g.gamma * B                   // Hz
+        const omega    = 2 * Math.PI * f_Larmor        // rad/s
+        const deltaE_J = hbar * omega                  // J (single quantum of Zeeman splitting)
+        const deltaE_eV = deltaE_J / eV
+        const T_period = 1 / f_Larmor
+
+        lines.push(`## Zeeman Splitting / Larmor Precession — ${g.label}`)
+        lines.push('')
+        lines.push(`| Quantity | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| Field B | ${fmtUnit(B, 'T')} (${fmtUnit(B * 1e4, 'G')}) |`)
+        lines.push(`| Spin | ${g.spin} |`)
+        lines.push(`| γ/(2π) | ${fmtUnit(g.gamma, 'Hz/T')} |`)
+        lines.push(`| Larmor frequency f_L | ${fmtUnit(f_Larmor, 'Hz')} |`)
+        lines.push(`| Angular Larmor ω_L | ${fmtUnit(omega, 'rad/s')} |`)
+        lines.push(`| Precession period | ${fmtUnit(T_period, 's')} |`)
+        lines.push(`| Zeeman energy ΔE | ${fmtUnit(deltaE_J, 'J')} = ${fmtUnit(deltaE_eV, 'eV')} |`)
+        if (sp === 'nv') {
+          const D_zfs = 2.87e9  // NV zero-field splitting (Hz)
+          const fPlus  = D_zfs + g.gamma * B
+          const fMinus = D_zfs - g.gamma * B
+          lines.push('')
+          lines.push(`**NV ODMR transitions** (D_zfs = 2.87 GHz):`)
+          lines.push(`- |0⟩ → |+1⟩ at ${fmtUnit(fPlus, 'Hz')}`)
+          lines.push(`- |0⟩ → |-1⟩ at ${fmtUnit(fMinus, 'Hz')}`)
+          lines.push(`- Splitting 2·γB = ${fmtUnit(2 * g.gamma * B, 'Hz')}`)
+        }
+        return lines.join('\n')
+      }
+
+      // ── 2) NV-diamond shot-noise-limited sensitivity ──────────────────────
+      if (mode === 'nv') {
+        // δB_min = (1 / (γ_NV · C)) · sqrt( (1 + 1/(C² · n_phot)) / (N · T2*) ) · 1/√T
+        // Simplified (Taylor et al., Degen et al.): δB = (η / (γ · √(N · T2*)))
+        const N  = Number(args.n_spins ?? 1)
+        const T2 = Number(args.t2_s ?? 1e-6)             // T2* default 1 µs (ensemble)
+        const C  = Number(args.readout_fidelity ?? 0.03) // single-shot contrast
+        const Tint = Number(args.integration_s ?? 1)
+        const gamma = GAMMA.nv.gamma * 2 * Math.PI       // rad/(s·T)
+
+        if (!(N > 0 && T2 > 0 && C > 0 && Tint > 0)) {
+          return `**Error**: nv mode requires positive n_spins, t2_s, readout_fidelity, integration_s.`
+        }
+
+        // Ramsey-limited shot-noise sensitivity per √Hz
+        const eta_B = 1 / (gamma * C * Math.sqrt(N * T2))           // T/√Hz
+        const deltaB = eta_B / Math.sqrt(Tint)                       // T for given integration
+        // Spin-projection (quantum) limit (C → 1)
+        const eta_SQL = 1 / (gamma * Math.sqrt(N * T2))
+
+        lines.push(`## NV-Diamond Magnetometer — Ramsey / ODMR Sensitivity`)
+        lines.push('')
+        lines.push(`| Input | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| Number of NV spins N | ${fmt(N)} |`)
+        lines.push(`| Coherence T2* | ${fmtUnit(T2, 's')} |`)
+        lines.push(`| Readout contrast C | ${fmt(C)} |`)
+        lines.push(`| Integration time | ${fmtUnit(Tint, 's')} |`)
+        lines.push('')
+        lines.push(`| Result | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| Shot-noise sensitivity η_B | ${fmtUnit(eta_B * 1e15, 'fT/√Hz')} |`)
+        lines.push(`| Spin-projection (SQL) limit | ${fmtUnit(eta_SQL * 1e15, 'fT/√Hz')} |`)
+        lines.push(`| Min detectable field δB (${fmtUnit(Tint, 's')}) | ${fmtUnit(deltaB * 1e15, 'fT')} |`)
+        lines.push('')
+        lines.push(`**Formulae** (Taylor 2008, Degen 2017):`)
+        lines.push(`- η_B = 1 / (γ · C · √(N · T2*))  [T/√Hz]`)
+        lines.push(`- η_SQL = 1 / (γ · √(N · T2*))    [SQL, C=1]`)
+        lines.push(`- γ_NV / (2π) = 28.024 GHz/T`)
+        return lines.join('\n')
+      }
+
+      // ── 3) SQUID magnetometer ─────────────────────────────────────────────
+      if (mode === 'squid') {
+        // Phi_0 = h / (2e)  — magnetic flux quantum
+        const Phi_0 = h / (2 * e_charge)                              // Wb
+        const A   = Number(args.pickup_area_m2 ?? 1e-6)               // default 1 mm^2
+        const Sn  = Number(args.flux_noise_phi0_rthz ?? 1e-6)         // Phi_0/√Hz
+        const Tint = Number(args.integration_s ?? 1)
+
+        if (!(A > 0 && Sn > 0 && Tint > 0)) {
+          return `**Error**: squid mode requires positive pickup_area_m2, flux_noise_phi0_rthz, integration_s.`
+        }
+
+        // Field-referred noise: S_B = S_Phi · Phi_0 / A
+        const S_B = Sn * Phi_0 / A                                     // T/√Hz
+        const deltaB = S_B / Math.sqrt(Tint)
+
+        lines.push(`## SQUID Magnetometer — Flux-to-Field Sensitivity`)
+        lines.push('')
+        lines.push(`| Input | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| Flux quantum Φ₀ = h/2e | ${fmtUnit(Phi_0, 'Wb')} |`)
+        lines.push(`| Pickup loop area A | ${fmtUnit(A, 'm²')} |`)
+        lines.push(`| Flux noise S_Φ | ${fmt(Sn)} Φ₀/√Hz |`)
+        lines.push(`| Integration time | ${fmtUnit(Tint, 's')} |`)
+        lines.push('')
+        lines.push(`| Result | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| Field noise S_B = S_Φ · Φ₀ / A | ${fmtUnit(S_B * 1e15, 'fT/√Hz')} |`)
+        lines.push(`| Min detectable δB | ${fmtUnit(deltaB * 1e15, 'fT')} |`)
+        lines.push('')
+        lines.push(`Josephson-junction SQUIDs exploit flux quantization in a superconducting ring; one flux quantum Φ₀ ≈ 2.07·10⁻¹⁵ Wb sets the intrinsic scale.`)
+        return lines.join('\n')
+      }
+
+      // ── 4) OPM (Optically Pumped Magnetometer) — SERF regime ──────────────
+      if (mode === 'opm' || mode === 'serf') {
+        // δB = (1 / γ) · 1 / √(n · V · T2 · T)   (Budker & Romalis)
+        const sp = String(args.species || 'rb87').toLowerCase()
+        const g  = GAMMA[sp]
+        if (!g) return `**Error**: unknown species "${sp}". OPM options: cs, rb87, rb85, k39`
+        const n  = Number(args.vapor_density_m3 ?? 1e20)
+        const V  = Number(args.cell_volume_m3 ?? 1e-6)
+        const T2 = Number(args.t2_s ?? 1e-2)          // typical SERF T2 ~10 ms–1 s
+        const Tint = Number(args.integration_s ?? 1)
+        const gamma = g.gamma * 2 * Math.PI           // rad/(s·T)
+
+        if (!(n > 0 && V > 0 && T2 > 0 && Tint > 0)) {
+          return `**Error**: opm mode requires positive vapor_density_m3, cell_volume_m3, t2_s, integration_s.`
+        }
+
+        const N_atoms = n * V
+        const eta_B = 1 / (gamma * Math.sqrt(N_atoms * T2))   // T/√Hz (SQL)
+        const deltaB = eta_B / Math.sqrt(Tint)
+
+        lines.push(`## Optically-Pumped Magnetometer (SERF) — ${g.label}`)
+        lines.push('')
+        lines.push(`| Input | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| Atom density n | ${fmtUnit(n, 'atoms/m³')} |`)
+        lines.push(`| Cell volume V | ${fmtUnit(V, 'm³')} |`)
+        lines.push(`| Total atoms N = n·V | ${fmt(N_atoms)} |`)
+        lines.push(`| Coherence T2 | ${fmtUnit(T2, 's')} |`)
+        lines.push(`| γ/(2π) | ${fmtUnit(g.gamma, 'Hz/T')} |`)
+        lines.push('')
+        lines.push(`| Result | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| SQL sensitivity η_B | ${fmtUnit(eta_B * 1e15, 'fT/√Hz')} |`)
+        lines.push(`| Min detectable δB (${fmtUnit(Tint, 's')}) | ${fmtUnit(deltaB * 1e15, 'fT')} |`)
+        lines.push('')
+        lines.push(`**SERF regime**: spin-exchange-relaxation-free limit reached when Larmor precession is slower than spin-exchange rate (typically near-zero-field, >150 °C vapor cells). Best demonstrated sensitivity: ~0.16 fT/√Hz (Dang et al., 2010).`)
+        return lines.join('\n')
+      }
+
+      // ── 5) Generic sensitivity (shot-noise / SQL) ─────────────────────────
+      if (mode === 'sensitivity' || mode === 'sql') {
+        const sp = String(args.species || 'electron').toLowerCase()
+        const g  = GAMMA[sp]
+        if (!g) return `**Error**: unknown species "${sp}". Options: ${Object.keys(GAMMA).join(', ')}`
+        const N  = Number(args.n_spins ?? 1)
+        const T2 = Number(args.t2_s ?? 1)
+        const C  = Number(args.readout_fidelity ?? 1)
+        const Tint = Number(args.integration_s ?? 1)
+        const gamma = g.gamma * 2 * Math.PI
+
+        if (!(N > 0 && T2 > 0 && C > 0 && Tint > 0)) {
+          return `**Error**: sensitivity mode requires positive n_spins, t2_s, readout_fidelity, integration_s.`
+        }
+
+        const eta_SQL = 1 / (gamma * Math.sqrt(N * T2))
+        const eta_B   = eta_SQL / C
+        const deltaB  = eta_B / Math.sqrt(Tint)
+        // Heisenberg (entangled) limit: η_H = 1 / (γ · N · √T2)
+        const eta_H   = 1 / (gamma * N * Math.sqrt(T2))
+
+        lines.push(`## Quantum-Limited Magnetometer Sensitivity — ${g.label}`)
+        lines.push('')
+        lines.push(`| Input | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| N spins | ${fmt(N)} |`)
+        lines.push(`| Coherence T2 | ${fmtUnit(T2, 's')} |`)
+        lines.push(`| Readout fidelity C | ${fmt(C)} |`)
+        lines.push(`| Integration time | ${fmtUnit(Tint, 's')} |`)
+        lines.push('')
+        lines.push(`| Sensitivity | Value |`)
+        lines.push(`|---|---|`)
+        lines.push(`| Standard Quantum Limit η_SQL | ${fmtUnit(eta_SQL * 1e15, 'fT/√Hz')} |`)
+        lines.push(`| Shot-noise-limited η_B | ${fmtUnit(eta_B * 1e15, 'fT/√Hz')} |`)
+        lines.push(`| Heisenberg (entangled) limit η_H | ${fmtUnit(eta_H * 1e15, 'fT/√Hz')} |`)
+        lines.push(`| Min detectable δB | ${fmtUnit(deltaB * 1e15, 'fT')} |`)
+        lines.push('')
+        lines.push(`SQL scales as 1/√N; Heisenberg-limited sensing with squeezed/entangled spin states improves to 1/N (quadratic gain).`)
+        return lines.join('\n')
+      }
+
+      return `**Error**: Unknown mode "${mode}". Options: nv, squid, opm, zeeman, sensitivity`
+    },
+  })
 }
