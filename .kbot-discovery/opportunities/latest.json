@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T03:55:47.788Z",
+  "timestamp": "2026-04-13T04:17:09.852Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(whatsapp): unify inbound policy resolution",
+      "url": "https://github.com/openclaw/openclaw/pull/65700",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "feat: Streamline Feishu channel onboarding process",
       "url": "https://github.com/openclaw/openclaw/pull/65680",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "Request: Claude Code subscription billing proxy integration",
       "url": "https://github.com/Soul-Brews-Studio/arra-oracle-v3/issues/721",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "chore(sync): sync paperclip-e392f6b1 to 11de5ae",
-      "url": "https://github.com/serenakeyitan/paperclip-tree/pull/11",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
