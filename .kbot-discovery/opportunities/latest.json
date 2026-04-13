@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-12T18:57:02.492Z",
+  "timestamp": "2026-04-13T01:29:17.953Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,22 +67,22 @@
     },
     {
       "source": "hn-comment",
+      "title": "Ask HN: What Are You Working On? (April 2026)",
+      "url": "https://news.ycombinator.com/item?id=47744566",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "The Closing of the Frontier",
+      "url": "https://news.ycombinator.com/item?id=47743835",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "AI Will Be Met with Violence, and Nothing Good Will Come of It",
       "url": "https://news.ycombinator.com/item?id=47740944",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "AI assistance when contributing to the Linux kernel",
-      "url": "https://news.ycombinator.com/item?id=47739567",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Small models also found the vulnerabilities that Mythos found",
-      "url": "https://news.ycombinator.com/item?id=47733915",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "False positive: rewind-memory flagged as Suspicious by VirusTotal",
-      "url": "https://github.com/openclaw/clawhub/issues/1641",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-13",
+      "url": "https://github.com/duanyytop/agents-radar/issues/558",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "CLI: detect env-backed audio providers",
-      "url": "https://github.com/openclaw/openclaw/pull/65491",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-13",
+      "url": "https://github.com/DenisZheng/agents-radar/issues/349",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "session: add maxAgeHours, maxContextTokens, createdAt controls",
-      "url": "https://github.com/rhinoroo/openclaw/pull/1",
+      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-13",
+      "url": "https://github.com/jstamagal/agents-radar/issues/283",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "I replaced my entire team with 19 Claude-powered agents. Here's the architecture.",
+      "url": "https://reddit.com/r/artificial/comments/1sjwqcf/i_replaced_my_entire_team_with_19_claudepowered/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Hey Siri, are you lying to me?⁠ AI chatbots and agents disregarded direct instructions, evaded safeguards and deceived humans and other AI, according to new research.⁠",
+      "url": "https://reddit.com/r/artificial/comments/1sjwbzu/hey_siri_are_you_lying_to_me_ai_chatbots_and/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "Been building a multi-agent framework in public for 5 weeks, its been a Journey.",
       "url": "https://reddit.com/r/artificial/comments/1sj6o0i/been_building_a_multiagent_framework_in_public/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Alibaba-linked AI agent hijacked GPUs for unauthorized crypto mining, researchers say",
-      "url": "https://reddit.com/r/artificial/comments/1sizjz7/alibabalinked_ai_agent_hijacked_gpus_for/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "AMD's GAIA now allows building custom AI agents via chat, becomes \"true desktop app\"",
-      "url": "https://reddit.com/r/artificial/comments/1sitbvu/amds_gaia_now_allows_building_custom_ai_agents/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
