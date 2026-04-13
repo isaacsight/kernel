@@ -531,6 +531,61 @@ async function main(): Promise<void> {
       process.stderr.write(await generateBriefing())
     })
 
+  // ── News ──
+  program
+    .command('news')
+    .description('Latest AI industry news from HN, arXiv, and GitHub Trending')
+    .option('--source <source>', 'Source: hn | arxiv | github | all', 'all')
+    .option('-n, --limit <n>', 'Max headlines to fetch', '10')
+    .option('--summarize', 'Ask a model to produce a short digest (uses configured provider or local Ollama)')
+    .option('--model <model>', 'Ollama model for --summarize (default: kernel:latest or first available)', '')
+    .option('--json', 'Output as JSON')
+    .action(async (opts: { source?: string; limit?: string; summarize?: boolean; model?: string; json?: boolean }) => {
+      const { fetchNews, formatNews, summarizeNews } = await import('./news.js')
+      const parentJson = program.opts().json
+      const source = (opts.source || 'all') as 'hn' | 'arxiv' | 'github' | 'all'
+      if (!['hn', 'arxiv', 'github', 'all'].includes(source)) {
+        printError(`Invalid source "${source}". Use: hn, arxiv, github, or all.`)
+        process.exit(1)
+      }
+      const limit = Math.max(1, Math.min(50, Number(opts.limit || 10)))
+
+      const items = await fetchNews({ source, limit })
+
+      if (opts.json || parentJson) {
+        console.log(JSON.stringify({ items }, null, 2))
+        process.exit(0)
+      }
+
+      process.stdout.write(formatNews(items))
+
+      if (opts.summarize && items.length > 0) {
+        const ollamaModel = opts.model || process.env.KBOT_NEWS_MODEL || 'kernel:latest'
+        try {
+          const summary = await summarizeNews(items, async (prompt: string) => {
+            const res = await fetch('http://localhost:11434/api/generate', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ model: ollamaModel, prompt, stream: false }),
+              signal: AbortSignal.timeout(45000),
+            })
+            if (!res.ok) throw new Error(`ollama returned ${res.status}`)
+            const data = await res.json() as { response?: string }
+            return data.response || '(empty response)'
+          })
+          console.log()
+          console.log(chalk.bold.hex('#6B5B95')('  ◉ Digest'))
+          console.log()
+          console.log('  ' + summary.split('\n').join('\n  '))
+          console.log()
+        } catch (err) {
+          printWarn(`Could not summarize via Ollama (${ollamaModel}): ${err instanceof Error ? err.message : String(err)}`)
+          printInfo('Tip: start Ollama locally (ollama serve) and pull the model, or pass --model <installed-model>.')
+        }
+      }
+      process.exit(0)
+    })
+
   // ── Discovery Agent ──
   const discoveryCmd = program
     .command('discovery')

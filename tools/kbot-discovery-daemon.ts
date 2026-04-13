@@ -63,6 +63,7 @@ const INTEL_DIR = join(DAEMON_DIR, 'intel')
 const OUTREACH_DIR = join(DAEMON_DIR, 'outreach')
 const WRITING_DIR = join(DAEMON_DIR, 'writing')
 const EVOLUTION_DIR = join(DAEMON_DIR, 'evolution')
+const MODEL_RELEASES_DIR = join(DAEMON_DIR, 'model-releases')
 const STATE_FILE = join(DAEMON_DIR, 'state.json')
 const LOG_FILE = join(DAEMON_DIR, 'daemon.log')
 
@@ -1882,6 +1883,135 @@ async function pushSynthesisToSupabase(result: any, daemonState: DaemonState): P
   }
 }
 
+// ── Model Releases Tracker (Apr 2026) ─────────────────────────────────
+// Runs every 6h (same cadence as intel). Scans HN + GitHub for announcements
+// of new foundation models from the major labs and writes a running log so
+// Isaac can see what shipped while he was away.
+
+const MODEL_RELEASE_PATTERNS = [
+  /claude[-\s](?:mythos|opus|sonnet|haiku)\s*\d/i,
+  /gpt[-\s]?5\.?\d/i,
+  /gpt[-\s]?6/i,
+  /gemini[-\s]?\d/i,
+  /llama[-\s]?\d/i,
+  /deepseek[-\s]?(?:v|r)\d/i,
+  /mistral[-\s]?(?:large|medium|codestral)/i,
+  /qwen[-\s]?\d/i,
+  /(?:release|announce|launch|introduce|unveil).*(?:model|llm|foundation)/i,
+]
+
+interface ModelReleaseSignal {
+  title: string
+  url: string
+  source: 'hn' | 'github'
+  score?: number
+  matchedPattern: string
+  seenAt: string
+}
+
+async function scanHNForReleases(): Promise<ModelReleaseSignal[]> {
+  const q = encodeURIComponent('(release OR announce OR launch OR introduces) (Claude OR GPT OR Gemini OR Llama OR DeepSeek OR Mistral OR Qwen OR Anthropic OR OpenAI)')
+  const url = `https://hn.algolia.com/api/v1/search_by_date?tags=story&query=${q}&hitsPerPage=30`
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
+    if (!res.ok) return []
+    const data = await res.json() as { hits?: Array<{ title?: string; url?: string; objectID: string; points?: number }> }
+    const signals: ModelReleaseSignal[] = []
+    for (const h of data.hits || []) {
+      if (!h.title) continue
+      for (const pat of MODEL_RELEASE_PATTERNS) {
+        if (pat.test(h.title)) {
+          signals.push({
+            title: h.title,
+            url: h.url || `https://news.ycombinator.com/item?id=${h.objectID}`,
+            source: 'hn',
+            score: h.points,
+            matchedPattern: pat.source,
+            seenAt: new Date().toISOString(),
+          })
+          break
+        }
+      }
+    }
+    return signals
+  } catch {
+    return []
+  }
+}
+
+async function scanGithubForReleases(): Promise<ModelReleaseSignal[]> {
+  // Check release activity from a handful of watched model-hosting orgs
+  const orgs = ['openai', 'anthropics', 'meta-llama', 'deepseek-ai', 'mistralai', 'google-deepmind', 'QwenLM']
+  const out: ModelReleaseSignal[] = []
+  for (const org of orgs) {
+    try {
+      const res = await fetch(`https://api.github.com/orgs/${org}/events?per_page=10`, {
+        headers: { 'User-Agent': 'kbot-discovery/1.0', Accept: 'application/vnd.github+json' },
+        signal: AbortSignal.timeout(6000),
+      })
+      if (!res.ok) continue
+      const events = await res.json() as Array<{ type: string; repo?: { name: string }; payload?: { release?: { name?: string; tag_name?: string; html_url?: string } } }>
+      for (const e of events) {
+        if (e.type === 'ReleaseEvent' && e.payload?.release) {
+          const r = e.payload.release
+          out.push({
+            title: `${e.repo?.name || org}: ${r.name || r.tag_name || '(release)'}`,
+            url: r.html_url || `https://github.com/${e.repo?.name || org}`,
+            source: 'github',
+            matchedPattern: 'release-event',
+            seenAt: new Date().toISOString(),
+          })
+        }
+      }
+    } catch { /* per-org failures shouldn't kill the scan */ }
+  }
+  return out
+}
+
+async function runModelReleases(state: DaemonState): Promise<void> {
+  ensureDir(MODEL_RELEASES_DIR)
+  const logFile = join(MODEL_RELEASES_DIR, 'signals.jsonl')
+  const seenFile = join(MODEL_RELEASES_DIR, 'seen.json')
+
+  // Load the "already-reported" set so we don't spam the log with the same URLs
+  let seen: Record<string, string> = {}
+  try {
+    if (existsSync(seenFile)) seen = JSON.parse(readFileSync(seenFile, 'utf8'))
+  } catch {}
+
+  const [hnSignals, ghSignals] = await Promise.all([scanHNForReleases(), scanGithubForReleases()])
+  const all = [...hnSignals, ...ghSignals]
+
+  const fresh = all.filter(s => !seen[s.url])
+  if (fresh.length === 0) {
+    log(`[model-releases] No new model-release signals (${all.length} scanned, all already seen)`)
+    return
+  }
+
+  for (const s of fresh) {
+    seen[s.url] = s.seenAt
+    appendFileSync(logFile, JSON.stringify(s) + '\n')
+    log(`[model-releases] ${s.source.toUpperCase()} · ${s.title.slice(0, 90)}`)
+    observeToolCall('model_release_detected', { source: s.source, url: s.url, title: s.title })
+  }
+
+  // Prune seen map to last 500 entries to keep it bounded
+  const entries = Object.entries(seen)
+  if (entries.length > 500) {
+    const trimmed = Object.fromEntries(entries.slice(-500))
+    writeFileSync(seenFile, JSON.stringify(trimmed))
+  } else {
+    writeFileSync(seenFile, JSON.stringify(seen))
+  }
+
+  // Notify on a truly significant release (Claude/GPT/Gemini with points > 100)
+  for (const s of fresh) {
+    if (s.source === 'hn' && (s.score ?? 0) >= 100) {
+      await notifyFinding(`New model release on HN (${s.score} pts): ${s.title}\n${s.url}`)
+    }
+  }
+}
+
 // ── Main Loop ─────────────────────────────────────────────────────────
 
 async function runCycle(): Promise<void> {
@@ -1899,6 +2029,7 @@ async function runCycle(): Promise<void> {
     { name: 'pulse', interval: INTERVALS.pulse, fn: runPulse },
     { name: 'synthesis', interval: INTERVALS.pulse, fn: runSynthesis }, // Every heartbeat — zero cost, pure filesystem
     { name: 'intel', interval: INTERVALS.intel, fn: runIntel },
+    { name: 'model-releases', interval: INTERVALS.intel, fn: runModelReleases },
     { name: 'opportunities', interval: INTERVALS.intel, fn: runOpportunities },
     { name: 'actions', interval: INTERVALS.intel, fn: processOpportunities },
     { name: 'outreach', interval: INTERVALS.outreach, fn: runOutreach },
@@ -1926,7 +2057,7 @@ async function runCycle(): Promise<void> {
 
 async function main(): Promise<void> {
   // Ensure all directories exist
-  for (const dir of [DAEMON_DIR, PULSE_DIR, INTEL_DIR, OUTREACH_DIR, WRITING_DIR, EVOLUTION_DIR, OPPORTUNITIES_DIR, ACTIONS_DIR]) {
+  for (const dir of [DAEMON_DIR, PULSE_DIR, INTEL_DIR, OUTREACH_DIR, WRITING_DIR, EVOLUTION_DIR, OPPORTUNITIES_DIR, ACTIONS_DIR, MODEL_RELEASES_DIR]) {
     ensureDir(dir)
   }
 

@@ -2,6 +2,33 @@
 
 > This file persists context between Claude Code sessions.
 
+## Current Session (2026-04-13) — AI NEWS UPDATES branch
+
+Branch: `claude/ai-news-updates-y2qoY`
+
+**Shipped:**
+- `packages/kbot/src/news.ts` — new module. Pulls from HN (algolia), arXiv (Atom feed, inline parse), GitHub trending (public search). Optional local-Ollama `--summarize` via `/api/generate`.
+- `packages/kbot/src/cli.ts` — new `kbot news` subcommand with `--source`, `--limit`, `--summarize`, `--model`, `--json` flags. Wired right after `kbot briefing` registration.
+- `packages/kbot/src/auth.ts` — PROVIDERS updated for April 2026 news cycle:
+  - anthropic.models += `claude-mythos-5` (10T params, restricted preview — falls through to sonnet if key not allow-listed)
+  - openai.models += `gpt-5.4-thinking` (autonomous-agent variant, 75% desktop benchmarks)
+  - google.models += `gemini-3.1-pro`, `gemini-3.1` (real-time voice + image; 6x memory compression)
+  - openrouter.models += mirrored entries for the above
+- `tools/kbot-discovery-daemon.ts` — new `model-releases` task (6h cadence, same as intel). Scans HN + a curated GitHub org list (openai, anthropics, meta-llama, deepseek-ai, mistralai, google-deepmind, QwenLM) for release events. Writes `.kbot-discovery/model-releases/signals.jsonl` and `seen.json` (bounded to last 500 URLs). Notifies Discord on HN ≥ 100 pts.
+- `KBOT_KERNEL_CHAT.md` — new operator's reference explaining how kbot CLI and the kernel.chat web companion relate, where to build features, and how to ship changes that span both.
+- `CLAUDE.md` §XII — recent-changes entry for v3.74.0 (news + provider refresh).
+
+**Not shipped (scoped out of this branch — would need separate PRs):**
+- Autonomous desktop agent mode (`kbot --autonomous`) — touches computer-use safety model
+- Mythos-powered security daemon task — blocked on Mythos API access
+- NotebookLM-style ingest — large feature, deserves own branch
+- Gemini 3.1 voice bridge — needs Gemini voice API spec
+- Model cost router in `learned-router.ts` — own branch
+
+**Next session:** verify `kbot news` end-to-end on a live network (typecheck passed, runtime not exercised here). If news output looks good, bump version in `packages/kbot/package.json` and publish.
+
+---
+
 ## Current Session (2026-04-02 full day) — MEGA BUILD + ABLETON + LEADERBOARD
 
 ### Two-day summary (Apr 1-2): v3.62.0 → v3.73.3

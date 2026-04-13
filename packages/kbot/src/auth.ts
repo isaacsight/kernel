@@ -69,7 +69,9 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,
     outputCost: 15.0,
     authHeader: 'x-api-key',
-    models: ['claude-mythos-1', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+    // Apr 2026: Mythos 5 (10T params) restricted preview — requires allow-listed org key.
+    // kbot falls through to sonnet-4-6 if the request is rejected.
+    models: ['claude-mythos-5', 'claude-mythos-1', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
   },
   openai: {
     name: 'OpenAI',
@@ -80,7 +82,8 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 2.0,
     outputCost: 8.0,
     authHeader: 'bearer',
-    models: ['gpt-5.4', 'gpt-5.4-pro', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano', 'o3', 'o4-mini'],
+    // Apr 2026: gpt-5.4-thinking (autonomous agent variant, 75% on desktop task benchmarks).
+    models: ['gpt-5.4-thinking', 'gpt-5.4', 'gpt-5.4-pro', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano', 'o3', 'o4-mini'],
   },
   google: {
     name: 'Google (Gemini)',
@@ -91,7 +94,8 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 1.25,
     outputCost: 10.0,
     authHeader: 'bearer', // uses x-goog-api-key header
-    models: ['gemini-3.1-flash-lite', 'gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash'],
+    // Apr 2026: Gemini 3.1 adds real-time voice + image analysis; 6x memory compression.
+    models: ['gemini-3.1-pro', 'gemini-3.1', 'gemini-3.1-flash-lite', 'gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash'],
   },
   mistral: {
     name: 'Mistral AI',
@@ -223,7 +227,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,   // varies by model — this is Claude Sonnet pricing
     outputCost: 15.0,
     authHeader: 'bearer',
-    models: ['anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
+    models: ['anthropic/claude-mythos-5', 'anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-5.4-thinking', 'openai/gpt-5.4', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-3.1-pro', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
   },
   lmstudio: {
     name: 'LM Studio (Local)',

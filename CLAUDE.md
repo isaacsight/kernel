@@ -512,6 +512,17 @@ npm run deploy            # From repo root — builds + pushes to gh-pages branc
 
 ## XII. RECENT CHANGES
 
+### v3.74.0 (2026-04-13) — AI News + April 2026 Model Refresh
+- `kbot news` subcommand — HN + arXiv + GitHub Trending aggregator (free APIs). `--source`, `--limit`, `--json`, `--summarize` (local Ollama digest).
+- `packages/kbot/src/news.ts` — new aggregator module.
+- `auth.ts` PROVIDERS updated for April 2026 releases:
+  - Anthropic: `claude-mythos-5` (10T params, restricted preview)
+  - OpenAI: `gpt-5.4-thinking` (autonomous agent, 75% desktop benchmark)
+  - Google: `gemini-3.1-pro`, `gemini-3.1` (real-time voice/image, 6× memory compression)
+  - OpenRouter mirrors for all of the above
+- Discovery daemon: new `model-releases` task (6h cadence). Scans HN + watched org release feeds (openai, anthropics, meta-llama, deepseek-ai, mistralai, google-deepmind, QwenLM). Signals in `.kbot-discovery/model-releases/`. Discord notify on HN ≥ 100 pts.
+- `KBOT_KERNEL_CHAT.md` — operator's reference for where to build (CLI vs web) and how to ship cross-cutting changes.
+
 ### v3.60.0 (2026-03-31) — Computer-Use Desktop Agent
 - Full desktop control: screenshot, click, type, scroll, drag, key combos
 - macOS permission wizard (`computer_check` tool: Accessibility + Screen Recording checks)
