@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T13:06:13.276Z",
+  "timestamp": "2026-04-13T13:23:08.029Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(core): handle floating promises in message bus and schedule",
+      "url": "https://github.com/google-gemini/gemini-cli/pull/25280",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "toolsInFlight Orphan Initialization",
       "url": "https://github.com/kubestellar/console/issues/7459",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "Implement tool/function calling normalization across AI providers",
       "url": "https://github.com/deskive/deskive/issues/36",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Feature]: Support outputSchema for MCP tools",
-      "url": "https://github.com/agentscope-ai/agentscope-java/issues/1204",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "Bump the android-deps group across 1 directory with 16 updates",
+      "url": "https://github.com/manthan291999/openclaw/pull/16",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "feat(examples): add inference service performance benchmark using OpenClaw + TAU2-bench",
+      "url": "https://github.com/inclusionAI/AReaL/pull/1175",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "sync(paperclip-e392f6b1): Treat Pi quota exhaustion as a failed run (from paperclipai/paperclip#2305)",
       "url": "https://github.com/serenakeyitan/paperclip-tree/pull/51",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(codex): materialize synthetic auth in catalog",
-      "url": "https://github.com/openclaw/openclaw/pull/65947",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "sync(paperclip-e392f6b1): fix(issues): replace non-null assertions with null checks in checkout… (from paperclipai/paperclip#2594)",
-      "url": "https://github.com/serenakeyitan/paperclip-tree/pull/44",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
