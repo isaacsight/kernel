@@ -1,0 +1,124 @@
+name: Publish kbot to npm
+
+# Three ways to trigger a publish — all work from GitHub mobile:
+#   1. Push a tag starting with "kbot-v" (e.g. kbot-v3.75.0)
+#   2. Create a GitHub Release whose tag starts with "kbot-v"
+#   3. Run this workflow manually ("Run workflow" button in Actions tab)
+#
+# Required repo secrets:
+#   NPM_TOKEN — an npm automation token with publish rights on @kernel.chat/kbot
+#
+# How to add the secret (one-time, from a computer):
+#   1. npmjs.com → Access Tokens → Generate → "Automation"
+#   2. GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+#      Name: NPM_TOKEN, Value: <the token>
+#
+# Once set, you never touch it again. Every publish runs from here.
+
+on:
+  push:
+    tags:
+      - 'kbot-v*'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version bump (patch, minor, major, or exact version like 3.75.0). Leave blank to use current package.json version.'
+        required: false
+        default: ''
+        type: string
+      dry_run:
+        description: 'Dry run (npm publish --dry-run, no actual upload)'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: publish-kbot
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Build, test, and publish @kernel.chat/kbot
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write       # Needed to commit a version bump back to main
+      id-token: write       # Enables npm provenance (supply-chain trust)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install root deps
+        run: npm install --include=dev
+
+      - name: Install kbot deps
+        run: cd packages/kbot && npm install --include=dev
+
+      - name: Optional version bump (workflow_dispatch only)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.version_bump != '' }}
+        run: |
+          cd packages/kbot
+          git config user.name "kbot-release-bot"
+          git config user.email "noreply@kernel.chat"
+          # npm version accepts "patch|minor|major" or an exact "1.2.3"
+          npm version "${{ inputs.version_bump }}" --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          cd ../..
+          git add packages/kbot/package.json packages/kbot/package-lock.json 2>/dev/null || true
+          git commit -m "chore(kbot): bump to $NEW_VERSION" || echo "no changes"
+
+      - name: Build
+        run: cd packages/kbot && npm run build
+
+      - name: Test
+        run: cd packages/kbot && npx vitest run
+
+      - name: Verify version is not already published
+        run: |
+          cd packages/kbot
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "@kernel.chat/kbot@$VERSION" version >/dev/null 2>&1; then
+            echo "::error::Version $VERSION is already published to npm. Bump the version first."
+            exit 1
+          fi
+          echo "Version $VERSION is new — proceeding."
+
+      - name: Publish (dry run)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: cd packages/kbot && npm publish --access public --provenance --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        run: cd packages/kbot && npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Tag release (workflow_dispatch only — push path already has a tag)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.version_bump != '' && !inputs.dry_run }}
+        run: |
+          VERSION=$(node -p "require('./packages/kbot/package.json').version")
+          git tag "kbot-v$VERSION"
+          git push origin HEAD:main --follow-tags
+
+      - name: Summary
+        if: ${{ always() }}
+        run: |
+          VERSION=$(node -p "require('./packages/kbot/package.json').version")
+          echo "### kbot publish" >> $GITHUB_STEP_SUMMARY
+          echo "- Package: \`@kernel.chat/kbot@$VERSION\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Trigger: \`${{ github.event_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Dry run: \`${{ inputs.dry_run || 'false' }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- View: https://www.npmjs.com/package/@kernel.chat/kbot" >> $GITHUB_STEP_SUMMARY
