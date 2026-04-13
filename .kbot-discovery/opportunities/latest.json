@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-13T04:54:56.669Z",
-  "count": 27,
+  "timestamp": "2026-04-13T04:55:01.646Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -62,6 +62,27 @@
       "source": "hn-comment",
       "title": "Show HN: ScrapAI – We scrape 500 sites. AI runs once per site, not per page",
       "url": "https://news.ycombinator.com/item?id=47233229",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Ask HN: What Are You Working On? (April 2026)",
+      "url": "https://news.ycombinator.com/item?id=47746534",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "The Closing of the Frontier",
+      "url": "https://news.ycombinator.com/item?id=47743835",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
+      "url": "https://news.ycombinator.com/item?id=47692725",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },

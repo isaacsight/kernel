@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T04:48:36.344Z",
+  "timestamp": "2026-04-13T04:54:58.428Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -796,230 +796,7 @@
     },
     {
       "query": "kbot",
-      "hits": [
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "gpi"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Code Review Is the New <em>Bot</em>tleneck for Engineering Teams"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://newsletter.eng-leadership.com/p/code-review-is-the-new-<em>bot</em>tleneck"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_gpi",
-            "story_47747625"
-          ],
-          "author": "gpi",
-          "created_at": "2026-04-13T04:31:03Z",
-          "created_at_i": 1776054663,
-          "num_comments": 0,
-          "objectID": "47747625",
-          "points": 1,
-          "story_id": 47747625,
-          "title": "Code Review Is the New Bottleneck for Engineering Teams",
-          "updated_at": "2026-04-13T04:35:46Z",
-          "url": "https://newsletter.eng-leadership.com/p/code-review-is-the-new-bottleneck"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "rpatni"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Grateful is a gratitude app with a simple social layer.<p>You write a short entry, keep it private or share it to a circle. A circle is a small private group of your own making — family, close friends, whoever you'd actually want to hear from.<p>It shows you the most recent post first. People in the circle can react or leave a comment. There's also a daily notification that sends you something you were grateful for in the past.<p>Try it out on <em>bot</em>h iOS and Android. Go to grateful.so"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: A social feed with no strangers"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.grateful.so/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_rpatni",
-            "story_47745300",
-            "show_hn"
-          ],
-          "author": "rpatni",
-          "created_at": "2026-04-12T22:41:25Z",
-          "created_at_i": 1776033685,
-          "num_comments": 0,
-          "objectID": "47745300",
-          "points": 3,
-          "story_id": 47745300,
-          "story_text": "Grateful is a gratitude app with a simple social layer.<p>You write a short entry, keep it private or share it to a circle. A circle is a small private group of your own making — family, close friends, whoever you&#x27;d actually want to hear from.<p>It shows you the most recent post first. People in the circle can react or leave a comment. There&#x27;s also a daily notification that sends you something you were grateful for in the past.<p>Try it out on both iOS and Android. Go to grateful.so",
-          "title": "Show HN: A social feed with no strangers",
-          "updated_at": "2026-04-13T01:21:46Z",
-          "url": "https://www.grateful.so/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "florianleibert"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "For years, the lock-in was dead simple: CUDA.<p>Want top-tier performance? You wrote CUDA. Do that once, and you were all-in on NVIDIA. The ecosystem compounded—libraries, tooling, docs, talent—everything reinforcing the same gravity well.<p>That world is starting to crack.<p>We’re entering a phase where low-level code isn’t a rare skill anymore. Models are capable at generating kernels, bindings, and glue code. Good enough to get a first version running fast and iterate from there. The switching cost to a new accelerator is dropping quickly. What used to require a dedicated team now often looks like a decent prompt plus a few review passes.<p>There’s an old David Wheeler line: All problems in computer science can be solved by another level of indirection. AI Codegen is an abstraction and more.<p>At the same time, the economics are shifting.<p>For many real workloads—especially inference—VRAM matters more than peak FLOPS. You want models resident in memory, batching cleanly, with predictable latency. On a dollars-per-GB basis, AMD is starting to look compelling. Newer cards bring stronger low-precision throughput (FP8/INT4), structured sparsity, and significantly more memory on mainstream SKUs. If you’re running open models and care about cost/throughput, you’re at least evaluating them.<p>Intel is entering the mix as well. Battlemage (Arc Pro B-series) pushes high VRAM configurations with competitive price/perf for local inference. Not dominant, but another viable option that didn’t exist in the CUDA-only world.<p>Then there’s supply.<p>NVIDIA has built enormous demand and maintained pricing power. But scarcity cuts <em>bot</em>h ways. If you can’t get hardware—or only at extreme prices—people explore alternatives. Startups take what they can get. Infra teams design for heterogeneity. Open source adapts to whatever is available.<p>This is how moats erode: not via a single replacement, but through many small workarounds that become standard.<p>Two datapoints from actually standing up a modern model serving stack:<p>1. In my recent GLM 5.1 deployment on 8xB200s, getting a novel model to serve reliably was painful. It took me ~12–13 minutes of cold starts (many!), random restarts, non-obvious flags, kernel warmups, and graph captures just to reach a stable baseline. Most of that wasn’t “AI”—it was infra whack-a-mole across memory limits, runtimes, and config quirks.<p>2. Even once it was running, it was fragile. I kept hitting issues like streaming tool calls producing invalid JSON because the model output, server parser, and client SDK were out of sync. Fixing it required patches across multiple layers just to get to consistent outputs. Real systems are leaky—far from clean abstractions.<p>That’s the actual moat: not CUDA, but the entire stack—libraries, compilers, interconnects, and years of ops knowledge.<p>But, it’s early.<p>CUDA isn’t just a platform; it’s a decade-plus of battle-tested infra. Getting something to run is one thing. Getting it to run great at scale is still difficult, performance cliffs in exactly the wrong places.<p>And NVIDIA is moving up the stack aggressively—higher-level APIs, inference tooling, tighter framework integration. Blackwell-class hardware pushes further efficiency (e.g., low-precision compute like FP4) and targets memory-bound inference directly. If abstractions become the battlefield, they’re positioning to control that layer too.<p>So what happens:<p>* Near term: NVIDIA continues to dominate. Demand is still growing fast and they remain the default.\n* Medium term: the edges fray. Inference becomes more heterogeneous. AMD and Intel pick up share where cost and memory dominate.\n* Long term: value shifts upward—to models, data, orchestration. Hardware still matters, but becomes more interchangeable at the margin.<p><em>Bot</em>tom line: CUDA used to be a wall. Now it’s closer to a speed bump. AI didn’t remove the moat—it just made it much easier to cross when there’s a reason to."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Nvidia's moat is not what it used to be"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_florianleibert",
-            "story_47740552",
-            "ask_hn"
-          ],
-          "author": "florianleibert",
-          "children": [
-            47742078,
-            47742198,
-            47740902,
-            47741770,
-            47740642,
-            47741189,
-            47740901,
-            47740882
-          ],
-          "created_at": "2026-04-12T15:03:11Z",
-          "created_at_i": 1776006191,
-          "num_comments": 11,
-          "objectID": "47740552",
-          "points": 6,
-          "story_id": 47740552,
-          "story_text": "For years, the lock-in was dead simple: CUDA.<p>Want top-tier performance? You wrote CUDA. Do that once, and you were all-in on NVIDIA. The ecosystem compounded—libraries, tooling, docs, talent—everything reinforcing the same gravity well.<p>That world is starting to crack.<p>We’re entering a phase where low-level code isn’t a rare skill anymore. Models are capable at generating kernels, bindings, and glue code. Good enough to get a first version running fast and iterate from there. The switching cost to a new accelerator is dropping quickly. What used to require a dedicated team now often looks like a decent prompt plus a few review passes.<p>There’s an old David Wheeler line: All problems in computer science can be solved by another level of indirection. AI Codegen is an abstraction and more.<p>At the same time, the economics are shifting.<p>For many real workloads—especially inference—VRAM matters more than peak FLOPS. You want models resident in memory, batching cleanly, with predictable latency. On a dollars-per-GB basis, AMD is starting to look compelling. Newer cards bring stronger low-precision throughput (FP8&#x2F;INT4), structured sparsity, and significantly more memory on mainstream SKUs. If you’re running open models and care about cost&#x2F;throughput, you’re at least evaluating them.<p>Intel is entering the mix as well. Battlemage (Arc Pro B-series) pushes high VRAM configurations with competitive price&#x2F;perf for local inference. Not dominant, but another viable option that didn’t exist in the CUDA-only world.<p>Then there’s supply.<p>NVIDIA has built enormous demand and maintained pricing power. But scarcity cuts both ways. If you can’t get hardware—or only at extreme prices—people explore alternatives. Startups take what they can get. Infra teams design for heterogeneity. Open source adapts to whatever is available.<p>This is how moats erode: not via a single replacement, but through many small workarounds that become standard.<p>Two datapoints from actually standing up a modern model serving stack:<p>1. In my recent GLM 5.1 deployment on 8xB200s, getting a novel model to serve reliably was painful. It took me ~12–13 minutes of cold starts (many!), random restarts, non-obvious flags, kernel warmups, and graph captures just to reach a stable baseline. Most of that wasn’t “AI”—it was infra whack-a-mole across memory limits, runtimes, and config quirks.<p>2. Even once it was running, it was fragile. I kept hitting issues like streaming tool calls producing invalid JSON because the model output, server parser, and client SDK were out of sync. Fixing it required patches across multiple layers just to get to consistent outputs. Real systems are leaky—far from clean abstractions.<p>That’s the actual moat: not CUDA, but the entire stack—libraries, compilers, interconnects, and years of ops knowledge.<p>But, it’s early.<p>CUDA isn’t just a platform; it’s a decade-plus of battle-tested infra. Getting something to run is one thing. Getting it to run great at scale is still difficult, performance cliffs in exactly the wrong places.<p>And NVIDIA is moving up the stack aggressively—higher-level APIs, inference tooling, tighter framework integration. Blackwell-class hardware pushes further efficiency (e.g., low-precision compute like FP4) and targets memory-bound inference directly. If abstractions become the battlefield, they’re positioning to control that layer too.<p>So what happens:<p>* Near term: NVIDIA continues to dominate. Demand is still growing fast and they remain the default.\n* Medium term: the edges fray. Inference becomes more heterogeneous. AMD and Intel pick up share where cost and memory dominate.\n* Long term: value shifts upward—to models, data, orchestration. Hardware still matters, but becomes more interchangeable at the margin.<p>Bottom line: CUDA used to be a wall. Now it’s closer to a speed bump. AI didn’t remove the moat—it just made it much easier to cross when there’s a reason to.",
-          "title": "Nvidia's moat is not what it used to be",
-          "updated_at": "2026-04-12T21:37:30Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "willeyy"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Hi HN, I'm William.<p>ember is a matchmaking app I built because after 10 years of\nusing every major dating app, I'd close each one feeling worse\nthan when I opened it. To me they all look the same and feel\nthe same. The apps reward looks over substance and swipes over\nconversations. I crave deeper connection and wanted to see if\na personality-first format can work.<p>It's a &quot;Love Is Blind&quot; structure: you do an interactive\nonboarding that builds a persona, get compared automatically\nagainst other users, and connect through conversation before\never seeing a photo. Photos unlock after you've actually matched.<p>A few things I tried to solve that <em>bot</em>her me about existing apps:<p>- Ghosting: a common issue where people just stop replying.\n  I've implemented a system that discourages this — repeated\n  ghosting eventually results in being removed from the app.<p>- Safety at its core: photo scanning, real-time moderation for\n  harassment and grooming patterns, behavioural flagging.<p>- No swiping feed: you spend your time actually talking to\n  matches, not browsing profiles.<p>Stack: Supabase, Railway, React Native, and Claude Code did a\nlot of the heavy lifting on the backend logic.<p>I'm a solo builder, this is my first real launch, and I'd\ngenuinely appreciate any feedback. Happy to answer anything in\nthe comments."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: A personality first matchmaking app"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.connectwithember.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_willeyy",
-            "story_47739823",
-            "show_hn"
-          ],
-          "author": "willeyy",
-          "children": [
-            47742335
-          ],
-          "created_at": "2026-04-12T14:06:00Z",
-          "created_at_i": 1776002760,
-          "num_comments": 0,
-          "objectID": "47739823",
-          "points": 1,
-          "story_id": 47739823,
-          "story_text": "Hi HN, I&#x27;m William.<p>ember is a matchmaking app I built because after 10 years of\nusing every major dating app, I&#x27;d close each one feeling worse\nthan when I opened it. To me they all look the same and feel\nthe same. The apps reward looks over substance and swipes over\nconversations. I crave deeper connection and wanted to see if\na personality-first format can work.<p>It&#x27;s a &quot;Love Is Blind&quot; structure: you do an interactive\nonboarding that builds a persona, get compared automatically\nagainst other users, and connect through conversation before\never seeing a photo. Photos unlock after you&#x27;ve actually matched.<p>A few things I tried to solve that bother me about existing apps:<p>- Ghosting: a common issue where people just stop replying.\n  I&#x27;ve implemented a system that discourages this — repeated\n  ghosting eventually results in being removed from the app.<p>- Safety at its core: photo scanning, real-time moderation for\n  harassment and grooming patterns, behavioural flagging.<p>- No swiping feed: you spend your time actually talking to\n  matches, not browsing profiles.<p>Stack: Supabase, Railway, React Native, and Claude Code did a\nlot of the heavy lifting on the backend logic.<p>I&#x27;m a solo builder, this is my first real launch, and I&#x27;d\ngenuinely appreciate any feedback. Happy to answer anything in\nthe comments.",
-          "title": "Show HN: A personality first matchmaking app",
-          "updated_at": "2026-04-12T17:40:44Z",
-          "url": "https://www.connectwithember.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "pentacent_hq"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Hey folks,<p>I'm building an Open Source email newsletter tool and one of the challenges we have is form spam: As soon as a signup form goes live somewhere, <em>bot</em>s will try to sign up. This is possibly an attempt to overwhelm the inbox of people whose accounts have been compromised. But it's also bad for the people who run the newsletter as these ultimately unwanted emails reduce their sender reputation.<p>There was recently a discussion here on HN about this topic [1]. The post author ended up using Cloudflare Turnstile to mitigate the issue. We currently already have support for external captcha solutions like hCaptcha. However, many of our users are quite privacy-conscious and don't like having user data sent to third parties (especially non-EU third parties for our European users).<p>So now I've been thinking of adding an invisible proof-of-work (PoW) captcha to all signup forms. Possible implementations I've been considering are Altcha [2] and mCaptcha [3].<p>Now to my question: Have any of you tried using PoW captchas to protect against form spam? What have your experiences been with it so far?<p>[1] https://news.ycombinator.com/item?id=47609882<p>[2] https://altcha.org/<p>[3] https://mcaptcha.org/"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Ask HN: What's your experience with PoW captchas against form spam?"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pentacent_hq",
-            "story_47739684",
-            "ask_hn"
-          ],
-          "author": "pentacent_hq",
-          "children": [
-            47744521,
-            47741579,
-            47740041
-          ],
-          "created_at": "2026-04-12T13:54:26Z",
-          "created_at_i": 1776002066,
-          "num_comments": 7,
-          "objectID": "47739684",
-          "points": 4,
-          "story_id": 47739684,
-          "story_text": "Hey folks,<p>I&#x27;m building an Open Source email newsletter tool and one of the challenges we have is form spam: As soon as a signup form goes live somewhere, bots will try to sign up. This is possibly an attempt to overwhelm the inbox of people whose accounts have been compromised. But it&#x27;s also bad for the people who run the newsletter as these ultimately unwanted emails reduce their sender reputation.<p>There was recently a discussion here on HN about this topic [1]. The post author ended up using Cloudflare Turnstile to mitigate the issue. We currently already have support for external captcha solutions like hCaptcha. However, many of our users are quite privacy-conscious and don&#x27;t like having user data sent to third parties (especially non-EU third parties for our European users).<p>So now I&#x27;ve been thinking of adding an invisible proof-of-work (PoW) captcha to all signup forms. Possible implementations I&#x27;ve been considering are Altcha [2] and mCaptcha [3].<p>Now to my question: Have any of you tried using PoW captchas to protect against form spam? What have your experiences been with it so far?<p>[1] https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47609882<p>[2] https:&#x2F;&#x2F;altcha.org&#x2F;<p>[3] https:&#x2F;&#x2F;mcaptcha.org&#x2F;",
-          "title": "Ask HN: What's your experience with PoW captchas against form spam?",
-          "updated_at": "2026-04-13T00:54:45Z"
-        }
-      ]
+      "hits": []
     },
     {
       "query": "OpenClaw+plugin",
@@ -1374,7 +1151,7 @@
           "story_id": 47741889,
           "story_text": "Hello everyone.<p>Claudraband wraps a Claude Code TUI in a controlled terminal to enable extended workflows. It uses tmux for visible controlled sessions or xterm.js for headless sessions (a little slower), but everything is mediated by an actual Claude Code TUI.<p>One example of a workflow I use now is having my current Claude Code interrogate older sessions for certain decisions it made: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;halfwhey&#x2F;claudraband?tab=readme-ov-file#self-interrogation\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;halfwhey&#x2F;claudraband?tab=readme-ov-file#s...</a><p>This project provides:<p>- Resumable non-interactive workflows. Essentially `claude -p` with session support: `cband continue &lt;session-id&gt; &#x27;what was the result of the research?&#x27;`\n- HTTP server to remotely control a Claude Code session: `cband serve --port 8123`\n- ACP server to use with alternative frontends such as Zed or Toad (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;batrachianai&#x2F;toad\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;batrachianai&#x2F;toad</a>): `cband acp --model haiku`.\n- TypeScript library so you can integrate these workflows into your own application.<p>This exists cause I was using `tmux send-keys` heavily in a lot of my Claude Code workflows, but I wanted to streamline it.",
           "title": "Show HN: Claudraband – Claude Code for the Power User",
-          "updated_at": "2026-04-13T04:43:46Z",
+          "updated_at": "2026-04-13T04:52:17Z",
           "url": "https://github.com/halfwhey/claudraband"
         },
         {
@@ -2545,5 +2322,5 @@
       ]
     }
   ],
-  "totalHits": 50
+  "totalHits": 45
 }
