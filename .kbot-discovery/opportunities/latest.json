@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T05:32:09.989Z",
+  "timestamp": "2026-04-13T05:40:41.168Z",
   "count": 30,
   "opportunities": [
     {
@@ -81,8 +81,8 @@
     },
     {
       "source": "hn-comment",
-      "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
-      "url": "https://news.ycombinator.com/item?id=47692725",
+      "title": "AI Will Be Met with Violence, and Nothing Good Will Come of It",
+      "url": "https://news.ycombinator.com/item?id=47740944",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
