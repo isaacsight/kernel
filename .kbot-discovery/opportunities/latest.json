@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-13T08:08:43.501Z",
-  "count": 30,
+  "timestamp": "2026-04-13T08:42:49.907Z",
+  "count": 27,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -88,27 +88,6 @@
     },
     {
       "source": "github-issue",
-      "title": "feat: AutoGen PolicyEnforcingAgent — compliance wrapper for AutoGen conversations",
-      "url": "https://github.com/ashutoshrana/regulated-ai-governance/issues/6",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Backend extraction pipeline is painfully slow — need architectural overhaul",
-      "url": "https://github.com/TINKPA/receipt-assistant/issues/6",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "[Epic] Push test coverage to ≥95% across all components",
-      "url": "https://github.com/Agent-Field/agentfield/issues/387",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
       "title": "docs: add JetBrains AI Assistant MCP proxy integration guide",
       "url": "https://github.com/agent-receipts/ar/issues/133",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -130,22 +109,22 @@
     },
     {
       "source": "github-issue",
+      "title": "fix(cli): load runtime plugins for wiki commands",
+      "url": "https://github.com/openclaw/openclaw/pull/65800",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Ai bankofai patch 1",
+      "url": "https://github.com/BofAI/docs/pull/42",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "build(deps): Bump the npm_and_yarn group across 53 directories with 6 updates",
       "url": "https://github.com/frannunpal/openclawskills/pull/168",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat(memory-wiki): support configurable vault layout",
-      "url": "https://github.com/openclaw/openclaw/pull/65784",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "feat: expose Torale API surface for external integrations",
-      "url": "https://github.com/prassanna-ravishankar/torale/pull/210",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
