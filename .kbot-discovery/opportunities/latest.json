@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T01:46:29.914Z",
+  "timestamp": "2026-04-13T02:02:30.103Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "Control UI: refresh slash commands from runtime command list",
-      "url": "https://github.com/openclaw/openclaw/pull/65620",
+      "title": "build(deps): bump the android-deps group across 1 directory with 16 updates",
+      "url": "https://github.com/zhou0928/openClaw/pull/19",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
       "title": "🦞 OpenClaw Ecosystem Digest 2026-04-13",
-      "url": "https://github.com/duanyytop/agents-radar/issues/558",
+      "url": "https://github.com/yinwm/agents-radar/issues/228",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-13",
-      "url": "https://github.com/DenisZheng/agents-radar/issues/349",
+      "title": "fix(mattermost): harden native slash command callbacks",
+      "url": "https://github.com/openclaw/openclaw/pull/65648",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,13 +193,6 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "I replaced my entire team with 19 Claude-powered agents. Here's the architecture.",
-      "url": "https://reddit.com/r/artificial/comments/1sjwqcf/i_replaced_my_entire_team_with_19_claudepowered/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
       "title": "Hey Siri, are you lying to me?⁠ AI chatbots and agents disregarded direct instructions, evaded safeguards and deceived humans and other AI, according to new research.⁠",
       "url": "https://reddit.com/r/artificial/comments/1sjwbzu/hey_siri_are_you_lying_to_me_ai_chatbots_and/",
       "why": "Discussion in r/artificial about AI agents",
@@ -209,6 +202,13 @@
       "source": "reddit-artificial",
       "title": "Been building a multi-agent framework in public for 5 weeks, its been a Journey.",
       "url": "https://reddit.com/r/artificial/comments/1sj6o0i/been_building_a_multiagent_framework_in_public/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Alibaba-linked AI agent hijacked GPUs for unauthorized crypto mining, researchers say",
+      "url": "https://reddit.com/r/artificial/comments/1sizjz7/alibabalinked_ai_agent_hijacked_gpus_for/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
