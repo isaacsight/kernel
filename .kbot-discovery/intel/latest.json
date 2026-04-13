@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T04:17:26.648Z",
+  "timestamp": "2026-04-13T04:32:18.738Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -807,7 +807,47 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "sshnaidm1"
+              "value": "gpi"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Code Review Is the New <em>Bot</em>tleneck for Engineering Teams"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://newsletter.eng-leadership.com/p/code-review-is-the-new-<em>bot</em>tleneck"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_gpi",
+            "story_47747625"
+          ],
+          "author": "gpi",
+          "created_at": "2026-04-13T04:31:03Z",
+          "created_at_i": 1776054663,
+          "num_comments": 0,
+          "objectID": "47747625",
+          "points": 1,
+          "story_id": 47747625,
+          "title": "Code Review Is the New Bottleneck for Engineering Teams",
+          "updated_at": "2026-04-13T04:32:01Z",
+          "url": "https://newsletter.eng-leadership.com/p/code-review-is-the-new-bottleneck"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "rpatni"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -815,136 +855,43 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Hi HN,<p>We built Sova AI <a href=\"https://ayconic.io/sova\" rel=\"nofollow\">https://ayconic.io/sova</a>, an Android assistant agent that actually controls and operates your apps. It's not a chat and not another LLM wrapper.<p>We were incredibly frustrated with the current state of mobile AI. Built-in assistants like Gemini are deeply integrated into the OS, yet if you ask them to &quot;Order an Uber to the airport&quot;, they mostly just give you web search results or a button to open the app yourself. They don't do the work. (The Perplexity &quot;assistant&quot; is just a browser agent :/ )<p>So, we built an agent that does operate your phone. (NO root, NO adb, NO PC, NO appium/whatever, NO usb, NO browser)<p>How it works: You give Sova a prompt - either voice or text, you can make it a default assistant if you like. Instead of relying on non-existent official app APIs, Sova acts as a virtual human - clicks, scrolls, types etc. It uses the Android Accessibility API to read the screen's UI node tree. \nAbout AI models - currently we support main AI cloud providers (OpenAI, Gemini, Anthropic, Deepseek etc etc) and working towards support of local AI models on your host - Ollama, LM studio, etc. \nPricing: 100% Free / Bring Your Own Key (BYOK) \nWe aren't charging for the Sova engine right now. We built a BYOK system: you plug in your own API key (OpenAI, Claude, whatever you prefer), and you only pay the provider for the tokens you use. We figured out how to do this entirely on-device as a standard <em>Kot</em>lin app. No tethering to a PC, no Appium, no Root, and no Shizuku/ADB workarounds. Just an app even your granny can use.<p>The Google Play Ban: Because we use the Accessibility API for &quot;universal automation&quot; (literally mapping and clicking other apps), Google Play rejected our submission. It’s ironic: they banned us for building the exact agentic behavior that Gemini promises but fails to deliver. So, we are hosting the APK ourselves: <a href=\"https://sova.ayconic.io\" rel=\"nofollow\">https://sova.ayconic.io</a><p>We’d love for you to download the APK, plug in your key, and try to break it. What apps completely confuse the agent?\nRoadmap: support of local models with Ollama, LM studio or another tools, predefined rules and personas for your tasks, detailed statistics for you, support for Openrouter, enterprise Amazon Bedrock, Google Vertex and Azure Foundry models, support for IOS.<p>What would you like to see more? We'd be happy to hear your feedback, success and failure stories.<p>Video demo is here <a href=\"https://www.youtube.com/watch?v=r-x6hRmtBy0\" rel=\"nofollow\">https://www.youtube.com/watch?v=r-x6hRmtBy0</a> and APK is here: <a href=\"https://ayconic.io/sova\" rel=\"nofollow\">https://ayconic.io/sova</a> We are here to answer your questions and listen to feedback in Telegram and Discord. It's not perfect yet, but it does its work."
+              "value": "Grateful is a gratitude app with a simple social layer.<p>You write a short entry, keep it private or share it to a circle. A circle is a small private group of your own making — family, close friends, whoever you'd actually want to hear from.<p>It shows you the most recent post first. People in the circle can react or leave a comment. There's also a daily notification that sends you something you were grateful for in the past.<p>Try it out on <em>bot</em>h iOS and Android. Go to grateful.so"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Android AI agent-assistant operating your apps (no adb,PC,root,etc.)"
+              "value": "Show HN: A social feed with no strangers"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.grateful.so/"
             }
           },
           "_tags": [
             "story",
-            "author_sshnaidm1",
-            "story_47738583",
+            "author_rpatni",
+            "story_47745300",
             "show_hn"
           ],
-          "author": "sshnaidm1",
-          "children": [
-            47741110,
-            47738635
-          ],
-          "created_at": "2026-04-12T11:48:16Z",
-          "created_at_i": 1775994496,
-          "num_comments": 2,
-          "objectID": "47738583",
-          "points": 2,
-          "story_id": 47738583,
-          "story_text": "Hi HN,<p>We built Sova AI <a href=\"https:&#x2F;&#x2F;ayconic.io&#x2F;sova\" rel=\"nofollow\">https:&#x2F;&#x2F;ayconic.io&#x2F;sova</a>, an Android assistant agent that actually controls and operates your apps. It&#x27;s not a chat and not another LLM wrapper.<p>We were incredibly frustrated with the current state of mobile AI. Built-in assistants like Gemini are deeply integrated into the OS, yet if you ask them to &quot;Order an Uber to the airport&quot;, they mostly just give you web search results or a button to open the app yourself. They don&#x27;t do the work. (The Perplexity &quot;assistant&quot; is just a browser agent :&#x2F; )<p>So, we built an agent that does operate your phone. (NO root, NO adb, NO PC, NO appium&#x2F;whatever, NO usb, NO browser)<p>How it works: You give Sova a prompt - either voice or text, you can make it a default assistant if you like. Instead of relying on non-existent official app APIs, Sova acts as a virtual human - clicks, scrolls, types etc. It uses the Android Accessibility API to read the screen&#x27;s UI node tree. \nAbout AI models - currently we support main AI cloud providers (OpenAI, Gemini, Anthropic, Deepseek etc etc) and working towards support of local AI models on your host - Ollama, LM studio, etc. \nPricing: 100% Free &#x2F; Bring Your Own Key (BYOK) \nWe aren&#x27;t charging for the Sova engine right now. We built a BYOK system: you plug in your own API key (OpenAI, Claude, whatever you prefer), and you only pay the provider for the tokens you use. We figured out how to do this entirely on-device as a standard Kotlin app. No tethering to a PC, no Appium, no Root, and no Shizuku&#x2F;ADB workarounds. Just an app even your granny can use.<p>The Google Play Ban: Because we use the Accessibility API for &quot;universal automation&quot; (literally mapping and clicking other apps), Google Play rejected our submission. It’s ironic: they banned us for building the exact agentic behavior that Gemini promises but fails to deliver. So, we are hosting the APK ourselves: <a href=\"https:&#x2F;&#x2F;sova.ayconic.io\" rel=\"nofollow\">https:&#x2F;&#x2F;sova.ayconic.io</a><p>We’d love for you to download the APK, plug in your key, and try to break it. What apps completely confuse the agent?\nRoadmap: support of local models with Ollama, LM studio or another tools, predefined rules and personas for your tasks, detailed statistics for you, support for Openrouter, enterprise Amazon Bedrock, Google Vertex and Azure Foundry models, support for IOS.<p>What would you like to see more? We&#x27;d be happy to hear your feedback, success and failure stories.<p>Video demo is here <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=r-x6hRmtBy0\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=r-x6hRmtBy0</a> and APK is here: <a href=\"https:&#x2F;&#x2F;ayconic.io&#x2F;sova\" rel=\"nofollow\">https:&#x2F;&#x2F;ayconic.io&#x2F;sova</a> We are here to answer your questions and listen to feedback in Telegram and Discord. It&#x27;s not perfect yet, but it does its work.",
-          "title": "Show HN: Android AI agent-assistant operating your apps (no adb,PC,root,etc.)",
-          "updated_at": "2026-04-12T19:20:45Z"
+          "author": "rpatni",
+          "created_at": "2026-04-12T22:41:25Z",
+          "created_at_i": 1776033685,
+          "num_comments": 0,
+          "objectID": "47745300",
+          "points": 3,
+          "story_id": 47745300,
+          "story_text": "Grateful is a gratitude app with a simple social layer.<p>You write a short entry, keep it private or share it to a circle. A circle is a small private group of your own making — family, close friends, whoever you&#x27;d actually want to hear from.<p>It shows you the most recent post first. People in the circle can react or leave a comment. There&#x27;s also a daily notification that sends you something you were grateful for in the past.<p>Try it out on both iOS and Android. Go to grateful.so",
+          "title": "Show HN: A social feed with no strangers",
+          "updated_at": "2026-04-13T01:21:46Z",
+          "url": "https://www.grateful.so/"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "c420"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Rockstar Games Hacked, Hackers Threaten a Massive Data Leak If Not Paid Ransom"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://<em>kot</em>aku.com/rockstar-games-reportedly-hacked-massive-data-leak-ransom-gta-6-shinyhunters-2000686858"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_c420",
-            "story_47731707"
-          ],
-          "author": "c420",
-          "children": [
-            47733784,
-            47732262,
-            47732398,
-            47733438,
-            47732442,
-            47732144,
-            47732663,
-            47734678,
-            47735579,
-            47732509,
-            47733272,
-            47732910,
-            47732110,
-            47732081,
-            47733459
-          ],
-          "created_at": "2026-04-11T16:04:52Z",
-          "created_at_i": 1775923492,
-          "num_comments": 59,
-          "objectID": "47731707",
-          "points": 109,
-          "story_id": 47731707,
-          "title": "Rockstar Games Hacked, Hackers Threaten a Massive Data Leak If Not Paid Ransom",
-          "updated_at": "2026-04-13T03:51:01Z",
-          "url": "https://kotaku.com/rockstar-games-reportedly-hacked-massive-data-leak-ransom-gta-6-shinyhunters-2000686858"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "tzury"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "1,200 years of peak cherry blossom dates in <em>Kyot</em>o"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://twitter.com/antea04/status/2042541639793627533"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_tzury",
-            "story_47721771"
-          ],
-          "author": "tzury",
-          "children": [
-            47723747,
-            47721902
-          ],
-          "created_at": "2026-04-10T18:17:39Z",
-          "created_at_i": 1775845059,
-          "num_comments": 2,
-          "objectID": "47721771",
-          "points": 13,
-          "story_id": 47721771,
-          "title": "1,200 years of peak cherry blossom dates in Kyoto",
-          "updated_at": "2026-04-11T02:46:37Z",
-          "url": "https://twitter.com/antea04/status/2042541639793627533"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "danoandco"
+              "value": "florianleibert"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -952,116 +899,130 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Hey HN, we're Willy and Dan, co-founders of Twill.ai (<a href=\"https://twill.ai/\">https://twill.ai/</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https://www.youtube.com/watch?v=oyfTMXVECbs\" rel=\"nofollow\">https://www.youtube.com/watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that <em>bot</em>h touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don't scale past a couple of tasks.<p>2. Persistence: close your laptop and the agent stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous agent full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the agents to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same agent, each in their own thread. Then memory, so &quot;use the existing logger in lib/log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own coding products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud agents on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their coding harness, Twill picks up the improvement automatically.<p>We’re also open-sourcing agentbox-sdk, <a href=\"https://github.com/TwillAI/agentbox-sdk\" rel=\"nofollow\">https://github.com/TwillAI/agentbox-sdk</a>, an SDK for running and interacting with agent CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel's Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50/month for 50 credits, with BYOK support on higher tiers. Free pro tier for open-source projects.<p>We’d love to hear how cloud coding agents fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing."
+              "value": "For years, the lock-in was dead simple: CUDA.<p>Want top-tier performance? You wrote CUDA. Do that once, and you were all-in on NVIDIA. The ecosystem compounded—libraries, tooling, docs, talent—everything reinforcing the same gravity well.<p>That world is starting to crack.<p>We’re entering a phase where low-level code isn’t a rare skill anymore. Models are capable at generating kernels, bindings, and glue code. Good enough to get a first version running fast and iterate from there. The switching cost to a new accelerator is dropping quickly. What used to require a dedicated team now often looks like a decent prompt plus a few review passes.<p>There’s an old David Wheeler line: All problems in computer science can be solved by another level of indirection. AI Codegen is an abstraction and more.<p>At the same time, the economics are shifting.<p>For many real workloads—especially inference—VRAM matters more than peak FLOPS. You want models resident in memory, batching cleanly, with predictable latency. On a dollars-per-GB basis, AMD is starting to look compelling. Newer cards bring stronger low-precision throughput (FP8/INT4), structured sparsity, and significantly more memory on mainstream SKUs. If you’re running open models and care about cost/throughput, you’re at least evaluating them.<p>Intel is entering the mix as well. Battlemage (Arc Pro B-series) pushes high VRAM configurations with competitive price/perf for local inference. Not dominant, but another viable option that didn’t exist in the CUDA-only world.<p>Then there’s supply.<p>NVIDIA has built enormous demand and maintained pricing power. But scarcity cuts <em>bot</em>h ways. If you can’t get hardware—or only at extreme prices—people explore alternatives. Startups take what they can get. Infra teams design for heterogeneity. Open source adapts to whatever is available.<p>This is how moats erode: not via a single replacement, but through many small workarounds that become standard.<p>Two datapoints from actually standing up a modern model serving stack:<p>1. In my recent GLM 5.1 deployment on 8xB200s, getting a novel model to serve reliably was painful. It took me ~12–13 minutes of cold starts (many!), random restarts, non-obvious flags, kernel warmups, and graph captures just to reach a stable baseline. Most of that wasn’t “AI”—it was infra whack-a-mole across memory limits, runtimes, and config quirks.<p>2. Even once it was running, it was fragile. I kept hitting issues like streaming tool calls producing invalid JSON because the model output, server parser, and client SDK were out of sync. Fixing it required patches across multiple layers just to get to consistent outputs. Real systems are leaky—far from clean abstractions.<p>That’s the actual moat: not CUDA, but the entire stack—libraries, compilers, interconnects, and years of ops knowledge.<p>But, it’s early.<p>CUDA isn’t just a platform; it’s a decade-plus of battle-tested infra. Getting something to run is one thing. Getting it to run great at scale is still difficult, performance cliffs in exactly the wrong places.<p>And NVIDIA is moving up the stack aggressively—higher-level APIs, inference tooling, tighter framework integration. Blackwell-class hardware pushes further efficiency (e.g., low-precision compute like FP4) and targets memory-bound inference directly. If abstractions become the battlefield, they’re positioning to control that layer too.<p>So what happens:<p>* Near term: NVIDIA continues to dominate. Demand is still growing fast and they remain the default.\n* Medium term: the edges fray. Inference becomes more heterogeneous. AMD and Intel pick up share where cost and memory dominate.\n* Long term: value shifts upward—to models, data, orchestration. Hardware still matters, but becomes more interchangeable at the margin.<p><em>Bot</em>tom line: CUDA used to be a wall. Now it’s closer to a speed bump. AI didn’t remove the moat—it just made it much easier to cross when there’s a reason to."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://twill.ai"
+              "value": "Nvidia's moat is not what it used to be"
             }
           },
           "_tags": [
             "story",
-            "author_danoandco",
-            "story_47720418",
-            "launch_hn"
+            "author_florianleibert",
+            "story_47740552",
+            "ask_hn"
           ],
-          "author": "danoandco",
+          "author": "florianleibert",
           "children": [
-            47721952,
-            47722143,
-            47729698,
-            47734885,
-            47724685,
-            47726513,
-            47722894,
-            47727181,
-            47739774,
-            47727825,
-            47726441,
-            47728452,
-            47730110,
-            47723506,
-            47730075,
-            47724790,
-            47721827,
-            47721911,
-            47729997,
-            47723053,
-            47723947,
-            47723944,
-            47722251,
-            47729916,
-            47724470,
-            47730687,
-            47731560,
-            47724244,
-            47729237,
-            47723090,
-            47722489,
-            47729750,
-            47728129,
-            47722067,
-            47728671,
-            47726505
+            47742078,
+            47742198,
+            47740902,
+            47741770,
+            47740642,
+            47741189,
+            47740901,
+            47740882
           ],
-          "created_at": "2026-04-10T16:22:13Z",
-          "created_at_i": 1775838133,
-          "num_comments": 90,
-          "objectID": "47720418",
-          "points": 77,
-          "story_id": 47720418,
-          "story_text": "Hey HN, we&#x27;re Willy and Dan, co-founders of Twill.ai (<a href=\"https:&#x2F;&#x2F;twill.ai&#x2F;\">https:&#x2F;&#x2F;twill.ai&#x2F;</a>). Twill runs coding CLIs like Claude Code and Codex in isolated cloud sandboxes. You hand it work through Slack, GitHub, Linear, our web app or CLI, and it comes back with a PR, a review, a diagnosis, or a follow-up question. It loops you in when it needs your input, so you stay in control.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=oyfTMXVECbs</a><p>Before Twill, building with Claude Code locally, we kept hitting three walls<p>1. Parallelization: two tasks that both touch your Docker config or the same infra files are painful to run locally at once, and manual port rebinding and separate build contexts don&#x27;t scale past a couple of tasks.<p>2. Persistence: close your laptop and the agent stops. We wanted to kick off a batch of tasks before bed and wake up to \nPRs.<p>3. Trust: giving an autonomous agent full access to your local filesystem and processes is a leap, and a sandbox per task felt safer to run unattended.<p>All three pointed to the same answer: move the agents to the cloud, give each task its own isolated environment.<p>So we built what we wanted. The first version was pure delegation: describe a task, get back a PR. Then multiplayer, so the whole team can talk to the same agent, each in their own thread. Then memory, so &quot;use the existing logger in lib&#x2F;log.ts, never console.log&quot; becomes a standing instruction on every future task. Then automation: crons for recurring work, event triggers for things like broken CI.<p>This space is crowded. AI labs ship their own coding products (Claude Code, Codex), local IDEs wrap models in your editor, and a wave of startups build custom cloud agents on bespoke harnesses. We take the following path: reuse the lab-native CLIs in cloud sandboxes. Labs will keep pouring RL into their own harnesses, so they only get better over time. That way, no vendor lock-in, and you can pick a different CLI per task or combine them.<p>When you give Twill a task, it spins up a dedicated sandbox, clones your repo, installs dependencies, and invokes the CLI you chose. Each task gets its own filesystem, ports, and process isolation. Secrets are injected at runtime through environment variables. After a task finishes, Twill snapshots the sandbox filesystem so the next run on the same repo starts warm with dependencies already installed. We chose this architecture because every time the labs ship an improvement to their coding harness, Twill picks up the improvement automatically.<p>We’re also open-sourcing agentbox-sdk, <a href=\"https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;TwillAI&#x2F;agentbox-sdk</a>, an SDK for running and interacting with agent CLIs across sandbox providers.<p>Here’s an example: a three-person team assigned Twill to a Linear backlog ticket about adding a CSV import feature to their Rails app. Twill cloned the repo, set up the dev environment, implemented the feature, ran the test suite, took screenshots and attached them to the PR. The PR needed one round of revision, which they requested through Github. For more complex tasks, Twill asks clarifying questions before writing code and records a browser session video (using Vercel&#x27;s Webreel) as proof of work.<p>Free tier: 10 credits per month (1 credit = $1 of AI compute at cost, no markup), no credit card. Paid plans start at $50&#x2F;month for 50 credits, with BYOK support on higher tiers. Free pro tier for open-source projects.<p>We’d love to hear how cloud coding agents fit into your workflow today, and if you try Twill, what worked, what broke, and what’s still missing.",
-          "title": "Launch HN: Twill.ai (YC S25) – Delegate to cloud agents, get back PRs",
-          "updated_at": "2026-04-13T02:50:15Z",
-          "url": "https://twill.ai"
+          "created_at": "2026-04-12T15:03:11Z",
+          "created_at_i": 1776006191,
+          "num_comments": 11,
+          "objectID": "47740552",
+          "points": 6,
+          "story_id": 47740552,
+          "story_text": "For years, the lock-in was dead simple: CUDA.<p>Want top-tier performance? You wrote CUDA. Do that once, and you were all-in on NVIDIA. The ecosystem compounded—libraries, tooling, docs, talent—everything reinforcing the same gravity well.<p>That world is starting to crack.<p>We’re entering a phase where low-level code isn’t a rare skill anymore. Models are capable at generating kernels, bindings, and glue code. Good enough to get a first version running fast and iterate from there. The switching cost to a new accelerator is dropping quickly. What used to require a dedicated team now often looks like a decent prompt plus a few review passes.<p>There’s an old David Wheeler line: All problems in computer science can be solved by another level of indirection. AI Codegen is an abstraction and more.<p>At the same time, the economics are shifting.<p>For many real workloads—especially inference—VRAM matters more than peak FLOPS. You want models resident in memory, batching cleanly, with predictable latency. On a dollars-per-GB basis, AMD is starting to look compelling. Newer cards bring stronger low-precision throughput (FP8&#x2F;INT4), structured sparsity, and significantly more memory on mainstream SKUs. If you’re running open models and care about cost&#x2F;throughput, you’re at least evaluating them.<p>Intel is entering the mix as well. Battlemage (Arc Pro B-series) pushes high VRAM configurations with competitive price&#x2F;perf for local inference. Not dominant, but another viable option that didn’t exist in the CUDA-only world.<p>Then there’s supply.<p>NVIDIA has built enormous demand and maintained pricing power. But scarcity cuts both ways. If you can’t get hardware—or only at extreme prices—people explore alternatives. Startups take what they can get. Infra teams design for heterogeneity. Open source adapts to whatever is available.<p>This is how moats erode: not via a single replacement, but through many small workarounds that become standard.<p>Two datapoints from actually standing up a modern model serving stack:<p>1. In my recent GLM 5.1 deployment on 8xB200s, getting a novel model to serve reliably was painful. It took me ~12–13 minutes of cold starts (many!), random restarts, non-obvious flags, kernel warmups, and graph captures just to reach a stable baseline. Most of that wasn’t “AI”—it was infra whack-a-mole across memory limits, runtimes, and config quirks.<p>2. Even once it was running, it was fragile. I kept hitting issues like streaming tool calls producing invalid JSON because the model output, server parser, and client SDK were out of sync. Fixing it required patches across multiple layers just to get to consistent outputs. Real systems are leaky—far from clean abstractions.<p>That’s the actual moat: not CUDA, but the entire stack—libraries, compilers, interconnects, and years of ops knowledge.<p>But, it’s early.<p>CUDA isn’t just a platform; it’s a decade-plus of battle-tested infra. Getting something to run is one thing. Getting it to run great at scale is still difficult, performance cliffs in exactly the wrong places.<p>And NVIDIA is moving up the stack aggressively—higher-level APIs, inference tooling, tighter framework integration. Blackwell-class hardware pushes further efficiency (e.g., low-precision compute like FP4) and targets memory-bound inference directly. If abstractions become the battlefield, they’re positioning to control that layer too.<p>So what happens:<p>* Near term: NVIDIA continues to dominate. Demand is still growing fast and they remain the default.\n* Medium term: the edges fray. Inference becomes more heterogeneous. AMD and Intel pick up share where cost and memory dominate.\n* Long term: value shifts upward—to models, data, orchestration. Hardware still matters, but becomes more interchangeable at the margin.<p>Bottom line: CUDA used to be a wall. Now it’s closer to a speed bump. AI didn’t remove the moat—it just made it much easier to cross when there’s a reason to.",
+          "title": "Nvidia's moat is not what it used to be",
+          "updated_at": "2026-04-12T21:37:30Z"
         },
         {
           "_highlightResult": {
             "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "willeyy"
+            },
+            "story_text": {
               "fullyHighlighted": false,
               "matchLevel": "full",
               "matchedWords": [
                 "kbot"
               ],
-              "value": "<em>kot</em>obuki"
+              "value": "Hi HN, I'm William.<p>ember is a matchmaking app I built because after 10 years of\nusing every major dating app, I'd close each one feeling worse\nthan when I opened it. To me they all look the same and feel\nthe same. The apps reward looks over substance and swipes over\nconversations. I crave deeper connection and wanted to see if\na personality-first format can work.<p>It's a &quot;Love Is Blind&quot; structure: you do an interactive\nonboarding that builds a persona, get compared automatically\nagainst other users, and connect through conversation before\never seeing a photo. Photos unlock after you've actually matched.<p>A few things I tried to solve that <em>bot</em>her me about existing apps:<p>- Ghosting: a common issue where people just stop replying.\n  I've implemented a system that discourages this — repeated\n  ghosting eventually results in being removed from the app.<p>- Safety at its core: photo scanning, real-time moderation for\n  harassment and grooming patterns, behavioural flagging.<p>- No swiping feed: you spend your time actually talking to\n  matches, not browsing profiles.<p>Stack: Supabase, Railway, React Native, and Claude Code did a\nlot of the heavy lifting on the backend logic.<p>I'm a solo builder, this is my first real launch, and I'd\ngenuinely appreciate any feedback. Happy to answer anything in\nthe comments."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Some LLM routers are injecting malicious tool calls"
+              "value": "Show HN: A personality first matchmaking app"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://twitter.com/fried_rice/status/2042423713019412941"
+              "value": "https://www.connectwithember.com/"
             }
           },
           "_tags": [
             "story",
-            "author_kotobuki",
-            "story_47713401"
+            "author_willeyy",
+            "story_47739823",
+            "show_hn"
           ],
-          "author": "kotobuki",
+          "author": "willeyy",
           "children": [
-            47730358,
-            47713483,
-            47729448
+            47742335
           ],
-          "created_at": "2026-04-10T03:50:42Z",
-          "created_at_i": 1775793042,
-          "num_comments": 2,
-          "objectID": "47713401",
-          "points": 7,
-          "story_id": 47713401,
-          "title": "Some LLM routers are injecting malicious tool calls",
-          "updated_at": "2026-04-11T14:31:55Z",
-          "url": "https://twitter.com/fried_rice/status/2042423713019412941"
+          "created_at": "2026-04-12T14:06:00Z",
+          "created_at_i": 1776002760,
+          "num_comments": 0,
+          "objectID": "47739823",
+          "points": 1,
+          "story_id": 47739823,
+          "story_text": "Hi HN, I&#x27;m William.<p>ember is a matchmaking app I built because after 10 years of\nusing every major dating app, I&#x27;d close each one feeling worse\nthan when I opened it. To me they all look the same and feel\nthe same. The apps reward looks over substance and swipes over\nconversations. I crave deeper connection and wanted to see if\na personality-first format can work.<p>It&#x27;s a &quot;Love Is Blind&quot; structure: you do an interactive\nonboarding that builds a persona, get compared automatically\nagainst other users, and connect through conversation before\never seeing a photo. Photos unlock after you&#x27;ve actually matched.<p>A few things I tried to solve that bother me about existing apps:<p>- Ghosting: a common issue where people just stop replying.\n  I&#x27;ve implemented a system that discourages this — repeated\n  ghosting eventually results in being removed from the app.<p>- Safety at its core: photo scanning, real-time moderation for\n  harassment and grooming patterns, behavioural flagging.<p>- No swiping feed: you spend your time actually talking to\n  matches, not browsing profiles.<p>Stack: Supabase, Railway, React Native, and Claude Code did a\nlot of the heavy lifting on the backend logic.<p>I&#x27;m a solo builder, this is my first real launch, and I&#x27;d\ngenuinely appreciate any feedback. Happy to answer anything in\nthe comments.",
+          "title": "Show HN: A personality first matchmaking app",
+          "updated_at": "2026-04-12T17:40:44Z",
+          "url": "https://www.connectwithember.com/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "pentacent_hq"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey folks,<p>I'm building an Open Source email newsletter tool and one of the challenges we have is form spam: As soon as a signup form goes live somewhere, <em>bot</em>s will try to sign up. This is possibly an attempt to overwhelm the inbox of people whose accounts have been compromised. But it's also bad for the people who run the newsletter as these ultimately unwanted emails reduce their sender reputation.<p>There was recently a discussion here on HN about this topic [1]. The post author ended up using Cloudflare Turnstile to mitigate the issue. We currently already have support for external captcha solutions like hCaptcha. However, many of our users are quite privacy-conscious and don't like having user data sent to third parties (especially non-EU third parties for our European users).<p>So now I've been thinking of adding an invisible proof-of-work (PoW) captcha to all signup forms. Possible implementations I've been considering are Altcha [2] and mCaptcha [3].<p>Now to my question: Have any of you tried using PoW captchas to protect against form spam? What have your experiences been with it so far?<p>[1] https://news.ycombinator.com/item?id=47609882<p>[2] https://altcha.org/<p>[3] https://mcaptcha.org/"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Ask HN: What's your experience with PoW captchas against form spam?"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_pentacent_hq",
+            "story_47739684",
+            "ask_hn"
+          ],
+          "author": "pentacent_hq",
+          "children": [
+            47744521,
+            47741579,
+            47740041
+          ],
+          "created_at": "2026-04-12T13:54:26Z",
+          "created_at_i": 1776002066,
+          "num_comments": 7,
+          "objectID": "47739684",
+          "points": 4,
+          "story_id": 47739684,
+          "story_text": "Hey folks,<p>I&#x27;m building an Open Source email newsletter tool and one of the challenges we have is form spam: As soon as a signup form goes live somewhere, bots will try to sign up. This is possibly an attempt to overwhelm the inbox of people whose accounts have been compromised. But it&#x27;s also bad for the people who run the newsletter as these ultimately unwanted emails reduce their sender reputation.<p>There was recently a discussion here on HN about this topic [1]. The post author ended up using Cloudflare Turnstile to mitigate the issue. We currently already have support for external captcha solutions like hCaptcha. However, many of our users are quite privacy-conscious and don&#x27;t like having user data sent to third parties (especially non-EU third parties for our European users).<p>So now I&#x27;ve been thinking of adding an invisible proof-of-work (PoW) captcha to all signup forms. Possible implementations I&#x27;ve been considering are Altcha [2] and mCaptcha [3].<p>Now to my question: Have any of you tried using PoW captchas to protect against form spam? What have your experiences been with it so far?<p>[1] https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=47609882<p>[2] https:&#x2F;&#x2F;altcha.org&#x2F;<p>[3] https:&#x2F;&#x2F;mcaptcha.org&#x2F;",
+          "title": "Ask HN: What's your experience with PoW captchas against form spam?",
+          "updated_at": "2026-04-13T00:54:45Z"
         }
       ]
     },
@@ -1404,8 +1365,8 @@
             47745166,
             47746085,
             47743616,
-            47747424,
             47743945,
+            47747424,
             47746959,
             47744265,
             47745149
@@ -1414,11 +1375,11 @@
           "created_at_i": 1776012920,
           "num_comments": 36,
           "objectID": "47741889",
-          "points": 100,
+          "points": 101,
           "story_id": 47741889,
           "story_text": "Hello everyone.<p>Claudraband wraps a Claude Code TUI in a controlled terminal to enable extended workflows. It uses tmux for visible controlled sessions or xterm.js for headless sessions (a little slower), but everything is mediated by an actual Claude Code TUI.<p>One example of a workflow I use now is having my current Claude Code interrogate older sessions for certain decisions it made: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;halfwhey&#x2F;claudraband?tab=readme-ov-file#self-interrogation\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;halfwhey&#x2F;claudraband?tab=readme-ov-file#s...</a><p>This project provides:<p>- Resumable non-interactive workflows. Essentially `claude -p` with session support: `cband continue &lt;session-id&gt; &#x27;what was the result of the research?&#x27;`\n- HTTP server to remotely control a Claude Code session: `cband serve --port 8123`\n- ACP server to use with alternative frontends such as Zed or Toad (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;batrachianai&#x2F;toad\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;batrachianai&#x2F;toad</a>): `cband acp --model haiku`.\n- TypeScript library so you can integrate these workflows into your own application.<p>This exists cause I was using `tmux send-keys` heavily in a lot of my Claude Code workflows, but I wanted to streamline it.",
           "title": "Show HN: Claudraband – Claude Code for the Power User",
-          "updated_at": "2026-04-13T04:16:45Z",
+          "updated_at": "2026-04-13T04:26:16Z",
           "url": "https://github.com/halfwhey/claudraband"
         },
         {
@@ -2365,6 +2326,45 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "granto"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "self",
+                "improving",
+                "ai"
+              ],
+              "value": "<em>Self</em>-<em>Improving</em> <em>AI</em> Agent"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/NousResearch/hermes-agent"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_granto",
+            "story_47747612"
+          ],
+          "author": "granto",
+          "created_at": "2026-04-13T04:29:20Z",
+          "created_at_i": 1776054560,
+          "num_comments": 0,
+          "objectID": "47747612",
+          "points": 1,
+          "story_id": 47747612,
+          "title": "Self-Improving AI Agent",
+          "updated_at": "2026-04-13T04:30:31Z",
+          "url": "https://github.com/NousResearch/hermes-agent"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "lablnet"
             },
             "story_text": {
@@ -2546,48 +2546,6 @@
           "title": "Hermes Agent: The self-improving open source AI agent Complete Guide for 2026",
           "updated_at": "2026-04-05T03:13:29Z",
           "url": "https://virtualuncle.com/hermes-agent-complete-guide-2026/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "geox"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Silicon Valley Is in a Frenzy over Bots That Build Themselves"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "self",
-                "improving",
-                "ai"
-              ],
-              "value": "https://www.theatlantic.com/technology/2026/04/<em>ai</em>-industry-<em>self</em>-<em>improving</em>-bots/686686/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_geox",
-            "story_47634234"
-          ],
-          "author": "geox",
-          "children": [
-            47635683
-          ],
-          "created_at": "2026-04-04T00:34:01Z",
-          "created_at_i": 1775262841,
-          "num_comments": 1,
-          "objectID": "47634234",
-          "points": 12,
-          "story_id": 47634234,
-          "title": "Silicon Valley Is in a Frenzy over Bots That Build Themselves",
-          "updated_at": "2026-04-05T18:48:16Z",
-          "url": "https://www.theatlantic.com/technology/2026/04/ai-industry-self-improving-bots/686686/"
         }
       ]
     }
