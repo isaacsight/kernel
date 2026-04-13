@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T05:05:45.166Z",
+  "timestamp": "2026-04-13T05:32:09.989Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,6 +130,13 @@
     },
     {
       "source": "github-issue",
+      "title": "chore(deps): bump the android-deps group across 1 directory with 16 updates",
+      "url": "https://github.com/skytow/openclaw-extra-write-roots/pull/21",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Weekly Report 2026-04-13",
       "url": "https://github.com/kagenti/kagenti/issues/1231",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -139,13 +146,6 @@
       "source": "github-issue",
       "title": "AI Builders Digest — 2026-04-13",
       "url": "https://github.com/study8677/follow-builders/issues/8",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "fix(whatsapp): unify inbound policy resolution",
-      "url": "https://github.com/openclaw/openclaw/pull/65700",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
