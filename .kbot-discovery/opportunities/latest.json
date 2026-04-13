@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T03:19:26.823Z",
+  "timestamp": "2026-04-13T03:38:49.396Z",
   "count": 30,
   "opportunities": [
     {
@@ -74,15 +74,15 @@
     },
     {
       "source": "hn-comment",
-      "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
-      "url": "https://news.ycombinator.com/item?id=47692725",
+      "title": "The Closing of the Frontier",
+      "url": "https://news.ycombinator.com/item?id=47743835",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "The cult of vibe coding is dogfooding run amok",
-      "url": "https://news.ycombinator.com/item?id=47675718",
+      "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
+      "url": "https://news.ycombinator.com/item?id=47692725",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
