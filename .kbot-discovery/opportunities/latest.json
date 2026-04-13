@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-13T08:42:49.907Z",
-  "count": 27,
+  "timestamp": "2026-04-13T09:50:09.783Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -68,6 +68,13 @@
     {
       "source": "hn-comment",
       "title": "Ask HN: What Are You Working On? (April 2026)",
+      "url": "https://news.ycombinator.com/item?id=47749411",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "Ask HN: What Are You Working On? (April 2026)",
       "url": "https://news.ycombinator.com/item?id=47748792",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
@@ -80,11 +87,25 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "The Closing of the Frontier",
-      "url": "https://news.ycombinator.com/item?id=47743835",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "Implement tool/function calling normalization across AI providers",
+      "url": "https://github.com/deskive/deskive/issues/36",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "feat: AutoGen PolicyEnforcingAgent — compliance wrapper for AutoGen conversations",
+      "url": "https://github.com/ashutoshrana/regulated-ai-governance/issues/6",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Backend extraction pipeline is painfully slow — need architectural overhaul",
+      "url": "https://github.com/TINKPA/receipt-assistant/issues/6",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -109,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(cli): load runtime plugins for wiki commands",
-      "url": "https://github.com/openclaw/openclaw/pull/65800",
+      "title": "NanoClaw Radar - 2026-04-13",
+      "url": "https://github.com/happydog-intj/NanoClawRadar/issues/41",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Ai bankofai patch 1",
-      "url": "https://github.com/BofAI/docs/pull/42",
+      "title": "fix(minimax): include MINIMAX_API_KEY in web search auto-detection and onboarding",
+      "url": "https://github.com/openclaw/openclaw/pull/65828",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "build(deps): Bump the npm_and_yarn group across 53 directories with 6 updates",
-      "url": "https://github.com/frannunpal/openclawskills/pull/168",
+      "title": "Secrets: add Exa web-search SecretRef target",
+      "url": "https://github.com/KnightNiwrem/openclaw/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
