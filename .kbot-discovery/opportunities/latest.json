@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T02:19:07.500Z",
+  "timestamp": "2026-04-13T02:49:05.208Z",
   "count": 30,
   "opportunities": [
     {
@@ -74,15 +74,15 @@
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN: What Are You Working On? (April 2026)",
-      "url": "https://news.ycombinator.com/item?id=47744566",
+      "title": "What a Japanese cooking principle taught me about overcoming AI fatigue",
+      "url": "https://news.ycombinator.com/item?id=47692725",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "The Closing of the Frontier",
-      "url": "https://news.ycombinator.com/item?id=47743835",
+      "title": "The cult of vibe coding is dogfooding run amok",
+      "url": "https://news.ycombinator.com/item?id=47675718",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "chore(sync): sync paperclip-e392f6b1 to 11de5ae",
+      "url": "https://github.com/serenakeyitan/paperclip-tree/pull/11",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "chore(deps): bump the minor-and-patch group across 1 directory with 22 updates",
+      "url": "https://github.com/parth012001/taskflow-ops/pull/24",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Claude/automate fork sync ir128",
       "url": "https://github.com/openclaw/openclaw/pull/65651",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "build(deps): bump the android-deps group across 1 directory with 16 updates",
-      "url": "https://github.com/zhou0928/openClaw/pull/19",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "🦞 OpenClaw Ecosystem Digest 2026-04-13",
-      "url": "https://github.com/yinwm/agents-radar/issues/228",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
