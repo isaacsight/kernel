@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T03:04:02.429Z",
+  "timestamp": "2026-04-13T03:19:24.992Z",
   "count": 30,
   "opportunities": [
     {
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
+      "title": "feat: Streamline Feishu channel onboarding process",
+      "url": "https://github.com/openclaw/openclaw/pull/65680",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Request: Claude Code subscription billing proxy integration",
+      "url": "https://github.com/Soul-Brews-Studio/arra-oracle-v3/issues/721",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "chore(sync): sync paperclip-e392f6b1 to 11de5ae",
       "url": "https://github.com/serenakeyitan/paperclip-tree/pull/11",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "chore(deps): bump the minor-and-patch group across 1 directory with 22 updates",
-      "url": "https://github.com/parth012001/taskflow-ops/pull/24",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Claude/automate fork sync ir128",
-      "url": "https://github.com/openclaw/openclaw/pull/65651",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
