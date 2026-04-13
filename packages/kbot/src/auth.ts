@@ -260,10 +260,24 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     authHeader: 'bearer',  // Ollama ignores auth but needs valid header
     // Ollama models are auto-detected from local install — this is just a starter list
     models: [
-      // Code-specialized
+      // Frontier open-weight (Apr 2026)
+      // Qwen 3 / 3.5 — Apache 2.0, matches DeepSeek-R1 / o3-mini / Gemini-2.5-Pro on reasoning
+      'qwen3:7b', 'qwen3:14b', 'qwen3:32b', 'qwen3:72b', 'qwen3:235b-a22b',
+      'qwen3-coder:7b', 'qwen3-coder:32b',
+      // DeepSeek V3.2 — MIT, 685B MoE (37B active), beats GPT-5 on some reasoning benchmarks
+      'deepseek-v3.2:latest', 'deepseek-v3.2:reasoner',
+      // GLM-5 — MIT, strong commercial-friendly contender
+      'glm-5:9b', 'glm-5:32b',
+      // Llama 4 — Meta
+      'llama4:8b', 'llama4:70b', 'llama4:400b',
+      // Gemma 4 — Google open weights
+      'gemma4:9b', 'gemma4:27b',
+      // Nemotron Cascade 2, Kimi K2.5
+      'nemotron-cascade:49b', 'kimi-k2.5:latest',
+      // Code-specialized (prior gens kept for compatibility)
       'qwen2.5-coder:7b', 'qwen2.5-coder:14b', 'qwen2.5-coder:32b',
       'deepseek-coder-v2:16b', 'codellama:13b', 'codegemma:7b', 'starcoder2:7b',
-      // Reasoning / general
+      // Reasoning / general (prior gens)
       'llama3.1:8b', 'llama3.1:70b', 'llama3.3:70b',
       'gemma3:12b', 'gemma3:27b',
       'phi4:14b', 'mistral:7b', 'mistral-small3:22b', 'mixtral:8x7b',

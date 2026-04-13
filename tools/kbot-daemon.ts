@@ -35,11 +35,15 @@ const LOG_FILE = join(REPORTS_DIR, 'daemon.log')
 
 // Models — best local model for each task type (all free via Ollama)
 // Custom Kernel personality models (built via tools/setup-kernel-models.sh)
-// Falls back to base models if custom ones aren't available
+// Falls back to base models if custom ones aren't available.
+//
+// Apr 2026: Qwen 3 and DeepSeek V3.2 overtook prior-gen open-weight models on
+// coding/reasoning benchmarks. Daemon uses those when available; env overrides
+// via KBOT_DAEMON_{CODE,REASONING,GENERAL}_MODEL.
 const MODELS = {
-  code: 'kernel-coder:latest',
-  reasoning: 'deepseek-r1:14b',
-  general: 'kernel:latest',
+  code: process.env.KBOT_DAEMON_CODE_MODEL || 'qwen3-coder:32b',
+  reasoning: process.env.KBOT_DAEMON_REASONING_MODEL || 'deepseek-v3.2:reasoner',
+  general: process.env.KBOT_DAEMON_GENERAL_MODEL || 'qwen3:32b',
   embeddings: 'nomic-embed-text',
 } as const
 
