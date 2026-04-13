@@ -1,63 +1,63 @@
 {
-  "timestamp": "2026-04-12T18:44:08.459Z",
+  "timestamp": "2026-04-13T06:57:43.814Z",
   "projects": [
     {
-      "name": "sonichi/sutando",
-      "url": "https://github.com/sonichi/sutando",
-      "stars": 114,
-      "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1062,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "gorango/flowcraft",
-      "url": "https://github.com/gorango/flowcraft",
-      "stars": 171,
-      "description": "A lightweight workflow engine"
+      "name": "nexu-io/nexu",
+      "url": "https://github.com/nexu-io/nexu",
+      "stars": 2497,
+      "description": "The simplest desktop client for OpenClaw 🦞 — bridge your Agent to WeChat, Feishu, Slack & Discord in one click. Works with Claude Code, Codex & any LLM. BYOK, Oauth, local-first, chat from your phone 24/7."
     },
     {
-      "name": "BlockRunAI/Franklin",
-      "url": "https://github.com/BlockRunAI/Franklin",
-      "stars": 279,
-      "description": "Franklin — The AI agent with a wallet. The first AI agent that can actually spend USDC to get real work done. Pay per action, no subscriptions."
+      "name": "rcarmo/piclaw",
+      "url": "https://github.com/rcarmo/piclaw",
+      "stars": 487,
+      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
     },
     {
-      "name": "Ar9av/obsidian-wiki",
-      "url": "https://github.com/Ar9av/obsidian-wiki",
-      "stars": 314,
-      "description": "Framework for AI agents to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern"
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 704,
+      "description": "Agent Skills for Solopreneurs"
     },
     {
       "name": "mensfeld/code-on-incus",
       "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 384,
+      "stars": 388,
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "url": "https://github.com/HuangYuChuh/ComfyUI_Skills_OpenClaw",
-      "stars": 205,
-      "description": "A powerful ComfyUI workflow skill for OpenClaw and other AI agents that support skills."
+      "name": "Ar9av/obsidian-wiki",
+      "url": "https://github.com/Ar9av/obsidian-wiki",
+      "stars": 325,
+      "description": "Framework for AI agents to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern"
     },
     {
-      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
-      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "name": "colygon/openclaw-nebius",
+      "url": "https://github.com/colygon/openclaw-nebius",
       "stars": 0,
-      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
+      "description": "OpenClaw + Nebius: provider plugin, deployment UI, and Claude Code skill"
     },
     {
-      "name": "orbio-api/orbio-openclaw",
-      "url": "https://github.com/orbio-api/orbio-openclaw",
-      "stars": 0,
-      "description": "Official Orbio plugin + skill for OpenClaw to discover Brazilian B2B accounts and export pipeline-ready lists in chat."
+      "name": "alirezarezvani/claude-skills",
+      "url": "https://github.com/alirezarezvani/claude-skills",
+      "stars": 10756,
+      "description": "232+ Claude Code skills & agent plugins for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory."
     },
     {
-      "name": "nj070574-gif/openclaw-obsidian-vault-skill",
-      "url": "https://github.com/nj070574-gif/openclaw-obsidian-vault-skill",
+      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
+      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
-      "description": "💎 OpenClaw skill — full Obsidian vault control via the Local REST API plugin. Read, write, search, append and manage notes from any AI agent. No macOS-only CLI required."
+      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
     }
   ],
   "latestPaper": {
-    "title": "Act Wisely: Cultivating Meta-Cognitive Tool Use in Agentic Multimodal Models",
-    "summary": "The advent of agentic multimodal models has empowered systems to actively interact with external environments. However, current agents suffer from a profound meta-cognitive deficit: they struggle to arbitrate between leveraging internal knowledge and querying external utilities. Consequently, they frequently fall prey to blind tool invocation, resorting to reflexive tool execution even when queries are resolvable from the raw visual context. This pathological behavior precipitates severe latency"
+    "title": "Semantic Rate-Distortion for Bounded Multi-Agent Communication: Capacity-Derived Semantic Spaces and the Communication Cost of Alignment",
+    "summary": "When two agents of different computational capacities interact with the same environment, they need not compress a common semantic alphabet differently; they can induce different semantic alphabets altogether. We show that the quotient POMDP $Q_{m,T}(M)$ - the unique coarsest abstraction consistent with an agent's capacity - serves as a capacity-derived semantic space for any bounded agent, and that communication between heterogeneous agents exhibits a sharp structural phase transition. Below a "
   }
 }
