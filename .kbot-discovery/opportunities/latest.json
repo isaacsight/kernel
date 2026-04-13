@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-13T09:50:09.783Z",
+  "timestamp": "2026-04-13T13:06:04.740Z",
   "count": 30,
   "opportunities": [
     {
@@ -88,6 +88,13 @@
     },
     {
       "source": "github-issue",
+      "title": "toolsInFlight Orphan Initialization",
+      "url": "https://github.com/kubestellar/console/issues/7459",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
       "title": "Implement tool/function calling normalization across AI providers",
       "url": "https://github.com/deskive/deskive/issues/36",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
@@ -95,15 +102,8 @@
     },
     {
       "source": "github-issue",
-      "title": "feat: AutoGen PolicyEnforcingAgent — compliance wrapper for AutoGen conversations",
-      "url": "https://github.com/ashutoshrana/regulated-ai-governance/issues/6",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "Backend extraction pipeline is painfully slow — need architectural overhaul",
-      "url": "https://github.com/TINKPA/receipt-assistant/issues/6",
+      "title": "[Feature]: Support outputSchema for MCP tools",
+      "url": "https://github.com/agentscope-ai/agentscope-java/issues/1204",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "NanoClaw Radar - 2026-04-13",
-      "url": "https://github.com/happydog-intj/NanoClawRadar/issues/41",
+      "title": "sync(paperclip-e392f6b1): Treat Pi quota exhaustion as a failed run (from paperclipai/paperclip#2305)",
+      "url": "https://github.com/serenakeyitan/paperclip-tree/pull/51",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(minimax): include MINIMAX_API_KEY in web search auto-detection and onboarding",
-      "url": "https://github.com/openclaw/openclaw/pull/65828",
+      "title": "fix(codex): materialize synthetic auth in catalog",
+      "url": "https://github.com/openclaw/openclaw/pull/65947",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Secrets: add Exa web-search SecretRef target",
-      "url": "https://github.com/KnightNiwrem/openclaw/pull/1",
+      "title": "sync(paperclip-e392f6b1): fix(issues): replace non-null assertions with null checks in checkout… (from paperclipai/paperclip#2594)",
+      "url": "https://github.com/serenakeyitan/paperclip-tree/pull/44",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -179,16 +179,23 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "lssh: A TUI-first SSH workflow tool: pick hosts from a list, diff remote files, mount paths, and reuse sessions",
+      "url": "https://reddit.com/r/commandline/comments/1sjh0ii/lssh_a_tuifirst_ssh_workflow_tool_pick_hosts_from/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "I kept losing track of terminal windows, so I made an auto-tiling Mac terminal app",
       "url": "https://reddit.com/r/commandline/comments/1sj813d/i_kept_losing_track_of_terminal_windows_so_i_made/",
       "why": "Discussion in r/commandline about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "I made a Ghostty-based terminal workspace for parallel workflows",
-      "url": "https://reddit.com/r/commandline/comments/1sgrfvh/i_made_a_ghosttybased_terminal_workspace_for/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "AI agents work in text. Humans think in visuals. I spent 2 months learning this the hard way.",
+      "url": "https://reddit.com/r/artificial/comments/1sk9k3y/ai_agents_work_in_text_humans_think_in_visuals_i/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Been building a multi-agent framework in public for 5 weeks, its been a Journey.",
       "url": "https://reddit.com/r/artificial/comments/1sj6o0i/been_building_a_multiagent_framework_in_public/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Alibaba-linked AI agent hijacked GPUs for unauthorized crypto mining, researchers say",
-      "url": "https://reddit.com/r/artificial/comments/1sizjz7/alibabalinked_ai_agent_hijacked_gpus_for/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
