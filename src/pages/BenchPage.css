@@ -16,36 +16,6 @@
   margin: 0 auto;
 }
 
-.ka-bench-badge {
-  display: inline-block;
-  font-family: 'Courier Prime', monospace;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #6B5B95;
-  border: 1px solid #6B5B9540;
-  border-radius: 20px;
-  padding: 4px 16px;
-  margin-bottom: 32px;
-}
-
-.ka-bench-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: clamp(36px, 8vw, 64px);
-  font-weight: 700;
-  color: #FAF9F6;
-  margin: 0 0 16px;
-  letter-spacing: -1px;
-  line-height: 1.1;
-}
-
-.ka-bench-subtitle {
-  font-size: clamp(18px, 3.5vw, 24px);
-  color: #aaa;
-  margin: 0 0 48px;
-  line-height: 1.4;
-}
-
 /* Hero stats grid */
 .ka-bench-stats {
   display: grid;
@@ -99,31 +69,6 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 60px 24px;
-}
-
-.ka-bench-h2 {
-  font-family: 'Courier Prime', monospace;
-  font-size: 28px;
-  color: #FAF9F6;
-  margin: 0 0 12px;
-  text-align: center;
-}
-
-.ka-bench-section-desc {
-  font-size: 16px;
-  color: #888;
-  text-align: center;
-  max-width: 560px;
-  margin: 0 auto 32px;
-  line-height: 1.6;
-}
-
-/* Divider */
-.ka-bench-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #333, transparent);
-  max-width: 400px;
-  margin: 0 auto;
 }
 
 /* Comparison table */
