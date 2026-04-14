@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { MagazineFrame } from '../components/MagazineFrame'
 import './BenchPage.css'
 
 // ── Data ──
@@ -74,6 +75,12 @@ export default function BenchPage() {
   }
 
   return (
+    <MagazineFrame
+      kicker="BENCHMARKS"
+      page={5}
+      stock="ink"
+      dark
+    >
     <div className="ka-bench">
       {/* Nav */}
       <nav className="ka-page-nav">
@@ -265,6 +272,7 @@ export default function BenchPage() {
         <p className="ka-bench-copyright">MIT &middot; kernel.chat group</p>
       </footer>
     </div>
+    </MagazineFrame>
   )
 }
 

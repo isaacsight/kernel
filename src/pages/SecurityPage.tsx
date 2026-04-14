@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { MagazineFrame } from '../components/MagazineFrame'
 import './SecurityPage.css'
 
 const SECURITY_FEATURES = [
@@ -78,6 +79,12 @@ export function SecurityPage() {
   }
 
   return (
+    <MagazineFrame
+      kicker="SECURITY"
+      page={4}
+      stock="ink"
+      dark
+    >
     <div className="ka-security">
       {/* Nav */}
       <nav className="ka-page-nav">
@@ -320,5 +327,6 @@ export function SecurityPage() {
         <p className="ka-security-copyright">MIT &middot; kernel.chat group</p>
       </footer>
     </div>
+    </MagazineFrame>
   )
 }

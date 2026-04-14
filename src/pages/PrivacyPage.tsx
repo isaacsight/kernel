@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { MagazineFrame } from '../components/MagazineFrame'
 
 export function PrivacyPage() {
   useEffect(() => {
@@ -7,12 +8,15 @@ export function PrivacyPage() {
   }, [])
 
   return (
+    <MagazineFrame
+      kicker="PRIVACY"
+      title="Privacy Policy."
+      titleJp="プライバシーポリシー"
+      page={2}
+      deck="What we collect, how we use it, and what makes our approach different. Written in plain language."
+      stock="cream"
+    >
     <div className="ka-legal-page">
-      <button className="ka-legal-back" onClick={() => { window.location.hash = '#/' }}>
-        &larr; Back to Kernel
-      </button>
-
-      <h1>Privacy Policy</h1>
       <p className="ka-legal-updated">Last updated: March 4, 2026</p>
 
       <p>
@@ -452,5 +456,6 @@ export function PrivacyPage() {
         protection authority.
       </p>
     </div>
+    </MagazineFrame>
   )
 }

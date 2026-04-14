@@ -29384,3 +29384,114 @@ h4 {
 /* Folio — page number, byline, date in corners */
 .pop-folio { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); opacity: 0.7; }
 
+
+/* ──────────────────────────────────────────────────────────────
+   POPEYE — print stylesheet
+   This design begs to be printable. Strip interactive chrome,
+   convert to ink-on-paper, expose URLs beside links, and use
+   proper page-break rules on sections.
+   ────────────────────────────────────────────────────────────── */
+@media print {
+  @page { size: A4; margin: 16mm 14mm 18mm; }
+
+  /* Ink on paper — ignore ground stocks, keep type */
+  html, body,
+  .pop-landing,
+  .pop-frame,
+  .pop-stock-cream,
+  .pop-stock-butter,
+  .pop-stock-kraft,
+  .pop-stock-ivory,
+  .pop-stock-ink {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  /* Tomato survives (it's meant to be the spot color on press) —
+     but everything else collapses to black for legibility. */
+  .pop-wordmark,
+  .pop-wordmark-sm,
+  .pop-kicker--tomato,
+  .pop-frame-folio,
+  .pop-display em,
+  .pop-catalog-num,
+  .pop-terminal-prompt,
+  .pop-monument strong {
+    color: #E24E1B !important;
+    text-shadow: none !important;
+  }
+
+  /* Hide interactive chrome */
+  .pop-cta-row,
+  .pop-cover-install,
+  .pop-frame-back,
+  .pop-colophon-links,
+  .ka-legal-back,
+  .ka-page-nav,
+  .ka-security-install,
+  button { display: none !important; }
+
+  /* Terminals print as plain ruled blocks */
+  .pop-terminal,
+  .pop-terminal--light {
+    background: #fafafa !important;
+    color: #111 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+  .pop-terminal-body,
+  .pop-terminal-line,
+  .pop-terminal-dim { color: #333 !important; }
+  .pop-terminal-bar { background: #eee !important; border-bottom: 1px solid #ccc !important; }
+
+  /* Expose URLs beside inline links (legal copy, colophon) */
+  a[href^="http"]::after,
+  a[href^="mailto:"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    font-family: 'Courier Prime', monospace;
+    color: #666;
+  }
+  /* But not inside the landing CTA row (already hidden) or banners */
+  .pop-banner a::after,
+  .pop-colophon-links a::after { content: none !important; }
+
+  /* Page breaks */
+  .pop-cover,
+  .pop-contents,
+  .pop-features,
+  .pop-field,
+  .pop-specialists,
+  .pop-compare,
+  .pop-quickstart,
+  .pop-colophon,
+  .pop-frame-masthead,
+  .pop-frame-footer {
+    page-break-inside: avoid;
+  }
+  .pop-section-header,
+  .pop-frame-head {
+    page-break-after: avoid;
+  }
+  .pop-catalog-card,
+  .pop-specialist-card,
+  .pop-row,
+  .ka-legal-page h2 {
+    page-break-inside: avoid;
+  }
+  .ka-legal-page h1,
+  .ka-legal-page h2 {
+    page-break-after: avoid;
+  }
+
+  /* Tighten type to save paper */
+  .pop-display { letter-spacing: -0.015em; }
+  .pop-section-title { font-size: 28pt; }
+  .pop-feature-title { font-size: 36pt; }
+  .pop-wordmark { font-size: 56pt; }
+
+  /* Widow/orphan control on prose */
+  p { orphans: 3; widows: 3; }
+}
+

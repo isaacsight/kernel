@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ISSUE } from '../content/issue'
 import './LandingPage.css'
 
 /* ──────────────────────────────────────────────
@@ -79,16 +80,6 @@ const AGENTS = [
 ]
 
 const STATS_URL = 'https://api.npmjs.org/downloads/point/last-week/@kernel.chat/kbot'
-
-/* ── Issue metadata — treat every release as a Popeye issue ── */
-const ISSUE = {
-  number: '360',
-  month: 'APRIL',
-  year: '2026',
-  feature: 'THE URBAN OUTDOORS REVIEW',
-  featureJp: '都会のコードと、自然のOS',
-  price: '¥0 · BYOK',
-}
 
 export function LandingPage() {
   const [downloads, setDownloads] = useState<number | null>(null)

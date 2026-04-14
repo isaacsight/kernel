@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { MagazineFrame } from '../components/MagazineFrame'
 
 export function TermsPage() {
   useEffect(() => {
@@ -7,12 +8,15 @@ export function TermsPage() {
   }, [])
 
   return (
+    <MagazineFrame
+      kicker="TERMS"
+      title="Terms of Service."
+      titleJp="利用規約"
+      page={3}
+      deck="The rules for using Kernel. Read once. Revisit only if something goes wrong."
+      stock="cream"
+    >
     <div className="ka-legal-page">
-      <button className="ka-legal-back" onClick={() => { window.location.hash = '#/' }}>
-        &larr; Back to Kernel
-      </button>
-
-      <h1>Terms of Service</h1>
       <p className="ka-legal-updated">Last updated: March 4, 2026</p>
 
       <p>
@@ -325,5 +329,6 @@ export function TermsPage() {
         Questions: <a href="mailto:support@kernel.chat">support@kernel.chat</a>
       </p>
     </div>
+    </MagazineFrame>
   )
 }

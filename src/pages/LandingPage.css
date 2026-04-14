@@ -544,3 +544,89 @@
   .pop-section-header { margin-bottom: 40px; }
   .pop-feature { padding: 24px 0 32px; }
 }
+
+/* ═══════════════════════════════════════════════
+   MOBILE — ≤ 640px
+   Tighten rhythm, stack metadata, trim monument
+   scale so the cover still reads as a print object.
+   ═══════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Section scaffolding */
+  .pop-section-inner { padding: 44px 18px; }
+  .pop-section-header { margin-bottom: 32px; gap: 12px; }
+  .pop-section-header .pop-kicker { font-size: 10px; letter-spacing: 0.14em; }
+
+  /* Cover */
+  .pop-cover-inner { padding: 20px 18px 40px; gap: 16px; }
+  .pop-cover-dateline {
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+    padding-top: 8px;
+  }
+  .pop-cover-dateline .pop-folio:first-child { font-size: 10px; max-width: 100%; }
+  .pop-masthead { padding: 12px 0 4px; gap: 8px; }
+  .pop-wordmark { font-size: clamp(56px, 18vw, 110px); }
+  .pop-masthead-meta { gap: 10px; }
+  .pop-masthead-meta .pop-banner { padding: 3px 9px; }
+  .pop-feature { padding: 16px 0 24px; gap: 10px; }
+  .pop-feature-title { font-size: clamp(40px, 12vw, 72px); }
+  .pop-feature-swash { font-size: clamp(17px, 4.5vw, 22px); }
+  .pop-feature-jp { font-size: 11px; letter-spacing: 0.08em; }
+
+  /* Monument — keep print-object feel at small size */
+  .pop-monument { font-size: 10px; letter-spacing: 0.14em; }
+  .pop-monument strong { font-size: 2.2em; }
+  .pop-cover-bottom { gap: 16px; margin-top: 8px; }
+  .pop-cover-install { padding: 12px 14px; gap: 10px; }
+  .pop-cover-install code { font-size: 11px; white-space: normal; word-break: break-all; }
+  .pop-cover-stats { gap: 10px 16px; padding-top: 12px; }
+  .pop-hash { font-size: 10px; }
+
+  /* Table of contents rows */
+  .pop-row {
+    grid-template-columns: 36px 1fr;
+    gap: 8px 12px;
+    padding: 12px 0;
+    font-size: 15px;
+  }
+  .pop-row .pop-banner { grid-column: 2; justify-self: start; margin-top: 4px; }
+  .pop-row-sub { font-size: 10px; }
+
+  /* Catalog grid — cards breathe less */
+  .pop-catalog-card { padding: 24px 20px; gap: 10px; }
+  .pop-catalog-card-title { font-size: clamp(20px, 5vw, 26px); }
+  .pop-catalog-card-jp { font-size: 10px; letter-spacing: 0.06em; }
+  .pop-catalog-card-desc { font-size: 14px; line-height: 1.5; }
+
+  /* Field report / quick start terminals */
+  .pop-terminal { box-shadow: 5px 5px 0 var(--pop-tomato); }
+  .pop-terminal-body { padding: 16px 16px; font-size: 12px; line-height: 1.6; }
+  .pop-terminal-bar { padding: 8px 12px; }
+
+  /* Specialist cards — two per row target, tighter padding */
+  .pop-specialist-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+  .pop-specialist-card { padding: 14px 16px; gap: 8px; }
+  .pop-specialist-id { font-size: 15px; }
+  .pop-specialist-en { font-size: 13px; }
+  .pop-specialist-jp { font-size: 10px; }
+
+  /* Comparison table — horizontal scroll preserved, tighter cells */
+  .pop-compare-table th,
+  .pop-compare-table td { padding: 10px 14px; font-size: 13px; }
+
+  /* CTA row — full-width stack */
+  .pop-cta-row { gap: 10px; margin-top: 28px; }
+  .pop-cta { min-width: 100%; justify-content: space-between; flex-direction: row; align-items: center; }
+
+  /* Colophon */
+  .pop-colophon-row { gap: 16px; }
+  .pop-wordmark-sm { font-size: 22px; }
+  .pop-colophon-links { gap: 12px; }
+  .pop-colophon-links a { font-size: 11px; letter-spacing: 0.06em; }
+
+  /* Generic rules — don't let tomato rules get overwhelming */
+  .pop-rule--tomato { height: 1.5px; }
+}
