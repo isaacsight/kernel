@@ -451,7 +451,6 @@ export function LandingPage() {
             <a href="https://discord.gg/kdMauM9abG" target="_blank" rel="noopener">Discord</a>
             <a href="#/security">Security</a>
             <a href="#/bench">Benchmarks</a>
-            <a href="#/sound-engineer">Sound Engineer</a>
             <a href="#/privacy">Privacy</a>
             <a href="#/terms">Terms</a>
           </div>

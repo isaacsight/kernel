@@ -86,16 +86,15 @@ export function SecurityPage() {
       dark
     >
     <div className="ka-security">
-      {/* Nav */}
-      <nav className="ka-page-nav">
-        <a href="#/" className="ka-page-nav-home">{'\u2190'} kernel.chat</a>
-      </nav>
-      {/* Hero */}
-      <section className="ka-security-hero">
+      {/* Hero — magazine grammar */}
+      <section className="ka-security-hero pop-section-header pop-section-header--on-ink">
         <div className="ka-security-shield" aria-hidden="true" />
-        <div className="ka-security-badge">Security-First Design</div>
-        <h1 className="ka-security-title">Security-First AI Agent</h1>
-        <p className="ka-security-subtitle">
+        <span className="pop-banner">SECURITY-FIRST DESIGN</span>
+        <h1 className="pop-display pop-section-title pop-section-title--on-ink">
+          Security-First <em>AI</em> Agent.
+        </h1>
+        <p className="pop-feature-jp">セキュリティ・ファースト</p>
+        <p className="pop-swash pop-swash--on-ink">
           Your keys encrypted. Your code local. Your permissions enforced.
         </p>
         <p className="ka-security-tagline">
@@ -111,10 +110,16 @@ export function SecurityPage() {
 
       {/* Security Features Grid */}
       <section className="ka-security-section">
-        <h2 className="ka-security-h2">8 layers of defense</h2>
-        <p className="ka-security-section-desc">
-          Not bolted on. Built in from day one. Every layer works independently.
-        </p>
+        <header className="pop-section-header pop-section-header--on-ink">
+          <span className="pop-kicker pop-kicker--tomato">THE DEFENSES · 守り</span>
+          <hr className="pop-rule pop-rule--short pop-rule--tomato" />
+          <h2 className="pop-display pop-section-title pop-section-title--on-ink">
+            Eight layers of defense.
+          </h2>
+          <p className="pop-swash pop-swash--on-ink">
+            Not bolted on. Built in from day one. Every layer works independently.
+          </p>
+        </header>
         <div className="ka-security-grid">
           {SECURITY_FEATURES.map(f => (
             <div key={f.title} className="ka-security-card">
@@ -127,14 +132,20 @@ export function SecurityPage() {
         </div>
       </section>
 
-      <div className="ka-security-divider" />
+      <hr className="pop-rule pop-rule--tomato" />
 
       {/* How it works — terminal demo */}
       <section className="ka-security-section">
-        <h2 className="ka-security-h2">See it in action</h2>
-        <p className="ka-security-section-desc">
-          kbot blocks dangerous commands, asks for confirmation, and logs everything.
-        </p>
+        <header className="pop-section-header pop-section-header--on-ink">
+          <span className="pop-kicker pop-kicker--tomato">FIELD TEST · 実地</span>
+          <hr className="pop-rule pop-rule--short pop-rule--tomato" />
+          <h2 className="pop-display pop-section-title pop-section-title--on-ink">
+            See it in action.
+          </h2>
+          <p className="pop-swash pop-swash--on-ink">
+            kbot blocks dangerous commands, asks for confirmation, and logs everything.
+          </p>
+        </header>
         <div className="ka-security-terminal">
           <div className="ka-security-terminal-bar">
             <span className="ka-security-dot" style={{ background: '#ff5f57' }} />
@@ -180,14 +191,20 @@ export function SecurityPage() {
         </div>
       </section>
 
-      <div className="ka-security-divider" />
+      <hr className="pop-rule pop-rule--tomato" />
 
       {/* Comparison */}
       <section className="ka-security-section">
-        <h2 className="ka-security-h2">What others don't have</h2>
-        <p className="ka-security-section-desc">
-          Most AI tools treat security as an afterthought. kbot treats it as the foundation.
-        </p>
+        <header className="pop-section-header pop-section-header--on-ink">
+          <span className="pop-kicker pop-kicker--tomato">THE SPECS · スペック</span>
+          <hr className="pop-rule pop-rule--short pop-rule--tomato" />
+          <h2 className="pop-display pop-section-title pop-section-title--on-ink">
+            What others don't have.
+          </h2>
+          <p className="pop-swash pop-swash--on-ink">
+            Most AI tools treat security as an afterthought. kbot treats it as the foundation.
+          </p>
+        </header>
         <div className="ka-security-table-wrap">
           <table className="ka-security-table">
             <thead>
@@ -217,11 +234,17 @@ export function SecurityPage() {
         </p>
       </section>
 
-      <div className="ka-security-divider" />
+      <hr className="pop-rule pop-rule--tomato" />
 
       {/* Security principles */}
       <section className="ka-security-section">
-        <h2 className="ka-security-h2">Security principles</h2>
+        <header className="pop-section-header pop-section-header--on-ink">
+          <span className="pop-kicker pop-kicker--tomato">THE PRINCIPLES · 原則</span>
+          <hr className="pop-rule pop-rule--short pop-rule--tomato" />
+          <h2 className="pop-display pop-section-title pop-section-title--on-ink">
+            Security principles.
+          </h2>
+        </header>
         <div className="ka-security-principles">
           <div className="ka-security-principle">
             <span className="ka-security-principle-num">01</span>
@@ -254,12 +277,17 @@ export function SecurityPage() {
         </div>
       </section>
 
-      <div className="ka-security-divider" />
+      <hr className="pop-rule pop-rule--tomato" />
 
       {/* Open Source */}
       <section className="ka-security-opensource">
-        <div className="ka-security-opensource-badge">OPEN SOURCE</div>
-        <h2 className="ka-security-h2">Transparency is the best security</h2>
+        <header className="pop-section-header pop-section-header--on-ink">
+          <span className="pop-banner">OPEN SOURCE · 公開</span>
+          <hr className="pop-rule pop-rule--short pop-rule--tomato" />
+          <h2 className="pop-display pop-section-title pop-section-title--on-ink">
+            Transparency is the best security.
+          </h2>
+        </header>
         <p className="ka-security-body">
           kbot is MIT licensed. The entire codebase is public on GitHub.
           You can read every line that touches your filesystem, your network, your keys.

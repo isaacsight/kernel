@@ -175,27 +175,9 @@
   .pop-cover-install { justify-self: stretch; flex-wrap: wrap; }
 }
 
-/* ═══════════════════════════════════════════════
-   SECTION HEADERS — editorial lockup
-   ═══════════════════════════════════════════════ */
-.pop-section-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 16px;
-  margin-bottom: 56px;
-}
-
-.pop-section-title {
-  font-size: clamp(36px, 6vw, 72px);
-  margin: 0;
-  line-height: 0.95;
-}
-
-.pop-section-header--on-ink .pop-kicker { color: var(--pop-tomato); }
-.pop-section-title--on-ink { color: var(--pop-ivory); }
-.pop-swash--on-ink { color: var(--pop-sepia); }
+/* Section header / title / on-ink variants are defined globally in
+   src/index.css alongside the pop-* primitives so they work on every
+   page, not just the landing. */
 
 /* ═══════════════════════════════════════════════
    CONTENTS — numbered ToC

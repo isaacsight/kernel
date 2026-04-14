@@ -11,7 +11,6 @@ const PrivacyPage = lazyRetry(() => import('./pages/PrivacyPage').then(m => ({ d
 const TermsPage = lazyRetry(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })))
 const SecurityPage = lazyRetry(() => import('./pages/SecurityPage').then(m => ({ default: m.SecurityPage })))
 const BenchPage = lazyRetry(() => import('./pages/BenchPage'))
-const SoundEngineerPage = lazyRetry(() => import('./pages/SoundEngineerPage').then(m => ({ default: m.SoundEngineerPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -51,11 +50,6 @@ export const router = createHashRouter([
       { path: 'bench', element: withErrorBoundary(
         <Suspense fallback={<div className="ka-page-loading">Loading benchmarks...</div>}>
           <BenchPage />
-        </Suspense>
-      ) },
-      { path: 'sound-engineer', element: withErrorBoundary(
-        <Suspense fallback={<div className="ka-page-loading ka-page-loading--dark">Loading...</div>}>
-          <SoundEngineerPage />
         </Suspense>
       ) },
       { path: 'privacy', element: withErrorBoundary(

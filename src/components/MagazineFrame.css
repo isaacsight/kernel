@@ -105,8 +105,8 @@
   display: none;
 }
 
-/* Dark pages (SecurityPage, BenchPage, SoundEngineer) don't need the
-   ivory frame; the wrapper stays neutral around their own background. */
+/* Dark pages (SecurityPage, BenchPage) don't need the ivory frame;
+   the wrapper stays neutral around their own background. */
 .pop-frame--dark {
   background: var(--pop-ink);
   color: var(--pop-ivory);

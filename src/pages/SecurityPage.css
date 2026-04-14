@@ -2,7 +2,7 @@
 
 .ka-security {
   min-height: 100vh;
-  background: #0d0d0d;
+  background: var(--pop-ink);
   color: #e8e6e3;
   font-family: var(--font-serif);
   overflow-x: hidden;

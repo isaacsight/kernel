@@ -82,15 +82,14 @@ export default function BenchPage() {
       dark
     >
     <div className="ka-bench">
-      {/* Nav */}
-      <nav className="ka-page-nav">
-        <a href="#/" className="ka-page-nav-home">{'\u2190'} kernel.chat</a>
-      </nav>
-      {/* Hero */}
-      <section className="ka-bench-hero">
-        <div className="ka-bench-badge">Benchmark Dashboard</div>
-        <h1 className="ka-bench-title">kbot by the numbers</h1>
-        <p className="ka-bench-subtitle">
+      {/* Hero — magazine grammar */}
+      <section className="ka-bench-hero pop-section-header pop-section-header--on-ink">
+        <span className="pop-banner">BENCHMARK DASHBOARD</span>
+        <h1 className="pop-display pop-section-title pop-section-title--on-ink">
+          kbot by the <em>numbers</em>.
+        </h1>
+        <p className="pop-feature-jp">ベンチマーク</p>
+        <p className="pop-swash pop-swash--on-ink">
           The most capable open-source terminal AI agent. Measured, not marketed.
         </p>
 
@@ -105,14 +104,20 @@ export default function BenchPage() {
         </div>
       </section>
 
-      <div className="ka-bench-divider" />
+      <hr className="pop-rule pop-rule--tomato" />
 
       {/* Comparison Table */}
       <section className="ka-bench-section">
-        <h2 className="ka-bench-h2">Head-to-head</h2>
-        <p className="ka-bench-section-desc">
-          Feature comparison against every major terminal AI agent. Updated March 2026.
-        </p>
+        <header className="pop-section-header pop-section-header--on-ink">
+          <span className="pop-kicker pop-kicker--tomato">HEAD-TO-HEAD · 対決</span>
+          <hr className="pop-rule pop-rule--short pop-rule--tomato" />
+          <h2 className="pop-display pop-section-title pop-section-title--on-ink">
+            The comparison.
+          </h2>
+          <p className="pop-swash pop-swash--on-ink">
+            Feature comparison against every major terminal AI agent. Updated March 2026.
+          </p>
+        </header>
         <div className="ka-bench-table-wrap">
           <table className="ka-bench-table">
             <thead>
@@ -143,14 +148,20 @@ export default function BenchPage() {
         </div>
       </section>
 
-      <div className="ka-bench-divider" />
+      <hr className="pop-rule pop-rule--tomato" />
 
       {/* Category Breakdown — CSS bar charts */}
       <section className="ka-bench-section">
-        <h2 className="ka-bench-h2">Category breakdown</h2>
-        <p className="ka-bench-section-desc">
-          Scored 0-100 across key capability dimensions. kbot vs best-in-class competitor.
-        </p>
+        <header className="pop-section-header pop-section-header--on-ink">
+          <span className="pop-kicker pop-kicker--tomato">THE BREAKDOWN · 内訳</span>
+          <hr className="pop-rule pop-rule--short pop-rule--tomato" />
+          <h2 className="pop-display pop-section-title pop-section-title--on-ink">
+            Category breakdown.
+          </h2>
+          <p className="pop-swash pop-swash--on-ink">
+            Scored 0-100 across key capability dimensions. kbot vs best-in-class competitor.
+          </p>
+        </header>
 
         <div className="ka-bench-charts">
           {CATEGORIES.map(cat => (
@@ -193,15 +204,21 @@ export default function BenchPage() {
         </div>
       </section>
 
-      <div className="ka-bench-divider" />
+      <hr className="pop-rule pop-rule--tomato" />
 
       {/* Run your own benchmark */}
       <section className="ka-bench-section ka-bench-cta-section">
-        <h2 className="ka-bench-h2">Run your own benchmark</h2>
-        <p className="ka-bench-section-desc">
-          Install kbot and run the built-in benchmark suite against your own codebase.
-          Every number on this page is reproducible.
-        </p>
+        <header className="pop-section-header pop-section-header--on-ink">
+          <span className="pop-kicker pop-kicker--tomato">FIELD PRIMER · 入門</span>
+          <hr className="pop-rule pop-rule--short pop-rule--tomato" />
+          <h2 className="pop-display pop-section-title pop-section-title--on-ink">
+            Run your own benchmark.
+          </h2>
+          <p className="pop-swash pop-swash--on-ink">
+            Install kbot and run the built-in benchmark suite against your own codebase.
+            Every number on this page is reproducible.
+          </p>
+        </header>
 
         <div className="ka-bench-terminal">
           <div className="ka-bench-terminal-bar">

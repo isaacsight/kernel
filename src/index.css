@@ -29384,6 +29384,19 @@ h4 {
 /* Folio — page number, byline, date in corners */
 .pop-folio { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); opacity: 0.7; }
 
+/* Section header — editorial lockup used on every page */
+.pop-section-header { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; margin-bottom: 56px; }
+.pop-section-title { font-family: var(--font-serif); font-weight: 700; line-height: 0.95; letter-spacing: -0.025em; font-size: clamp(36px, 6vw, 72px); margin: 0; color: var(--pop-ink); }
+
+/* On-ink ground variants — for dark pages (Security, Bench, Field Report) */
+.pop-section-header--on-ink .pop-kicker { color: var(--pop-tomato); }
+.pop-section-title--on-ink { color: var(--pop-ivory); }
+.pop-swash--on-ink { color: var(--pop-sepia); }
+
+/* Feature-JP micro lockup — small Japanese subtitle */
+.pop-feature-jp { font-family: var(--font-mono); font-size: var(--text-sm); letter-spacing: 0.12em; color: var(--pop-coffee); margin: 0; }
+.pop-section-header--on-ink .pop-feature-jp { color: var(--pop-sepia); }
+
 
 /* ──────────────────────────────────────────────────────────────
    POPEYE — print stylesheet
