@@ -111,6 +111,31 @@
     --radius-md: 10px;
     --radius-lg: 20px;
     --radius-full: 9999px;
+
+    /* ──────────────────────────────────────────────
+       POPEYE PALETTE — editorial warm grounds + spot accents
+       "Magazine for City Coders" — issue-driven flavor layer
+       over the Rubin base. Additive, never overrides.
+       ────────────────────────────────────────────── */
+    --pop-ivory:    #FAF9F6;   /* primary ground (= rubin-ivory) */
+    --pop-cream:    #F3E9D2;   /* warm paper */
+    --pop-butter:   #EFD9A0;   /* summer / reading issue stock */
+    --pop-sepia:    #D4C5A9;   /* = rubin-sepia */
+    --pop-kraft:    #C8A97E;   /* camel / outdoor issue */
+    --pop-coffee:   #6B4E3D;   /* rich brown */
+    --pop-ink:      #1F1E1D;   /* = rubin-slate */
+
+    /* Spot colors — the punch accents */
+    --pop-tomato:   #E24E1B;   /* THE Popeye accent — banners, rules, tags */
+    --pop-tomato-soft: rgba(226, 78, 27, 0.08);
+    --pop-cobalt:   #1D4E89;
+    --pop-ivy:      #2E4A2E;
+    --pop-pool:     #4FB5C8;
+
+    /* Editorial rules & ornament */
+    --pop-hairline: rgba(31, 30, 29, 0.85);
+    --pop-hairline-soft: rgba(31, 30, 29, 0.16);
+    --pop-tape:     rgba(239, 217, 160, 0.6);
 }
 
 /* Dark Mode Palette */
@@ -29291,3 +29316,71 @@ h4 {
 .ka-page-nav-home { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--text-secondary-on-dark); text-decoration: none; transition: color 0.2s; }
 .ka-page-nav-home:hover { color: #FAF9F6; }
 @media (max-width: 768px) { .ka-marketing-hero { padding: 80px 20px 60px; } .ka-marketing-section { padding: 40px 20px; } }
+
+/* ──────────────────────────────────────────────────────────────
+   POPEYE — editorial primitives
+   "Magazine for City Coders." Grammar over typeface. These
+   classes give any surface a print-magazine feel using only
+   EB Garamond + Courier Prime.
+   ────────────────────────────────────────────────────────────── */
+
+/* Hairline — the 0.5px Popeye rule */
+.pop-rule { border: 0; height: 1px; background: var(--pop-hairline); margin: 0; }
+.pop-rule--soft { background: var(--pop-hairline-soft); }
+.pop-rule--tomato { height: 2px; background: var(--pop-tomato); }
+.pop-rule--short { max-width: 64px; margin: 0 auto; }
+
+/* Bracketed kicker: [CATEGORY] */
+.pop-kicker { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); }
+.pop-kicker::before { content: '[ '; opacity: 0.6; }
+.pop-kicker::after  { content: ' ]'; opacity: 0.6; }
+.pop-kicker--tomato { color: var(--pop-tomato); }
+
+/* Tomato banner tag — feature flag style, reversed rounded-corner box */
+.pop-banner { display: inline-block; font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; background: var(--pop-tomato); color: var(--pop-ivory); padding: 4px 12px; border-radius: 2px; font-weight: 700; }
+.pop-banner--ink { background: var(--pop-ink); color: var(--pop-ivory); }
+.pop-banner--kraft { background: var(--pop-kraft); color: var(--pop-ink); }
+
+/* Hashtag chip — #feature style */
+.pop-hash { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--pop-coffee); letter-spacing: 0.02em; }
+.pop-hash::before { content: '#'; opacity: 0.5; }
+
+/* Numbered catalog item: 001. / 002. / 003. (tabular) */
+.pop-catalog-num { font-family: var(--font-mono); font-size: var(--text-sm); font-variant-numeric: tabular-nums; color: var(--pop-tomato); letter-spacing: 0.04em; }
+
+/* Price tag — ¥0 · BYOK / $0 / MIT */
+.pop-price { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); opacity: 0.75; }
+
+/* Issue-number monument — stacked corner block */
+.pop-monument { font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1.4; letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); display: inline-flex; flex-direction: column; gap: 2px; text-align: left; }
+.pop-monument strong { font-size: 2.4em; font-weight: 700; letter-spacing: -0.02em; line-height: 0.95; color: var(--pop-tomato); font-variant-numeric: tabular-nums; text-transform: none; }
+
+/* Bilingual lockup — Latin over Japanese */
+.pop-bilingual { display: flex; flex-direction: column; gap: 6px; align-items: inherit; }
+.pop-bilingual > .pop-latin { font-family: var(--font-serif); font-weight: 600; letter-spacing: -0.005em; }
+.pop-bilingual > .pop-jp { font-family: var(--font-mono); font-size: var(--text-sm); letter-spacing: 0.08em; color: var(--pop-coffee); opacity: 0.85; }
+
+/* Display headline — EB Garamond, tight, large */
+.pop-display { font-family: var(--font-serif); font-weight: 700; line-height: 0.98; letter-spacing: -0.025em; color: var(--pop-ink); }
+.pop-display em { font-style: italic; color: var(--pop-tomato); font-weight: 600; }
+
+/* Swash / italic accent */
+.pop-swash { font-family: var(--font-serif); font-style: italic; font-weight: 500; letter-spacing: -0.01em; color: var(--pop-coffee); }
+
+/* Stock — whole section on colored paper */
+.pop-stock-cream { background: var(--pop-cream); color: var(--pop-ink); }
+.pop-stock-butter { background: var(--pop-butter); color: var(--pop-ink); }
+.pop-stock-kraft { background: var(--pop-kraft); color: var(--pop-ink); }
+.pop-stock-ivory { background: var(--pop-ivory); color: var(--pop-ink); }
+.pop-stock-ink { background: var(--pop-ink); color: var(--pop-ivory); }
+
+/* Catalog row — 001. · ITEM · bilingual · price · hairline */
+.pop-row { display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--pop-hairline-soft); font-family: var(--font-serif); font-size: var(--text-base); }
+.pop-row:last-child { border-bottom: 0; }
+.pop-row:hover { background: var(--pop-tomato-soft); }
+.pop-row-label { font-weight: 600; }
+.pop-row-sub { display: block; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--pop-coffee); margin-top: 2px; letter-spacing: 0.04em; }
+
+/* Folio — page number, byline, date in corners */
+.pop-folio { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); opacity: 0.7; }
+
