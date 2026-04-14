@@ -18,10 +18,12 @@ import {
   type MusicSession,
   type SocialPostLite,
 } from '../hooks/usePersonalPlatform'
+import { MeConversation } from '../components/me/MeConversation'
 
-type Tab = 'now' | 'influences' | 'timeline' | 'music' | 'social' | 'feed'
+type Tab = 'converse' | 'now' | 'influences' | 'timeline' | 'music' | 'social' | 'feed'
 
 const TABS: { id: Tab; label: string }[] = [
+  { id: 'converse', label: 'Converse' },
   { id: 'now', label: 'Now' },
   { id: 'influences', label: 'Influences' },
   { id: 'timeline', label: 'Timeline' },
@@ -32,7 +34,7 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function MePage() {
   const { id } = useParams<{ id: string }>()
-  const [tab, setTab] = useState<Tab>('now')
+  const [tab, setTab] = useState<Tab>('converse')
   const platform = usePersonalPlatform(id)
 
   if (!id) {
@@ -82,9 +84,15 @@ export function MePage() {
         key={tab}
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="ka-me-section"
       >
+        {tab === 'converse' && (
+          <MeConversation
+            ctx={{ profile, influences, timeline, music, posts }}
+            name={profile?.display_name ?? 'this person'}
+          />
+        )}
         {tab === 'now' && (
           <NowSection
             latestTimeline={timeline[0]}
