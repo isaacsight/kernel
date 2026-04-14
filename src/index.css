@@ -29909,3 +29909,238 @@ h4 {
   .ka-me-converse-turn--visitor { padding-left: 1rem; }
   .ka-me-converse-form { flex-wrap: wrap; }
 }
+
+/* ─── Museum of Thoughts — gallery presentation ────────────── */
+.ka-me-institution {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--me-ink-whisper);
+  margin-bottom: 0.75rem;
+}
+
+/* ── Foyer ──────────────────────────────────────────────────── */
+.ka-me-foyer { display: flex; flex-direction: column; gap: 4rem; }
+.ka-me-foyer-epigraph p {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--me-ink-soft);
+  max-width: 56ch;
+  margin: 0;
+}
+.ka-me-foyer-map {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--me-rule);
+}
+.ka-me-foyer-door {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 2rem 1.5rem 2rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--me-rule);
+  text-align: left;
+  cursor: pointer;
+  min-height: 140px;
+  transition: background 500ms cubic-bezier(0.22, 1, 0.36, 1),
+              padding 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ka-me-foyer-door:hover:not(:disabled) {
+  background: rgba(138, 109, 59, 0.04);
+  padding-left: 1rem;
+}
+.ka-me-foyer-door:disabled { opacity: 0.35; cursor: default; }
+.ka-me-foyer-door-label {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--me-ink);
+  letter-spacing: -0.005em;
+}
+.ka-me-foyer-door-count {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--me-ink-whisper);
+}
+.ka-me-foyer-door-featured {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9375rem;
+  color: var(--me-ink-soft);
+  margin-top: auto;
+}
+
+/* ── Exhibit ────────────────────────────────────────────────── */
+.ka-me-exhibit {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 1rem 0 0;
+}
+.ka-me-exhibit-room {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--me-ink-whisper);
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--me-rule);
+}
+.ka-me-exhibit-hall { color: var(--me-ink); }
+.ka-me-exhibit-position { font-variant-numeric: tabular-nums; }
+
+.ka-me-exhibit-wall {
+  padding: 3rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 62ch;
+}
+.ka-me-exhibit-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--me-brass);
+  margin-bottom: 0.5rem;
+}
+.ka-me-exhibit-title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--me-ink);
+  margin: 0;
+}
+.ka-me-exhibit-attribution {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.125rem;
+  color: var(--me-ink-soft);
+  margin-top: -0.25rem;
+}
+.ka-me-exhibit-body {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--me-ink);
+  margin: 1rem 0 0;
+  max-width: 60ch;
+}
+
+/* ── Placard ────────────────────────────────────────────────── */
+.ka-me-placard {
+  border-top: 1px solid var(--me-rule);
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 540px;
+}
+.ka-me-placard-accession {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--me-brass);
+  font-variant-numeric: tabular-nums;
+}
+.ka-me-placard-fields {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0.625rem 1.25rem;
+  margin: 0;
+}
+.ka-me-placard-field {
+  display: contents;
+}
+.ka-me-placard-field dt {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--me-ink-whisper);
+  padding-top: 0.1rem;
+}
+.ka-me-placard-field dd {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  color: var(--me-ink);
+  margin: 0;
+}
+.ka-me-placard-actions {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+.ka-me-placard-ask {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9375rem;
+  background: transparent;
+  border: none;
+  color: var(--me-brass);
+  cursor: pointer;
+  padding: 0.5rem 0;
+  min-height: 44px;
+  transition: color 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ka-me-placard-ask:hover { color: var(--me-brass-deep); }
+.ka-me-placard-ask::before { content: '— '; opacity: 0.5; font-style: normal; }
+
+/* ── Gallery navigation ─────────────────────────────────────── */
+.ka-me-exhibit-nav {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 3rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--me-rule);
+}
+.ka-me-exhibit-arrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: transparent;
+  border: none;
+  color: var(--me-ink);
+  padding: 0.75rem 0;
+  cursor: pointer;
+  min-height: 44px;
+  transition: color 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ka-me-exhibit-arrow:hover:not(:disabled) { color: var(--me-brass); }
+.ka-me-exhibit-arrow:disabled { color: var(--me-ink-whisper); opacity: 0.4; cursor: default; }
+
+/* ── Empty room ─────────────────────────────────────────────── */
+.ka-me-empty-room {
+  padding: 6rem 0;
+  text-align: center;
+}
+.ka-me-empty-room p {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--me-ink-whisper);
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+  .ka-me-exhibit-title { font-size: 2rem; }
+  .ka-me-placard-fields { grid-template-columns: 1fr; gap: 0.25rem 0; }
+  .ka-me-placard-field dd { margin-bottom: 0.75rem; }
+}

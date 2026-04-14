@@ -4,7 +4,7 @@
 // Visitor lines appear italic serif, indented. The agent replies
 // flush-left in prose. Designed to read like a letter exchange.
 
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type FormEvent } from 'react'
 import { useMeAgent } from '../../hooks/useMeAgent'
 import type { MeAgentContext } from '../../agents/me-agent'
 
@@ -13,7 +13,14 @@ interface Props {
   name: string
 }
 
-export function MeConversation({ ctx, name }: Props) {
+export interface MeConversationHandle {
+  ask: (question: string) => void
+}
+
+export const MeConversation = forwardRef<MeConversationHandle, Props>(function MeConversation(
+  { ctx, name },
+  ref,
+) {
   const { turns, send, isStreaming, error, reset } = useMeAgent(ctx)
   const [input, setInput] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -24,6 +31,13 @@ export function MeConversation({ ctx, name }: Props) {
       behavior: 'smooth',
     })
   }, [turns])
+
+  useImperativeHandle(ref, () => ({
+    ask: (question: string) => {
+      if (!question.trim() || isStreaming) return
+      void send(question)
+    },
+  }), [send, isStreaming])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -108,7 +122,7 @@ export function MeConversation({ ctx, name }: Props) {
       </form>
     </div>
   )
-}
+})
 
 function SuggestionButton({ text, onClick }: { text: string; onClick: (t: string) => void }) {
   return (

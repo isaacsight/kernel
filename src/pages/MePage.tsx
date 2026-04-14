@@ -1,41 +1,55 @@
-// ─── Personal Platform Page ─────────────────────────────────────
+// ─── Personal Platform Page — Museum of Thoughts ───────────────
 //
-// Public profile surface that presents a user's social life and what
-// influences them. Route: /#/me/:id
-//
-// Composed of seven sections that read from the personal_platform
-// data model (influences, timeline_events, music_sessions) plus the
-// existing author_profiles and social_posts tables.
+// /me/:id renders as a small museum. Every influence, event, studio
+// session, post, or feed item is an *exhibit* — spotlit one at a
+// time, with a placard. The Docent (an AI agent grounded in the
+// record) accompanies visitors and answers questions. The platform
+// is the agent, and the agent is the room.
 
-import { useMemo, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { motion } from 'motion/react'
 import {
   usePersonalPlatform,
-  type FeedItem,
   type Influence,
   type TimelineEvent,
   type MusicSession,
   type SocialPostLite,
+  type FeedItem,
 } from '../hooks/usePersonalPlatform'
-import { MeConversation } from '../components/me/MeConversation'
+import { MeConversation, type MeConversationHandle } from '../components/me/MeConversation'
+import { Exhibit, EmptyRoom, type PlacardField } from '../components/me/Exhibit'
 
-type Tab = 'converse' | 'now' | 'influences' | 'timeline' | 'music' | 'social' | 'feed'
+type Tab = 'docent' | 'foyer' | 'influences' | 'chronicle' | 'studio' | 'dispatches' | 'archive'
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'converse', label: 'Converse' },
-  { id: 'now', label: 'Now' },
-  { id: 'influences', label: 'Influences' },
-  { id: 'timeline', label: 'Timeline' },
-  { id: 'music', label: 'Studio' },
-  { id: 'social', label: 'Social' },
-  { id: 'feed', label: 'Feed' },
+const TABS: { id: Tab; label: string; hall: string }[] = [
+  { id: 'docent',     label: 'Docent',     hall: 'The Docent' },
+  { id: 'foyer',      label: 'Foyer',      hall: 'Foyer' },
+  { id: 'influences', label: 'Influences', hall: 'Influences' },
+  { id: 'chronicle',  label: 'Chronicle',  hall: 'Chronicle' },
+  { id: 'studio',     label: 'Studio',     hall: 'Studio' },
+  { id: 'dispatches', label: 'Dispatches', hall: 'Dispatches' },
+  { id: 'archive',    label: 'Archive',    hall: 'Archive' },
 ]
 
 export function MePage() {
   const { id } = useParams<{ id: string }>()
-  const [tab, setTab] = useState<Tab>('converse')
+  const [tab, setTab] = useState<Tab>('docent')
   const platform = usePersonalPlatform(id)
+  const conversationRef = useRef<MeConversationHandle>(null)
+
+  // Exhibit cursors per hall
+  const [influenceIdx, setInfluenceIdx] = useState(0)
+  const [chronicleIdx, setChronicleIdx] = useState(0)
+  const [studioIdx, setStudioIdx] = useState(0)
+  const [dispatchIdx, setDispatchIdx] = useState(0)
+  const [archiveIdx, setArchiveIdx] = useState(0)
+
+  const askDocent = useCallback((seed: string) => {
+    setTab('docent')
+    // Defer to next frame so the tab mounts and ref attaches
+    setTimeout(() => conversationRef.current?.ask(seed), 50)
+  }, [])
 
   if (!id) {
     return (
@@ -48,7 +62,7 @@ export function MePage() {
   if (platform.loading) {
     return (
       <div className="ka-me-page">
-        <div className="ka-me-loading">Loading…</div>
+        <div className="ka-me-loading">Opening the gallery…</div>
       </div>
     )
   }
@@ -62,12 +76,13 @@ export function MePage() {
   }
 
   const { profile, influences, timeline, music, posts, feed } = platform
+  const name = profile?.display_name ?? 'Unclaimed profile'
 
   return (
     <div className="ka-me-page">
       <ProfileHeader profile={profile} userId={id} />
 
-      <nav className="ka-me-tabs" aria-label="Sections">
+      <nav className="ka-me-tabs" aria-label="Museum halls">
         {TABS.map(t => (
           <button
             key={t.id}
@@ -84,28 +99,65 @@ export function MePage() {
         key={tab}
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="ka-me-section"
       >
-        {tab === 'converse' && (
+        {tab === 'docent' && (
           <MeConversation
+            ref={conversationRef}
             ctx={{ profile, influences, timeline, music, posts }}
-            name={profile?.display_name ?? 'this person'}
+            name={name}
           />
         )}
-        {tab === 'now' && (
-          <NowSection
-            latestTimeline={timeline[0]}
-            topInfluences={influences.slice(0, 5)}
-            latestMusic={music[0]}
-            latestPost={posts[0]}
+        {tab === 'foyer' && (
+          <Foyer
+            name={name}
+            influences={influences}
+            timeline={timeline}
+            music={music}
+            onEnter={setTab}
           />
         )}
-        {tab === 'influences' && <InfluencesSection items={influences} />}
-        {tab === 'timeline' && <TimelineSection items={timeline} />}
-        {tab === 'music' && <MusicSection items={music} />}
-        {tab === 'social' && <SocialSection items={posts} />}
-        {tab === 'feed' && <FeedSection items={feed} />}
+        {tab === 'influences' && (
+          <InfluenceGallery
+            items={influences}
+            index={influenceIdx}
+            onIndex={setInfluenceIdx}
+            onAskDocent={askDocent}
+          />
+        )}
+        {tab === 'chronicle' && (
+          <ChronicleGallery
+            items={timeline}
+            index={chronicleIdx}
+            onIndex={setChronicleIdx}
+            onAskDocent={askDocent}
+          />
+        )}
+        {tab === 'studio' && (
+          <StudioGallery
+            items={music}
+            index={studioIdx}
+            onIndex={setStudioIdx}
+            onAskDocent={askDocent}
+          />
+        )}
+        {tab === 'dispatches' && (
+          <DispatchGallery
+            items={posts}
+            index={dispatchIdx}
+            onIndex={setDispatchIdx}
+            onAskDocent={askDocent}
+          />
+        )}
+        {tab === 'archive' && (
+          <ArchiveGallery
+            items={feed}
+            index={archiveIdx}
+            onIndex={setArchiveIdx}
+            onAskDocent={askDocent}
+          />
+        )}
       </motion.div>
     </div>
   )
@@ -137,255 +189,245 @@ function ProfileHeader({ profile, userId }: ProfileHeaderProps) {
         )}
       </div>
       <div className="ka-me-identity">
+        <div className="ka-me-institution">A museum of thoughts</div>
         <h1 className="ka-me-name">{name}</h1>
         {profile?.bio && <p className="ka-me-bio">{profile.bio}</p>}
         <div className="ka-me-meta">
-          <span className="ka-me-meta-item">{profile?.follower_count ?? 0} followers</span>
+          <span className="ka-me-meta-item">{profile?.follower_count ?? 0} patrons</span>
           <span className="ka-me-meta-dot">·</span>
-          <span className="ka-me-meta-item">{profile?.following_count ?? 0} following</span>
+          <span className="ka-me-meta-item">{profile?.following_count ?? 0} inspirations</span>
           <span className="ka-me-meta-dot">·</span>
-          <span className="ka-me-meta-item ka-me-meta-id">{userId.slice(0, 8)}</span>
+          <span className="ka-me-meta-item ka-me-meta-id">accn {userId.slice(0, 8)}</span>
         </div>
       </div>
     </header>
   )
 }
 
-// ─── Now ────────────────────────────────────────────────────────
+// ─── Foyer ──────────────────────────────────────────────────────
 
-interface NowSectionProps {
-  latestTimeline?: TimelineEvent
-  topInfluences: Influence[]
-  latestMusic?: MusicSession
-  latestPost?: SocialPostLite
+interface FoyerProps {
+  name: string
+  influences: Influence[]
+  timeline: TimelineEvent[]
+  music: MusicSession[]
+  onEnter: (tab: Tab) => void
 }
 
-function NowSection({ latestTimeline, topInfluences, latestMusic, latestPost }: NowSectionProps) {
-  const hasAny = latestTimeline || topInfluences.length > 0 || latestMusic || latestPost
-  if (!hasAny) {
-    return <EmptyState message="Nothing published yet." />
-  }
-  return (
-    <div className="ka-me-now">
-      {latestTimeline && (
-        <div className="ka-me-now-card">
-          <div className="ka-me-now-label">Latest</div>
-          <div className="ka-me-now-title">{latestTimeline.title}</div>
-          {latestTimeline.body && <p className="ka-me-now-body">{latestTimeline.body}</p>}
-          <div className="ka-me-now-date">{formatDate(latestTimeline.occurred_at)}</div>
-        </div>
-      )}
-      {topInfluences.length > 0 && (
-        <div className="ka-me-now-card">
-          <div className="ka-me-now-label">Currently shaped by</div>
-          <ul className="ka-me-now-list">
-            {topInfluences.map(inf => (
-              <li key={inf.id} className="ka-me-now-list-item">
-                <span className="ka-me-chip">{inf.kind}</span>
-                <span className="ka-me-now-list-title">{inf.title}</span>
-                {inf.creator && <span className="ka-me-now-list-by">— {inf.creator}</span>}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {latestMusic && (
-        <div className="ka-me-now-card">
-          <div className="ka-me-now-label">In the studio</div>
-          <div className="ka-me-now-title">{latestMusic.title}</div>
-          <div className="ka-me-now-meta">
-            {latestMusic.kind && <span>{latestMusic.kind}</span>}
-            {latestMusic.bpm && <span>{latestMusic.bpm} bpm</span>}
-            {latestMusic.musical_key && <span>{latestMusic.musical_key}</span>}
-            {latestMusic.genre && <span>{latestMusic.genre}</span>}
-          </div>
-          <div className="ka-me-now-date">{formatDate(latestMusic.occurred_at)}</div>
-        </div>
-      )}
-      {latestPost && (
-        <div className="ka-me-now-card">
-          <div className="ka-me-now-label">Last post · {latestPost.platform}</div>
-          <p className="ka-me-now-body">{latestPost.body}</p>
-          {latestPost.published_at && (
-            <div className="ka-me-now-date">{formatDate(latestPost.published_at)}</div>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ─── Influences ─────────────────────────────────────────────────
-
-function InfluencesSection({ items }: { items: Influence[] }) {
-  const grouped = useMemo(() => {
-    const m = new Map<string, Influence[]>()
-    items.forEach(i => {
-      const list = m.get(i.kind) ?? []
-      list.push(i)
-      m.set(i.kind, list)
-    })
-    return Array.from(m.entries())
-  }, [items])
-
-  if (items.length === 0) return <EmptyState message="No influences logged yet." />
+function Foyer({ name, influences, timeline, music, onEnter }: FoyerProps) {
+  const halls: { tab: Tab; hall: string; count: number; featured?: string }[] = [
+    { tab: 'influences', hall: 'Influences', count: influences.length, featured: influences[0]?.title },
+    { tab: 'chronicle',  hall: 'Chronicle',  count: timeline.length,   featured: timeline[0]?.title },
+    { tab: 'studio',     hall: 'Studio',     count: music.length,      featured: music[0]?.title },
+    { tab: 'dispatches', hall: 'Dispatches', count: 0,                 featured: undefined },
+    { tab: 'archive',    hall: 'Archive',    count: 0,                 featured: undefined },
+  ]
 
   return (
-    <div className="ka-me-influences">
-      {grouped.map(([kind, list]) => (
-        <section key={kind} className="ka-me-influence-group">
-          <h2 className="ka-me-group-title">{kind}</h2>
-          <ul className="ka-me-influence-list">
-            {list.map(inf => (
-              <li key={inf.id} className="ka-me-influence-item">
-                <div className="ka-me-influence-head">
-                  <span className="ka-me-influence-title">{inf.title}</span>
-                  {inf.creator && <span className="ka-me-influence-by">— {inf.creator}</span>}
-                </div>
-                {inf.note && <p className="ka-me-influence-note">{inf.note}</p>}
-                <div className="ka-me-influence-meta">
-                  <span className="ka-me-weight" aria-label={`weight ${inf.weight}`}>
-                    {'▮'.repeat(inf.weight)}{'▯'.repeat(10 - inf.weight)}
-                  </span>
-                  {inf.url && (
-                    <a className="ka-me-link" href={inf.url} target="_blank" rel="noopener noreferrer">
-                      source ↗
-                    </a>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </div>
-  )
-}
+    <div className="ka-me-foyer">
+      <div className="ka-me-foyer-epigraph">
+        <p>
+          Welcome. This museum displays the thoughts, influences, and works of{' '}
+          <em>{name}</em>. The Docent accompanies you — ask about any piece and
+          it will answer from the record. Otherwise, wander the halls at your
+          own pace.
+        </p>
+      </div>
 
-// ─── Timeline ───────────────────────────────────────────────────
-
-function TimelineSection({ items }: { items: TimelineEvent[] }) {
-  if (items.length === 0) return <EmptyState message="Timeline is empty." />
-  return (
-    <ol className="ka-me-timeline">
-      {items.map(ev => (
-        <li key={ev.id} className="ka-me-timeline-item">
-          <div className="ka-me-timeline-date">{formatDate(ev.occurred_at)}</div>
-          <div className="ka-me-timeline-content">
-            <div className="ka-me-timeline-head">
-              <span className="ka-me-chip">{ev.kind}</span>
-              <span className="ka-me-timeline-title">{ev.title}</span>
-            </div>
-            {ev.body && <p className="ka-me-timeline-body">{ev.body}</p>}
-            {ev.url && (
-              <a className="ka-me-link" href={ev.url} target="_blank" rel="noopener noreferrer">
-                {ev.url} ↗
-              </a>
+      <div className="ka-me-foyer-map">
+        {halls.map(h => (
+          <button
+            key={h.tab}
+            type="button"
+            className="ka-me-foyer-door"
+            onClick={() => onEnter(h.tab)}
+            disabled={h.count === 0}
+          >
+            <span className="ka-me-foyer-door-label">{h.hall}</span>
+            <span className="ka-me-foyer-door-count">
+              {h.count === 0 ? 'in preparation' : `${h.count} pieces`}
+            </span>
+            {h.featured && (
+              <span className="ka-me-foyer-door-featured">“{h.featured}”</span>
             )}
-          </div>
-        </li>
-      ))}
-    </ol>
-  )
-}
-
-// ─── Music ──────────────────────────────────────────────────────
-
-function MusicSection({ items }: { items: MusicSession[] }) {
-  if (items.length === 0) return <EmptyState message="No studio sessions logged." />
-  return (
-    <div className="ka-me-music">
-      {items.map(m => (
-        <article key={m.id} className="ka-me-music-card">
-          <div className="ka-me-music-head">
-            {m.kind && <span className="ka-me-chip">{m.kind}</span>}
-            <h3 className="ka-me-music-title">{m.title}</h3>
-          </div>
-          <div className="ka-me-music-meta">
-            {m.bpm && <span>{m.bpm} bpm</span>}
-            {m.musical_key && <span>key {m.musical_key}</span>}
-            {m.genre && <span>{m.genre}</span>}
-            {m.duration_min && <span>{m.duration_min} min</span>}
-          </div>
-          {m.note && <p className="ka-me-music-note">{m.note}</p>}
-          <div className="ka-me-music-foot">
-            <span className="ka-me-music-date">{formatDate(m.occurred_at)}</span>
-            {m.artifact_url && (
-              <a className="ka-me-link" href={m.artifact_url} target="_blank" rel="noopener noreferrer">
-                listen ↗
-              </a>
-            )}
-          </div>
-        </article>
-      ))}
+          </button>
+        ))}
+      </div>
     </div>
   )
 }
 
-// ─── Social ─────────────────────────────────────────────────────
+// ─── Gallery wrappers ───────────────────────────────────────────
 
-function SocialSection({ items }: { items: SocialPostLite[] }) {
-  if (items.length === 0) return <EmptyState message="No published posts." />
-  return (
-    <ul className="ka-me-social">
-      {items.map(p => (
-        <li key={p.id} className="ka-me-social-item">
-          <div className="ka-me-social-head">
-            <span className="ka-me-chip">{p.platform}</span>
-            {p.published_at && <span className="ka-me-social-date">{formatDate(p.published_at)}</span>}
-          </div>
-          <p className="ka-me-social-body">{p.body}</p>
-          {p.platform_url && (
-            <a className="ka-me-link" href={p.platform_url} target="_blank" rel="noopener noreferrer">
-              view on {p.platform} ↗
-            </a>
-          )}
-        </li>
-      ))}
-    </ul>
-  )
+interface GalleryProps<T> {
+  items: T[]
+  index: number
+  onIndex: (n: number) => void
+  onAskDocent: (seed: string) => void
 }
 
-// ─── Feed ───────────────────────────────────────────────────────
-
-function FeedSection({ items }: { items: FeedItem[] }) {
-  if (items.length === 0) return <EmptyState message="No feed items yet." />
-  return (
-    <ul className="ka-me-feed">
-      {items.map(it => (
-        <li key={`${it.item_type}-${it.id}`} className="ka-me-feed-item">
-          <div className="ka-me-feed-head">
-            <span className="ka-me-chip">{it.item_type}</span>
-            <span className="ka-me-feed-kind">{it.kind}</span>
-            <span className="ka-me-feed-date">{formatDate(it.at)}</span>
-          </div>
-          <div className="ka-me-feed-title">{it.title}</div>
-          {it.body && <p className="ka-me-feed-body">{it.body}</p>}
-          {it.url && (
-            <a className="ka-me-link" href={it.url} target="_blank" rel="noopener noreferrer">
-              {it.url} ↗
-            </a>
-          )}
-        </li>
-      ))}
-    </ul>
-  )
+function formatMonthYear(iso: string): string {
+  try {
+    const d = new Date(iso)
+    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long' })
+  } catch { return iso }
 }
-
-// ─── Shared ─────────────────────────────────────────────────────
-
-function EmptyState({ message }: { message: string }) {
-  return <div className="ka-me-empty">{message}</div>
-}
-
 function formatDate(iso: string): string {
   try {
     return new Date(iso).toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+      year: 'numeric', month: 'short', day: 'numeric',
     })
-  } catch {
-    return iso
-  }
+  } catch { return iso }
+}
+function accession(prefix: string, index: number, iso: string): string {
+  const year = new Date(iso).getFullYear() || new Date().getFullYear()
+  return `${prefix}.${year}.${String(index + 1).padStart(3, '0')}`
+}
+
+function InfluenceGallery({ items, index, onIndex, onAskDocent }: GalleryProps<Influence>) {
+  if (items.length === 0) return <EmptyRoom hall="Influences" />
+  const inf = items[index]
+  const placard: PlacardField[] = [
+    { label: 'Medium', value: inf.kind },
+    { label: 'Weight', value: `${inf.weight} / 10` },
+    { label: 'Acquired', value: formatMonthYear(inf.added_at) },
+  ]
+  if (inf.tags.length > 0) placard.push({ label: 'Tags', value: inf.tags.join(' · ') })
+
+  return (
+    <Exhibit
+      hall="Influences"
+      index={index}
+      total={items.length}
+      accession={accession('INF', index, inf.added_at)}
+      eyebrow={inf.kind}
+      title={inf.title}
+      attribution={inf.creator ? `— ${inf.creator}` : undefined}
+      body={inf.note}
+      placard={placard}
+      sourceUrl={inf.url}
+      sourceLabel="view source"
+      onPrev={() => onIndex(Math.max(0, index - 1))}
+      onNext={() => onIndex(Math.min(items.length - 1, index + 1))}
+      onAskDocent={() =>
+        onAskDocent(
+          `Tell me about "${inf.title}"${inf.creator ? ` by ${inf.creator}` : ''}. Why does this shape them?`
+        )
+      }
+    />
+  )
+}
+
+function ChronicleGallery({ items, index, onIndex, onAskDocent }: GalleryProps<TimelineEvent>) {
+  if (items.length === 0) return <EmptyRoom hall="Chronicle" />
+  const ev = items[index]
+  const placard: PlacardField[] = [
+    { label: 'Category', value: ev.kind },
+    { label: 'Date', value: formatDate(ev.occurred_at) },
+  ]
+  if (ev.tags.length > 0) placard.push({ label: 'Tags', value: ev.tags.join(' · ') })
+
+  return (
+    <Exhibit
+      hall="Chronicle"
+      index={index}
+      total={items.length}
+      accession={accession('CHR', index, ev.occurred_at)}
+      eyebrow={ev.kind}
+      title={ev.title}
+      body={ev.body}
+      placard={placard}
+      sourceUrl={ev.url}
+      sourceLabel="reference"
+      onPrev={() => onIndex(Math.max(0, index - 1))}
+      onNext={() => onIndex(Math.min(items.length - 1, index + 1))}
+      onAskDocent={() =>
+        onAskDocent(`What is the significance of "${ev.title}" on ${formatDate(ev.occurred_at)}?`)
+      }
+    />
+  )
+}
+
+function StudioGallery({ items, index, onIndex, onAskDocent }: GalleryProps<MusicSession>) {
+  if (items.length === 0) return <EmptyRoom hall="Studio" />
+  const m = items[index]
+  const placard: PlacardField[] = []
+  if (m.kind) placard.push({ label: 'Form', value: m.kind })
+  if (m.bpm) placard.push({ label: 'Tempo', value: `${m.bpm} bpm` })
+  if (m.musical_key) placard.push({ label: 'Key', value: m.musical_key })
+  if (m.genre) placard.push({ label: 'Idiom', value: m.genre })
+  if (m.duration_min) placard.push({ label: 'Duration', value: `${m.duration_min} min` })
+  placard.push({ label: 'Dated', value: formatDate(m.occurred_at) })
+
+  return (
+    <Exhibit
+      hall="Studio"
+      index={index}
+      total={items.length}
+      accession={accession('STU', index, m.occurred_at)}
+      eyebrow={m.kind ?? 'Work'}
+      title={m.title}
+      body={m.note}
+      placard={placard}
+      sourceUrl={m.artifact_url}
+      sourceLabel="listen"
+      onPrev={() => onIndex(Math.max(0, index - 1))}
+      onNext={() => onIndex(Math.min(items.length - 1, index + 1))}
+      onAskDocent={() => onAskDocent(`Tell me about the studio work "${m.title}".`)}
+    />
+  )
+}
+
+function DispatchGallery({ items, index, onIndex, onAskDocent }: GalleryProps<SocialPostLite>) {
+  if (items.length === 0) return <EmptyRoom hall="Dispatches" />
+  const p = items[index]
+  const placard: PlacardField[] = [
+    { label: 'Platform', value: p.platform },
+  ]
+  if (p.published_at) placard.push({ label: 'Dispatched', value: formatDate(p.published_at) })
+
+  return (
+    <Exhibit
+      hall="Dispatches"
+      index={index}
+      total={items.length}
+      accession={accession('DSP', index, p.published_at ?? new Date().toISOString())}
+      eyebrow={p.platform}
+      title={p.body}
+      placard={placard}
+      sourceUrl={p.platform_url}
+      sourceLabel={`view on ${p.platform}`}
+      onPrev={() => onIndex(Math.max(0, index - 1))}
+      onNext={() => onIndex(Math.min(items.length - 1, index + 1))}
+      onAskDocent={() => onAskDocent(`What were they thinking when they posted this on ${p.platform}?`)}
+    />
+  )
+}
+
+function ArchiveGallery({ items, index, onIndex, onAskDocent }: GalleryProps<FeedItem>) {
+  if (items.length === 0) return <EmptyRoom hall="Archive" />
+  const it = items[index]
+  const placard: PlacardField[] = [
+    { label: 'Collection', value: it.item_type },
+    { label: 'Form', value: it.kind },
+    { label: 'Dated', value: formatDate(it.at) },
+  ]
+  if (it.tags.length > 0) placard.push({ label: 'Tags', value: it.tags.join(' · ') })
+
+  return (
+    <Exhibit
+      hall="Archive"
+      index={index}
+      total={items.length}
+      accession={accession('ARC', index, it.at)}
+      eyebrow={it.item_type}
+      title={it.title}
+      body={it.body}
+      placard={placard}
+      sourceUrl={it.url}
+      onPrev={() => onIndex(Math.max(0, index - 1))}
+      onNext={() => onIndex(Math.min(items.length - 1, index + 1))}
+      onAskDocent={() => onAskDocent(`Tell me about "${it.title}".`)}
+    />
+  )
 }
