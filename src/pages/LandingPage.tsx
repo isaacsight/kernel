@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ISSUE } from '../content/issue'
 import { ALL_ISSUES } from '../content/issues'
-import { FashionSpread } from '../components/FashionSpread'
+import { IssueFeature } from '../components/IssueFeature'
 import { IssueCredits } from '../components/IssueCredits'
 import './LandingPage.css'
 
@@ -145,11 +145,13 @@ export function LandingPage() {
 
 
       {/* ═══════════════════════════════════════════════
-          FEATURE SPREAD — rendered when this issue runs
-          a long-form editorial feature. Each issue may
-          or may not have one; the template adapts.
+          FEATURE — editorial tool varies per issue. The
+          router in IssueFeature picks which component
+          renders (essay, interview, etc.) based on the
+          spread.type field in the current issue's data.
+          Each issue picks its own tool.
           ═══════════════════════════════════════════════ */}
-      {ISSUE.spread && <FashionSpread issue={ISSUE} />}
+      {ISSUE.spread && <IssueFeature issue={ISSUE} />}
 
 
       {/* ═══════════════════════════════════════════════

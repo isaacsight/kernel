@@ -1,20 +1,21 @@
-import type { IssueRecord } from '../content/issues'
-import './FashionSpread.css'
+import type { IssueRecord, EssaySpread } from '../content/issues'
+import './EssayFeature.css'
 
-interface FashionSpreadProps {
+interface EssayFeatureProps {
+  spread: EssaySpread
   issue: IssueRecord
 }
 
 /**
- * FashionSpread — long-form editorial feature, text only.
- * Used by issues that set a `spread` field on IssueRecord.
- * Renders as a proper magazine essay: kicker, title + JP, italic
- * standfirst, byline, sectioned prose with a drop cap on the first
- * paragraph, a tomato pull-quote, and a signoff. No images.
+ * EssayFeature — long-form prose essay.
+ *
+ * Editorial tool #1 in the IssueFeature family. Used when the issue
+ * is carried by writing: culture, style, field-of-thought pieces.
+ * Kicker, title + JP, italic standfirst, byline, sectioned prose
+ * with a drop cap on the lead paragraph, a tomato pull-quote, and
+ * a signoff. No images.
  */
-export function FashionSpread({ issue }: FashionSpreadProps) {
-  if (!issue.spread) return null
-  const { spread } = issue
+export function EssayFeature({ spread, issue }: EssayFeatureProps) {
   const stockClass = `pop-stock-${spread.stock ?? 'kraft'}`
 
   return (

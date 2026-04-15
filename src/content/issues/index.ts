@@ -39,45 +39,92 @@ export interface IssueHeadline {
   swash: string
 }
 
-/** A section within a long-form spread feature — a mono kicker
- *  heading and a run of prose paragraphs beneath it. */
-export interface SpreadSection {
-  /** Uppercase mono kicker, e.g. "THE UNIFORM IS QUIETER NOW" */
-  heading: string
-  /** Optional Japanese subtitle for the section */
-  headingJp?: string
-  /** Body paragraphs, prose in serif */
-  paragraphs: string[]
-}
+/** ──────────────────────────────────────────────────────────────
+ *  ISSUE FEATURES — the editorial "tool" used for a given issue.
+ *
+ *  Different issues need different tools. An essay wants section
+ *  kickers, drop caps, and a pull quote. An interview wants a
+ *  subject dossier and Q&A format. A recipe wants ingredient lists
+ *  and method steps. Rather than force every feature into one
+ *  layout, `spread` is a discriminated union: each issue picks the
+ *  right tool, and the IssueFeature router renders the matching
+ *  component.
+ *
+ *  To add a new editorial tool (e.g. 'photo-diary', 'review',
+ *  'letters', 'recipe'):
+ *    1. Add a new interface with its own `type` literal below.
+ *    2. Add it to the IssueSpread union.
+ *    3. Create src/components/<Name>Feature.{tsx,css}.
+ *    4. Register it in src/components/IssueFeature.tsx's switch.
+ *  ────────────────────────────────────────────────────────────── */
 
-/** A pull quote — the large italic tomato callout inside a spread. */
-export interface SpreadPullQuote {
-  text: string
-  attribution: string
-}
-
-/** Long-form editorial feature rendered by FashionSpread. Prose,
- *  drop caps, pull quotes — no images. */
-export interface IssueSpread {
-  /** Editorial kicker above the spread, e.g. "STYLE SPREAD · スタイル" */
+/** Shared base — fields every feature type needs regardless of
+ *  which editorial tool the issue uses. */
+interface SpreadCommon {
+  /** Editorial kicker above the feature, e.g. "STYLE SPREAD · スタイル" */
   kicker: string
-  /** Section title — the essay's title */
+  /** Feature title */
   title: string
   /** Japanese title */
   titleJp: string
   /** Italic standfirst under the title */
   deck: string
-  /** Byline — who wrote it */
+  /** Byline — who wrote / interviewed / shot it */
   byline: string
-  /** Body of the essay, broken into section runs */
-  sections: SpreadSection[]
-  /** Optional pull quote — renders big italic tomato */
-  pullQuote?: SpreadPullQuote
   /** Closing sign-off line (italic) */
   signoff: string
-  /** Paper stock for the spread — different from default cover */
+  /** Paper stock for the feature — usually different from cover */
   stock?: 'cream' | 'butter' | 'kraft' | 'ivory'
 }
+
+/** A section within a long-form essay — mono kicker + serif prose. */
+export interface SpreadSection {
+  heading: string
+  headingJp?: string
+  paragraphs: string[]
+}
+
+/** A pull quote — the large italic tomato callout inside an essay. */
+export interface SpreadPullQuote {
+  text: string
+  attribution: string
+}
+
+/** ─── essay ────────────────────────────────────────────────────
+ *  Long-form prose with drop cap, section kickers, pull quote.
+ *  Used for culture / style / field-of-thought features. */
+export interface EssaySpread extends SpreadCommon {
+  type: 'essay'
+  sections: SpreadSection[]
+  pullQuote?: SpreadPullQuote
+}
+
+/** ─── interview ────────────────────────────────────────────────
+ *  Q&A with a subject dossier at the top. Used for profiles of
+ *  people — real, fictional, or composite. */
+export interface InterviewSubject {
+  name: string
+  nameJp?: string
+  role: string
+  roleJp?: string
+  location: string
+}
+
+export interface InterviewExchange {
+  q: string
+  a: string
+}
+
+export interface InterviewSpread extends SpreadCommon {
+  type: 'interview'
+  subject: InterviewSubject
+  exchanges: InterviewExchange[]
+  /** Optional intro block before the Q&A begins. */
+  intro?: string
+}
+
+/** Discriminated union — add new editorial tools here. */
+export type IssueSpread = EssaySpread | InterviewSpread
 
 export interface IssueCredits {
   editorInChief: string

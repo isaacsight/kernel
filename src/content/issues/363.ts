@@ -45,6 +45,7 @@ export const ISSUE_363: IssueRecord = {
   ],
 
   spread: {
+    type: 'essay',
     kicker: 'STYLE SPREAD · スタイル特集',
     title: 'On the Street.',
     titleJp: '街角で。',

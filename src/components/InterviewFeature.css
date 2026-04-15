@@ -1,0 +1,271 @@
+/* ──────────────────────────────────────────────────────────────
+   InterviewFeature — Q&A profile editorial tool
+   Different rhythm from essay: subject dossier card up top, then
+   alternating italic tomato Q. / serif A. blocks. Dropcap on the
+   final answer. Shape of the page says "conversation with a
+   person," not "essay about a topic."
+   ────────────────────────────────────────────────────────────── */
+
+.pop-interview {
+  padding: 96px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-interview-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.pop-interview-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-bottom: 32px;
+}
+
+.pop-interview-title {
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: 0.95;
+  margin: 8px 0 0;
+  letter-spacing: -0.03em;
+}
+
+.pop-interview-title-jp { margin: 0; }
+
+.pop-interview-deck {
+  font-size: clamp(18px, 2.2vw, 24px);
+  max-width: 50ch;
+  margin: 8px 0 0;
+  line-height: 1.35;
+}
+
+.pop-interview-byline {
+  margin: 16px 0 0;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+/* ── Subject dossier — the "THE SUBJECT" card ───────────── */
+.pop-interview-subject {
+  margin: 32px auto 0;
+  max-width: 520px;
+}
+
+.pop-interview-subject-frame {
+  border: 1px solid var(--pop-ink);
+  padding: 24px 28px;
+  background: var(--pop-ivory);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+/* A small tomato corner mark — editorial badge style. */
+.pop-interview-subject-frame::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 22px;
+  height: 22px;
+  background: var(--pop-tomato);
+}
+
+.pop-interview-subject-kicker {
+  margin: 0 0 4px;
+  letter-spacing: 0.16em;
+}
+
+.pop-interview-subject-name {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--pop-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pop-interview-subject-name-jp {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--pop-coffee);
+  font-weight: 400;
+}
+
+.pop-interview-subject-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 12px;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-interview-subject-role {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--pop-ink);
+  line-height: 1.3;
+}
+
+.pop-interview-subject-role-jp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+.pop-interview-subject-location {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-interview-subject-location-value {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--pop-ink);
+}
+
+/* ── Intro + rule ───────────────────────────────────────── */
+.pop-interview-intro {
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+  color: var(--pop-ink);
+  margin: 40px auto 0;
+  max-width: 56ch;
+  text-wrap: pretty;
+}
+
+.pop-interview-rule {
+  margin: 40px auto;
+  max-width: 120px;
+  height: 1px;
+  background: var(--pop-hairline);
+}
+
+/* ── Q&A body ───────────────────────────────────────────── */
+.pop-interview-body {
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+}
+
+.pop-interview-exchange {
+  margin-bottom: 28px;
+}
+
+.pop-interview-q,
+.pop-interview-a {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  margin: 0 0 12px;
+  text-wrap: pretty;
+}
+
+.pop-interview-q {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--pop-tomato);
+  font-size: clamp(17px, 1.4vw, 20px);
+  letter-spacing: -0.01em;
+}
+
+.pop-interview-a {
+  color: var(--pop-ink);
+  margin-bottom: 0;
+}
+
+.pop-interview-q-mark,
+.pop-interview-a-mark {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding-top: 4px;
+  font-variant-numeric: tabular-nums;
+  font-style: normal;
+}
+
+.pop-interview-q-mark { color: var(--pop-tomato); }
+.pop-interview-a-mark { color: var(--pop-coffee); opacity: 0.8; }
+
+.pop-interview-divider {
+  margin: 28px 0 24px;
+  max-width: 44px;
+}
+
+/* Drop cap on the final answer — POPEYE convention: the last
+   word of the interview lands softer with a pull. */
+.pop-interview-a--last .pop-interview-a-text::first-letter {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 3.4em;
+  line-height: 0.85;
+  float: left;
+  margin: 0.08em 0.12em 0 -0.02em;
+  color: var(--pop-tomato);
+  font-style: italic;
+}
+
+/* ── Sign-off ───────────────────────────────────────────── */
+.pop-interview-signoff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 48px;
+  margin-top: 48px;
+}
+
+.pop-interview-signoff-text {
+  font-size: clamp(17px, 1.8vw, 22px);
+  margin: 0;
+  color: var(--pop-coffee);
+}
+
+.pop-interview-monument {
+  margin-top: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .pop-interview { padding: 56px 0; }
+  .pop-interview-inner { padding: 0 22px; }
+  .pop-interview-title { font-size: clamp(36px, 10vw, 56px); }
+  .pop-interview-deck { font-size: clamp(16px, 4.5vw, 20px); }
+  .pop-interview-subject { margin-top: 24px; }
+  .pop-interview-subject-frame { padding: 18px 20px; gap: 10px; }
+  .pop-interview-body { font-size: 16px; line-height: 1.6; }
+  .pop-interview-q,
+  .pop-interview-a {
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+  }
+  .pop-interview-q-mark,
+  .pop-interview-a-mark { font-size: 11px; padding-top: 3px; }
+  .pop-interview-a--last .pop-interview-a-text::first-letter { font-size: 2.8em; }
+  .pop-interview-signoff { padding-top: 32px; margin-top: 32px; }
+}

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { MagazineFrame } from '../components/MagazineFrame'
-import { FashionSpread } from '../components/FashionSpread'
+import { IssueFeature } from '../components/IssueFeature'
 import { IssueCredits } from '../components/IssueCredits'
 import { ALL_ISSUES, findIssue } from '../content/issues'
 // Share the cover grammar + layout variants with the live cover.
@@ -102,9 +102,9 @@ export function IssueDetailPage() {
           </ol>
         </section>
 
-        {/* ── Optional feature spread — issues that ran a long-form
-              editorial feature preserve it here in the archive. ── */}
-        {issue.spread && <FashionSpread issue={issue} />}
+        {/* ── Optional feature — each issue's editorial tool is
+              preserved in the archive at its original component. ── */}
+        {issue.spread && <IssueFeature issue={issue} />}
 
         {/* ── Optional masthead — editorial team credits. ────── */}
         {issue.credits && <IssueCredits issue={issue} />}

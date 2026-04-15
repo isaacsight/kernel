@@ -166,10 +166,54 @@ Print any route (`Cmd+P`) for the printable zine form.
 
 ---
 
+## Editorial tools — per-feature modules
+
+Different issues need different tools. An essay wants section
+kickers, drop caps, and a pull quote. An interview wants a subject
+dossier and a Q&A format. A recipe (future) wants an ingredient
+list and a method block. Rather than force every feature into one
+layout, the `spread` field on `IssueRecord` is a **discriminated
+union** — each issue picks the right tool, and the
+`IssueFeature` router renders the matching component.
+
+### Current tools
+
+| Tool | `spread.type` | Component | Used by | Grammar |
+|---|---|---|---|---|
+| Essay | `'essay'` | `EssayFeature` | ISSUE 363 | Mono section kickers, serif prose, drop cap on lead paragraph, tomato pull-quote, sign-off |
+| Interview | `'interview'` | `InterviewFeature` | (available) | Subject dossier card with tomato corner badge, alternating Q./A. blocks, drop cap on final answer |
+
+### How to add a new tool
+
+1. Extend `IssueSpread` in `src/content/issues/index.ts` with a new
+   member of the union, e.g. `{ type: 'recipe', ... }`.
+2. Build `src/components/<Name>Feature.{tsx,css}` following the
+   `EssayFeature` / `InterviewFeature` conventions.
+3. Add a case to the switch in `src/components/IssueFeature.tsx`.
+4. TypeScript's exhaustiveness check will flag any variant that
+   isn't handled.
+
+### Tools worth adding next
+
+- **`recipe`** — ingredients list (numbered rows), method block
+  (numbered steps), field variables (time, yield, temp). POPEYE
+  runs these in food issues.
+- **`review`** — product review grid: 4–6 cards with rating,
+  price, pros/cons. Good for gear / tools / café issues.
+- **`letters`** — reader letters column: one block per letter
+  with italic signature right-aligned.
+- **`dispatch`** — field report: location-date header, monospace
+  diary entries, observation notes.
+- **`gallery`** — when images arrive: caption-first photo grid.
+
+---
+
 ## Future moves (not yet shipped)
 
-- `/issues` — back-catalog page listing past ISSUE numbers
 - PDF export per route — actual printable issue file
-- A "contributors" block in the colophon (Isaac as editor-in-chief,
-  kbot as staff writer)
 - Cobalt / ivy / pool accents wired to seasonal issue variants
+- Decorative primitives layer: `pop-shape-*`, `pop-icon-*`,
+  text-on-path SVG — ornaments that work across any feature
+- Issue template helpers — one-call builders for common issue
+  shapes (classic cover, essay-led, interview-led) so authoring
+  a new issue feels closer to filling in a form
