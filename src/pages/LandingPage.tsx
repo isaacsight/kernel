@@ -112,7 +112,9 @@ export function LandingPage() {
           {/* Top dateline — folio style */}
           <div className="pop-cover-dateline">
             <span className="pop-folio">都会に住んで、コードで遊ぶための、自由なスタイルを作ろう。</span>
-            <span className="pop-folio">ISSUE {ISSUE.number} · {ISSUE.month} {ISSUE.year}</span>
+            <span className="pop-folio pop-folio--collab">
+              IN THE TRADITION OF <em>POPEYE</em> · ISSUE {ISSUE.number} · {ISSUE.month} {ISSUE.year}
+            </span>
           </div>
 
           <hr className="pop-rule" />
@@ -227,8 +229,10 @@ export function LandingPage() {
                   <span className="pop-catalog-num">{f.n}.</span>
                   <span className="pop-banner">{f.tag}</span>
                 </div>
-                <h3 className="pop-catalog-card-title">{f.title}</h3>
-                <p className="pop-catalog-card-jp">{f.jp}</p>
+                <div className="pop-bilingual pop-catalog-card-bilingual">
+                  <h3 className="pop-latin pop-catalog-card-title">{f.title}</h3>
+                  <span className="pop-jp">{f.jp}</span>
+                </div>
                 <hr className="pop-rule pop-rule--soft" />
                 <p className="pop-catalog-card-desc">{f.desc}</p>
               </article>
@@ -259,9 +263,9 @@ export function LandingPage() {
 
           <div className="pop-terminal">
             <div className="pop-terminal-bar">
-              <span className="pop-terminal-dot" style={{ background: '#ff5f57' }} />
-              <span className="pop-terminal-dot" style={{ background: '#ffbd2e' }} />
-              <span className="pop-terminal-dot" style={{ background: '#28c840' }} />
+              <span className="pop-term-dot pop-term-dot--red" />
+              <span className="pop-term-dot pop-term-dot--yellow" />
+              <span className="pop-term-dot pop-term-dot--green" />
               <span className="pop-terminal-title">kbot</span>
             </div>
             <div className="pop-terminal-body">
@@ -311,10 +315,10 @@ export function LandingPage() {
             {AGENTS.map((a, i) => (
               <div key={a.id} className="pop-specialist-card">
                 <span className="pop-catalog-num">{String(i + 1).padStart(2, '0')}.</span>
-                <div className="pop-specialist-body">
+                <div className="pop-bilingual pop-specialist-body">
                   <span className="pop-specialist-id">{a.id}</span>
-                  <span className="pop-specialist-en">{a.en}</span>
-                  <span className="pop-specialist-jp">{a.jp}</span>
+                  <span className="pop-latin pop-specialist-en">{a.en}</span>
+                  <span className="pop-jp pop-specialist-jp">{a.jp}</span>
                 </div>
               </div>
             ))}
@@ -391,9 +395,9 @@ export function LandingPage() {
 
           <div className="pop-terminal pop-terminal--light">
             <div className="pop-terminal-bar">
-              <span className="pop-terminal-dot" style={{ background: '#ff5f57' }} />
-              <span className="pop-terminal-dot" style={{ background: '#ffbd2e' }} />
-              <span className="pop-terminal-dot" style={{ background: '#28c840' }} />
+              <span className="pop-term-dot pop-term-dot--red" />
+              <span className="pop-term-dot pop-term-dot--yellow" />
+              <span className="pop-term-dot pop-term-dot--green" />
             </div>
             <div className="pop-terminal-body">
               <div className="pop-terminal-line"><span className="pop-terminal-prompt">$</span> npm i -g @kernel.chat/kbot</div>
@@ -457,6 +461,9 @@ export function LandingPage() {
 
           <p className="pop-folio pop-colophon-copy">
             MIT · kernel.chat group · Published monthly from the terminal.
+          </p>
+          <p className="pop-folio pop-colophon-credit">
+            Art direction: an editorial homage to <em>POPEYE Magazine</em> · 街のコーダーたちへ
           </p>
         </div>
       </footer>

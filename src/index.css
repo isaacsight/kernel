@@ -128,14 +128,24 @@
     /* Spot colors — the punch accents */
     --pop-tomato:   #E24E1B;   /* THE Popeye accent — banners, rules, tags */
     --pop-tomato-soft: rgba(226, 78, 27, 0.08);
-    --pop-cobalt:   #1D4E89;
-    --pop-ivy:      #2E4A2E;
-    --pop-pool:     #4FB5C8;
+
+    /* Reserved issue-variant accents (future "nature" / "city" covers).
+       Kept in the palette so a future issue can be re-skinned without
+       introducing new tokens. Only pool is in active use today
+       (.pop-terminal-agent in the field-report section). */
+    --pop-cobalt:   #1D4E89;   /* reserved — cold-weather / winter issue */
+    --pop-ivy:      #2E4A2E;   /* reserved — nature / outdoor issue */
+    --pop-pool:     #4FB5C8;   /* terminal agent label accent */
 
     /* Editorial rules & ornament */
     --pop-hairline: rgba(31, 30, 29, 0.85);
     --pop-hairline-soft: rgba(31, 30, 29, 0.16);
     --pop-tape:     rgba(239, 217, 160, 0.6);
+
+    /* Terminal window chrome (mac-style traffic lights) */
+    --pop-term-red:    #ff5f57;
+    --pop-term-yellow: #ffbd2e;
+    --pop-term-green:  #28c840;
 }
 
 /* Dark Mode Palette */
@@ -29382,6 +29392,12 @@ h4 {
 
 /* Folio — page number, byline, date in corners */
 .pop-folio { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); opacity: 0.7; }
+
+/* Terminal traffic-light dots — used inside .pop-terminal-bar */
+.pop-term-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.pop-term-dot--red    { background: var(--pop-term-red); }
+.pop-term-dot--yellow { background: var(--pop-term-yellow); }
+.pop-term-dot--green  { background: var(--pop-term-green); }
 
 /* Section header — editorial lockup used on every page */
 .pop-section-header { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; margin-bottom: 56px; }

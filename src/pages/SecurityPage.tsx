@@ -148,9 +148,9 @@ export function SecurityPage() {
         </header>
         <div className="ka-security-terminal">
           <div className="ka-security-terminal-bar">
-            <span className="ka-security-dot" style={{ background: '#ff5f57' }} />
-            <span className="ka-security-dot" style={{ background: '#ffbd2e' }} />
-            <span className="ka-security-dot" style={{ background: '#28c840' }} />
+            <span className="pop-term-dot pop-term-dot--red" />
+            <span className="pop-term-dot pop-term-dot--yellow" />
+            <span className="pop-term-dot pop-term-dot--green" />
             <span className="ka-security-terminal-title">kbot</span>
           </div>
           <div className="ka-security-terminal-body">
@@ -300,9 +300,9 @@ export function SecurityPage() {
 
         <div className="ka-security-terminal" style={{ maxWidth: 480, marginTop: 32 }}>
           <div className="ka-security-terminal-bar">
-            <span className="ka-security-dot" style={{ background: '#ff5f57' }} />
-            <span className="ka-security-dot" style={{ background: '#ffbd2e' }} />
-            <span className="ka-security-dot" style={{ background: '#28c840' }} />
+            <span className="pop-term-dot pop-term-dot--red" />
+            <span className="pop-term-dot pop-term-dot--yellow" />
+            <span className="pop-term-dot pop-term-dot--green" />
           </div>
           <div className="ka-security-terminal-body">
             <div className="ka-security-line">

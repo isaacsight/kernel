@@ -222,9 +222,9 @@ export default function BenchPage() {
 
         <div className="ka-bench-terminal">
           <div className="ka-bench-terminal-bar">
-            <span className="ka-bench-dot" style={{ background: '#ff5f57' }} />
-            <span className="ka-bench-dot" style={{ background: '#ffbd2e' }} />
-            <span className="ka-bench-dot" style={{ background: '#28c840' }} />
+            <span className="pop-term-dot pop-term-dot--red" />
+            <span className="pop-term-dot pop-term-dot--yellow" />
+            <span className="pop-term-dot pop-term-dot--green" />
             <span className="ka-bench-terminal-title">Terminal</span>
           </div>
           <div className="ka-bench-terminal-body">

@@ -49,6 +49,16 @@
   padding-top: 12px;
 }
 
+.pop-folio--collab em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--pop-tomato);
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 1.05em;
+}
+
 /* Masthead */
 .pop-masthead {
   display: flex;
@@ -519,6 +529,21 @@
 .pop-colophon-copy {
   margin: 0;
   opacity: 0.6;
+}
+
+.pop-colophon-credit {
+  margin: 6px 0 0;
+  opacity: 0.55;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.pop-colophon-credit em {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--pop-tomato);
+  letter-spacing: 0.02em;
 }
 
 @media (max-width: 768px) {

@@ -35,13 +35,15 @@
 .pop-frame-brand {
   background: transparent;
   border: 0;
-  padding: 0;
-  margin: 0;
+  padding: 8px 12px 8px 0;
+  margin: 0 0 0 -12px;
   cursor: pointer;
   text-align: left;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 4px;
+  min-height: 44px;
   font-family: var(--font-serif);
   color: inherit;
   transition: opacity 0.2s;
@@ -103,6 +105,54 @@
    MagazineFrame already provides a back link in the footer. */
 .pop-frame-body .ka-legal-back {
   display: none;
+}
+
+/* Apply magazine grammar to legal h2 sections: tomato spot rule +
+   tightened serif display type, so Privacy/Terms read as spreads,
+   not bare appendices. */
+.pop-frame-body .ka-legal-page h1 {
+  display: none; /* MagazineFrame already renders the page title */
+}
+
+.pop-frame-body .ka-legal-page h2 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 30px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--pop-ink);
+  margin: 56px 0 14px;
+  padding-top: 20px;
+  position: relative;
+}
+
+.pop-frame-body .ka-legal-page h2::before {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 2px;
+  background: var(--pop-tomato);
+  margin-bottom: 16px;
+}
+
+.pop-frame-body .ka-legal-page h3 {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  margin: 24px 0 6px;
+  opacity: 0.9;
+}
+
+.pop-frame-body .ka-legal-updated {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  opacity: 0.7;
+  margin-bottom: 32px;
 }
 
 /* Dark pages (SecurityPage, BenchPage) don't need the ivory frame;
