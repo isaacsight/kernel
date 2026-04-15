@@ -30,6 +30,12 @@
   padding-top: 8px;
 }
 
+/* Constrain the snapshot's cover headline so it matches the live
+   landing's mobile clamp instead of inheriting desktop sizing. */
+.pop-issue-feature .pop-feature-title {
+  font-size: clamp(48px, 9vw, 128px);
+}
+
 /* ── Contents block ──────────────────────────────────────── */
 .pop-issue-contents {
   padding: 56px 0 32px;
@@ -125,21 +131,65 @@
 
 .pop-issue-nav-empty {
   opacity: 0.4;
-  align-self: center;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 0;
 }
 
+.pop-issue-nav-cell--right .pop-issue-nav-empty { justify-content: flex-end; }
+
 @media (max-width: 640px) {
+  /* Cover — center the monument so it doesn't float into a hard-right
+     dead space, and tighten the headline scale to match the landing. */
+  .pop-issue-cover {
+    gap: 16px;
+    padding: 12px 0;
+  }
+  .pop-issue-feature {
+    padding: 16px 0 24px;
+    gap: 10px;
+  }
+  .pop-issue-feature .pop-feature-title {
+    font-size: clamp(40px, 12vw, 72px);
+  }
+  .pop-issue-monument-wrap {
+    justify-content: center;
+    padding-top: 4px;
+  }
+  .pop-issue-contents { padding: 32px 0 24px; }
+
+  /* Navigation — single column, prev → next → back, with empty
+     states that hold their own height so flow stays even. */
   .pop-issue-nav {
     grid-template-columns: 1fr;
     gap: 16px;
+    margin-top: 32px;
+    padding-top: 24px;
   }
   .pop-issue-nav-cell--right {
     text-align: left;
     align-items: flex-start;
   }
+  .pop-issue-nav-cell--right .pop-issue-nav-empty { justify-content: flex-start; }
   .pop-issue-nav-link--right {
     align-items: flex-start;
     text-align: left;
   }
-  .pop-issue-nav-cell--center { order: 99; padding-top: 16px; border-top: 1px solid var(--pop-hairline-soft); }
+  .pop-issue-nav-cell--center {
+    order: 99;
+    padding-top: 16px;
+    border-top: 1px solid var(--pop-hairline-soft);
+  }
+  /* Long feature titles in the prev/next cells need to wrap and
+     respect the screen edge instead of running off. */
+  .pop-issue-nav-feature {
+    white-space: normal;
+    font-size: 13px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
