@@ -16,6 +16,7 @@ import { ISSUE_360 } from './360'
 import { ISSUE_361 } from './361'
 import { ISSUE_362 } from './362'
 import { ISSUE_363 } from './363'
+import { ISSUE_364 } from './364'
 
 export interface ContentsItem {
   /** Numbered catalog number, padded (e.g. "001") */
@@ -74,7 +75,7 @@ interface SpreadCommon {
   /** Closing sign-off line (italic) */
   signoff: string
   /** Paper stock for the feature — usually different from cover */
-  stock?: 'cream' | 'butter' | 'kraft' | 'ivory'
+  stock?: 'cream' | 'butter' | 'kraft' | 'ivory' | 'ink'
 }
 
 /** A section within a long-form essay — mono kicker + serif prose. */
@@ -123,8 +124,33 @@ export interface InterviewSpread extends SpreadCommon {
   intro?: string
 }
 
+/** ─── forecast ────────────────────────────────────────────────
+ *  Numbered propositions — a manifesto / forecast / declaration
+ *  of stance. Used when the issue's thesis is a *list of claims*
+ *  rather than a narrative or a conversation. */
+export interface ForecastProposition {
+  /** Catalog number, padded — "01", "02", etc. */
+  n: string
+  /** Short declaration — one sentence, bold serif. */
+  title: string
+  /** Japanese subtitle for the proposition. */
+  titleJp?: string
+  /** Prose explanation, 1–3 short paragraphs. */
+  body: string[]
+}
+
+export interface ForecastSpread extends SpreadCommon {
+  type: 'forecast'
+  /** Standfirst prose block between the deck and the first
+   *  proposition — optional, used to set the frame. */
+  intro?: string
+  propositions: ForecastProposition[]
+  /** Closing meditation paragraph after the last proposition. */
+  outro?: string
+}
+
 /** Discriminated union — add new editorial tools here. */
-export type IssueSpread = EssaySpread | InterviewSpread
+export type IssueSpread = EssaySpread | InterviewSpread | ForecastSpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -181,6 +207,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_361,
   ISSUE_362,
   ISSUE_363,
+  ISSUE_364,
 ]
 
 /** The latest published issue — drives the landing cover. */

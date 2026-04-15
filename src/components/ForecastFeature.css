@@ -1,0 +1,222 @@
+/* ──────────────────────────────────────────────────────────────
+   ForecastFeature — numbered manifesto / forecast
+   Declarative rhythm: tomato ring badges with mono numbers,
+   bold serif titles, prose bodies in short paragraphs. Designed
+   to work on ink stock (dark manifesto) OR warm stock; the
+   stock class on .pop-forecast controls the ground.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-forecast {
+  padding: 96px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-forecast-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* When rendered on ink stock, lift hairlines + invert text. */
+.pop-forecast.pop-stock-ink {
+  border-top-color: rgba(250, 249, 246, 0.15);
+  border-bottom-color: rgba(250, 249, 246, 0.15);
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.pop-forecast-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-bottom: 32px;
+}
+
+.pop-forecast-title {
+  font-size: clamp(44px, 7vw, 96px);
+  line-height: 0.92;
+  margin: 8px 0 0;
+  letter-spacing: -0.035em;
+}
+
+.pop-stock-ink .pop-forecast-title { color: var(--pop-ivory); }
+
+.pop-forecast-title-jp { margin: 0; }
+.pop-stock-ink .pop-forecast-title-jp { color: var(--pop-sepia); }
+
+.pop-forecast-deck {
+  font-size: clamp(18px, 2.2vw, 24px);
+  max-width: 50ch;
+  margin: 8px 0 0;
+  line-height: 1.35;
+}
+.pop-stock-ink .pop-forecast-deck { color: var(--pop-sepia); }
+
+.pop-forecast-byline {
+  margin: 16px 0 0;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+.pop-stock-ink .pop-forecast-byline { color: var(--pop-sepia); }
+
+.pop-forecast-rule {
+  margin: 24px auto;
+  max-width: 120px;
+  height: 1px;
+  background: var(--pop-hairline);
+}
+
+.pop-stock-ink .pop-forecast-rule {
+  background: rgba(250, 249, 246, 0.25);
+}
+
+.pop-forecast-divider {
+  margin: 32px 0 48px;
+}
+
+/* ── Intro ──────────────────────────────────────────────── */
+.pop-forecast-intro {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(18px, 1.5vw, 22px);
+  line-height: 1.55;
+  color: var(--pop-coffee);
+  margin: 0 auto;
+  max-width: 52ch;
+  text-align: center;
+  text-wrap: pretty;
+}
+.pop-stock-ink .pop-forecast-intro { color: var(--pop-sepia); }
+
+/* ── Proposition list ──────────────────────────────────── */
+.pop-forecast-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.pop-forecast-item {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.pop-forecast-item-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.pop-forecast-badge {
+  margin-top: 2px;
+}
+
+.pop-forecast-item-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.pop-forecast-item-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--pop-ink);
+  text-wrap: balance;
+}
+.pop-stock-ink .pop-forecast-item-title { color: var(--pop-ivory); }
+
+.pop-forecast-item-title-jp {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--pop-coffee);
+  margin: 0;
+  opacity: 0.9;
+}
+.pop-stock-ink .pop-forecast-item-title-jp { color: var(--pop-sepia); }
+
+.pop-forecast-item-body {
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+  color: var(--pop-ink);
+  padding-left: 84px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.pop-stock-ink .pop-forecast-item-body { color: var(--pop-ivory); opacity: 0.92; }
+
+.pop-forecast-item-para {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ── Outro ──────────────────────────────────────────────── */
+.pop-forecast-outro {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.5;
+  color: var(--pop-coffee);
+  margin: 0 auto;
+  max-width: 52ch;
+  text-align: center;
+  text-wrap: pretty;
+}
+.pop-stock-ink .pop-forecast-outro { color: var(--pop-sepia); }
+
+/* ── Sign-off ──────────────────────────────────────────── */
+.pop-forecast-signoff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 48px;
+  margin-top: 48px;
+}
+
+.pop-forecast-signoff-text {
+  font-size: clamp(17px, 1.8vw, 22px);
+  margin: 0;
+  color: var(--pop-coffee);
+}
+.pop-stock-ink .pop-forecast-signoff-text { color: var(--pop-sepia); }
+
+.pop-forecast-monument { margin-top: 8px; align-items: center; text-align: center; }
+.pop-stock-ink .pop-forecast-monument { color: var(--pop-ivory); }
+.pop-stock-ink .pop-forecast-monument span { color: var(--pop-sepia); }
+.pop-stock-ink .pop-forecast-monument strong { color: var(--pop-tomato); }
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .pop-forecast { padding: 56px 0; }
+  .pop-forecast-inner { padding: 0 22px; }
+  .pop-forecast-title { font-size: clamp(38px, 11vw, 64px); }
+  .pop-forecast-deck { font-size: clamp(16px, 4.5vw, 20px); }
+  .pop-forecast-list { gap: 40px; }
+  .pop-forecast-divider { margin: 24px 0 32px; }
+  .pop-forecast-item-head {
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+  }
+  .pop-forecast-item-title { font-size: clamp(20px, 5.5vw, 26px); }
+  .pop-forecast-item-body {
+    font-size: 16px;
+    line-height: 1.6;
+    padding-left: 0;
+  }
+  .pop-forecast-signoff { padding-top: 32px; margin-top: 32px; }
+}
