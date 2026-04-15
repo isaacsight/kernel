@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { MagazineFrame } from '../components/MagazineFrame'
+import { FashionSpread } from '../components/FashionSpread'
+import { IssueCredits } from '../components/IssueCredits'
 import { ALL_ISSUES, findIssue } from '../content/issues'
 import './IssueDetailPage.css'
 
@@ -90,6 +92,13 @@ export function IssueDetailPage() {
             ))}
           </ol>
         </section>
+
+        {/* ── Optional feature spread — issues that ran a long-form
+              editorial feature preserve it here in the archive. ── */}
+        {issue.spread && <FashionSpread issue={issue} />}
+
+        {/* ── Optional masthead — editorial team credits. ────── */}
+        {issue.credits && <IssueCredits issue={issue} />}
 
         {/* ── PREV / NEXT navigation ─────────────────────────── */}
         <nav className="pop-issue-nav" aria-label="Issue navigation">

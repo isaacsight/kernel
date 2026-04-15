@@ -9,8 +9,6 @@ import { lazyRetry } from './utils/lazyRetry'
 const LandingPage = lazyRetry(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })))
 const PrivacyPage = lazyRetry(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })))
 const TermsPage = lazyRetry(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })))
-const SecurityPage = lazyRetry(() => import('./pages/SecurityPage').then(m => ({ default: m.SecurityPage })))
-const BenchPage = lazyRetry(() => import('./pages/BenchPage'))
 const IssuesPage = lazyRetry(() => import('./pages/IssuesPage').then(m => ({ default: m.IssuesPage })))
 const IssueDetailPage = lazyRetry(() => import('./pages/IssueDetailPage').then(m => ({ default: m.IssueDetailPage })))
 
@@ -42,16 +40,6 @@ export const router = createHashRouter([
       { index: true, element: withErrorBoundary(
         <Suspense fallback={<KernelLoading />}>
           <LandingPage />
-        </Suspense>
-      ) },
-      { path: 'security', element: withErrorBoundary(
-        <Suspense fallback={<div className="ka-page-loading">Loading...</div>}>
-          <SecurityPage />
-        </Suspense>
-      ) },
-      { path: 'bench', element: withErrorBoundary(
-        <Suspense fallback={<div className="ka-page-loading">Loading benchmarks...</div>}>
-          <BenchPage />
         </Suspense>
       ) },
       { path: 'issues', element: withErrorBoundary(

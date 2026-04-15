@@ -1,0 +1,98 @@
+/* ──────────────────────────────────────────────────────────────
+   IssueCredits — editorial masthead block
+   Per-issue roster: role · name. Hairline-framed panel. Adopts
+   the same header grammar as every section head on the site.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-credits {
+  padding: 72px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-credits-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.pop-credits-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.pop-credits-title {
+  font-size: clamp(32px, 5vw, 56px);
+  margin: 0;
+  line-height: 0.95;
+}
+
+.pop-credits-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-credits-row {
+  display: grid;
+  grid-template-columns: 44% 1fr;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--pop-hairline-soft);
+  align-items: baseline;
+  margin: 0;
+}
+
+.pop-credits-row:nth-child(odd) {
+  border-right: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-credits-role {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+  margin: 0;
+}
+
+.pop-credits-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--pop-ink);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.pop-credits-note {
+  margin: 32px 0 0;
+  text-align: center;
+  opacity: 0.6;
+}
+
+@media (max-width: 720px) {
+  .pop-credits-list {
+    grid-template-columns: 1fr;
+  }
+  .pop-credits-row:nth-child(odd) {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .pop-credits { padding: 48px 0; }
+  .pop-credits-inner { padding: 0 22px; }
+  .pop-credits-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 14px 0;
+  }
+}

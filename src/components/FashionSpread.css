@@ -1,0 +1,187 @@
+/* ──────────────────────────────────────────────────────────────
+   FashionSpread — long-form editorial feature
+   Prose-led magazine essay. Wide margins, narrow measure, drop cap
+   on the lead paragraph, mono section kickers, full-width tomato
+   pull quote. Feels like a Sunday supplement — different rhythm
+   than the typography-forward cover issues.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-essay {
+  padding: 96px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-essay-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.pop-essay-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-bottom: 32px;
+}
+
+.pop-essay-title {
+  font-size: clamp(44px, 7vw, 88px);
+  line-height: 0.95;
+  margin: 8px 0 0;
+  letter-spacing: -0.03em;
+}
+
+.pop-essay-title-jp {
+  margin: 0;
+}
+
+.pop-essay-deck {
+  font-size: clamp(18px, 2.2vw, 24px);
+  max-width: 52ch;
+  margin: 8px 0 0;
+  line-height: 1.35;
+}
+
+.pop-essay-byline {
+  margin: 16px 0 0;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+.pop-essay-rule {
+  margin: 24px auto 40px;
+  max-width: 120px;
+  height: 1px;
+  background: var(--pop-hairline);
+}
+
+/* ── Body ───────────────────────────────────────────────── */
+.pop-essay-body {
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+}
+
+.pop-essay-section + .pop-essay-section {
+  margin-top: 48px;
+}
+
+.pop-essay-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-essay-section-head-en {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-tomato);
+  font-weight: 700;
+}
+
+.pop-essay-section-head-jp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+.pop-essay-para {
+  margin: 0 0 18px;
+  text-wrap: pretty;
+}
+
+.pop-essay-para:last-child {
+  margin-bottom: 0;
+}
+
+/* Drop cap on the lead paragraph — POPEYE essay convention. */
+.pop-essay-para--lead::first-letter {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 5.2em;
+  line-height: 0.85;
+  float: left;
+  margin: 0.08em 0.08em 0 -0.05em;
+  color: var(--pop-tomato);
+  font-style: italic;
+}
+
+/* ── Pull quote ─────────────────────────────────────────── */
+.pop-essay-pullquote {
+  margin: 40px -8px;
+  padding: 24px 0;
+  border-top: 2px solid var(--pop-tomato);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+  text-align: center;
+}
+
+.pop-essay-pullquote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--pop-tomato);
+  margin: 0;
+  max-width: 30ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pop-essay-pullquote-attr {
+  margin: 12px 0 0;
+  opacity: 0.75;
+}
+
+/* ── Sign-off ───────────────────────────────────────────── */
+.pop-essay-signoff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 48px;
+  margin-top: 48px;
+}
+
+.pop-essay-signoff-text {
+  font-size: clamp(17px, 1.8vw, 22px);
+  margin: 0;
+  color: var(--pop-coffee);
+}
+
+.pop-essay-monument {
+  margin-top: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .pop-essay { padding: 56px 0; }
+  .pop-essay-inner { padding: 0 22px; }
+  .pop-essay-title { font-size: clamp(38px, 11vw, 64px); }
+  .pop-essay-deck { font-size: clamp(16px, 4.5vw, 20px); }
+  .pop-essay-body { font-size: 16px; line-height: 1.6; }
+  .pop-essay-section + .pop-essay-section { margin-top: 36px; }
+  .pop-essay-para--lead::first-letter { font-size: 4.2em; }
+  .pop-essay-pullquote {
+    margin: 32px 0;
+    padding: 18px 0;
+  }
+  .pop-essay-pullquote-text { font-size: clamp(19px, 5.5vw, 26px); }
+  .pop-essay-signoff { padding-top: 32px; margin-top: 32px; }
+}
