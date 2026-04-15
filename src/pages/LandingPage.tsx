@@ -139,11 +139,11 @@ export function LandingPage() {
               <span className="pop-kicker pop-kicker--tomato">FEATURE · {ISSUE.number}</span>
             </div>
             <h2 className="pop-display pop-feature-title">
-              The <em>Urban Outdoors</em><br />
-              Review
+              The <em>Indoor</em><br />
+              Issue
             </h2>
             <p className="pop-swash pop-feature-swash">
-              A terminal companion for city coders.
+              A field guide to working inside.
             </p>
             <p className="pop-feature-jp">
               {ISSUE.featureJp}

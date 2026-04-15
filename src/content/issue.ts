@@ -22,11 +22,11 @@ export interface Issue {
 }
 
 export const ISSUE: Issue = {
-  number: '360',
-  month: 'APRIL',
+  number: '361',
+  month: 'MAY',
   year: '2026',
-  feature: 'THE URBAN OUTDOORS REVIEW',
-  featureJp: '都会のコードと、自然のOS',
+  feature: 'THE INDOOR ISSUE: A FIELD GUIDE TO WORKING INSIDE',
+  featureJp: '室内派宣言 — 部屋の中で世界を作る',
   price: '¥0 · BYOK',
   tagline: 'MAGAZINE FOR CITY CODERS · 街のコーダーのために',
 }
