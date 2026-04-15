@@ -4,7 +4,7 @@ import './LandingPage.css'
 
 /* ──────────────────────────────────────────────
    kernel.chat — "A Magazine for City Coders"
-   Popeye-inspired editorial landing.
+   Editorial landing page.
    Grammar: issue-number monument, bracketed
    categories, numbered catalog, bilingual
    lockups, tomato spot color, paper stocks.
@@ -112,9 +112,7 @@ export function LandingPage() {
           {/* Top dateline — folio style */}
           <div className="pop-cover-dateline">
             <span className="pop-folio">都会に住んで、コードで遊ぶための、自由なスタイルを作ろう。</span>
-            <span className="pop-folio pop-folio--collab">
-              IN THE TRADITION OF <em>POPEYE</em> · ISSUE {ISSUE.number} · {ISSUE.month} {ISSUE.year}
-            </span>
+            <span className="pop-folio">ISSUE {ISSUE.number} · {ISSUE.month} {ISSUE.year}</span>
           </div>
 
           <hr className="pop-rule" />
@@ -461,9 +459,6 @@ export function LandingPage() {
 
           <p className="pop-folio pop-colophon-copy">
             MIT · kernel.chat group · Published monthly from the terminal.
-          </p>
-          <p className="pop-folio pop-colophon-credit">
-            Art direction: an editorial homage to <em>POPEYE Magazine</em> · 街のコーダーたちへ
           </p>
         </div>
       </footer>
