@@ -4,10 +4,13 @@ import './LandingPage.css'
 
 /* ──────────────────────────────────────────────
    kernel.chat — "A Magazine for City Coders"
-   Editorial landing page.
-   Grammar: issue-number monument, bracketed
-   categories, numbered catalog, bilingual
-   lockups, tomato spot color, paper stocks.
+   Editorial landing page. Design language is an
+   homage to POPEYE Magazine (Tokyo, Magazine
+   House) — issue-number monument, bracketed
+   categories, numbered catalog, bilingual JP
+   lockups, tomato spot color, warm paper stocks.
+   See docs/design-language.md for the full spec.
+   The site itself never names the inspiration.
    ────────────────────────────────────────────── */
 
 const CONTENTS = [

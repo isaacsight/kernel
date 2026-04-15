@@ -1,7 +1,8 @@
 /* ──────────────────────────────────────────────────────────────
    kernel.chat — "A Magazine for City Coders"
-   Editorial landing page.
-   Uses the pop-* primitives defined in src/index.css.
+   Editorial landing page. Design language is an homage to
+   POPEYE Magazine (see docs/design-language.md). Uses the pop-*
+   primitives defined in src/index.css.
    Type stack: EB Garamond (display/prose) + Courier Prime (meta).
    ────────────────────────────────────────────────────────────── */
 
@@ -47,16 +48,6 @@
   gap: 16px;
   flex-wrap: wrap;
   padding-top: 12px;
-}
-
-.pop-folio--collab em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 700;
-  color: var(--pop-tomato);
-  letter-spacing: 0;
-  text-transform: none;
-  font-size: 1.05em;
 }
 
 /* Masthead */
@@ -529,21 +520,6 @@
 .pop-colophon-copy {
   margin: 0;
   opacity: 0.6;
-}
-
-.pop-colophon-credit {
-  margin: 6px 0 0;
-  opacity: 0.55;
-  font-style: italic;
-  letter-spacing: 0.04em;
-}
-
-.pop-colophon-credit em {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-style: italic;
-  color: var(--pop-tomato);
-  letter-spacing: 0.02em;
 }
 
 @media (max-width: 768px) {
