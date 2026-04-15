@@ -1,35 +1,17 @@
 /* ──────────────────────────────────────────────────────────────
-   kernel.chat — Issue metadata
-   Treat every release as a magazine issue. Change these values
-   on each version bump and the whole publication updates.
+   kernel.chat — Current issue (back-compat re-export)
+   The current cover always tracks the latest issue in the archive.
+   For the back catalog and per-issue data, see ./issues/.
    ────────────────────────────────────────────────────────────── */
 
-export interface Issue {
-  /** Issue number, stringified and padded (e.g. "360") */
-  number: string
-  /** Uppercase month, e.g. "APRIL" */
-  month: string
-  /** Year, e.g. "2026" */
-  year: string
-  /** Cover feature headline, uppercase */
-  feature: string
-  /** Japanese subtitle for the feature */
-  featureJp: string
-  /** Price tag, e.g. "¥0 · BYOK" */
-  price: string
-  /** Short tagline shown in the colophon */
-  tagline: string
-}
+import { LATEST_ISSUE } from './issues'
+import type { IssueRecord } from './issues'
 
-export const ISSUE: Issue = {
-  number: '361',
-  month: 'MAY',
-  year: '2026',
-  feature: 'THE INDOOR ISSUE: A FIELD GUIDE TO WORKING INSIDE',
-  featureJp: '室内派宣言 — 部屋の中で世界を作る',
-  price: '¥0 · BYOK',
-  tagline: 'MAGAZINE FOR CITY CODERS · 街のコーダーのために',
-}
+/** Legacy alias — same shape as IssueRecord, points at LATEST_ISSUE. */
+export type Issue = IssueRecord
+
+/** The current cover. Always equal to LATEST_ISSUE. */
+export const ISSUE: Issue = LATEST_ISSUE
 
 /** Format a page folio, e.g. "PRIVACY · P. 07" */
 export function folio(section: string, page?: number): string {

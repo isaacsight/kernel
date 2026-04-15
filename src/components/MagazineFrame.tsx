@@ -99,13 +99,18 @@ export function MagazineFrame({
             <span className="pop-folio">
               {ISSUE.tagline}
             </span>
-            <button
-              type="button"
-              className="pop-folio pop-frame-back"
-              onClick={goHome}
-            >
-              ← BACK TO COVER
-            </button>
+            <div className="pop-frame-footer-actions">
+              <button
+                type="button"
+                className="pop-folio pop-frame-back"
+                onClick={goHome}
+              >
+                ← BACK TO COVER
+              </button>
+              <a href="#/issues" className="pop-folio pop-frame-back pop-frame-back--alt">
+                ISSUES →
+              </a>
+            </div>
             <span className="pop-folio">
               ISSUE {ISSUE.number} · {ISSUE.month} {ISSUE.year}
             </span>

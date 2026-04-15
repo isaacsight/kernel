@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { ISSUE } from '../content/issue'
+import { ALL_ISSUES } from '../content/issues'
 import './LandingPage.css'
+
+/** The most recent issue before the current one — drives the
+ *  "PREVIOUSLY" cover strip and helps readers discover the archive. */
+const PREVIOUS_ISSUE = ALL_ISSUES[ALL_ISSUES.length - 2]
 
 /* ──────────────────────────────────────────────
    kernel.chat — "A Magazine for City Coders"
@@ -13,14 +18,9 @@ import './LandingPage.css'
    The site itself never names the inspiration.
    ────────────────────────────────────────────── */
 
-const CONTENTS = [
-  { n: '001', en: 'Computer-use desktop agent', jp: 'デスクトップ制御', tag: 'FEATURE' },
-  { n: '002', en: 'Max 4 Live device pack (×9)', jp: 'M4L デバイス', tag: 'SOUND' },
-  { n: '003', en: 'DJ Set Builder', jp: 'DJ セット', tag: 'SOUND' },
-  { n: '004', en: 'Serum 2 preset tool', jp: 'シーラム プリセット', tag: 'SOUND' },
-  { n: '005', en: 'Session isolation fix', jp: 'セッション分離', tag: 'SHIP' },
-  { n: '006', en: 'SSRF protection via dns.lookup()', jp: 'SSRF 対策', tag: 'SECURITY' },
-]
+/* Table of contents — drives off the latest issue's data so the
+   landing always reflects what shipped this month. */
+const CONTENTS = ISSUE.contents
 
 const FEATURES = [
   {
@@ -139,11 +139,11 @@ export function LandingPage() {
               <span className="pop-kicker pop-kicker--tomato">FEATURE · {ISSUE.number}</span>
             </div>
             <h2 className="pop-display pop-feature-title">
-              The <em>Indoor</em><br />
-              Issue
+              {ISSUE.headline.prefix} <em>{ISSUE.headline.emphasis}</em><br />
+              {ISSUE.headline.suffix}
             </h2>
             <p className="pop-swash pop-feature-swash">
-              A field guide to working inside.
+              {ISSUE.headline.swash}
             </p>
             <p className="pop-feature-jp">
               {ISSUE.featureJp}
@@ -173,6 +173,17 @@ export function LandingPage() {
             <span className="pop-hash">local-first</span>
             {downloads && <span className="pop-hash">{downloads.toLocaleString()}-weekly</span>}
           </div>
+
+          {PREVIOUS_ISSUE && (
+            <a href="#/issues" className="pop-previously">
+              <span className="pop-folio">PREVIOUSLY</span>
+              <span className="pop-previously-body">
+                ISSUE {PREVIOUS_ISSUE.number} · {PREVIOUS_ISSUE.month} {PREVIOUS_ISSUE.year}
+                <span className="pop-previously-feature"> · {PREVIOUS_ISSUE.feature}</span>
+              </span>
+              <span className="pop-folio pop-previously-arrow">SEE BACK CATALOG →</span>
+            </a>
+          )}
         </div>
       </section>
 
@@ -451,6 +462,7 @@ export function LandingPage() {
           <hr className="pop-rule pop-rule--soft" />
 
           <div className="pop-colophon-links">
+            <a href="#/issues">Back Issues</a>
             <a href="https://github.com/isaacsight/kernel" target="_blank" rel="noopener">GitHub</a>
             <a href="https://www.npmjs.com/package/@kernel.chat/kbot" target="_blank" rel="noopener">npm</a>
             <a href="https://discord.gg/kdMauM9abG" target="_blank" rel="noopener">Discord</a>

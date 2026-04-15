@@ -1,0 +1,103 @@
+/* ──────────────────────────────────────────────────────────────
+   IssuesPage — back catalog index
+   Magazine-style row list of every published issue. Each row is a
+   link to its frozen-snapshot detail page.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-issues {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 0 48px;
+}
+
+.pop-issues-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-issues-row {
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-issues-link {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 32px;
+  align-items: center;
+  padding: 32px 12px;
+  text-decoration: none;
+  color: var(--pop-ink);
+  transition: background 0.2s, padding-left 0.2s;
+  min-height: 44px;
+}
+
+.pop-issues-link:hover {
+  background: var(--pop-tomato-soft);
+  padding-left: 20px;
+}
+
+.pop-issues-monument {
+  min-width: 96px;
+}
+
+.pop-issues-monument strong {
+  font-size: 3em;
+}
+
+.pop-issues-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pop-issues-feature-title {
+  font-size: clamp(24px, 3vw, 36px);
+  margin: 4px 0 0;
+  line-height: 1.05;
+}
+
+.pop-issues-feature-jp {
+  margin: 0;
+}
+
+.pop-issues-arrow {
+  white-space: nowrap;
+}
+
+.pop-issues-arrow .pop-folio {
+  color: var(--pop-tomato);
+  opacity: 1;
+  font-weight: 700;
+}
+
+.pop-issues-note {
+  margin-top: 48px;
+  padding: 24px;
+  border: 1px solid var(--pop-hairline-soft);
+  background: var(--pop-ivory);
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--pop-coffee);
+  text-align: center;
+}
+
+.pop-issues-note .pop-kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 640px) {
+  .pop-issues-link {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 8px;
+  }
+  .pop-issues-link:hover { padding-left: 12px; }
+  .pop-issues-monument strong { font-size: 2.4em; }
+  .pop-issues-feature-title { font-size: 22px; }
+  .pop-issues-arrow { justify-self: end; }
+}

@@ -170,6 +170,60 @@
   border-top: 1px solid var(--pop-hairline-soft);
 }
 
+/* PREVIOUSLY strip — points to the last issue, opens the archive.
+   The POPEYE move: every cover references the previous cover. */
+.pop-previously {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  margin-top: 24px;
+  padding: 14px 18px;
+  background: var(--pop-ivory);
+  border: 1px solid var(--pop-hairline-soft);
+  border-left: 3px solid var(--pop-tomato);
+  text-decoration: none;
+  color: var(--pop-ink);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.pop-previously:hover {
+  background: var(--pop-cream);
+  transform: translateX(2px);
+}
+
+.pop-previously-body {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-ink);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pop-previously-feature {
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+.pop-previously-arrow {
+  color: var(--pop-tomato);
+  opacity: 1;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .pop-previously {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 12px 14px;
+  }
+  .pop-previously-body { white-space: normal; }
+}
+
 @media (max-width: 768px) {
   .pop-cover-inner { padding: 24px 20px 48px; }
   .pop-cover-bottom { grid-template-columns: 1fr; gap: 20px; }

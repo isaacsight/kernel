@@ -214,6 +214,25 @@
 .pop-frame-back:hover { background: var(--pop-tomato-soft); }
 .pop-frame-back:focus-visible { outline: 2px solid var(--pop-tomato); outline-offset: 2px; }
 
+.pop-frame-back--alt {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--pop-coffee) !important;
+}
+
+.pop-frame-back--alt:hover {
+  color: var(--pop-tomato) !important;
+}
+
+.pop-frame-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 /* ── Mobile (≤ 640px) ──────────────────────────────────────── */
 @media (max-width: 640px) {
   .pop-frame-inner { padding: 0 20px; }
