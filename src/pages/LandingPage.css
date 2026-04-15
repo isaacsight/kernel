@@ -682,10 +682,11 @@
    Each issue picks one via coverLayout in its data
    file. These modifiers reshape the cover's visual
    hierarchy without changing the design language.
-   Applied on .pop-cover (landing) AND on the
-   .pop-issue-detail wrapper (back-issue snapshots)
-   so each issue's frozen snapshot reads with the
-   same composition as its original cover.
+   Applied on .pop-cover wherever it appears — on
+   the landing and on /issues/:n, since both surfaces
+   now share the same IssueCover component so each
+   issue's permanent URL reads with the same
+   composition as its original cover.
    ═══════════════════════════════════════════════ */
 
 /* ── classic — default, centered, monument bottom-right.
@@ -741,18 +742,6 @@
   letter-spacing: 0.16em;
 }
 
-/* Snapshot variant — IssueDetailPage doesn't have pop-cover-bottom;
-   the monument lives in pop-issue-monument-wrap. Mirror the same
-   hero treatment there. */
-.pop-cover--monument-hero.pop-issue-detail .pop-issue-monument-wrap {
-  justify-content: center;
-  padding: 32px 0;
-  border-top: 1px solid var(--pop-hairline-soft);
-  border-bottom: 1px solid var(--pop-hairline-soft);
-  margin-top: 16px;
-}
-
-
 /* ── asymmetric-left — editorial / fashion-magazine rhythm.
       Everything left-aligned; masthead slides left; feature
       headline becomes a left-column block instead of centered;
@@ -792,25 +781,6 @@
 }
 .pop-cover--asymmetric-left .pop-cover-stats {
   justify-content: flex-start;
-}
-
-/* Snapshot variant — IssueDetailPage feature + monument. */
-.pop-cover--asymmetric-left.pop-issue-detail .pop-issue-feature {
-  text-align: left;
-  align-items: flex-start;
-  padding: 40px 0 28px;
-}
-.pop-cover--asymmetric-left.pop-issue-detail .pop-feature-kicker {
-  justify-content: flex-start;
-}
-.pop-cover--asymmetric-left.pop-issue-detail .pop-feature-title,
-.pop-cover--asymmetric-left.pop-issue-detail .pop-feature-swash,
-.pop-cover--asymmetric-left.pop-issue-detail .pop-feature-jp {
-  text-align: left;
-  max-width: 52ch;
-}
-.pop-cover--asymmetric-left.pop-issue-detail .pop-issue-monument-wrap {
-  justify-content: flex-end;
 }
 
 

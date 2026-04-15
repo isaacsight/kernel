@@ -1,0 +1,153 @@
+/* ──────────────────────────────────────────────────────────────
+   IssueArchiveNav — prev/next + archive indicator for /issues/:n
+   Sits at the end of a detail page. The cover above stays identical
+   to the landing; this nav is the only chrome that differs.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-archive-nav {
+  background: var(--pop-ivory);
+  border-top: 1px solid var(--pop-hairline-soft);
+  padding: 56px 0;
+}
+
+.pop-archive-nav-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.pop-archive-nav-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.pop-archive-nav-folio {
+  color: var(--pop-ink);
+  opacity: 1;
+  font-weight: 700;
+}
+
+.pop-archive-nav-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: stretch;
+  margin-top: 24px;
+}
+
+.pop-archive-nav-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.pop-archive-nav-cell--center {
+  align-items: center;
+  justify-content: center;
+}
+
+.pop-archive-nav-cell--right {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.pop-archive-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--pop-ink);
+  padding: 8px 0;
+  min-height: 44px;
+  transition: color 0.2s;
+  min-width: 0;
+}
+
+.pop-archive-nav-link:hover { color: var(--pop-tomato); }
+.pop-archive-nav-link:hover .pop-folio { color: var(--pop-tomato); }
+
+.pop-archive-nav-link--right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.pop-archive-nav-issue {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+}
+
+.pop-archive-nav-feature {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--pop-ink);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pop-archive-nav-back {
+  color: var(--pop-tomato);
+  opacity: 1;
+  font-weight: 700;
+  padding: 12px 16px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.pop-archive-nav-back:hover { background: var(--pop-tomato-soft); }
+
+.pop-archive-nav-empty {
+  opacity: 0.4;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 0;
+}
+
+.pop-archive-nav-cell--right .pop-archive-nav-empty {
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .pop-archive-nav { padding: 40px 0; }
+  .pop-archive-nav-inner { padding: 0 22px; }
+  .pop-archive-nav-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .pop-archive-nav-cell--right {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .pop-archive-nav-cell--right .pop-archive-nav-empty {
+    justify-content: flex-start;
+  }
+  .pop-archive-nav-link--right {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .pop-archive-nav-cell--center {
+    order: 99;
+    padding-top: 16px;
+    border-top: 1px solid var(--pop-hairline-soft);
+  }
+  .pop-archive-nav-feature {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+}
