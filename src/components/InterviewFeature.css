@@ -66,15 +66,13 @@
   position: relative;
 }
 
-/* A small tomato corner mark — editorial badge style. */
-.pop-interview-subject-frame::before {
-  content: '';
+/* Editorial badge — tomato lozenge overlapping the top-left
+   corner. Rendered via the PopShape primitive (Illustrator layer)
+   so it scales via clamp() and takes the color token. */
+.pop-interview-subject-badge {
   position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 22px;
-  height: 22px;
-  background: var(--pop-tomato);
+  top: -14px;
+  left: -14px;
 }
 
 .pop-interview-subject-kicker {

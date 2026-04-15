@@ -9,6 +9,9 @@
   background: var(--pop-ivory);
   color: var(--pop-ink);
   font-family: var(--font-serif);
+  /* Respect iPhone notch / home indicator. */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .pop-frame-inner {

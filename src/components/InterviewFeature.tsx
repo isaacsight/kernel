@@ -1,4 +1,5 @@
 import type { IssueRecord, InterviewSpread } from '../content/issues'
+import { PopShape } from './ornaments'
 import './InterviewFeature.css'
 
 interface InterviewFeatureProps {
@@ -38,6 +39,15 @@ export function InterviewFeature({ spread, issue }: InterviewFeatureProps) {
         {/* ── Subject dossier — name, role, location card ── */}
         <aside className="pop-interview-subject" aria-label="Interview subject">
           <div className="pop-interview-subject-frame">
+            {/* Editorial badge — tomato lozenge in the corner.
+                Uses a PopShape primitive (Illustrator layer). */}
+            <PopShape
+              name="lozenge"
+              size="md"
+              color="tomato"
+              className="pop-interview-subject-badge"
+              aria-label="subject badge"
+            />
             <span className="pop-folio pop-interview-subject-kicker">THE SUBJECT · 対象</span>
             <h3 className="pop-interview-subject-name">
               {spread.subject.name}

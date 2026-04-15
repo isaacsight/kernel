@@ -1,0 +1,25 @@
+/* ──────────────────────────────────────────────────────────────
+   PopIcon — editorial pictograms
+   Inline SVG, takes currentColor, scales via clamp(). Same
+   mobile-first sizing philosophy as PopShape.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 0;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.pop-icon-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pop-icon--sm { width: clamp(12px, 2vw, 14px); height: clamp(12px, 2vw, 14px); }
+.pop-icon--md { width: clamp(16px, 2.6vw, 20px); height: clamp(16px, 2.6vw, 20px); }
+.pop-icon--lg { width: clamp(28px, 4vw, 36px); height: clamp(28px, 4vw, 36px); }

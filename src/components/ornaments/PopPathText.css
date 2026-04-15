@@ -1,0 +1,36 @@
+/* ──────────────────────────────────────────────────────────────
+   PopPathText — writing along a path
+   SVG textPath primitive, editorial ornament for curved headlines.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-path-text {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0;
+  color: inherit;
+}
+
+.pop-path-text-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.pop-path-text-label {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  fill: currentColor;
+}
+
+.pop-path-text--sm { width: clamp(160px, 36vw, 240px); }
+.pop-path-text--md { width: clamp(220px, 48vw, 360px); }
+.pop-path-text--lg { width: clamp(280px, 64vw, 520px); }
+
+.pop-path-text--tomato { color: var(--pop-tomato); }
+.pop-path-text--ink { color: var(--pop-ink); }
+.pop-path-text--coffee { color: var(--pop-coffee); }
+.pop-path-text--ivory { color: var(--pop-ivory); }
+.pop-path-text--current { color: inherit; }

@@ -208,12 +208,138 @@ union** — each issue picks the right tool, and the
 
 ---
 
+## The toolkit — four layers
+
+Inspired by how designers work across Illustrator, Photoshop,
+InDesign, and Adobe Express, the kernel.chat magazine is a
+four-layer toolkit. Each layer has a distinct job; each issue
+picks what it needs from each.
+
+| Layer | Tool analog | What it does | Status |
+|---|---|---|---|
+| Layout + text flow + features | **InDesign** | Grid, masthead/frame, feature modules (essay / interview / future) | ✅ shipped |
+| Ornaments — shape, icon, path-text | **Illustrator** | Editorial marks that compose inside any feature | ✅ shipped |
+| Images + textures | **Photoshop** | Photography, overlays, raster texture | ⏸ deliberately skipped |
+| Template builders | **Adobe Express** | One-call issue helpers so authoring is faster | ⬜ next |
+
+### Ornaments — the Illustrator layer
+
+Three families of decorative primitive, all in `src/components/ornaments/`:
+
+#### `<PopShape />` — geometric marks
+Tokenized shapes for editorial badges, corner marks, dividers.
+Renders as inline SVG taking `currentColor` so it adopts the ink
+of wherever it sits.
+
+| name | use |
+|---|---|
+| `circle` · `ring` · `dot` | counters, corner badges, index markers |
+| `square` · `lozenge` | subject-card corner badges, feature tags |
+| `triangle` · `star` | flags, anniversary covers, play buttons |
+| `slash` | diagonal accent, strike-through headlines |
+
+Sizes: `sm · md · lg` (all via `clamp()` — mobile-first).
+Colors: `tomato · ink · coffee · ivory · current`.
+Optional `label` prop centers mono text inside the shape.
+
+```tsx
+<PopShape name="lozenge" size="md" color="tomato" />
+<PopShape name="circle" size="lg" label="03" />
+```
+
+#### `<PopIcon />` — editorial pictograms
+Hand-tuned inline SVGs with a slightly thicker editorial stroke.
+Not Lucide / Feather / Material — these speak the magazine's
+type weight.
+
+Icons: `arrow · asterisk · sparkle · leaf · coffee · sun · moon ·
+book · pin · quote · thread · pilcrow`. Sizes: `sm · md · lg`.
+Takes `currentColor`.
+
+```tsx
+<PopIcon name="asterisk" size="sm" />
+<PopIcon name="arrow" aria-label="continue" />
+```
+
+#### `<PopPathText />` — writing along a path
+SVG `<textPath>` primitive for curved headlines, arc signoffs,
+wavy drop-in ornaments.
+
+Presets: `arc-top · arc-bottom · wave`. Custom `d` supported for
+bespoke curves.
+
+```tsx
+<PopPathText text="Summer is Here" preset="arc-top" color="tomato" />
+```
+
+### Editorial tools — per-feature modules (InDesign layer)
+
+Different issues need different tools. An essay wants section
+kickers, drop caps, and a pull quote. An interview wants a subject
+dossier and a Q&A format. The `spread` field on `IssueRecord` is a
+**discriminated union** — each issue picks the right tool, and the
+`IssueFeature` router renders the matching component.
+
+| Tool | `spread.type` | Component | Used by | Grammar |
+|---|---|---|---|---|
+| Essay | `'essay'` | `EssayFeature` | ISSUE 363 | Mono section kickers, serif prose, drop cap on lead paragraph, tomato pull-quote, sign-off |
+| Interview | `'interview'` | `InterviewFeature` | (available) | Subject dossier card with PopShape corner lozenge, alternating Q./A. blocks, drop cap on final answer |
+
+#### How to add a new tool
+
+1. Extend `IssueSpread` in `src/content/issues/index.ts` with a new
+   member of the union, e.g. `{ type: 'recipe', ... }`.
+2. Build `src/components/<Name>Feature.{tsx,css}` following the
+   `EssayFeature` / `InterviewFeature` conventions.
+3. Add a case to the switch in `src/components/IssueFeature.tsx`.
+4. TypeScript's exhaustiveness check will flag any variant that
+   isn't handled.
+
+#### Tools worth adding next
+
+- **`recipe`** — ingredient list, method block, field variables.
+- **`review`** — product review grid, ratings, pros/cons.
+- **`letters`** — reader letters column.
+- **`dispatch`** — field report, location/date header.
+- **`gallery`** — when images arrive: caption-first photo grid.
+
+---
+
+## Mobile design philosophy
+
+Mobile is **primary**, not responsive. Six principles guide every
+layout decision:
+
+1. **Mobile is the cover.** Design at 393px first; scale up.
+2. **The thumb is the turn-of-page.** 44px tap targets everywhere,
+   no sticky nav, no hamburger menu, no horizontal scroll (except
+   deliberate editorial moves like wide tables).
+3. **Type-first, never card-first.** No rounded-rectangle UI
+   chrome. The pop-* primitives are all typographic — pop-kicker,
+   pop-banner, pop-folio, pop-rule.
+4. **Warm grounds beat pure white.** Ivory/cream/butter/kraft stocks
+   soften mobile blue-light. No pure `#ffffff`. No dark mode (the
+   ink stock handles dark sections on a per-section basis).
+5. **Generous vertical rhythm, tight horizontal frame.** 18–22px
+   horizontal padding on ≤640px; `line-height: 1.6+` for serif
+   prose.
+6. **One issue per session.** Linear read: cover → feature → next.
+   No discovery UI, no menus, no app-shell. The issue is the app.
+
+### Implemented rules
+
+- All `.pop-landing` and `.pop-frame` use `env(safe-area-inset-*)`
+  so iPhone notch + home indicator are respected.
+- `prefers-reduced-motion` disables transitions site-wide.
+- Every layout variant has a mobile-first `clamp()` pass.
+- Ornaments (PopShape, PopIcon, PopPathText) use `clamp()` sizing
+  by default.
+
+---
+
 ## Future moves (not yet shipped)
 
 - PDF export per route — actual printable issue file
 - Cobalt / ivy / pool accents wired to seasonal issue variants
-- Decorative primitives layer: `pop-shape-*`, `pop-icon-*`,
-  text-on-path SVG — ornaments that work across any feature
-- Issue template helpers — one-call builders for common issue
-  shapes (classic cover, essay-led, interview-led) so authoring
-  a new issue feels closer to filling in a form
+- Template builder layer (Adobe Express analog): one-call helpers
+  like `createEssayIssue({...})` that fill in defaults

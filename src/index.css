@@ -29523,3 +29523,22 @@ h4 {
   p { orphans: 3; widows: 3; }
 }
 
+
+/* ──────────────────────────────────────────────────────────────
+   Motion — the magazine is static like paper. Disable every
+   non-essential transition / animation when the reader prefers
+   reduced motion. Matches the editorial intent; no animation
+   budget lost.
+   ────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+

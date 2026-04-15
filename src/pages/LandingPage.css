@@ -12,6 +12,10 @@
   color: var(--pop-ink);
   font-family: var(--font-serif);
   overflow-x: hidden;
+  /* Respect iPhone notch / home indicator — magazine should feel
+     physically at the edge of the device, not boxed inside it. */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .pop-section-inner {
