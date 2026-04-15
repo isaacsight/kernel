@@ -26,6 +26,10 @@
 
 /* ═══════════════════════════════════════════════
    COVER — the print object
+   Base cover is .pop-cover. Each issue also picks a
+   .pop-cover--<layout> modifier so no two covers are
+   visually identical even inside the same design
+   language.
    ═══════════════════════════════════════════════ */
 .pop-cover {
   min-height: 100vh;
@@ -666,4 +670,164 @@
 
   /* Generic rules — don't let tomato rules get overwhelming */
   .pop-rule--tomato { height: 1.5px; }
+}
+
+
+/* ═══════════════════════════════════════════════
+   COVER LAYOUT VARIANTS
+   Each issue picks one via coverLayout in its data
+   file. These modifiers reshape the cover's visual
+   hierarchy without changing the design language.
+   Applied on .pop-cover (landing) AND on the
+   .pop-issue-detail wrapper (back-issue snapshots)
+   so each issue's frozen snapshot reads with the
+   same composition as its original cover.
+   ═══════════════════════════════════════════════ */
+
+/* ── classic — default, centered, monument bottom-right.
+      Nothing to do; the base .pop-cover styles already
+      provide this rhythm. */
+
+/* ── monument-hero — the issue number becomes the cover art.
+      Used when the theme IS the number: milestones, absences,
+      anniversaries. Headline shrinks to subtitle; monument
+      dominates; feature kicker moves above headline to read
+      as a small label. */
+.pop-cover--monument-hero .pop-feature {
+  padding: 12px 0 16px;
+  gap: 6px;
+}
+.pop-cover--monument-hero .pop-feature-title {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.pop-cover--monument-hero .pop-feature-title em {
+  font-weight: 700;
+}
+.pop-cover--monument-hero .pop-feature-swash {
+  font-size: clamp(15px, 2vw, 18px);
+  opacity: 0.85;
+}
+.pop-cover--monument-hero .pop-cover-bottom {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 32px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+.pop-cover--monument-hero .pop-monument {
+  text-align: center;
+  align-items: center;
+  gap: 6px;
+}
+.pop-cover--monument-hero .pop-monument strong {
+  font-size: clamp(180px, 34vw, 420px);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  margin: 6px 0;
+}
+.pop-cover--monument-hero .pop-monument span:first-child,
+.pop-cover--monument-hero .pop-monument span:last-child {
+  font-size: var(--text-sm);
+  letter-spacing: 0.16em;
+}
+
+/* Snapshot variant — IssueDetailPage doesn't have pop-cover-bottom;
+   the monument lives in pop-issue-monument-wrap. Mirror the same
+   hero treatment there. */
+.pop-cover--monument-hero.pop-issue-detail .pop-issue-monument-wrap {
+  justify-content: center;
+  padding: 32px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+  margin-top: 16px;
+}
+
+
+/* ── asymmetric-left — editorial / fashion-magazine rhythm.
+      Everything left-aligned; masthead slides left; feature
+      headline becomes a left-column block instead of centered;
+      monument drops to the far right like a masthead byline
+      rather than a corner block. */
+.pop-cover--asymmetric-left .pop-masthead {
+  align-items: flex-start;
+  text-align: left;
+}
+.pop-cover--asymmetric-left .pop-masthead-meta {
+  justify-content: flex-start;
+}
+.pop-cover--asymmetric-left .pop-feature {
+  text-align: left;
+  align-items: flex-start;
+  padding: 48px 0 32px;
+}
+.pop-cover--asymmetric-left .pop-feature-kicker {
+  justify-content: flex-start;
+}
+.pop-cover--asymmetric-left .pop-feature-title {
+  text-align: left;
+  letter-spacing: -0.04em;
+}
+.pop-cover--asymmetric-left .pop-feature-swash,
+.pop-cover--asymmetric-left .pop-feature-jp {
+  text-align: left;
+  max-width: 52ch;
+}
+.pop-cover--asymmetric-left .pop-cover-bottom {
+  grid-template-columns: 1fr auto;
+  align-items: end;
+}
+.pop-cover--asymmetric-left .pop-monument {
+  text-align: right;
+  align-items: flex-end;
+}
+.pop-cover--asymmetric-left .pop-cover-stats {
+  justify-content: flex-start;
+}
+
+/* Snapshot variant — IssueDetailPage feature + monument. */
+.pop-cover--asymmetric-left.pop-issue-detail .pop-issue-feature {
+  text-align: left;
+  align-items: flex-start;
+  padding: 40px 0 28px;
+}
+.pop-cover--asymmetric-left.pop-issue-detail .pop-feature-kicker {
+  justify-content: flex-start;
+}
+.pop-cover--asymmetric-left.pop-issue-detail .pop-feature-title,
+.pop-cover--asymmetric-left.pop-issue-detail .pop-feature-swash,
+.pop-cover--asymmetric-left.pop-issue-detail .pop-feature-jp {
+  text-align: left;
+  max-width: 52ch;
+}
+.pop-cover--asymmetric-left.pop-issue-detail .pop-issue-monument-wrap {
+  justify-content: flex-end;
+}
+
+
+/* ── Mobile — collapse hero variants gracefully on phones. */
+@media (max-width: 640px) {
+  .pop-cover--monument-hero .pop-monument strong {
+    font-size: clamp(140px, 44vw, 220px);
+  }
+  .pop-cover--monument-hero .pop-cover-bottom {
+    padding: 24px 0;
+    margin-top: 16px;
+  }
+  .pop-cover--asymmetric-left .pop-feature {
+    padding: 24px 0;
+  }
+  .pop-cover--asymmetric-left .pop-cover-bottom {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .pop-cover--asymmetric-left .pop-monument {
+    text-align: left;
+    align-items: flex-start;
+  }
 }

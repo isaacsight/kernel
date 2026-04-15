@@ -36,8 +36,12 @@ export function LandingPage() {
 
       {/* ═══════════════════════════════════════════════
           COVER — the Print Object. Loud, warm, editorial.
+          Paper stock + layout variant are per-issue so every
+          cover reads as its own visual object.
           ═══════════════════════════════════════════════ */}
-      <section className="pop-cover pop-stock-cream">
+      <section
+        className={`pop-cover pop-stock-${ISSUE.coverStock ?? 'cream'} pop-cover--${ISSUE.coverLayout ?? 'classic'}`}
+      >
         <div className="pop-cover-inner">
 
           {/* Top dateline — folio style */}

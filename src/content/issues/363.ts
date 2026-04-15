@@ -21,6 +21,13 @@ export const ISSUE_363: IssueRecord = {
   price: '¥0 · BYOK',
   tagline: 'MAGAZINE FOR CITY CODERS · 街のコーダーのために',
 
+  /** Cover identity — kraft stock + asymmetric-left layout.
+      Editorial / fashion-magazine rhythm; left-aligned lockup and
+      a denser, looser grid break from the centered template of
+      the first three issues. */
+  coverStock: 'kraft',
+  coverLayout: 'asymmetric-left',
+
   headline: {
     prefix: 'The',
     emphasis: 'Style',

@@ -19,6 +19,12 @@ export const ISSUE_360: IssueRecord = {
   price: '¥0 · BYOK',
   tagline: 'MAGAZINE FOR CITY CODERS · 街のコーダーのために',
 
+  /** Cover identity — warm cream stock, classic centered layout.
+      The inaugural issue reads as the template everything else
+      departs from. */
+  coverStock: 'cream',
+  coverLayout: 'classic',
+
   /** Cover headline parts — typeset by hand each issue. */
   headline: {
     prefix: 'The',

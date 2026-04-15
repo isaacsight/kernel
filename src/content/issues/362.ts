@@ -23,6 +23,13 @@ export const ISSUE_362: IssueRecord = {
   price: '¥0 · BYOK',
   tagline: 'MAGAZINE FOR CITY CODERS · 街のコーダーのために',
 
+  /** Cover identity — bright ivory stock + monument-hero layout.
+      The feature is absence; the cover makes absence literal by
+      turning the issue number itself into the dominant visual
+      element and demoting the headline to subtitle. */
+  coverStock: 'ivory',
+  coverLayout: 'monument-hero',
+
   headline: {
     prefix: 'The',
     emphasis: 'Vacation',

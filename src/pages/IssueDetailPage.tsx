@@ -4,6 +4,10 @@ import { MagazineFrame } from '../components/MagazineFrame'
 import { FashionSpread } from '../components/FashionSpread'
 import { IssueCredits } from '../components/IssueCredits'
 import { ALL_ISSUES, findIssue } from '../content/issues'
+// Share the cover grammar + layout variants with the live cover.
+// Direct loads (e.g. /issues/361) wouldn't otherwise get these
+// styles because LandingPage is lazy-loaded.
+import './LandingPage.css'
 import './IssueDetailPage.css'
 
 /**
@@ -30,18 +34,23 @@ export function IssueDetailPage() {
   const prev = idx > 0 ? ALL_ISSUES[idx - 1] : undefined
   const next = idx < ALL_ISSUES.length - 1 ? ALL_ISSUES[idx + 1] : undefined
 
+  const stock = issue.coverStock ?? 'cream'
+  const layout = issue.coverLayout ?? 'classic'
+
   return (
     <MagazineFrame
       kicker={`ARCHIVE · ${issue.month}`}
-      stock="cream"
+      stock={stock}
       issue={issue}
     >
-      <div className="pop-issue-detail">
+      <div className={`pop-issue-detail pop-cover--${layout}`}>
 
         {/* ── Cover snapshot (mirrors landing's cover grammar).
               MagazineFrame masthead already handles the dateline +
               tagline + folio, so the body skips straight to the
-              feature lockup + monument. ────────────────────── */}
+              feature lockup + monument. Layout variant is applied
+              to the wrapper so each issue's snapshot reads with the
+              same composition as its original cover. ─────────── */}
         <section className="pop-issue-cover">
           <div className="pop-feature pop-issue-feature">
             <div className="pop-feature-kicker">

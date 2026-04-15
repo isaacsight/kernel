@@ -21,6 +21,12 @@ export const ISSUE_361: IssueRecord = {
   price: '¥0 · BYOK',
   tagline: 'MAGAZINE FOR CITY CODERS · 街のコーダーのために',
 
+  /** Cover identity — butter stock (warmer, denser, indoor-lit),
+      classic layout. Reads as the indoor counterpart to 360's
+      summer-cream cover. */
+  coverStock: 'butter',
+  coverLayout: 'classic',
+
   headline: {
     prefix: 'The',
     emphasis: 'Indoor',

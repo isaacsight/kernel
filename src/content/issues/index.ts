@@ -90,6 +90,24 @@ export interface IssueCredits {
   production: string
 }
 
+/** Cover paper stock — each issue picks one so the covers are
+ *  visually distinct at a glance. Defaults to 'cream'. */
+export type IssueStock = 'cream' | 'butter' | 'kraft' | 'ivory' | 'ink'
+
+/**
+ * Cover layout variant — controls the composition of the cover,
+ * not just the content. Gives each issue its own visual rhythm.
+ *
+ * - 'classic'         — centered, monument bottom-right (the default).
+ * - 'monument-hero'   — the issue number itself becomes the cover art;
+ *                       headline shrinks to subtitle. Best for issues
+ *                       whose theme IS the number (anniversaries,
+ *                       absence, milestones).
+ * - 'asymmetric-left' — left-aligned everything, editorial rhythm;
+ *                       suits fashion / culture features.
+ */
+export type IssueCoverLayout = 'classic' | 'monument-hero' | 'asymmetric-left'
+
 export interface IssueRecord {
   number: string
   month: string
@@ -100,8 +118,11 @@ export interface IssueRecord {
   tagline: string
   headline: IssueHeadline
   contents: ContentsItem[]
-  /** Optional image-led spread. When present, the landing renders
-   *  the FashionSpread component instead of the default cover. */
+  /** Cover paper stock. Defaults to 'cream'. */
+  coverStock?: IssueStock
+  /** Cover composition variant. Defaults to 'classic'. */
+  coverLayout?: IssueCoverLayout
+  /** Optional long-form editorial feature (prose, no images). */
   spread?: IssueSpread
   /** Optional masthead / editorial team credits. */
   credits?: IssueCredits
