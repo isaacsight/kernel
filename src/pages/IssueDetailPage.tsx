@@ -30,21 +30,17 @@ export function IssueDetailPage() {
 
   return (
     <MagazineFrame
-      kicker={`ISSUE ${issue.number}`}
-      page={Number(issue.number)}
+      kicker={`ARCHIVE · ${issue.month}`}
       stock="cream"
+      issue={issue}
     >
       <div className="pop-issue-detail">
 
-        {/* ── Cover snapshot (mirrors landing's cover grammar) ── */}
+        {/* ── Cover snapshot (mirrors landing's cover grammar).
+              MagazineFrame masthead already handles the dateline +
+              tagline + folio, so the body skips straight to the
+              feature lockup + monument. ────────────────────── */}
         <section className="pop-issue-cover">
-          <div className="pop-cover-dateline">
-            <span className="pop-folio">ISSUE {issue.number} · {issue.month} {issue.year}</span>
-            <span className="pop-folio">{issue.tagline}</span>
-          </div>
-
-          <hr className="pop-rule" />
-
           <div className="pop-feature pop-issue-feature">
             <div className="pop-feature-kicker">
               <span className="pop-kicker pop-kicker--tomato">FEATURE · {issue.number}</span>

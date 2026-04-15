@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { ISSUE } from '../content/issue'
+import type { IssueRecord } from '../content/issues'
 import './MagazineFrame.css'
 
 interface MagazineFrameProps {
@@ -21,6 +22,12 @@ interface MagazineFrameProps {
   stock?: 'ivory' | 'cream' | 'butter' | 'kraft' | 'ink'
   /** Render on ink ground (for dark inner pages) */
   dark?: boolean
+  /**
+   * Optional issue override for the masthead. Use on per-issue
+   * detail routes (/issues/:n) so the masthead shows the issue
+   * being viewed rather than always falling through to LATEST_ISSUE.
+   */
+  issue?: IssueRecord
   /** Page body */
   children: ReactNode
 }
@@ -39,9 +46,11 @@ export function MagazineFrame({
   deck,
   stock = 'ivory',
   dark = false,
+  issue: issueOverride,
   children,
 }: MagazineFrameProps) {
   const stockClass = `pop-stock-${stock}`
+  const issue = issueOverride ?? ISSUE
   const folio = page === undefined ? kicker : `${kicker} · P. ${String(page).padStart(2, '0')}`
 
   const goHome = () => {
@@ -63,11 +72,11 @@ export function MagazineFrame({
               <span className="pop-wordmark-sm">
                 kernel<span className="pop-wordmark-dot">.</span>chat
               </span>
-              <span className="pop-folio">{ISSUE.tagline}</span>
+              <span className="pop-folio">{issue.tagline}</span>
             </button>
             <div className="pop-frame-issue">
               <span className="pop-folio">
-                ISSUE {ISSUE.number} · {ISSUE.month} {ISSUE.year}
+                ISSUE {issue.number} · {issue.month} {issue.year}
               </span>
               <span className="pop-folio pop-frame-folio">{folio}</span>
             </div>
