@@ -14,6 +14,7 @@
 
 import { ISSUE_360 } from './360'
 import { ISSUE_361 } from './361'
+import { ISSUE_362 } from './362'
 
 export interface ContentsItem {
   /** Numbered catalog number, padded (e.g. "001") */
@@ -53,6 +54,7 @@ export interface IssueRecord {
 export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_360,
   ISSUE_361,
+  ISSUE_362,
 ]
 
 /** The latest published issue — drives the landing cover. */
