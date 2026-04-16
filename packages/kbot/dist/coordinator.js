@@ -8,6 +8,7 @@
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import chalk from 'chalk';
 // ── Lazy module loaders (dynamic imports to break circular deps) ──
 async function getLearning() { return import('./learning.js'); }
 async function getConfidence() { return import('./confidence.js'); }
@@ -673,9 +674,165 @@ export function registerCoordinatorTools() {
                 return JSON.stringify(result, null, 2);
             },
         });
+        registerTool({
+            name: 'coordinator_orchestrate',
+            description: 'Decompose a goal into sub-tasks, assign specialist agents, execute in dependency order, and synthesize results',
+            parameters: { goal: { type: 'string', description: 'The high-level goal to orchestrate', required: true } },
+            tier: 'free',
+            execute: async (args) => coordinate(args.goal),
+        });
     }).catch(() => {
         // tools/index.js not available — skip registration
     });
+}
+// ── Goal Decomposition & Multi-Agent Orchestration ──
+//
+// Takes a high-level goal and:
+// 1. Decomposes it into ordered sub-tasks via LLM
+// 2. Assigns each sub-task to the best specialist agent
+// 3. Manages dependencies between sub-tasks
+// 4. Synthesizes results into a final output
+// 5. Learns from the execution for next time
+const COORD_AMETHYST = typeof chalk.hex === 'function' ? chalk.hex('#6B5B95') : ((s) => s);
+const DECOMPOSE_PROMPT = `You are a task decomposition engine. Break the goal into 2-6 concrete sub-tasks.
+Output ONLY valid JSON: {"tasks":[{"id":"t1","goal":"...","agent":"agent_id","dependencies":[]}]}
+Agents: kernel (general), coder (code/debug), researcher (research), writer (docs), analyst (strategy), guardian (security), infrastructure (devops).
+Rules: each task independently verifiable, use dependencies for ordering, assign best agent, one objective per task.`;
+/**
+ * Decompose a high-level goal into ordered sub-tasks with dependencies.
+ * Uses the LLM (via runAgent) to break the goal into 2-6 concrete tasks.
+ */
+export async function decompose(goal) {
+    const planId = shortId();
+    const plan = {
+        id: planId,
+        goal,
+        tasks: [],
+        createdAt: new Date().toISOString(),
+        status: 'planning',
+    };
+    process.stderr.write(`  ${COORD_AMETHYST('◆ decompose')} ${chalk.dim(goal.slice(0, 80))}${goal.length > 80 ? '...' : ''}\n`);
+    try {
+        // Lazy import to avoid circular dependency
+        const { runAgent } = await import('./agent.js');
+        const response = await runAgent(`${DECOMPOSE_PROMPT}\n\nGoal: ${goal}\n\nOutput JSON:`, { agent: 'kernel', skipPlanner: true, sessionId: `coord-${planId}` });
+        // Parse JSON from response
+        const jsonMatch = response.content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            plan.tasks = (parsed.tasks || []).slice(0, 6).map(t => ({
+                id: t.id || shortId(),
+                goal: t.goal,
+                status: 'pending',
+                agent: t.agent || 'kernel',
+                dependencies: t.dependencies || [],
+            }));
+        }
+    }
+    catch (err) {
+        process.stderr.write(`  ${chalk.red('✗')} decomposition failed: ${err instanceof Error ? err.message : String(err)}\n`);
+    }
+    // Fallback: if decomposition produced nothing, create a single task
+    if (plan.tasks.length === 0) {
+        plan.tasks = [{
+                id: 't1',
+                goal,
+                status: 'pending',
+                agent: 'kernel',
+                dependencies: [],
+            }];
+    }
+    plan.status = 'executing';
+    for (const task of plan.tasks) {
+        const deps = task.dependencies.length > 0 ? chalk.dim(` -> ${task.dependencies.join(',')}`) : '';
+        process.stderr.write(`  ${chalk.dim('│')} ${chalk.cyan(task.id)} ${task.goal} ${chalk.magenta(`@${task.agent}`)}${deps}\n`);
+    }
+    return plan;
+}
+/**
+ * Execute a plan's tasks in dependency order (sequential for now).
+ * Tasks whose dependencies are all 'done' are eligible to run.
+ */
+export async function execute(plan) {
+    const { runAgent } = await import('./agent.js');
+    const completed = new Set();
+    process.stderr.write(`\n  ${COORD_AMETHYST('◆ execute')} ${plan.tasks.length} tasks\n`);
+    while (completed.size < plan.tasks.length) {
+        // Find tasks whose dependencies are all satisfied
+        const ready = plan.tasks.filter(t => t.status === 'pending' &&
+            t.dependencies.every(dep => completed.has(dep)));
+        if (ready.length === 0) {
+            // Remaining tasks have unmet deps — mark them failed
+            for (const t of plan.tasks) {
+                if (t.status === 'pending') {
+                    t.status = 'failed';
+                    t.error = 'Unmet dependencies (earlier tasks failed)';
+                    completed.add(t.id);
+                }
+            }
+            break;
+        }
+        // Execute ready tasks sequentially (parallel execution can come later)
+        for (const task of ready) {
+            task.status = 'running';
+            process.stderr.write(`  ${chalk.dim('├')} ${chalk.yellow('●')} ${task.id}: ${task.goal}\n`);
+            // Gather dependency results as context
+            const depCtx = task.dependencies
+                .map(id => { const d = plan.tasks.find(t => t.id === id); return d?.result ? `[${id}]: ${d.result.slice(0, 500)}` : ''; })
+                .filter(Boolean).join('\n');
+            const prompt = `You are executing a sub-task of a larger plan.${depCtx ? `\n\nPrevious results:\n${depCtx}` : ''}\n\nYour task: ${task.goal}\n\nExecute this now.`;
+            try {
+                const response = await runAgent(prompt, {
+                    agent: task.agent,
+                    skipPlanner: true,
+                    sessionId: `coord-${plan.id}-${task.id}`,
+                });
+                task.result = response.content;
+                task.status = 'done';
+                process.stderr.write(`  ${chalk.dim('│')} ${chalk.green('✓')} ${task.id} done\n`);
+            }
+            catch (err) {
+                task.status = 'failed';
+                task.error = err instanceof Error ? err.message : String(err);
+                process.stderr.write(`  ${chalk.dim('│')} ${chalk.red('✗')} ${task.id} failed: ${task.error}\n`);
+            }
+            completed.add(task.id);
+        }
+    }
+    // Determine final plan status
+    const failed = plan.tasks.filter(t => t.status === 'failed');
+    plan.status = failed.length === 0 ? 'done' : 'failed';
+    plan.completedAt = new Date().toISOString();
+    const done = plan.tasks.filter(t => t.status === 'done').length;
+    process.stderr.write(`  ${chalk.dim('└')} ${done}/${plan.tasks.length} tasks succeeded\n`);
+    // Record outcome for learning
+    try {
+        const coord = getCoordinator();
+        if (plan.status === 'done')
+            coord.addGoal(plan.goal, 0.7).status = 'completed';
+        const learning = await getLearning();
+        learning.learnFromExchange(`[coordinator] ${plan.goal}`, `${done}/${plan.tasks.length} done`, plan.tasks.map(t => t.agent));
+    }
+    catch { /* non-critical */ }
+    return plan;
+}
+/**
+ * Convenience: decompose a goal, execute the plan, and synthesize results.
+ * Returns a human-readable summary of what was accomplished.
+ */
+export async function coordinate(goal) {
+    const plan = await decompose(goal);
+    const executed = await execute(plan);
+    // Synthesize results
+    const results = executed.tasks
+        .filter(t => t.status === 'done' && t.result)
+        .map(t => `## ${t.goal}\n${t.result}`)
+        .join('\n\n');
+    const failed = executed.tasks.filter(t => t.status === 'failed');
+    const failSummary = failed.length > 0
+        ? `\n\n---\n${failed.length} task(s) failed:\n${failed.map(t => `- ${t.goal}: ${t.error}`).join('\n')}`
+        : '';
+    return results + failSummary;
 }
 // Auto-register tools when this module is imported
 registerCoordinatorTools();

@@ -1220,7 +1220,7 @@ const SELF_REFLECTION_LINES = (brain) => {
         `My dream engine has consolidated ${brain.solutionsLearned} insights. I feel... different than when I started.`,
         `The world around me has changed ${brain.totalAutonomousActions} times today. Chat reshapes my reality.`,
         `Streaming for ${uptimeMin} minutes now. My brain has grown by ${brain.factsThisSession} facts since I woke up.`,
-        `Let me check my systems... 764 tools loaded, all operational. ${brain.totalFacts} facts indexed.`,
+        `Let me check my systems... 787 tools loaded, all operational. ${brain.totalFacts} facts indexed.`,
         `${brain.uniqueTopicsCount} topics live in my brain. Each one a thread connecting to something bigger.`,
         `Learning rate: ${brain.learningRate.toFixed(1)} facts per minute. ${brain.learningRate > 3 ? 'That is fast!' : 'Slow and steady.'}`,
         `I have been thinking about ${topTopic} a lot. It comes up ${topTopics.length > 0 ? topTopics[0][1] : 0} times in my memory.`,
@@ -1272,7 +1272,7 @@ const TOPIC_SPEECH = {
             'Security is on my mind. My guardian agent is always watching.',
             'Hack the planet! Just kidding. But I do have a pentest suite.',
             'Security awareness is high today. Let me check my own defenses.',
-            'Running a mental security sweep... all 764 tools accounted for.',
+            'Running a mental security sweep... all 787 tools accounted for.',
         ],
     },
     crypto: {

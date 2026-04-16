@@ -518,11 +518,12 @@ export async function runDoctor() {
 // ── Formatter ──
 // Color palette matching ui.ts
 const useColor = !process.env.NO_COLOR && process.stdout.isTTY !== false;
-const GREEN = useColor ? chalk.hex('#4ADE80') : chalk;
-const RED = useColor ? chalk.hex('#F87171') : chalk;
-const YELLOW = useColor ? chalk.hex('#FBBF24') : chalk;
+const hex = typeof chalk.hex === 'function' ? (c) => chalk.hex(c) : () => ((s) => s);
+const GREEN = useColor ? hex('#4ADE80') : ((s) => s);
+const RED = useColor ? hex('#F87171') : ((s) => s);
+const YELLOW = useColor ? hex('#FBBF24') : ((s) => s);
 const DIM = useColor ? chalk.dim : ((s) => s);
-const ACCENT = useColor ? chalk.hex('#A78BFA') : chalk;
+const ACCENT = useColor ? hex('#A78BFA') : ((s) => s);
 const STATUS_ICON = {
     pass: GREEN('✓'),
     warn: YELLOW('!'),

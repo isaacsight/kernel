@@ -1,6 +1,6 @@
 {
   "name": "@kernel.chat/kbot",
-  "version": "3.97.1",
+  "version": "3.98.0",
   "description": "Open-source terminal AI agent. 787+ tools, 35 agents, 20 providers. Dreams, learns, watches your system. Controls your phone. Fully local, fully sovereign. MIT.",
   "type": "module",
   "repository": {

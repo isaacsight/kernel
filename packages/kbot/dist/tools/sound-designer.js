@@ -537,6 +537,252 @@ const SOUND_RECIPES = {
         },
         description: 'Metallic pluck — inharmonic FM, bell-like attack, short decay',
     },
+    // ─── Drift (analog-modeled synth) ───────────────────────────────────────
+    'drift_dark_bass': {
+        synth: 'Drift',
+        params: {
+            'Osc 1 Shape': 0.8, // Near-saw, harmonically rich
+            'Osc 2 On': 1,
+            'Osc 2 Shape': 0.6,
+            'Osc 2 Detune': 0.05,
+            'Osc 2 Level': 0.7,
+            'Filter Freq': 300,
+            'Filter Res': 0.25,
+            'Filter Drive': 0.4,
+            'Filter Type': 0, // LP
+            'Drift Amount': 0.3,
+            'LFO Rate': 0.4,
+            'LFO Amount': 0.1,
+            'LFO Dest': 0, // Filter
+            'Amp Attack': 0.005,
+            'Amp Decay': 0.4,
+            'Amp Sustain': 0.8,
+            'Amp Release': 0.2,
+            'Volume': 0.85,
+        },
+        description: 'Dark Drift bass — filtered saw with analog drift and subtle movement',
+    },
+    'drift_warm_bass': {
+        synth: 'Drift',
+        params: {
+            'Osc 1 Shape': 0.4, // Between triangle and saw
+            'Osc 2 On': 1,
+            'Osc 2 Shape': 0.3,
+            'Osc 2 Detune': 0.08,
+            'Osc 2 Level': 0.6,
+            'Filter Freq': 500,
+            'Filter Res': 0.15,
+            'Filter Drive': 0.2,
+            'Filter Type': 0, // LP
+            'Drift Amount': 0.5,
+            'LFO Rate': 0.2,
+            'LFO Amount': 0.08,
+            'LFO Dest': 0, // Filter
+            'Amp Attack': 0.01,
+            'Amp Decay': 0.3,
+            'Amp Sustain': 0.85,
+            'Amp Release': 0.25,
+            'Volume': 0.85,
+        },
+        description: 'Warm Drift bass — round and fat, gentle analog drift',
+    },
+    'drift_analog_lead': {
+        synth: 'Drift',
+        params: {
+            'Osc 1 Shape': 1.0, // Full saw
+            'Osc 2 On': 1,
+            'Osc 2 Shape': 0.9,
+            'Osc 2 Detune': 0.12,
+            'Osc 2 Level': 0.8,
+            'Filter Freq': 2500,
+            'Filter Res': 0.35,
+            'Filter Drive': 0.3,
+            'Filter Type': 0, // LP
+            'Drift Amount': 0.25,
+            'LFO Rate': 3.0,
+            'LFO Amount': 0.05,
+            'LFO Dest': 0, // Filter
+            'Amp Attack': 0.01,
+            'Amp Decay': 0.2,
+            'Amp Sustain': 0.85,
+            'Amp Release': 0.15,
+            'Volume': 0.75,
+        },
+        description: 'Analog Drift lead — detuned saws, resonant filter, vintage character',
+    },
+    'drift_lo_fi': {
+        synth: 'Drift',
+        params: {
+            'Osc 1 Shape': 0.5,
+            'Osc 2 On': 0,
+            'Filter Freq': 1200,
+            'Filter Res': 0.1,
+            'Filter Drive': 0.6, // Drive for lo-fi saturation
+            'Filter Type': 0, // LP
+            'Drift Amount': 0.7, // Heavy drift for wobble
+            'LFO Rate': 0.15,
+            'LFO Amount': 0.2,
+            'LFO Dest': 0, // Filter
+            'Amp Attack': 0.01,
+            'Amp Decay': 0.5,
+            'Amp Sustain': 0.6,
+            'Amp Release': 0.3,
+            'Volume': 0.7,
+        },
+        description: 'Lo-fi Drift — heavy drift, filter drive, warped and vintage',
+        effects: [{
+                name: 'Saturator',
+                params: { 'Drive': 8, 'Type': 1, 'Output': -3, 'Dry/Wet': 0.4 },
+            }],
+    },
+    'drift_ethereal_pad': {
+        synth: 'Drift',
+        params: {
+            'Osc 1 Shape': 0.3, // Soft, triangle-ish
+            'Osc 2 On': 1,
+            'Osc 2 Shape': 0.2,
+            'Osc 2 Detune': 0.15,
+            'Osc 2 Level': 0.6,
+            'Filter Freq': 1800,
+            'Filter Res': 0.2,
+            'Filter Drive': 0.1,
+            'Filter Type': 0, // LP
+            'Drift Amount': 0.6, // High drift for organic movement
+            'LFO Rate': 0.1,
+            'LFO Amount': 0.25,
+            'LFO Dest': 0, // Filter
+            'Amp Attack': 2.0,
+            'Amp Decay': 2.5,
+            'Amp Sustain': 0.5,
+            'Amp Release': 3.0,
+            'Volume': 0.65,
+        },
+        description: 'Ethereal Drift pad — slow, drifting, organic and alive',
+        effects: [{
+                name: 'Reverb',
+                params: { 'Decay Time': 5.0, 'Room Size': 0.85, 'Dry/Wet': 0.45 },
+            }],
+    },
+    // ─── Meld (MPE-capable bi-timbral synth) ──────────────────────────────
+    'meld_bright_pad': {
+        synth: 'Meld',
+        params: {
+            'Engine 1 Type': 0, // Harmonic engine
+            'Engine 1 Brightness': 0.7,
+            'Engine 1 Color': 0.6,
+            'Engine 1 Level': 0.8,
+            'Engine 2 On': 1,
+            'Engine 2 Type': 0, // Harmonic engine
+            'Engine 2 Brightness': 0.8,
+            'Engine 2 Color': 0.4,
+            'Engine 2 Level': 0.6,
+            'Filter Type': 0, // LP
+            'Filter Freq': 4000,
+            'Filter Res': 0.15,
+            'Amp Attack': 1.0,
+            'Amp Decay': 1.5,
+            'Amp Sustain': 0.7,
+            'Amp Release': 2.5,
+            'Volume': 0.7,
+        },
+        description: 'Bright Meld pad — dual harmonic engines, open and airy',
+        effects: [{
+                name: 'Chorus',
+                params: { 'Rate 1': 0.4, 'Amount 1': 0.25, 'Dry/Wet': 0.3 },
+            }],
+    },
+    'meld_dark_pad': {
+        synth: 'Meld',
+        params: {
+            'Engine 1 Type': 1, // Noise engine
+            'Engine 1 Brightness': 0.2,
+            'Engine 1 Color': 0.3,
+            'Engine 1 Level': 0.7,
+            'Engine 2 On': 1,
+            'Engine 2 Type': 0, // Harmonic engine
+            'Engine 2 Brightness': 0.2,
+            'Engine 2 Color': 0.5,
+            'Engine 2 Level': 0.8,
+            'Filter Type': 0, // LP
+            'Filter Freq': 600,
+            'Filter Res': 0.2,
+            'Amp Attack': 1.5,
+            'Amp Decay': 2.0,
+            'Amp Sustain': 0.6,
+            'Amp Release': 2.5,
+            'Volume': 0.7,
+        },
+        description: 'Dark Meld pad — noise + harmonic blend, moody and textured',
+    },
+    'meld_fm_bass': {
+        synth: 'Meld',
+        params: {
+            'Engine 1 Type': 2, // FM engine
+            'Engine 1 Brightness': 0.4,
+            'Engine 1 Color': 0.6,
+            'Engine 1 Level': 1.0,
+            'Engine 2 On': 0,
+            'Filter Type': 0, // LP
+            'Filter Freq': 450,
+            'Filter Res': 0.3,
+            'Amp Attack': 0.005,
+            'Amp Decay': 0.5,
+            'Amp Sustain': 0.7,
+            'Amp Release': 0.2,
+            'Volume': 0.85,
+        },
+        description: 'Meld FM bass — single FM engine, warm and punchy low end',
+    },
+    'meld_harmonic_lead': {
+        synth: 'Meld',
+        params: {
+            'Engine 1 Type': 0, // Harmonic engine
+            'Engine 1 Brightness': 0.6,
+            'Engine 1 Color': 0.7,
+            'Engine 1 Level': 1.0,
+            'Engine 2 On': 1,
+            'Engine 2 Type': 2, // FM engine
+            'Engine 2 Brightness': 0.5,
+            'Engine 2 Color': 0.5,
+            'Engine 2 Level': 0.4,
+            'Filter Type': 0, // LP
+            'Filter Freq': 3500,
+            'Filter Res': 0.25,
+            'Amp Attack': 0.01,
+            'Amp Decay': 0.3,
+            'Amp Sustain': 0.85,
+            'Amp Release': 0.15,
+            'Volume': 0.75,
+        },
+        description: 'Meld harmonic lead — bright harmonic engine with FM shimmer',
+    },
+    'meld_noise_texture': {
+        synth: 'Meld',
+        params: {
+            'Engine 1 Type': 1, // Noise engine
+            'Engine 1 Brightness': 0.5,
+            'Engine 1 Color': 0.4,
+            'Engine 1 Level': 0.8,
+            'Engine 2 On': 1,
+            'Engine 2 Type': 1, // Noise engine
+            'Engine 2 Brightness': 0.6,
+            'Engine 2 Color': 0.7,
+            'Engine 2 Level': 0.6,
+            'Filter Type': 1, // HP
+            'Filter Freq': 500,
+            'Filter Res': 0.15,
+            'Amp Attack': 2.0,
+            'Amp Decay': 3.0,
+            'Amp Sustain': 0.4,
+            'Amp Release': 3.5,
+            'Volume': 0.6,
+        },
+        description: 'Meld noise texture — dual noise engines, evolving ambient atmosphere',
+        effects: [{
+                name: 'Reverb',
+                params: { 'Decay Time': 6.0, 'Room Size': 0.9, 'Dry/Wet': 0.55 },
+            }],
+    },
     // ─── FX ────────────────────────────────────────────────────────────────
     'fx_riser': {
         synth: 'Wavetable',
@@ -684,6 +930,32 @@ const MATCH_RULES = [
     { keywords: ['pluck', 'acoustic'], recipe: 'pluck_acoustic' },
     { keywords: ['pluck', 'natural'], recipe: 'pluck_acoustic' },
     { keywords: ['pluck'], recipe: 'pluck_acoustic' },
+    // Drift synth
+    { keywords: ['drift', 'bass', 'dark'], recipe: 'drift_dark_bass' },
+    { keywords: ['drift', 'bass', 'warm'], recipe: 'drift_warm_bass' },
+    { keywords: ['drift', 'bass'], recipe: 'drift_dark_bass' },
+    { keywords: ['drift', 'lead'], recipe: 'drift_analog_lead' },
+    { keywords: ['drift', 'lo', 'fi'], recipe: 'drift_lo_fi' },
+    { keywords: ['drift', 'lofi'], recipe: 'drift_lo_fi' },
+    { keywords: ['drift', 'pad', 'dark'], recipe: 'dark_pad' },
+    { keywords: ['drift', 'pad', 'ethereal'], recipe: 'drift_ethereal_pad' },
+    { keywords: ['drift', 'pad'], recipe: 'drift_ethereal_pad' },
+    { keywords: ['drift', 'analog'], recipe: 'drift_analog_lead' },
+    { keywords: ['drift'], recipe: 'drift_dark_bass' },
+    // Meld synth
+    { keywords: ['meld', 'pad', 'bright'], recipe: 'meld_bright_pad' },
+    { keywords: ['meld', 'pad', 'dark'], recipe: 'meld_dark_pad' },
+    { keywords: ['meld', 'pad'], recipe: 'meld_bright_pad' },
+    { keywords: ['meld', 'bass'], recipe: 'meld_fm_bass' },
+    { keywords: ['meld', 'fm'], recipe: 'meld_fm_bass' },
+    { keywords: ['meld', 'lead'], recipe: 'meld_harmonic_lead' },
+    { keywords: ['meld', 'harmonic'], recipe: 'meld_harmonic_lead' },
+    { keywords: ['meld', 'noise'], recipe: 'meld_noise_texture' },
+    { keywords: ['meld', 'texture'], recipe: 'meld_noise_texture' },
+    { keywords: ['meld', 'ambient'], recipe: 'meld_noise_texture' },
+    { keywords: ['meld', 'bright'], recipe: 'meld_bright_pad' },
+    { keywords: ['meld', 'dark'], recipe: 'meld_dark_pad' },
+    { keywords: ['meld'], recipe: 'meld_bright_pad' },
     // FX
     { keywords: ['riser'], recipe: 'fx_riser' },
     { keywords: ['rise'], recipe: 'fx_riser' },
@@ -702,6 +974,7 @@ const SYNTH_NAME_MAP = {
     'drift': 'Drift',
     'analog': 'Analog',
     'electric': 'Electric',
+    'meld': 'Meld',
     'serum2': 'Serum 2',
     'serum': 'Serum 2',
     'vital': 'Vital',
@@ -775,7 +1048,7 @@ export function registerSoundDesignerTools() {
             },
             synth: {
                 type: 'string',
-                description: 'Override synth choice: "operator", "wavetable", "drift", "analog", "electric", "serum2". If omitted, the best synth is chosen automatically from the recipe.',
+                description: 'Override synth choice: "operator", "wavetable", "drift", "meld", "analog", "electric", "serum2". If omitted, the best synth is chosen automatically from the recipe.',
             },
         },
         tier: 'free',
@@ -797,8 +1070,10 @@ export function registerSoundDesignerTools() {
                     const categories = [
                         '**808 bass**: "808", "dark 808", "808 slide", "808 hard clip"',
                         '**Sub bass**: "sub bass", "warm sub", "triangle sub"',
-                        '**Leads**: "bright lead", "acid lead", "supersaw", "dark bell"',
-                        '**Pads**: "dark pad", "warm pad", "ambient pad", "shimmer pad", "string pad"',
+                        '**Leads**: "bright lead", "acid lead", "supersaw", "dark bell", "drift lead", "meld lead"',
+                        '**Pads**: "dark pad", "warm pad", "ambient pad", "shimmer pad", "string pad", "drift pad", "meld pad"',
+                        '**Drift synth**: "drift bass", "drift lead", "drift lo-fi", "drift pad"',
+                        '**Meld synth**: "meld pad", "meld bass", "meld lead", "meld noise texture"',
                         '**Keys**: "rhodes", "wurlitzer", "organ", "electric piano"',
                         '**Plucks**: "pluck", "digital pluck", "metallic pluck"',
                         '**FX**: "riser", "noise sweep", "impact"',

@@ -1,6 +1,6 @@
 // kbot Auth Tests
 import { describe, it, expect } from 'vitest';
-import { detectProvider, isLocalProvider, isKeylessProvider, estimateCost, getProviderModel, selectOllamaModel, PROVIDERS, } from './auth.js';
+import { detectProvider, isLocalProvider, isKeylessProvider, estimateCost, getProviderModel, selectOllamaModel, classifyComplexity, routeModelForTask, PROVIDERS, } from './auth.js';
 describe('Provider Detection', () => {
     it('detects Anthropic keys', () => {
         expect(detectProvider('sk-ant-abc123456789')).toBe('anthropic');
@@ -64,6 +64,11 @@ describe('Cost Estimation', () => {
         expect(estimateCost('ollama', 10000, 5000)).toBe(0);
         expect(estimateCost('kbot-local', 10000, 5000)).toBe(0);
     });
+    it('scales linearly with token count', () => {
+        const cost1 = estimateCost('anthropic', 1000, 1000);
+        const cost2 = estimateCost('anthropic', 2000, 2000);
+        expect(cost2).toBeCloseTo(cost1 * 2, 5);
+    });
 });
 describe('Model Selection', () => {
     it('returns fast model for fast speed', () => {
@@ -82,6 +87,64 @@ describe('Model Selection', () => {
     it('routes Ollama general tasks to general models', () => {
         const model = selectOllamaModel('what is the weather today', ['gemma3:12b', 'llama3.1:8b']);
         expect(model).toBeTruthy();
+    });
+});
+describe('classifyComplexity', () => {
+    it('classifies greetings as trivial', () => {
+        expect(classifyComplexity('hi')).toBe('trivial');
+        expect(classifyComplexity('hello')).toBe('trivial');
+        expect(classifyComplexity('thanks')).toBe('trivial');
+        expect(classifyComplexity('bye')).toBe('trivial');
+    });
+    it('does not classify long messages as trivial', () => {
+        expect(classifyComplexity('hello world what is this long sentence about')).not.toBe('trivial');
+    });
+    it('classifies reasoning requests', () => {
+        expect(classifyComplexity('explain why this architecture is better')).toBe('reasoning');
+        expect(classifyComplexity('compare React and Vue')).toBe('reasoning');
+        expect(classifyComplexity('what are the pros and cons of microservices')).toBe('reasoning');
+        expect(classifyComplexity('design a system for handling payments')).toBe('reasoning');
+    });
+    it('classifies complex multi-file tasks', () => {
+        expect(classifyComplexity('refactor the authentication module')).toBe('complex');
+        expect(classifyComplexity('migrate the database to PostgreSQL')).toBe('complex');
+        expect(classifyComplexity('rewrite the entire caching layer')).toBe('complex');
+    });
+    it('classifies very long messages as complex', () => {
+        const longMessage = Array(101).fill('word').join(' ');
+        expect(classifyComplexity(longMessage)).toBe('complex');
+    });
+    it('classifies code generation as moderate', () => {
+        expect(classifyComplexity('create a function to validate emails')).toBe('moderate');
+        expect(classifyComplexity('fix the login bug')).toBe('moderate');
+        expect(classifyComplexity('add a new test for the auth module')).toBe('moderate');
+    });
+    it('classifies simple questions as simple', () => {
+        expect(classifyComplexity('what time is it in Tokyo')).toBe('simple');
+        expect(classifyComplexity('how many users do we have')).toBe('simple');
+    });
+});
+describe('routeModelForTask', () => {
+    it('routes trivial tasks to fast model', () => {
+        const result = routeModelForTask('anthropic', 'hi');
+        expect(result.model).toBe(PROVIDERS.anthropic.fastModel);
+        expect(result.reason).toContain('trivial');
+    });
+    it('routes complex tasks to default model', () => {
+        const result = routeModelForTask('anthropic', 'refactor the entire authentication system');
+        expect(result.model).toBe(PROVIDERS.anthropic.defaultModel);
+        expect(result.reason).toContain('complex');
+    });
+    it('routes reasoning tasks to default model', () => {
+        const result = routeModelForTask('anthropic', 'explain why this design is better');
+        expect(result.model).toBe(PROVIDERS.anthropic.defaultModel);
+        expect(result.reason).toContain('reasoning');
+    });
+    it('works across providers', () => {
+        for (const provider of ['anthropic', 'openai', 'google', 'groq']) {
+            const result = routeModelForTask(provider, 'hello');
+            expect(result.model).toBe(PROVIDERS[provider].fastModel);
+        }
     });
 });
 //# sourceMappingURL=auth.test.js.map

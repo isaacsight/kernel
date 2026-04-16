@@ -415,7 +415,7 @@ function formatAuditReport(result) {
     // Badge
     const badgeColor = pct >= 80 ? 'brightgreen' : pct >= 60 ? 'yellow' : 'red';
     const badgeUrl = `https://img.shields.io/badge/kbot_audit-${result.grade}_(${pct}%25)-${badgeColor}`;
-    lines.push('---', '', '### Add this badge to your README', '', '```markdown', `[![kbot audit: ${result.grade}](${badgeUrl})](https://www.npmjs.com/package/@kernel.chat/kbot)`, '```', '', `*Audited by [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 35 specialist agents, 686+ tools, 20 AI providers*`, `*Install: \`npm install -g @kernel.chat/kbot\` | Audit any repo: \`kbot audit owner/repo\`*`);
+    lines.push('---', '', '### Add this badge to your README', '', '```markdown', `[![kbot audit: ${result.grade}](${badgeUrl})](https://www.npmjs.com/package/@kernel.chat/kbot)`, '```', '', `*Audited by [kbot](https://www.npmjs.com/package/@kernel.chat/kbot) — 35 specialist agents, 787+ tools, 20 AI providers*`, `*Install: \`npm install -g @kernel.chat/kbot\` | Audit any repo: \`kbot audit owner/repo\`*`);
     return lines.join('\n');
 }
 /** Generate a compact one-line summary for social sharing */
@@ -546,7 +546,7 @@ function formatAuditTerminal(result) {
     // Install CTA
     lines.push(chalk.hex(DIM)('  Audited by ') +
         chalk.hex(VIOLET).bold('kbot') +
-        chalk.hex(DIM)(' \u2014 35 specialist agents, 686+ tools, 20 AI providers'));
+        chalk.hex(DIM)(' \u2014 35 specialist agents, 787+ tools, 20 AI providers'));
     lines.push(chalk.hex(DIM)('  Install: ') +
         chalk.hex(WHITE)('npm install -g @kernel.chat/kbot') +
         chalk.hex(DIM)('  |  Audit any repo: ') +

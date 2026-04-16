@@ -11,10 +11,12 @@
 //   ableton_mixer           — snapshot levels, batch set, sends
 //   ableton_create_progression — chord progressions → MIDI in clips
 //   ableton_session_info    — full session state snapshot
+//   ableton_audio_analysis  — real-time audio level meters (track + master RMS)
 //   ableton_knowledge       — deep Ableton knowledge base queries (registered in ableton-knowledge.ts)
 //
 // Requires: AbletonOSC loaded in Ableton Live (Preferences → Link/Tempo/MIDI → Control Surface)
 import { registerTool } from './index.js';
+import { execSync } from 'node:child_process';
 import { ensureAbleton, formatAbletonError } from '../integrations/ableton-osc.js';
 import { parseProgression, voiceChord, arpeggiate, NAMED_PROGRESSIONS, RHYTHM_PATTERNS, GENRE_DRUM_PATTERNS, noteNameToMidi, midiToNoteName, } from './music-theory.js';
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -769,52 +771,89 @@ export function registerAbletonTools() {
     // ─── 10. Load Plugin ──────────────────────────────────────────────────
     registerTool({
         name: 'ableton_load_plugin',
-        description: 'Load any instrument or plugin onto a track by name — native (Operator, Wavetable, Drift) or third-party VST/AU (Serum 2, Vital, Kontakt). Searches Ableton\'s browser and loads onto the selected track.',
+        description: 'Load any instrument or plugin onto a track by name — native (Operator, Wavetable, Drift) or third-party VST/AU (Serum 2, Vital, Kontakt). Tries OSC first, then falls back to AppleScript browser automation on macOS.',
         parameters: {
             track: { type: 'number', description: 'Track number (1-based)', required: true },
             plugin: { type: 'string', description: 'Plugin name to search for (e.g. "Serum 2", "Operator", "Wavetable")', required: true },
             manufacturer: { type: 'string', description: 'Manufacturer name for VST/AU (e.g. "Xfer Records", "Native Instruments"). Optional — helps narrow search.' },
+            skip_results: { type: 'number', description: 'Number of Down arrow presses before selecting (to skip past FX/presets). Default: 1' },
         },
         tier: 'free',
-        timeout: 15_000,
+        timeout: 20_000,
         async execute(args) {
             const t = userTrack(args.track);
             const plugin = String(args.plugin);
             const manufacturer = args.manufacturer ? String(args.manufacturer) : '';
+            const skipResults = Number(args.skip_results) || 1;
+            // ── Attempt 1: OSC (fast, reliable for native instruments) ──
             try {
                 const osc = await ensureAbleton();
-                if (manufacturer) {
-                    const result = await osc.query('/live/kbot/load_plugin', t, manufacturer, plugin);
-                    const status = extractArgs(result);
-                    if (status[0] === 'ok') {
-                        return `Loaded **${status[1]}** on track ${args.track}`;
-                    }
-                    return `Could not find "${manufacturer} ${plugin}": ${status.join(', ')}`;
+                // Select the target track first so the plugin loads there
+                osc.send('/live/song/set/current_track', t);
+                await new Promise(r => setTimeout(r, 200));
+                // Try native load_device endpoint (works for Ableton built-in instruments)
+                const nativeResult = await osc.query('/live/track/load/device', t, plugin);
+                const nativeStatus = extractArgs(nativeResult);
+                if (nativeStatus.length > 0 && String(nativeStatus[0]) !== 'error') {
+                    return `Loaded **${plugin}** on track ${args.track} (via OSC)`;
                 }
-                // Try load_plugin first — _deep_plugin_search correctly handles native
-                // instruments by returning the first loadable child of matching browser folders.
-                // This works for both native (Drum Rack, Operator, Wavetable) and third-party plugins.
-                let result = await osc.query('/live/kbot/load_plugin', t, plugin, '');
-                let status = extractArgs(result);
-                if (status[0] === 'ok') {
-                    return `Loaded **${status[1]}** on track ${args.track}`;
+            }
+            catch {
+                // OSC failed — fall through to AppleScript
+            }
+            // ── Attempt 2: AppleScript browser automation (macOS only) ──
+            // Uses Ableton's built-in browser search: Cmd+F → type name → arrow down → Return
+            // Proven approach from ZENOLOGY loading session
+            if (process.platform !== 'darwin') {
+                return `Plugin "${plugin}" could not be loaded via OSC. AppleScript fallback is macOS-only.`;
+            }
+            try {
+                const searchTerm = manufacturer ? `${manufacturer} ${plugin}` : plugin;
+                // Build AppleScript: activate Ableton, open browser search, type plugin name, select, load
+                const downArrows = Array(skipResults).fill('key code 125').join('\ndelay 0.3\n'); // 125 = Down arrow
+                const script = `
+tell application "Ableton Live 12"
+  activate
+end tell
+delay 0.5
+tell application "System Events"
+  tell process "Ableton Live 12"
+    -- Open browser search: Cmd+F (View > Search in Browser)
+    keystroke "f" using command down
+    delay 0.8
+    -- Clear any existing search text and type plugin name
+    keystroke "a" using command down
+    delay 0.1
+    keystroke "${searchTerm.replace(/"/g, '\\"')}"
+    delay 1.0
+    -- Navigate down to the result (skip past categories/folders)
+    ${downArrows}
+    delay 0.3
+    -- Press Return to load the selected item onto the current track
+    key code 36
+    delay 0.5
+  end tell
+end tell
+return "ok"
+`;
+                const lines = script.split('\n').filter(l => l.trim());
+                const escapedArgs = lines.map(l => `-e '${l.replace(/'/g, "'\\''")}'`).join(' ');
+                const result = execSync(`osascript ${escapedArgs}`, {
+                    encoding: 'utf-8',
+                    timeout: 15_000,
+                    stdio: ['pipe', 'pipe', 'pipe'],
+                }).trim();
+                if (result === 'ok') {
+                    return `Loaded **${plugin}** on track ${args.track} (via AppleScript browser search)`;
                 }
-                // Fallback: try load_device (uses _search_tree, less reliable for native instruments)
-                result = await osc.query('/live/kbot/load_device', t, plugin);
-                status = extractArgs(result);
-                if (status[0] === 'ok') {
-                    return `Loaded **${status[1]}** on track ${args.track}`;
-                }
-                // Final fallback: try plugins category with name as both manufacturer and plugin
-                result = await osc.query('/live/kbot/load_plugin', t, plugin, plugin);
-                status = extractArgs(result);
-                if (status[0] === 'ok') {
-                    return `Loaded **${status[1]}** on track ${args.track}`;
-                }
-                return `Plugin "${plugin}" not found in Ableton's browser. Check the name and try again.`;
+                return `AppleScript returned unexpected result: ${result}`;
             }
             catch (err) {
-                return `Ableton connection failed: ${err.message}\n\n${formatAbletonError()}`;
+                const msg = err.message;
+                if (msg.includes('not allowed') || msg.includes('assistive')) {
+                    return `AppleScript failed — Accessibility permission required.\n\nGrant permission in System Settings > Privacy & Security > Accessibility for your terminal app.`;
+                }
+                return `Failed to load "${plugin}": OSC endpoint not available, AppleScript fallback failed.\n\nError: ${msg}`;
             }
         },
     });
@@ -964,20 +1003,18 @@ export function registerAbletonTools() {
                 if (args.name) {
                     osc.send('/live/track/set/name', newTrackIdx, String(args.name));
                 }
-                // Load instrument if specified — use load_plugin first (handles native + third-party)
+                // Load instrument if specified — try native OSC first, then load_plugin tool handles fallbacks
                 if (args.instrument) {
-                    const manufacturer = args.manufacturer ? String(args.manufacturer) : '';
-                    if (manufacturer) {
-                        await osc.query('/live/kbot/load_plugin', newTrackIdx, manufacturer, String(args.instrument));
-                    }
-                    else {
-                        // Try load_plugin first (works for native instruments via _deep_plugin_search fallback)
-                        const result = await osc.query('/live/kbot/load_plugin', newTrackIdx, String(args.instrument), '');
-                        const status = extractArgs(result);
-                        if (status[0] !== 'ok') {
-                            // Fallback to load_device
-                            await osc.query('/live/kbot/load_device', newTrackIdx, String(args.instrument));
+                    try {
+                        const loadResult = await osc.query('/live/track/load/device', newTrackIdx, String(args.instrument));
+                        const loadStatus = extractArgs(loadResult);
+                        if (loadStatus.length === 0 || String(loadStatus[0]) === 'error') {
+                            // Native load failed — OSC doesn't have this device. The user can use
+                            // ableton_load_plugin separately which has AppleScript fallback.
                         }
+                    }
+                    catch {
+                        // Timeout or connection error — device may still have loaded, continue
                     }
                 }
                 return `Created ${trackType} track **${args.name || 'Track ' + (newTrackIdx + 1)}**${args.instrument ? ' with ' + args.instrument : ''} (track ${newTrackIdx + 1})`;
@@ -1032,6 +1069,103 @@ export function registerAbletonTools() {
             }
             catch (err) {
                 return `Splice search failed: ${err.message}`;
+            }
+        },
+    });
+    // ─── 15. Audio Analysis ──────────────────────────────────────────────
+    registerTool({
+        name: 'ableton_audio_analysis',
+        description: 'Get real-time audio level meters from Ableton Live — track output levels (L/R RMS), master output, and peak detection. Use this to hear what is playing, check if a track has signal, or monitor the mix.',
+        parameters: {
+            track: { type: 'number', description: 'Track number to analyze (1-based). Omit to get master output only.' },
+            all_tracks: { type: 'boolean', description: 'If true, read levels for all tracks plus master. Default: false' },
+        },
+        tier: 'free',
+        timeout: 10_000,
+        async execute(args) {
+            try {
+                const osc = await ensureAbleton();
+                const lines = ['## Audio Levels', ''];
+                // Helper to read a meter value with error handling
+                async function readMeter(address, ...oscArgs) {
+                    try {
+                        const result = await osc.query(address, ...oscArgs);
+                        const vals = extractArgs(result);
+                        // Meter values are typically floats 0.0 - 1.0 (or higher for clipping)
+                        return typeof vals[vals.length - 1] === 'number' ? vals[vals.length - 1] : 0;
+                    }
+                    catch {
+                        return -1; // timeout = no response
+                    }
+                }
+                // Meter bar visualization
+                function meterBar(level) {
+                    if (level < 0)
+                        return '[-no signal-]';
+                    const db = level > 0 ? 20 * Math.log10(level) : -Infinity;
+                    const dbStr = db === -Infinity ? '-inf' : db.toFixed(1);
+                    const barLen = Math.min(20, Math.max(0, Math.round(level * 20)));
+                    const bar = '\u2588'.repeat(barLen) + '\u2591'.repeat(20 - barLen);
+                    return `[${bar}] ${dbStr} dB`;
+                }
+                if (args.all_tracks) {
+                    // Read all track levels
+                    const countResult = await osc.query('/live/song/get/num_tracks');
+                    const numTracks = Number(extractArgs(countResult)[0]) || 0;
+                    for (let t = 0; t < numTracks - 1; t++) { // -1 to skip master return
+                        const nameResult = await osc.query('/live/track/get/name', t);
+                        const name = extractArgs(nameResult)[1] || `Track ${t + 1}`;
+                        const left = await readMeter('/live/track/get/output_meter_left', t);
+                        const right = await readMeter('/live/track/get/output_meter_right', t);
+                        const avg = left >= 0 && right >= 0 ? (left + right) / 2 : Math.max(left, right);
+                        lines.push(`**${displayTrack(t)}. ${name}**: ${meterBar(avg)}`);
+                        if (left >= 0 && right >= 0 && Math.abs(left - right) > 0.05) {
+                            lines.push(`  L: ${meterBar(left)} | R: ${meterBar(right)}`);
+                        }
+                    }
+                    lines.push('');
+                }
+                else if (args.track) {
+                    // Read specific track
+                    const t = userTrack(args.track);
+                    const nameResult = await osc.query('/live/track/get/name', t);
+                    const name = extractArgs(nameResult)[1] || `Track ${args.track}`;
+                    const left = await readMeter('/live/track/get/output_meter_left', t);
+                    const right = await readMeter('/live/track/get/output_meter_right', t);
+                    lines.push(`**Track ${args.track} (${name})**`);
+                    lines.push(`  Left:  ${meterBar(left)}`);
+                    lines.push(`  Right: ${meterBar(right)}`);
+                    // Check if signal is present
+                    const avg = left >= 0 && right >= 0 ? (left + right) / 2 : Math.max(left, right);
+                    if (avg <= 0) {
+                        lines.push('');
+                        lines.push('No signal detected. Check: is the track armed? Is transport playing? Does the track have clips?');
+                    }
+                    else if (avg > 1.0) {
+                        lines.push('');
+                        lines.push('**Warning**: Signal is clipping! Reduce track volume.');
+                    }
+                    lines.push('');
+                }
+                // Always show master output
+                const masterLeft = await readMeter('/live/master/get/output_meter_left');
+                const masterRight = await readMeter('/live/master/get/output_meter_right');
+                lines.push('**Master Output**');
+                lines.push(`  Left:  ${meterBar(masterLeft)}`);
+                lines.push(`  Right: ${meterBar(masterRight)}`);
+                const masterAvg = masterLeft >= 0 && masterRight >= 0 ? (masterLeft + masterRight) / 2 : Math.max(masterLeft, masterRight);
+                if (masterAvg <= 0) {
+                    lines.push('');
+                    lines.push('No audio on master output. Is transport playing?');
+                }
+                else if (masterAvg > 0.9) {
+                    lines.push('');
+                    lines.push('**Loud!** Master is near clipping. Consider reducing levels.');
+                }
+                return lines.join('\n');
+            }
+            catch (err) {
+                return `Ableton connection failed: ${err.message}\n\n${formatAbletonError()}`;
             }
         },
     });

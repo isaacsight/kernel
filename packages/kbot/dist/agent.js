@@ -654,6 +654,19 @@ function isComplexTask(message) {
 async function callProvider(provider, apiKey, model, systemContext, messages, tools, options) {
     const p = getProvider(provider);
     const startTime = Date.now();
+    // Teacher logger — captures (prompt, response) pairs for later distillation.
+    // Disabled for local providers (already free) and when KBOT_TEACHER_LOG=0.
+    const { getTeacherLogger } = await import('./teacher-logger.js');
+    const teacher = getTeacherLogger();
+    const teacherId = (teacher.isEnabled() && !isLocalProvider(provider))
+        ? teacher.begin({
+            sessionId: options?.sessionId,
+            provider,
+            model,
+            system: systemContext,
+            messages: messages.map(m => ({ role: m.role, content: m.content })),
+        })
+        : '';
     try {
         let result;
         // Embedded inference — runs in-process via node-llama-cpp, no HTTP
@@ -692,6 +705,14 @@ async function callProvider(provider, apiKey, model, systemContext, messages, to
             }
         }
         recordSuccess(provider, Date.now() - startTime);
+        if (teacherId) {
+            teacher.end(teacherId, {
+                content: result.content,
+                thinking: result.thinking,
+                tool_calls: result.tool_calls,
+                stop_reason: result.stop_reason,
+            }, result.usage);
+        }
         return result;
     }
     catch (err) {

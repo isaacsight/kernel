@@ -311,6 +311,7 @@ const LAZY_MODULE_IMPORTS = [
     { path: './financial-analysis.js', registerFn: 'registerFinancialAnalysisTools' },
     { path: './ai-analysis.js', registerFn: 'registerAIAnalysisTools' },
     { path: './music-gen.js', registerFn: 'registerMusicGenTools' },
+    { path: './one-prompt-producer.js', registerFn: 'registerOnePromptTools' },
     { path: './mobile-automation.js', registerFn: 'registerMobileAutomationTools' },
     { path: './iphone.js', registerFn: 'registerIPhoneTools' },
     { path: './ghost.js', registerFn: 'registerGhostTools' },

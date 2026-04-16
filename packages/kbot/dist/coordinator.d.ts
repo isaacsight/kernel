@@ -129,4 +129,36 @@ export declare class IntelligenceCoordinator {
 export declare function getCoordinator(): IntelligenceCoordinator;
 /** Register coordinator tools with the kbot tool registry */
 export declare function registerCoordinatorTools(): void;
+export interface Task {
+    id: string;
+    goal: string;
+    status: 'pending' | 'running' | 'done' | 'failed';
+    agent: string;
+    dependencies: string[];
+    result?: string;
+    error?: string;
+}
+export interface CoordinatorPlan {
+    id: string;
+    goal: string;
+    tasks: Task[];
+    createdAt: string;
+    completedAt?: string;
+    status: 'planning' | 'executing' | 'done' | 'failed';
+}
+/**
+ * Decompose a high-level goal into ordered sub-tasks with dependencies.
+ * Uses the LLM (via runAgent) to break the goal into 2-6 concrete tasks.
+ */
+export declare function decompose(goal: string): Promise<CoordinatorPlan>;
+/**
+ * Execute a plan's tasks in dependency order (sequential for now).
+ * Tasks whose dependencies are all 'done' are eligible to run.
+ */
+export declare function execute(plan: CoordinatorPlan): Promise<CoordinatorPlan>;
+/**
+ * Convenience: decompose a goal, execute the plan, and synthesize results.
+ * Returns a human-readable summary of what was accomplished.
+ */
+export declare function coordinate(goal: string): Promise<string>;
 //# sourceMappingURL=coordinator.d.ts.map

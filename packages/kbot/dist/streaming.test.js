@@ -1,6 +1,6 @@
-// Tests for kbot Streaming — createStreamState and formatThinkingSummary
+// Tests for kbot Streaming — createStreamState, formatThinkingSummary, stripThinkTags
 import { describe, it, expect } from 'vitest';
-import { createStreamState, formatThinkingSummary } from './streaming.js';
+import { createStreamState, formatThinkingSummary, stripThinkTags } from './streaming.js';
 describe('createStreamState', () => {
     it('creates a clean initial state', () => {
         const state = createStreamState();
@@ -11,6 +11,37 @@ describe('createStreamState', () => {
         expect(state.isThinking).toBe(false);
         expect(state.thinkingDisplayed).toBe(false);
         expect(state.usage).toEqual({ input_tokens: 0, output_tokens: 0 });
+    });
+    it('returns independent instances', () => {
+        const a = createStreamState();
+        const b = createStreamState();
+        a.content = 'modified';
+        expect(b.content).toBe('');
+    });
+});
+describe('stripThinkTags', () => {
+    it('removes complete think blocks', () => {
+        expect(stripThinkTags('before<think>hidden</think>after')).toBe('beforeafter');
+    });
+    it('removes multiline think blocks', () => {
+        const input = 'start<think>\nline1\nline2\n</think>end';
+        expect(stripThinkTags(input)).toBe('startend');
+    });
+    it('removes unclosed think tag at end', () => {
+        expect(stripThinkTags('visible<think>partial thought')).toBe('visible');
+    });
+    it('removes orphaned think tags', () => {
+        expect(stripThinkTags('text<think>more text</think>rest')).toBe('textrest');
+    });
+    it('handles multiple think blocks', () => {
+        const input = 'a<think>1</think>b<think>2</think>c';
+        expect(stripThinkTags(input)).toBe('abc');
+    });
+    it('returns text unchanged when no think tags', () => {
+        expect(stripThinkTags('hello world')).toBe('hello world');
+    });
+    it('handles empty string', () => {
+        expect(stripThinkTags('')).toBe('');
     });
 });
 describe('formatThinkingSummary', () => {
