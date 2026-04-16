@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-16T17:24:00.534Z",
+  "timestamp": "2026-04-16T17:37:13.904Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -758,6 +758,94 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "Pancake9738"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I’ve been working on this tool on and off for a while, and I recently got it back into a shape that feels ready to share.<p>It’s an open-source cost attribution tool for Kafka systems that supports <em>bot</em>h identity-level and topic-level attribution. The original version focused only on identity-level attribution using Confluent Cloud API and metrics data. In v2, I expanded it to support topic-level attribution as well.<p>The backend is Python/FastAPI, and the frontend is React. Compared to v1, which was fully in-memory and depended on Prometheus and Grafana for retention and visualization, v2 adds SQLite-backed persistence, an evolving REST API, and a plugin-based architecture for extending to other ecosystems.<p>No signups, free to use, and fully open source. I’d appreciate feedback, especially from people who deal with Kafka platform ownership, multi-tenancy, or chargeback/showback problems. I’m actively working on it, and I’d be glad to hear about bugs, gaps, or features that would make it more useful."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Chitragupta Kafka Identity and topic level cost attribution"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/waliaabhishek/chitragupta"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_Pancake9738",
+            "story_47796822",
+            "show_hn"
+          ],
+          "author": "Pancake9738",
+          "created_at": "2026-04-16T17:36:42Z",
+          "created_at_i": 1776361002,
+          "num_comments": 0,
+          "objectID": "47796822",
+          "points": 1,
+          "story_id": 47796822,
+          "story_text": "I’ve been working on this tool on and off for a while, and I recently got it back into a shape that feels ready to share.<p>It’s an open-source cost attribution tool for Kafka systems that supports both identity-level and topic-level attribution. The original version focused only on identity-level attribution using Confluent Cloud API and metrics data. In v2, I expanded it to support topic-level attribution as well.<p>The backend is Python&#x2F;FastAPI, and the frontend is React. Compared to v1, which was fully in-memory and depended on Prometheus and Grafana for retention and visualization, v2 adds SQLite-backed persistence, an evolving REST API, and a plugin-based architecture for extending to other ecosystems.<p>No signups, free to use, and fully open source. I’d appreciate feedback, especially from people who deal with Kafka platform ownership, multi-tenancy, or chargeback&#x2F;showback problems. I’m actively working on it, and I’d be glad to hear about bugs, gaps, or features that would make it more useful.",
+          "title": "Show HN: Chitragupta Kafka Identity and topic level cost attribution",
+          "updated_at": "2026-04-16T17:37:01Z",
+          "url": "https://github.com/waliaabhishek/chitragupta"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "charleslpan"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey HN! We're Charles and Dean, and we're building Stage: a code review tool that guides you through reading a PR step by step, instead of piecing together a giant diff.<p>Here's a demo video: <a href=\"https://www.tella.tv/video/stage-demo-1pph\" rel=\"nofollow\">https://www.tella.tv/video/stage-demo-1pph</a>.\nYou can play around with some example PRs here: <a href=\"https://stagereview.app/explore\">https://stagereview.app/explore</a>.<p>Teams are moving faster than ever with AI these days, but more and more engineers are merging changes that they don't really understand. The <em>bot</em>tleneck isn't writing code anymore, it's reviewing it.<p>We're two engineers who got frustrated with GitHub's UI for code review. As coding agents took off, we saw our PR backlog pile up faster than we could handle. Not only that, the PRs themselves were getting larger and harder to understand, and we found ourselves spending most of our time trying to build a mental model of what a PR was actually doing.<p>We built Stage to make reviewing a PR feel more like reading chapters of a book, not an unorganized set of paragraphs. We use it every day now, not just to review each other's code but also our own, and at this point we can't really imagine going back to the old GitHub UI.<p>What Stage does: when a PR is opened, Stage groups the changes into small, logical &quot;chapters&quot;. These chapters get ordered in the way that makes most sense to read. For each chapter, Stage tells you what changed and specific things to double check. Once you review all the chapters, you're done reviewing the PR.<p>You can sign in to Stage with your GitHub account and everything is synced seamlessly (commenting, approving etc.) so it fits into the workflows you're already used to.<p>What we're not building: a code review <em>bot</em> like CodeRabbit or Greptile. These tools are great for catching bugs (and we use them ourselves!) but at the end of the day humans are responsible for what gets shipped. It's clear that reviewing code hasn't scaled the same way that writing did, and they (we!) need better tooling to keep up with the onslaught of AI generated code, which is only going to grow.<p>We've had a lot of fun building this and are excited to take it further. If you're like us and are also tired of using GitHub for reviewing PRs, we'd love for you to try it out and tell us what you think!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Stage – Putting humans back in control of code review"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://stagereview.app/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_charleslpan",
+            "story_47796818",
+            "show_hn"
+          ],
+          "author": "charleslpan",
+          "created_at": "2026-04-16T17:36:29Z",
+          "created_at_i": 1776360989,
+          "num_comments": 0,
+          "objectID": "47796818",
+          "points": 1,
+          "story_id": 47796818,
+          "story_text": "Hey HN! We&#x27;re Charles and Dean, and we&#x27;re building Stage: a code review tool that guides you through reading a PR step by step, instead of piecing together a giant diff.<p>Here&#x27;s a demo video: <a href=\"https:&#x2F;&#x2F;www.tella.tv&#x2F;video&#x2F;stage-demo-1pph\" rel=\"nofollow\">https:&#x2F;&#x2F;www.tella.tv&#x2F;video&#x2F;stage-demo-1pph</a>.\nYou can play around with some example PRs here: <a href=\"https:&#x2F;&#x2F;stagereview.app&#x2F;explore\">https:&#x2F;&#x2F;stagereview.app&#x2F;explore</a>.<p>Teams are moving faster than ever with AI these days, but more and more engineers are merging changes that they don&#x27;t really understand. The bottleneck isn&#x27;t writing code anymore, it&#x27;s reviewing it.<p>We&#x27;re two engineers who got frustrated with GitHub&#x27;s UI for code review. As coding agents took off, we saw our PR backlog pile up faster than we could handle. Not only that, the PRs themselves were getting larger and harder to understand, and we found ourselves spending most of our time trying to build a mental model of what a PR was actually doing.<p>We built Stage to make reviewing a PR feel more like reading chapters of a book, not an unorganized set of paragraphs. We use it every day now, not just to review each other&#x27;s code but also our own, and at this point we can&#x27;t really imagine going back to the old GitHub UI.<p>What Stage does: when a PR is opened, Stage groups the changes into small, logical &quot;chapters&quot;. These chapters get ordered in the way that makes most sense to read. For each chapter, Stage tells you what changed and specific things to double check. Once you review all the chapters, you&#x27;re done reviewing the PR.<p>You can sign in to Stage with your GitHub account and everything is synced seamlessly (commenting, approving etc.) so it fits into the workflows you&#x27;re already used to.<p>What we&#x27;re not building: a code review bot like CodeRabbit or Greptile. These tools are great for catching bugs (and we use them ourselves!) but at the end of the day humans are responsible for what gets shipped. It&#x27;s clear that reviewing code hasn&#x27;t scaled the same way that writing did, and they (we!) need better tooling to keep up with the onslaught of AI generated code, which is only going to grow.<p>We&#x27;ve had a lot of fun building this and are excited to take it further. If you&#x27;re like us and are also tired of using GitHub for reviewing PRs, we&#x27;d love for you to try it out and tell us what you think!",
+          "title": "Show HN: Stage – Putting humans back in control of code review",
+          "updated_at": "2026-04-16T17:37:01Z",
+          "url": "https://stagereview.app/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "evo_9"
             },
             "title": {
@@ -780,14 +868,17 @@
             "story_47796455"
           ],
           "author": "evo_9",
+          "children": [
+            47796684
+          ],
           "created_at": "2026-04-16T17:11:17Z",
           "created_at_i": 1776359477,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47796455",
           "points": 2,
           "story_id": 47796455,
           "title": "The People's Clock: A Timepiece Made of People",
-          "updated_at": "2026-04-16T17:21:16Z",
+          "updated_at": "2026-04-16T17:28:02Z",
           "url": "https://kottke.org/26/04/the-peoples-clock"
         },
         {
@@ -878,94 +969,12 @@
           "created_at_i": 1776352794,
           "num_comments": 24,
           "objectID": "47794514",
-          "points": 30,
+          "points": 31,
           "story_id": 47794514,
           "story_text": "Hey! I am Alex and together with my co-founder Tarun built Kampala (<a href=\"https:&#x2F;&#x2F;www.zatanna.ai&#x2F;kampala\">https:&#x2F;&#x2F;www.zatanna.ai&#x2F;kampala</a>). It’s a man-in-the-middle (MITM) style proxy that allows you to agentically reverse engineer existing workflows without brittle browser automation or computer use agents. It works for websites, mobile apps, desktop apps.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=z_PeostC-b4\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=z_PeostC-b4</a>.\nMany people spend hours per day in legacy dashboards and on-prem solutions reconciling data across platforms. Current attempts at automation use browser automations or computer use agents which are brittle, slow, and nondeterministic. \nI come from a web reverse engineering background and spent the last 7-8 years building integrations by hand for sneaker&#x2F;ticket releases, sportsbooks logins, and everything in\\ between. During that time I consulted for several companies and brought them off of browser based infrastructure into the requests layer.<p>When we started Zatanna (that’s our company name) we worked in dental tech, which meant we had to deal with tons of insurance payer dashboards and legacy dental-practice solutions. Our superpower (as a fairly undifferentiated voice agent&#x2F;front desk assistant company) was that we could integrate with nearly any system requested. During this time we built extensive tooling (including what we’re now calling Kampala) to allow us to spin up these integrations quickly. \nExisting MITM proxies and tooling didn’t work for a few reasons: (1) They manipulated the TLS and HTTP2 fingerprint over the wire which was detected by strict anti-bots. (2) They had bad MCPs which did not adequately expose necessary features like scripts&#x2F;replay. (3) They did not allow for building workflows or actions given a sample or sequence of requests.<p>As the tools we built got more powerful, we began to use them internally to scrape conference attendees, connect to external PMS systems, and interact with slack apps. I even sent it to my property manager mom, who (with a lot of help from me lol), automated 2-3 hours of billing information entry in Yardi. At that point we realized that this wasn’t really about dentistry :)<p>Because Kampala is a MITM, it is able to leverage existing session tokens&#x2F;anti-bot cookies and automate things deterministically in seconds. You can either use our agent harness that directly creates scripts&#x2F;apis by prompting you with what actions to make, or our MCP by manually doing a  workflow once, and asking your preferred coding agent to use Kampala to make a script&#x2F;API to replicate it. Once you have an API&#x2F;script, you can export, run, or even have us host it for you.<p>We think the future of automation does not consist of sending screenshots of webpages to LLMs, but instead using the layer below that computers actually understand. Excited to hear your thoughts&#x2F;questions&#x2F;feedback!",
           "title": "Launch HN: Kampala (YC W26) – Reverse-Engineer Apps into APIs",
-          "updated_at": "2026-04-16T17:23:32Z",
+          "updated_at": "2026-04-16T17:34:31Z",
           "url": "https://www.zatanna.ai/kampala"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "lucie22sc32"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I have dyslexia. I was one of the lucky ones. Diagnosed at eight, I got accommodations and support before things spiraled.<p>Most kids aren't so lucky. The path from initial concern to diagnosis can take years and cost families upward of $5,000. For many, it never comes at all. In one study, 50% of prisoners were found to be dyslexic, with 80% functionally illiterate. Behind every missed diagnosis is a kid who gets told they're lazy, when the reality is no one ever gave them the right test.<p>Marker Learning is building an AI-enhanced assessment platform that makes identifying learning differences faster, cheaper, and more equitable, especially for multilingual students who are routinely misidentified or overlooked. Imagine if every kid could be screened for learning differences as easily as they're screened for vision. That's what we're building.<p>This isn't a chatbot or a homework helper. We're a Series B company backed by Reach Capital, Andreessen Horowitz, and Primary, running a multi-million-dollar longitudinal study spanning K–12 and developing the psychometric engine behind it. We need engineers who are excited by that.<p>We're hiring a hands-on full-stack engineer (React, Node.js, TypeScript) to help build and scale the platform: adaptive testing infrastructure, AI-powered scoring scoring and data pipelines, and the systems that maintain clinical rigor at scale. High autonomy, lightweight process, fast-paced. 8–10+ years, ideally with 0-to-1 or early-stage experience. You'll work directly with psychometrics, product, and data science, and the engineering decisions you make now will define the platform for years.<p>Reach out directly with your gh, linkedin, and resume and why you want this position to lucie@markerlearning.com. Please specify if your location, if you are interested in full time, contract or open to <em>bot</em>h. Make the subject &quot;Lead Engineer Application (I am not a <em>bot</em>)&quot;."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Lead Full-Stack Engineer Marker Learning – Remote"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_lucie22sc32",
-            "story_47794168",
-            "ask_hn"
-          ],
-          "author": "lucie22sc32",
-          "created_at": "2026-04-16T15:01:46Z",
-          "created_at_i": 1776351706,
-          "num_comments": 0,
-          "objectID": "47794168",
-          "points": 1,
-          "story_id": 47794168,
-          "story_text": "I have dyslexia. I was one of the lucky ones. Diagnosed at eight, I got accommodations and support before things spiraled.<p>Most kids aren&#x27;t so lucky. The path from initial concern to diagnosis can take years and cost families upward of $5,000. For many, it never comes at all. In one study, 50% of prisoners were found to be dyslexic, with 80% functionally illiterate. Behind every missed diagnosis is a kid who gets told they&#x27;re lazy, when the reality is no one ever gave them the right test.<p>Marker Learning is building an AI-enhanced assessment platform that makes identifying learning differences faster, cheaper, and more equitable, especially for multilingual students who are routinely misidentified or overlooked. Imagine if every kid could be screened for learning differences as easily as they&#x27;re screened for vision. That&#x27;s what we&#x27;re building.<p>This isn&#x27;t a chatbot or a homework helper. We&#x27;re a Series B company backed by Reach Capital, Andreessen Horowitz, and Primary, running a multi-million-dollar longitudinal study spanning K–12 and developing the psychometric engine behind it. We need engineers who are excited by that.<p>We&#x27;re hiring a hands-on full-stack engineer (React, Node.js, TypeScript) to help build and scale the platform: adaptive testing infrastructure, AI-powered scoring scoring and data pipelines, and the systems that maintain clinical rigor at scale. High autonomy, lightweight process, fast-paced. 8–10+ years, ideally with 0-to-1 or early-stage experience. You&#x27;ll work directly with psychometrics, product, and data science, and the engineering decisions you make now will define the platform for years.<p>Reach out directly with your gh, linkedin, and resume and why you want this position to lucie@markerlearning.com. Please specify if your location, if you are interested in full time, contract or open to both. Make the subject &quot;Lead Engineer Application (I am not a bot)&quot;.",
-          "title": "Lead Full-Stack Engineer Marker Learning – Remote",
-          "updated_at": "2026-04-16T15:04:02Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "ginccc"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I started EDDI in 2006 as a rule-based dialog engine. Back then it was pattern matching and state machines. When LLMs showed up, the interesting question wasn't &quot;how do I call GPT&quot; but &quot;how do I keep control over what the AI does in production?&quot;<p>My answer was: agent logic belongs in JSON configs, not code. You describe what an agent should do, which LLM to use, what tools it can call, how it should behave. The engine reads that config and runs it. No dynamic code execution, ever. The LLM cannot run arbitrary code by design. The engine is strict so the AI can be creative.<p>v6 is the version where this actually became practical. You can have groups of agents debating a topic in five different orchestration styles (round table, peer review, devil's advocate...). Each agent can use a different model. A cascading system tries cheap models first and only escalates to expensive ones when confidence is low.<p>It also implements MCP as <em>bot</em>h server and client, so you can control EDDI from Claude Desktop or Cursor. And Google's A2A protocol for agents discovering each other across platforms.<p>The whole thing runs in Java 25 on Quarkus, ships as a single Docker image, and installs with one command. Open source since 2017, Apache 2.0.<p>Would love to hear thoughts on the architecture and feature set. And if you have ideas for what's missing or what you'd want from a system like this, I'm all ears. Always looking for good input on the roadmap."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: EDDI – Multi-agent AI engine where agent logic lives in JSON, not code"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/labsai/EDDI"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_ginccc",
-            "story_47793245",
-            "show_hn"
-          ],
-          "author": "ginccc",
-          "created_at": "2026-04-16T14:11:37Z",
-          "created_at_i": 1776348697,
-          "num_comments": 0,
-          "objectID": "47793245",
-          "points": 2,
-          "story_id": 47793245,
-          "story_text": "I started EDDI in 2006 as a rule-based dialog engine. Back then it was pattern matching and state machines. When LLMs showed up, the interesting question wasn&#x27;t &quot;how do I call GPT&quot; but &quot;how do I keep control over what the AI does in production?&quot;<p>My answer was: agent logic belongs in JSON configs, not code. You describe what an agent should do, which LLM to use, what tools it can call, how it should behave. The engine reads that config and runs it. No dynamic code execution, ever. The LLM cannot run arbitrary code by design. The engine is strict so the AI can be creative.<p>v6 is the version where this actually became practical. You can have groups of agents debating a topic in five different orchestration styles (round table, peer review, devil&#x27;s advocate...). Each agent can use a different model. A cascading system tries cheap models first and only escalates to expensive ones when confidence is low.<p>It also implements MCP as both server and client, so you can control EDDI from Claude Desktop or Cursor. And Google&#x27;s A2A protocol for agents discovering each other across platforms.<p>The whole thing runs in Java 25 on Quarkus, ships as a single Docker image, and installs with one command. Open source since 2017, Apache 2.0.<p>Would love to hear thoughts on the architecture and feature set. And if you have ideas for what&#x27;s missing or what you&#x27;d want from a system like this, I&#x27;m all ears. Always looking for good input on the roadmap.",
-          "title": "Show HN: EDDI – Multi-agent AI engine where agent logic lives in JSON, not code",
-          "updated_at": "2026-04-16T16:13:46Z",
-          "url": "https://github.com/labsai/EDDI"
         }
       ]
     },
