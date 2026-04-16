@@ -1,31 +1,31 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-04-13T11:28:47.959Z",
-    "intel": "2026-04-13T08:08:32.532Z",
-    "outreach": "2026-04-16T17:29:32.252Z",
-    "writing": "2026-04-16T17:29:33.079Z",
-    "evolution": "2026-04-16T17:46:23.128Z",
-    "opportunities": "2026-04-13T08:08:49.662Z",
-    "actions": "2026-04-16T17:29:31.861Z",
-    "synthesis": "2026-04-13T11:28:48.435Z",
-    "obsidian": "2026-04-16T17:29:32.264Z"
+    "pulse": "2026-04-13T13:41:26.129Z",
+    "intel": "2026-04-16T17:23:57.779Z",
+    "outreach": "2026-04-16T17:30:12.148Z",
+    "writing": "2026-04-16T17:30:12.942Z",
+    "evolution": "2026-04-16T17:47:02.510Z",
+    "opportunities": "2026-04-16T17:24:08.006Z",
+    "actions": "2026-04-16T17:30:11.729Z",
+    "synthesis": "2026-04-13T13:41:26.797Z",
+    "obsidian": "2026-04-16T17:30:12.164Z"
   },
   "stats": {
-    "totalRuns": 2462,
-    "totalPulses": 974,
+    "totalRuns": 2452,
+    "totalPulses": 964,
     "totalIntel": 107,
-    "totalOutreach": 51,
+    "totalOutreach": 50,
     "totalWriting": 27,
     "totalEvolution": 29,
     "errorsToday": 0,
     "lastErrorDate": "2026-04-13",
-    "postsAttempted": 2,
+    "postsAttempted": 3,
     "postsEngaged": 0,
     "postsFlagged": 0,
     "evolutionSuccesses": 3,
     "evolutionFailures": 16,
-    "totalSynthesis": 768,
-    "totalObsidianSyncs": 34
+    "totalSynthesis": 758,
+    "totalObsidianSyncs": 33
   },
   "knownStars": 12,
   "knownDownloads": 23,
@@ -55,6 +55,18 @@
       "currentComments": 0,
       "repliesReceived": 0,
       "outcome": "ignored"
+    },
+    {
+      "postedAt": "2026-04-16T17:30:10.790Z",
+      "url": "https://news.ycombinator.com/item?id=47783674",
+      "title": "I wrote a open source iMessage for your AI agents",
+      "scoreAtPost": 1,
+      "commentsAtPost": 0,
+      "lastCheckedAt": "2026-04-16T17:30:10.790Z",
+      "currentScore": 1,
+      "currentComments": 0,
+      "repliesReceived": 0,
+      "outcome": "pending"
     }
   ],
   "reachedMilestones": [
