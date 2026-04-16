@@ -1,25 +1,6 @@
 {
-  "timestamp": "2026-04-16T17:28:02.619Z",
-  "projects": [
-    {
-      "name": "Haervwe/open-webui-tools",
-      "url": "https://github.com/Haervwe/open-webui-tools",
-      "stars": 666,
-      "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
-    },
-    {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 774,
-      "description": "Agent Skills for Solopreneurs"
-    },
-    {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 401,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
-    }
-  ],
+  "timestamp": "2026-04-16T17:28:07.502Z",
+  "projects": [],
   "latestPaper": {
     "title": "LongCoT: Benchmarking Long-Horizon Chain-of-Thought Reasoning",
     "summary": "As language models are increasingly deployed for complex autonomous tasks, their ability to reason accurately over longer horizons becomes critical. An essential component of this ability is planning and managing a long, complex chain-of-thought (CoT). We introduce LongCoT, a scalable benchmark of 2,500 expert-designed problems spanning chemistry, mathematics, computer science, chess, and logic to isolate and directly measure the long-horizon CoT reasoning capabilities of frontier models. Proble"
