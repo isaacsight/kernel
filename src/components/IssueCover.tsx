@@ -33,9 +33,19 @@ export function IssueCover({ issue, footer }: IssueCoverProps) {
     <section className={sectionClasses}>
       <div className="pop-cover-inner">
 
-        {/* Top dateline — folio style */}
+        {/* Top dateline — folio style.
+            The JP tagline is rendered in a marquee wrapper so it
+            drifts horizontally at ~4px/second, the magazine-ticker
+            touch. Static fallback for prefers-reduced-motion
+            (handled globally in src/index.css). The issue folio on
+            the right stays still. */}
         <div className="pop-cover-dateline">
-          <span className="pop-folio">都会に住んで、コードで遊ぶための、自由なスタイルを作ろう。</span>
+          <span className="pop-folio pop-marquee" aria-label="都会に住んで、コードで遊ぶための、自由なスタイルを作ろう。">
+            <span className="pop-marquee-track" aria-hidden="true">
+              <span className="pop-marquee-item">都会に住んで、コードで遊ぶための、自由なスタイルを作ろう。</span>
+              <span className="pop-marquee-item">都会に住んで、コードで遊ぶための、自由なスタイルを作ろう。</span>
+            </span>
+          </span>
           <span className="pop-folio">ISSUE {issue.number} · {issue.month} {issue.year}</span>
         </div>
 

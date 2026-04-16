@@ -29336,8 +29336,20 @@ h4 {
 /* Hairline — the 0.5px Popeye rule */
 .pop-rule { border: 0; height: 1px; background: var(--pop-hairline); margin: 0; }
 .pop-rule--soft { background: var(--pop-hairline-soft); }
-.pop-rule--tomato { height: 2px; background: var(--pop-tomato); }
+.pop-rule--tomato {
+  height: 2px;
+  background: var(--pop-tomato);
+  /* Ambient breath — the hairline is alive but imperceptibly so.
+     Matches the TikTok tomato-breath token (0.3Hz ≈ 3.33s period).
+     The site-wide prefers-reduced-motion rule disables this. */
+  animation: pop-rule-breath 3.3s ease-in-out infinite;
+}
 .pop-rule--short { max-width: 64px; margin: 0 auto; }
+
+@keyframes pop-rule-breath {
+  0%, 100% { opacity: 0.92; }
+  50%      { opacity: 1.00; }
+}
 
 /* Bracketed kicker: [CATEGORY] */
 .pop-kicker { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); }
@@ -29392,6 +29404,32 @@ h4 {
 
 /* Folio — page number, byline, date in corners */
 .pop-folio { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); opacity: 0.7; }
+
+/* Marquee — horizontal ticker, magazine-style.
+   Used for the cover dateline JP tagline. Drifts at ~4px/second.
+   Duplicated content + translate loop so there is no visible seam.
+   Respects prefers-reduced-motion via the site-wide override at the
+   bottom of this stylesheet (animation-duration → 0.01ms freezes it). */
+.pop-marquee {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 60ch;
+  vertical-align: middle;
+  mask-image: linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 24px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 24px), transparent);
+}
+.pop-marquee-track {
+  display: inline-flex;
+  gap: 3ch;
+  white-space: nowrap;
+  animation: pop-marquee-drift 64s linear infinite;
+  will-change: transform;
+}
+.pop-marquee-item { flex: 0 0 auto; }
+@keyframes pop-marquee-drift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(-100% - 3ch)); }
+}
 
 /* Terminal traffic-light dots — used inside .pop-terminal-bar */
 .pop-term-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }

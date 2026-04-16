@@ -337,6 +337,37 @@ layout decision:
 
 ---
 
+## Ambient motion — the two accents
+
+A print-inspired magazine is mostly still on the web. A book
+doesn't animate itself. But two very small ambient moves keep
+the page from feeling dead — both respect
+`prefers-reduced-motion` via the site-wide override in
+`src/index.css` (animation-duration collapses to 0.01ms).
+
+| Accent | Where | Spec |
+|---|---|---|
+| Tomato rule breath | Every `.pop-rule--tomato` | Opacity 0.92 ↔ 1.00, 3.3s period (0.3Hz). CSS keyframe `pop-rule-breath`. |
+| Dateline marquee | Cover dateline JP tagline | ~4px/second horizontal drift via `.pop-marquee` + `.pop-marquee-track`. Static folio beside it stays still. Mask gradient softens the entry/exit edges. |
+
+Both are deliberately subtle — a reviewer should have to be told
+they exist. The tomato rule breath is also the one motion token
+shared with the TikTok grammar, a quiet cross-medium tie-in.
+
+**Rules for new ambient motion:**
+1. Must be imperceptibly small (amplitudes ≤ 8% opacity or
+   ≤ 4px translate).
+2. Must respect `prefers-reduced-motion`.
+3. Must be CSS-only — no JS animation libraries, no Framer
+   Motion, no `requestAnimationFrame`.
+4. Must not trigger layout or repaint hotspots — animate only
+   `opacity` and `transform`.
+5. Before adding a third ambient accent, audit whether the
+   existing two are enough. The site's character is stillness
+   with two quiet accents — not a gallery of ambient effects.
+
+---
+
 ## Future moves (not yet shipped)
 
 - PDF export per route — actual printable issue file
