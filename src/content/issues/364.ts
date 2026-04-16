@@ -1,5 +1,5 @@
 /* ──────────────────────────────────────────────────────────────
-   ISSUE 364 — AUGUST 2026
+   ISSUE 364 — APRIL 2026
    NOTES TOWARD 2027 · WHAT DESIGN GETS RIGHT NEXT YEAR
    2027年の予告 — デザインの次の一年
 
@@ -17,7 +17,7 @@ import type { IssueRecord } from './index'
 
 export const ISSUE_364: IssueRecord = {
   number: '364',
-  month: 'AUGUST',
+  month: 'APRIL',
   year: '2026',
   feature: 'NOTES TOWARD 2027: WHAT DESIGN GETS RIGHT NEXT YEAR',
   featureJp: '2027年の予告 — デザインの次の一年',
@@ -52,7 +52,7 @@ export const ISSUE_364: IssueRecord = {
     kicker: 'THE FORECAST · 2027予告',
     title: 'Notes Toward 2027.',
     titleJp: '次の一年、デザインは何を取り戻すか',
-    deck: 'Seven declarations on where design is headed as the year turns. Written from a beach chair in August; published in case any of it comes true.',
+    deck: 'Seven declarations on where design is headed as the year turns. Written in April; published in case any of it comes true.',
     byline: 'BY THE EDITORS \u00b7 KERNEL.CHAT',
     stock: 'ink',
 

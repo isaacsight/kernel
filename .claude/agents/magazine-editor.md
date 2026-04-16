@@ -90,11 +90,11 @@ To add a new tool: extend `IssueSpread` union in `src/content/issues/index.ts`, 
 | # | Month | Stock | Layout | Tool | Feature |
 |---|---|---|---|---|---|
 | 360 | APR 2026 | cream | classic | — | The Urban Outdoors Review |
-| 361 | MAY 2026 | butter | classic | — | The Indoor Issue |
-| 362 | JUN 2026 | ivory | monument-hero | — | The Vacation Issue: Software That Doesn't Need You |
-| 363 | JUL 2026 | kraft | asymmetric-left | essay | The Style Issue: What Coders Are Wearing Now |
-| 364 | AUG 2026 | ink | classic | forecast | Notes Toward 2027: What Design Gets Right Next Year |
-| 365 | SEP 2026 | cream | monument-hero | interview | The Craft Issue: What We Make When Nobody's Watching |
+| 361 | APR 2026 | butter | classic | — | The Indoor Issue |
+| 362 | APR 2026 | ivory | monument-hero | — | The Vacation Issue: Software That Doesn't Need You |
+| 363 | APR 2026 | kraft | asymmetric-left | essay | The Style Issue: What Coders Are Wearing Now |
+| 364 | APR 2026 | ink | classic | forecast | Notes Toward 2027: What Design Gets Right Next Year |
+| 365 | APR 2026 | cream | monument-hero | interview | The Craft Issue: What We Make When Nobody's Watching |
 
 Thematic arc so far: outdoor → indoor → absence → style → forecast → craft. Multiple issues can ship in the same month — issue numbers are sequential, not calendar-bound. Each issue has its own visual identity (stock + layout) and its own editorial tool where applicable.
 

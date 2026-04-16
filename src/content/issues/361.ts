@@ -1,5 +1,5 @@
 /* ──────────────────────────────────────────────────────────────
-   ISSUE 361 — MAY 2026
+   ISSUE 361 — APRIL 2026
    THE INDOOR ISSUE: A FIELD GUIDE TO WORKING INSIDE
    室内派宣言 — 部屋の中で世界を作る
 
@@ -14,7 +14,7 @@ import type { IssueRecord } from './index'
 
 export const ISSUE_361: IssueRecord = {
   number: '361',
-  month: 'MAY',
+  month: 'APRIL',
   year: '2026',
   feature: 'THE INDOOR ISSUE: A FIELD GUIDE TO WORKING INSIDE',
   featureJp: '室内派宣言 — 部屋の中で世界を作る',

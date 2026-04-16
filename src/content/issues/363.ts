@@ -1,5 +1,5 @@
 /* ──────────────────────────────────────────────────────────────
-   ISSUE 363 — JULY 2026
+   ISSUE 363 — APRIL 2026
    THE STYLE ISSUE: WHAT CODERS ARE WEARING NOW
    スタイル号 — 今、コーダーが着ているもの
 
@@ -14,7 +14,7 @@ import type { IssueRecord } from './index'
 
 export const ISSUE_363: IssueRecord = {
   number: '363',
-  month: 'JULY',
+  month: 'APRIL',
   year: '2026',
   feature: 'THE STYLE ISSUE: WHAT CODERS ARE WEARING NOW',
   featureJp: 'スタイル号 — 今、コーダーが着ているもの',

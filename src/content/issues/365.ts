@@ -1,5 +1,5 @@
 /* ──────────────────────────────────────────────────────────────
-   ISSUE 365 — SEPTEMBER 2026
+   ISSUE 365 — APRIL 2026
    THE CRAFT ISSUE: WHAT WE MAKE WHEN NOBODY'S WATCHING
    手仕事号 — 誰も見ていないとき、何を作るか
 
@@ -20,7 +20,7 @@ import type { IssueRecord } from './index'
 
 export const ISSUE_365: IssueRecord = {
   number: '365',
-  month: 'SEPTEMBER',
+  month: 'APRIL',
   year: '2026',
   feature: 'THE CRAFT ISSUE: WHAT WE MAKE WHEN NOBODY\u2019S WATCHING',
   featureJp: '手仕事号 — 誰も見ていないとき、何を作るか',

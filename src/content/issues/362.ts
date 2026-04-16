@@ -1,5 +1,5 @@
 /* ──────────────────────────────────────────────────────────────
-   ISSUE 362 — JUNE 2026
+   ISSUE 362 — APRIL 2026
    THE VACATION ISSUE: SOFTWARE THAT DOESN'T NEED YOU
    休暇号 — あなたなしで動くソフトウェア
 
@@ -16,7 +16,7 @@ import type { IssueRecord } from './index'
 
 export const ISSUE_362: IssueRecord = {
   number: '362',
-  month: 'JUNE',
+  month: 'APRIL',
   year: '2026',
   feature: 'THE VACATION ISSUE: SOFTWARE THAT DOESN\u2019T NEED YOU',
   featureJp: '休暇号 — あなたなしで動くソフトウェア',
