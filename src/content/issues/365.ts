@@ -27,13 +27,12 @@ export const ISSUE_365: IssueRecord = {
   price: '¥0 · BYOK',
   tagline: 'MAGAZINE FOR CITY CODERS · 街のコーダーのために',
 
-  /** Cover identity — cream stock, monument-hero layout. Back to
-      the warm ground of 360 after a run through butter, ivory,
-      kraft, and ink. Monument-hero makes the issue number the
-      dominant visual — monographic, like a special issue devoted
-      to one subject. */
-  coverStock: 'cream',
-  coverLayout: 'monument-hero',
+  /** Cover identity — ivory stock, asymmetric-left layout. Bright
+      airy ground for a conversational interview; left-aligned
+      editorial rhythm reads like a magazine profile page — the
+      subject is the focus, not the number. */
+  coverStock: 'ivory',
+  coverLayout: 'asymmetric-left',
 
   headline: {
     prefix: 'The',

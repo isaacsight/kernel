@@ -94,7 +94,7 @@ To add a new tool: extend `IssueSpread` union in `src/content/issues/index.ts`, 
 | 362 | APR 2026 | ivory | monument-hero | — | The Vacation Issue: Software That Doesn't Need You |
 | 363 | APR 2026 | kraft | asymmetric-left | essay | The Style Issue: What Coders Are Wearing Now |
 | 364 | APR 2026 | ink | classic | forecast | Notes Toward 2027: What Design Gets Right Next Year |
-| 365 | APR 2026 | cream | monument-hero | interview | The Craft Issue: What We Make When Nobody's Watching |
+| 365 | APR 2026 | ivory | asymmetric-left | interview | The Craft Issue: What We Make When Nobody's Watching |
 
 Thematic arc so far: outdoor → indoor → absence → style → forecast → craft. Multiple issues can ship in the same month — issue numbers are sequential, not calendar-bound. Each issue has its own visual identity (stock + layout) and its own editorial tool where applicable.
 
