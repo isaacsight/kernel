@@ -2,7 +2,130 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-04-02 full day) — MEGA BUILD + ABLETON + LEADERBOARD
+## Current Session (2026-04-16) — TRAIN-SELF: LOCAL FINE-TUNING PIPELINE
+
+### Clean state (all committed)
+
+**7 new files in `packages/kbot/src/`:**
+`teacher-logger.ts`, `train-curate.ts`, `train-self.ts`, `train-cycle.ts`, `train-agent-trace.ts`, `train-merge.ts`, `train-grpo.ts`
+
+**Integration:**
+- `agent.ts::callProvider` → logs every non-local Claude call to `~/.kbot/teacher/traces.jsonl`
+- `cli.ts` → 5 new subcommands: `train-self | train-cycle | train-merge | train-grpo | train-agent-trace`
+- `~/.zshrc` → `export KBOT_TEACHER_LOG=1` (always-on at shell open)
+- `~/Library/LaunchAgents/com.kernel.kbot-train-self.plist` → Sundays 3am (dry-run; enable with `launchctl load`)
+
+**Known fragility:**
+- `kbot-discovery-daemon` (PID 2491) auto-commits "evolution: kbot proposal" every few min. It previously wiped uncommitted files. Commit work fast. (Committed: 3 commits during this session — `fea4acd5 → ff0498da`.)
+
+**Corpus status (first run):**
+- `~/.claude/projects/**/*.jsonl` → 2,537 examples examined, 200 kept, mean score 0.700.
+- `~/.kbot/teacher/dataset-default.jsonl` (353KB) ready for MLX.
+- Teacher traces file: empty until future kbot sessions run through new middleware.
+
+**Live run (background task `b8h2y33gf`):**
+- Command: `kbot train-self --mode default --max-examples 150 --iters 200 --num-layers 8`
+- Base: `mlx-community/Qwen2.5-Coder-7B-Instruct-4bit` (first-run HF download ~4GB)
+- Log: `~/.kbot/teacher/train-self.log`
+- Output model: `kernel-self:v<timestamp>` in Ollama
+- Test when done: `ollama run kernel-self:<ts>`
+
+### Shipped (not yet versioned/published)
+
+**6 phases of local fine-tuning infra, end-to-end on M3 Max 36GB:**
+
+New files under `packages/kbot/src/`:
+- `teacher-logger.ts` — middleware that captures every Claude call as (prompt, response, tools, outcome) to `~/.kbot/teacher/traces.jsonl`. PII/key scrubber (sk-ant, ghp_, AIza, JWT, email, IP). Size rotation at 500MB. Wired into `agent.ts::callProvider` at line ~820.
+- `train-curate.ts` — scores + dedupes traces into training JSONL. Modes: default / reasoning / agent-trace / code-only.
+- `train-self.ts` — end-to-end pipeline: curate → mlx_lm.lora → mlx_lm.fuse → quantize → Ollama deploy. Default bases per mode (Qwen2.5-Coder-7B / DeepSeek-R1-Distill-7B / Qwen2.5-Coder-14B).
+- `train-cycle.ts` — DeepSeek-R1 Distill style on-policy loop: student (Ollama) generates → Claude grades with JSON rubric → corrected pairs append to corrections.jsonl → optional retrain.
+- `train-agent-trace.ts` — reformats tool-use traces with explicit `<think>`/`<tool>`/`<args>`/`<result>`/`<answer>` tokens for Phase 4 specialization.
+- `train-merge.ts` — MergeKit wrapper (TIES / SLERP / DARE / linear). Default kbot triad: qwen-coder + deepseek-r1 + self. MoE swap path documented (DeepSeek-V2-Lite-16B, Qwen3-MoE).
+- `train-grpo.ts` — GRPO rollouts with verifiable rewards: regex-match, json-valid, build-pass, test-pass, lint-pass, custom. Group-relative advantage calc. Rollouts persist to JSONL; external runner hookup via `--runner-cmd`.
+
+CLI commands registered in `cli.ts` before `program.parse`:
+- `kbot train-self --mode [default|reasoning|agent-trace|code-only]`
+- `kbot train-cycle --student --teacher --samples --threshold --retrain`
+- `kbot train-merge [--default | --method ties/slerp/dare_ties/linear]`
+- `kbot train-grpo --student --group-size --runner-cmd`
+- `kbot train-agent-trace --min-tools --verified-only`
+
+**Validated:**
+- `npm run typecheck` clean
+- `kbot --help` shows all 5 new commands
+- Teacher-logger end-to-end test persists trace and scrubs `sk-ant-api03-...` → `sk-ant-<REDACTED>`
+
+**Research grounding (2025–2026):**
+- s1/s1.1 (1K curated reasoning traces) → reasoning mode
+- DeepSeek-R1 Distill (on-policy student+teacher) → train-cycle
+- Magpie/Genstruct (instruction back-translation) → curator approach
+- Agent-R / SWE-Gym (tool-token SFT) → agent-trace mode
+- MergeKit / TIES / SLERP → train-merge
+- GRPO (DeepSeek-Math) → train-grpo
+- DeepSeek-V2-Lite / Qwen3-MoE → MoE swap path docs
+
+**Hardware target confirmed:** M3 Max, 36GB unified, MLX 0.29.3 + mlx-lm 0.29.1 installed. ~350–500 tok/s expected for 7B LoRA.
+
+**Pending to fully close loop:**
+- Real user sessions must run through the (updated) `callProvider` to populate `~/.kbot/teacher/traces.jsonl`. Today: zero traces yet.
+- Observer log (`~/.kbot/observer/session.jsonl`) is tool-call-only, NOT prompt/response. It's a good source for `agent-trace` mode after grouping by session, but curator's default mode currently skips it correctly (yields 0 examples until teacher-log accumulates).
+- MergeKit / mlx_lm.fuse / llama.cpp convert binaries not yet checked; pipeline fails gracefully when missing.
+- Bench harness (Claude-as-judge on 20 held-out tasks) not yet written — plan says write it at Phase 1 ship; queued for next session.
+- npm publish + version bump (`v3.98.0 "teacher logger"` → `v3.99.0 "train-self"` → `v4.0.0 "reasoning distill"`) not done.
+
+**Next session pickup:**
+1. Use kbot for 1–2 days so teacher-log populates (~200–500 traces minimum).
+2. Run `kbot train-self --dry-run --mode default` to confirm curator emits a dataset.
+3. Install `mergekit` (`pip install mergekit`) to unblock `train-merge`.
+4. Write the bench harness.
+5. Version-bump + publish v3.98.0 with teacher-logger alone (Phase 0 ships standalone value: forever-free dataset accumulation).
+
+---
+
+## Previous Session (2026-04-05 night) — STREAM V2 + INTELLIGENCE COORDINATOR
+
+### Shipped: v3.97.0 (npm published, GitHub pushed)
+
+**Stream V2 — 6 new systems (~5,700 lines, 26 new tools):**
+- PCM audio engine: oscillators, ADSR, chiptune sequencer, 7 SFX types
+- Stream overlay: follow/raid/sub/donation/achievement alerts, goal bars, ticker, info bar
+- Weather system: 12 weather types, day/night cycle, mood-coupled particles
+- AI chat: Gemma 4 via Ollama, viewer memory, topic tracking, 4 response modes
+- VOD system: auto-record, highlight detection, clips, YouTube upload
+- Chat commands: 31 commands, XP economy, inventory, polls, boss fights, giveaways
+
+**Intelligence Coordinator (886 lines):**
+- 4-phase cognitive loop wired into agent.ts
+- Pre-execution: learned routing, confidence gating, graph context, anticipation
+- Tool oversight: pattern warnings, destructive tool detection, graph logging
+- Post-response: heuristic self-eval (no LLM), pattern extraction, drive updates
+- Cross-session consolidation every 10 interactions (selfTrain, graph prune, behaviour rules)
+
+**Stream Renderer Improvements:**
+- Pulsing red LIVE dot, weather/time in header, viewer count badge
+- Ambient scenery: trees, rocks, grass tufts, flowers, clouds (procedural, camera-relative)
+- Ground-level atmospheric haze, improved speech bubble position
+- Chat panel accent border, branded kernel.chat watermark
+- All v2 systems wired into render loop and chat processing chain
+- Stream auditor agent created (.claude/agents/stream-auditor.md)
+
+**Stats:** v3.97.0 on npm | 5,105 downloads/week | 19,384 total | 787+ tools | 37 registered users
+
+**Stream:** Live on Twitch (kernelchatkbot) + Kick. Rumble needs fresh key each session.
+
+**Groq:** $0.25 invoice for March (llama-3.1-8b-instant). Account needs login to check which email.
+
+**Pending:**
+- Tune PCM audio (enabled but untested on stream)
+- Test all 31 chat commands live on Twitch
+- X API tokens still expired (social posting blocked)
+- Video demo still needed
+- kernel.chat site needs tool count update (787+)
+- Daily stream auditor cron (session-only, needs launchd for persistence)
+
+---
+
+## Previous Session (2026-04-02 full day) — MEGA BUILD + ABLETON + LEADERBOARD
 
 ### Two-day summary (Apr 1-2): v3.62.0 → v3.73.3
 
