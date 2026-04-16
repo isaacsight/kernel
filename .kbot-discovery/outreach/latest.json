@@ -1,6 +1,61 @@
 {
-  "timestamp": "2026-04-16T17:27:47.559Z",
-  "projects": [],
+  "timestamp": "2026-04-16T17:27:55.112Z",
+  "projects": [
+    {
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1063,
+      "description": "the easiest way to run natural language-described workflows automatically"
+    },
+    {
+      "name": "OpenCoworkAI/open-cowork",
+      "url": "https://github.com/OpenCoworkAI/open-cowork",
+      "stars": 857,
+      "description": "Open-source AI agent desktop app for Windows & macOS. One-click install Claude Code, MCP tools, and Skills — with sandbox isolation, multi-model support, and Feishu/Slack integration."
+    },
+    {
+      "name": "suitedaces/dorabot",
+      "url": "https://github.com/suitedaces/dorabot",
+      "stars": 224,
+      "description": "macOS app for 24/7 AI agents in an IDE with memory, scheduled tasks, browser use + access to Whatsapp, Telegram, Slack."
+    },
+    {
+      "name": "Haervwe/open-webui-tools",
+      "url": "https://github.com/Haervwe/open-webui-tools",
+      "stars": 666,
+      "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
+    },
+    {
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 774,
+      "description": "Agent Skills for Solopreneurs"
+    },
+    {
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 401,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+    },
+    {
+      "name": "loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
+      "url": "https://github.com/loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
+      "stars": 0,
+      "description": "Discover curated OpenClaw skills, plugins, and Chinese tutorials for fast, safe extensions from the Chinese community"
+    },
+    {
+      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
+      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
+      "stars": 0,
+      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+    },
+    {
+      "name": "LpcPaul/AgentRX",
+      "url": "https://github.com/LpcPaul/AgentRX",
+      "stars": 1,
+      "description": "AgentRX diagnoses AI tool-chain failures and prescribes the next best action. Covers skills, MCP servers, plugins, built-in tools, agents, workflows, and hooks. Task-first, not tool-first."
+    }
+  ],
   "latestPaper": {
     "title": "LongCoT: Benchmarking Long-Horizon Chain-of-Thought Reasoning",
     "summary": "As language models are increasingly deployed for complex autonomous tasks, their ability to reason accurately over longer horizons becomes critical. An essential component of this ability is planning and managing a long, complex chain-of-thought (CoT). We introduce LongCoT, a scalable benchmark of 2,500 expert-designed problems spanning chemistry, mathematics, computer science, chess, and logic to isolate and directly measure the long-horizon CoT reasoning capabilities of frontier models. Proble"
