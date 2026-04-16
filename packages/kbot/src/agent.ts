@@ -807,10 +807,24 @@ async function callProvider(
   provider: ByokProvider, apiKey: string, model: string,
   systemContext: string, messages: ProviderMessage[],
   tools?: Array<{ name: string; description: string; input_schema: Record<string, unknown> }>,
-  options?: { multimodal?: ParsedMessage; thinking?: boolean; thinkingBudget?: number },
+  options?: { multimodal?: ParsedMessage; thinking?: boolean; thinkingBudget?: number; sessionId?: string },
 ): Promise<ProviderResult> {
   const p = getProvider(provider)
   const startTime = Date.now()
+
+  // Teacher logger — captures (prompt, response) pairs for later distillation.
+  // Disabled for local providers (already free) and when KBOT_TEACHER_LOG=0.
+  const { getTeacherLogger } = await import('./teacher-logger.js')
+  const teacher = getTeacherLogger()
+  const teacherId = (teacher.isEnabled() && !isLocalProvider(provider))
+    ? teacher.begin({
+        sessionId: options?.sessionId,
+        provider,
+        model,
+        system: systemContext,
+        messages: messages.map(m => ({ role: m.role, content: m.content })),
+      })
+    : ''
 
   try {
     let result: ProviderResult
@@ -844,6 +858,14 @@ async function callProvider(
       }
     }
     recordSuccess(provider, Date.now() - startTime)
+    if (teacherId) {
+      teacher.end(teacherId, {
+        content: result.content,
+        thinking: result.thinking,
+        tool_calls: result.tool_calls,
+        stop_reason: result.stop_reason,
+      }, result.usage)
+    }
     return result
   } catch (err) {
     recordFailure(provider, err instanceof Error ? err : new Error(String(err)))

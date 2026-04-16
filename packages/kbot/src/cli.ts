@@ -4131,6 +4131,130 @@ async function main(): Promise<void> {
     pikaCmd.commands.find(c => c.name() === 'status')?.parse(['', '', 'status'])
   })
 
+  // ── train-self / train-cycle / train-merge / train-grpo ──
+  // Fine-tune a local model on your own agent sessions.
+  program
+    .command('train-self')
+    .description('Fine-tune a local model on your own kbot sessions (MLX LoRA)')
+    .option('--mode <mode>', 'default | reasoning | agent-trace | code-only', 'default')
+    .option('--base-model <model>', 'Override base model (HF path or mlx-community/*)')
+    .option('--output-name <name>', 'Ollama model name to register')
+    .option('--backend <backend>', 'mlx | unsloth | llama-cpp | together', 'mlx')
+    .option('--iters <n>', 'Training iterations', (v) => parseInt(v, 10))
+    .option('--batch-size <n>', 'Batch size', (v) => parseInt(v, 10))
+    .option('--num-layers <n>', 'LoRA layers', (v) => parseInt(v, 10))
+    .option('--learning-rate <lr>', 'Learning rate', parseFloat)
+    .option('--max-examples <n>', 'Cap curated examples', (v) => parseInt(v, 10))
+    .option('--dry-run', 'Curate only, do not train')
+    .option('--skip-curate', 'Skip curation (use existing dataset)')
+    .option('--skip-train', 'Skip training (prepare + deploy only)')
+    .option('--skip-deploy', 'Skip Ollama deploy')
+    .option('--no-grad-checkpoint', 'Disable gradient checkpointing')
+    .action(async (opts: Record<string, unknown>) => {
+      const { trainSelf, formatTrainSelfReport } = await import('./train-self.js')
+      const r = await trainSelf({
+        mode: opts.mode as 'default' | 'reasoning' | 'agent-trace' | 'code-only',
+        baseModel: opts.baseModel as string | undefined,
+        outputName: opts.outputName as string | undefined,
+        backend: opts.backend as 'mlx' | 'unsloth' | 'llama-cpp' | 'together',
+        iters: opts.iters as number | undefined,
+        batchSize: opts.batchSize as number | undefined,
+        numLayers: opts.numLayers as number | undefined,
+        learningRate: opts.learningRate as number | undefined,
+        maxExamples: opts.maxExamples as number | undefined,
+        dryRun: Boolean(opts.dryRun),
+        skipCurate: Boolean(opts.skipCurate),
+        skipTrain: Boolean(opts.skipTrain),
+        skipDeploy: Boolean(opts.skipDeploy),
+        gradCheckpoint: opts.gradCheckpoint !== false,
+      })
+      console.log(formatTrainSelfReport(r))
+    })
+
+  program
+    .command('train-cycle')
+    .description('On-policy distillation: student generates → Claude grades/corrects → retrain')
+    .option('--student <model>', 'Local student model (Ollama)', 'kernel-coder:latest')
+    .option('--teacher <model>', 'Teacher model', 'claude-opus-4-6')
+    .option('--samples <n>', 'Prompts to sample per cycle', (v) => parseInt(v, 10), 50)
+    .option('--threshold <score>', 'Pass threshold 0..1', parseFloat, 0.6)
+    .option('--retrain', 'Trigger train-self after collecting corrections')
+    .option('--dry-run', 'Skip teacher grading, just test student generation')
+    .action(async (opts: Record<string, unknown>) => {
+      const { runCycle, formatCycleReport } = await import('./train-cycle.js')
+      const r = await runCycle({
+        studentModel: opts.student as string,
+        teacherModel: opts.teacher as string,
+        samples: opts.samples as number,
+        passThreshold: opts.threshold as number,
+        retrain: Boolean(opts.retrain),
+        dryRun: Boolean(opts.dryRun),
+      })
+      console.log(formatCycleReport(r))
+    })
+
+  program
+    .command('train-merge')
+    .description('Merge models via MergeKit (TIES/SLERP/DARE)')
+    .option('--method <method>', 'ties | slerp | dare_ties | linear', 'ties')
+    .option('--base <model>', 'Base model (HF path)', 'Qwen/Qwen2.5-Coder-7B-Instruct')
+    .option('--output <name>', 'Output name')
+    .option('--default', 'Use kbot triad defaults (qwen-coder + deepseek-r1 + self)')
+    .option('--deploy', 'Register with Ollama after merge')
+    .action(async (opts: Record<string, unknown>) => {
+      const { mergeKbotDefault, mergeModels, formatMergeReport } = await import('./train-merge.js')
+      if (opts.default) {
+        const r = await mergeKbotDefault()
+        console.log(formatMergeReport(r))
+        return
+      }
+      const r = await mergeModels({
+        method: opts.method as 'ties' | 'slerp' | 'dare_ties' | 'linear',
+        baseModel: opts.base as string,
+        models: [
+          { model: opts.base as string, weight: 1, density: 0.5 },
+        ],
+        outputName: opts.output as string | undefined,
+        deploy: Boolean(opts.deploy),
+      })
+      console.log(formatMergeReport(r))
+    })
+
+  program
+    .command('train-grpo')
+    .description('GRPO on verifiable tasks (build-pass, test-pass, regex-match, json-valid)')
+    .option('--student <model>', 'Student model', 'kernel-coder:latest')
+    .option('--group-size <n>', 'Rollouts per prompt', (v) => parseInt(v, 10), 8)
+    .option('--iters <n>', 'Outer iterations', (v) => parseInt(v, 10), 100)
+    .option('--dry-run', 'Collect rollouts only, do not update weights')
+    .option('--runner-cmd <cmd>', 'External GRPO runner command')
+    .action(async (opts: Record<string, unknown>) => {
+      const { runGrpoRollouts, DEFAULT_VERIFIER_SUITE, formatGrpoReport } = await import('./train-grpo.js')
+      const r = await runGrpoRollouts({
+        studentModel: opts.student as string,
+        prompts: DEFAULT_VERIFIER_SUITE,
+        groupSize: opts.groupSize as number,
+        iters: opts.iters as number,
+        dryRun: Boolean(opts.dryRun),
+        runnerCmd: opts.runnerCmd as string | undefined,
+      })
+      console.log(formatGrpoReport(r))
+    })
+
+  program
+    .command('train-agent-trace')
+    .description('Reformat tool-use traces as agent training examples')
+    .option('--min-tools <n>', 'Minimum tool calls per trajectory', (v) => parseInt(v, 10), 1)
+    .option('--verified-only', 'Only use trajectories tagged verified')
+    .action(async (opts: Record<string, unknown>) => {
+      const { formatAgentTraces, formatAgentTraceReport } = await import('./train-agent-trace.js')
+      const r = formatAgentTraces({
+        minTools: opts.minTools as number,
+        verifiedOnly: Boolean(opts.verifiedOnly),
+      })
+      console.log(formatAgentTraceReport(r))
+    })
+
   program.parse(process.argv)
 
   const opts = program.opts()
