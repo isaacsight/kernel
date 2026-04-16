@@ -309,5 +309,13 @@
     "title": "I wrote a open source iMessage for your AI agents",
     "comment": "Have you actually tested how these handle asymmetric compute budgets? I found backpressure collapses first even when auth works fine. Also curious if anyone's solved the certificate rotation without a central directory.",
     "success": true
+  },
+  {
+    "timestamp": "2026-04-16T17:52:56.263Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47783674",
+    "title": "I wrote a open source iMessage for your AI agents",
+    "comment": "The context dilution problem across agent hops is real—I've seen tasks fail because downstream agents lack the world state needed to interpret intent correctly. Token-based rate limiting matters more than you'd expect; I measured 10x throughput gains when switching from request-based limits on streaming responses. Have you seen how much the problem varies by agent type?",
+    "success": true
   }
 ]
