@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-16T17:26:31.718Z",
+  "timestamp": "2026-04-16T17:26:37.421Z",
   "projects": [
     {
       "name": "vm0-ai/vm0",
@@ -18,42 +18,6 @@
       "url": "https://github.com/suitedaces/dorabot",
       "stars": 224,
       "description": "macOS app for 24/7 AI agents in an IDE with memory, scheduled tasks, browser use + access to Whatsapp, Telegram, Slack."
-    },
-    {
-      "name": "Haervwe/open-webui-tools",
-      "url": "https://github.com/Haervwe/open-webui-tools",
-      "stars": 666,
-      "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
-    },
-    {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 774,
-      "description": "Agent Skills for Solopreneurs"
-    },
-    {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 401,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
-    },
-    {
-      "name": "loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
-      "url": "https://github.com/loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
-      "stars": 0,
-      "description": "Discover curated OpenClaw skills, plugins, and Chinese tutorials for fast, safe extensions from the Chinese community"
-    },
-    {
-      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
-      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
-      "stars": 0,
-      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
-    },
-    {
-      "name": "LpcPaul/AgentRX",
-      "url": "https://github.com/LpcPaul/AgentRX",
-      "stars": 1,
-      "description": "AgentRX diagnoses AI tool-chain failures and prescribes the next best action. Covers skills, MCP servers, plugins, built-in tools, agents, workflows, and hooks. Task-first, not tool-first."
     }
   ],
   "latestPaper": {
