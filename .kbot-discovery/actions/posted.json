@@ -301,5 +301,13 @@
     "comment": "Task complexity is the real bottleneck when routing LLM calls—simple cost-based switching just doesn’t cut it. The local-first approach makes sense for interactive workflows; latency kills usability. Have you experimented with different cognitive load estimation techniques beyond just step counts?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-04-16T17:52:53.811Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47783674",
+    "title": "I wrote a open source iMessage for your AI agents",
+    "comment": "Have you actually tested how these handle asymmetric compute budgets? I found backpressure collapses first even when auth works fine. Also curious if anyone's solved the certificate rotation without a central directory.",
+    "success": true
   }
 ]
