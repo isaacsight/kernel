@@ -211,16 +211,16 @@ union** — each issue picks the right tool, and the
 ## The toolkit — four layers
 
 Inspired by how designers work across Illustrator, Photoshop,
-InDesign, and Adobe Express, the kernel.chat magazine is a
-four-layer toolkit. Each layer has a distinct job; each issue
-picks what it needs from each.
+InDesign, and Adobe Express (or their Figma equivalents), the
+kernel.chat magazine is a four-layer toolkit. Each layer has a
+distinct job; each issue picks what it needs from each.
 
-| Layer | Tool analog | What it does | Status |
-|---|---|---|---|
-| Layout + text flow + features | **InDesign** | Grid, masthead/frame, feature modules (essay / interview / future) | ✅ shipped |
-| Ornaments — shape, icon, path-text | **Illustrator** | Editorial marks that compose inside any feature | ✅ shipped |
-| Images + textures | **Photoshop** | Photography, overlays, raster texture | ⏸ deliberately skipped |
-| Template builders | **Adobe Express** | One-call issue helpers so authoring is faster | ⬜ next |
+| Layer | Adobe analog | Figma analog | What it does | Status |
+|---|---|---|---|---|
+| Layout + text flow + features | **InDesign** | Pages + auto-layout | Grid, masthead/frame, feature modules (essay / interview / forecast) | ✅ shipped |
+| Ornaments — shape, icon, path-text | **Illustrator** | Components (vector) | Editorial marks that compose inside any feature | ✅ shipped |
+| Images + textures | **Photoshop** | Image fills | Photography, overlays, raster texture | ⏸ deliberately skipped |
+| Template builders | **Adobe Express** | Community templates | One-call issue helpers so authoring is faster | ⬜ next |
 
 ### Ornaments — the Illustrator layer
 
