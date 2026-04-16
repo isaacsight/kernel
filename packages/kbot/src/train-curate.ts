@@ -10,7 +10,7 @@
 //   − response contained "I don't know" / "I can't help"
 //   − near-duplicate of another example (hash-based)
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, readdirSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { homedir } from 'node:os'
 import { createHash } from 'node:crypto'
@@ -140,29 +140,97 @@ function parseObserverLine(line: string): Example | null {
   }
 }
 
-function defaultSources(): string[] {
+// ── Claude Code session parser (seed corpus) ─────────────────────────
+// ~/.claude/projects/<slug>/<uuid>.jsonl records each turn as a JSON line with
+// { type: 'user' | 'assistant', message: { role, content } }.  Content is
+// either a string (user) or an array of {type:'text',text} blocks (assistant).
+
+interface ClaudeCodeTurn {
+  type: string
+  message?: { role?: string; content?: string | Array<{ type: string; text?: string }> }
+  sessionId?: string
+}
+
+function extractContent(raw: unknown): string {
+  if (typeof raw === 'string') return raw
+  if (Array.isArray(raw)) {
+    return raw.map(b => (b && typeof b === 'object' && 'text' in b) ? String((b as { text?: string }).text || '') : '').join('\n')
+  }
+  return ''
+}
+
+function parseClaudeCodeFile(filePath: string): Example[] {
+  let lines: string[]
+  try { lines = readFileSync(filePath, 'utf-8').split('\n').filter(l => l.trim()) }
+  catch { return [] }
+  const out: Example[] = []
+  let pendingUser: string | null = null
+  for (const line of lines) {
+    let turn: ClaudeCodeTurn
+    try { turn = JSON.parse(line) as ClaudeCodeTurn } catch { continue }
+    if (turn.type === 'user' && turn.message) {
+      const content = extractContent(turn.message.content)
+      if (content.length > 10 && !content.startsWith('<tool_result')) pendingUser = content
+    } else if (turn.type === 'assistant' && turn.message && pendingUser) {
+      const content = extractContent(turn.message.content)
+      if (content.length > 40) {
+        out.push({
+          messages: [
+            { role: 'user', content: pendingUser },
+            { role: 'assistant', content },
+          ],
+          meta: { source: 'claude-code', session: turn.sessionId, file: filePath },
+        })
+        pendingUser = null
+      }
+    }
+  }
+  return out
+}
+
+function findClaudeCodeSessions(limitFiles = 40, maxDepth = 4): string[] {
+  const base = join(homedir(), '.claude', 'projects')
+  if (!existsSync(base)) return []
+  const files: Array<{ path: string; size: number }> = []
+  function walk(dir: string, depth: number): void {
+    if (depth > maxDepth) return
+    let entries: string[]
+    try { entries = readdirSync(dir) } catch { return }
+    for (const entry of entries) {
+      if (entry.startsWith('.') || entry === 'node_modules') continue
+      const full = join(dir, entry)
+      let st
+      try { st = statSync(full) } catch { continue }
+      if (st.isDirectory()) { walk(full, depth + 1); continue }
+      if (entry.endsWith('.jsonl') && st.size > 2048) files.push({ path: full, size: st.size })
+    }
+  }
+  try { walk(base, 0) } catch { return [] }
+  files.sort((a, b) => b.size - a.size)
+  return files.slice(0, limitFiles).map(f => f.path)
+}
+
+function defaultSources(includeClaudeCode = true): string[] {
   const home = homedir()
-  const candidates = [
+  const list = [
     join(home, '.kbot', 'teacher', 'traces.jsonl'),
+    join(home, '.kbot', 'teacher', 'corrections.jsonl'),
     join(home, '.kbot', 'observer', 'session.jsonl'),
-  ]
-  return candidates.filter(p => existsSync(p))
+  ].filter(p => existsSync(p))
+  if (includeClaudeCode) list.push(...findClaudeCodeSessions())
+  return list
 }
 
 function readLines(file: string): string[] {
-  try {
-    const content = readFileSync(file, 'utf-8')
-    return content.split('\n').filter(l => l.trim().length > 0)
-  } catch {
-    return []
-  }
+  try { return readFileSync(file, 'utf-8').split('\n').filter(l => l.trim().length > 0) }
+  catch { return [] }
 }
 
 function parseSource(file: string): Example[] {
+  if (file.includes('/.claude/projects/')) return parseClaudeCodeFile(file)
   const lines = readLines(file)
-  if (file.includes('teacher')) return lines.map(parseTeacherLine).filter((x): x is Example => x !== null)
+  if (file.includes('teacher') || file.includes('corrections')) return lines.map(parseTeacherLine).filter((x): x is Example => x !== null)
   if (file.includes('observer')) return lines.map(parseObserverLine).filter((x): x is Example => x !== null)
-  // Generic: try teacher format first, then observer
   const out: Example[] = []
   for (const line of lines) {
     const t = parseTeacherLine(line) || parseObserverLine(line)
