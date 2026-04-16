@@ -193,7 +193,7 @@ export async function trainSelf(opts = {}) {
             `SYSTEM "You are kbot's self-trained assistant (${mode} mode). You were fine-tuned on the operator's own agent sessions."`,
         ].join('\n');
         try {
-            require('node:fs').writeFileSync(modelfilePath, modelfile);
+            writeFileSync(modelfilePath, modelfile);
             const cmd = `ollama create ${outputName} -f ${modelfilePath}`;
             const r = shell(cmd);
             log('deploy', r.ok, Date.now() - t0, r.output.split('\n').slice(-8).join('\n'));
