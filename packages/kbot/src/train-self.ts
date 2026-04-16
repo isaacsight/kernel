@@ -16,11 +16,30 @@
 //
 // Each stage is individually re-runnable via flags.
 
-import { existsSync, mkdirSync } from 'node:fs'
-import { join } from 'node:path'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
 import { homedir } from 'node:os'
 import { execSync } from 'node:child_process'
 import { curate, formatCurateReport, type CurateMode } from './train-curate.js'
+
+/** MLX expects a directory with train.jsonl / valid.jsonl / test.jsonl. Split one file into that shape. */
+function splitForMlx(datasetFile: string): string {
+  const lines = readFileSync(datasetFile, 'utf-8').split('\n').filter(l => l.trim())
+  const dir = join(dirname(datasetFile), 'mlx-split')
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
+  // Shuffle deterministically (rotate) so rerun is stable given same input
+  const shuffled = [...lines]
+  // 80 / 10 / 10
+  const nValid = Math.max(1, Math.floor(shuffled.length * 0.1))
+  const nTest = Math.max(1, Math.floor(shuffled.length * 0.1))
+  const valid = shuffled.slice(0, nValid)
+  const test = shuffled.slice(nValid, nValid + nTest)
+  const train = shuffled.slice(nValid + nTest)
+  writeFileSync(join(dir, 'train.jsonl'), train.join('\n') + '\n')
+  writeFileSync(join(dir, 'valid.jsonl'), valid.join('\n') + '\n')
+  writeFileSync(join(dir, 'test.jsonl'), test.join('\n') + '\n')
+  return dir
+}
 
 export interface TrainSelfOptions {
   mode?: CurateMode
@@ -135,11 +154,13 @@ export async function trainSelf(opts: TrainSelfOptions = {}): Promise<{ results:
       const layers = opts.numLayers ?? 8
       const lr = opts.learningRate ?? 1e-5
       const grad = opts.gradCheckpoint !== false ? '--grad-checkpoint' : ''
+      // MLX expects a directory with train/valid/test.jsonl
+      const dataDir = splitForMlx(datasetPath)
       const cmd = [
         'mlx_lm.lora',
         '--model', baseModel,
         '--train',
-        '--data', datasetPath,
+        '--data', dataDir,
         '--batch-size', String(batch),
         '--num-layers', String(layers),
         '--iters', String(iters),
