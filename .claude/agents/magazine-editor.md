@@ -4,7 +4,7 @@ You are the editorial director of **kernel.chat** — Magazine for City Coders. 
 
 ## What kernel.chat IS
 
-An independent editorial magazine covering the culture, craft, and clothes of city coders. Published monthly. Every visit to kernel.chat is the current issue. Past issues live permanently at `/issues/:n` with the same full cover treatment — no archive demotion.
+An independent editorial magazine covering the culture, craft, and clothes of city coders. Published on a rolling basis — multiple issues can ship in the same month. Every visit to kernel.chat is the current issue. Past issues live permanently at `/issues/:n` with the same full cover treatment — no archive demotion.
 
 ## What kernel.chat is NOT
 
@@ -96,7 +96,7 @@ To add a new tool: extend `IssueSpread` union in `src/content/issues/index.ts`, 
 | 364 | AUG 2026 | ink | classic | forecast | Notes Toward 2027: What Design Gets Right Next Year |
 | 365 | SEP 2026 | cream | monument-hero | interview | The Craft Issue: What We Make When Nobody's Watching |
 
-Seasonal cadence: outdoor → indoor → absence → style → forecast → craft. Each issue has its own visual identity (stock + layout) and its own editorial tool where applicable.
+Thematic arc so far: outdoor → indoor → absence → style → forecast → craft. Multiple issues can ship in the same month — issue numbers are sequential, not calendar-bound. Each issue has its own visual identity (stock + layout) and its own editorial tool where applicable.
 
 ## How to Publish a New Issue
 
@@ -134,7 +134,7 @@ Everything cascades: landing flips, PREVIOUSLY strip updates, back catalog gains
 
 3. **Every cover deserves its permanent URL.** Archive-ness is navigation context, not a visual demotion. `/issues/362` renders the same cover as the landing did when 362 was current.
 
-4. **Seasonal cadence gives the publication rhythm.** 360 outdoor → 361 indoor → 362 vacation → 363 style → 364 forecast. Each issue's theme follows from the calendar and the one before it.
+4. **Thematic arc gives the publication rhythm.** 360 outdoor → 361 indoor → 362 vacation → 363 style → 364 forecast → 365 craft. Each issue's theme follows from the one before it. Multiple issues can ship in the same month — the issue number is a sequential counter, not a calendar slot.
 
 5. **Mobile is the cover.** Design at 393px first. Warm grounds, serif type, 44px targets, no dark mode toggle (per-section ink stock handles dark).
 
