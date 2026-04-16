@@ -1,63 +1,63 @@
 {
-  "timestamp": "2026-04-13T13:23:05.975Z",
+  "timestamp": "2026-04-16T17:52:56.331Z",
   "projects": [
     {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 30181,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
+      "name": "rcarmo/piclaw",
+      "url": "https://github.com/rcarmo/piclaw",
+      "stars": 519,
+      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
     },
     {
-      "name": "iOfficeAI/AionUi",
-      "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 21638,
-      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+      "name": "clawwork-ai/ClawWork",
+      "url": "https://github.com/clawwork-ai/ClawWork",
+      "stars": 464,
+      "description": "Client for OpenClaw — Connect ClawWork to your own OpenClaw and unlock 10x multi-session productivity."
     },
     {
-      "name": "activepieces/activepieces",
-      "url": "https://github.com/activepieces/activepieces",
-      "stars": 21690,
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
+      "name": "CherryHQ/cherry-studio",
+      "url": "https://github.com/CherryHQ/cherry-studio",
+      "stars": 43611,
+      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
+    },
+    {
+      "name": "Haervwe/open-webui-tools",
+      "url": "https://github.com/Haervwe/open-webui-tools",
+      "stars": 666,
+      "description": "Open‑WebUI Tools is a modular toolkit designed to extend and enrich your Open WebUI instance, turning it into a powerful AI workstation. With a suite of over 15 specialized tools, function pipelines, and filters, this project supports academic research, agentic autonomy, multimodal creativity, workflows, and more"
+    },
+    {
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 774,
+      "description": "Agent Skills for Solopreneurs"
     },
     {
       "name": "mensfeld/code-on-incus",
       "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 390,
+      "stars": 401,
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
-      "name": "agentscope-ai/QwenPaw",
-      "url": "https://github.com/agentscope-ai/QwenPaw",
-      "stars": 15199,
-      "description": "Your Personal AI Assistant; easy to install, deploy on your own machine or on the cloud; supports multiple chat apps with easily extensible capabilities."
+      "name": "ANGUARDA/clawvitals-plugin",
+      "url": "https://github.com/ANGUARDA/clawvitals-plugin",
+      "stars": 0,
+      "description": "Security vitals checker for OpenClaw, providing enhanced checks and functionality beyond the ClawVitals skill (https://clawhub.ai/bk-cm/clawvitals). Checks your installation for common misconfigurations and security issues, with scheduled scans, delta detection, regression alerts, and scan history. Full details: https://clawvitals.io/plugin"
     },
     {
-      "name": "Panniantong/Agent-Reach",
-      "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 17216,
-      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
-    },
-    {
-      "name": "alirezarezvani/claude-skills",
-      "url": "https://github.com/alirezarezvani/claude-skills",
-      "stars": 10811,
-      "description": "232+ Claude Code skills & agent plugins for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory."
+      "name": "loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
+      "url": "https://github.com/loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
+      "stars": 0,
+      "description": "Discover curated OpenClaw skills, plugins, and Chinese tutorials for fast, safe extensions from the Chinese community"
     },
     {
       "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
       "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
       "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     }
   ],
   "latestPaper": {
-    "title": "unknown",
-    "summary": "unknown"
+    "title": "LongCoT: Benchmarking Long-Horizon Chain-of-Thought Reasoning",
+    "summary": "As language models are increasingly deployed for complex autonomous tasks, their ability to reason accurately over longer horizons becomes critical. An essential component of this ability is planning and managing a long, complex chain-of-thought (CoT). We introduce LongCoT, a scalable benchmark of 2,500 expert-designed problems spanning chemistry, mathematics, computer science, chess, and logic to isolate and directly measure the long-horizon CoT reasoning capabilities of frontier models. Proble"
   }
 }
