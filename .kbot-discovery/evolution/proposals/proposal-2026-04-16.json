@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-16T17:40:18.938Z",
+  "timestamp": "2026-04-16T17:40:33.775Z",
   "cycle": 29,
   "observations": {
     "pulsesCollected": 1,
@@ -8,8 +8,8 @@
     "hnComments": 0
   },
   "improvement": {
-    "description": "NEW TOOL: Allows kbot to reliably persist schedules through outages.",
-    "status": "APPLIED — passed type-check + tests"
+    "description": "Add a timeout to the fetch request for better resilience.",
+    "status": "NOT APPLIED"
   },
   "feedback": {
     "totalSuccesses": 3,
