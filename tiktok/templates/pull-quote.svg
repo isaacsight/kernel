@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  kernel.chat — TikTok Template: Pull Quote
+  Duration: 12–20s
+  Spec: docs/tiktok-tokens.md
+  Doc:  docs/tiktok.md § Pull Quote
+
+  Slot-fill contract:
+    #ground        → issue stock color
+    #kicker-text   → [PULL QUOTE · 引用]
+    #quote-text    → the quote body (up to ~28 words)
+    #attribution   → FROM N · CITY
+    #colophon-text → ISSUE N · MONTH YEAR
+
+  Per-cut motion:
+    0–30f   (0–1s)    kicker fades in
+    30–90f  (1–3s)    quote type-reveal (80ms/char)
+    90–450f (3–15s)   hold; em-sweep at 5s if any <em> in quote
+    450–540f (15–18s) attribution fades in
+    540–600f (18–20s) colophon rule + text fade in
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1080 1920"
+     width="1080" height="1920"
+     preserveAspectRatio="xMidYMid meet">
+
+  <defs>
+    <style type="text/css"><![CDATA[
+      .tk-serif  { font-family: 'EB Garamond', Garamond, serif; }
+      .tk-mono   { font-family: 'Courier Prime', 'Courier New', monospace; }
+      .tk-kicker { font-size: 36px; letter-spacing: 0.16em; fill: #E24E1B; text-transform: uppercase; }
+      .tk-quote  { font-size: 72px; font-style: italic; line-height: 1.15; letter-spacing: -0.01em; fill: #1F1E1D; }
+      .tk-em     { fill: #E24E1B; }
+      .tk-attr   { font-size: 28px; letter-spacing: 0.14em; fill: #6B4E3D; text-transform: uppercase; }
+      .tk-colo   { font-size: 28px; letter-spacing: 0.14em; fill: #1F1E1D; text-transform: uppercase; }
+    ]]></style>
+  </defs>
+
+  <!-- #ground: fill = issue stock -->
+  <rect id="ground" x="0" y="0" width="1080" height="1920" fill="#F3E9D2"/>
+
+  <!-- ────── Kicker ────── -->
+  <g id="kicker">
+    <text id="kicker-text" class="tk-mono tk-kicker"
+          x="80" y="130">[PULL QUOTE · 引用]</text>
+  </g>
+
+  <!-- ────── Tomato short rule under kicker ────── -->
+  <rect x="80" y="180" width="180" height="6" fill="#E24E1B"/>
+
+  <!-- ────── Quote body (content zone) ────── -->
+  <g id="content">
+    <!-- Multi-line quote placeholder — replace with <text> + <tspan dy> per line.
+         Layout aim: centered vertically in 240–1680 content zone. -->
+    <foreignObject x="80" y="480" width="920" height="960">
+      <div xmlns="http://www.w3.org/1999/xhtml"
+           style="font-family: 'EB Garamond', Garamond, serif;
+                  font-size: 72px; font-style: italic;
+                  line-height: 1.15; color: #1F1E1D;
+                  letter-spacing: -0.01em; text-align: left;">
+        <span id="quote-text">The developer who dresses well has less to prove — and gets taken
+        <em style="color:#E24E1B;">more seriously</em> for it.</span>
+      </div>
+    </foreignObject>
+
+    <text id="attribution" class="tk-mono tk-attr"
+          x="80" y="1600">FROM A READER · TOKYO</text>
+  </g>
+
+  <!-- ────── Colophon ────── -->
+  <g id="colophon">
+    <rect x="80" y="1760" width="920" height="8" fill="#E24E1B"/>
+    <text id="colophon-text" class="tk-mono tk-colo"
+          x="540" y="1810" text-anchor="middle">ISSUE 365 · APRIL 2026</text>
+  </g>
+</svg>

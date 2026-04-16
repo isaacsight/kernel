@@ -47,11 +47,13 @@ Every video, no exceptions:
 | Middle 3–(N-2)s | Body | 60–80% | Pull-quote, scene, voiceover text |
 | Bottom last 2s | Colophon | 2s | Tomato rule + `ISSUE N · MONTH YEAR` |
 
-### Motion
-- Fade in 200ms, hold, fade out 200ms
-- Tomato underline sweep 400ms for emphasis
-- Type reveal 80ms per character for pull quotes
-- **Never:** spring bounces, kinetic type, particle effects, glitch, 3D, emoji rain
+### Motion — always moving, three layers
+Every cut composites three layers. Skip any and the video dies.
+- **Ambient (always on):** ground grain ±1px @ 0.5Hz, tomato-rule breath 0.92↔1.00 @ 0.3Hz, monument sway ±0.3° @ 0.25Hz, hairline shimmer 0.80↔1.00 @ 0.4Hz
+- **Camera (always on):** slow push-in, scale 1.00 → 1.025 over the full duration, ±4px y-drift
+- **Primary (the beats):** fade in 200ms, type reveal 80ms/char, em-sweep 400ms, monument arrive 800ms, dissolve with 200ms overlap
+- **Max 8 frames of primary stillness.** Ambient must keep moving always. Nothing is ever frozen.
+- **Never:** spring bounces, kinetic type, particle effects, glitch, 3D, emoji rain, trending-audio beat-syncs, hard cuts, speed ramps, whip pans
 
 ### Sound
 - Field recordings > music. Café, keyboard, rain, single held note.
@@ -136,7 +138,7 @@ Each cut should be specified precisely enough that a producer (human or agent) c
 ## The Ten Principles
 
 1. **The magazine is the content.** TikTok is the channel, not the medium.
-2. **Restraint reads louder on a loud platform.** Still serif on cream stops the scroll harder than another hype edit.
+2. **Always in motion — disciplined motion.** Standing still doesn't work on this platform. But motion is typographic and small: ambient grain, tomato breath, monument sway, camera push-in. Never hype cuts, never trending audio, never kinetic sticker type.
 3. **Warm grounds, always.** No pure white, no pure black.
 4. **Serif leads.** Lose EB Garamond and the magazine is gone.
 5. **Tomato is the only spot.** No second accent, no brand gradient, no neon.
@@ -175,7 +177,12 @@ GROUND: <stock>
 Xs–(X+2)s COLOPHON: ISSUE <N> · <MONTH> <YEAR>
 
 SOUND: <specific field recording, music, VO, or silence>
-MOTION: <type-reveal timing, fade, emphasis sweep>
+
+MOTION (three layers — all required):
+  ambient: grain ±1px @ 0.5Hz; tomato breath 0.92↔1.00 @ 0.3Hz
+           <plus any issue-specific ambient layer>
+  camera:  push-in 1.00 → 1.025 linear over full duration
+  primary: <beat-by-beat list with frame timings>
 
 CAPTION: <magazine-voice caption>
 KICKER: [<CATEGORY> · <JP>]

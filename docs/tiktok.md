@@ -92,21 +92,75 @@ as the section head for moving image.
 The kicker and the colophon are the magazine showing up. They
 appear on every single video. They're the masthead strip.
 
-### Motion — minimal, deliberate
+### Motion — always moving, disciplined
+
+The platform rewards motion. Standing still doesn't work. But the
+magazine grammar still holds — the discipline is in the *kind* of
+motion, not the absence of it.
+
+**The baseline: nothing is ever frozen.** Every frame has
+something changing. A held beat is still moving; stillness is
+never more than 6–8 frames.
+
+#### The three motion layers
+
+Every cut composites three layers of motion. You cannot skip any
+of them.
+
+| Layer | What moves | Speed | Never stops |
+|---|---|---|---|
+| **Ambient** | Ground paper-grain loop, hairline breath, tomato-rule pulse | 0.3–0.5 Hz | Yes — continuous for the whole cut |
+| **Camera** | Slow push-in on the composition, 2–3% scale over the duration | 0.02% per frame | Yes |
+| **Primary** | Kicker arriving, headline reveal, em-sweep, next-element entering before last finishes | Per motion tokens | No — this is where the beats happen |
+
+The primary layer is what the viewer notices. The ambient and
+camera layers are why the video feels *alive* instead of
+slideshow-flat — without them the cut is a PowerPoint.
+
+#### Primary motion vocabulary
 
 | Move | When | Timing |
 |---|---|---|
-| Fade in | Headlines entering | 200ms |
-| Hold | Main beat | 60–80% of video |
-| Fade out | Transitions | 200ms |
-| Tomato underline sweep | Emphasis on a word | 400ms |
-| Type reveal | Pull quotes, one line at a time | 80ms per character |
+| Fade in | Headlines entering | 200ms (6f) |
+| Type reveal | Pull quotes, character-by-character | 80ms per char |
+| Tomato em-sweep | Underline drawing under emphasis word | 400ms (12f) |
+| Monument arrive | Scale 0.92 → 1.00 with opacity 0 → 1 | 800ms (24f) |
+| Ground fill | New cut's stock sweeps in from one edge | 2000ms (60f) |
+| Dissolve | Element leaving while next arrives (overlap 200ms) | 400ms (12f) total |
 
-**No:** spring bounces, kinetic type, particle effects, camera
-shakes, glitch effects, 3D text, sticker animations, emoji rain.
+**Transitions are always overlapping.** Never a hard cut between
+beats. The outgoing fades while the incoming is already arriving.
 
-Motion is the difference between a book being opened and a
-slideshow. We're a book being opened.
+#### Ambient motion vocabulary (continuous, always on)
+
+| Move | Amplitude | Frequency |
+|---|---|---|
+| Ground grain drift | 1px x/y random | 0.5 Hz |
+| Tomato rule breath | Opacity 0.92 ↔ 1.00 | 0.3 Hz |
+| Monument sway | ±0.3° rotation, ±2px y | 0.25 Hz |
+| Hairline shimmer | Opacity 0.80 ↔ 1.00 on thin rules | 0.4 Hz |
+| Type breathing | Tracking ±0.001em on held headlines | 0.2 Hz |
+
+The numbers are small on purpose. None of these should be
+*noticed*; they should make the frame feel like it's alive
+without drawing attention to any single move.
+
+#### Forbidden motion
+
+Speed doesn't mean platform-cliche. These remain banned:
+
+- Spring bounces, overshoot, elastic curves
+- Kinetic type (words exploding, rotating, flying in)
+- Particle effects, sparkles, glitters
+- Glitch effects, VHS, RGB split
+- 3D text, extrusions, perspective tilts
+- Camera shakes, hand-held jitter
+- Sticker animations, emoji rain, platform chrome
+- Speed ramps, zoom-punches, whip pans
+- Beat-synced cuts to trending audio
+
+Motion is continuous and small. A book being slowly leafed through
+in good light. Not a slideshow; not a hype edit.
 
 ### Sound — restrained
 
@@ -268,9 +322,12 @@ Same as the web, but compressed for the format:
    scene from an issue. Never something that exists only on
    TikTok.
 
-2. **Restraint reads louder on a loud platform.** The feed is a
-   wall of motion and hype. A still serif pull quote on cream
-   with no music stops the scroll harder than another hype edit.
+2. **Always in motion — disciplined motion.** The platform
+   rewards movement and standing still doesn't work. But the
+   movement is typographic and small: page-turn, em-sweep,
+   monument breath, camera push-in. Never hype cuts, never
+   trending sounds, never kinetic sticker type. A book being
+   leafed through in good light, not a slideshow.
 
 3. **Warm grounds, always.** Never pure white or pure black.
    Cream, ivory, butter, kraft, ink — same tokens as the web.
@@ -302,16 +359,26 @@ Same as the web, but compressed for the format:
 
 ---
 
-## Template builders (deferred)
+## Template infrastructure — the load-bearing files
 
-A future `tiktok/` directory in the repo will hold editable
-templates — After Effects / Rive / Figma community files — that
-encode the kicker, headline, monument, and colophon grammar as
-reusable composition layers. Goal: one-call "drop a quote onto
-the current-issue template" authoring, same load-bearing
-philosophy as the web.
+The `tiktok/` directory is the video equivalent of `src/` for
+the web. Same philosophy: a new cut = one template + one spec.
 
-Until then, each video is hand-composed against this doc.
+| File | Role |
+|---|---|
+| `tiktok/README.md` | Directory map and the template contract |
+| `tiktok/templates/issue-drop.svg` | Cover animation master |
+| `tiktok/templates/pull-quote.svg` | Quote + attribution master |
+| `tiktok/templates/monument.svg` | Issue-number teaser master |
+| `tiktok/templates/colophon.svg` | Credits master |
+| `tiktok/specs/<N>/` | Per-issue cut specs (drop.md, pull-01.md, etc.) |
+| `docs/tiktok-tokens.md` | Exact pixel tokens at 1080×1920 |
+
+The SVG masters declare stable layer IDs (`#ground`, `#kicker`,
+`#content`, `#colophon`) so importing into After Effects, Figma,
+or Rive gives you the same slot-fill contract every time. Motion
+is not in the SVG — motion lives in the cut spec and the tokens
+doc, applied in the animation tool of choice.
 
 ---
 

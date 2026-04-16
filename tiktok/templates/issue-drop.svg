@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  kernel.chat — TikTok Template: Issue Drop
+  Duration: 10–15s
+  Spec: docs/tiktok-tokens.md
+  Doc:  docs/tiktok.md § Issue Drop
+
+  Slot-fill contract:
+    #ground       → background <rect> fill = issue stock color
+    #kicker-text  → [CATEGORY · 日本語]
+    #wordmark     → kernel.chat (fixed)
+    #banner-text  → MAGAZINE FOR CITY CODERS (fixed)
+    #price-text   → ¥0 · BYOK (fixed)
+    #monument-n   → issue number (e.g. 365)
+    #monument-m   → MONTH YEAR
+    #headline-a   → prefix
+    #headline-em  → emphasis (italic tomato)
+    #headline-b   → suffix
+    #swash        → swash subtitle
+    #colophon-text → ISSUE N · MONTH YEAR
+
+  Per-cut motion (timing in frames @ 30fps):
+    0–60f   (0–2s)     ground fills from left edge
+    60–150f (2–5s)     masthead slides in
+    150–240f (5–8s)    monument scales 0.92 → 1.00
+    240–360f (8–12s)   headline + em-sweep + swash
+    360–450f (12–15s)  colophon rule + text
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1080 1920"
+     width="1080" height="1920"
+     preserveAspectRatio="xMidYMid meet">
+
+  <defs>
+    <style type="text/css"><![CDATA[
+      .tk-serif   { font-family: 'EB Garamond', Garamond, serif; }
+      .tk-mono    { font-family: 'Courier Prime', 'Courier New', monospace; }
+      .tk-kicker  { font-size: 36px; letter-spacing: 0.16em; fill: #E24E1B; text-transform: uppercase; }
+      .tk-wordmark{ font-size: 200px; font-weight: 800; letter-spacing: -0.04em; fill: #E24E1B; }
+      .tk-dot     { fill: #1F1E1D; font-style: italic; }
+      .tk-banner  { font-size: 28px; letter-spacing: 0.14em; fill: #FAF9F6; text-transform: uppercase; }
+      .tk-price   { font-size: 28px; letter-spacing: 0.14em; fill: #1F1E1D; text-transform: uppercase; }
+      .tk-mlabel  { font-size: 36px; letter-spacing: 0.16em; fill: #1F1E1D; text-transform: uppercase; }
+      .tk-mnum    { font-size: 720px; font-weight: 800; letter-spacing: -0.05em; fill: #1F1E1D; }
+      .tk-mdate   { font-size: 36px; letter-spacing: 0.16em; fill: #1F1E1D; text-transform: uppercase; }
+      .tk-display { font-size: 144px; font-weight: 700; letter-spacing: -0.03em; fill: #1F1E1D; }
+      .tk-em      { fill: #E24E1B; font-style: italic; }
+      .tk-swash   { font-size: 40px; font-style: italic; fill: #6B4E3D; }
+      .tk-colo    { font-size: 28px; letter-spacing: 0.14em; fill: #1F1E1D; text-transform: uppercase; }
+    ]]></style>
+  </defs>
+
+  <!-- #ground: fill = --tk-cream by default; replace for other stocks -->
+  <rect id="ground" x="0" y="0" width="1080" height="1920" fill="#F3E9D2"/>
+
+  <!-- ────── Kicker zone (y: 80–160) ────── -->
+  <g id="kicker">
+    <text id="kicker-text" class="tk-mono tk-kicker"
+          x="80" y="130">[FEATURE · 特集]</text>
+  </g>
+
+  <!-- ────── Masthead lockup (starts y=220) ────── -->
+  <g id="masthead">
+    <text id="wordmark" class="tk-serif tk-wordmark"
+          x="540" y="400" text-anchor="middle">
+      kernel<tspan class="tk-dot">.</tspan>chat
+    </text>
+    <!-- banner -->
+    <g id="banner">
+      <rect x="280" y="450" width="520" height="56" fill="#E24E1B"/>
+      <text id="banner-text" class="tk-mono tk-banner"
+            x="540" y="487" text-anchor="middle">MAGAZINE FOR CITY CODERS</text>
+    </g>
+    <text id="price-text" class="tk-mono tk-price"
+          x="540" y="560" text-anchor="middle">¥0 · BYOK</text>
+  </g>
+
+  <!-- ────── Tomato hairline separator ────── -->
+  <rect x="80" y="620" width="920" height="8" fill="#E24E1B"/>
+
+  <!-- ────── Monument lockup (centered y ≈ 900) ────── -->
+  <g id="monument">
+    <text id="monument-label" class="tk-mono tk-mlabel"
+          x="540" y="720" text-anchor="middle">ISSUE</text>
+    <text id="monument-n" class="tk-serif tk-mnum"
+          x="540" y="1280" text-anchor="middle">365</text>
+    <text id="monument-m" class="tk-mono tk-mdate"
+          x="540" y="1360" text-anchor="middle">APRIL 2026</text>
+  </g>
+
+  <!-- ────── Headline (centered y = 1480) ────── -->
+  <g id="content">
+    <text class="tk-serif tk-display" x="540" y="1520" text-anchor="middle">
+      <tspan id="headline-a">The </tspan><tspan id="headline-em" class="tk-em">Craft</tspan><tspan id="headline-b"> Issue</tspan>
+    </text>
+    <text id="swash" class="tk-serif tk-swash"
+          x="540" y="1600" text-anchor="middle">What we make when nobody's watching.</text>
+  </g>
+
+  <!-- ────── Colophon (y = 1760 rule, 1800 text) ────── -->
+  <g id="colophon">
+    <rect x="80" y="1760" width="920" height="8" fill="#E24E1B"/>
+    <text id="colophon-text" class="tk-mono tk-colo"
+          x="540" y="1810" text-anchor="middle">ISSUE 365 · APRIL 2026</text>
+  </g>
+</svg>

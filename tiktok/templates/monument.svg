@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  kernel.chat — TikTok Template: Monument
+  Duration: 8–12s
+  Spec: docs/tiktok-tokens.md
+  Doc:  docs/tiktok.md § Monument
+
+  Slot-fill contract:
+    #ground         → issue stock color
+    #kicker-text    → [MONUMENT · 記念]
+    #monument-label → ISSUE (fixed)
+    #monument-n     → issue number
+    #monument-m     → MONTH YEAR
+    #swash          → one-line teaser
+    #colophon-text  → ISSUE N · MONTH YEAR
+
+  Per-cut motion:
+    0–30f   (0–1s)   ground + kicker
+    30–60f  (1–2s)   monument number scales 0.92 → 1.00
+    60–240f (2–8s)   hold on monument
+    240–300f (8–10s) swash fades in
+    300–360f (10–12s) colophon
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1080 1920"
+     width="1080" height="1920"
+     preserveAspectRatio="xMidYMid meet">
+
+  <defs>
+    <style type="text/css"><![CDATA[
+      .tk-serif  { font-family: 'EB Garamond', Garamond, serif; }
+      .tk-mono   { font-family: 'Courier Prime', 'Courier New', monospace; }
+      .tk-kicker { font-size: 36px; letter-spacing: 0.16em; fill: #E24E1B; text-transform: uppercase; }
+      .tk-mlabel { font-size: 36px; letter-spacing: 0.16em; fill: #1F1E1D; text-transform: uppercase; }
+      .tk-mnum   { font-size: 720px; font-weight: 800; letter-spacing: -0.05em; fill: #1F1E1D; }
+      .tk-mdate  { font-size: 36px; letter-spacing: 0.16em; fill: #1F1E1D; text-transform: uppercase; }
+      .tk-swash  { font-size: 48px; font-style: italic; fill: #6B4E3D; }
+      .tk-colo   { font-size: 28px; letter-spacing: 0.14em; fill: #1F1E1D; text-transform: uppercase; }
+    ]]></style>
+  </defs>
+
+  <rect id="ground" x="0" y="0" width="1080" height="1920" fill="#F3E9D2"/>
+
+  <g id="kicker">
+    <text id="kicker-text" class="tk-mono tk-kicker"
+          x="80" y="130">[MONUMENT · 記念]</text>
+  </g>
+
+  <!-- ────── Monument centered ────── -->
+  <g id="content">
+    <text id="monument-label" class="tk-mono tk-mlabel"
+          x="540" y="560" text-anchor="middle">ISSUE</text>
+    <text id="monument-n" class="tk-serif tk-mnum"
+          x="540" y="1180" text-anchor="middle">365</text>
+    <text id="monument-m" class="tk-mono tk-mdate"
+          x="540" y="1260" text-anchor="middle">APRIL 2026</text>
+    <text id="swash" class="tk-serif tk-swash"
+          x="540" y="1520" text-anchor="middle">On stands now.</text>
+  </g>
+
+  <g id="colophon">
+    <rect x="80" y="1760" width="920" height="8" fill="#E24E1B"/>
+    <text id="colophon-text" class="tk-mono tk-colo"
+          x="540" y="1810" text-anchor="middle">ISSUE 365 · APRIL 2026</text>
+  </g>
+</svg>
