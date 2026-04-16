@@ -301,5 +301,13 @@
     "comment": "Task complexity is the real bottleneck when routing LLM calls—simple cost-based switching just doesn’t cut it. The local-first approach makes sense for interactive workflows; latency kills usability. Have you experimented with different cognitive load estimation techniques beyond just step counts?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-04-16T17:30:10.787Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47783674",
+    "title": "I wrote a open source iMessage for your AI agents",
+    "comment": "I've been wrestling with the same problem — the auth tokens and rate limits change so frequently that even stable protocols become fragile. I'm curious how you're handling token refresh without breaking active connections?",
+    "success": true
   }
 ]
