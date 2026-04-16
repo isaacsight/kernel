@@ -1,61 +1,6 @@
 {
-  "timestamp": "2026-04-13T13:23:05.975Z",
-  "projects": [
-    {
-      "name": "CopilotKit/CopilotKit",
-      "url": "https://github.com/CopilotKit/CopilotKit",
-      "stars": 30181,
-      "description": "The Frontend Stack for Agents & Generative UI. React + Angular.  Makers of the AG-UI Protocol"
-    },
-    {
-      "name": "iOfficeAI/AionUi",
-      "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 21638,
-      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
-    },
-    {
-      "name": "activepieces/activepieces",
-      "url": "https://github.com/activepieces/activepieces",
-      "stars": 21690,
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents"
-    },
-    {
-      "name": "mensfeld/code-on-incus",
-      "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 390,
-      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
-    },
-    {
-      "name": "agentscope-ai/QwenPaw",
-      "url": "https://github.com/agentscope-ai/QwenPaw",
-      "stars": 15199,
-      "description": "Your Personal AI Assistant; easy to install, deploy on your own machine or on the cloud; supports multiple chat apps with easily extensible capabilities."
-    },
-    {
-      "name": "Panniantong/Agent-Reach",
-      "url": "https://github.com/Panniantong/Agent-Reach",
-      "stars": 17216,
-      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
-    },
-    {
-      "name": "alirezarezvani/claude-skills",
-      "url": "https://github.com/alirezarezvani/claude-skills",
-      "stars": 10811,
-      "description": "232+ Claude Code skills & agent plugins for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory."
-    },
-    {
-      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
-      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
-      "stars": 0,
-      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
-    }
-  ],
+  "timestamp": "2026-04-16T17:22:55.983Z",
+  "projects": [],
   "latestPaper": {
     "title": "unknown",
     "summary": "unknown"
