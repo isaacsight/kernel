@@ -1,37 +1,11 @@
 {
-  "lastRunTimestamps": {
-    "pulse": "2026-04-16T23:52:10.932Z",
-    "intel": "2026-04-16T17:52:14.366Z",
-    "outreach": "2026-04-16T17:52:57.387Z",
-    "writing": "2026-04-16T17:52:58.129Z",
-    "evolution": "2026-04-16T17:55:47.980Z",
-    "opportunities": "2026-04-16T17:52:18.610Z",
-    "actions": "2026-04-16T17:52:57.011Z",
-    "synthesis": "2026-04-16T23:52:11.258Z",
-    "obsidian": "2026-04-16T17:52:57.402Z"
-  },
-  "stats": {
-    "totalRuns": 2488,
-    "totalPulses": 976,
-    "totalIntel": 107,
-    "totalOutreach": 50,
-    "totalWriting": 27,
-    "totalEvolution": 29,
-    "errorsToday": 0,
-    "lastErrorDate": "2026-04-16",
-    "postsAttempted": 3,
-    "postsEngaged": 0,
-    "postsFlagged": 0,
-    "evolutionSuccesses": 3,
-    "evolutionFailures": 17,
-    "totalSynthesis": 770,
-    "totalObsidianSyncs": 33
-  },
-  "knownStars": 12,
-  "knownDownloads": 22,
-  "hnScore": 1,
-  "hnComments": 0,
-  "feedback": [
+  "timestamp": "2026-04-16T23:52:10.931Z",
+  "total": 3,
+  "engaged": 0,
+  "ignored": 2,
+  "flagged": 0,
+  "pending": 1,
+  "entries": [
     {
       "postedAt": "2026-03-29T18:19:40.512Z",
       "url": "https://news.ycombinator.com/item?id=47543679",
@@ -68,11 +42,5 @@
       "repliesReceived": 0,
       "outcome": "pending"
     }
-  ],
-  "reachedMilestones": [
-    "downloads-1000",
-    "stars-5",
-    "stars-10"
-  ],
-  "startedAt": "2026-03-26T14:07:56.896Z"
+  ]
 }
