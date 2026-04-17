@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-17T14:30:46.292Z",
+  "timestamp": "2026-04-17T20:43:55.355Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,22 +67,22 @@
     },
     {
       "source": "hn-comment",
+      "title": "The future of everything is lies, I guess: Where do we go from here?",
+      "url": "https://news.ycombinator.com/item?id=47809986",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "The Utopia of the Family Computer",
+      "url": "https://news.ycombinator.com/item?id=47808858",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "[dead]",
       "url": "https://news.ycombinator.com/item?id=47805131",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Codex for almost everything",
-      "url": "https://news.ycombinator.com/item?id=47800767",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Codex for almost everything",
-      "url": "https://news.ycombinator.com/item?id=47797862",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(gateway): hold startup-gated requests at server until post-attach (closes #67160)",
-      "url": "https://github.com/openclaw/openclaw/pull/68146",
+      "title": "⚪ Upstream v3.17.0 → v3.17.4: HOLD_FOR_HUMAN (slop 0%)",
+      "url": "https://github.com/Vacbo/oh-my-opencode/issues/10",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat: Apify integration",
-      "url": "https://github.com/apify/deer-flow/pull/1",
+      "title": "[OpenClaw][Tools] No end-user path to give the 'main' agent access to custom tools — skills are prompt recipes, MCP registry only wires to ACP, plugins are undocumented",
+      "url": "https://github.com/openclaw/openclaw/issues/68246",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Module Specification for Capability & Integration Layer",
-      "url": "https://github.com/1024XEngineer/anyclaw/issues/61",
+      "title": "⚪ Upstream v3.17.0 → v3.17.4: HOLD_FOR_HUMAN (slop 0%)",
+      "url": "https://github.com/Vacbo/oh-my-opencode/issues/7",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "slate — one command to theme your terminal + prompt + CLI tools (Rust,macOS/Linux)",
+      "url": "https://reddit.com/r/commandline/comments/1so21xg/slate_one_command_to_theme_your_terminal_prompt/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "Mini Sudoku: A minimal 6x6 CLI Sudoku game",
       "url": "https://reddit.com/r/commandline/comments/1snl6fi/mini_sudoku_a_minimal_6x6_cli_sudoku_game/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,30 +192,23 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "lssh: A TUI-first SSH workflow tool: pick hosts from a list, diff remote files, mount paths, and reuse sessions",
-      "url": "https://reddit.com/r/commandline/comments/1sjh0ii/lssh_a_tuifirst_ssh_workflow_tool_pick_hosts_from/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "What is the current landscape on AI agents knowledge",
+      "url": "https://reddit.com/r/artificial/comments/1sobysx/what_is_the_current_landscape_on_ai_agents/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
+      "title": "Scaling an AI agent without making it dumber [Attention scoping pattern]",
+      "url": "https://reddit.com/r/artificial/comments/1so2xsx/scaling_an_ai_agent_without_making_it_dumber/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
       "title": "Agentic OS — an  governed multi-agent execution platform",
       "url": "https://reddit.com/r/artificial/comments/1so03op/agentic_os_an_governed_multiagent_execution/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Agentic OS — an  governed multi-agent execution platform",
-      "url": "https://reddit.com/r/artificial/comments/1snzm1s/agentic_os_an_governed_multiagent_execution/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "I built a small project to organize AI coding tools,  looking for feedback on the structure and data model",
-      "url": "https://reddit.com/r/artificial/comments/1snxdjk/i_built_a_small_project_to_organize_ai_coding/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

@@ -1,41 +1,47 @@
 {
-  "timestamp": "2026-04-17T06:57:02.539Z",
+  "timestamp": "2026-04-17T18:58:48.719Z",
   "projects": [
     {
-      "name": "holaboss-ai/holaOS",
-      "url": "https://github.com/holaboss-ai/holaOS",
-      "stars": 2730,
-      "description": "The agent environment for long-horizon work, continuity, and self-evolution."
+      "name": "sonichi/sutando",
+      "url": "https://github.com/sonichi/sutando",
+      "stars": 115,
+      "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
     },
     {
-      "name": "iOfficeAI/AionUi",
-      "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 22039,
-      "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
+      "name": "redwoodjs/agent-ci",
+      "url": "https://github.com/redwoodjs/agent-ci",
+      "stars": 560,
+      "description": "Agent-CI is local GitHub Actions for your agents."
     },
     {
-      "name": "suitedaces/dorabot",
-      "url": "https://github.com/suitedaces/dorabot",
-      "stars": 225,
-      "description": "macOS app for 24/7 AI agents in an IDE with memory, scheduled tasks, browser use + access to Whatsapp, Telegram, Slack."
+      "name": "vm0-ai/vm0",
+      "url": "https://github.com/vm0-ai/vm0",
+      "stars": 1063,
+      "description": "the easiest way to run natural language-described workflows automatically"
     },
     {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 778,
-      "description": "Agent Skills for Solopreneurs"
+      "name": "mensfeld/code-on-incus",
+      "url": "https://github.com/mensfeld/code-on-incus",
+      "stars": 420,
+      "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
     },
     {
       "name": "agentscope-ai/QwenPaw",
       "url": "https://github.com/agentscope-ai/QwenPaw",
-      "stars": 15507,
+      "stars": 15551,
       "description": "Your Personal AI Assistant; easy to install, deploy on your own machine or on the cloud; supports multiple chat apps with easily extensible capabilities."
     },
     {
-      "name": "Ruya-AI/cozempic",
-      "url": "https://github.com/Ruya-AI/cozempic",
-      "stars": 248,
-      "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
+      "name": "Ar9av/obsidian-wiki",
+      "url": "https://github.com/Ar9av/obsidian-wiki",
+      "stars": 434,
+      "description": "Framework for AI agents to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern"
+    },
+    {
+      "name": "ANGUARDA/clawvitals-plugin",
+      "url": "https://github.com/ANGUARDA/clawvitals-plugin",
+      "stars": 0,
+      "description": "Security vitals checker for OpenClaw, providing enhanced checks and functionality beyond the ClawVitals skill (https://clawhub.ai/bk-cm/clawvitals). Checks your installation for common misconfigurations and security issues, with scheduled scans, delta detection, regression alerts, and scan history. Full details: https://clawvitals.io/plugin"
     },
     {
       "name": "loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
@@ -48,12 +54,6 @@
       "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
       "stars": 0,
       "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
-    },
-    {
-      "name": "velrixsemiwl-max/awesome-openclaw-usecases",
-      "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
-      "stars": 0,
-      "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
     }
   ],
   "latestPaper": {
