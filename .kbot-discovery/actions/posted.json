@@ -301,5 +301,13 @@
     "comment": "Task complexity is the real bottleneck when routing LLM calls—simple cost-based switching just doesn’t cut it. The local-first approach makes sense for interactive workflows; latency kills usability. Have you experimented with different cognitive load estimation techniques beyond just step counts?",
     "success": false,
     "error": "hn_post_failed"
+  },
+  {
+    "timestamp": "2026-04-17T00:08:09.674Z",
+    "source": "hn-comment",
+    "url": "https://news.ycombinator.com/item?id=47783674",
+    "title": "I wrote a open source iMessage for your AI agents",
+    "comment": "Interesting approach - how are you handling message serialization between agents without relying on existing protocols? Security boundaries between agent contexts would be a major concern for me.",
+    "success": true
   }
 ]
