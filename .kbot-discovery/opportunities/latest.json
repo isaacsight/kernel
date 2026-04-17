@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-17T06:40:15.218Z",
+  "timestamp": "2026-04-17T14:30:00.819Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "[dead]",
+      "url": "https://news.ycombinator.com/item?id=47805131",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Codex for almost everything",
       "url": "https://news.ycombinator.com/item?id=47800767",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -74,36 +81,29 @@
     },
     {
       "source": "hn-comment",
-      "title": "Ask HN: Who is using OpenClaw?",
-      "url": "https://news.ycombinator.com/item?id=47790800",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "Open Source Isn't Dead. Cal.com Just Learned the Wrong Lesson",
-      "url": "https://news.ycombinator.com/item?id=47783070",
+      "title": "Codex for almost everything",
+      "url": "https://news.ycombinator.com/item?id=47797862",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "github-issue",
-      "title": "[Improvements] Needed changes - to be discussed",
-      "url": "https://github.com/2060-io/hologram-generic-ai-agent-vs/issues/84",
+      "title": "codex & claude support",
+      "url": "https://github.com/viperfoundation/v1-chat-builds-public/issues/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Integration: MCP (Model Context Protocol) tool guard middleware",
-      "url": "https://github.com/hidearmoon/agentshield/issues/2",
+      "title": "Multi-agent runtime: dispatch per-agent in task runner, add Codex CLI support",
+      "url": "https://github.com/k8nstantin/OpenPraxis/issues/33",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Tool-calling passthrough (OpenAI `tools` field)",
-      "url": "https://github.com/farmaciadeldiamant-star/openclaude-bridge/issues/2",
+      "title": "[V1.3.0] Sometimes sending a message doesn't trigger agent",
+      "url": "https://github.com/CraftOS-dev/CraftBot/issues/202",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "build(deps): Bump the npm_and_yarn group across 66 directories with 8 updates",
-      "url": "https://github.com/frannunpal/openclawskills/pull/192",
+      "title": "fix(gateway): hold startup-gated requests at server until post-attach (closes #67160)",
+      "url": "https://github.com/openclaw/openclaw/pull/68146",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Twitch: add bundled setup entry",
-      "url": "https://github.com/openclaw/openclaw/pull/68008",
+      "title": "feat: Apify integration",
+      "url": "https://github.com/apify/deer-flow/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "Configure: defer channel status until selection",
-      "url": "https://github.com/openclaw/openclaw/pull/68007",
+      "title": "Module Specification for Capability & Integration Layer",
+      "url": "https://github.com/1024XEngineer/anyclaw/issues/61",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,22 +193,22 @@
     },
     {
       "source": "reddit-artificial",
-      "title": "How to Use AI to Do Real Science",
-      "url": "https://reddit.com/r/artificial/comments/1snmqfw/how_to_use_ai_to_do_real_science/",
+      "title": "Agentic OS — an  governed multi-agent execution platform",
+      "url": "https://reddit.com/r/artificial/comments/1so03op/agentic_os_an_governed_multiagent_execution/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "Live now: watching AI agents spend money in real time",
-      "url": "https://reddit.com/r/artificial/comments/1snjr09/live_now_watching_ai_agents_spend_money_in_real/",
+      "title": "Agentic OS — an  governed multi-agent execution platform",
+      "url": "https://reddit.com/r/artificial/comments/1snzm1s/agentic_os_an_governed_multiagent_execution/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
       "source": "reddit-artificial",
-      "title": "Thoughts on AI at Home?",
-      "url": "https://reddit.com/r/artificial/comments/1snh60v/thoughts_on_ai_at_home/",
+      "title": "I built a small project to organize AI coding tools,  looking for feedback on the structure and data model",
+      "url": "https://reddit.com/r/artificial/comments/1snxdjk/i_built_a_small_project_to_organize_ai_coding/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }

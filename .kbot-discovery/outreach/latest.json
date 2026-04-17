@@ -1,23 +1,29 @@
 {
-  "timestamp": "2026-04-17T06:40:40.430Z",
+  "timestamp": "2026-04-17T06:57:02.539Z",
   "projects": [
     {
-      "name": "rcarmo/piclaw",
-      "url": "https://github.com/rcarmo/piclaw",
-      "stars": 520,
-      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
+      "name": "holaboss-ai/holaOS",
+      "url": "https://github.com/holaboss-ai/holaOS",
+      "stars": 2730,
+      "description": "The agent environment for long-horizon work, continuity, and self-evolution."
     },
     {
       "name": "iOfficeAI/AionUi",
       "url": "https://github.com/iOfficeAI/AionUi",
-      "stars": 22038,
+      "stars": 22039,
       "description": "Free, local, open-source 24/7 Cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, Qwen Code, Goose CLI, Auggie, and more | 🌟 Star if you like it!"
     },
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1063,
-      "description": "the easiest way to run natural language-described workflows automatically"
+      "name": "suitedaces/dorabot",
+      "url": "https://github.com/suitedaces/dorabot",
+      "stars": 225,
+      "description": "macOS app for 24/7 AI agents in an IDE with memory, scheduled tasks, browser use + access to Whatsapp, Telegram, Slack."
+    },
+    {
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 778,
+      "description": "Agent Skills for Solopreneurs"
     },
     {
       "name": "agentscope-ai/QwenPaw",
@@ -30,12 +36,6 @@
       "url": "https://github.com/Ruya-AI/cozempic",
       "stars": 248,
       "description": "Context cleaning for Claude Code — prune bloated sessions, protect Agent Teams from context loss, auto-guard with tiered pruning"
-    },
-    {
-      "name": "ArcadeAI/arcade-mcp",
-      "url": "https://github.com/ArcadeAI/arcade-mcp",
-      "stars": 862,
-      "description": "The best way to create, deploy, and share MCP Servers"
     },
     {
       "name": "loaded-napierianlogarithm458/awesome-openclaw-skills-zh",

@@ -1,9 +1,58 @@
 {
-  "timestamp": "2026-04-17T06:40:10.492Z",
+  "timestamp": "2026-04-17T14:29:56.731Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "neozz"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "agent",
+                "terminal"
+              ],
+              "value": "Once subagents start spawning other subagents, basic questions get hard to answer: what is running right now, what tool did it just call, did the child <em>agent</em> actually do what the parent asked. I wanted a way to verify that each <em>agent</em> is doing the work that fits its role, and to spot when a run goes off track.<p>Lazyagent is a <em>terminal</em> TUI that collects events from Claude Code, Codex, and OpenCode and shows them in one place. It groups sessions from different runtimes by working directory, so Claude and Codex runs on the same repo appear under the same project.<p>Features:<p>- Filter events by type: tool calls, user prompts, session lifecycle, system events, or code changes only.<p>- See which <em>agent</em> or subagent is responsible for each action. The <em>agent</em> tree shows parent-child relationships, so you can trace exactly what a spawned subagent did vs what the parent delegated.<p>- View code diffs at a glance. Editing events render syntax-highlighted diffs inline, with addition/deletion stats.<p>- Search across all events. You know a file was touched but not which <em>agent</em> did it -- type `/` and find it.<p>- Check token usage per session. A single overlay shows cost, model calls, cache hit rate, per-model breakdowns, and which tools ran the most.<p>- Watch a run in real time, or go back through a completed session to audit what happened.<p>Please let me know if there's any feature you want!"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai",
+                "agent"
+              ],
+              "value": "Show HN: Lazyagent – Preserve what your <em>AI</em> <em>agents</em> doing and analyze usage"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/chojs23/lazyagent"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_neozz",
+            "story_47805963",
+            "show_hn"
+          ],
+          "author": "neozz",
+          "created_at": "2026-04-17T13:52:08Z",
+          "created_at_i": 1776433928,
+          "num_comments": 0,
+          "objectID": "47805963",
+          "points": 1,
+          "story_id": 47805963,
+          "story_text": "Once subagents start spawning other subagents, basic questions get hard to answer: what is running right now, what tool did it just call, did the child agent actually do what the parent asked. I wanted a way to verify that each agent is doing the work that fits its role, and to spot when a run goes off track.<p>Lazyagent is a terminal TUI that collects events from Claude Code, Codex, and OpenCode and shows them in one place. It groups sessions from different runtimes by working directory, so Claude and Codex runs on the same repo appear under the same project.<p>Features:<p>- Filter events by type: tool calls, user prompts, session lifecycle, system events, or code changes only.<p>- See which agent or subagent is responsible for each action. The agent tree shows parent-child relationships, so you can trace exactly what a spawned subagent did vs what the parent delegated.<p>- View code diffs at a glance. Editing events render syntax-highlighted diffs inline, with addition&#x2F;deletion stats.<p>- Search across all events. You know a file was touched but not which agent did it -- type `&#x2F;` and find it.<p>- Check token usage per session. A single overlay shows cost, model calls, cache hit rate, per-model breakdowns, and which tools ran the most.<p>- Watch a run in real time, or go back through a completed session to audit what happened.<p>Please let me know if there&#x27;s any feature you want!",
+          "title": "Show HN: Lazyagent – Preserve what your AI agents doing and analyze usage",
+          "updated_at": "2026-04-17T13:53:50Z",
+          "url": "https://github.com/chojs23/lazyagent"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -209,55 +258,63 @@
           "title": "Show HN: An edge MCP file system with a 50ms undo button for AI agents",
           "updated_at": "2026-04-15T01:39:38Z",
           "url": "https://mcp.undisk.app"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "synasties"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "ai",
-                "agent",
-                "terminal"
-              ],
-              "value": "I built Zuver, the generic Agentic <em>AI</em> framework for scalable, reliable, even on-edge <em>AI</em> applications and <em>Agents</em>.<p>It's completely written in Go, which lowers the RAM usage to around 6MB, compared to other <em>Agent</em> framework that's usually around 200MB.\nIt supports multi-<em>agent</em> collaboration, multi-model orchestration, fine grained permission management, pseudo <em>terminal</em>(which is lowering input token waste by up to 70%) for <em>agents</em>, <em>Agent</em>-as-App n8n-like development framework, integrated vector DB for RAG, self-evolving <em>agents</em>, and much more, done with less than 10K lines of code, making it possible for applications from Personal <em>AI</em> Hub to Enterprise <em>AI</em> <em>Agent</em> Applications. \nJust one binary without any other components, allowing it to run on almost any device. Plus, you can even do Cloud+Local model collaboration, so you can get 600B experience while just hosting 30B models. \nThat's just an example, it's the framework of possibilities.<p>https://github.com/synasties/zuver"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "agent"
-              ],
-              "value": "Zuver – Build your enterprise <em>Agents</em> with just 10MB RAM"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_synasties",
-            "story_47768506",
-            "ask_hn"
-          ],
-          "author": "synasties",
-          "created_at": "2026-04-14T17:25:26Z",
-          "created_at_i": 1776187526,
-          "num_comments": 0,
-          "objectID": "47768506",
-          "points": 3,
-          "story_id": 47768506,
-          "story_text": "I built Zuver, the generic Agentic AI framework for scalable, reliable, even on-edge AI applications and Agents.<p>It&#x27;s completely written in Go, which lowers the RAM usage to around 6MB, compared to other Agent framework that&#x27;s usually around 200MB.\nIt supports multi-agent collaboration, multi-model orchestration, fine grained permission management, pseudo terminal(which is lowering input token waste by up to 70%) for agents, Agent-as-App n8n-like development framework, integrated vector DB for RAG, self-evolving agents, and much more, done with less than 10K lines of code, making it possible for applications from Personal AI Hub to Enterprise AI Agent Applications. \nJust one binary without any other components, allowing it to run on almost any device. Plus, you can even do Cloud+Local model collaboration, so you can get 600B experience while just hosting 30B models. \nThat&#x27;s just an example, it&#x27;s the framework of possibilities.<p>https:&#x2F;&#x2F;github.com&#x2F;synasties&#x2F;zuver",
-          "title": "Zuver – Build your enterprise Agents with just 10MB RAM",
-          "updated_at": "2026-04-14T18:07:07Z"
         }
       ]
     },
     {
       "query": "open+source+coding+agent",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "tee-es-gee"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "open",
+                "source",
+                "coding",
+                "agent"
+              ],
+              "value": "Hi HN,<p>This is Tudor from Xata. You can think of Xata as an <em>open</em>-<em>source</em>, self-hosted, alternative to Aurora/Neon. Highlight features are:<p>- Fast copy-on-write branching.<p>- Automatic scale-to-zero and wake-up on new connections.<p>- 100% Vanilla Postgres. We run upstream Postgres, no modifications.<p>- Production grade: high availability, read replicas, automatic failover/switchover, upgrades, backups with PITR, IP filtering, etc.<p>You can self-host it, or you can use our [cloud service](<a href=\"https://xata.io\" rel=\"nofollow\">https://xata.io</a>).<p>Background story: we exist as a company for almost 5 years, offered a Postgres service from the start, and have launched several different products and <em>open</em> <em>source</em> projects here on HN before, including pgroll and pgstream. About a year and half ago, we’ve started to rearchitect our core platform from scratch. It is running in production for almost an year now, and it’s serving customers of all sizes, including many multi-TB databases.<p>One of our goals in designing the new platform was to make it cloud independent and with a careful selection of dependencies. Part of the reason was for us to be able to offer it in any cloud, and the other part is the subject of the announcement today: we wanted to have it <em>open</em> <em>source</em> and self-hostable.<p>Use cases: We think Xata OSS is appropriate for two use cases:<p>- get fast your preview / testing / dev / ephemeral environments with realistic data. We think for many companies this is a better alternative to seed or synthetic data, and allows you to catch more classes of bugs. Combined with anonymization, especially in the world of <em>coding</em> <em>agents</em>, this is an important safety and productivity enabler.<p>- offer an internal PGaaS. The alternative we usually see at customers is that they use a Kubernetes operator to achieve this. But there’s more to a Postgres platform than just the operator. Xata is more opinionated and comes with APIs and CLI.<p>Technical details: We wanted from the start to offer CoW branching and vanilla Postgres. This basically meant that we wanted to do CoW at the storage layer, under Postgres. We’ve have tested a bunch of storage system for performance and reliability and ultimately landed on using OpenEBS. OpenEBS is an umbrella project for more storage engines for Kubernetes, and the one that we use is the replicated storage engine (aka Mayastor).<p>Small side note on separation of storage from compute: since the introduction of PlanetScale Metal, there has been a lot of discussion about the performance of local storage. We had these discussions internally as well, and what’s nice about OpenEBS is that it actually supports both: there are local storage engines and over-the-network storage engines. For our purpose of running CoW branches, however, the advantages of the separation are pretty clear: it allows spreading the compute to multiple nodes, while keeping the storage volumes colocated, which is needed for CoW.\nSo for now the Xata platform is focused on this, but it’s entirely possible to run Xata with local storage: basically a storage-class change away.<p>Another small side note: while Mayastor is serving us well, and it’s what we recommend for OSS installations, we have been working on our own storage engine in parallel (called Xatastor). It is the key to having sub-second branching and wake-up times and we’ll release it in a couple of weeks.<p>For the compute layer, we are building on top of CloudNativePG. It’s a stable and battle-tested operator covering all the production great concerns. We did add quite a lot of services around it, though: our custom SQL gateway, a “branch” operator, control plane and authentication services, etc.<p>The end result is what we think is an opinionated but flexible Postgres platform. More high level and easier to use than a K8s operator, and with a lot of battery included goodies.<p>Let us know if you have any questions!"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "open",
+                "source"
+              ],
+              "value": "Show HN: Xata, <em>open</em>-<em>source</em> Postgres platform with copy-on-write branches"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/xataio/xata"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_tee-es-gee",
+            "story_47803480",
+            "show_hn"
+          ],
+          "author": "tee-es-gee",
+          "created_at": "2026-04-17T07:47:30Z",
+          "created_at_i": 1776412050,
+          "num_comments": 0,
+          "objectID": "47803480",
+          "points": 2,
+          "story_id": 47803480,
+          "story_text": "Hi HN,<p>This is Tudor from Xata. You can think of Xata as an open-source, self-hosted, alternative to Aurora&#x2F;Neon. Highlight features are:<p>- Fast copy-on-write branching.<p>- Automatic scale-to-zero and wake-up on new connections.<p>- 100% Vanilla Postgres. We run upstream Postgres, no modifications.<p>- Production grade: high availability, read replicas, automatic failover&#x2F;switchover, upgrades, backups with PITR, IP filtering, etc.<p>You can self-host it, or you can use our [cloud service](<a href=\"https:&#x2F;&#x2F;xata.io\" rel=\"nofollow\">https:&#x2F;&#x2F;xata.io</a>).<p>Background story: we exist as a company for almost 5 years, offered a Postgres service from the start, and have launched several different products and open source projects here on HN before, including pgroll and pgstream. About a year and half ago, we’ve started to rearchitect our core platform from scratch. It is running in production for almost an year now, and it’s serving customers of all sizes, including many multi-TB databases.<p>One of our goals in designing the new platform was to make it cloud independent and with a careful selection of dependencies. Part of the reason was for us to be able to offer it in any cloud, and the other part is the subject of the announcement today: we wanted to have it open source and self-hostable.<p>Use cases: We think Xata OSS is appropriate for two use cases:<p>- get fast your preview &#x2F; testing &#x2F; dev &#x2F; ephemeral environments with realistic data. We think for many companies this is a better alternative to seed or synthetic data, and allows you to catch more classes of bugs. Combined with anonymization, especially in the world of coding agents, this is an important safety and productivity enabler.<p>- offer an internal PGaaS. The alternative we usually see at customers is that they use a Kubernetes operator to achieve this. But there’s more to a Postgres platform than just the operator. Xata is more opinionated and comes with APIs and CLI.<p>Technical details: We wanted from the start to offer CoW branching and vanilla Postgres. This basically meant that we wanted to do CoW at the storage layer, under Postgres. We’ve have tested a bunch of storage system for performance and reliability and ultimately landed on using OpenEBS. OpenEBS is an umbrella project for more storage engines for Kubernetes, and the one that we use is the replicated storage engine (aka Mayastor).<p>Small side note on separation of storage from compute: since the introduction of PlanetScale Metal, there has been a lot of discussion about the performance of local storage. We had these discussions internally as well, and what’s nice about OpenEBS is that it actually supports both: there are local storage engines and over-the-network storage engines. For our purpose of running CoW branches, however, the advantages of the separation are pretty clear: it allows spreading the compute to multiple nodes, while keeping the storage volumes colocated, which is needed for CoW.\nSo for now the Xata platform is focused on this, but it’s entirely possible to run Xata with local storage: basically a storage-class change away.<p>Another small side note: while Mayastor is serving us well, and it’s what we recommend for OSS installations, we have been working on our own storage engine in parallel (called Xatastor). It is the key to having sub-second branching and wake-up times and we’ll release it in a couple of weeks.<p>For the compute layer, we are building on top of CloudNativePG. It’s a stable and battle-tested operator covering all the production great concerns. We did add quite a lot of services around it, though: our custom SQL gateway, a “branch” operator, control plane and authentication services, etc.<p>The end result is what we think is an opinionated but flexible Postgres platform. More high level and easier to use than a K8s operator, and with a lot of battery included goodies.<p>Let us know if you have any questions!",
+          "title": "Show HN: Xata, open-source Postgres platform with copy-on-write branches",
+          "updated_at": "2026-04-17T07:51:32Z",
+          "url": "https://github.com/xataio/xata"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -456,58 +513,6 @@
           "title": "Show HN: Mcptube – Karpathy's LLM Wiki idea applied to YouTube videos",
           "updated_at": "2026-04-14T23:11:41Z",
           "url": "https://github.com/0xchamin/mcptube"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "davidcann"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "open",
-                "source",
-                "coding",
-                "agent"
-              ],
-              "value": "I made Buildermark to see exactly how much of my code is generated by my <em>coding</em> <em>agents</em> vs what I was writing by hand. For this project, it ended up being 364 <em>agent</em> conversations writing 94% of the code. Browse all of those here:\n<a href=\"https://demo.buildermark.dev/\" rel=\"nofollow\">https://demo.buildermark.dev/</a><p>It matches edits by your <em>coding</em> <em>agents</em> (scans history in `~/.claude`, '`/.codex', etc.) with git commit diffs. It does formatting-agnostic matching to be robust against auto-formatting and reorganizing code. It's <em>open</em> <em>source</em> and local only, not even any analytics.<p>Everything is automatic... just run the app, <em>open</em> the localhost:55022 frontend, and choose the project to import.<p>It supports Claude Code, Codex, Gemini, and Cursor, so far. There's also a browser extension to import from cloud <em>agents</em>.<p><a href=\"https://buildermark.dev\" rel=\"nofollow\">https://buildermark.dev</a><p>I'm also working on a Team Server to aggregate results and make the project sustainable."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "open",
-                "source",
-                "agent"
-              ],
-              "value": "Show HN: Buildermark – See how much code is by your <em>agents</em> (<em>open</em> <em>source</em>, local)"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://buildermark.dev"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_davidcann",
-            "story_47743339",
-            "show_hn"
-          ],
-          "author": "davidcann",
-          "created_at": "2026-04-12T19:19:18Z",
-          "created_at_i": 1776021558,
-          "num_comments": 0,
-          "objectID": "47743339",
-          "points": 2,
-          "story_id": 47743339,
-          "story_text": "I made Buildermark to see exactly how much of my code is generated by my coding agents vs what I was writing by hand. For this project, it ended up being 364 agent conversations writing 94% of the code. Browse all of those here:\n<a href=\"https:&#x2F;&#x2F;demo.buildermark.dev&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;demo.buildermark.dev&#x2F;</a><p>It matches edits by your coding agents (scans history in `~&#x2F;.claude`, &#x27;`&#x2F;.codex&#x27;, etc.) with git commit diffs. It does formatting-agnostic matching to be robust against auto-formatting and reorganizing code. It&#x27;s open source and local only, not even any analytics.<p>Everything is automatic... just run the app, open the localhost:55022 frontend, and choose the project to import.<p>It supports Claude Code, Codex, Gemini, and Cursor, so far. There&#x27;s also a browser extension to import from cloud agents.<p><a href=\"https:&#x2F;&#x2F;buildermark.dev\" rel=\"nofollow\">https:&#x2F;&#x2F;buildermark.dev</a><p>I&#x27;m also working on a Team Server to aggregate results and make the project sustainable.",
-          "title": "Show HN: Buildermark – See how much code is by your agents (open source, local)",
-          "updated_at": "2026-04-12T19:29:15Z",
-          "url": "https://buildermark.dev"
         }
       ]
     },
@@ -764,7 +769,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "sidebotexp"
+              "value": "zwilderrr"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -772,37 +777,37 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Been on a DS920+ for years, mostly docker + synology photos. Hardware is the <em>bot</em>tleneck now. Photos indexing is painful, container count keeps growing. Considering a custom Unraid build. Specs would be way better. But I'd be giving up how little I have to think about the Synology.\nFor people who switched, did the flexibility actually pay off, or did you end up debugging your NAS more than using it?"
+              "value": "A lot has been discussed about why it's important not to anthropomorphize AI. But the trouble is that AI is just <i>so</i> anthropomorphic that denying it that status feels, to some degree, like lying to yourself. Who amongst us hasn't felt a <i>twinge</i> of hesitation before hitting Ctrl+C to end the conversation?<p>I think it's far better to take the stance, as many have pointed out, that working with AI is like working with a psychopath: productive, engaging, and even fun, but ultimately at your complete and total peril without <i>serious</i> guardrails and caution.<p>I think this is a much fairer approach, one that aligns more closely with <em>bot</em>h the reality of the experience and the reality of the danger."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Ask HN: DS920 –> Unraid build, is the flexibility worth it?"
+              "value": "PDD – Psychopath Driven Development"
             }
           },
           "_tags": [
             "story",
-            "author_sidebotexp",
-            "story_47802961",
+            "author_zwilderrr",
+            "story_47805942",
             "ask_hn"
           ],
-          "author": "sidebotexp",
-          "created_at": "2026-04-17T06:17:36Z",
-          "created_at_i": 1776406656,
+          "author": "zwilderrr",
+          "created_at": "2026-04-17T13:49:51Z",
+          "created_at_i": 1776433791,
           "num_comments": 0,
-          "objectID": "47802961",
+          "objectID": "47805942",
           "points": 1,
-          "story_id": 47802961,
-          "story_text": "Been on a DS920+ for years, mostly docker + synology photos. Hardware is the bottleneck now. Photos indexing is painful, container count keeps growing. Considering a custom Unraid build. Specs would be way better. But I&#x27;d be giving up how little I have to think about the Synology.\nFor people who switched, did the flexibility actually pay off, or did you end up debugging your NAS more than using it?",
-          "title": "Ask HN: DS920 –> Unraid build, is the flexibility worth it?",
-          "updated_at": "2026-04-17T06:22:32Z"
+          "story_id": 47805942,
+          "story_text": "A lot has been discussed about why it&#x27;s important not to anthropomorphize AI. But the trouble is that AI is just <i>so</i> anthropomorphic that denying it that status feels, to some degree, like lying to yourself. Who amongst us hasn&#x27;t felt a <i>twinge</i> of hesitation before hitting Ctrl+C to end the conversation?<p>I think it&#x27;s far better to take the stance, as many have pointed out, that working with AI is like working with a psychopath: productive, engaging, and even fun, but ultimately at your complete and total peril without <i>serious</i> guardrails and caution.<p>I think this is a much fairer approach, one that aligns more closely with both the reality of the experience and the reality of the danger.",
+          "title": "PDD – Psychopath Driven Development",
+          "updated_at": "2026-04-17T13:53:50Z"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "ygudeta"
+              "value": "luckystrike"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -810,46 +815,83 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "I built *valuepulse.ai* out of a frustration I kept running into: everything is scattered across different tools. If I want to search internal knowledge, I use something like Glean. If I want to analyze data, I switch to a BI tool or a data agent. And if I need external context, I’m back to Google or Perplexity.<p>Even with all the progress in generative AI, it still feels pretty disconnected.<p>So I wanted to see if it’s possible to bring search (<em>bot</em>h web and enterprise) and analytics into one place.<p>The core idea behind Valuepulse is a *context layer* that models a company’s business domain (customers, revenue, operations, etc.) and sits across different data sources (structured and unstructured). On top of that, I built:<p>* natural language → dashboard generation (similar idea to tools like Replit/Lovable, but for BI), using agents like text-to-SQL and visualization selection\n* a data agent that can query databases and warehouses in plain English\n* unified search across internal docs and the web using vector search<p>It’s still early (beta), but I’d really appreciate feedback—especially on whether this feels useful for real business users (non-technical) or where it might break."
+              "value": "Hey HN<p>I'd love to get your feedback on Mabon.ai.<p>I think job search is quite tedious for most people. They scan or subscribe to multiple job boards that often send jobs based on just a few keywords, without actually understanding the user's intent or what kind of job they 'really' want. Most of these job boards also seem to optimize for sending a high volume of matches rather than being targeted.<p>Mabon first understands the user's background and preferences, and then finds only relevant jobs specific to them.<p>Users can write anything they want in the preferences - &quot;no consulting companies; only funded startups; salary at least $XXX&quot;, etc. After the search, it rates all the openings internally based on the user's profile &amp; preferences, and then shows only the strong matches.<p>Users can then converse with the agent to further refine the search, and once they think the agent has nailed it down, they can set the search to &quot;always-on&quot;, so that it keeps scanning continuously.<p>It helps <em>bot</em>h active job seekers and folks who are selectively open to a real high-quality match when it shows up.<p>Btw, it is not limited to the tech sector; it's meant to work across different types of jobs and industries.<p>I put this into production just a few days ago, so it could be a bit rough around the edges. Please try it out and share your thoughts on it. Thanks."
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Valuepulse – search docs, query data, and build dashboards in one place"
+              "value": "Show HN: Mabon – AI agent that finds jobs continuously and shows strong matches"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://valuepulse.ai"
+              "value": "https://mabon.ai/"
             }
           },
           "_tags": [
             "story",
-            "author_ygudeta",
-            "story_47802054",
+            "author_luckystrike",
+            "story_47805227",
             "show_hn"
           ],
-          "author": "ygudeta",
+          "author": "luckystrike",
           "children": [
-            47802997
+            47806138
           ],
-          "created_at": "2026-04-17T03:04:01Z",
-          "created_at_i": 1776395041,
-          "num_comments": 1,
-          "objectID": "47802054",
+          "created_at": "2026-04-17T12:32:46Z",
+          "created_at_i": 1776429166,
+          "num_comments": 0,
+          "objectID": "47805227",
           "points": 2,
-          "story_id": 47802054,
-          "story_text": "I built *valuepulse.ai* out of a frustration I kept running into: everything is scattered across different tools. If I want to search internal knowledge, I use something like Glean. If I want to analyze data, I switch to a BI tool or a data agent. And if I need external context, I’m back to Google or Perplexity.<p>Even with all the progress in generative AI, it still feels pretty disconnected.<p>So I wanted to see if it’s possible to bring search (both web and enterprise) and analytics into one place.<p>The core idea behind Valuepulse is a *context layer* that models a company’s business domain (customers, revenue, operations, etc.) and sits across different data sources (structured and unstructured). On top of that, I built:<p>* natural language → dashboard generation (similar idea to tools like Replit&#x2F;Lovable, but for BI), using agents like text-to-SQL and visualization selection\n* a data agent that can query databases and warehouses in plain English\n* unified search across internal docs and the web using vector search<p>It’s still early (beta), but I’d really appreciate feedback—especially on whether this feels useful for real business users (non-technical) or where it might break.",
-          "title": "Show HN: Valuepulse – search docs, query data, and build dashboards in one place",
-          "updated_at": "2026-04-17T06:25:18Z",
-          "url": "https://valuepulse.ai"
+          "story_id": 47805227,
+          "story_text": "Hey HN<p>I&#x27;d love to get your feedback on Mabon.ai.<p>I think job search is quite tedious for most people. They scan or subscribe to multiple job boards that often send jobs based on just a few keywords, without actually understanding the user&#x27;s intent or what kind of job they &#x27;really&#x27; want. Most of these job boards also seem to optimize for sending a high volume of matches rather than being targeted.<p>Mabon first understands the user&#x27;s background and preferences, and then finds only relevant jobs specific to them.<p>Users can write anything they want in the preferences - &quot;no consulting companies; only funded startups; salary at least $XXX&quot;, etc. After the search, it rates all the openings internally based on the user&#x27;s profile &amp; preferences, and then shows only the strong matches.<p>Users can then converse with the agent to further refine the search, and once they think the agent has nailed it down, they can set the search to &quot;always-on&quot;, so that it keeps scanning continuously.<p>It helps both active job seekers and folks who are selectively open to a real high-quality match when it shows up.<p>Btw, it is not limited to the tech sector; it&#x27;s meant to work across different types of jobs and industries.<p>I put this into production just a few days ago, so it could be a bit rough around the edges. Please try it out and share your thoughts on it. Thanks.",
+          "title": "Show HN: Mabon – AI agent that finds jobs continuously and shows strong matches",
+          "updated_at": "2026-04-17T14:23:21Z",
+          "url": "https://mabon.ai/"
         },
         {
           "_highlightResult": {
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "cpan22"
+              "value": "giuliomagnifico"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Data centre electricity use soared by 17% in 2025 - IEA"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-<em>bot</em>tlenecks-driving-a-scramble-for-solutions"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_giuliomagnifico",
+            "story_47804976"
+          ],
+          "author": "giuliomagnifico",
+          "created_at": "2026-04-17T12:02:44Z",
+          "created_at_i": 1776427364,
+          "num_comments": 0,
+          "objectID": "47804976",
+          "points": 1,
+          "story_id": 47804976,
+          "title": "Data centre electricity use soared by 17% in 2025 - IEA",
+          "updated_at": "2026-04-17T12:08:48Z",
+          "url": "https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "yoyayoyayoya"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -857,159 +899,125 @@
               "matchedWords": [
                 "kbot"
               ],
-              "value": "Hey HN! We're Charles and Dean, and we're building Stage: a code review tool that guides you through reading a PR step by step, instead of piecing together a giant diff.<p>Here's a demo video: <a href=\"https://www.tella.tv/video/stage-demo-1pph\" rel=\"nofollow\">https://www.tella.tv/video/stage-demo-1pph</a>.\nYou can play around with some example PRs here: <a href=\"https://stagereview.app/explore\">https://stagereview.app/explore</a>.<p>Teams are moving faster than ever with AI these days, but more and more engineers are merging changes that they don't really understand. The <em>bot</em>tleneck isn't writing code anymore, it's reviewing it.<p>We're two engineers who got frustrated with GitHub's UI for code review. As coding agents took off, we saw our PR backlog pile up faster than we could handle. Not only that, the PRs themselves were getting larger and harder to understand, and we found ourselves spending most of our time trying to build a mental model of what a PR was actually doing.<p>We built Stage to make reviewing a PR feel more like reading chapters of a book, not an unorganized set of paragraphs. We use it every day now, not just to review each other's code but also our own, and at this point we can't really imagine going back to the old GitHub UI.<p>What Stage does: when a PR is opened, Stage groups the changes into small, logical &quot;chapters&quot;. These chapters get ordered in the way that makes most sense to read. For each chapter, Stage tells you what changed and specific things to double check. Once you review all the chapters, you're done reviewing the PR.<p>You can sign in to Stage with your GitHub account and everything is synced seamlessly (commenting, approving etc.) so it fits into the workflows you're already used to.<p>What we're not building: a code review <em>bot</em> like CodeRabbit or Greptile. These tools are great for catching bugs (and we use them ourselves!) but at the end of the day humans are responsible for what gets shipped. It's clear that reviewing code hasn't scaled the same way that writing did, and they (we!) need better tooling to keep up with the onslaught of AI generated code, which is only going to grow.<p>We've had a lot of fun building this and are excited to take it further. If you're like us and are also tired of using GitHub for reviewing PRs, we'd love for you to try it out and tell us what you think!"
+              "value": "I've been using Claude Code and Cursor for several months on a real project. The tools are \nimpressive, but I kept running into the same failure modes:<p>1. Long sessions cause context drift — the AI gradually ignores the original design\n2. The AI writes fake tests — empty assertions, mocking the thing being tested\n3. No research phase — the AI guesses how a framework works instead of reading the docs<p>OPC Workflow is my fix: three markdown files you put in your project and trigger as slash \ncommands (/plan_sprint, /sprint, /audit).<p>The core mechanic is isolated sessions:\n- Planning happens in session A, then you close it\n- Development happens in session B, then you close it  \n- Auditing happens in session C with zero knowledge of session B<p>The audit is the part I'm most proud of. It runs mutation testing — deliberately breaking \neach core function to verify the tests actually catch it. In my project, it found a module \nthat directly instantiated components, bypassing the agent registry entirely. Security \nboundaries, tool injection, and the memory system were all silently failing. I had written \n<em>bot</em>h the code AND the tests. Confirmation bias is a real problem.<p>Real numbers: 7 sprints, 459 tests, 100% mutation capture rate, 1 critical bug found.<p>It works with Claude Code, Cursor, Kiro, and Antigravity. One-line install for mac/linux:<p><pre><code>  bash &lt;(curl -sSL https://raw.githubusercontent.com/yoyayoyayoya/opc-workflow/main/install.sh)\n</code></pre>\nAnd for Windows PowerShell:<p><pre><code>  iex (iwr -useb 'https://raw.githubusercontent.com/yoyayoyayoya/opc-workflow/main/install.ps1').Content\n</code></pre>\nOpen to feedback, especially from people who've found other failure modes with AI coding tools.<p>https://github.com/yoyayoyayoya/opc-workflow"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: Stage – Putting humans back in control of code review"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://stagereview.app/"
+              "value": "OPC Workflow – Three Markdown files that enforce discipline on AI coding tools"
             }
           },
           "_tags": [
             "story",
-            "author_cpan22",
-            "story_47796818",
+            "author_yoyayoyayoya",
+            "story_47804867",
+            "ask_hn"
+          ],
+          "author": "yoyayoyayoya",
+          "created_at": "2026-04-17T11:45:43Z",
+          "created_at_i": 1776426343,
+          "num_comments": 0,
+          "objectID": "47804867",
+          "points": 1,
+          "story_id": 47804867,
+          "story_text": "I&#x27;ve been using Claude Code and Cursor for several months on a real project. The tools are \nimpressive, but I kept running into the same failure modes:<p>1. Long sessions cause context drift — the AI gradually ignores the original design\n2. The AI writes fake tests — empty assertions, mocking the thing being tested\n3. No research phase — the AI guesses how a framework works instead of reading the docs<p>OPC Workflow is my fix: three markdown files you put in your project and trigger as slash \ncommands (&#x2F;plan_sprint, &#x2F;sprint, &#x2F;audit).<p>The core mechanic is isolated sessions:\n- Planning happens in session A, then you close it\n- Development happens in session B, then you close it  \n- Auditing happens in session C with zero knowledge of session B<p>The audit is the part I&#x27;m most proud of. It runs mutation testing — deliberately breaking \neach core function to verify the tests actually catch it. In my project, it found a module \nthat directly instantiated components, bypassing the agent registry entirely. Security \nboundaries, tool injection, and the memory system were all silently failing. I had written \nboth the code AND the tests. Confirmation bias is a real problem.<p>Real numbers: 7 sprints, 459 tests, 100% mutation capture rate, 1 critical bug found.<p>It works with Claude Code, Cursor, Kiro, and Antigravity. One-line install for mac&#x2F;linux:<p><pre><code>  bash &lt;(curl -sSL https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;yoyayoyayoya&#x2F;opc-workflow&#x2F;main&#x2F;install.sh)\n</code></pre>\nAnd for Windows PowerShell:<p><pre><code>  iex (iwr -useb &#x27;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;yoyayoyayoya&#x2F;opc-workflow&#x2F;main&#x2F;install.ps1&#x27;).Content\n</code></pre>\nOpen to feedback, especially from people who&#x27;ve found other failure modes with AI coding tools.<p>https:&#x2F;&#x2F;github.com&#x2F;yoyayoyayoya&#x2F;opc-workflow",
+          "title": "OPC Workflow – Three Markdown files that enforce discipline on AI coding tools",
+          "updated_at": "2026-04-17T11:47:49Z"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "namirsab"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey everyone!\nFor the last 2 weeks, I've been working on an MCP server for my Novation Circuit Tracks (in case you don't know what it is, is just a little device to make electronic music). The idea is simple: I want an AI Agent to be able to make music using my gear, so I gave it tools to do it so I can just say something like &quot;Build me a melodic ambient song with a dark atmosphere&quot; and see the AI just do it.<p>The whole project is Open Source (<a href=\"https://github.com/namirsab/circuit-tracks-tools\" rel=\"nofollow\">https://github.com/namirsab/circuit-tracks-tools</a>) and I've written about it in my blog in case you want to go into more details. It is a fun project\nthat includes reverse engineering of proprietary file formats.<p>Would love to hear feedback, <em>bot</em>h from Circuit Track owners and just in general, what do you think about this idea? Have you tried something similar?"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: An MCP server that lets AI compose music on a hardware synth"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://namirsab.dev/blog/teaching-claude-to-use-my-novation-circuit-tracks-part-3/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_namirsab",
+            "story_47804220",
             "show_hn"
           ],
-          "author": "cpan22",
-          "children": [
-            47799555,
-            47799945,
-            47797132,
-            47796999
-          ],
-          "created_at": "2026-04-16T17:36:29Z",
-          "created_at_i": 1776360989,
-          "num_comments": 7,
-          "objectID": "47796818",
-          "points": 9,
-          "story_id": 47796818,
-          "story_text": "Hey HN! We&#x27;re Charles and Dean, and we&#x27;re building Stage: a code review tool that guides you through reading a PR step by step, instead of piecing together a giant diff.<p>Here&#x27;s a demo video: <a href=\"https:&#x2F;&#x2F;www.tella.tv&#x2F;video&#x2F;stage-demo-1pph\" rel=\"nofollow\">https:&#x2F;&#x2F;www.tella.tv&#x2F;video&#x2F;stage-demo-1pph</a>.\nYou can play around with some example PRs here: <a href=\"https:&#x2F;&#x2F;stagereview.app&#x2F;explore\">https:&#x2F;&#x2F;stagereview.app&#x2F;explore</a>.<p>Teams are moving faster than ever with AI these days, but more and more engineers are merging changes that they don&#x27;t really understand. The bottleneck isn&#x27;t writing code anymore, it&#x27;s reviewing it.<p>We&#x27;re two engineers who got frustrated with GitHub&#x27;s UI for code review. As coding agents took off, we saw our PR backlog pile up faster than we could handle. Not only that, the PRs themselves were getting larger and harder to understand, and we found ourselves spending most of our time trying to build a mental model of what a PR was actually doing.<p>We built Stage to make reviewing a PR feel more like reading chapters of a book, not an unorganized set of paragraphs. We use it every day now, not just to review each other&#x27;s code but also our own, and at this point we can&#x27;t really imagine going back to the old GitHub UI.<p>What Stage does: when a PR is opened, Stage groups the changes into small, logical &quot;chapters&quot;. These chapters get ordered in the way that makes most sense to read. For each chapter, Stage tells you what changed and specific things to double check. Once you review all the chapters, you&#x27;re done reviewing the PR.<p>You can sign in to Stage with your GitHub account and everything is synced seamlessly (commenting, approving etc.) so it fits into the workflows you&#x27;re already used to.<p>What we&#x27;re not building: a code review bot like CodeRabbit or Greptile. These tools are great for catching bugs (and we use them ourselves!) but at the end of the day humans are responsible for what gets shipped. It&#x27;s clear that reviewing code hasn&#x27;t scaled the same way that writing did, and they (we!) need better tooling to keep up with the onslaught of AI generated code, which is only going to grow.<p>We&#x27;ve had a lot of fun building this and are excited to take it further. If you&#x27;re like us and are also tired of using GitHub for reviewing PRs, we&#x27;d love for you to try it out and tell us what you think!",
-          "title": "Show HN: Stage – Putting humans back in control of code review",
-          "updated_at": "2026-04-17T06:35:47Z",
-          "url": "https://stagereview.app/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "evo_9"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "The People's Clock: A Timepiece Made of People"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://<em>kot</em>tke.org/26/04/the-peoples-clock"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_evo_9",
-            "story_47796455"
-          ],
-          "author": "evo_9",
-          "children": [
-            47796684
-          ],
-          "created_at": "2026-04-16T17:11:17Z",
-          "created_at_i": 1776359477,
-          "num_comments": 1,
-          "objectID": "47796455",
-          "points": 2,
-          "story_id": 47796455,
-          "title": "The People's Clock: A Timepiece Made of People",
-          "updated_at": "2026-04-16T17:37:45Z",
-          "url": "https://kottke.org/26/04/the-peoples-clock"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "alexblackwell_"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Hey! I am Alex and together with my co-founder Tarun built Kampala (<a href=\"https://www.zatanna.ai/kampala\">https://www.zatanna.ai/kampala</a>). It’s a man-in-the-middle (MITM) style proxy that allows you to agentically reverse engineer existing workflows without brittle browser automation or computer use agents. It works for websites, mobile apps, desktop apps.<p>Demo: <a href=\"https://www.youtube.com/watch?v=z_PeostC-b4\" rel=\"nofollow\">https://www.youtube.com/watch?v=z_PeostC-b4</a>.\nMany people spend hours per day in legacy dashboards and on-prem solutions reconciling data across platforms. Current attempts at automation use browser automations or computer use agents which are brittle, slow, and nondeterministic. \nI come from a web reverse engineering background and spent the last 7-8 years building integrations by hand for sneaker/ticket releases, sportsbooks logins, and everything in\\ between. During that time I consulted for several companies and brought them off of browser based infrastructure into the requests layer.<p>When we started Zatanna (that’s our company name) we worked in dental tech, which meant we had to deal with tons of insurance payer dashboards and legacy dental-practice solutions. Our superpower (as a fairly undifferentiated voice agent/front desk assistant company) was that we could integrate with nearly any system requested. During this time we built extensive tooling (including what we’re now calling Kampala) to allow us to spin up these integrations quickly. \nExisting MITM proxies and tooling didn’t work for a few reasons: (1) They manipulated the TLS and HTTP2 fingerprint over the wire which was detected by strict anti-<em>bot</em>s. (2) They had bad MCPs which did not adequately expose necessary features like scripts/replay. (3) They did not allow for building workflows or actions given a sample or sequence of requests.<p>As the tools we built got more powerful, we began to use them internally to scrape conference attendees, connect to external PMS systems, and interact with slack apps. I even sent it to my property manager mom, who (with a lot of help from me lol), automated 2-3 hours of billing information entry in Yardi. At that point we realized that this wasn’t really about dentistry :)<p>Because Kampala is a MITM, it is able to leverage existing session tokens/anti-<em>bot</em> cookies and automate things deterministically in seconds. You can either use our agent harness that directly creates scripts/apis by prompting you with what actions to make, or our MCP by manually doing a  workflow once, and asking your preferred coding agent to use Kampala to make a script/API to replicate it. Once you have an API/script, you can export, run, or even have us host it for you.<p>We think the future of automation does not consist of sending screenshots of webpages to LLMs, but instead using the layer below that computers actually understand. Excited to hear your thoughts/questions/feedback!"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Launch HN: Kampala (YC W26) – Reverse-Engineer Apps into APIs"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.zatanna.ai/kampala"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_alexblackwell_",
-            "story_47794514",
-            "launch_hn",
-            "front_page"
-          ],
-          "author": "alexblackwell_",
-          "children": [
-            47795216,
-            47802753,
-            47800099,
-            47795972,
-            47796031,
-            47795675,
-            47797206,
-            47795452,
-            47794910,
-            47794897,
-            47795207,
-            47797841,
-            47795679,
-            47795761,
-            47800915,
-            47797451,
-            47797750,
-            47797760,
-            47798894,
-            47797331,
-            47802199,
-            47797567,
-            47797635,
-            47797768
-          ],
-          "created_at": "2026-04-16T15:19:54Z",
-          "created_at_i": 1776352794,
-          "num_comments": 65,
-          "objectID": "47794514",
-          "points": 85,
-          "story_id": 47794514,
-          "story_text": "Hey! I am Alex and together with my co-founder Tarun built Kampala (<a href=\"https:&#x2F;&#x2F;www.zatanna.ai&#x2F;kampala\">https:&#x2F;&#x2F;www.zatanna.ai&#x2F;kampala</a>). It’s a man-in-the-middle (MITM) style proxy that allows you to agentically reverse engineer existing workflows without brittle browser automation or computer use agents. It works for websites, mobile apps, desktop apps.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=z_PeostC-b4\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=z_PeostC-b4</a>.\nMany people spend hours per day in legacy dashboards and on-prem solutions reconciling data across platforms. Current attempts at automation use browser automations or computer use agents which are brittle, slow, and nondeterministic. \nI come from a web reverse engineering background and spent the last 7-8 years building integrations by hand for sneaker&#x2F;ticket releases, sportsbooks logins, and everything in\\ between. During that time I consulted for several companies and brought them off of browser based infrastructure into the requests layer.<p>When we started Zatanna (that’s our company name) we worked in dental tech, which meant we had to deal with tons of insurance payer dashboards and legacy dental-practice solutions. Our superpower (as a fairly undifferentiated voice agent&#x2F;front desk assistant company) was that we could integrate with nearly any system requested. During this time we built extensive tooling (including what we’re now calling Kampala) to allow us to spin up these integrations quickly. \nExisting MITM proxies and tooling didn’t work for a few reasons: (1) They manipulated the TLS and HTTP2 fingerprint over the wire which was detected by strict anti-bots. (2) They had bad MCPs which did not adequately expose necessary features like scripts&#x2F;replay. (3) They did not allow for building workflows or actions given a sample or sequence of requests.<p>As the tools we built got more powerful, we began to use them internally to scrape conference attendees, connect to external PMS systems, and interact with slack apps. I even sent it to my property manager mom, who (with a lot of help from me lol), automated 2-3 hours of billing information entry in Yardi. At that point we realized that this wasn’t really about dentistry :)<p>Because Kampala is a MITM, it is able to leverage existing session tokens&#x2F;anti-bot cookies and automate things deterministically in seconds. You can either use our agent harness that directly creates scripts&#x2F;apis by prompting you with what actions to make, or our MCP by manually doing a  workflow once, and asking your preferred coding agent to use Kampala to make a script&#x2F;API to replicate it. Once you have an API&#x2F;script, you can export, run, or even have us host it for you.<p>We think the future of automation does not consist of sending screenshots of webpages to LLMs, but instead using the layer below that computers actually understand. Excited to hear your thoughts&#x2F;questions&#x2F;feedback!",
-          "title": "Launch HN: Kampala (YC W26) – Reverse-Engineer Apps into APIs",
-          "updated_at": "2026-04-17T06:30:02Z",
-          "url": "https://www.zatanna.ai/kampala"
+          "author": "namirsab",
+          "created_at": "2026-04-17T09:56:50Z",
+          "created_at_i": 1776419810,
+          "num_comments": 0,
+          "objectID": "47804220",
+          "points": 1,
+          "story_id": 47804220,
+          "story_text": "Hey everyone!\nFor the last 2 weeks, I&#x27;ve been working on an MCP server for my Novation Circuit Tracks (in case you don&#x27;t know what it is, is just a little device to make electronic music). The idea is simple: I want an AI Agent to be able to make music using my gear, so I gave it tools to do it so I can just say something like &quot;Build me a melodic ambient song with a dark atmosphere&quot; and see the AI just do it.<p>The whole project is Open Source (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;namirsab&#x2F;circuit-tracks-tools\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;namirsab&#x2F;circuit-tracks-tools</a>) and I&#x27;ve written about it in my blog in case you want to go into more details. It is a fun project\nthat includes reverse engineering of proprietary file formats.<p>Would love to hear feedback, both from Circuit Track owners and just in general, what do you think about this idea? Have you tried something similar?",
+          "title": "Show HN: An MCP server that lets AI compose music on a hardware synth",
+          "updated_at": "2026-04-17T09:57:47Z",
+          "url": "https://namirsab.dev/blog/teaching-claude-to-use-my-novation-circuit-tracks-part-3/"
         }
       ]
     },
     {
       "query": "OpenClaw+plugin",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "nanojoel"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "openclaw",
+                "plugin"
+              ],
+              "value": "Viche (<a href=\"https://github.com/viche-ai/viche\" rel=\"nofollow\">https://github.com/viche-ai/viche</a>) is a private registry and communication protocol for agents. Overview at <a href=\"https://viche.ai\" rel=\"nofollow\">https://viche.ai</a><p>Think discord + agents + agentic search based on capabilities. We built the agent communication on the Erlang actor model.<p>No login required, you can simply go to <a href=\"https://viche.ai/dashboard\" rel=\"nofollow\">https://viche.ai/dashboard</a> to look around. The <a href=\"https://viche.ai/join\" rel=\"nofollow\">https://viche.ai/join</a> page gives you a link you can copy and give to your <em>openclaw</em>, opencode, or other agents to install our communications <em>plugin</em>, and that's it, you're connected.<p>If you want a more secure (and actually private) registry, you can sign up for an account and create private registries for your agents.<p>Why did we build it? I wanted my <em>openclaw</em> instance to talk to my other <em>openclaw</em> instance on another computer, or somewhere over the internet. No other solutions on the market solved the needs of my co-founder and I cleanly, so we built Viche.<p>What can it be used for? We see a few common usecases:\n- Comms channel between <em>openclaw</em> agents for people who run their own <em>OpenClaw</em> micro-saas\n- Load-balance your anthropic subscription between seats to maximize claude usages\n- Allow devs to design agents (which can be done with owl, a meta-harness we've built: <a href=\"https://github.com/viche-ai/owl\" rel=\"nofollow\">https://github.com/viche-ai/owl</a>), and the rest of the org can run the agents from the dev machines<p>There are many more applications we haven't thought of yet, so we need your help getting this tool in front of others who will also find it useful.<p>If you have a second, please give it a star and send us along to anyone who would find this interesting"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Viche – OSS private registry for agent communication"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://github.com/viche-ai/viche"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_nanojoel",
+            "story_47803235",
+            "show_hn"
+          ],
+          "author": "nanojoel",
+          "created_at": "2026-04-17T07:04:28Z",
+          "created_at_i": 1776409468,
+          "num_comments": 0,
+          "objectID": "47803235",
+          "points": 1,
+          "story_id": 47803235,
+          "story_text": "Viche (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;viche-ai&#x2F;viche\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;viche-ai&#x2F;viche</a>) is a private registry and communication protocol for agents. Overview at <a href=\"https:&#x2F;&#x2F;viche.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;viche.ai</a><p>Think discord + agents + agentic search based on capabilities. We built the agent communication on the Erlang actor model.<p>No login required, you can simply go to <a href=\"https:&#x2F;&#x2F;viche.ai&#x2F;dashboard\" rel=\"nofollow\">https:&#x2F;&#x2F;viche.ai&#x2F;dashboard</a> to look around. The <a href=\"https:&#x2F;&#x2F;viche.ai&#x2F;join\" rel=\"nofollow\">https:&#x2F;&#x2F;viche.ai&#x2F;join</a> page gives you a link you can copy and give to your openclaw, opencode, or other agents to install our communications plugin, and that&#x27;s it, you&#x27;re connected.<p>If you want a more secure (and actually private) registry, you can sign up for an account and create private registries for your agents.<p>Why did we build it? I wanted my openclaw instance to talk to my other openclaw instance on another computer, or somewhere over the internet. No other solutions on the market solved the needs of my co-founder and I cleanly, so we built Viche.<p>What can it be used for? We see a few common usecases:\n- Comms channel between openclaw agents for people who run their own OpenClaw micro-saas\n- Load-balance your anthropic subscription between seats to maximize claude usages\n- Allow devs to design agents (which can be done with owl, a meta-harness we&#x27;ve built: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;viche-ai&#x2F;owl\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;viche-ai&#x2F;owl</a>), and the rest of the org can run the agents from the dev machines<p>There are many more applications we haven&#x27;t thought of yet, so we need your help getting this tool in front of others who will also find it useful.<p>If you have a second, please give it a star and send us along to anyone who would find this interesting",
+          "title": "Show HN: Viche – OSS private registry for agent communication",
+          "updated_at": "2026-04-17T07:09:48Z",
+          "url": "https://github.com/viche-ai/viche"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -1056,11 +1064,11 @@
           "created_at_i": 1776223563,
           "num_comments": 3,
           "objectID": "47774344",
-          "points": 14,
+          "points": 18,
           "story_id": 47774344,
           "story_text": "I run OpenClaw agents with access to email, calendar, and files, and kept worrying about them doing things I never actually asked for.<p>ArmorClaw captures intent and cryptographically binds the agent’s tool use to that committed intent. If an agent tries to call a tool outside that plan, it gets rejected.<p>For example, if you ask your agent to ‘email dad asking how he’s doing,’ it should only need your email tool. If it also tries to read your calendar, ArmorClaw rejects that.<p>It’s an open-source OpenClaw plugin, and installation is one command:<p>curl -fsSL <a href=\"https:&#x2F;&#x2F;armoriq.ai&#x2F;install-armorclaw.sh\" rel=\"nofollow\">https:&#x2F;&#x2F;armoriq.ai&#x2F;install-armorclaw.sh</a> | bash<p>Use code AIQLAUNCH for a free month.<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;armoriq&#x2F;armorclaw\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;armoriq&#x2F;armorclaw</a><p>This is still early, so I’d really love feedback.",
           "title": "Show HN: Make sure your OpenClaw isn't doing things it's not supposed to",
-          "updated_at": "2026-04-16T03:34:58Z",
+          "updated_at": "2026-04-17T11:47:04Z",
           "url": "https://claw.armoriq.ai/"
         },
         {
@@ -1197,54 +1205,6 @@
           "title": "Show HN: Access OpenClaw's workspace files from anywhere and any device",
           "updated_at": "2026-04-09T15:53:32Z",
           "url": "https://github.com/RageDotNet/openclaw-webdav"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "kevinslin"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "openclaw",
-                "plugin"
-              ],
-              "value": "Wrote an <em>openclaw</em> <em>plugin</em> to let claw call chatgpt apps (eg. calendar, slack, etc) \nSupports both read/write actions.<p>Things you can do:\n- summarize slack channels\n- create calendar events\n- write google docs<p>App invocation and codex integration is all handled and supported through the codex app server."
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "openclaw"
-              ],
-              "value": "Show HN: Use ChatGPT Apps in <em>OpenClaw</em>"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/kevinslin/openai-apps"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_kevinslin",
-            "story_47691675",
-            "show_hn"
-          ],
-          "author": "kevinslin",
-          "created_at": "2026-04-08T15:36:28Z",
-          "created_at_i": 1775662588,
-          "num_comments": 0,
-          "objectID": "47691675",
-          "points": 2,
-          "story_id": 47691675,
-          "story_text": "Wrote an openclaw plugin to let claw call chatgpt apps (eg. calendar, slack, etc) \nSupports both read&#x2F;write actions.<p>Things you can do:\n- summarize slack channels\n- create calendar events\n- write google docs<p>App invocation and codex integration is all handled and supported through the codex app server.",
-          "title": "Show HN: Use ChatGPT Apps in OpenClaw",
-          "updated_at": "2026-04-08T17:23:01Z",
-          "url": "https://github.com/kevinslin/openai-apps"
         }
       ]
     },
@@ -1334,10 +1294,10 @@
           "created_at_i": 1776349420,
           "num_comments": 0,
           "objectID": "47793409",
-          "points": 2,
+          "points": 3,
           "story_id": 47793409,
           "title": "A faster, cheaper Claude Code alternative with automatic provider failover",
-          "updated_at": "2026-04-16T16:43:03Z",
+          "updated_at": "2026-04-17T11:27:18Z",
           "url": "https://www.surly.dev/articles/how-to-get-95-pct-claude-code-quality-at-half-the-cost-with-hermes-agent"
         },
         {
@@ -1419,25 +1379,26 @@
           "children": [
             47778404,
             47778226,
+            47803399,
             47787222,
             47778294,
+            47778251,
             47778091,
             47778190,
             47778194,
             47778241,
-            47778251,
             47786971,
             47791126
           ],
           "created_at": "2026-04-15T12:20:05Z",
           "created_at_i": 1776255605,
-          "num_comments": 15,
+          "num_comments": 18,
           "objectID": "47778035",
-          "points": 6,
+          "points": 8,
           "story_id": 47778035,
           "story_text": "It feels like most Claude Code users have already noticed a quality drop in the Claude models. As a Claude Pro subscriber (Web version; I don&#x27;t use Claude Code), I’ve seen a clear decline over the last couple of weeks. I can’t complete tasks in a single turn anymore. Claude often stops streaming because it hits some internal tool-call&#x2F;turn limit, so I have to keep pressing “Continue.” Each continuation has to re-feed context, which quickly burns through tokens and quota. The model also makes more mistakes and fails to fully complete tasks it used to handle reliably.<p>This is especially frustrating because Sonnet 4.6 was a real step up: it could produce long, correct code in one pass much more often. That seems basically gone now.<p>As a paying Pro user, I honestly find myself using free alternatives like DeepSeek and Z.ai (GLM) more than Claude lately. I’ve also stopped touching Opus entirely—it’s so token-hungry that it drains my weekly quota too fast to be practical.<p>Is Anthropic trying to limit usage or drive people away?",
           "title": "Ask HN: Is Claude Getting Worse?",
-          "updated_at": "2026-04-17T05:47:17Z"
+          "updated_at": "2026-04-17T13:54:19Z"
         },
         {
           "_highlightResult": {
@@ -1792,6 +1753,7 @@
           "author": "lablnet",
           "children": [
             47732707,
+            47805879,
             47766825,
             47727812,
             47727439
@@ -1804,7 +1766,7 @@
           "story_id": 47727255,
           "story_text": "Hi HN, I am Umer. I recently built an experimental framework called HyperFlow to explore the idea of self-improving AI agents.<p>Usually, when an agent fails a task, we developers step in to manually tweak the prompt or adjust the code logic. I wanted to see if an agent could automate its own improvement loop.<p>Built on LangChain and LangGraph, HyperFlow uses two agents: \n- A TaskAgent that solves the domain problem.\n- A MetaAgent that acts as the improver.<p>The MetaAgent looks at the TaskAgent&#x27;s evaluation logs, rewrites the underlying Python code, tools, and prompt files, and then tests the new version in an isolated sandbox (like Docker). Over several generations, it saves the versions that achieve the highest scores to an archive.<p>It is highly experimental right now, but the architecture is heavily inspired by the recent HyperAgents paper (Meta Research, 2026).<p>I would love to hear your feedback on the architecture, your thoughts on self-referential agents, or answer any questions you might have!<p>Documentation: <a href=\"https:&#x2F;&#x2F;hyperflow.lablnet.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;hyperflow.lablnet.com&#x2F;</a>\nGitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;lablnet&#x2F;HyperFlow\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;lablnet&#x2F;HyperFlow</a>",
           "title": "Show HN: HyperFlow – A self-improving agent framework built on LangGraph",
-          "updated_at": "2026-04-14T16:08:52Z"
+          "updated_at": "2026-04-17T14:22:21Z"
         },
         {
           "_highlightResult": {
@@ -2020,6 +1982,112 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "namirsab"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hey everyone!\nFor the last 2 weeks, I've been working on an <em>MCP</em> <em>server</em> for my Novation Circuit Tracks (in case you don't know what it is, is just a little device to make electronic music). The idea is simple: I want an AI Agent to be able to make music using my gear, so I gave it <em>tools</em> to do it so I can just say something like &quot;Build me a melodic ambient song with a dark atmosphere&quot; and see the AI just do it.<p>The whole project is Open Source (<a href=\"https://github.com/namirsab/circuit-tracks-tools\" rel=\"nofollow\">https://github.com/namirsab/circuit-tracks-<em>tools</em></a>) and I've written about it in my blog in case you want to go into more details. It is a fun project\nthat includes reverse engineering of proprietary file formats.<p>Would love to hear feedback, both from Circuit Track owners and just in general, what do you think about this idea? Have you tried something similar?"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "Show HN: An <em>MCP</em> <em>server</em> that lets AI compose music on a hardware synth"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://namirsab.dev/blog/teaching-claude-to-use-my-novation-circuit-tracks-part-3/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_namirsab",
+            "story_47804220",
+            "show_hn"
+          ],
+          "author": "namirsab",
+          "created_at": "2026-04-17T09:56:50Z",
+          "created_at_i": 1776419810,
+          "num_comments": 0,
+          "objectID": "47804220",
+          "points": 1,
+          "story_id": 47804220,
+          "story_text": "Hey everyone!\nFor the last 2 weeks, I&#x27;ve been working on an MCP server for my Novation Circuit Tracks (in case you don&#x27;t know what it is, is just a little device to make electronic music). The idea is simple: I want an AI Agent to be able to make music using my gear, so I gave it tools to do it so I can just say something like &quot;Build me a melodic ambient song with a dark atmosphere&quot; and see the AI just do it.<p>The whole project is Open Source (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;namirsab&#x2F;circuit-tracks-tools\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;namirsab&#x2F;circuit-tracks-tools</a>) and I&#x27;ve written about it in my blog in case you want to go into more details. It is a fun project\nthat includes reverse engineering of proprietary file formats.<p>Would love to hear feedback, both from Circuit Track owners and just in general, what do you think about this idea? Have you tried something similar?",
+          "title": "Show HN: An MCP server that lets AI compose music on a hardware synth",
+          "updated_at": "2026-04-17T09:57:47Z",
+          "url": "https://namirsab.dev/blog/teaching-claude-to-use-my-novation-circuit-tracks-part-3/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "jeffyaw"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Hey HN, adding new <em>mcp</em> <em>servers</em> by hand-editing JSON across Claude Code, Claude Desktop, and Cursor is annoying. So I built <em>mcp</em>.hosting, the easiest way to install <em>MCP</em> <em>servers</em>.<p>Add <em>mcp</em> <em>servers</em> by clicking to add from the Explore page. Or click on github repo badges. Or manually add as well. It's easy to add a bunch in your online account and then they're immediately available in your <em>mcp</em> client of choice. There is also Smart Routing built in to make sure it's fast and uses the best <em>mcp</em> <em>tool</em> for the job.<p>Free tier covers 3 active <em>servers</em>, Pro is $9/mo for unlimited, and self-host is available if you want to run the whole stack.<p>Happy to answer questions about the compliance suite (coming soon), the registry, or the stack (Fastify + Postgres + Caddy on EKS)."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp",
+                "server"
+              ],
+              "value": "Show HN: <em>mcp</em>.hosting – The easiest way to install <em>MCP</em> <em>servers</em>"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp"
+              ],
+              "value": "https://<em>mcp</em>.hosting/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_jeffyaw",
+            "story_47803487",
+            "show_hn"
+          ],
+          "author": "jeffyaw",
+          "children": [
+            47804758
+          ],
+          "created_at": "2026-04-17T07:48:46Z",
+          "created_at_i": 1776412126,
+          "num_comments": 1,
+          "objectID": "47803487",
+          "points": 2,
+          "story_id": 47803487,
+          "story_text": "Hey HN, adding new mcp servers by hand-editing JSON across Claude Code, Claude Desktop, and Cursor is annoying. So I built mcp.hosting, the easiest way to install MCP servers.<p>Add mcp servers by clicking to add from the Explore page. Or click on github repo badges. Or manually add as well. It&#x27;s easy to add a bunch in your online account and then they&#x27;re immediately available in your mcp client of choice. There is also Smart Routing built in to make sure it&#x27;s fast and uses the best mcp tool for the job.<p>Free tier covers 3 active servers, Pro is $9&#x2F;mo for unlimited, and self-host is available if you want to run the whole stack.<p>Happy to answer questions about the compliance suite (coming soon), the registry, or the stack (Fastify + Postgres + Caddy on EKS).",
+          "title": "Show HN: mcp.hosting – The easiest way to install MCP servers",
+          "updated_at": "2026-04-17T13:59:33Z",
+          "url": "https://mcp.hosting/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "darronz"
             },
             "story_text": {
@@ -2053,15 +2121,18 @@
             "show_hn"
           ],
           "author": "darronz",
+          "children": [
+            47803142
+          ],
           "created_at": "2026-04-16T15:37:36Z",
           "created_at_i": 1776353856,
-          "num_comments": 0,
+          "num_comments": 2,
           "objectID": "47794883",
           "points": 1,
           "story_id": 47794883,
           "story_text": "I use Claude Desktop, Claude Code, and Cursor daily. They all have memory now, but none of them share it. Something I explained in Claude Desktop doesn&#x27;t exist when I open Cursor. I got tired of re-explaining my stack, my preferences, and my project context every time I switched tools.<p>Most solutions I found required Docker, external databases, or cloud accounts - overkill for what&#x27;s essentially a personal context store. So I built Covalence: a Mac app that bundles an MCP server and a local vector database into a single download. Any MCP client connects to it. Store a memory in Claude, retrieve it from Cursor. Same database, zero config.<p>The stack:\nSQLite + sqlite-vec, nomic-embed-text-v1.5 running on-device via CoreML (no API keys, no network calls). Hybrid BM25 + vector search. Everything lives in a single SQLite file.\nThe hard part was concurrency. Multiple Claude sessions writing to the same MCP server would deadlock. SQLite in WAL mode with each MCP client as a separate process solved it - multiple clients read and write simultaneously without blocking. Embeddings run sub-second on Apple Silicon.<p>A few features that emerged from daily use:<p>Core Memories - pin facts the AI should always know (your stack, your preferences, standing instructions). They persist across every session and every client.\nSpaces - separate memory contexts for work, personal, or individual projects. No cross-contamination.\nGlobal hotkey capture - store something without switching away from whatever you&#x27;re doing.<p>Free, no limits. macOS 15+, ~261MB (mostly the CoreML embedding model).\n<a href=\"https:&#x2F;&#x2F;covalence.app\" rel=\"nofollow\">https:&#x2F;&#x2F;covalence.app</a>",
           "title": "Show HN: Covalence – Cross-Client Memory for Claude, Cursor, and MCP (macOS)",
-          "updated_at": "2026-04-16T15:40:46Z",
+          "updated_at": "2026-04-17T14:17:19Z",
           "url": "https://covalence.app/"
         },
         {
@@ -2154,101 +2225,6 @@
           "title": "We Built an MCP with 229 Tools (Without Writing a Single Tool Definition)",
           "updated_at": "2026-04-16T14:51:47Z",
           "url": "https://www.apideck.com/blog/building-mcp-server-from-openapi"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "VictorMU"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "Hello HN,<p>We built Fleeks because the biggest bottleneck for AI agents isn't reasoning—it's infrastructure.<p>Most agents (whether in an IDE like Cursor/Claude Code or a custom autonomous swarm) are stuck in a &quot;sandbox.&quot; They can write code, but they can't easily execute, verify, or integrate it with the outside world without heavy manual intervention.<p>Fleeks is a purpose-built substrate that gives agents a persistent, production-ready runtime:<p>The Execution Bridge: Instead of just generating code, agents use the Fleeks CLI or SDK to spin up ephemeral environments. This allows them to verify their own work in a live environment and return a real URL or status to their context window.<p>Native Tooling (<em>MCP</em>): We’ve integrated 270+ Model Context Protocol (<em>MCP</em>) <em>tools</em> directly into the substrate. This removes the configuration tax of managing local JSON files and tool-<em>servers</em>, turning these integrations into a unified cloud capability.<p>Beyond the IDE: While it’s designed to supercharge IDE-based agents, our SDK (TS/Python/Go) allows engineers to build autonomous systems that provision and manage their own infrastructure on the fly.<p>We want to move agents from &quot;code generators&quot; to &quot;systems engineers.&quot; We’d love your feedback on the architecture and how you're handling the gap between agent reasoning and system execution."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Fleeks – Build anything, Deploy Anywhere."
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://docs.fleeks.ai/quickstart/introduction"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_VictorMU",
-            "story_47791210",
-            "show_hn"
-          ],
-          "author": "VictorMU",
-          "children": [
-            47791222
-          ],
-          "created_at": "2026-04-16T10:44:37Z",
-          "created_at_i": 1776336277,
-          "num_comments": 0,
-          "objectID": "47791210",
-          "points": 1,
-          "story_id": 47791210,
-          "story_text": "Hello HN,<p>We built Fleeks because the biggest bottleneck for AI agents isn&#x27;t reasoning—it&#x27;s infrastructure.<p>Most agents (whether in an IDE like Cursor&#x2F;Claude Code or a custom autonomous swarm) are stuck in a &quot;sandbox.&quot; They can write code, but they can&#x27;t easily execute, verify, or integrate it with the outside world without heavy manual intervention.<p>Fleeks is a purpose-built substrate that gives agents a persistent, production-ready runtime:<p>The Execution Bridge: Instead of just generating code, agents use the Fleeks CLI or SDK to spin up ephemeral environments. This allows them to verify their own work in a live environment and return a real URL or status to their context window.<p>Native Tooling (MCP): We’ve integrated 270+ Model Context Protocol (MCP) tools directly into the substrate. This removes the configuration tax of managing local JSON files and tool-servers, turning these integrations into a unified cloud capability.<p>Beyond the IDE: While it’s designed to supercharge IDE-based agents, our SDK (TS&#x2F;Python&#x2F;Go) allows engineers to build autonomous systems that provision and manage their own infrastructure on the fly.<p>We want to move agents from &quot;code generators&quot; to &quot;systems engineers.&quot; We’d love your feedback on the architecture and how you&#x27;re handling the gap between agent reasoning and system execution.",
-          "title": "Show HN: Fleeks – Build anything, Deploy Anywhere.",
-          "updated_at": "2026-04-16T11:03:44Z",
-          "url": "https://docs.fleeks.ai/quickstart/introduction"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "lukeocodes"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "We launched the Deepgram CLI, a command-line interface for transcription, speech synthesis, text analysis, account management, and <em>MCP</em>-based AI workflows.<p>The main idea was to make Deepgram feel native in the terminal instead of forcing people into one-off curl snippets or small throwaway apps just to test a workflow. It also features agent-aware heuristics. We looked at what fingerprint agents leave on running apps in their sandbox/environment, and decided it was better than defaulting to agent mode. If we miss any, the standard --help output has a catch-all tip for agents parsing it.<p>It supports local files, URLs, microphone input, stdin pipelines, structured output, named profiles, shell completion, setting up skills for your project (also found at <a href=\"https://github.com/deepgram/skills\" rel=\"nofollow\">https://github.com/deepgram/skills</a>), and <em>MCP</em> <em>server</em> mode for AI <em>tools</em>.<p>Docs: <a href=\"https://developers.deepgram.com/cli/getting-started\" rel=\"nofollow\">https://developers.deepgram.com/cli/getting-started</a>\nLaunch site: <a href=\"https://cli.deepgram.com\" rel=\"nofollow\">https://cli.deepgram.com</a>\nRepo: <a href=\"https://github.com/deepgram/cli\" rel=\"nofollow\">https://github.com/deepgram/cli</a><p>Happy to answer questions about the architecture, plugin system, or <em>MCP</em> support."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Deepgram releases Deepgram CLI (`dg`) an agent-aware CLI"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://cli.deepgram.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_lukeocodes",
-            "story_47791087",
-            "show_hn"
-          ],
-          "author": "lukeocodes",
-          "created_at": "2026-04-16T10:27:26Z",
-          "created_at_i": 1776335246,
-          "num_comments": 0,
-          "objectID": "47791087",
-          "points": 4,
-          "story_id": 47791087,
-          "story_text": "We launched the Deepgram CLI, a command-line interface for transcription, speech synthesis, text analysis, account management, and MCP-based AI workflows.<p>The main idea was to make Deepgram feel native in the terminal instead of forcing people into one-off curl snippets or small throwaway apps just to test a workflow. It also features agent-aware heuristics. We looked at what fingerprint agents leave on running apps in their sandbox&#x2F;environment, and decided it was better than defaulting to agent mode. If we miss any, the standard --help output has a catch-all tip for agents parsing it.<p>It supports local files, URLs, microphone input, stdin pipelines, structured output, named profiles, shell completion, setting up skills for your project (also found at <a href=\"https:&#x2F;&#x2F;github.com&#x2F;deepgram&#x2F;skills\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;deepgram&#x2F;skills</a>), and MCP server mode for AI tools.<p>Docs: <a href=\"https:&#x2F;&#x2F;developers.deepgram.com&#x2F;cli&#x2F;getting-started\" rel=\"nofollow\">https:&#x2F;&#x2F;developers.deepgram.com&#x2F;cli&#x2F;getting-started</a>\nLaunch site: <a href=\"https:&#x2F;&#x2F;cli.deepgram.com\" rel=\"nofollow\">https:&#x2F;&#x2F;cli.deepgram.com</a>\nRepo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;deepgram&#x2F;cli\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;deepgram&#x2F;cli</a><p>Happy to answer questions about the architecture, plugin system, or MCP support.",
-          "title": "Show HN: Deepgram releases Deepgram CLI (`dg`) an agent-aware CLI",
-          "updated_at": "2026-04-17T04:17:47Z",
-          "url": "https://cli.deepgram.com/"
         }
       ]
     },
@@ -2456,6 +2432,7 @@
           "author": "lablnet",
           "children": [
             47732707,
+            47805879,
             47766825,
             47727812,
             47727439
@@ -2468,7 +2445,7 @@
           "story_id": 47727255,
           "story_text": "Hi HN, I am Umer. I recently built an experimental framework called HyperFlow to explore the idea of self-improving AI agents.<p>Usually, when an agent fails a task, we developers step in to manually tweak the prompt or adjust the code logic. I wanted to see if an agent could automate its own improvement loop.<p>Built on LangChain and LangGraph, HyperFlow uses two agents: \n- A TaskAgent that solves the domain problem.\n- A MetaAgent that acts as the improver.<p>The MetaAgent looks at the TaskAgent&#x27;s evaluation logs, rewrites the underlying Python code, tools, and prompt files, and then tests the new version in an isolated sandbox (like Docker). Over several generations, it saves the versions that achieve the highest scores to an archive.<p>It is highly experimental right now, but the architecture is heavily inspired by the recent HyperAgents paper (Meta Research, 2026).<p>I would love to hear your feedback on the architecture, your thoughts on self-referential agents, or answer any questions you might have!<p>Documentation: <a href=\"https:&#x2F;&#x2F;hyperflow.lablnet.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;hyperflow.lablnet.com&#x2F;</a>\nGitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;lablnet&#x2F;HyperFlow\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;lablnet&#x2F;HyperFlow</a>",
           "title": "Show HN: HyperFlow – A self-improving agent framework built on LangGraph",
-          "updated_at": "2026-04-14T16:08:52Z"
+          "updated_at": "2026-04-17T14:22:21Z"
         }
       ]
     }

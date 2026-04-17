@@ -1,18 +1,18 @@
 {
   "lastRunTimestamps": {
-    "pulse": "2026-04-17T06:56:43.816Z",
-    "intel": "2026-04-17T06:23:05.823Z",
-    "outreach": "2026-04-17T06:40:40.431Z",
+    "pulse": "2026-04-17T11:32:59.730Z",
+    "intel": "2026-04-17T06:40:10.494Z",
+    "outreach": "2026-04-17T06:57:02.540Z",
     "writing": "2026-04-16T17:52:58.129Z",
     "evolution": "2026-04-16T17:55:47.980Z",
-    "opportunities": "2026-04-17T06:23:10.924Z",
-    "actions": "2026-04-17T06:40:40.026Z",
-    "synthesis": "2026-04-17T06:56:44.228Z",
-    "obsidian": "2026-04-17T06:40:40.451Z"
+    "opportunities": "2026-04-17T06:40:15.679Z",
+    "actions": "2026-04-17T06:57:01.136Z",
+    "synthesis": "2026-04-17T11:33:00.147Z",
+    "obsidian": "2026-04-17T06:57:02.559Z"
   },
   "stats": {
-    "totalRuns": 2525,
-    "totalPulses": 990,
+    "totalRuns": 2526,
+    "totalPulses": 991,
     "totalIntel": 109,
     "totalOutreach": 51,
     "totalWriting": 27,
@@ -24,11 +24,11 @@
     "postsFlagged": 0,
     "evolutionSuccesses": 3,
     "evolutionFailures": 17,
-    "totalSynthesis": 784,
+    "totalSynthesis": 785,
     "totalObsidianSyncs": 34
   },
   "knownStars": 12,
-  "knownDownloads": 22,
+  "knownDownloads": 222,
   "hnScore": 1,
   "hnComments": 0,
   "feedback": [
@@ -62,7 +62,7 @@
       "title": "I wrote a open source iMessage for your AI agents",
       "scoreAtPost": 1,
       "commentsAtPost": 0,
-      "lastCheckedAt": "2026-04-17T06:56:43.815Z",
+      "lastCheckedAt": "2026-04-17T11:32:59.728Z",
       "currentScore": 0,
       "currentComments": 0,
       "repliesReceived": 0,
