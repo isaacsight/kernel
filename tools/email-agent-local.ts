@@ -543,7 +543,7 @@ async function checkAndRespond(): Promise<void> {
 // ── Proactive Follow-ups ──
 // Once a week, check in with active companions who haven't emailed recently.
 
-const PROACTIVE_INTERVAL = 7 * 24 * 60 * 60_000 // 7 days
+const PROACTIVE_INTERVAL = 14 * 24 * 60 * 60_000 // 14 days
 const PROACTIVE_STATE_FILE = join(COMPANIONS_DIR, '_proactive_state.json')
 
 interface ProactiveState {
@@ -575,7 +575,7 @@ async function proactiveCheckins(): Promise<void> {
       const memory: CompanionMemory = JSON.parse(readFileSync(join(COMPANIONS_DIR, file), 'utf8'))
       if (!memory.email || memory.email.endsWith('@kernel.chat')) continue
 
-      // Skip if we checked in within the last 7 days
+      // Skip if we checked in within the last 14 days
       const lastCheckin = state.lastCheckin[memory.email]
       if (lastCheckin && now - new Date(lastCheckin).getTime() < PROACTIVE_INTERVAL) continue
 
@@ -597,6 +597,10 @@ async function proactiveCheckins(): Promise<void> {
 
       // Only reach out if they've been quiet 3-14 days (not too soon, not too late)
       if (daysSinceLastEmail < 3 || daysSinceLastEmail > 14) continue
+
+      // Max one unanswered check-in per quiet streak: if lastCheckin is AFTER
+      // the user's last email, they haven't replied to our last check-in — skip
+      if (lastCheckin && new Date(lastCheckin).getTime() > new Date(lastEmail).getTime()) continue
 
       console.log(`[Proactive] Checking in with ${memory.name} (${memory.email}) — ${Math.floor(daysSinceLastEmail)}d since last email`)
 
