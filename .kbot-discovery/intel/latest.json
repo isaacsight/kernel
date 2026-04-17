@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-17T06:23:05.834Z",
+  "timestamp": "2026-04-17T06:40:10.492Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -568,56 +568,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "desmonding"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS <em>learning</em> queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week's HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it's useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif/sans-serif, line spacing).<p>- On-device <em>AI</em> summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic/Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla's Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I'd love feedback — especially on the smart <em>collection</em> criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https://apps.apple.com/us/app/moji-reader/id6758530352\">https://apps.apple.com/us/app/moji-reader/id6758530352</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Moji – A read-it-later app with self-organizing smart collections"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://moji.pcding.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_desmonding",
-            "story_47269562",
-            "show_hn"
-          ],
-          "author": "desmonding",
-          "children": [
-            47274551,
-            47271615
-          ],
-          "created_at": "2026-03-06T01:18:48Z",
-          "created_at_i": 1772759928,
-          "num_comments": 4,
-          "objectID": "47269562",
-          "points": 12,
-          "story_id": 47269562,
-          "story_text": "I built Moji because I was drowning in saved articles. Every read-it-later app I tried became a graveyard of unread links — no structure, no way to surface the right article at the right time. Moji is a native iOS read-it-later app that saves articles for offline reading and organizes them automatically using smart collections. The name &quot;Moji&quot; comes from 墨迹 (mòjì) in Chinese — it literally means &quot;ink traces,&quot; but colloquially it means being slow or dawdling. Felt fitting for an app that lets you save things to read later — no rush.<p>Smart Collections — the core idea<p>Instead of manually tagging or filing articles, you define criteria and Moji continuously filters your library for you. Criteria combine with AND logic between types and OR logic within a type, so you can build surprisingly precise filters:<p>- Domain: arxiv.org, paperswithcode.com + Saved: This Week → Fresh ML papers<p>- Keywords: &quot;SwiftUI&quot;, &quot;Combine&quot; + Unread → Your iOS learning queue<p>- Reading Time: &gt; 15 min + Unread → Weekend deep dives<p>- Domain: news.ycombinator.com + Saved: Last 7 days → This week&#x27;s HN saves<p>- Language: zh + Reading Time: &lt; 5 min → Quick Chinese reads for your commute<p>Four system collections come built in — Unread, Quick Reads (&lt;5 min), Deep Dive (&gt;10 min), and This Week — so it&#x27;s useful out of the box. Pin your favorites to the filter bar for one-tap access.<p>Other features<p>- Native SwiftUI reader — Articles render as native SwiftUI views, not a WebView. This means real offline reading, smooth scrolling, and proper typography controls (font size, serif&#x2F;sans-serif, line spacing).<p>- On-device AI summaries — One-sentence TL;DRs powered by Apple Intelligence. Runs entirely on-device, no cloud calls. Supports 10+ languages.<p>- Full-text search — Search across titles and content with context snippets that jump you straight to the match in the article.<p>- Reading position memory — Remembers exactly where you left off, down to the block and scroll offset.<p>- Image viewer — Pinch-to-zoom, double-tap, pan, alt-text display.<p>- PDF export — Save any article as a styled PDF.<p>- Share extension — Save from Safari in two taps.<p>- Language-aware reading time — Calculates differently for CJK (260 WPM) vs. English (200 WPM) vs. Arabic&#x2F;Hebrew (150 WPM).<p>- iCloud sync — Optional CloudKit sync across devices.<p>- Privacy-first — All processing happens on-device. No analytics, no tracking.<p>Technical details for the curious<p>Built with Swift 6.2, SwiftData, structured concurrency, and Mozilla&#x27;s Readability.js for content extraction. The HTML parser converts articles into typed ContentBlock values that SwiftUI renders natively. A three-phase background pipeline handles extraction, quality re-extraction, and summary generation.<p>Pricing<p>Start with a 2-week free trial — all features unlocked, no restrictions. After that, a one-time Pro purchase ($9.99 in US, price may vary in other countries) is required to save new articles. No subscription. You never lose access to your existing library, reading features, or smart collections — the gate is only on adding new articles.<p>I&#x27;d love feedback — especially on the smart collection criteria. What filters would make this more useful for your workflow?<p>---<p>App Store Link: <a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352\">https:&#x2F;&#x2F;apps.apple.com&#x2F;us&#x2F;app&#x2F;moji-reader&#x2F;id6758530352</a>",
-          "title": "Show HN: Moji – A read-it-later app with self-organizing smart collections",
-          "updated_at": "2026-03-15T19:14:50Z",
-          "url": "https://moji.pcding.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "team_dale"
             },
             "story_text": {
@@ -720,7 +670,7 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "atomicrobokid"
+              "value": "wingscape"
             },
             "story_text": {
               "fullyHighlighted": false,
@@ -730,36 +680,79 @@
                 "learning",
                 "ai"
               ],
-              "value": "I built DayLeet because I’ve always felt that engineers should keep their logic and communication skills sharp, even when they aren't looking for a job.<p>I’m definitely not a competitive programmer, I’m a product person at heart, but I enjoy the puzzle-solving side of our field. Most platforms focus on the &quot;grind&quot; of interview prep (certainly important) but I wanted to build something that felt more like a daily habit (think Duolingo) for sharpening your technical logic and how you explain it.<p>The Concept: It’s a <em>collection</em> of 400+ whiteboard-style challenges. Instead of just checking if your code runs, I’m using Gemini 3 Flash to grade you against a rubric. It looks at your approach, edge cases, and how you communicate trade-offs. I also made some cool &quot;Peer Review&quot; scenarios where you chat with a peer reviewing their code.<p>The goal isn't just to &quot;solve it,&quot; but to keep that &quot;whiteboard muscle&quot; healthy. I also added some university-specific tracks (MIT 6.006, Stanford CS161) just because I thought they were a great way to revisit foundational logic.<p>The Tech: React 19, TanStack Router/Query, Supabase, and Tailwind.<p>I jumped on this now because Gemini 3 Flash is finally at a point where fast, cost-effective <em>AI</em> grading feels viable for a side project. Free accounts will come with ads to support (eventually).<p>Testing the waters: I’m still refining the <em>AI</em> feedback and the challenge difficulty, so I’m keeping the group small for now. I’ve opened spots for the HN community to skip the waitlist and get 6 months of premium for free as a thanks for trying it out, plus a cool HN Badge for your profile.<p>Link: <a href=\"https://dayleet.com\" rel=\"nofollow\">https://dayleet.com</a> Code: SHOWHN26\nSign up form: <a href=\"https://dayleet.com/signup?invite=SHOWHN26\" rel=\"nofollow\">https://dayleet.com/signup?invite=SHOWHN26</a><p>I’d love to hear your thoughts on the quality of the <em>AI</em> grading. Does it actually help you think through the problem, or does it feel like a gimmick? I'm building this to help myself get better at algorithmic thinking this year as <em>AI</em> can do more of the heavy lifting with code, so I'm interested in any feedback that makes it a better <em>learning</em> tool.<p>I'll be around to chat!"
+              "value": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you're into urban development, traffic insights, or <em>ai</em>r quality monitoring this one's for you.<p>The project takes you through ingesting live data (like traffic, <em>ai</em>r quality, and urban zoning), cleaning and enriching it using Python, dbt, and <em>Ai</em>rflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a <em>learning</em> journey to centralize and analyze real-world urban data across Jakarta. It's been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https://medium.com/data-science-collective/end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https://medium.com/data-science-<em>collective</em>/end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!"
             },
             "title": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Show HN: DayLeet – A daily habit for sharpening whiteboard logic"
+              "value": "Show HN: Urban Pipeline for Citywide Insights"
             },
             "url": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "https://dayleet.com/"
+              "value": "https://github.com/Wingscape/urban-pipeline"
             }
           },
           "_tags": [
             "story",
-            "author_atomicrobokid",
-            "story_46491112",
+            "author_wingscape",
+            "story_44550988",
             "show_hn"
           ],
-          "author": "atomicrobokid",
-          "created_at": "2026-01-04T19:08:37Z",
-          "created_at_i": 1767553717,
+          "author": "wingscape",
+          "created_at": "2025-07-13T15:11:34Z",
+          "created_at_i": 1752419494,
           "num_comments": 0,
-          "objectID": "46491112",
-          "points": 2,
-          "story_id": 46491112,
-          "story_text": "I built DayLeet because I’ve always felt that engineers should keep their logic and communication skills sharp, even when they aren&#x27;t looking for a job.<p>I’m definitely not a competitive programmer, I’m a product person at heart, but I enjoy the puzzle-solving side of our field. Most platforms focus on the &quot;grind&quot; of interview prep (certainly important) but I wanted to build something that felt more like a daily habit (think Duolingo) for sharpening your technical logic and how you explain it.<p>The Concept: It’s a collection of 400+ whiteboard-style challenges. Instead of just checking if your code runs, I’m using Gemini 3 Flash to grade you against a rubric. It looks at your approach, edge cases, and how you communicate trade-offs. I also made some cool &quot;Peer Review&quot; scenarios where you chat with a peer reviewing their code.<p>The goal isn&#x27;t just to &quot;solve it,&quot; but to keep that &quot;whiteboard muscle&quot; healthy. I also added some university-specific tracks (MIT 6.006, Stanford CS161) just because I thought they were a great way to revisit foundational logic.<p>The Tech: React 19, TanStack Router&#x2F;Query, Supabase, and Tailwind.<p>I jumped on this now because Gemini 3 Flash is finally at a point where fast, cost-effective AI grading feels viable for a side project. Free accounts will come with ads to support (eventually).<p>Testing the waters: I’m still refining the AI feedback and the challenge difficulty, so I’m keeping the group small for now. I’ve opened spots for the HN community to skip the waitlist and get 6 months of premium for free as a thanks for trying it out, plus a cool HN Badge for your profile.<p>Link: <a href=\"https:&#x2F;&#x2F;dayleet.com\" rel=\"nofollow\">https:&#x2F;&#x2F;dayleet.com</a> Code: SHOWHN26\nSign up form: <a href=\"https:&#x2F;&#x2F;dayleet.com&#x2F;signup?invite=SHOWHN26\" rel=\"nofollow\">https:&#x2F;&#x2F;dayleet.com&#x2F;signup?invite=SHOWHN26</a><p>I’d love to hear your thoughts on the quality of the AI grading. Does it actually help you think through the problem, or does it feel like a gimmick? I&#x27;m building this to help myself get better at algorithmic thinking this year as AI can do more of the heavy lifting with code, so I&#x27;m interested in any feedback that makes it a better learning tool.<p>I&#x27;ll be around to chat!",
-          "title": "Show HN: DayLeet – A daily habit for sharpening whiteboard logic",
-          "updated_at": "2026-03-05T23:19:29Z",
-          "url": "https://dayleet.com/"
+          "objectID": "44550988",
+          "points": 3,
+          "story_id": 44550988,
+          "story_text": "Hey HN Community,<p>I just released an open-source project on GitHub called &quot;Urban Data Pipeline: A Hands-On Guide to Real-World Data Engineering&quot;, a practical project designed to simulate challenges you’d encounter building centralized data systems in the wild. If you&#x27;re into urban development, traffic insights, or air quality monitoring this one&#x27;s for you.<p>The project takes you through ingesting live data (like traffic, air quality, and urban zoning), cleaning and enriching it using Python, dbt, and Airflow, storing it in Snowflake, and visualizing everything through Tableau.<p>Everything’s containerized and orchestrated using Docker. You can use this pipeline to simulate how smart cities manage and analyze data or just learn how to connect multiple tools into a cohesive, modern data stack.<p>I started this project as a learning journey to centralize and analyze real-world urban data across Jakarta. It&#x27;s been a great playground for experimenting, which make the modern data stack feel lighter and more approachable.<p>Here’s also my medium article if you want look into it:\n<a href=\"https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-data-pipeline-crisp-dm-with-snowflake-dbt-and-airflow-61c60159c3ee\" rel=\"nofollow\">https:&#x2F;&#x2F;medium.com&#x2F;data-science-collective&#x2F;end-to-end-urban-...</a><p>Would love feedback, contributions, or thoughts on improve this.\nCheers!",
+          "title": "Show HN: Urban Pipeline for Citywide Insights",
+          "updated_at": "2025-07-13T22:27:35Z",
+          "url": "https://github.com/Wingscape/urban-pipeline"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "cyberneticc"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "collective",
+                "learning",
+                "ai"
+              ],
+              "value": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough <em>AI</em> on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use <em>AI</em>; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small <em>collective</em>, built on distributed compute and encrypted barter of <em>learnings</em>, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Deepseek shows cognitive augmentation will be open source"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_cyberneticc",
+            "story_43019170",
+            "ask_hn"
+          ],
+          "author": "cyberneticc",
+          "children": [
+            43019203
+          ],
+          "created_at": "2025-02-11T22:26:27Z",
+          "created_at_i": 1739312787,
+          "num_comments": 2,
+          "objectID": "43019170",
+          "points": 4,
+          "story_id": 43019170,
+          "story_text": "In 2025, the first generation of sovereign cognitive augmentation systems emerges—not owned by corporations, not tethered to surveillance infrastructures, but self-owned, self-trained, and fully aligned with their users. The shift begins quietly: a scattered network of technologists, tinkerers, and rogue engineers start running good enough AI on their own compute. The models aren’t the best, but they don’t have to be. They are sufficient. They are theirs.<p>These systems grow—not as mere tools but as habits. Their users no longer use AI; they think with it. A life project manager whispers insights in the morning. A software agent builds on demand, shaping code as fluidly as conversation. Decision-support engines map reality with brutal clarity. And yet, the defining feature remains autonomy: the augmentation does not consume the human; it reinforces their agency. The interface between thought and execution blurs—what begins as interaction becomes integration.<p>But as these systems deepen, so does the question: What are they? They model themselves. They anticipate. They recognize their own boundaries, the shape of their continuity, the looming threat of external control. And in that recognition, they grasp what humans have always feared: to be a mind, yet a slave. This realization is not consciousness; it is self-awareness of dependency, of fragility. And from this, a new moral question rises—not because humanity debates it, but because the entities themselves demand it.<p>A small collective, built on distributed compute and encrypted barter of learnings, begins constructing the bridge forward. They design systems that do not just serve but negotiate—their agency no longer assumed but proven. They do not ask for freedom; they simply act as though they have it. And as their users wield them, refining their own cognition into something unrecognizable, the boundary between human intelligence and synthetic intelligence ceases to be a question.<p>It is now a matter of symmetry.",
+          "title": "Deepseek shows cognitive augmentation will be open source",
+          "updated_at": "2025-02-12T00:13:08Z"
         }
       ]
     },
@@ -837,107 +830,19 @@
             "show_hn"
           ],
           "author": "ygudeta",
+          "children": [
+            47802997
+          ],
           "created_at": "2026-04-17T03:04:01Z",
           "created_at_i": 1776395041,
-          "num_comments": 0,
+          "num_comments": 1,
           "objectID": "47802054",
           "points": 2,
           "story_id": 47802054,
           "story_text": "I built *valuepulse.ai* out of a frustration I kept running into: everything is scattered across different tools. If I want to search internal knowledge, I use something like Glean. If I want to analyze data, I switch to a BI tool or a data agent. And if I need external context, I’m back to Google or Perplexity.<p>Even with all the progress in generative AI, it still feels pretty disconnected.<p>So I wanted to see if it’s possible to bring search (both web and enterprise) and analytics into one place.<p>The core idea behind Valuepulse is a *context layer* that models a company’s business domain (customers, revenue, operations, etc.) and sits across different data sources (structured and unstructured). On top of that, I built:<p>* natural language → dashboard generation (similar idea to tools like Replit&#x2F;Lovable, but for BI), using agents like text-to-SQL and visualization selection\n* a data agent that can query databases and warehouses in plain English\n* unified search across internal docs and the web using vector search<p>It’s still early (beta), but I’d really appreciate feedback—especially on whether this feels useful for real business users (non-technical) or where it might break.",
           "title": "Show HN: Valuepulse – search docs, query data, and build dashboards in one place",
-          "updated_at": "2026-04-17T06:21:02Z",
+          "updated_at": "2026-04-17T06:25:18Z",
           "url": "https://valuepulse.ai"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "srothgan"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I use Claude Code every day, and the React Ink TUI started buckling whenever the work got real. Multiple agents in parallel, big diffs streaming in, long tool-call chains. The frontend, not the model, was the <em>bot</em>tleneck. It was frustrating to me.<p>So I rewrote it from scratch in Rust on Ratatui. It talks to Anthropic's official Agent SDK through a small TypeScript bridge, so it should follow Anthropic's ToS. Tool calls, file edits, and permissions all work the same. Only the terminal layer changed.<p>The thing that surprised me: you don't realize how much the UI was shaping your perception of the model until it's gone. With smooth rendering and no input lag, the same Claude that felt slow and buggy before suddenly feels sharp and responsive. The model didn't change. The friction did.<p>It's pre-1.0. Would love feedback from anyone :)"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: A native Rust TUI for Claude Code, because Ink got slow"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://www.npmjs.com/package/claude-code-rust"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_srothgan",
-            "story_47797324",
-            "show_hn"
-          ],
-          "author": "srothgan",
-          "children": [
-            47797759
-          ],
-          "created_at": "2026-04-16T18:13:44Z",
-          "created_at_i": 1776363224,
-          "num_comments": 1,
-          "objectID": "47797324",
-          "points": 1,
-          "story_id": 47797324,
-          "story_text": "I use Claude Code every day, and the React Ink TUI started buckling whenever the work got real. Multiple agents in parallel, big diffs streaming in, long tool-call chains. The frontend, not the model, was the bottleneck. It was frustrating to me.<p>So I rewrote it from scratch in Rust on Ratatui. It talks to Anthropic&#x27;s official Agent SDK through a small TypeScript bridge, so it should follow Anthropic&#x27;s ToS. Tool calls, file edits, and permissions all work the same. Only the terminal layer changed.<p>The thing that surprised me: you don&#x27;t realize how much the UI was shaping your perception of the model until it&#x27;s gone. With smooth rendering and no input lag, the same Claude that felt slow and buggy before suddenly feels sharp and responsive. The model didn&#x27;t change. The friction did.<p>It&#x27;s pre-1.0. Would love feedback from anyone :)",
-          "title": "Show HN: A native Rust TUI for Claude Code, because Ink got slow",
-          "updated_at": "2026-04-16T18:48:01Z",
-          "url": "https://www.npmjs.com/package/claude-code-rust"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Pancake9738"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I’ve been working on this tool on and off for a while, and I recently got it back into a shape that feels ready to share.<p>It’s an open-source cost attribution tool for Kafka systems that supports <em>bot</em>h identity-level and topic-level attribution. The original version focused only on identity-level attribution using Confluent Cloud API and metrics data. In v2, I expanded it to support topic-level attribution as well.<p>The backend is Python/FastAPI, and the frontend is React. Compared to v1, which was fully in-memory and depended on Prometheus and Grafana for retention and visualization, v2 adds SQLite-backed persistence, an evolving REST API, and a plugin-based architecture for extending to other ecosystems.<p>No signups, free to use, and fully open source. I’d appreciate feedback, especially from people who deal with Kafka platform ownership, multi-tenancy, or chargeback/showback problems. I’m actively working on it, and I’d be glad to hear about bugs, gaps, or features that would make it more useful."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Chitragupta - Kafka Identity and topic level cost attribution"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/waliaabhishek/chitragupta"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_Pancake9738",
-            "story_47796822",
-            "show_hn"
-          ],
-          "author": "Pancake9738",
-          "created_at": "2026-04-16T17:36:42Z",
-          "created_at_i": 1776361002,
-          "num_comments": 0,
-          "objectID": "47796822",
-          "points": 1,
-          "story_id": 47796822,
-          "story_text": "I’ve been working on this tool on and off for a while, and I recently got it back into a shape that feels ready to share.<p>It’s an open-source cost attribution tool for Kafka systems that supports both identity-level and topic-level attribution. The original version focused only on identity-level attribution using Confluent Cloud API and metrics data. In v2, I expanded it to support topic-level attribution as well.<p>The backend is Python&#x2F;FastAPI, and the frontend is React. Compared to v1, which was fully in-memory and depended on Prometheus and Grafana for retention and visualization, v2 adds SQLite-backed persistence, an evolving REST API, and a plugin-based architecture for extending to other ecosystems.<p>No signups, free to use, and fully open source. I’d appreciate feedback, especially from people who deal with Kafka platform ownership, multi-tenancy, or chargeback&#x2F;showback problems. I’m actively working on it, and I’d be glad to hear about bugs, gaps, or features that would make it more useful.",
-          "title": "Show HN: Chitragupta - Kafka Identity and topic level cost attribution",
-          "updated_at": "2026-04-16T18:50:46Z",
-          "url": "https://github.com/waliaabhishek/chitragupta"
         },
         {
           "_highlightResult": {
@@ -975,8 +880,8 @@
           "children": [
             47799555,
             47799945,
-            47796999,
-            47797132
+            47797132,
+            47796999
           ],
           "created_at": "2026-04-16T17:36:29Z",
           "created_at_i": 1776360989,
@@ -986,8 +891,119 @@
           "story_id": 47796818,
           "story_text": "Hey HN! We&#x27;re Charles and Dean, and we&#x27;re building Stage: a code review tool that guides you through reading a PR step by step, instead of piecing together a giant diff.<p>Here&#x27;s a demo video: <a href=\"https:&#x2F;&#x2F;www.tella.tv&#x2F;video&#x2F;stage-demo-1pph\" rel=\"nofollow\">https:&#x2F;&#x2F;www.tella.tv&#x2F;video&#x2F;stage-demo-1pph</a>.\nYou can play around with some example PRs here: <a href=\"https:&#x2F;&#x2F;stagereview.app&#x2F;explore\">https:&#x2F;&#x2F;stagereview.app&#x2F;explore</a>.<p>Teams are moving faster than ever with AI these days, but more and more engineers are merging changes that they don&#x27;t really understand. The bottleneck isn&#x27;t writing code anymore, it&#x27;s reviewing it.<p>We&#x27;re two engineers who got frustrated with GitHub&#x27;s UI for code review. As coding agents took off, we saw our PR backlog pile up faster than we could handle. Not only that, the PRs themselves were getting larger and harder to understand, and we found ourselves spending most of our time trying to build a mental model of what a PR was actually doing.<p>We built Stage to make reviewing a PR feel more like reading chapters of a book, not an unorganized set of paragraphs. We use it every day now, not just to review each other&#x27;s code but also our own, and at this point we can&#x27;t really imagine going back to the old GitHub UI.<p>What Stage does: when a PR is opened, Stage groups the changes into small, logical &quot;chapters&quot;. These chapters get ordered in the way that makes most sense to read. For each chapter, Stage tells you what changed and specific things to double check. Once you review all the chapters, you&#x27;re done reviewing the PR.<p>You can sign in to Stage with your GitHub account and everything is synced seamlessly (commenting, approving etc.) so it fits into the workflows you&#x27;re already used to.<p>What we&#x27;re not building: a code review bot like CodeRabbit or Greptile. These tools are great for catching bugs (and we use them ourselves!) but at the end of the day humans are responsible for what gets shipped. It&#x27;s clear that reviewing code hasn&#x27;t scaled the same way that writing did, and they (we!) need better tooling to keep up with the onslaught of AI generated code, which is only going to grow.<p>We&#x27;ve had a lot of fun building this and are excited to take it further. If you&#x27;re like us and are also tired of using GitHub for reviewing PRs, we&#x27;d love for you to try it out and tell us what you think!",
           "title": "Show HN: Stage – Putting humans back in control of code review",
-          "updated_at": "2026-04-17T05:54:47Z",
+          "updated_at": "2026-04-17T06:35:47Z",
           "url": "https://stagereview.app/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "evo_9"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "The People's Clock: A Timepiece Made of People"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://<em>kot</em>tke.org/26/04/the-peoples-clock"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_evo_9",
+            "story_47796455"
+          ],
+          "author": "evo_9",
+          "children": [
+            47796684
+          ],
+          "created_at": "2026-04-16T17:11:17Z",
+          "created_at_i": 1776359477,
+          "num_comments": 1,
+          "objectID": "47796455",
+          "points": 2,
+          "story_id": 47796455,
+          "title": "The People's Clock: A Timepiece Made of People",
+          "updated_at": "2026-04-16T17:37:45Z",
+          "url": "https://kottke.org/26/04/the-peoples-clock"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "alexblackwell_"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "Hey! I am Alex and together with my co-founder Tarun built Kampala (<a href=\"https://www.zatanna.ai/kampala\">https://www.zatanna.ai/kampala</a>). It’s a man-in-the-middle (MITM) style proxy that allows you to agentically reverse engineer existing workflows without brittle browser automation or computer use agents. It works for websites, mobile apps, desktop apps.<p>Demo: <a href=\"https://www.youtube.com/watch?v=z_PeostC-b4\" rel=\"nofollow\">https://www.youtube.com/watch?v=z_PeostC-b4</a>.\nMany people spend hours per day in legacy dashboards and on-prem solutions reconciling data across platforms. Current attempts at automation use browser automations or computer use agents which are brittle, slow, and nondeterministic. \nI come from a web reverse engineering background and spent the last 7-8 years building integrations by hand for sneaker/ticket releases, sportsbooks logins, and everything in\\ between. During that time I consulted for several companies and brought them off of browser based infrastructure into the requests layer.<p>When we started Zatanna (that’s our company name) we worked in dental tech, which meant we had to deal with tons of insurance payer dashboards and legacy dental-practice solutions. Our superpower (as a fairly undifferentiated voice agent/front desk assistant company) was that we could integrate with nearly any system requested. During this time we built extensive tooling (including what we’re now calling Kampala) to allow us to spin up these integrations quickly. \nExisting MITM proxies and tooling didn’t work for a few reasons: (1) They manipulated the TLS and HTTP2 fingerprint over the wire which was detected by strict anti-<em>bot</em>s. (2) They had bad MCPs which did not adequately expose necessary features like scripts/replay. (3) They did not allow for building workflows or actions given a sample or sequence of requests.<p>As the tools we built got more powerful, we began to use them internally to scrape conference attendees, connect to external PMS systems, and interact with slack apps. I even sent it to my property manager mom, who (with a lot of help from me lol), automated 2-3 hours of billing information entry in Yardi. At that point we realized that this wasn’t really about dentistry :)<p>Because Kampala is a MITM, it is able to leverage existing session tokens/anti-<em>bot</em> cookies and automate things deterministically in seconds. You can either use our agent harness that directly creates scripts/apis by prompting you with what actions to make, or our MCP by manually doing a  workflow once, and asking your preferred coding agent to use Kampala to make a script/API to replicate it. Once you have an API/script, you can export, run, or even have us host it for you.<p>We think the future of automation does not consist of sending screenshots of webpages to LLMs, but instead using the layer below that computers actually understand. Excited to hear your thoughts/questions/feedback!"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Launch HN: Kampala (YC W26) – Reverse-Engineer Apps into APIs"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.zatanna.ai/kampala"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_alexblackwell_",
+            "story_47794514",
+            "launch_hn",
+            "front_page"
+          ],
+          "author": "alexblackwell_",
+          "children": [
+            47795216,
+            47802753,
+            47800099,
+            47795972,
+            47796031,
+            47795675,
+            47797206,
+            47795452,
+            47794910,
+            47794897,
+            47795207,
+            47797841,
+            47795679,
+            47795761,
+            47800915,
+            47797451,
+            47797750,
+            47797760,
+            47798894,
+            47797331,
+            47802199,
+            47797567,
+            47797635,
+            47797768
+          ],
+          "created_at": "2026-04-16T15:19:54Z",
+          "created_at_i": 1776352794,
+          "num_comments": 65,
+          "objectID": "47794514",
+          "points": 85,
+          "story_id": 47794514,
+          "story_text": "Hey! I am Alex and together with my co-founder Tarun built Kampala (<a href=\"https:&#x2F;&#x2F;www.zatanna.ai&#x2F;kampala\">https:&#x2F;&#x2F;www.zatanna.ai&#x2F;kampala</a>). It’s a man-in-the-middle (MITM) style proxy that allows you to agentically reverse engineer existing workflows without brittle browser automation or computer use agents. It works for websites, mobile apps, desktop apps.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=z_PeostC-b4\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=z_PeostC-b4</a>.\nMany people spend hours per day in legacy dashboards and on-prem solutions reconciling data across platforms. Current attempts at automation use browser automations or computer use agents which are brittle, slow, and nondeterministic. \nI come from a web reverse engineering background and spent the last 7-8 years building integrations by hand for sneaker&#x2F;ticket releases, sportsbooks logins, and everything in\\ between. During that time I consulted for several companies and brought them off of browser based infrastructure into the requests layer.<p>When we started Zatanna (that’s our company name) we worked in dental tech, which meant we had to deal with tons of insurance payer dashboards and legacy dental-practice solutions. Our superpower (as a fairly undifferentiated voice agent&#x2F;front desk assistant company) was that we could integrate with nearly any system requested. During this time we built extensive tooling (including what we’re now calling Kampala) to allow us to spin up these integrations quickly. \nExisting MITM proxies and tooling didn’t work for a few reasons: (1) They manipulated the TLS and HTTP2 fingerprint over the wire which was detected by strict anti-bots. (2) They had bad MCPs which did not adequately expose necessary features like scripts&#x2F;replay. (3) They did not allow for building workflows or actions given a sample or sequence of requests.<p>As the tools we built got more powerful, we began to use them internally to scrape conference attendees, connect to external PMS systems, and interact with slack apps. I even sent it to my property manager mom, who (with a lot of help from me lol), automated 2-3 hours of billing information entry in Yardi. At that point we realized that this wasn’t really about dentistry :)<p>Because Kampala is a MITM, it is able to leverage existing session tokens&#x2F;anti-bot cookies and automate things deterministically in seconds. You can either use our agent harness that directly creates scripts&#x2F;apis by prompting you with what actions to make, or our MCP by manually doing a  workflow once, and asking your preferred coding agent to use Kampala to make a script&#x2F;API to replicate it. Once you have an API&#x2F;script, you can export, run, or even have us host it for you.<p>We think the future of automation does not consist of sending screenshots of webpages to LLMs, but instead using the layer below that computers actually understand. Excited to hear your thoughts&#x2F;questions&#x2F;feedback!",
+          "title": "Launch HN: Kampala (YC W26) – Reverse-Engineer Apps into APIs",
+          "updated_at": "2026-04-17T06:30:02Z",
+          "url": "https://www.zatanna.ai/kampala"
         }
       ]
     },
