@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-17T06:40:35.936Z",
+  "timestamp": "2026-04-17T06:40:40.430Z",
   "projects": [
     {
       "name": "rcarmo/piclaw",
@@ -22,7 +22,7 @@
     {
       "name": "agentscope-ai/QwenPaw",
       "url": "https://github.com/agentscope-ai/QwenPaw",
-      "stars": 15506,
+      "stars": 15507,
       "description": "Your Personal AI Assistant; easy to install, deploy on your own machine or on the cloud; supports multiple chat apps with easily extensible capabilities."
     },
     {
