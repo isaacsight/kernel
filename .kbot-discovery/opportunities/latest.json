@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-17T00:07:26.094Z",
+  "timestamp": "2026-04-17T06:23:09.377Z",
   "count": 30,
   "opportunities": [
     {
@@ -74,15 +74,15 @@
     },
     {
       "source": "hn-comment",
-      "title": "Codex for almost everything",
-      "url": "https://news.ycombinator.com/item?id=47797862",
+      "title": "Ask HN: Who is using OpenClaw?",
+      "url": "https://news.ycombinator.com/item?id=47790800",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
       "source": "hn-comment",
-      "title": "[dead]",
-      "url": "https://news.ycombinator.com/item?id=47796415",
+      "title": "Open Source Isn't Dead. Cal.com Just Learned the Wrong Lesson",
+      "url": "https://news.ycombinator.com/item?id=47783070",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "seo: bulk rewrite 66 short summaries to SEO sweet spot",
-      "url": "https://github.com/kylep/multi/pull/187",
+      "title": "Configure: defer channel status until selection",
+      "url": "https://github.com/openclaw/openclaw/pull/68007",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "fix(openai): align auth picker labels for API key vs Codex OAuth",
-      "url": "https://github.com/openclaw/openclaw/pull/67848",
+      "title": "release: cut v1.0.0",
+      "url": "https://github.com/gegej1/opensparrow/pull/2",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "feat(sanitize): harden fingerprint defense — evaluate port of ex-machina paragraph-based scrub vs. direct plugin",
-      "url": "https://github.com/ArshyaAI/meridian/issues/9",
+      "title": "fix(cli): prefer live channel logout [AI-assisted]",
+      "url": "https://github.com/openclaw/openclaw/pull/67981",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "Mini Sudoku: A minimal 6x6 CLI Sudoku game",
+      "url": "https://reddit.com/r/commandline/comments/1snl6fi/mini_sudoku_a_minimal_6x6_cli_sudoku_game/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "Lazyagent - See what your coding agents are doing from the terminal",
       "url": "https://reddit.com/r/commandline/comments/1sk2t6t/lazyagent_see_what_your_coding_agents_are_doing/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,10 +192,10 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "I kept losing track of terminal windows, so I made an auto-tiling Mac terminal app",
-      "url": "https://reddit.com/r/commandline/comments/1sj813d/i_kept_losing_track_of_terminal_windows_so_i_made/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "How to Use AI to Do Real Science",
+      "url": "https://reddit.com/r/artificial/comments/1snmqfw/how_to_use_ai_to_do_real_science/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "Thoughts on AI at Home?",
       "url": "https://reddit.com/r/artificial/comments/1snh60v/thoughts_on_ai_at_home/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Opus 4.7 is here and the numbers are crazy.",
-      "url": "https://reddit.com/r/artificial/comments/1sn8bk4/opus_47_is_here_and_the_numbers_are_crazy/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
