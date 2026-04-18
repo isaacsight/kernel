@@ -116,6 +116,59 @@ the postmark dateline, and the disciplined white margin around a
 single quiet hero image. Borrow the mechanics; do not borrow the
 silence — kernel.chat has a louder voice.
 
+#### What PAPERSKY adds that POPEYE doesn't
+
+POPEYE is dense, urban, catalog-led — a packed magazine for city
+boys. PAPERSKY is spare, place-led, slow — a quiet magazine for
+travellers. Seven things the second has that the first doesn't,
+ranked by usefulness to kernel.chat:
+
+1. **Restraint as a tool.** ★ POPEYE packs the cover. PAPERSKY
+   shows what one big photograph and a real white margin can carry.
+   The discipline of *not* putting things on the cover is itself a
+   design move. We tend toward POPEYE's density; banking a single
+   restraint move per year (one quiet cover among the loud ones)
+   would extend our range.
+2. **A single recurring system glyph.** ★ POPEYE's identity is the
+   wordmark plus the layout grammar; it has no small graphic
+   shorthand that travels across cover, section openers, and page
+   numbers. PAPERSKY's paper-airplane does. We have `<PopIcon>`
+   infrastructure for this — what we lack is the discipline to
+   reserve **one** mark as a system thread instead of using eleven.
+3. **Per-issue commissioned display lettering.** POPEYE's
+   typography is largely systemized (a confident type lockup is the
+   brand). PAPERSKY commissions a unique JP display word per place.
+   A different relationship to type: bespoke per issue, not a font
+   choice. For us this could mean occasionally hand-drawing the
+   `featureJp` word rather than setting it.
+4. **Place-and-route as issue spine.** ★ POPEYE is *theme-and-
+   catalog* ("Italy," "Long Stays," "Reading"). PAPERSKY is
+   *place-and-route* (Shimanami built around the cycling road, not
+   "the cycling issue"). The structure is geographic and kinetic.
+   Every kernel.chat issue could ask: *what is the route through
+   this subject?* — not just *what is this subject?*
+5. **Full bilingual parallel text.** POPEYE is JP-primary with
+   selective Latin display. PAPERSKY runs JP/EN side by side. A
+   different commitment to readership. We are EN-primary with
+   selective JP — the inverse of POPEYE — so PAPERSKY's mode would
+   be a stretch but not a reversal.
+6. **The postmark grammar.** ★ POPEYE plants a monument number
+   bottom-right. PAPERSKY plants a centred place dateline at the
+   bottom — geography, not serial time. A future `coverLayout:
+   'postmark'` variant could let an issue ground itself in subject
+   rather than serial position.
+7. **Slowness as a position.** POPEYE is monthly; PAPERSKY is
+   quarterly. The cadence itself is a design decision the reader
+   can feel. We publish more like POPEYE — fast, frequent — but
+   could mark certain issues as *slow* (no dispatch energy, longer
+   form, fewer items in the catalog) to use cadence as a tool the
+   way PAPERSKY does.
+
+★ marks the four most useful for kernel.chat: **restraint**,
+**single-glyph system thread**, **place-and-route structure**,
+**postmark dateline**. Adopt these first; the others are
+optional.
+
 ---
 
 ## The system
