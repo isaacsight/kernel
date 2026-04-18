@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-18T09:14:37.891Z",
+  "timestamp": "2026-04-18T15:28:50.390Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -299,11 +299,11 @@
           "created_at_i": 1776456004,
           "num_comments": 4,
           "objectID": "47809920",
-          "points": 3,
+          "points": 4,
           "story_id": 47809920,
           "story_text": "Paper Lantern is an MCP server that lets coding agents ask for personalized techniques &#x2F; ideas from 2M+ CS research papers. Your coding agent tells PL what problem it is working on --&gt; PL finds the most relevant ideas from 100+ research papers for you --&gt; gives it to your coding agent including trade-offs and implementation instructions.<p>We had previously shown that this helps research work and want to know understand whether it helps everyday software engineering tasks. We built out 9 tasks to measure this and compared using only a Coding Agent (Opus 4.6) (baseline) vs Coding Agent + Paper Lantern access.<p>(Blog post with full breakdown: <a href=\"https:&#x2F;&#x2F;www.paperlantern.ai&#x2F;blog&#x2F;coding-agent-benchmarks\" rel=\"nofollow\">https:&#x2F;&#x2F;www.paperlantern.ai&#x2F;blog&#x2F;coding-agent-benchmarks</a>)<p>Some interesting results :\n1. we asked the agent to write tests that maximize mutation score (fraction of injected bugs caught). The baseline caught 63% of injected bugs. Baseline + Paper Lantern found mutation-aware prompting from recent research (MuTAP, Aug 2023; MUTGEN, Jun 2025), which suggested enumerating every possible mutation via AST analysis and then writing tests to target each one. This caught 87%.<p>2. extracting legal clauses from 50 contracts. The baseline sent the full document to the LLM and correctly extracted 44% of clauses. Baseline + Paper Lantern found two papers from March 2026 (BEAVER for section-level relevance scoring, PAVE for post-extraction validation). Accuracy jumped to 76%.<p>Five of nine tasks improved by 30-80%. The difference was technique selection. 10 of 15 most-cited papers across all experiments were published in 2025 or later.<p>Everything is open source : <a href=\"https:&#x2F;&#x2F;github.com&#x2F;paperlantern-ai&#x2F;paper-lantern-challenges\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;paperlantern-ai&#x2F;paper-lantern-challenges</a><p>Each experiment has its own README with detailed results and an approach.md showing exactly what Paper Lantern surfaced and how the agent used it.<p>Quick setup: `npx paperlantern@latest`",
           "title": "Show HN: Paper Lantern – on-demand techniques from 2M+ papers for coding agents",
-          "updated_at": "2026-04-17T23:39:21Z",
+          "updated_at": "2026-04-18T10:10:51Z",
           "url": "https://www.paperlantern.ai/code"
         },
         {
@@ -516,51 +516,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "pauliusztin"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "While building a financial assistant for an SF start-up, we learned that <em>AI</em> frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain's MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB <em>collection</em> as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don't need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual <em>learning</em>.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity/relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities/relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https://www.linkedin.com/feed/update/urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https://www.linkedin.com/feed/update/urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first <em>AI</em>: https://www.linkedin.com/feed/update/urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https://www.linkedin.com/feed/update/urn:li:activity:7432054336589021184<p>- Most <em>AI</em> agents don't need three databases: https://www.linkedin.com/feed/update/urn:li:activity:7426981104227856385"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "My 11-step GraphRAG pipeline, what worked, and what's still broken"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_pauliusztin",
-            "story_47639059",
-            "ask_hn"
-          ],
-          "author": "pauliusztin",
-          "children": [
-            47653050,
-            47700676,
-            47639143
-          ],
-          "created_at": "2026-04-04T13:50:22Z",
-          "created_at_i": 1775310622,
-          "num_comments": 1,
-          "objectID": "47639059",
-          "points": 3,
-          "story_id": 47639059,
-          "story_text": "While building a financial assistant for an SF start-up, we learned that AI frameworks add complexity without value. When I started building a personal assistant with GraphRAG, I carried that lesson but still tried LangChain&#x27;s MongoDBGraphStore. It gave me a working knowledge graph in 10 minutes.<p>Then I looked at the data. I had 17 node types and 34 relationship types from just 5 documents, including three versions of &quot;part of&quot;. GraphRAG is a data modeling problem, not a retrieval problem.<p>The attached diagram shows the full 11-step pipeline I ended up with. Here is a walkthrough of what you can learn from each step.<p>So basically, in steps 1 and 2 of the data pipeline, raw sources go through an Extract, Transform, Load (ETL) process. They land as documents in a MongoDB data warehouse. Each document stores the source type, URI, content, and metadata.<p>Then in step 3, we clean the documents and split them into token-bounded chunks. We started with 512 tokens with a 64-token overlap. Still, we have to run more tests on this.<p>The thing is, step 4 handles graph extraction. We defined a strict ontology. An ontology is just a formal contract defining exactly what categories and relationships exist in your data. We used 6 node types and 8 edge types. The LLM can only extract what this ontology allows.<p>For example, if it outputs a PERSON to TASK connection with an EXPERIENCED edge, the pipeline rejects it. EXPERIENCED must connect a PERSON to an EPISODE.<p>We also split LLM extraction from deterministic extraction. We create structural entries like Document or Chunk nodes without LLM calls.<p>Turns out, step 5 for normalization is the hardest part. We use a three-phase deduplication process. We do in-memory fuzzy matching, cross-document resolution against MongoDB, and edge remapping.<p>Anyway, in step 6, we batch embed the nodes. The system uses a mock for tests, Sentence Transformers for development, and the Voyage API for production.<p>Ultimately, in steps 7 and 8, nodes and edges are stored in a single MongoDB collection as unified memory. We use deterministic string IDs like &quot;person:alice&quot; to prevent duplicates. MongoDB handles documents, $vectorSearch, $text, and $graphLookup in one aggregation pipeline. The $graphLookup function natively traverses connected graph data directly in the database. You don&#x27;t need Neo4j + Pinecone + Postgres for most agent use cases. A single database like MongoDB gets the job done really well. Through sharding, you can scale it up to a billion records.<p>To wrap it up, steps 9 through 11 cover retrieval. The agent calls tools through an MCP server. It uses search memory with hybrid vector, text, and graph expansion, alongside query memory for natural language to MongoDB aggregation. The agent also uses ingest tools to write back to the database for continual learning.<p>Here are a few things I am still struggling with and would love your opinion on:<p>How are you handling entity&#x2F;relationship resolution across documents?<p>What helped you the most to optimize the extraction of entities&#x2F;relationships using LLMs?<p>How do you keep embeddings in sync after graph updates?<p>Also, while building my personal assistant, I have been writing about this system on LinkedIn over the past few months. Here are the posts that go deeper into each piece:<p>- 3 ways to run embedding models: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7443288346153480192<p>- LangChain gave me a knowledge graph in 10 minutes: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7440751582381494272<p>- Palantir built a $400B empire on ontology-first AI: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7434591082367320064<p>- Ingestion architecture for Digital Twin agent: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7432054336589021184<p>- Most AI agents don&#x27;t need three databases: https:&#x2F;&#x2F;www.linkedin.com&#x2F;feed&#x2F;update&#x2F;urn:li:activity:7426981104227856385",
-          "title": "My 11-step GraphRAG pipeline, what worked, and what's still broken",
-          "updated_at": "2026-04-09T09:37:16Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "jwatters"
             },
             "story_text": {
@@ -761,12 +716,100 @@
           "title": "Show HN: I built a labor union for AI agents",
           "updated_at": "2026-03-05T23:36:18Z",
           "url": "https://aawu.ai"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "vassilbek"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "collective",
+                "learning"
+              ],
+              "value": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if/then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data <em>collection</em> plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation / Monitoring, Evaluation, Accountability, and -<em>Learning</em> specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https://github.com/vassiliylakhonin/Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics/templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development / United Nations / European Union formats)"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "ai"
+              ],
+              "value": "https://clawhub.<em>ai</em>/vassiliylakhonin/nonprofit-rbm-logic-model"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_vassilbek",
+            "story_47062912",
+            "show_hn"
+          ],
+          "author": "vassilbek",
+          "created_at": "2026-02-18T16:40:11Z",
+          "created_at_i": 1771432811,
+          "num_comments": 0,
+          "objectID": "47062912",
+          "points": 1,
+          "story_id": 47062912,
+          "story_text": "Hi HN! I built an open-source OpenClaw skill for nonprofit and NGO teams that need donor-ready program logic models.<p>What it generates:\n-A 5-level results chain (Inputs -&gt; Activities -&gt; Outputs -&gt; Outcomes -&gt; Impact)\n-Theory of Change (if&#x2F;then pathway + assumptions)\n-Specific-Measurable-Achievable-Relevant-Time-bound outcome indicators\n-Sustainable Development Goals alignment\n-Monitoring and data collection plan<p>Who it is for:\n-Nonprofit program managers\n-Monitoring and Evaluation &#x2F; Monitoring, Evaluation, Accountability, and -Learning specialists\n-Grant writers and NGO consultants<p>Repo:\n<a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-Claw-Hub\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;Nonprofit-RBM-Skill-For-...</a><p>I would really value feedback on:<p>Clarity of outputs for real grant workflows\nMissing metrics&#x2F;templates for NGO Monitoring and Evaluation teams\nGaps in donor alignment (United States Agency for International Development &#x2F; United Nations &#x2F; European Union formats)",
+          "title": "Show HN: Nonprofit Results-Based Management logic model skill for OpenClaw",
+          "updated_at": "2026-03-05T23:35:10Z",
+          "url": "https://clawhub.ai/vassiliylakhonin/nonprofit-rbm-logic-model"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "PaulHoule"
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Tomb Raider Studio Faces Fourth Round of Layoffs in Just 12 Months"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "https://<em>kot</em>aku.com/tomb-raider-remake-crystal-dynamics-layoffs-2000680096"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_PaulHoule",
+            "story_47815020"
+          ],
+          "author": "PaulHoule",
+          "children": [
+            47816161
+          ],
+          "created_at": "2026-04-18T11:27:20Z",
+          "created_at_i": 1776511640,
+          "num_comments": 0,
+          "objectID": "47815020",
+          "points": 2,
+          "story_id": 47815020,
+          "title": "Tomb Raider Studio Faces Fourth Round of Layoffs in Just 12 Months",
+          "updated_at": "2026-04-18T14:24:52Z",
+          "url": "https://kotaku.com/tomb-raider-remake-crystal-dynamics-layoffs-2000680096"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -803,27 +846,42 @@
           "author": "fouronnes3",
           "children": [
             47812435,
-            47814275,
             47813296,
             47813354,
+            47816565,
+            47816254,
             47813477,
-            47814228,
-            47813762,
+            47816020,
+            47815065,
+            47815108,
+            47814275,
+            47814815,
             47813659,
+            47813762,
+            47815191,
+            47814855,
             47813871,
             47813841,
+            47814463,
+            47814228,
+            47814707,
             47813829,
+            47815471,
+            47814983,
+            47815792,
+            47814427,
+            47815277,
             47814182
           ],
           "created_at": "2026-04-18T01:15:43Z",
           "created_at_i": 1776474943,
-          "num_comments": 22,
+          "num_comments": 45,
           "objectID": "47812341",
-          "points": 143,
+          "points": 229,
           "story_id": 47812341,
           "story_text": "I&#x27;ve been studying interval arithmetic for the past few weeks and it&#x27;s a really interesting field because while there is a ton of super interesting research published over the past decades, it has never really gotten the recognition that it deserves, IMO.<p>One reason for this is that standard interval arithmetic has really poor handling of division by intervals containing zero. If you compute 1 &#x2F; [-1, 2] in regular interval arithmetic, you get either [-∞, +∞], or you have to say that the operation is undefined. Both solutions are virtually useless. The real answer of course is [-∞, -1] U [0.5, +∞]: i.e. a union of two disjoint intervals.<p>This is useful because you can confidently exclude a non empty set of the real numbers ([-1, 0.5]) from the set of possible values that you can get by dividing 1 by a number between -1 and 2.<p>But this definition of interval division yields a value that is not an interval. This is a problem if you want to define a closed arithmetic system, where you can build and evaluate arbitrary expression over interval values.<p>(This behavior extends to any non continuous function like tan() for example, which is implemented in my project - not without difficulties!)<p>Well the obvious solution is to define your arithmetic over disjoint unions of intervals. This is the subject of a 2017 paper called &quot;Interval Unions&quot; by by Schichl, H., Domes, F., Montanher, T. and Kofler, K..<p>This open-source project I made implements interval union arithmetic in TypeScript in the form of a simple interactive calculator, so you can try it out for yourself! The underlying TypeScript library is dependency free and implements interval union arithmetic over IEEE 754 double precision floats (JS native number type) with outward rounding. This guarantees accuracy of interval results in the presence of rounding issue inherent to floating point.",
           "title": "Show HN: I made a calculator that works over disjoint sets of intervals",
-          "updated_at": "2026-04-18T09:13:22Z",
+          "updated_at": "2026-04-18T15:27:37Z",
           "url": "https://victorpoughon.github.io/interval-calculator/"
         },
         {
@@ -956,46 +1014,6 @@
           "title": "Building a Custom HR Announcement Bot",
           "updated_at": "2026-04-17T15:59:35Z",
           "url": "https://www.stackbuilders.com/insights/automating-joy-building-a-custom-hr-announcement-bot/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "speckx"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Agents, Code Reviews, and the <em>Bot</em>tleneck Shift, Oh My"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "https://ayende.com/blog/203939-C/agents-code-reviews-and-the-<em>bot</em>tleneck-shift-oh-my?Key=a4aac51e-45ff-426d-8340-9c2056e743f0"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_speckx",
-            "story_47806888"
-          ],
-          "author": "speckx",
-          "created_at": "2026-04-17T15:19:17Z",
-          "created_at_i": 1776439157,
-          "num_comments": 0,
-          "objectID": "47806888",
-          "points": 1,
-          "story_id": 47806888,
-          "title": "Agents, Code Reviews, and the Bottleneck Shift, Oh My",
-          "updated_at": "2026-04-17T15:23:04Z",
-          "url": "https://ayende.com/blog/203939-C/agents-code-reviews-and-the-bottleneck-shift-oh-my?Key=a4aac51e-45ff-426d-8340-9c2056e743f0"
         }
       ]
     },
@@ -1409,9 +1427,9 @@
             47778404,
             47778226,
             47787222,
-            47806829,
-            47803399,
             47778294,
+            47803399,
+            47806829,
             47778251,
             47778091,
             47778190,
@@ -1428,7 +1446,7 @@
           "story_id": 47778035,
           "story_text": "It feels like most Claude Code users have already noticed a quality drop in the Claude models. As a Claude Pro subscriber (Web version; I don&#x27;t use Claude Code), I’ve seen a clear decline over the last couple of weeks. I can’t complete tasks in a single turn anymore. Claude often stops streaming because it hits some internal tool-call&#x2F;turn limit, so I have to keep pressing “Continue.” Each continuation has to re-feed context, which quickly burns through tokens and quota. The model also makes more mistakes and fails to fully complete tasks it used to handle reliably.<p>This is especially frustrating because Sonnet 4.6 was a real step up: it could produce long, correct code in one pass much more often. That seems basically gone now.<p>As a paying Pro user, I honestly find myself using free alternatives like DeepSeek and Z.ai (GLM) more than Claude lately. I’ve also stopped touching Opus entirely—it’s so token-hungry that it drains my weekly quota too fast to be practical.<p>Is Anthropic trying to limit usage or drive people away?",
           "title": "Ask HN: Is Claude Getting Worse?",
-          "updated_at": "2026-04-18T07:44:06Z"
+          "updated_at": "2026-04-18T14:30:37Z"
         },
         {
           "_highlightResult": {
@@ -2013,6 +2031,48 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "adelelo13"
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "Mac-control-<em>MCP</em> – 63-<em>tool</em> native Swift <em>MCP</em> <em>server</em> for macOS"
+            },
+            "url": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "mcp"
+              ],
+              "value": "https://github.com/AdelElo13/mac-control-<em>mcp</em>"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_adelelo13",
+            "story_47815080"
+          ],
+          "author": "adelelo13",
+          "created_at": "2026-04-18T11:35:44Z",
+          "created_at_i": 1776512144,
+          "num_comments": 0,
+          "objectID": "47815080",
+          "points": 2,
+          "story_id": 47815080,
+          "title": "Mac-control-MCP – 63-tool native Swift MCP server for macOS",
+          "updated_at": "2026-04-18T13:11:52Z",
+          "url": "https://github.com/AdelElo13/mac-control-mcp"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "arjunchint"
             },
             "story_text": {
@@ -2214,52 +2274,6 @@
           "title": "Show HN: Covalence – Cross-Client Memory for Claude, Cursor, and MCP (macOS)",
           "updated_at": "2026-04-17T14:17:19Z",
           "url": "https://covalence.app/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "ginccc"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "mcp",
-                "server",
-                "tools"
-              ],
-              "value": "I started EDDI in 2006 as a rule-based dialog engine. Back then it was pattern matching and state machines. When LLMs showed up, the interesting question wasn't &quot;how do I call GPT&quot; but &quot;how do I keep control over what the AI does in production?&quot;<p>My answer was: agent logic belongs in JSON configs, not code. You describe what an agent should do, which LLM to use, what <em>tools</em> it can call, how it should behave. The engine reads that config and runs it. No dynamic code execution, ever. The LLM cannot run arbitrary code by design. The engine is strict so the AI can be creative.<p>v6 is the version where this actually became practical. You can have groups of agents debating a topic in five different orchestration styles (round table, peer review, devil's advocate...). Each agent can use a different model. A cascading system tries cheap models first and only escalates to expensive ones when confidence is low.<p>It also implements <em>MCP</em> as both <em>server</em> and client, so you can control EDDI from Claude Desktop or Cursor. And Google's A2A protocol for agents discovering each other across platforms.<p>The whole thing runs in Java 25 on Quarkus, ships as a single Docker image, and installs with one command. Open source since 2017, Apache 2.0.<p>Would love to hear thoughts on the architecture and feature set. And if you have ideas for what's missing or what you'd want from a system like this, I'm all ears. Always looking for good input on the roadmap."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: EDDI – Multi-agent AI engine where agent logic lives in JSON, not code"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/labsai/EDDI"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_ginccc",
-            "story_47793245",
-            "show_hn"
-          ],
-          "author": "ginccc",
-          "created_at": "2026-04-16T14:11:37Z",
-          "created_at_i": 1776348697,
-          "num_comments": 0,
-          "objectID": "47793245",
-          "points": 2,
-          "story_id": 47793245,
-          "story_text": "I started EDDI in 2006 as a rule-based dialog engine. Back then it was pattern matching and state machines. When LLMs showed up, the interesting question wasn&#x27;t &quot;how do I call GPT&quot; but &quot;how do I keep control over what the AI does in production?&quot;<p>My answer was: agent logic belongs in JSON configs, not code. You describe what an agent should do, which LLM to use, what tools it can call, how it should behave. The engine reads that config and runs it. No dynamic code execution, ever. The LLM cannot run arbitrary code by design. The engine is strict so the AI can be creative.<p>v6 is the version where this actually became practical. You can have groups of agents debating a topic in five different orchestration styles (round table, peer review, devil&#x27;s advocate...). Each agent can use a different model. A cascading system tries cheap models first and only escalates to expensive ones when confidence is low.<p>It also implements MCP as both server and client, so you can control EDDI from Claude Desktop or Cursor. And Google&#x27;s A2A protocol for agents discovering each other across platforms.<p>The whole thing runs in Java 25 on Quarkus, ships as a single Docker image, and installs with one command. Open source since 2017, Apache 2.0.<p>Would love to hear thoughts on the architecture and feature set. And if you have ideas for what&#x27;s missing or what you&#x27;d want from a system like this, I&#x27;m all ears. Always looking for good input on the roadmap.",
-          "title": "Show HN: EDDI – Multi-agent AI engine where agent logic lives in JSON, not code",
-          "updated_at": "2026-04-16T16:13:46Z",
-          "url": "https://github.com/labsai/EDDI"
         }
       ]
     },

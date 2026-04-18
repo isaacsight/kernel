@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-18T09:14:40.795Z",
+  "timestamp": "2026-04-18T15:28:53.826Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,43 +67,43 @@
     },
     {
       "source": "hn-comment",
+      "title": "Ask HN: Building a solo business is impossible?",
+      "url": "https://news.ycombinator.com/item?id=47816553",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
+      "title": "The Apple II Moment is here",
+      "url": "https://news.ycombinator.com/item?id=47815275",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Fuck Facebook, Again",
       "url": "https://news.ycombinator.com/item?id=47814364",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "The future of everything is lies, I guess: Where do we go from here?",
-      "url": "https://news.ycombinator.com/item?id=47809986",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
-      "source": "hn-comment",
-      "title": "The Utopia of the Family Computer",
-      "url": "https://news.ycombinator.com/item?id=47808858",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
-    },
-    {
       "source": "github-issue",
-      "title": "feat: seed community marketplace with 20+ production-quality agent templates",
-      "url": "https://github.com/rajitsaha/agentbreeder/issues/74",
+      "title": "Publish integration guides for common AI agent frameworks and orchestration platforms",
+      "url": "https://github.com/accept-io/midas/issues/45",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "enhancement: increase /ai-agents page engagement with interactive agent actions",
-      "url": "https://github.com/kubestellar/console/issues/8800",
+      "title": "question: further automation for code",
+      "url": "https://github.com/stellardreams/asi.surge.sh/issues/64",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "ux: mission suggestion cards need richer preview to convert browse → start",
-      "url": "https://github.com/kubestellar/console/issues/8791",
+      "title": "PDA Platform Worked Example",
+      "url": "https://github.com/SingularityAI-Dev/logic-md/issues/18",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "chore(master): release 0.38.0",
-      "url": "https://github.com/dragonGR/rtk/pull/2",
+      "title": "fix(whatsapp): start typing on accepted inbound",
+      "url": "https://github.com/openclaw/openclaw/pull/68612",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "chore(master): release 0.38.0",
-      "url": "https://github.com/dragonGR/rtk/pull/1",
+      "title": "docs: update README title to SoloClaw",
+      "url": "https://github.com/openclaw/openclaw/pull/68592",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "🌐 Global Tech Briefing - 2026-04-18",
-      "url": "https://github.com/AtomChen0425/Global_Trends/issues/61",
+      "title": "docs: AI features & autonomy reference (ai-features.md)",
+      "url": "https://github.com/hailmary-ship-it/openclaw/pull/6",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -193,6 +193,13 @@
     },
     {
       "source": "reddit-artificial",
+      "title": "AI helped me build a custom PC and 4 apps in 6 months with zero coding experience",
+      "url": "https://reddit.com/r/artificial/comments/1sozcus/ai_helped_me_build_a_custom_pc_and_4_apps_in_6/",
+      "why": "Discussion in r/artificial about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-artificial",
       "title": "We added cryptographic approval to our AI agent… and it was still unsafe",
       "url": "https://reddit.com/r/artificial/comments/1sorsxu/we_added_cryptographic_approval_to_our_ai_agent/",
       "why": "Discussion in r/artificial about AI agents",
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "What is the current landscape on AI agents knowledge",
       "url": "https://reddit.com/r/artificial/comments/1sobysx/what_is_the_current_landscape_on_ai_agents/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "Scaling an AI agent without making it dumber [Attention scoping pattern]",
-      "url": "https://reddit.com/r/artificial/comments/1so2xsx/scaling_an_ai_agent_without_making_it_dumber/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
