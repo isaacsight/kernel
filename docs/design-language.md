@@ -32,6 +32,92 @@ The site never says "POPEYE." The grammar carries the homage on its own.
 
 ---
 
+## Editorial neighbours
+
+POPEYE is the spine. Around it we keep a working file of **editorial
+neighbours** — magazines whose mechanics we want to learn from
+without imitating. Each entry below is a quick decode (what makes
+the cover read as that magazine) plus a short list of transferable
+mechanics (what we could borrow without it reading as homage to a
+second magazine on top of POPEYE). This section grows as we
+encounter new references; future entries follow the same shape.
+
+### PAPERSKY
+
+PAPERSKY (Tokyo, 2002–present, founded by
+Lucas Badtke-Berkow / Knee High Media — rebranded as PAPERSKY Inc.
+in 2024) is a quieter cross-reference. Self-described as **"a
+different way to travel,"** it runs roughly quarterly, bilingual
+JP/EN, anchored each issue to a single place — most issues built
+around a walking, hiking or cycling route through it. The
+SHIMANAMI issue (#69 "Dreamy") is built around the Setouchi
+Shimanami Kaido, the ~70 km route from Onomichi (Hiroshima) to
+Imabari (Ehime) across the Seto Inland Sea.
+
+We do not want to look like PAPERSKY — its serene white-bordered
+single-photo cover is so identifiably PAPERSKY that direct mimicry
+would read as homage to a second magazine on top of the first.
+What we want from it is a **small set of mechanics** the POPEYE
+grammar doesn't already give us.
+
+#### The PAPERSKY cover, decoded
+
+| Element | What it does | Notes |
+|---|---|---|
+| Single full-bleed photograph in natural light | Functions as the cover headline; no cover lines compete with it | Available light, candid, place-led. Editorial brief, not layout rule |
+| Generous white border around the photo | Reads as gallery print, not magazine bleed | Margin, not bleed |
+| Sans-serif white wordmark set high, modest scale | Stable masthead across every issue | Geometric sans, all-caps, tight tracking |
+| All-caps Latin subtitle ("A DIFFERENT WAY TO TRAVEL") | Stable tagline under the wordmark | Tracked tight |
+| Custom JP display lettering for the issue's place name | Per-issue signature gesture | Hand-drawn or commissioned per issue — never a system font |
+| Paper-airplane glyph below the place word | Recurring folio / wayfinding mark | The "paper" + "sky" rebus, used as a small system element |
+| Centred place dateline at the bottom (e.g. "HIROSHIMA & EHIME") | Postmark, not subtitle | Small-caps Latin |
+
+#### Transferable mechanics
+
+Things kernel.chat could borrow without copying the silence:
+
+1. **Per-issue custom display lettering for the topic word**, paired
+   with the stable Latin wordmark — gives every issue an identity
+   without breaking the masthead. Our equivalent is the
+   `headline.emphasis` italic-tomato word; the move PAPERSKY suggests
+   is occasionally commissioning a hand-drawn JP word for
+   `featureJp` or for the cover's secondary lockup, instead of
+   defaulting to the body type.
+2. **A small recurring glyph as a system folio mark** — PAPERSKY
+   uses a paper airplane. We could reserve a single mark (a tomato
+   spot, a kernel, a caret, a block-quote bracket) and use it
+   consistently as the cover/section/page-number ornament. We
+   already have `<PopIcon>` infrastructure for this; the discipline
+   we lack is using **one** glyph as a system thread, not eleven.
+3. **Centred place / topic dateline as postmark** — small-caps Latin
+   anchored at the bottom centre of the cover, separate from the
+   monument. Could co-exist with the existing bottom-right monument
+   on `classic` layout, or replace it on a future `postmark` cover
+   variant.
+4. **One-photo cover with a real margin** — for the rare future
+   issue where photography is the right voice (a place dispatch, a
+   field report, a maker profile). Resist cover lines; let the
+   image be the headline. We have not shipped this yet — would
+   need a new `coverLayout: 'photo-postmark'` variant.
+5. **Photographic register rule** — when we do use photography,
+   commit to natural light, place-led, candid, no studio gloss.
+   This is a brief to photographers, not a CSS rule.
+6. **Issue-as-place** — anchor each issue to one subject (a route,
+   a problem, a maker, a fish) rather than a mixed bag. We already
+   do this; PAPERSKY confirms the discipline.
+
+#### What's PAPERSKY-distinctive vs widely shared
+
+The bilingual parallel text and the place-anchored issue concept
+are **table stakes** in the JP indie ecosystem (POPEYE, &Premium,
+Brutus, Subsequence). The **distinctive** PAPERSKY moves are the
+per-issue custom JP display word, the paper-airplane folio glyph,
+the postmark dateline, and the disciplined white margin around a
+single quiet hero image. Borrow the mechanics; do not borrow the
+silence — kernel.chat has a louder voice.
+
+---
+
 ## The system
 
 ### Tokens (`src/index.css:118-150`)
