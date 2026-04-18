@@ -872,6 +872,34 @@
   color: var(--pop-ink);
 }
 
+/* ── warty-spots — a scattered field of tomato papillae drifting
+      across the full height of the cover. Sized to cover the whole
+      surface (rather than bleeding off a corner like ink-spread),
+      because the reference is an organism whose spots are spread
+      across its body, not an inkwell that tipped. Opacity kept
+      low enough that the type always wins, high enough that the
+      spots read as pigment, not shadow. */
+.pop-cover-ornament--warty-spots {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.72;
+  mix-blend-mode: multiply;
+}
+
+/* On ink stock — unused for 369, but kept for future re-use —
+   re-mode to screen so the spots remain legible against dark paper. */
+.pop-stock-ink .pop-cover-ornament--warty-spots {
+  mix-blend-mode: normal;
+  opacity: 0.3;
+}
+
+@media (max-width: 640px) {
+  .pop-cover-ornament--warty-spots {
+    opacity: 0.6;
+  }
+}
+
 /* ──────────────────────────────────────────────────────────────
    Cover seal — press-preview rubber stamp in the top-right
    corner. Tomato outline, curved label, Courier date, five-point

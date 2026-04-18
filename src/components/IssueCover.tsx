@@ -42,6 +42,7 @@ export function IssueCover({ issue, footer }: IssueCoverProps) {
   return (
     <section className={sectionClasses}>
       {ornament === 'ink-spread' && <InkSpreadOrnament />}
+      {ornament === 'warty-spots' && <WartySpotsOrnament />}
       {seal && <CoverSeal label={seal.label} date={seal.date} />}
       <div className="pop-cover-inner">
 
@@ -222,6 +223,64 @@ function InkSpreadOrnament() {
         <circle cx="140" cy="110" r="2.5" />
         <path d="M 405 280 q 6 2 10 5 l -4 3 q -4 -2 -6 -8 z" />
         <path d="M 80 260 q -5 3 -9 7 l 6 2 q 3 -3 3 -9 z" />
+      </g>
+    </svg>
+  )
+}
+
+/**
+ * WartySpotsOrnament — a drifting field of irregular tomato
+ * papillae scattered across the cover. Each spot is hand-tuned
+ * (position, radius, slight ellipse skew) so the cluster reads
+ * as a specimen's dermis, not a polka-dot pattern. Renders under
+ * .pop-cover--ornament-warty-spots.
+ */
+function WartySpotsOrnament() {
+  return (
+    <svg
+      className="pop-cover-ornament pop-cover-ornament--warty-spots"
+      viewBox="0 0 420 560"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <g fill="currentColor">
+        {/* Upper drift — sparse, the ornament's lightest region */}
+        <ellipse cx="58" cy="46" rx="7" ry="6" />
+        <ellipse cx="92" cy="78" rx="4" ry="3.5" />
+        <ellipse cx="348" cy="62" rx="9" ry="7.5" />
+        <ellipse cx="384" cy="104" rx="5" ry="4.5" />
+        <ellipse cx="168" cy="52" rx="3" ry="2.5" />
+        {/* Mid-cover scatter — behind the headline; kept small
+            so type reads cleanly against it */}
+        <ellipse cx="32" cy="212" rx="6" ry="5" />
+        <ellipse cx="400" cy="198" rx="8" ry="7" />
+        <ellipse cx="380" cy="256" rx="4" ry="3.5" />
+        <ellipse cx="48" cy="288" rx="5" ry="4" />
+        <ellipse cx="402" cy="322" rx="11" ry="9" />
+        <ellipse cx="18" cy="358" rx="9" ry="7" />
+        {/* Lower field — the cluster intensifies toward the
+            bottom edge, reading as warts gathering on the
+            belly of the specimen */}
+        <ellipse cx="72" cy="430" rx="12" ry="9" />
+        <ellipse cx="118" cy="468" rx="6" ry="5" />
+        <ellipse cx="156" cy="502" rx="14" ry="11" />
+        <ellipse cx="208" cy="478" rx="5" ry="4" />
+        <ellipse cx="252" cy="512" rx="9" ry="7" />
+        <ellipse cx="296" cy="482" rx="7" ry="6" />
+        <ellipse cx="334" cy="518" rx="13" ry="10" />
+        <ellipse cx="380" cy="478" rx="6" ry="5" />
+        <ellipse cx="402" cy="538" rx="16" ry="12" />
+        <ellipse cx="22" cy="498" rx="10" ry="8" />
+        {/* Tiny specks — the grain between the larger papillae */}
+        <circle cx="142" cy="228" r="1.8" />
+        <circle cx="270" cy="268" r="2.2" />
+        <circle cx="210" cy="340" r="1.6" />
+        <circle cx="330" cy="182" r="2" />
+        <circle cx="90" cy="350" r="2.4" />
+        <circle cx="368" cy="420" r="2.6" />
+        <circle cx="248" cy="430" r="1.8" />
+        <circle cx="186" cy="140" r="2" />
       </g>
     </svg>
   )
