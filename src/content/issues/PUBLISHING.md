@@ -286,6 +286,18 @@ Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
   (if it exists and documents the current spread types)
 - If the user asked for it, post to socials via `kbot_social` MCP
   tools — otherwise don't
+- **Keep this playbook current.** When you ship issue N, do two small
+  edits to this file before you commit:
+  1. **Update the "Last updated" line at the very bottom** to match
+     the issue you just shipped (e.g. `_Last updated: ISSUE 369 · MAY 2026._`)
+  2. **Refresh the §III.2 spread-type examples** if the previous
+     example issue for that spread type is now three or more issues
+     behind — just change the parenthetical number so readers are
+     pointed at a recent template, not a stale one
+  3. **Update the §IV "most recent same-format issue" reference** if
+     a newer example now exists for the format you shipped
+  This is a 30-second hygiene pass. Don't skip it — a playbook whose
+  examples are a year stale quietly stops being trusted.
 
 ---
 
