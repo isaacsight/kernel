@@ -805,3 +805,127 @@
     align-items: flex-start;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   Cover ornaments — optional decorative marks that reinforce the
+   issue's theme. One ornament per issue, set via
+   IssueRecord.coverOrnament. Kept scoped to the pop-cover so the
+   positioning context (relative) is guaranteed.
+   ────────────────────────────────────────────────────────────── */
+
+/* When an ornament is present, clip it to the cover's edge so it
+   bleeds off-page rather than overflowing the next section. */
+.pop-cover[class*="pop-cover--ornament-"] {
+  overflow: hidden;
+}
+
+.pop-cover-ornament {
+  position: absolute;
+  pointer-events: none;
+  color: var(--pop-tomato);
+  z-index: 0;
+}
+
+/* The .pop-cover-inner sits on z-index 1 so the ornament reads as
+   a ground layer — ink drying under the typography, not over it. */
+.pop-cover[class*="pop-cover--ornament-"] .pop-cover-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── ink-spread — tomato blot bleeding off the lower-right
+      corner. Sized and offset so only ~40% of the blot appears
+      on-page; it reads as ink that ran off the press before the
+      cover was trimmed. Mix-blend-multiply fuses it into the
+      paper stock. Kept small enough that it never overlaps the
+      monument text on the asymmetric-left layout. */
+.pop-cover-ornament--ink-spread {
+  right: clamp(-180px, -12vw, -120px);
+  bottom: clamp(-120px, -8vw, -80px);
+  width: clamp(200px, 26vw, 340px);
+  height: auto;
+  opacity: 0.75;
+  mix-blend-mode: multiply;
+  transform: rotate(8deg);
+}
+
+/* On ink stock the blot would disappear — re-mode it to screen. */
+.pop-stock-ink .pop-cover-ornament--ink-spread {
+  mix-blend-mode: normal;
+  opacity: 0.22;
+}
+
+@media (max-width: 640px) {
+  .pop-cover-ornament--ink-spread {
+    width: 160px;
+    right: -60px;
+    bottom: -40px;
+    opacity: 0.65;
+  }
+}
+
+/* When the ink-spread ornament is active, flip the monument's
+   tomato issue-number to ink so it doesn't disappear against
+   the blot. Dark serif numeral reads clearly on both the ivory
+   paper ground AND the tomato blot where they overlap. */
+.pop-cover--ornament-ink-spread .pop-monument strong {
+  color: var(--pop-ink);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Cover seal — press-preview rubber stamp in the top-right
+   corner. Tomato outline, curved label, Courier date, five-point
+   star anchor. Slight tilt so it reads as hand-stamped, not
+   printed. Full-width on mobile so it stays visible.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-cover--has-seal {
+  position: relative;
+}
+
+.pop-cover-seal {
+  position: absolute;
+  top: 72px;
+  right: 48px;
+  width: clamp(84px, 9vw, 120px);
+  height: auto;
+  aspect-ratio: 1;
+  color: var(--pop-tomato);
+  transform: rotate(-8deg);
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.pop-cover-seal-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.pop-cover-seal-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.pop-cover-seal-date {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .pop-cover-seal {
+    top: 24px;
+    right: 18px;
+    width: 76px;
+    transform: rotate(-6deg);
+  }
+  .pop-cover-seal-label { font-size: 8px; letter-spacing: 0.18em; }
+  .pop-cover-seal-date { font-size: 12px; }
+}
