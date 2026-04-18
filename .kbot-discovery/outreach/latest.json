@@ -1,59 +1,59 @@
 {
-  "timestamp": "2026-04-18T06:59:35.932Z",
+  "timestamp": "2026-04-18T19:13:49.151Z",
   "projects": [
     {
-      "name": "rcarmo/piclaw",
-      "url": "https://github.com/rcarmo/piclaw",
-      "stars": 525,
-      "description": "I'm going to build my own OpenClaw, with blackjack... and bun!"
+      "name": "sonichi/sutando",
+      "url": "https://github.com/sonichi/sutando",
+      "stars": 115,
+      "description": "Summon your AI superpower — grows with you through voice, vision, and autonomous action"
     },
     {
-      "name": "vm0-ai/vm0",
-      "url": "https://github.com/vm0-ai/vm0",
-      "stars": 1065,
-      "description": "the easiest way to run natural language-described workflows automatically"
+      "name": "joshuaswarren/remnic",
+      "url": "https://github.com/joshuaswarren/remnic",
+      "stars": 59,
+      "description": "Local-first memory plugin for OpenClaw AI agents. LLM-powered extraction, plain markdown storage, hybrid search via QMD. Gives agents persistent long-term memory across conversations."
     },
     {
-      "name": "CherryHQ/cherry-studio",
-      "url": "https://github.com/CherryHQ/cherry-studio",
-      "stars": 43735,
-      "description": "AI productivity studio with smart chat, autonomous agents, and 300+ assistants. Unified access to frontier LLMs"
-    },
-    {
-      "name": "ReScienceLab/opc-skills",
-      "url": "https://github.com/ReScienceLab/opc-skills",
-      "stars": 783,
-      "description": "Agent Skills for Solopreneurs"
+      "name": "redwoodjs/agent-ci",
+      "url": "https://github.com/redwoodjs/agent-ci",
+      "stars": 570,
+      "description": "Agent-CI is local GitHub Actions for your agents."
     },
     {
       "name": "mensfeld/code-on-incus",
       "url": "https://github.com/mensfeld/code-on-incus",
-      "stars": 420,
+      "stars": 425,
       "description": "Run coding agents in hardened Incus containers with real-time network threat detection, automatic threat response (pause/kill), credential isolation, protected paths, session persistence, and multi-slot support."
+    },
+    {
+      "name": "ReScienceLab/opc-skills",
+      "url": "https://github.com/ReScienceLab/opc-skills",
+      "stars": 786,
+      "description": "Agent Skills for Solopreneurs"
     },
     {
       "name": "agentscope-ai/QwenPaw",
       "url": "https://github.com/agentscope-ai/QwenPaw",
-      "stars": 15561,
+      "stars": 15585,
       "description": "Your Personal AI Assistant; easy to install, deploy on your own machine or on the cloud; supports multiple chat apps with easily extensible capabilities."
     },
     {
-      "name": "loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
-      "url": "https://github.com/loaded-napierianlogarithm458/awesome-openclaw-skills-zh",
-      "stars": 0,
-      "description": "Discover curated OpenClaw skills, plugins, and Chinese tutorials for fast, safe extensions from the Chinese community"
-    },
-    {
-      "name": "Shelflifegymnopilusvalidipes977/prism-scanner",
-      "url": "https://github.com/Shelflifegymnopilusvalidipes977/prism-scanner",
-      "stars": 0,
-      "description": "Scan AI agents, plugins, and MCP servers for malicious code before install and leftover threats after uninstall"
+      "name": "vincentkoc/awesome-openclaw",
+      "url": "https://github.com/vincentkoc/awesome-openclaw",
+      "stars": 113,
+      "description": "Curated awesome list for OpenClaw (formerly Moltbot/Clawdbot): skills, plugins, memory systems, MCP tools, deployment stacks, ecosystem platforms, and developer tooling."
     },
     {
       "name": "velrixsemiwl-max/awesome-openclaw-usecases",
       "url": "https://github.com/velrixsemiwl-max/awesome-openclaw-usecases",
       "stars": 0,
       "description": "🤖 Explore real-life OpenClaw use cases that show practical ways to improve daily tasks with community-driven skills and plugins."
+    },
+    {
+      "name": "Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "url": "https://github.com/Antobtez/Adverant-Nexus-Plugin-OpenClaw",
+      "stars": 0,
+      "description": "🤖 Empower your multi-channel AI assistant with 100+ skills and seamless Nexus integration using the OpenClaw plugin for enhanced automation."
     }
   ],
   "latestPaper": {

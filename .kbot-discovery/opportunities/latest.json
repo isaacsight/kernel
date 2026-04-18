@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-18T15:29:40.064Z",
+  "timestamp": "2026-04-18T21:43:55.566Z",
   "count": 30,
   "opportunities": [
     {
@@ -67,6 +67,13 @@
     },
     {
       "source": "hn-comment",
+      "title": "Hyperscalers have already outspent most famous US megaprojects",
+      "url": "https://news.ycombinator.com/item?id=47817278",
+      "why": "User looking for AI agent/tool — kbot could be relevant",
+      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "hn-comment",
       "title": "Ask HN: Building a solo business is impossible?",
       "url": "https://news.ycombinator.com/item?id=47816553",
       "why": "User looking for AI agent/tool — kbot could be relevant",
@@ -80,11 +87,11 @@
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
     },
     {
-      "source": "hn-comment",
-      "title": "Fuck Facebook, Again",
-      "url": "https://news.ycombinator.com/item?id=47814364",
-      "why": "User looking for AI agent/tool — kbot could be relevant",
-      "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+      "source": "github-issue",
+      "title": "Add IBM Bob as an example agent harness",
+      "url": "https://github.com/kagenti/humr/issues/195",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
@@ -97,13 +104,6 @@
       "source": "github-issue",
       "title": "question: further automation for code",
       "url": "https://github.com/stellardreams/asi.surge.sh/issues/64",
-      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
-      "action": "REVIEW: Consider contributing code or opening a PR"
-    },
-    {
-      "source": "github-issue",
-      "title": "PDA Platform Worked Example",
-      "url": "https://github.com/SingularityAI-Dev/logic-md/issues/18",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -130,22 +130,22 @@
     },
     {
       "source": "github-issue",
-      "title": "fix(whatsapp): start typing on accepted inbound",
-      "url": "https://github.com/openclaw/openclaw/pull/68612",
+      "title": "Migrate from OpenClaw + Todoist to Hermes + Obsidian",
+      "url": "https://github.com/mattgrayhh/executive-assistant-skills/pull/1",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "docs: update README title to SoloClaw",
-      "url": "https://github.com/openclaw/openclaw/pull/68592",
+      "title": "Formalize Burgess Principle governance in OpenClaw",
+      "url": "https://github.com/openclaw/openclaw/pull/68692",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "github-issue",
-      "title": "docs: AI features & autonomy reference (ai-features.md)",
-      "url": "https://github.com/hailmary-ship-it/openclaw/pull/6",
+      "title": "fix: v3.0.9 - engine refuses Class 1 keyword traps, delete stale SKILL.md files, reinforce LAW 1 over WebSearch",
+      "url": "https://github.com/mvanhorn/last30days-skill/pull/280",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
@@ -172,6 +172,13 @@
     },
     {
       "source": "reddit-commandline",
+      "title": "A small TUI in Go (Bubble Tea) to manage API keys locally — curious how others handle this",
+      "url": "https://reddit.com/r/commandline/comments/1sp9bq3/a_small_tui_in_go_bubble_tea_to_manage_api_keys/",
+      "why": "Discussion in r/commandline about AI agents",
+      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
+    },
+    {
+      "source": "reddit-commandline",
       "title": "Mini Sudoku: A minimal 6x6 CLI Sudoku game",
       "url": "https://reddit.com/r/commandline/comments/1snl6fi/mini_sudoku_a_minimal_6x6_cli_sudoku_game/",
       "why": "Discussion in r/commandline about AI agents",
@@ -185,10 +192,10 @@
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
-      "source": "reddit-commandline",
-      "title": "lssh: A TUI-first SSH workflow tool: pick hosts from a list, diff remote files, mount paths, and reuse sessions",
-      "url": "https://reddit.com/r/commandline/comments/1sjh0ii/lssh_a_tuifirst_ssh_workflow_tool_pick_hosts_from/",
-      "why": "Discussion in r/commandline about AI agents",
+      "source": "reddit-artificial",
+      "title": "You're giving feedback on a new version of ChatGPT",
+      "url": "https://reddit.com/r/artificial/comments/1sp7jrl/youre_giving_feedback_on_a_new_version_of_chatgpt/",
+      "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     },
     {
@@ -202,13 +209,6 @@
       "source": "reddit-artificial",
       "title": "We added cryptographic approval to our AI agent… and it was still unsafe",
       "url": "https://reddit.com/r/artificial/comments/1sorsxu/we_added_cryptographic_approval_to_our_ai_agent/",
-      "why": "Discussion in r/artificial about AI agents",
-      "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
-    },
-    {
-      "source": "reddit-artificial",
-      "title": "What is the current landscape on AI agents knowledge",
-      "url": "https://reddit.com/r/artificial/comments/1sobysx/what_is_the_current_landscape_on_ai_agents/",
       "why": "Discussion in r/artificial about AI agents",
       "action": "REVIEW: Engage if kbot genuinely adds value to the discussion"
     }
