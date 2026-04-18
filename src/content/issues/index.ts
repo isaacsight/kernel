@@ -21,6 +21,7 @@ import { ISSUE_365 } from './365'
 import { ISSUE_366 } from './366'
 import { ISSUE_367 } from './367'
 import { ISSUE_368 } from './368'
+import { ISSUE_369 } from './369'
 
 export interface ContentsItem {
   /** Numbered catalog number, padded (e.g. "001") */
@@ -345,13 +346,18 @@ export type IssueCoverLayout = 'classic' | 'monument-hero' | 'asymmetric-left'
  * Optional cover ornament — a decorative mark that reinforces
  * the issue's theme. Currently:
  *
- * - 'ink-spread' — a tomato ink blot bleeding off the lower-right
- *                  margin of the cover. Pairs with dispatch-style
- *                  issues whose swash names the ink literally.
+ * - 'ink-spread'  — a tomato ink blot bleeding off the lower-right
+ *                   margin of the cover. Pairs with dispatch-style
+ *                   issues whose swash names the ink literally.
+ * - 'warty-spots' — a scattered field of irregular tomato papillae
+ *                   drifting across the cover like the spotted
+ *                   dermis of a reef specimen. Introduced for 369
+ *                   (warty frogfish); reusable any time a cover
+ *                   wants "speckled" rather than "blotted."
  *
  * Most issues do not set this; leaving it undefined is the default.
  */
-export type IssueCoverOrnament = 'ink-spread'
+export type IssueCoverOrnament = 'ink-spread' | 'warty-spots'
 
 /** Optional press-preview wax seal rendered in the top-right
  *  corner of the cover. Reads as a rubber stamp or embargo seal;
@@ -402,6 +408,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_366,
   ISSUE_367,
   ISSUE_368,
+  ISSUE_369,
 ]
 
 /** The latest published issue — drives the landing cover. */

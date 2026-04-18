@@ -107,7 +107,8 @@ One distinctive element that makes THIS cover recognizable at a glance.
 Examples in use:
 
 - **coverOrnament: 'ink-spread'** — tomato blot bleeding off the corner (368)
-- **coverSeal: { label, date }** — circular rubber-stamp in top-right (368)
+- **coverOrnament: 'warty-spots'** — scattered tomato papillae drifting across the full cover; reads as a specimen's spotted dermis (369)
+- **coverSeal: { label, date }** — circular rubber-stamp in top-right (368, 369)
 
 New ornaments live as new members of the `IssueCoverOrnament` union
 in `index.ts`; new seals reuse the existing component.
@@ -120,7 +121,7 @@ grow with the archive.
 ## IV. Writing the issue file
 
 Create `src/content/issues/<N>.ts` following the shape of the most
-recent same-format issue (`367.ts` for essay, `368.ts` for dispatch,
+recent same-format issue (`369.ts` for essay, `368.ts` for dispatch,
 etc.). Every issue needs:
 
 - A leading block comment explaining the identity decisions
@@ -324,4 +325,4 @@ Typecheck → build → commit on the current branch with the format in §VIII �
 
 ---
 
-_Last updated: ISSUE 368 · APR 2026._
+_Last updated: ISSUE 369 · APR 2026._
