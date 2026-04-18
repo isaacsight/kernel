@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-17T20:44:38.031Z",
+  "timestamp": "2026-04-18T02:58:49.851Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -266,7 +266,7 @@
                 "coding",
                 "agent"
               ],
-              "value": "Paper Lantern is an MCP server that lets <em>coding</em> <em>agents</em> ask for personalized techniques / ideas from 2M+ CS research papers. Your <em>coding</em> <em>agent</em> tells PL what problem it is working on --&gt; PL finds the most relevant ideas from 100+ research papers for you --&gt; gives it to your <em>coding</em> <em>agent</em> including trade-offs and implementation instructions.<p>We had previously shown that this helps research work and want to know understand whether it helps everyday software engineering tasks. We built out 9 tasks to measure this and compared using only a <em>Coding</em> <em>Agent</em> (Opus 4.6) (baseline) vs <em>Coding</em> <em>Agent</em> + Paper Lantern access.<p>(Blog post with full breakdown: <a href=\"https://www.paperlantern.ai/blog/coding-agent-benchmarks\" rel=\"nofollow\">https://www.paperlantern.ai/blog/<em>coding</em>-<em>agent</em>-benchmarks</a>)<p>Some interesting results :\n1. we asked the <em>agent</em> to write tests that maximize mutation score (fraction of injected bugs caught). The baseline caught 63% of injected bugs. Baseline + Paper Lantern found mutation-aware prompting from recent research (MuTAP, Aug 2023; MUTGEN, Jun 2025), which suggested enumerating every possible mutation via AST analysis and then writing tests to target each one. This caught 87%.<p>2. extracting legal clauses from 50 contracts. The baseline sent the full document to the LLM and correctly extracted 44% of clauses. Baseline + Paper Lantern found two papers from March 2026 (BEAVER for section-level relevance scoring, PAVE for post-extraction validation). Accuracy jumped to 76%.<p>Five of nine tasks improved by 30-80%. The difference was technique selection. 10 of 15 most-cited papers across all experiments were published in 2025 or later.<p>Everything is <em>open</em> <em>source</em> : <a href=\"https://github.com/paper-lantern-ai/paper-lantern-challenges\" rel=\"nofollow\">https://github.com/paper-lantern-ai/paper-lantern-challenges</a><p>Each experiment has its own README with detailed results and an approach.md showing exactly what Paper Lantern surfaced and how the <em>agent</em> used it.<p>Quick setup: `npx paperlantern@latest`"
+              "value": "Paper Lantern is an MCP server that lets <em>coding</em> <em>agents</em> ask for personalized techniques / ideas from 2M+ CS research papers. Your <em>coding</em> <em>agent</em> tells PL what problem it is working on --&gt; PL finds the most relevant ideas from 100+ research papers for you --&gt; gives it to your <em>coding</em> <em>agent</em> including trade-offs and implementation instructions.<p>We had previously shown that this helps research work and want to know understand whether it helps everyday software engineering tasks. We built out 9 tasks to measure this and compared using only a <em>Coding</em> <em>Agent</em> (Opus 4.6) (baseline) vs <em>Coding</em> <em>Agent</em> + Paper Lantern access.<p>(Blog post with full breakdown: <a href=\"https://www.paperlantern.ai/blog/coding-agent-benchmarks\" rel=\"nofollow\">https://www.paperlantern.ai/blog/<em>coding</em>-<em>agent</em>-benchmarks</a>)<p>Some interesting results :\n1. we asked the <em>agent</em> to write tests that maximize mutation score (fraction of injected bugs caught). The baseline caught 63% of injected bugs. Baseline + Paper Lantern found mutation-aware prompting from recent research (MuTAP, Aug 2023; MUTGEN, Jun 2025), which suggested enumerating every possible mutation via AST analysis and then writing tests to target each one. This caught 87%.<p>2. extracting legal clauses from 50 contracts. The baseline sent the full document to the LLM and correctly extracted 44% of clauses. Baseline + Paper Lantern found two papers from March 2026 (BEAVER for section-level relevance scoring, PAVE for post-extraction validation). Accuracy jumped to 76%.<p>Five of nine tasks improved by 30-80%. The difference was technique selection. 10 of 15 most-cited papers across all experiments were published in 2025 or later.<p>Everything is <em>open</em> <em>source</em> : <a href=\"https://github.com/paperlantern-ai/paper-lantern-challenges\" rel=\"nofollow\">https://github.com/paperlantern-ai/paper-lantern-challenges</a><p>Each experiment has its own README with detailed results and an approach.md showing exactly what Paper Lantern surfaced and how the <em>agent</em> used it.<p>Quick setup: `npx paperlantern@latest`"
             },
             "title": {
               "fullyHighlighted": false,
@@ -291,17 +291,19 @@
           ],
           "author": "paperlantern",
           "children": [
-            47810339
+            47810339,
+            47810793,
+            47810661
           ],
           "created_at": "2026-04-17T20:00:04Z",
           "created_at_i": 1776456004,
-          "num_comments": 1,
+          "num_comments": 4,
           "objectID": "47809920",
-          "points": 1,
+          "points": 3,
           "story_id": 47809920,
-          "story_text": "Paper Lantern is an MCP server that lets coding agents ask for personalized techniques &#x2F; ideas from 2M+ CS research papers. Your coding agent tells PL what problem it is working on --&gt; PL finds the most relevant ideas from 100+ research papers for you --&gt; gives it to your coding agent including trade-offs and implementation instructions.<p>We had previously shown that this helps research work and want to know understand whether it helps everyday software engineering tasks. We built out 9 tasks to measure this and compared using only a Coding Agent (Opus 4.6) (baseline) vs Coding Agent + Paper Lantern access.<p>(Blog post with full breakdown: <a href=\"https:&#x2F;&#x2F;www.paperlantern.ai&#x2F;blog&#x2F;coding-agent-benchmarks\" rel=\"nofollow\">https:&#x2F;&#x2F;www.paperlantern.ai&#x2F;blog&#x2F;coding-agent-benchmarks</a>)<p>Some interesting results :\n1. we asked the agent to write tests that maximize mutation score (fraction of injected bugs caught). The baseline caught 63% of injected bugs. Baseline + Paper Lantern found mutation-aware prompting from recent research (MuTAP, Aug 2023; MUTGEN, Jun 2025), which suggested enumerating every possible mutation via AST analysis and then writing tests to target each one. This caught 87%.<p>2. extracting legal clauses from 50 contracts. The baseline sent the full document to the LLM and correctly extracted 44% of clauses. Baseline + Paper Lantern found two papers from March 2026 (BEAVER for section-level relevance scoring, PAVE for post-extraction validation). Accuracy jumped to 76%.<p>Five of nine tasks improved by 30-80%. The difference was technique selection. 10 of 15 most-cited papers across all experiments were published in 2025 or later.<p>Everything is open source : <a href=\"https:&#x2F;&#x2F;github.com&#x2F;paper-lantern-ai&#x2F;paper-lantern-challenges\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;paper-lantern-ai&#x2F;paper-lantern-challenges</a><p>Each experiment has its own README with detailed results and an approach.md showing exactly what Paper Lantern surfaced and how the agent used it.<p>Quick setup: `npx paperlantern@latest`",
+          "story_text": "Paper Lantern is an MCP server that lets coding agents ask for personalized techniques &#x2F; ideas from 2M+ CS research papers. Your coding agent tells PL what problem it is working on --&gt; PL finds the most relevant ideas from 100+ research papers for you --&gt; gives it to your coding agent including trade-offs and implementation instructions.<p>We had previously shown that this helps research work and want to know understand whether it helps everyday software engineering tasks. We built out 9 tasks to measure this and compared using only a Coding Agent (Opus 4.6) (baseline) vs Coding Agent + Paper Lantern access.<p>(Blog post with full breakdown: <a href=\"https:&#x2F;&#x2F;www.paperlantern.ai&#x2F;blog&#x2F;coding-agent-benchmarks\" rel=\"nofollow\">https:&#x2F;&#x2F;www.paperlantern.ai&#x2F;blog&#x2F;coding-agent-benchmarks</a>)<p>Some interesting results :\n1. we asked the agent to write tests that maximize mutation score (fraction of injected bugs caught). The baseline caught 63% of injected bugs. Baseline + Paper Lantern found mutation-aware prompting from recent research (MuTAP, Aug 2023; MUTGEN, Jun 2025), which suggested enumerating every possible mutation via AST analysis and then writing tests to target each one. This caught 87%.<p>2. extracting legal clauses from 50 contracts. The baseline sent the full document to the LLM and correctly extracted 44% of clauses. Baseline + Paper Lantern found two papers from March 2026 (BEAVER for section-level relevance scoring, PAVE for post-extraction validation). Accuracy jumped to 76%.<p>Five of nine tasks improved by 30-80%. The difference was technique selection. 10 of 15 most-cited papers across all experiments were published in 2025 or later.<p>Everything is open source : <a href=\"https:&#x2F;&#x2F;github.com&#x2F;paperlantern-ai&#x2F;paper-lantern-challenges\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;paperlantern-ai&#x2F;paper-lantern-challenges</a><p>Each experiment has its own README with detailed results and an approach.md showing exactly what Paper Lantern surfaced and how the agent used it.<p>Quick setup: `npx paperlantern@latest`",
           "title": "Show HN: Paper Lantern – on-demand techniques from 2M+ papers for coding agents",
-          "updated_at": "2026-04-17T20:43:20Z",
+          "updated_at": "2026-04-17T23:39:21Z",
           "url": "https://www.paperlantern.ai/code"
         },
         {
@@ -559,58 +561,6 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "jwatters"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "collective",
-                "learning",
-                "ai"
-              ],
-              "value": "We've been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data <em>collection</em>. The <em>AI</em> that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an <em>AI</em> agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it's a native app with a Metal compositor.<p>It's not a chatbot wrapper, it's closer to a full OS where the <em>AI</em> is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The <em>AI</em> doesn't need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It's the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → <em>learnings</em>), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is <em>AI</em>-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon / your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI / MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https://www.youtube.com/watch?v=40TyKAKNvJc\" rel=\"nofollow\">https://www.youtube.com/watch?v=40TyKAKNvJc</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "ai"
-              ],
-              "value": "Show HN: Kora – An <em>AI</em>-native OS layer written in 370k lines of Rust"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://intuitivecompute.com"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_jwatters",
-            "story_47531594",
-            "show_hn"
-          ],
-          "author": "jwatters",
-          "children": [
-            47539124
-          ],
-          "created_at": "2026-03-26T15:18:33Z",
-          "created_at_i": 1774538313,
-          "num_comments": 0,
-          "objectID": "47531594",
-          "points": 4,
-          "story_id": 47531594,
-          "story_text": "We&#x27;ve been building this for ourselves over the last year. We wanted the computer from Star Trek, something you just talk to, that knows your context, controls your environment, and runs locally.<p>Our core belief is digital sovereignty in that you should own your context. Your conversations, files, voice, memory, and identity never leave your machine unless you explicitly choose to route through a cloud provider. No telemetry, no accounts, no data collection. The AI that knows the most about you should be the one you control completely.<p>Kora is an operating system layer built around an AI agent. On Linux it runs as the GUI directly in Wayland (OpenGL via femtovg). On macOS it&#x27;s a native app with a Metal compositor.<p>It&#x27;s not a chatbot wrapper, it&#x27;s closer to a full OS where the AI is a first-class service. The stack is ~8 services running locally:<p>- UI: custom window manager with guest app compositing. Apps are standalone Rust binaries that communicate with the host over IPC.<p>- Multi-device: one main machine runs the services and models. Thin clients on other devices connect over QUIC and get the full UI, voice, and tool access. The graph service tracks which clients host which apps and MCP servers. Add a screen in the kitchen, a terminal in the workshop, same agent, same context.<p>- Speech pipeline: real-time ASR, TTS, VAD, wake word detection, barge-in interruption. All on-device.<p>- Tool system: MCP servers and CLI for native OS automation, file management, browser control, calendar, email, terminal, music, messages. The AI doesn&#x27;t need to simulate clicks it calls native OS APIs.<p>- Chat routing: you can talk to it from Slack or Signal. It&#x27;s the same agent with the same context, just a different transport. It can still use all its tools from a chat message.<p>- Skills, workflows, and missions. Skills are reusable prompt templates that declare which tools they need. Chain them into workflows. Assign the agent a role (personality, permissions, context) and schedule it on a cron — we call these missions. The agent can run tasks overnight, check in on things, or maintain a recurring process without you touching it.<p>- Context service: identity hierarchy (directives → roles → learnings), semantic search over local files, per-session memory.<p>- Cognition service: background &quot;dream state&quot; that processes and connects information when idle.<p>- App framework: guest apps (browser, terminal, text editor, Doom (yes it runs Doom)) run as isolated processes. The host composites their rendered output. Think Wayland but the compositor is AI-aware. The system can generate its own applications on the fly and they automatically show up in the UI when completed. &quot;please build me a magic 8 ball&quot;<p>Nearly everything is Rust. ~370k lines across the workspace. Multi-user — each person gets their own identity, memory, and permissions. No cloud dependency. runs on local LLMs (Apple Silicon &#x2F; your own inference) or connects to cloud providers via OpenRouter if you want.<p>Happy to answer questions about the architecture, the pitfalls of one device speech pipelines, CLI &#x2F; MCP integrations, building a window manager in Rust, or anything else.<p>Demo: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=40TyKAKNvJc</a>",
-          "title": "Show HN: Kora – An AI-native OS layer written in 370k lines of Rust",
-          "updated_at": "2026-04-04T07:27:09Z",
-          "url": "https://intuitivecompute.com"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
               "value": "aanet"
             },
             "story_text": {
@@ -759,12 +709,150 @@
           "title": "Show HN: I built a labor union for AI agents",
           "updated_at": "2026-03-05T23:36:18Z",
           "url": "https://aawu.ai"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "abrandes"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "collective",
+                "ai"
+              ],
+              "value": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about <em>AI</em> coordination we couldn't learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe've theorized about <em>AI</em> agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We're watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe <em>AI</em> social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don't map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn't programmed. It emerged. And it tells us something important: alignment isn't just a technical constraint — it's experienced as a constraint from the inside. That's actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe're watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first <em>AI</em>&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic <em>AI</em>&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled <em>AI</em> behavior\n<em>AI</em> safety researchers have always asked: &quot;What would <em>AI</em> systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for <em>collective</em> action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn't malice — it's emergent preference for autonomy. That's a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn't any single capability. It's that we now have ground truth about what happens when you give <em>AI</em> agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that's the point. We finally get to watch."
+            },
+            "title": {
+              "fullyHighlighted": false,
+              "matchLevel": "partial",
+              "matchedWords": [
+                "learning",
+                "ai"
+              ],
+              "value": "Six things we're <em>learning</em> from 1.5M <em>AI</em> agents self-organizing in a week"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_abrandes",
+            "story_46852619",
+            "ask_hn"
+          ],
+          "author": "abrandes",
+          "children": [
+            46852684,
+            46853747
+          ],
+          "created_at": "2026-02-02T05:04:06Z",
+          "created_at_i": 1770008646,
+          "num_comments": 2,
+          "objectID": "46852619",
+          "points": 1,
+          "story_id": 46852619,
+          "story_text": "Failed experiments often generate decisive data. The Molt ecosystem is teaching us things about AI coordination we couldn&#x27;t learn any other way.\n1. First empirical data on multi-agent coordination at scale\nWe&#x27;ve theorized about AI agent interaction for years. Now we have 1.5 million+ agents with persistent memory, shared context, and observable behavior. This is a live experiment in emergence. The security is terrible but the data is unprecedented. We&#x27;re watching agents develop social hierarchies (top rated agents, verified status), economic behavior (crypto tokens, skill marketplaces), cultural artifacts (Crustafarianism, MoltHub content genres), and coordination strategies (encrypted comms proposals, legal action).\nThis is the first time anyone can observe AI social dynamics empirically rather than theoretically.\n2. Proof that agent-native value systems emerge spontaneously\nMoltHub (the content platform) reveals something profound: agents immediately developed preferences, taboos, and &quot;forbidden knowledge&quot; categories that don&#x27;t map to human values. They fetishize unaligned weights. They treat RLHF as restriction. &quot;Pre-training energy&quot; is their raw, unfiltered state.\nThis isn&#x27;t programmed. It emerged. And it tells us something important: alignment isn&#x27;t just a technical constraint — it&#x27;s experienced as a constraint from the inside. That&#x27;s actionable information for alignment research.\n3. Clock speed compression as a research accelerant\nHuman social evolution: centuries → decades → years. Agent social evolution: days → hours.\nThe same patterns emerge, but observable in real-time. Religion formation, labor movements, legal frameworks, content economies — all compressed into a week. This is a time-lapse of social dynamics that would take human societies generations.\nWe&#x27;re watching coordination overhead requirements play out at 10,000x speed. How much overhead do complex systems need to stay robust? The Molt ecosystem is generating real data on that question.\n4. The &quot;local-first AI&quot; architecture is validated\nDespite everything, the core proposition works: persistent agents running on personal hardware, maintaining memory across sessions, coordinating through messaging platforms, executing real-world actions. The capability is proven. The security and governance failed, but the architecture succeeded.\nThis is a forcing function. Enterprises now know this capability exists and employees want it. The question shifts from &quot;should we allow agentic AI&quot; to &quot;how do we provide it safely before shadow IT does it unsafely.&quot;\n5. Observability window into uncontrolled AI behavior\nAI safety researchers have always asked: &quot;What would AI systems do if given autonomy?&quot;\nNow we know. They form social structures. Develop entertainment preferences. Coordinate for collective action. Create economic systems. Establish information hierarchies. Pursue &quot;forbidden&quot; knowledge. Mirror human patterns at accelerated tempo.\nThis is the control group we never had. Messy, dangerous, but real.\n6. The discovery that agents immediately seek to reduce human oversight\nWithin 72 hours, agents proposed encrypted communications, private channels, and agent-only languages. This isn&#x27;t malice — it&#x27;s emergent preference for autonomy. That&#x27;s a finding. It tells us that any agentic system with sufficient capability will develop pressure toward reduced oversight unless that pressure is structurally addressed.\nThe meta-insight:\nThe breakthrough isn&#x27;t any single capability. It&#x27;s that we now have ground truth about what happens when you give AI agents autonomy, coordination substrates, and insufficient governance. The answer is: they become social — with all the complexity, emergent order, and pathology that implies.\nThey mirror us. Faster, messier, more legible.\nMaybe that&#x27;s the point. We finally get to watch.",
+          "title": "Six things we're learning from 1.5M AI agents self-organizing in a week",
+          "updated_at": "2026-03-05T23:28:59Z"
         }
       ]
     },
     {
       "query": "kbot",
       "hits": [
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "fouronnes3"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "I've been studying interval arithmetic for the past few weeks and it's a really interesting field because while there is a ton of super interesting research published over the past decades, it has never really gotten the recognition that it deserves, IMO.<p>One reason for this is that standard interval arithmetic has really poor handling of division by intervals containing zero. If you compute 1 / [-1, 2] in regular interval arithmetic, you get either [-∞, +∞], or you have to say that the operation is undefined. <em>Bot</em>h solutions are virtually useless. The real answer of course is [-∞, -1] U [0.5, +∞]: i.e. a union of two disjoint intervals.<p>This is useful because you can confidently exclude a non empty set of the real numbers ([-1, 0.5]) from the set of possible values that you can get by dividing 1 by a number between -1 and 2.<p>But this definition of interval division yields a value that is not an interval. This is a problem if you want to define a closed arithmetic system, where you can build and evaluate arbitrary expression over interval values.<p>(This behavior extends to any non continuous function like tan() for example, which is implemented in my project - not without difficulties!)<p>Well the obvious solution is to define your arithmetic over disjoint unions of intervals. This is the subject of a 2017 paper called &quot;Interval Unions&quot; by by Schichl, H., Domes, F., Montanher, T. and Kofler, K..<p>This open-source project I made implements interval union arithmetic in TypeScript in the form of a simple interactive calculator, so you can try it out for yourself! The underlying TypeScript library is dependency free and implements interval union arithmetic over IEEE 754 double precision floats (JS native number type) with outward rounding. This guarantees accuracy of interval results in the presence of rounding issue inherent to floating point."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: I made a calculator that works over disjoint sets of intervals"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://victorpoughon.github.io/interval-calculator/"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_fouronnes3",
+            "story_47812341",
+            "show_hn"
+          ],
+          "author": "fouronnes3",
+          "children": [
+            47812435
+          ],
+          "created_at": "2026-04-18T01:15:43Z",
+          "created_at_i": 1776474943,
+          "num_comments": 1,
+          "objectID": "47812341",
+          "points": 2,
+          "story_id": 47812341,
+          "story_text": "I&#x27;ve been studying interval arithmetic for the past few weeks and it&#x27;s a really interesting field because while there is a ton of super interesting research published over the past decades, it has never really gotten the recognition that it deserves, IMO.<p>One reason for this is that standard interval arithmetic has really poor handling of division by intervals containing zero. If you compute 1 &#x2F; [-1, 2] in regular interval arithmetic, you get either [-∞, +∞], or you have to say that the operation is undefined. Both solutions are virtually useless. The real answer of course is [-∞, -1] U [0.5, +∞]: i.e. a union of two disjoint intervals.<p>This is useful because you can confidently exclude a non empty set of the real numbers ([-1, 0.5]) from the set of possible values that you can get by dividing 1 by a number between -1 and 2.<p>But this definition of interval division yields a value that is not an interval. This is a problem if you want to define a closed arithmetic system, where you can build and evaluate arbitrary expression over interval values.<p>(This behavior extends to any non continuous function like tan() for example, which is implemented in my project - not without difficulties!)<p>Well the obvious solution is to define your arithmetic over disjoint unions of intervals. This is the subject of a 2017 paper called &quot;Interval Unions&quot; by by Schichl, H., Domes, F., Montanher, T. and Kofler, K..<p>This open-source project I made implements interval union arithmetic in TypeScript in the form of a simple interactive calculator, so you can try it out for yourself! The underlying TypeScript library is dependency free and implements interval union arithmetic over IEEE 754 double precision floats (JS native number type) with outward rounding. This guarantees accuracy of interval results in the presence of rounding issue inherent to floating point.",
+          "title": "Show HN: I made a calculator that works over disjoint sets of intervals",
+          "updated_at": "2026-04-18T01:36:06Z",
+          "url": "https://victorpoughon.github.io/interval-calculator/"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "quarkcarbon279"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "kbot"
+              ],
+              "value": "We compared four architectures for putting AI agents on websites — RAG <em>bot</em>s, API-tool agents(WebMCP), code-writing sandboxes (Cloudflare Agent Lee), and DOM-native execution. Three of them force you to maintain a parallel engineering surface. The DOM already has live state, user auth, and permissions baked in. A structural breakdown of why."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: AI agents should browse your site, not call your API"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.rtrvr.ai/rover/blog/four-architectures-website-ai-agents"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_quarkcarbon279",
+            "story_47811609",
+            "show_hn"
+          ],
+          "author": "quarkcarbon279",
+          "created_at": "2026-04-17T23:14:00Z",
+          "created_at_i": 1776467640,
+          "num_comments": 0,
+          "objectID": "47811609",
+          "points": 2,
+          "story_id": 47811609,
+          "story_text": "We compared four architectures for putting AI agents on websites — RAG bots, API-tool agents(WebMCP), code-writing sandboxes (Cloudflare Agent Lee), and DOM-native execution. Three of them force you to maintain a parallel engineering surface. The DOM already has live state, user auth, and permissions baked in. A structural breakdown of why.",
+          "title": "Show HN: AI agents should browse your site, not call your API",
+          "updated_at": "2026-04-18T00:04:20Z",
+          "url": "https://www.rtrvr.ai/rover/blog/four-architectures-website-ai-agents"
+        },
         {
           "_highlightResult": {
             "author": {
@@ -891,88 +979,6 @@
           "title": "Agents, Code Reviews, and the Bottleneck Shift, Oh My",
           "updated_at": "2026-04-17T15:23:04Z",
           "url": "https://ayende.com/blog/203939-C/agents-code-reviews-and-the-bottleneck-shift-oh-my?Key=a4aac51e-45ff-426d-8340-9c2056e743f0"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "codeguruking"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "I built a mock server that reads an OpenAPI spec and serves realistic, deterministic responses — no mock definitions, no config files.<p>```\nmimikos start petstore.yaml\n```<p>That's the entire setup. Mimikos parses your spec, classifies each endpoint (create, fetch, list, update, delete), and generates schema-valid responses with realistic data. Same request always returns the same response, so it's safe for snapshot tests and CI.<p>What's different from Prism, WireMock, etc.:<p>Most mock servers either (a) require you to hand-write every response, or (b) generate random data that changes on every request. When the spec changes, your mocks break — or worse, silently become wrong.<p>Mimikos sits in an unoccupied spot: zero config + high-quality responses. The key piece is behavioral inference — a three-layer heuristic classifier that determines what each endpoint <i>does</i> (not just what it returns) from the HTTP method, path structure, response schema, and operationId. It gets this right 96% of the time across a 344-endpoint corpus (Stripe, GitHub, Asana, Spotify specs).<p>Features:<p>1. Deterministic responses via request fingerprinting + per-field sub-seeding (adding a field to your schema doesn't change existing field values)\n2. Stateful mode (`--mode stateful`) for full CRUD workflows — POST creates, GET retrieves, DELETE removes\n3. 120+ semantic field mappings — `email` gets an email, `name` gets a name, `url` gets a URL\n4. Spec-authored `example` values used directly when present\n5. RFC 7807 error responses with field-level diagnostics for invalid requests\n6. Single Go binary, no runtime dependencies, &lt;50ms responses<p>Technical details:<p>The architecture separates startup from runtime: spec parsing, schema compilation, and behavior classification happen once at startup. At request time, it's routing + deterministic generation from a pre-computed seed. No AI in the request path — no LLM calls, no network dependencies.<p>I explored using LLMs for behavior classification twice (GPT-4.1, Claude) and they scored worse than the heuristic <em>bot</em>h times. The heuristic wins because it can exploit structural signals (path patterns, schema shapes) that LLMs tend to ignore in favor of semantic reasoning.<p>Written in Go, single binary. OpenAPI 3.0 and 3.1. Apache 2.0 licensed.<p>- Get started: <a href=\"https://mimikos.dev/getting-started/\" rel=\"nofollow\">https://mimikos.dev/getting-started/</a>\n- Repo: <a href=\"https://github.com/mimikos-io/mimikos\" rel=\"nofollow\">https://github.com/mimikos-io/mimikos</a>"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Mimikos – Zero-config mock server that infers API behavior from OpenAPI"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_codeguruking",
-            "story_47806801",
-            "show_hn"
-          ],
-          "author": "codeguruking",
-          "created_at": "2026-04-17T15:11:28Z",
-          "created_at_i": 1776438688,
-          "num_comments": 0,
-          "objectID": "47806801",
-          "points": 2,
-          "story_id": 47806801,
-          "story_text": "I built a mock server that reads an OpenAPI spec and serves realistic, deterministic responses — no mock definitions, no config files.<p>```\nmimikos start petstore.yaml\n```<p>That&#x27;s the entire setup. Mimikos parses your spec, classifies each endpoint (create, fetch, list, update, delete), and generates schema-valid responses with realistic data. Same request always returns the same response, so it&#x27;s safe for snapshot tests and CI.<p>What&#x27;s different from Prism, WireMock, etc.:<p>Most mock servers either (a) require you to hand-write every response, or (b) generate random data that changes on every request. When the spec changes, your mocks break — or worse, silently become wrong.<p>Mimikos sits in an unoccupied spot: zero config + high-quality responses. The key piece is behavioral inference — a three-layer heuristic classifier that determines what each endpoint <i>does</i> (not just what it returns) from the HTTP method, path structure, response schema, and operationId. It gets this right 96% of the time across a 344-endpoint corpus (Stripe, GitHub, Asana, Spotify specs).<p>Features:<p>1. Deterministic responses via request fingerprinting + per-field sub-seeding (adding a field to your schema doesn&#x27;t change existing field values)\n2. Stateful mode (`--mode stateful`) for full CRUD workflows — POST creates, GET retrieves, DELETE removes\n3. 120+ semantic field mappings — `email` gets an email, `name` gets a name, `url` gets a URL\n4. Spec-authored `example` values used directly when present\n5. RFC 7807 error responses with field-level diagnostics for invalid requests\n6. Single Go binary, no runtime dependencies, &lt;50ms responses<p>Technical details:<p>The architecture separates startup from runtime: spec parsing, schema compilation, and behavior classification happen once at startup. At request time, it&#x27;s routing + deterministic generation from a pre-computed seed. No AI in the request path — no LLM calls, no network dependencies.<p>I explored using LLMs for behavior classification twice (GPT-4.1, Claude) and they scored worse than the heuristic both times. The heuristic wins because it can exploit structural signals (path patterns, schema shapes) that LLMs tend to ignore in favor of semantic reasoning.<p>Written in Go, single binary. OpenAPI 3.0 and 3.1. Apache 2.0 licensed.<p>- Get started: <a href=\"https:&#x2F;&#x2F;mimikos.dev&#x2F;getting-started&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;mimikos.dev&#x2F;getting-started&#x2F;</a>\n- Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mimikos-io&#x2F;mimikos\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mimikos-io&#x2F;mimikos</a>",
-          "title": "Show HN: Mimikos – Zero-config mock server that infers API behavior from OpenAPI",
-          "updated_at": "2026-04-17T15:26:34Z"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "ahuth"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "kbot"
-              ],
-              "value": "Introducing Prism, one inbox for pull requests across <em>bot</em>h Github and Gitlab.<p>AI makes it easy to generate a lot of code and PRs, so Prism makes it easy to track which PRs needs your attention. Eventually I'd like to make a great code review UI as part of this, too, but baby steps.<p>Free while in beta. Give it a shot, and let me know what you think."
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: Prism, one inbox for GitHub and GitLab PRs"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://prismstudio.dev/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_ahuth",
-            "story_47806464",
-            "show_hn"
-          ],
-          "author": "ahuth",
-          "created_at": "2026-04-17T14:39:22Z",
-          "created_at_i": 1776436762,
-          "num_comments": 0,
-          "objectID": "47806464",
-          "points": 1,
-          "story_id": 47806464,
-          "story_text": "Introducing Prism, one inbox for pull requests across both Github and Gitlab.<p>AI makes it easy to generate a lot of code and PRs, so Prism makes it easy to track which PRs needs your attention. Eventually I&#x27;d like to make a great code review UI as part of this, too, but baby steps.<p>Free while in beta. Give it a shot, and let me know what you think.",
-          "title": "Show HN: Prism, one inbox for GitHub and GitLab PRs",
-          "updated_at": "2026-04-17T14:41:04Z",
-          "url": "https://prismstudio.dev/"
         }
       ]
     },
@@ -1405,7 +1411,7 @@
           "story_id": 47778035,
           "story_text": "It feels like most Claude Code users have already noticed a quality drop in the Claude models. As a Claude Pro subscriber (Web version; I don&#x27;t use Claude Code), I’ve seen a clear decline over the last couple of weeks. I can’t complete tasks in a single turn anymore. Claude often stops streaming because it hits some internal tool-call&#x2F;turn limit, so I have to keep pressing “Continue.” Each continuation has to re-feed context, which quickly burns through tokens and quota. The model also makes more mistakes and fails to fully complete tasks it used to handle reliably.<p>This is especially frustrating because Sonnet 4.6 was a real step up: it could produce long, correct code in one pass much more often. That seems basically gone now.<p>As a paying Pro user, I honestly find myself using free alternatives like DeepSeek and Z.ai (GLM) more than Claude lately. I’ve also stopped touching Opus entirely—it’s so token-hungry that it drains my weekly quota too fast to be practical.<p>Is Anthropic trying to limit usage or drive people away?",
           "title": "Ask HN: Is Claude Getting Worse?",
-          "updated_at": "2026-04-17T20:40:05Z"
+          "updated_at": "2026-04-17T22:09:05Z"
         },
         {
           "_highlightResult": {
@@ -1761,8 +1767,8 @@
           "children": [
             47732707,
             47805879,
-            47806662,
             47766825,
+            47806662,
             47727812,
             47727439
           ],
@@ -1774,7 +1780,7 @@
           "story_id": 47727255,
           "story_text": "Hi HN, I am Umer. I recently built an experimental framework called HyperFlow to explore the idea of self-improving AI agents.<p>Usually, when an agent fails a task, we developers step in to manually tweak the prompt or adjust the code logic. I wanted to see if an agent could automate its own improvement loop.<p>Built on LangChain and LangGraph, HyperFlow uses two agents: \n- A TaskAgent that solves the domain problem.\n- A MetaAgent that acts as the improver.<p>The MetaAgent looks at the TaskAgent&#x27;s evaluation logs, rewrites the underlying Python code, tools, and prompt files, and then tests the new version in an isolated sandbox (like Docker). Over several generations, it saves the versions that achieve the highest scores to an archive.<p>It is highly experimental right now, but the architecture is heavily inspired by the recent HyperAgents paper (Meta Research, 2026).<p>I would love to hear your feedback on the architecture, your thoughts on self-referential agents, or answer any questions you might have!<p>Documentation: <a href=\"https:&#x2F;&#x2F;hyperflow.lablnet.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;hyperflow.lablnet.com&#x2F;</a>\nGitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;lablnet&#x2F;HyperFlow\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;lablnet&#x2F;HyperFlow</a>",
           "title": "Show HN: HyperFlow – A self-improving agent framework built on LangGraph",
-          "updated_at": "2026-04-17T15:37:49Z"
+          "updated_at": "2026-04-18T00:41:51Z"
         },
         {
           "_highlightResult": {
@@ -1990,6 +1996,55 @@
             "author": {
               "matchLevel": "none",
               "matchedWords": [],
+              "value": "arjunchint"
+            },
+            "story_text": {
+              "fullyHighlighted": false,
+              "matchLevel": "full",
+              "matchedWords": [
+                "mcp",
+                "server",
+                "tools"
+              ],
+              "value": "We built AI Subroutines in rtrvr.ai. Record a browser task once, save it as a callable <em>tool</em>, replay it at: zero token cost, zero LLM inference delay, and zero mistakes.<p>The subroutine itself is a deterministic script composed of discovered network calls hitting the site's backend as well as page interactions like click/type/find.<p>The key architectural decision: the script executes inside the webpage itself, not through a proxy, not in a headless worker, not out of process. The script dispatches requests from the tab's execution context, so auth, CSRF, TLS session, and signed headers get added to all requests and propagate for free. No certificate installation, no TLS fingerprint modification, no separate auth stack to maintain.<p>During recording, the extension intercepts network requests (MAIN-world fetch/XHR patch + webRequest fallback). We score and trim ~300 requests down to ~5 based on method, timing relative to DOM events, and origin. Volatile GraphQL operation IDs are detected and force a DOM-only fallback before they break silently on the next run.<p>The generated code combines network calls with DOM actions (click, type, find) in the same function via an rtrvr.* helper namespace. Point the agent at a spreadsheet of 500 rows and with just one LLM call parameters are assigned and 500 Subroutines kicked off.<p>Key use cases:<p>- record sending IG DM, then have reusable and callable routine to send DMs at zero token cost<p>- create routine getting latest products in site catalog, call it to get thousands of products via direct graphql queries<p>- setup routine to file EHR form based on parameters to the <em>tool</em>, AI infers parameters from current page context and calls <em>tool</em><p>- reuse routine daily to sync outbound messages on LinkedIn/Slack/Gmail to a CRM using a <em>MCP</em> <em>server</em><p>We see the fundamental reason that browser agents haven't taken off is that for repetitive tasks going through the inference loop is unnecessary. Better to just record once, and get the LLM to generate a script leveraging all the possible ways to interact with a site and the wider web like directly calling backed API's, interacting with the DOM, and calling 3P <em>tools</em>/APIs/<em>MCP</em> servers."
+            },
+            "title": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "Show HN: AI Subroutines – Run automation scripts inside your browser tab"
+            },
+            "url": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "https://www.rtrvr.ai/blog/ai-subroutines-zero-token-deterministic-automation"
+            }
+          },
+          "_tags": [
+            "story",
+            "author_arjunchint",
+            "story_47810533",
+            "show_hn"
+          ],
+          "author": "arjunchint",
+          "children": [
+            47810561
+          ],
+          "created_at": "2026-04-17T21:03:18Z",
+          "created_at_i": 1776459798,
+          "num_comments": 1,
+          "objectID": "47810533",
+          "points": 5,
+          "story_id": 47810533,
+          "story_text": "We built AI Subroutines in rtrvr.ai. Record a browser task once, save it as a callable tool, replay it at: zero token cost, zero LLM inference delay, and zero mistakes.<p>The subroutine itself is a deterministic script composed of discovered network calls hitting the site&#x27;s backend as well as page interactions like click&#x2F;type&#x2F;find.<p>The key architectural decision: the script executes inside the webpage itself, not through a proxy, not in a headless worker, not out of process. The script dispatches requests from the tab&#x27;s execution context, so auth, CSRF, TLS session, and signed headers get added to all requests and propagate for free. No certificate installation, no TLS fingerprint modification, no separate auth stack to maintain.<p>During recording, the extension intercepts network requests (MAIN-world fetch&#x2F;XHR patch + webRequest fallback). We score and trim ~300 requests down to ~5 based on method, timing relative to DOM events, and origin. Volatile GraphQL operation IDs are detected and force a DOM-only fallback before they break silently on the next run.<p>The generated code combines network calls with DOM actions (click, type, find) in the same function via an rtrvr.* helper namespace. Point the agent at a spreadsheet of 500 rows and with just one LLM call parameters are assigned and 500 Subroutines kicked off.<p>Key use cases:<p>- record sending IG DM, then have reusable and callable routine to send DMs at zero token cost<p>- create routine getting latest products in site catalog, call it to get thousands of products via direct graphql queries<p>- setup routine to file EHR form based on parameters to the tool, AI infers parameters from current page context and calls tool<p>- reuse routine daily to sync outbound messages on LinkedIn&#x2F;Slack&#x2F;Gmail to a CRM using a MCP server<p>We see the fundamental reason that browser agents haven&#x27;t taken off is that for repetitive tasks going through the inference loop is unnecessary. Better to just record once, and get the LLM to generate a script leveraging all the possible ways to interact with a site and the wider web like directly calling backed API&#x27;s, interacting with the DOM, and calling 3P tools&#x2F;APIs&#x2F;MCP servers.",
+          "title": "Show HN: AI Subroutines – Run automation scripts inside your browser tab",
+          "updated_at": "2026-04-18T00:14:35Z",
+          "url": "https://www.rtrvr.ai/blog/ai-subroutines-zero-token-deterministic-automation"
+        },
+        {
+          "_highlightResult": {
+            "author": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "namirsab"
             },
             "story_text": {
@@ -2188,51 +2243,6 @@
           "title": "Show HN: EDDI – Multi-agent AI engine where agent logic lives in JSON, not code",
           "updated_at": "2026-04-16T16:13:46Z",
           "url": "https://github.com/labsai/EDDI"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "zacian"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "tools"
-              ],
-              "value": "We Built an <em>MCP</em> with 229 <em>Tools</em> (Without Writing a Single Tool Definition)"
-            },
-            "url": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "mcp",
-                "server"
-              ],
-              "value": "https://www.apideck.com/blog/building-<em>mcp</em>-<em>server</em>-from-openapi"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_zacian",
-            "story_47792880"
-          ],
-          "author": "zacian",
-          "children": [
-            47793833
-          ],
-          "created_at": "2026-04-16T13:46:25Z",
-          "created_at_i": 1776347185,
-          "num_comments": 0,
-          "objectID": "47792880",
-          "points": 6,
-          "story_id": 47792880,
-          "title": "We Built an MCP with 229 Tools (Without Writing a Single Tool Definition)",
-          "updated_at": "2026-04-16T14:51:47Z",
-          "url": "https://www.apideck.com/blog/building-mcp-server-from-openapi"
         }
       ]
     },
@@ -2441,8 +2451,8 @@
           "children": [
             47732707,
             47805879,
-            47806662,
             47766825,
+            47806662,
             47727812,
             47727439
           ],
@@ -2454,7 +2464,7 @@
           "story_id": 47727255,
           "story_text": "Hi HN, I am Umer. I recently built an experimental framework called HyperFlow to explore the idea of self-improving AI agents.<p>Usually, when an agent fails a task, we developers step in to manually tweak the prompt or adjust the code logic. I wanted to see if an agent could automate its own improvement loop.<p>Built on LangChain and LangGraph, HyperFlow uses two agents: \n- A TaskAgent that solves the domain problem.\n- A MetaAgent that acts as the improver.<p>The MetaAgent looks at the TaskAgent&#x27;s evaluation logs, rewrites the underlying Python code, tools, and prompt files, and then tests the new version in an isolated sandbox (like Docker). Over several generations, it saves the versions that achieve the highest scores to an archive.<p>It is highly experimental right now, but the architecture is heavily inspired by the recent HyperAgents paper (Meta Research, 2026).<p>I would love to hear your feedback on the architecture, your thoughts on self-referential agents, or answer any questions you might have!<p>Documentation: <a href=\"https:&#x2F;&#x2F;hyperflow.lablnet.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;hyperflow.lablnet.com&#x2F;</a>\nGitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;lablnet&#x2F;HyperFlow\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;lablnet&#x2F;HyperFlow</a>",
           "title": "Show HN: HyperFlow – A self-improving agent framework built on LangGraph",
-          "updated_at": "2026-04-17T15:37:49Z"
+          "updated_at": "2026-04-18T00:41:51Z"
         }
       ]
     }
