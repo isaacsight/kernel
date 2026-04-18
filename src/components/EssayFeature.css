@@ -169,6 +169,330 @@
   text-align: center;
 }
 
+/* ── Dossier (editorial register — opening data card) ──────
+   A fashion-magazine-style front register: numbered catalog of
+   the issue's subject, mono labels paired with serif values,
+   hairline rules between rows. Reads as part of the editorial
+   grammar, not as scientific frontmatter. */
+.pop-essay-dossier {
+  max-width: 640px;
+  margin: 0 auto 56px;
+  padding: 32px 28px;
+  border-top: 2px solid var(--pop-tomato);
+  border-bottom: 1px solid var(--pop-hairline);
+}
+
+.pop-essay-dossier-kicker {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.pop-essay-dossier-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--pop-coffee);
+  margin: 4px 0 24px;
+  max-width: 48ch;
+}
+
+.pop-essay-dossier-list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pop-essay-dossier-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 2fr;
+  gap: 24px;
+  padding: 14px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  align-items: baseline;
+}
+
+.pop-essay-dossier-row:first-child { border-top: none; padding-top: 4px; }
+.pop-essay-dossier-row:last-child { padding-bottom: 0; }
+
+.pop-essay-dossier-label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pop-essay-dossier-n {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--pop-tomato);
+  font-weight: 700;
+}
+
+.pop-essay-dossier-label-en {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-ink);
+  font-weight: 700;
+}
+
+.pop-essay-dossier-label-jp {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+  opacity: 0.8;
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.pop-essay-dossier-value {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pop-essay-dossier-value-en {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--pop-ink);
+  text-wrap: balance;
+}
+
+.pop-essay-dossier-value-jp {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+/* ── Figures (the editorial "by-the-numbers" block) ────────
+   Harper's Index-style grid inserted mid-essay. Oversized tomato
+   numbers anchor the left of each row; serif caption flows right.
+   A hard tomato rule above the block, a hairline below. */
+.pop-essay-data {
+  margin: 48px -8px;
+  padding: 28px 16px 24px;
+  border-top: 2px solid var(--pop-tomato);
+  border-bottom: 1px solid var(--pop-hairline);
+}
+
+.pop-essay-data-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.pop-essay-data-heading {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--pop-ink);
+  margin: 4px 0 0;
+}
+
+.pop-essay-data-heading-jp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--pop-coffee);
+  margin: 0;
+}
+
+.pop-essay-data-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pop-essay-data-stat {
+  display: grid;
+  grid-template-columns: minmax(140px, auto) 1fr;
+  column-gap: 28px;
+  row-gap: 2px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-essay-data-stat:first-child { border-top: none; }
+
+.pop-essay-data-n {
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1;
+  color: var(--pop-tomato);
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.pop-essay-data-label {
+  grid-column: 2;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--pop-ink);
+  text-wrap: pretty;
+}
+
+.pop-essay-data-label-jp {
+  grid-column: 2;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+  opacity: 0.8;
+}
+
+.pop-essay-data-source {
+  grid-column: 2;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+/* ── Further reading (editorial back matter) ───────────────
+   A numbered register of cited sources. Hanging indent, mono
+   metadata, italic titles. Reads as part of the back-of-book
+   grammar — colophon-adjacent, not footnote-adjacent. */
+.pop-essay-refs {
+  max-width: 640px;
+  margin: 56px auto 0;
+  padding: 28px 0 0;
+  border-top: 1px solid var(--pop-hairline);
+}
+
+.pop-essay-refs-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.pop-essay-refs-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--pop-coffee);
+  margin: 4px 0 0;
+  max-width: 52ch;
+}
+
+.pop-essay-refs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pop-essay-refs-item {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 8px;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--pop-ink);
+  text-indent: 0;
+}
+
+.pop-essay-refs-n {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--pop-tomato);
+  font-weight: 700;
+  padding-top: 2px;
+}
+
+.pop-essay-refs-authors {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+}
+
+.pop-essay-refs-year {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--pop-coffee);
+}
+
+.pop-essay-refs-title {
+  font-style: italic;
+  color: var(--pop-ink);
+}
+
+.pop-essay-refs-journal {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--pop-coffee);
+}
+
+.pop-essay-refs-dot { color: var(--pop-ink); }
+
+/* ── Ink stock — flip prose colors for dark paper ──────────
+   The body prose, byline, JP headings, and signoff default to
+   ink-dark tones that disappear against the ink paper stock.
+   On ink, flip them to ivory/sepia so the essay stays legible. */
+.pop-essay.pop-stock-ink .pop-essay-body { color: var(--pop-ivory); }
+.pop-essay.pop-stock-ink .pop-essay-byline { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-section-head-jp { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-signoff-text { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-pullquote-attr { color: var(--pop-sepia); }
+
+/* Dossier on ink */
+.pop-essay.pop-stock-ink .pop-essay-dossier-note { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-dossier-label-en { color: var(--pop-ivory); }
+.pop-essay.pop-stock-ink .pop-essay-dossier-label-jp { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-dossier-value-en { color: var(--pop-ivory); }
+.pop-essay.pop-stock-ink .pop-essay-dossier-value-jp { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-dossier-row { border-top-color: rgba(250, 249, 246, 0.12); }
+
+/* Figures on ink */
+.pop-essay.pop-stock-ink .pop-essay-data-heading { color: var(--pop-ivory); }
+.pop-essay.pop-stock-ink .pop-essay-data-heading-jp { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-data-label { color: var(--pop-ivory); }
+.pop-essay.pop-stock-ink .pop-essay-data-label-jp { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-data-source { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-data-stat { border-top-color: rgba(250, 249, 246, 0.12); }
+
+/* Further reading on ink */
+.pop-essay.pop-stock-ink .pop-essay-refs { border-top-color: rgba(250, 249, 246, 0.18); }
+.pop-essay.pop-stock-ink .pop-essay-refs-note { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-refs-item { color: var(--pop-ivory); }
+.pop-essay.pop-stock-ink .pop-essay-refs-authors { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-refs-year { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-refs-title { color: var(--pop-ivory); }
+.pop-essay.pop-stock-ink .pop-essay-refs-journal { color: var(--pop-sepia); }
+.pop-essay.pop-stock-ink .pop-essay-refs-dot { color: var(--pop-ivory); }
+
 /* ── Mobile ─────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .pop-essay { padding: 56px 0; }

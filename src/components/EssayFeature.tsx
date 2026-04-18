@@ -36,6 +36,39 @@ export function EssayFeature({ spread, issue }: EssayFeatureProps) {
 
         <hr className="pop-rule pop-essay-rule" />
 
+        {/* ── Optional dossier: methods-paper abstract card ── */}
+        {spread.dossier && (
+          <aside className="pop-essay-dossier" aria-label="Abstract">
+            <span className="pop-kicker pop-kicker--tomato pop-essay-dossier-kicker">
+              {spread.dossier.kicker}
+            </span>
+            {spread.dossier.note && (
+              <p className="pop-essay-dossier-note">{spread.dossier.note}</p>
+            )}
+            <dl className="pop-essay-dossier-list">
+              {spread.dossier.items.map((item, i) => (
+                <div key={i} className="pop-essay-dossier-row">
+                  <dt className="pop-essay-dossier-label">
+                    <span className="pop-essay-dossier-n">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="pop-essay-dossier-label-en">{item.label}</span>
+                    {item.labelJp && (
+                      <span className="pop-essay-dossier-label-jp">{item.labelJp}</span>
+                    )}
+                  </dt>
+                  <dd className="pop-essay-dossier-value">
+                    <span className="pop-essay-dossier-value-en">{item.value}</span>
+                    {item.valueJp && (
+                      <span className="pop-essay-dossier-value-jp">{item.valueJp}</span>
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
+        )}
+
         {/* ── Body ────────────────────────────────────────── */}
         <article className="pop-essay-body">
           {spread.sections.map((section, sIdx) => (
@@ -69,9 +102,76 @@ export function EssayFeature({ spread, issue }: EssayFeatureProps) {
                   </p>
                 </aside>
               )}
+
+              {/* Optional "by the numbers" data block — mid-essay. */}
+              {spread.dataBlock && spread.dataBlock.afterSection === sIdx && (
+                <aside className="pop-essay-data" aria-label="By the numbers">
+                  <header className="pop-essay-data-head">
+                    <span className="pop-kicker pop-kicker--tomato">
+                      {spread.dataBlock.kicker}
+                    </span>
+                    {spread.dataBlock.heading && (
+                      <h4 className="pop-essay-data-heading">
+                        {spread.dataBlock.heading}
+                      </h4>
+                    )}
+                    {spread.dataBlock.headingJp && (
+                      <p className="pop-essay-data-heading-jp">
+                        {spread.dataBlock.headingJp}
+                      </p>
+                    )}
+                  </header>
+                  <ul className="pop-essay-data-grid">
+                    {spread.dataBlock.stats.map((stat, i) => (
+                      <li key={i} className="pop-essay-data-stat">
+                        <span className="pop-essay-data-n">{stat.n}</span>
+                        <span className="pop-essay-data-label">{stat.label}</span>
+                        {stat.labelJp && (
+                          <span className="pop-essay-data-label-jp">{stat.labelJp}</span>
+                        )}
+                        {stat.source && (
+                          <span className="pop-essay-data-source">— {stat.source}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              )}
             </div>
           ))}
         </article>
+
+        {/* ── Optional works-cited block ───────────────────── */}
+        {spread.references && (
+          <aside className="pop-essay-refs" aria-label="Works cited">
+            <header className="pop-essay-refs-head">
+              <span className="pop-kicker pop-kicker--tomato">
+                {spread.references.kicker}
+              </span>
+              {spread.references.note && (
+                <p className="pop-essay-refs-note">{spread.references.note}</p>
+              )}
+            </header>
+            <ol className="pop-essay-refs-list">
+              {spread.references.items.map((ref, i) => (
+                <li key={i} className="pop-essay-refs-item">
+                  <span className="pop-essay-refs-n">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="pop-essay-refs-body">
+                    <span className="pop-essay-refs-authors">{ref.authors}</span>
+                    <span className="pop-essay-refs-year"> ({ref.year}). </span>
+                    <span className="pop-essay-refs-title">{ref.title}</span>
+                    {ref.journal && (
+                      <span className="pop-essay-refs-journal">. {ref.journal}</span>
+                    )}
+                    <span className="pop-essay-refs-dot">.</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        )}
 
         {/* ── Sign-off ────────────────────────────────────── */}
         <footer className="pop-essay-signoff">

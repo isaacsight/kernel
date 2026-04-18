@@ -1,5 +1,10 @@
 # CLAUDE.md — K:BOT Project
 
+> **Publishing a new kernel.chat issue?** Read
+> [`src/content/issues/PUBLISHING.md`](src/content/issues/PUBLISHING.md)
+> first. It is the single source of truth for the magazine workflow —
+> identity decisions, spread types, deploy steps, collision handling.
+
 ## I. SYSTEM ROLE
 
 You are the engineering engine for **K:BOT** — an open-source terminal AI agent by kernel.chat group. K:BOT is the primary product. The web companion (kernel.chat) lives in `src/` and `supabase/`.

@@ -20,6 +20,7 @@ import { ISSUE_364 } from './364'
 import { ISSUE_365 } from './365'
 import { ISSUE_366 } from './366'
 import { ISSUE_367 } from './367'
+import { ISSUE_368 } from './368'
 
 export interface ContentsItem {
   /** Numbered catalog number, padded (e.g. "001") */
@@ -94,13 +95,77 @@ export interface SpreadPullQuote {
   attribution: string
 }
 
+/** A labeled data row for the abstract dossier at the top of an
+ *  essay — reads like the front matter of a methods paper. */
+export interface SpreadDossierItem {
+  label: string
+  labelJp?: string
+  value: string
+  valueJp?: string
+}
+
+/** A methods-paper-style abstract block that can sit above the
+ *  essay body — mono labels, tomato values, numbered rows. */
+export interface SpreadDossier {
+  kicker: string
+  note?: string
+  items: SpreadDossierItem[]
+}
+
+/** A single statistic in a "by the numbers" data block —
+ *  large tomato display type, caption underneath. */
+export interface SpreadStat {
+  n: string
+  label: string
+  labelJp?: string
+  source?: string
+}
+
+/** A mid-essay data block. Interrupts the prose rhythm with a
+ *  grid of large statistics. `afterSection` is the 0-indexed
+ *  position where the block should appear (inserts *after* that
+ *  section). */
+export interface SpreadDataBlock {
+  kicker: string
+  heading?: string
+  headingJp?: string
+  afterSection: number
+  stats: SpreadStat[]
+}
+
+/** A single cited work for the works-cited block. Mono type,
+ *  hanging-indent layout. */
+export interface SpreadReference {
+  authors: string
+  year: string
+  title: string
+  journal?: string
+}
+
+/** The works-cited block at the foot of the essay. Gives an
+ *  editorial essay the weight of a methods paper when the topic
+ *  calls for it. */
+export interface SpreadReferences {
+  kicker: string
+  note?: string
+  items: SpreadReference[]
+}
+
 /** ─── essay ────────────────────────────────────────────────────
  *  Long-form prose with drop cap, section kickers, pull quote.
- *  Used for culture / style / field-of-thought features. */
+ *  Used for culture / style / field-of-thought features.
+ *
+ *  Optional modules for issues that want more expression:
+ *  - dossier:    abstract block at the top (methods-paper card)
+ *  - dataBlock:  "by the numbers" grid inserted between sections
+ *  - references: works-cited block at the foot */
 export interface EssaySpread extends SpreadCommon {
   type: 'essay'
   sections: SpreadSection[]
   pullQuote?: SpreadPullQuote
+  dossier?: SpreadDossier
+  dataBlock?: SpreadDataBlock
+  references?: SpreadReferences
 }
 
 /** ─── interview ────────────────────────────────────────────────
@@ -336,6 +401,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_365,
   ISSUE_366,
   ISSUE_367,
+  ISSUE_368,
 ]
 
 /** The latest published issue — drives the landing cover. */
