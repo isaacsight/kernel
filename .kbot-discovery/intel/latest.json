@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-19T16:00:41.863Z",
+  "timestamp": "2026-04-19T16:01:25.626Z",
   "queries": [
     {
       "query": "AI+agent+terminal",
@@ -406,11 +406,11 @@
           "created_at_i": 1776412050,
           "num_comments": 0,
           "objectID": "47803480",
-          "points": 3,
+          "points": 2,
           "story_id": 47803480,
           "story_text": "Hi HN,<p>This is Tudor from Xata. You can think of Xata as an open-source, self-hosted, alternative to Aurora&#x2F;Neon. Highlight features are:<p>- Fast copy-on-write branching.<p>- Automatic scale-to-zero and wake-up on new connections.<p>- 100% Vanilla Postgres. We run upstream Postgres, no modifications.<p>- Production grade: high availability, read replicas, automatic failover&#x2F;switchover, upgrades, backups with PITR, IP filtering, etc.<p>You can self-host it, or you can use our [cloud service](<a href=\"https:&#x2F;&#x2F;xata.io\" rel=\"nofollow\">https:&#x2F;&#x2F;xata.io</a>).<p>Background story: we exist as a company for almost 5 years, offered a Postgres service from the start, and have launched several different products and open source projects here on HN before, including pgroll and pgstream. About a year and half ago, we’ve started to rearchitect our core platform from scratch. It is running in production for almost an year now, and it’s serving customers of all sizes, including many multi-TB databases.<p>One of our goals in designing the new platform was to make it cloud independent and with a careful selection of dependencies. Part of the reason was for us to be able to offer it in any cloud, and the other part is the subject of the announcement today: we wanted to have it open source and self-hostable.<p>Use cases: We think Xata OSS is appropriate for two use cases:<p>- get fast your preview &#x2F; testing &#x2F; dev &#x2F; ephemeral environments with realistic data. We think for many companies this is a better alternative to seed or synthetic data, and allows you to catch more classes of bugs. Combined with anonymization, especially in the world of coding agents, this is an important safety and productivity enabler.<p>- offer an internal PGaaS. The alternative we usually see at customers is that they use a Kubernetes operator to achieve this. But there’s more to a Postgres platform than just the operator. Xata is more opinionated and comes with APIs and CLI.<p>Technical details: We wanted from the start to offer CoW branching and vanilla Postgres. This basically meant that we wanted to do CoW at the storage layer, under Postgres. We’ve have tested a bunch of storage system for performance and reliability and ultimately landed on using OpenEBS. OpenEBS is an umbrella project for more storage engines for Kubernetes, and the one that we use is the replicated storage engine (aka Mayastor).<p>Small side note on separation of storage from compute: since the introduction of PlanetScale Metal, there has been a lot of discussion about the performance of local storage. We had these discussions internally as well, and what’s nice about OpenEBS is that it actually supports both: there are local storage engines and over-the-network storage engines. For our purpose of running CoW branches, however, the advantages of the separation are pretty clear: it allows spreading the compute to multiple nodes, while keeping the storage volumes colocated, which is needed for CoW.\nSo for now the Xata platform is focused on this, but it’s entirely possible to run Xata with local storage: basically a storage-class change away.<p>Another small side note: while Mayastor is serving us well, and it’s what we recommend for OSS installations, we have been working on our own storage engine in parallel (called Xatastor). It is the key to having sub-second branching and wake-up times and we’ll release it in a couple of weeks.<p>For the compute layer, we are building on top of CloudNativePG. It’s a stable and battle-tested operator covering all the production great concerns. We did add quite a lot of services around it, though: our custom SQL gateway, a “branch” operator, control plane and authentication services, etc.<p>The end result is what we think is an opinionated but flexible Postgres platform. More high level and easier to use than a K8s operator, and with a lot of battery included goodies.<p>Let us know if you have any questions!",
           "title": "Show HN: Xata, open-source Postgres platform with copy-on-write branches",
-          "updated_at": "2026-04-19T15:52:11Z",
+          "updated_at": "2026-04-17T07:51:32Z",
           "url": "https://github.com/xataio/xata"
         },
         {
@@ -1462,270 +1462,7 @@
     },
     {
       "query": "Cursor+alternative+open+source",
-      "hits": [
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "seyz"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "Show HN: RootCX – I built an <em>open</em> <em>source</em> <em>alternative</em> to \"<em>Cursor</em> and Supabase\""
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/RootCX/RootCX"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_seyz",
-            "story_47659303",
-            "show_hn"
-          ],
-          "author": "seyz",
-          "created_at": "2026-04-06T11:02:42Z",
-          "created_at_i": 1775473362,
-          "num_comments": 0,
-          "objectID": "47659303",
-          "points": 2,
-          "story_id": 47659303,
-          "title": "Show HN: RootCX – I built an open source alternative to \"Cursor and Supabase\"",
-          "updated_at": "2026-04-06T11:14:19Z",
-          "url": "https://github.com/RootCX/RootCX"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "mohshomis"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "Show HN: Modo – I built an <em>open</em>-<em>source</em> <em>alternative</em> to Kiro, <em>Cursor</em>, and Windsurf"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/mohshomis/modo"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_mohshomis",
-            "story_47655268",
-            "show_hn"
-          ],
-          "author": "mohshomis",
-          "children": [
-            47656439,
-            47657588,
-            47659642,
-            47658552,
-            47686726,
-            47657890,
-            47657287,
-            47660550,
-            47656014,
-            47657249,
-            47660569,
-            47657759,
-            47658048,
-            47662213,
-            47660760,
-            47661216,
-            47661291,
-            47657465,
-            47656159,
-            47656169,
-            47657644
-          ],
-          "created_at": "2026-04-05T23:59:10Z",
-          "created_at_i": 1775433550,
-          "num_comments": 28,
-          "objectID": "47655268",
-          "points": 103,
-          "story_id": 47655268,
-          "title": "Show HN: Modo – I built an open-source alternative to Kiro, Cursor, and Windsurf",
-          "updated_at": "2026-04-18T06:47:06Z",
-          "url": "https://github.com/mohshomis/modo"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "gr00ve"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "With longer agentic workflows becoming the norm, token cost can eat through usage so quickly that it prevents any real work from getting done.<p>After studying the business model of top labs like Anthropic and OpenAI, their business model shows about 80% margins on inference cost which they use for R+D on the next model.<p>Working with <em>open</em> <em>source</em> models is much cheaper and allow for 5-10x higher usage, so I decided to create Sweet! CLI as an <em>alternative</em> to the products offered by big labs.<p>Sweet! CLI uses our own custom post trained version of Deepseek v3.2 hosted on US based inference servers (very similar to <em>Cursor</em>'s Composer model).<p>Unlike most llm based agent products, we bill solely based on usage and have a seamless top up experience so you only pay for what you use.<p>My favorite feature is 'autopilot', where you can specify the duration of time you want the agent to work on a specific task, including indefinitely. This is good for monitoring live deployed applications and detecting outages that need triaged immediately, and I have multiple Sweet! agents deployed to the production server right now with that exact objective.<p>I'd appreciate any support or feedback on how I can make it better!<p>Thanks,<p>Adam - Founder of Sweet! CLI"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "alternative"
-              ],
-              "value": "Show HN: I made a cheaper <em>alternative</em> to Claude Code or Codex CLI"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://sweetcli.com/"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_gr00ve",
-            "story_47579652",
-            "show_hn"
-          ],
-          "author": "gr00ve",
-          "children": [
-            47580137,
-            47620652
-          ],
-          "created_at": "2026-03-30T21:00:53Z",
-          "created_at_i": 1774904453,
-          "num_comments": 3,
-          "objectID": "47579652",
-          "points": 2,
-          "story_id": 47579652,
-          "story_text": "With longer agentic workflows becoming the norm, token cost can eat through usage so quickly that it prevents any real work from getting done.<p>After studying the business model of top labs like Anthropic and OpenAI, their business model shows about 80% margins on inference cost which they use for R+D on the next model.<p>Working with open source models is much cheaper and allow for 5-10x higher usage, so I decided to create Sweet! CLI as an alternative to the products offered by big labs.<p>Sweet! CLI uses our own custom post trained version of Deepseek v3.2 hosted on US based inference servers (very similar to Cursor&#x27;s Composer model).<p>Unlike most llm based agent products, we bill solely based on usage and have a seamless top up experience so you only pay for what you use.<p>My favorite feature is &#x27;autopilot&#x27;, where you can specify the duration of time you want the agent to work on a specific task, including indefinitely. This is good for monitoring live deployed applications and detecting outages that need triaged immediately, and I have multiple Sweet! agents deployed to the production server right now with that exact objective.<p>I&#x27;d appreciate any support or feedback on how I can make it better!<p>Thanks,<p>Adam - Founder of Sweet! CLI",
-          "title": "Show HN: I made a cheaper alternative to Claude Code or Codex CLI",
-          "updated_at": "2026-04-02T21:53:49Z",
-          "url": "https://sweetcli.com/"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "phillipclapham"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "There is a shortfall to our current approach to agent memory. Right now, we are just collecting flat facts across a flat memory surface and creating vectorized chains of ambiguity, then wondering why when we ask an agent why it did something the best answer we can get is a probabilistic half-hallucinated half-answer that does not address the actual details of the issue, because it is simply pattern matching to find untyped similarities.<p>So I built FlowScript.<p>FlowScript is a typed reasoning graph that your agent builds through tool calls during your everyday work. It is NOT a graph database. What it is is a small set of unique opinionated primitives: things like thoughts, questions, decisions, blockers, and each of those have typed relationships between them. Your agent calls the tools as it works and it builds this typed graph, and then afterwards you can query that structure to get actual deterministic answers using five queries: <i>tensions</i>, <i>blocked</i>, <i>why</i>, <i>whatIf</i>, <i><em>alternatives</em></i>.<p>What does this look like in practice? Here's an agent that has been reasoning about database choices for a few sessions:<p><pre><code>  &gt; mem.query.why(&quot;node_postgres_decision&quot;)\n\n  PostgreSQL chosen\n      ← &quot;Need ACID for payment processing&quot;\n      ← &quot;Original requirement: handle refunds atomically&quot;\n      ← &quot;Stripe webhook failures in staging revealed race condition&quot;\n\n  &gt; mem.query.tensions()\n\n  &gt;&lt;[performance vs cost]\n      &quot;Redis: sub-ms reads critical for UX&quot; vs &quot;Redis cluster: $200/mo for 3 nodes&quot;\n</code></pre>\nThe why chain traces back to the original constraint and the tension preserves the actual tradeoff being made. These are things no vector store can do, because they are NOT just flat facts, but are relationships and reasoning chains that are being captured in a deterministic way. Meaning you can actually go back and audit the actual reasoning of your agent, how it evolved over time, and see the actual tensions that were being balanced. No more opaque reasoning that is lost as soon as the polished answer is generated. Try that in any other memory system, I'll wait.<p>Other memory systems, when they come across a tension or a contradiction, for the most part they are just simply deleting that. And that is wrong because that tension is new knowledge. Knowledge that we need to actually keep for auditing and because it tells us about the evolution of the system and its cognition over time. So instead of deleting contradictions, we relate and create named relationships for them. Relationships you can query.<p>Every decision, every tension, every piece of reasoning is being deterministically captured into an audit trail and hash-encoded. Now, not only do you have a deterministic reasoning chain, but that reasoning chain is auditable. You can go back to any point within the time that you have audit logs for and deterministically review and understand the actual reasoning chain that your model was using. Something that no other system can offer. The EU AI Act is going to require exactly this kind of transparency by August 2026, and as far as I can tell, FlowScript is the first <em>open</em> <em>source</em> agent memory system that is designed to meet that bar.<p>Try it NOW: Our MCP server in Claude Code or <em>Cursor</em>. Install and check our Get Started guide so you can add one JSON block to your editor config and drop a snippet into your project CLAUDE.md file, then restart. Your AI assistant gets a full set of reasoning tools that actually trace causality.<p><pre><code>  pip install flowscript-agents openai\n</code></pre>\nSee flowscript.org for full setup instructions: &lt;<a href=\"https://flowscript.org/get-started\" rel=\"nofollow\">https://flowscript.org/get-started</a>&gt;<p>Or grab the TypeScript SDK for programmatic use:<p><pre><code>  npm install flowscript-core\n</code></pre>\nThere are drop-in adapters for LangGraph, CrewAI, Google ADK, and more Python agent frameworks. MIT licensed. <em>Open</em> <em>source</em>.<p>Repo: &lt;<a href=\"https://github.com/phillipclapham/flowscript\" rel=\"nofollow\">https://github.com/phillipclapham/flowscript</a>&gt;\nDocs: &lt;<a href=\"https://flowscript.org\" rel=\"nofollow\">https://flowscript.org</a>&gt;\nPython SDK: &lt;<a href=\"https://github.com/phillipclapham/flowscript-agents\" rel=\"nofollow\">https://github.com/phillipclapham/flowscript-agents</a>&gt;"
-            },
-            "title": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Show HN: FlowScript – Agent memory where contradictions are features"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/phillipclapham/flowscript"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_phillipclapham",
-            "story_47516792",
-            "show_hn"
-          ],
-          "author": "phillipclapham",
-          "children": [
-            47538689,
-            47518627
-          ],
-          "created_at": "2026-03-25T13:01:58Z",
-          "created_at_i": 1774443718,
-          "num_comments": 1,
-          "objectID": "47516792",
-          "points": 2,
-          "story_id": 47516792,
-          "story_text": "There is a shortfall to our current approach to agent memory. Right now, we are just collecting flat facts across a flat memory surface and creating vectorized chains of ambiguity, then wondering why when we ask an agent why it did something the best answer we can get is a probabilistic half-hallucinated half-answer that does not address the actual details of the issue, because it is simply pattern matching to find untyped similarities.<p>So I built FlowScript.<p>FlowScript is a typed reasoning graph that your agent builds through tool calls during your everyday work. It is NOT a graph database. What it is is a small set of unique opinionated primitives: things like thoughts, questions, decisions, blockers, and each of those have typed relationships between them. Your agent calls the tools as it works and it builds this typed graph, and then afterwards you can query that structure to get actual deterministic answers using five queries: <i>tensions</i>, <i>blocked</i>, <i>why</i>, <i>whatIf</i>, <i>alternatives</i>.<p>What does this look like in practice? Here&#x27;s an agent that has been reasoning about database choices for a few sessions:<p><pre><code>  &gt; mem.query.why(&quot;node_postgres_decision&quot;)\n\n  PostgreSQL chosen\n      ← &quot;Need ACID for payment processing&quot;\n      ← &quot;Original requirement: handle refunds atomically&quot;\n      ← &quot;Stripe webhook failures in staging revealed race condition&quot;\n\n  &gt; mem.query.tensions()\n\n  &gt;&lt;[performance vs cost]\n      &quot;Redis: sub-ms reads critical for UX&quot; vs &quot;Redis cluster: $200&#x2F;mo for 3 nodes&quot;\n</code></pre>\nThe why chain traces back to the original constraint and the tension preserves the actual tradeoff being made. These are things no vector store can do, because they are NOT just flat facts, but are relationships and reasoning chains that are being captured in a deterministic way. Meaning you can actually go back and audit the actual reasoning of your agent, how it evolved over time, and see the actual tensions that were being balanced. No more opaque reasoning that is lost as soon as the polished answer is generated. Try that in any other memory system, I&#x27;ll wait.<p>Other memory systems, when they come across a tension or a contradiction, for the most part they are just simply deleting that. And that is wrong because that tension is new knowledge. Knowledge that we need to actually keep for auditing and because it tells us about the evolution of the system and its cognition over time. So instead of deleting contradictions, we relate and create named relationships for them. Relationships you can query.<p>Every decision, every tension, every piece of reasoning is being deterministically captured into an audit trail and hash-encoded. Now, not only do you have a deterministic reasoning chain, but that reasoning chain is auditable. You can go back to any point within the time that you have audit logs for and deterministically review and understand the actual reasoning chain that your model was using. Something that no other system can offer. The EU AI Act is going to require exactly this kind of transparency by August 2026, and as far as I can tell, FlowScript is the first open source agent memory system that is designed to meet that bar.<p>Try it NOW: Our MCP server in Claude Code or Cursor. Install and check our Get Started guide so you can add one JSON block to your editor config and drop a snippet into your project CLAUDE.md file, then restart. Your AI assistant gets a full set of reasoning tools that actually trace causality.<p><pre><code>  pip install flowscript-agents openai\n</code></pre>\nSee flowscript.org for full setup instructions: &lt;<a href=\"https:&#x2F;&#x2F;flowscript.org&#x2F;get-started\" rel=\"nofollow\">https:&#x2F;&#x2F;flowscript.org&#x2F;get-started</a>&gt;<p>Or grab the TypeScript SDK for programmatic use:<p><pre><code>  npm install flowscript-core\n</code></pre>\nThere are drop-in adapters for LangGraph, CrewAI, Google ADK, and more Python agent frameworks. MIT licensed. Open source.<p>Repo: &lt;<a href=\"https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript</a>&gt;\nDocs: &lt;<a href=\"https:&#x2F;&#x2F;flowscript.org\" rel=\"nofollow\">https:&#x2F;&#x2F;flowscript.org</a>&gt;\nPython SDK: &lt;<a href=\"https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript-agents\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;phillipclapham&#x2F;flowscript-agents</a>&gt;",
-          "title": "Show HN: FlowScript – Agent memory where contradictions are features",
-          "updated_at": "2026-03-27T03:06:51Z",
-          "url": "https://github.com/phillipclapham/flowscript"
-        },
-        {
-          "_highlightResult": {
-            "author": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "eddelgado"
-            },
-            "story_text": {
-              "fullyHighlighted": false,
-              "matchLevel": "full",
-              "matchedWords": [
-                "cursor",
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "We launched Kodus – Agent Readiness today.<p>It’s an <em>open</em> <em>source</em> CLI that analyzes your codebase across 39 checks and 7 pillars, from linting to security, and shows how ready it is for agents like Claude Code, <em>Cursor</em>, and Copilot.<p>Everything runs locally.<p>Your code never leaves your machine.<p>Factory.ai coined the term Agent Readiness, but their solution is proprietary, cloud only, and paid.<p>So we built a free, self hosted, <em>open</em> <em>source</em> <em>alternative</em>.<p>Feedback is very welcome.<p>Here is the repository link: <a href=\"https://github.com/kodustech/agent-readiness\" rel=\"nofollow\">https://github.com/kodustech/agent-readiness</a>"
-            },
-            "title": {
-              "fullyHighlighted": false,
-              "matchLevel": "partial",
-              "matchedWords": [
-                "alternative",
-                "open",
-                "source"
-              ],
-              "value": "Show HN: <em>Open</em>-<em>source</em> <em>alternative</em> to Factory.ai's Agent Readiness"
-            },
-            "url": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "https://github.com/kodustech/agent-readiness"
-            }
-          },
-          "_tags": [
-            "story",
-            "author_eddelgado",
-            "story_47378675",
-            "show_hn"
-          ],
-          "author": "eddelgado",
-          "created_at": "2026-03-14T17:01:51Z",
-          "created_at_i": 1773507711,
-          "num_comments": 0,
-          "objectID": "47378675",
-          "points": 2,
-          "story_id": 47378675,
-          "story_text": "We launched Kodus – Agent Readiness today.<p>It’s an open source CLI that analyzes your codebase across 39 checks and 7 pillars, from linting to security, and shows how ready it is for agents like Claude Code, Cursor, and Copilot.<p>Everything runs locally.<p>Your code never leaves your machine.<p>Factory.ai coined the term Agent Readiness, but their solution is proprietary, cloud only, and paid.<p>So we built a free, self hosted, open source alternative.<p>Feedback is very welcome.<p>Here is the repository link: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;kodustech&#x2F;agent-readiness\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;kodustech&#x2F;agent-readiness</a>",
-          "title": "Show HN: Open-source alternative to Factory.ai's Agent Readiness",
-          "updated_at": "2026-03-14T17:06:59Z",
-          "url": "https://github.com/kodustech/agent-readiness"
-        }
-      ]
+      "hits": []
     },
     {
       "query": "AI+agent+framework+2026",
@@ -2473,5 +2210,5 @@
       ]
     }
   ],
-  "totalHits": 50
+  "totalHits": 45
 }
