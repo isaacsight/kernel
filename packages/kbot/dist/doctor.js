@@ -404,6 +404,29 @@ async function checkOllamaMLX() {
         message: `Ollama ${version} — upgrade to 0.19+ for MLX backend (2x faster on Apple Silicon)`,
     };
 }
+async function checkToolCapability() {
+    try {
+        const { getByokProvider, getProviderModel } = await import('./auth.js');
+        const { supportsToolCalls } = await import('./model-capabilities.js');
+        const provider = getByokProvider();
+        const model = getProviderModel(provider, 'default');
+        const ok = await supportsToolCalls(provider, model);
+        if (ok === true) {
+            return { name: 'Tool calling', status: 'pass', message: `${model} supports tool calls` };
+        }
+        if (ok === false) {
+            return {
+                name: 'Tool calling',
+                status: 'fail',
+                message: `${model} does NOT support tool calls — file reads, bash, git will hallucinate. Switch with \`kbot auth\` to qwen2.5-coder:14b, mistral:7b, or any Ollama model with the "tools" capability.`,
+            };
+        }
+        return { name: 'Tool calling', status: 'warn', message: `could not determine tool-call support for ${model}` };
+    }
+    catch {
+        return { name: 'Tool calling', status: 'warn', message: 'check failed unexpectedly' };
+    }
+}
 // ── Hardware checks (uses machine.ts) ──
 async function checkHardware() {
     const results = [];
@@ -491,6 +514,8 @@ export async function runDoctor() {
     // Ollama MLX check (Apple Silicon only)
     if (ollamaMLXResult)
         checks.push(ollamaMLXResult);
+    // Tool-calling capability of configured model
+    checks.push(await checkToolCapability());
     // Hardware checks
     checks.push(...hardwareResults);
     // More synchronous checks

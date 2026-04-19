@@ -70,10 +70,71 @@ export function registerSearchTools() {
                 }
                 catch { /* skip */ }
             }
+            // Source 4: Brave Search (general web results, requires free API key)
+            // Sign up at https://api.search.brave.com — 2000 free queries/month.
+            const braveKey = process.env.BRAVE_API_KEY || process.env.BRAVE_SEARCH_API_KEY;
+            if (braveKey && parts.length < 2) {
+                try {
+                    const encoded = encodeURIComponent(query);
+                    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encoded}&count=5`, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Subscription-Token': braveKey,
+                        },
+                        signal: AbortSignal.timeout(8000),
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const items = data.web?.results ?? [];
+                        if (items.length > 0) {
+                            parts.push('**Brave Search:**');
+                            for (const item of items.slice(0, 5)) {
+                                const desc = (item.description || '').replace(/<[^>]+>/g, '').slice(0, 200);
+                                parts.push(`- [${item.title}](${item.url}) — ${desc}`);
+                            }
+                        }
+                    }
+                }
+                catch { /* skip */ }
+            }
+            // Source 5: DuckDuckGo HTML search (fallback when instant answers empty).
+            // No API key required. Free but fragile to HTML changes.
+            if (parts.length === 0) {
+                try {
+                    const encoded = encodeURIComponent(query);
+                    const res = await fetch(`https://html.duckduckgo.com/html/?q=${encoded}`, {
+                        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; KBot/2.0)' },
+                        signal: AbortSignal.timeout(8000),
+                    });
+                    if (res.ok) {
+                        const html = await res.text();
+                        // Extract result snippets — DuckDuckGo HTML structure
+                        const resultPattern = /<a[^>]+class="result__a"[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>[\s\S]*?<a[^>]+class="result__snippet"[^>]*>([^<]+)</g;
+                        const results = [];
+                        let m;
+                        while ((m = resultPattern.exec(html)) !== null && results.length < 5) {
+                            const url = m[1].replace(/^\/\/duckduckgo\.com\/l\/\?uddg=/, '')
+                                .split('&')[0];
+                            const decoded = decodeURIComponent(url);
+                            const title = m[2].trim();
+                            const snippet = m[3].trim();
+                            results.push(`- [${title}](${decoded}) — ${snippet}`);
+                        }
+                        if (results.length > 0) {
+                            parts.push('**Web results:**');
+                            parts.push(...results);
+                        }
+                    }
+                }
+                catch { /* skip */ }
+            }
             if (parts.length > 0) {
                 return parts.join('\n\n');
             }
-            return `No instant results for "${query}". Try:\n- url_fetch with a specific documentation URL\n- research tool for deeper investigation`;
+            const hint = braveKey
+                ? `\n- Check BRAVE_API_KEY is valid and has quota`
+                : `\n- Set BRAVE_API_KEY (free at api.search.brave.com, 2000/mo) for real web search`;
+            return `No results for "${query}". Try:\n- url_fetch with a specific documentation URL\n- research tool for deeper investigation${hint}`;
         },
     });
     registerTool({

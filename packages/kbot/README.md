@@ -126,6 +126,16 @@ kbot attack_surface_scan --domain x.com    # Passive recon + security headers
 kbot incident_response --type ransomware   # Generate IR playbook
 ```
 
+### Design From Your Terminal
+
+```bash
+kbot design "a minimal pitch deck cover for our product" --kind deck --pdf --open
+kbot design "landing page hero with our brand colors" --kind page
+kbot design "interactive prototype of a chat inbox" --kind prototype
+```
+
+Local-first alternative to Anthropic's Claude Design. kbot reads your repo's CSS design tokens, typography, and component patterns, then generates a single complete HTML file — no external deps, mobile-first, a11y-clean — that matches your visual system. Optional Playwright-backed PDF export. Runs on your local model at $0, ships with `@kernel.chat/kbot`. No subscription, no upload, no cloud.
+
 ### Audit Any Repo in One Command
 
 ```
@@ -151,6 +161,7 @@ Checks security, documentation, code quality, CI/CD, community health, and DevOp
 | Buddy companion | Yes (8 species) | No | No | No | No |
 | iPhone control | Yes | No | No | No | No |
 | Music production | Ableton Live | No | No | No | No |
+| Visual design | `kbot design` (local, $0) | Separate Claude Design subscription | No | No | No |
 | Financial analysis | Multi-agent | No | No | No | No |
 | Threat intelligence | Yes | No | No | No | No |
 | Buddy leaderboard | kernel.chat | No | No | No | No |

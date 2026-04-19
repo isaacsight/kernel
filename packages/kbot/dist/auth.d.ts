@@ -20,6 +20,8 @@ export interface KbotConfig {
     byok_enabled?: boolean;
     byok_provider?: ByokProvider;
     kernel_token?: string;
+    critic_enabled?: boolean;
+    critic_strictness?: number;
 }
 export declare function loadConfig(): KbotConfig | null;
 export declare function saveConfig(config: KbotConfig): void;

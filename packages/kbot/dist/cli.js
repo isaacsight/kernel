@@ -835,6 +835,109 @@ async function main() {
             ignorePatterns,
         });
     });
+    const skillsCmd = program.command('skills').description('Manage agent skills (agentskills.io format — compatible with Claude Skills, Hermes, Copilot)');
+    skillsCmd
+        .command('list')
+        .description('List all discovered skills')
+        .action(async () => {
+        const { discoverSkillFiles } = await import('./skills-loader.js');
+        const skills = discoverSkillFiles(process.cwd());
+        if (skills.length === 0) {
+            printInfo('No skills found. Run `kbot skills import --from hermes` to import 76 Hermes skills.');
+            return;
+        }
+        printInfo(`Found ${skills.length} skill${skills.length === 1 ? '' : 's'}:\n`);
+        for (const s of skills) {
+            const desc = s.description ? ` — ${s.description.slice(0, 70)}` : '';
+            printInfo(`  ${s.name}${desc}`);
+        }
+    });
+    skillsCmd
+        .command('import')
+        .description('Import skills from an external agent (Hermes, Claude, or a custom directory)')
+        .option('--from <source>', 'Source: hermes, claude, or an absolute path', 'hermes')
+        .action(async (opts) => {
+        const { importExternalSkills } = await import('./skills-loader.js');
+        const { homedir } = await import('node:os');
+        const { join } = await import('node:path');
+        const { existsSync } = await import('node:fs');
+        const sources = {
+            hermes: join(homedir(), '.hermes', 'skills'),
+            claude: join(homedir(), '.claude', 'skills'),
+        };
+        const from = opts.from || 'hermes';
+        const src = sources[from] || from;
+        if (!existsSync(src)) {
+            printError(`Source not found: ${src}`);
+            if (from === 'hermes')
+                printInfo('Install Hermes: `ollama launch hermes --yes --model hermes3:8b`');
+            return;
+        }
+        const result = await importExternalSkills(src);
+        printSuccess(`Imported ${result.imported} skill${result.imported === 1 ? '' : 's'} from ${src}`);
+        if (result.skipped > 0)
+            printInfo(`  ${result.skipped} skipped (existing user-authored files preserved)`);
+        printInfo(`  → ${result.destination}`);
+    });
+    const memoryCmd = program.command('memory').description('Inspect or prune kbot\'s memory store');
+    memoryCmd
+        .command('prune')
+        .description('Compact ~/.kbot/memory/solutions.json — removes stale, unused, or obsolete entries')
+        .option('--max-age-days <n>', 'Drop entries older than N days with zero reuses', '30')
+        .option('--obsolete-version <prefix>', 'Drop entries whose solution mentions this version prefix')
+        .option('--dry-run', 'Count what would be pruned without writing')
+        .action(async (opts) => {
+        const { pruneSolutions } = await import('./memory-prune.js');
+        const result = pruneSolutions({
+            maxAgeDays: opts.maxAgeDays ? parseInt(opts.maxAgeDays, 10) : undefined,
+            obsoleteVersionPrefix: opts.obsoleteVersion,
+            dryRun: opts.dryRun,
+        });
+        printInfo(`Total: ${result.total} · Kept: ${result.kept} · Pruned: ${result.pruned}`);
+        for (const [reason, count] of Object.entries(result.reasons)) {
+            printInfo(`  ${reason}: ${count}`);
+        }
+        if (result.backup)
+            printSuccess(`Backup written: ${result.backup}`);
+        if (opts.dryRun)
+            printInfo('(dry run — no changes written)');
+    });
+    program
+        .command('design <brief...>')
+        .description('Local-first alternative to Claude Design. Reads your repo\'s design tokens and generates an HTML prototype applying your visual system.')
+        .option('-o, --out <path>', 'Output file path (default: ./design-output/<slug>.html)')
+        .option('-k, --kind <kind>', 'Artifact kind: deck | page | prototype | one-pager', 'one-pager')
+        .option('--pdf', 'Also render to PDF via Playwright')
+        .option('--open', 'Open in default browser after generation')
+        .action(async (briefWords, opts) => {
+        const { runDesign } = await import('./design.js');
+        const brief = briefWords.join(' ');
+        if (!brief) {
+            printError('Usage: kbot design "<brief>" [--kind deck|page|prototype|one-pager] [--pdf] [--open]');
+            process.exit(1);
+        }
+        printInfo(`Designing ${opts.kind || 'one-pager'} from brief: "${brief.slice(0, 60)}${brief.length > 60 ? '…' : ''}"`);
+        try {
+            const out = await runDesign({
+                brief,
+                out: opts.out,
+                kind: opts.kind || 'one-pager',
+                pdf: opts.pdf,
+                open: opts.open,
+            });
+            printSuccess(`Written ${out}`);
+            if (opts.pdf) {
+                const pdf = out.replace(/\.html?$/i, '.pdf');
+                printInfo(`PDF: ${pdf}`);
+            }
+            if (!opts.open)
+                printInfo(`Preview: open ${out}`);
+        }
+        catch (err) {
+            printError(`Design failed: ${String(err).slice(0, 200)}`);
+            process.exit(1);
+        }
+    });
     program
         .command('doctor')
         .description('Diagnose your kbot setup — check everything is working')
@@ -868,10 +971,13 @@ async function main() {
     });
     program
         .command('growth')
-        .description('See how you\'ve evolved as a builder — milestones, efficiency gains, knowledge arc')
-        .action(async () => {
-        const { generateGrowthReport } = await import('./introspection.js');
-        process.stderr.write(generateGrowthReport());
+        .description('See how kbot has improved at your tasks — tool success rate, routing accuracy, learned patterns')
+        .option('--json', 'Output JSON instead of pretty table')
+        .option('--days <n>', 'Compare last N days vs prior N days', '7')
+        .action(async (opts) => {
+        const { runGrowth } = await import('./growth.js');
+        const days = opts.days ? Number.parseInt(opts.days, 10) : 7;
+        runGrowth({ json: opts.json, days: Number.isFinite(days) && days > 0 ? days : 7 });
     });
     program
         .command('decisions')
@@ -4272,6 +4378,9 @@ async function main() {
         try {
             const { CheckpointManager } = await import('./checkpoint.js');
             const cpManager = new CheckpointManager();
+            // Auto-expire checkpoints older than 30 min that never marked completed —
+            // otherwise crashed sessions linger forever in the recovery banner.
+            await cpManager.expireStaleInProgress().catch(() => 0);
             const incomplete = await cpManager.listIncomplete();
             if (incomplete.length > 0) {
                 const latest = incomplete[0];

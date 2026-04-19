@@ -1,0 +1,57 @@
+{
+  "name": "@kernel.chat/kbot-control",
+  "version": "0.1.0",
+  "description": "One Max for Live device giving any program full JSON-RPC 2.0 TCP control of Ableton Live. Zero runtime deps.",
+  "type": "module",
+  "main": "dist/client.js",
+  "types": "dist/client.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "*.amxd",
+    "*.js",
+    "*.maxpat",
+    "*.md",
+    "manifest.json",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc && node --test dist/client.test.js",
+    "prepublishOnly": "tsc && node -e \"import('node:fs').then(fs => { if (!fs.existsSync('kbot-control.amxd')) { console.error('kbot-control.amxd missing — run build.mjs'); process.exit(1) } })\""
+  },
+  "keywords": [
+    "ableton",
+    "ableton-live",
+    "max-for-live",
+    "m4l",
+    "midi",
+    "music",
+    "json-rpc",
+    "live-object-model",
+    "lom",
+    "kbot"
+  ],
+  "author": "kernel.chat",
+  "license": "MIT",
+  "homepage": "https://github.com/isaacsight/kbot-control",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kbot-control.git"
+  },
+  "bugs": {
+    "url": "https://github.com/isaacsight/kbot-control/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "typescript": "^5.9.3"
+  }
+}

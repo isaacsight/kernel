@@ -27,6 +27,7 @@ use context::energy_tracker::EnergyTracker;
 use context::musical_context::MusicalContext;
 use context::scale_detector::ScaleDetector;
 use dsp::drums::DrumKit;
+use dsp::effects::FxChain;
 use dsp::envelope::Adsr;
 use dsp::filter::{FilterMode, ZdfSvf};
 use dsp::fm::FmOscillator;
@@ -60,10 +61,55 @@ impl OscMode {
     }
 }
 
+/// Per-channel sound patch (multi-timbral settings).
+/// Each MIDI channel can have its own oscillator mode, filter, envelope, etc.
+#[derive(Clone)]
+struct ChannelPatch {
+    osc_mode: OscMode,
+    wt_position: f32,        // 0.0..1.0
+    filter_cutoff: f32,      // Hz
+    filter_resonance: f32,   // 0.0..1.0
+    filter_mode: FilterMode,
+    env_attack: f32,         // seconds
+    env_decay: f32,          // seconds
+    env_sustain: f32,        // 0.0..1.0
+    env_release: f32,        // seconds
+    fm_depth: f32,
+    fm_algorithm: i32,
+    fm_ratios: [f32; 4],
+    fm_levels: [f32; 4],
+    lfo_rate: f32,
+    lfo_depth: f32,
+}
+
+impl Default for ChannelPatch {
+    fn default() -> Self {
+        Self {
+            osc_mode: OscMode::Wavetable,
+            wt_position: 0.0,
+            filter_cutoff: 20_000.0,
+            filter_resonance: 0.0,
+            filter_mode: FilterMode::Lowpass,
+            env_attack: 0.01,
+            env_decay: 0.1,
+            env_sustain: 0.7,
+            env_release: 0.3,
+            fm_depth: 1.0,
+            fm_algorithm: 0,
+            fm_ratios: [1.0, 2.0, 1.0, 1.0],
+            fm_levels: [1.0, 0.0, 0.0, 0.0],
+            lfo_rate: 1.0,
+            lfo_depth: 0.0,
+        }
+    }
+}
+
 /// A single synth voice.
 struct Voice {
     /// Whether this voice is currently active.
     active: bool,
+    /// MIDI channel that triggered this voice (0..15).
+    channel: u8,
     /// MIDI note number that triggered this voice.
     note: u8,
     /// Note ID for nih-plug's voice management (matches NoteEvent note_id).
@@ -88,6 +134,7 @@ impl Voice {
     fn new(sample_rate: f32) -> Self {
         Self {
             active: false,
+            channel: 0,
             note: 0,
             note_id: 0,
             velocity: 0.0,
@@ -115,6 +162,8 @@ pub struct TwentyTwentySeven {
     wavetable: Wavetable,
     /// Polyphonic voice pool.
     voices: Vec<Voice>,
+    /// Per-MIDI-channel sound patches (multi-timbral: 16 channels).
+    channel_patches: [ChannelPatch; 16],
     /// LFO bank (4 LFOs, shared across all voices).
     lfo_bank: LfoBank,
     /// Modulation matrix (32 routing slots).
@@ -135,8 +184,10 @@ pub struct TwentyTwentySeven {
     agent: Agent,
     /// Combined musical context state, updated each buffer.
     musical_context: MusicalContext,
-    /// Synthesized drum kit (8 voices, triggered by MIDI notes).
+    /// Synthesized drum kit (9 voices, triggered by MIDI notes).
     drum_kit: DrumKit,
+    /// Effects chain: chorus -> delay -> reverb (mono in, stereo out).
+    fx_chain: FxChain,
 
     // --- Intelligence layer (Phase 4) ---
     /// Adaptive dynamics: section-aware drum modifiers.
@@ -173,10 +224,14 @@ impl Default for TwentyTwentySeven {
         mod_matrix.set_route(1, ModSource::AgentX, ModDest::FmDepth, 1.0, ModSource::None);
         mod_matrix.set_route(2, ModSource::AgentY, ModDest::GrainDensity, 1.0, ModSource::None);
 
+        // Initialize 16 channel patches with defaults
+        let channel_patches: [ChannelPatch; 16] = std::array::from_fn(|_| ChannelPatch::default());
+
         Self {
             params: Arc::new(SynthParams::default()),
             wavetable,
             voices,
+            channel_patches,
             lfo_bank: LfoBank::new(default_sr),
             mod_matrix,
             sample_rate: default_sr,
@@ -187,6 +242,7 @@ impl Default for TwentyTwentySeven {
             agent: Agent::new(default_sr, default_buf),
             musical_context: MusicalContext::default(),
             drum_kit: DrumKit::new(default_sr),
+            fx_chain: FxChain::new(default_sr),
 
             // Intelligence layer
             adaptive_dynamics: AdaptiveDynamics::new(default_sr, default_buf),
@@ -218,8 +274,8 @@ impl TwentyTwentySeven {
         oldest_idx
     }
 
-    /// Handle a note-on event.
-    fn note_on(&mut self, note: u8, velocity: f32, note_id: i32, sample_offset: u32) {
+    /// Handle a note-on event with MIDI channel for multi-timbral routing.
+    fn note_on(&mut self, channel: u8, note: u8, velocity: f32, note_id: i32, sample_offset: u32) {
         // Feed musical intelligence detectors
         self.chord_detector.note_on(note, velocity);
         self.scale_detector.note_on(note, velocity);
@@ -234,6 +290,7 @@ impl TwentyTwentySeven {
         let voice = &mut self.voices[idx];
 
         voice.active = true;
+        voice.channel = channel;
         voice.note = note;
         voice.note_id = note_id;
         voice.velocity = velocity;
@@ -254,6 +311,39 @@ impl TwentyTwentySeven {
 
         // Trigger key-triggered LFOs
         self.lfo_bank.note_on();
+    }
+
+    /// Handle a MIDI CC event, updating the per-channel patch for multi-timbral control.
+    /// CC values from nih-plug are normalized f32 in [0.0, 1.0].
+    fn handle_cc(&mut self, channel: u8, cc: u8, value: f32) {
+        let patch = &mut self.channel_patches[channel as usize % 16];
+        match cc {
+            74 => {
+                // Filter cutoff: exponential mapping 20Hz - 20kHz
+                patch.filter_cutoff = 20.0 * (20_000.0f32 / 20.0).powf(value);
+            }
+            71 => patch.filter_resonance = value,
+            73 => patch.env_attack = 0.001 + value * 2.0,       // 1ms - 2s
+            75 => patch.env_decay = 0.001 + value * 2.0,        // 1ms - 2s
+            76 => patch.env_sustain = value,                      // 0-1
+            72 => patch.env_release = 0.001 + value * 3.0,      // 1ms - 3s
+            80 => {
+                // Osc mode: 0-0.33 = Wavetable, 0.33-0.66 = FM, 0.66-1.0 = Granular
+                patch.osc_mode = if value < 0.33 {
+                    OscMode::Wavetable
+                } else if value < 0.66 {
+                    OscMode::Fm
+                } else {
+                    OscMode::Granular
+                };
+            }
+            81 => patch.wt_position = value,
+            82 => patch.fm_depth = value * 10.0,                 // 0-10
+            83 => patch.fm_algorithm = (value * 4.99) as i32,    // 0-4
+            84 => patch.lfo_rate = 0.01 + value * 19.99,        // 0.01-20 Hz
+            85 => patch.lfo_depth = value,
+            _ => {}
+        }
     }
 
     /// Handle a note-off event.
@@ -305,8 +395,8 @@ impl Plugin for TwentyTwentySeven {
         ..AudioIOLayout::const_default()
     }];
 
-    // Accept MIDI input
-    const MIDI_INPUT: MidiConfig = MidiConfig::Basic;
+    // Accept MIDI input (MidiCCs to receive CC messages for multi-timbral control)
+    const MIDI_INPUT: MidiConfig = MidiConfig::MidiCCs;
     const SAMPLE_ACCURATE_AUTOMATION: bool = true;
 
     type SysExMessage = ();
@@ -331,6 +421,12 @@ impl Plugin for TwentyTwentySeven {
 
         self.lfo_bank.set_sample_rate(self.sample_rate);
         self.drum_kit.set_sample_rate(self.sample_rate);
+        self.fx_chain.set_sample_rate(self.sample_rate);
+
+        // Configure effects with sensible defaults
+        self.fx_chain.reverb.set_params(0.6, 0.5, 0.15);
+        self.fx_chain.delay.set_params(0.375, 0.3, 0.2);
+        self.fx_chain.chorus.set_params(1.5, 0.3, 0.15);
 
         // Initialize musical intelligence with host sample rate and buffer size
         self.chord_detector
@@ -363,6 +459,7 @@ impl Plugin for TwentyTwentySeven {
     fn reset(&mut self) {
         for voice in self.voices.iter_mut() {
             voice.active = false;
+            voice.channel = 0;
             voice.envelope.reset();
             voice.filter.reset();
             voice.oscillator.reset();
@@ -371,8 +468,14 @@ impl Plugin for TwentyTwentySeven {
             voice.age = 0;
         }
 
+        // Reset all channel patches to defaults
+        for patch in self.channel_patches.iter_mut() {
+            *patch = ChannelPatch::default();
+        }
+
         self.lfo_bank.reset();
         self.drum_kit.reset();
+        self.fx_chain.reset();
         self.last_fm_algo = -1;
 
         // Reset musical intelligence
@@ -405,6 +508,8 @@ impl Plugin for TwentyTwentySeven {
             self.musical_context.tempo = tempo;
             self.scale_detector.set_tempo(self.sample_rate, tempo);
             self.lfo_bank.set_host_bpm(tempo as f32);
+            // Sync delay to dotted-eighth note at host tempo
+            self.fx_chain.delay.set_dotted_eighth(tempo);
         }
 
         let mut next_event = context.next_event();
@@ -418,18 +523,27 @@ impl Plugin for TwentyTwentySeven {
 
                 match event {
                     NoteEvent::NoteOn {
+                        channel,
                         note,
                         velocity,
                         voice_id,
                         timing,
                         ..
                     } => {
-                        self.note_on(note, velocity, voice_id.unwrap_or(-1), timing);
+                        self.note_on(channel, note, velocity, voice_id.unwrap_or(-1), timing);
                     }
                     NoteEvent::NoteOff {
                         note, voice_id, ..
                     } => {
                         self.note_off(note, voice_id.unwrap_or(-1));
+                    }
+                    NoteEvent::MidiCC {
+                        channel,
+                        cc,
+                        value,
+                        ..
+                    } => {
+                        self.handle_cc(channel, cc, value);
                     }
                     _ => (),
                 }
@@ -442,31 +556,32 @@ impl Plugin for TwentyTwentySeven {
                 nih_plug::util::db_to_gain_fast(self.params.master_volume.smoothed.next());
             let drum_gain =
                 nih_plug::util::db_to_gain_fast(self.params.drum_level.smoothed.next());
-            let wt_position = self.params.wt_position.smoothed.next() / 100.0;
+            // Advance smoothed params (values used for memory snapshot + channel 0 defaults)
+            let _wt_position = self.params.wt_position.smoothed.next() / 100.0;
             let filter_cutoff = self.params.filter_cutoff.smoothed.next();
-            let filter_reso = self.params.filter_resonance.smoothed.next() / 100.0;
-            let filter_mode = int_to_filter_mode(self.params.filter_mode.value());
+            let _filter_reso = self.params.filter_resonance.smoothed.next() / 100.0;
+            let _filter_mode = int_to_filter_mode(self.params.filter_mode.value());
 
-            let env_attack = self.params.env_attack.value();
-            let env_decay = self.params.env_decay.value();
-            let env_sustain = self.params.env_sustain.value() / 100.0;
-            let env_release = self.params.env_release.value();
+            let _env_attack = self.params.env_attack.value();
+            let _env_decay = self.params.env_decay.value();
+            let _env_sustain = self.params.env_sustain.value() / 100.0;
+            let _env_release = self.params.env_release.value();
 
             let pitch_offset = self.params.osc_pitch.value() as f32;
             let fine_cents = self.params.osc_fine.value();
 
-            let osc_mode = OscMode::from_int(self.params.osc_mode.value());
+            let _osc_mode = OscMode::from_int(self.params.osc_mode.value());
 
             // FM parameters
             let fm_depth = self.params.fm_depth.smoothed.next();
             let fm_algo = self.params.fm_algorithm.value();
-            let fm_ratios = [
+            let _fm_ratios = [
                 self.params.fm_ratio1.value(),
                 self.params.fm_ratio2.value(),
                 self.params.fm_ratio3.value(),
                 self.params.fm_ratio4.value(),
             ];
-            let fm_levels = [
+            let _fm_levels = [
                 self.params.fm_level1.value(),
                 self.params.fm_level2.value(),
                 self.params.fm_level3.value(),
@@ -525,12 +640,6 @@ impl Plugin for TwentyTwentySeven {
                 self.last_fm_algo = fm_algo;
             }
 
-            // --- Compute modulated filter cutoff ---
-            // mod_offsets.filter_cutoff scaled to semitones of cutoff shift
-            let cutoff_mod_semitones = mod_offsets.filter_cutoff * 48.0;
-            let cutoff_mod_factor = 2.0f32.powf(cutoff_mod_semitones / 12.0);
-            let modulated_cutoff = (filter_cutoff * cutoff_mod_factor).clamp(20.0, 20_000.0);
-
             // --- Update drum kit parameters ---
             self.drum_kit.set_tune(self.params.drum_tune.value());
             self.drum_kit.set_decay(self.params.drum_decay.value());
@@ -547,18 +656,42 @@ impl Plugin for TwentyTwentySeven {
             // --- Process drum kit ---
             let drum_out = self.drum_kit.process() * drum_gain * dyn_vel_scale;
 
-            // --- Sum all active voices ---
+            // --- Sum all active voices (multi-timbral: per-channel patches) ---
             let mut mix = 0.0f32;
 
-            for voice in self.voices.iter_mut() {
-                if !voice.active {
+            for voice_idx in 0..self.voices.len() {
+                if !self.voices[voice_idx].active {
                     continue;
                 }
+
+                // Read the channel patch for this voice's MIDI channel.
+                // Channel 0 uses the global params as defaults; channels 1-15
+                // use their channel_patches (which can be configured via CC).
+                let ch = self.voices[voice_idx].channel as usize % 16;
+                let patch = &self.channel_patches[ch];
+
+                // Per-channel envelope parameters
+                let v_env_attack = patch.env_attack;
+                let v_env_decay = patch.env_decay;
+                let v_env_sustain = patch.env_sustain;
+                let v_env_release = patch.env_release;
+
+                // Per-channel oscillator mode and settings
+                let v_osc_mode = patch.osc_mode;
+                let v_wt_position = patch.wt_position;
+                let v_filter_cutoff = patch.filter_cutoff;
+                let v_filter_reso = patch.filter_resonance;
+                let v_filter_mode = patch.filter_mode;
+                let v_fm_depth = patch.fm_depth;
+                let v_fm_ratios = patch.fm_ratios;
+                let v_fm_levels = patch.fm_levels;
+
+                let voice = &mut self.voices[voice_idx];
 
                 // Update envelope parameters (allows live tweaking during sustain)
                 voice
                     .envelope
-                    .set_params(env_attack, env_decay, env_sustain, env_release);
+                    .set_params(v_env_attack, v_env_decay, v_env_sustain, v_env_release);
 
                 // Compute base frequency with pitch modulation from mod matrix
                 let base_freq = midi_note_to_freq(voice.note, pitch_offset, fine_cents);
@@ -566,30 +699,35 @@ impl Plugin for TwentyTwentySeven {
                 let modulated_freq =
                     base_freq * 2.0f32.powf(pitch_mod_semitones / 12.0);
 
-                // Update filter with modulated cutoff + resonance
-                let reso_mod = (filter_reso + mod_offsets.filter_resonance).clamp(0.0, 1.0);
-                voice.filter.set_params(modulated_cutoff, reso_mod);
+                // Compute per-channel modulated filter cutoff
+                let cutoff_mod_semitones = mod_offsets.filter_cutoff * 48.0;
+                let cutoff_mod_factor = 2.0f32.powf(cutoff_mod_semitones / 12.0);
+                let v_modulated_cutoff = (v_filter_cutoff * cutoff_mod_factor).clamp(20.0, 20_000.0);
 
-                // --- Generate oscillator sample based on mode ---
-                let osc_out = match osc_mode {
+                // Update filter with per-channel modulated cutoff + resonance
+                let reso_mod = (v_filter_reso + mod_offsets.filter_resonance).clamp(0.0, 1.0);
+                voice.filter.set_params(v_modulated_cutoff, reso_mod);
+
+                // --- Generate oscillator sample based on per-channel mode ---
+                let osc_out = match v_osc_mode {
                     OscMode::Wavetable => {
                         voice
                             .oscillator
                             .set_frequency(modulated_freq, self.sample_rate);
                         let wt_pos_mod =
-                            (wt_position + mod_offsets.wt_position).clamp(0.0, 1.0);
+                            (v_wt_position + mod_offsets.wt_position).clamp(0.0, 1.0);
                         voice.oscillator.next_sample(&self.wavetable, wt_pos_mod)
                     }
                     OscMode::Fm => {
-                        // Update FM operator params from plugin params + mod matrix
-                        let effective_depth = (fm_depth + mod_offsets.fm_depth).max(0.0);
+                        // Update FM operator params from per-channel settings + mod matrix
+                        let effective_depth = (v_fm_depth + mod_offsets.fm_depth).max(0.0);
                         for (i, op) in voice.fm_osc.params.iter_mut().enumerate() {
-                            op.ratio = (fm_ratios[i] + mod_offsets.fm_ratio[i]).max(0.001);
-                            op.output_level = fm_levels[i];
+                            op.ratio = (v_fm_ratios[i] + mod_offsets.fm_ratio[i]).max(0.001);
+                            op.output_level = v_fm_levels[i];
                             op.feedback =
                                 (op.feedback + mod_offsets.fm_feedback[i]).clamp(0.0, 1.0);
                         }
-                        // Scale mod matrix depths by global FM depth
+                        // Scale mod matrix depths by per-channel FM depth
                         for src in 0..4 {
                             for dst in 0..4 {
                                 let base = voice.fm_osc.mod_matrix[src][dst];
@@ -614,8 +752,8 @@ impl Plugin for TwentyTwentySeven {
                     }
                 };
 
-                // Apply filter
-                let filtered = voice.filter.process_mode(osc_out, filter_mode);
+                // Apply per-channel filter mode
+                let filtered = voice.filter.process_mode(osc_out, v_filter_mode);
 
                 // Apply envelope
                 let env_val = voice.envelope.next();
@@ -639,10 +777,17 @@ impl Plugin for TwentyTwentySeven {
             let spec_advice = self.spectral_awareness.advice();
             let drum_adjusted = drum_out * (1.0 + spec_advice.drum_level_nudge);
 
-            // Apply master volume and mix drums + synth → stereo output
-            let output = (mix + drum_adjusted) * master_gain;
-            for sample in channel_samples {
-                *sample = output;
+            // Mix drums + synth into mono, then run through effects chain
+            let mono_mix = (mix + drum_adjusted) * master_gain;
+            let (fx_left, fx_right) = self.fx_chain.process(mono_mix);
+
+            // Write stereo output
+            let mut ch_iter = channel_samples.into_iter();
+            if let Some(left) = ch_iter.next() {
+                *left = fx_left;
+            }
+            if let Some(right) = ch_iter.next() {
+                *right = fx_right;
             }
 
             // --- Periodic memory snapshot (~every 5 seconds) ---

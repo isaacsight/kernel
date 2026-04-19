@@ -11,8 +11,12 @@
 // The log file is written by a Claude Code hook (PostToolUse) that appends
 // one JSON line per tool call to ~/.kbot/observer/session.jsonl
 //
-// Format per line:
+// Format per line (schema v1 — legacy):
 //   {"ts":"ISO","tool":"Read","args":{"file_path":"/src/foo.ts"},"result_length":1234,"session":"abc"}
+//
+// Format per line (schema v2 — includes action-token training fields):
+//   {"schema":2,"ts":"ISO","tool":"Read","args":{...},"result_length":1234,"session":"abc",
+//    "durationMs":42,"outcome":"success","resultSize":1234,"error":false}
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { homedir } from 'node:os';

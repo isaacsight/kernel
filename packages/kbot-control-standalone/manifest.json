@@ -1,0 +1,26 @@
+{
+  "name": "kbot-control",
+  "displayName": "kbot-control",
+  "version": "0.1.0",
+  "author": "kernel.chat",
+  "description": "One M4L device that supersedes AbletonOSC, AbletonBridge, kbot-bridge. Single TCP + JSON-RPC 2.0 API for full Ableton control, newline-delimited. Listens on 127.0.0.1:9000. Zero npm deps.",
+  "license": "MIT",
+  "category": "Max Audio Effect",
+  "kind": "audio_effect",
+  "type": "amxd",
+  "maxVersion": "8.1",
+  "liveVersion": "11.0",
+  "dependencies": {
+    "node-for-max-packages": []
+  },
+  "files": [
+    "kbot-control.maxpat",
+    "kbot-control.js",
+    "kbot-control-server.js",
+    "manifest.json",
+    "PROTOCOL.md",
+    "README.md"
+  ],
+  "port": 9000,
+  "protocol": "json-rpc-2.0-over-tcp-newline"
+}

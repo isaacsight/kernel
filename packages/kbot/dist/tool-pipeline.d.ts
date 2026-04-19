@@ -58,6 +58,40 @@ export declare function truncationMiddleware(maxSize?: number): ToolMiddleware;
  */
 export declare function telemetryMiddleware(emit: (event: string, data: any) => void): ToolMiddleware;
 /**
+ * Thresholds for outcome classification.
+ * Exported so downstream code (training, analytics) can mirror them.
+ */
+export declare const OUTCOME_EMPTY_THRESHOLD = 5;
+export declare const OUTCOME_LARGE_THRESHOLD = 10240;
+/**
+ * Classify a tool execution outcome from its ToolContext.
+ *
+ * Priority:
+ *   1. timeout  — aborted with timeout reason
+ *   2. error    — ctx.error is set (or aborted for any other reason)
+ *   3. empty    — result present but shorter than OUTCOME_EMPTY_THRESHOLD chars
+ *   4. large    — result byte length > OUTCOME_LARGE_THRESHOLD
+ *   5. success  — anything else
+ */
+export declare function classifyOutcome(ctx: ToolContext): 'success' | 'error' | 'timeout' | 'empty' | 'large';
+/**
+ * Observer middleware — writes an observation to ~/.kbot/observer/session.jsonl.
+ *
+ * Records the three fields that cannot be backfilled for action-token training:
+ *   - durationMs: wall-clock time of tool execution
+ *   - outcome:    success | error | timeout | empty | large
+ *   - resultSize: byte length of the serialized result
+ *
+ * Emits schema v2 events. Backward compatible — consumers that don't know
+ * about the new fields will ignore them (the tokenizer has fallbacks).
+ *
+ * Place this as the OUTERMOST middleware so duration captures the true
+ * wall-clock of the full pipeline (including timeout, truncation, fallback).
+ */
+export declare function observerMiddleware(sessionId: string, options?: {
+    enabled?: () => boolean;
+}): ToolMiddleware;
+/**
  * Execution middleware — the actual tool call.
  * This should be the last middleware in the pipeline.
  */
@@ -100,7 +134,7 @@ export declare function fallbackMiddleware(rules: FallbackRule[], execute: (name
 export declare function resourceAwareMiddleware(): ToolMiddleware;
 /**
  * Create the default pipeline with the standard middleware stack.
- * Order: telemetry? → permission → hooks → resource → metrics → timeout → truncation → fallback? → execution
+ * Order: observer? → telemetry? → permission → hooks → resource → metrics → timeout → truncation → fallback? → execution
  */
 export declare function createDefaultPipeline(deps: {
     checkPermission: (name: string, args: any) => Promise<boolean>;
@@ -116,5 +150,9 @@ export declare function createDefaultPipeline(deps: {
     recordMetrics: (name: string, duration: number, error?: string) => void;
     emit?: (event: string, data: any) => void;
     fallbackRules?: FallbackRule[];
+    /** If set, observerMiddleware is added as the outermost layer and writes to ~/.kbot/observer/session.jsonl. */
+    observerSessionId?: string;
+    /** Runtime gate for observer writes. */
+    observerEnabled?: () => boolean;
 }): ToolPipeline;
 //# sourceMappingURL=tool-pipeline.d.ts.map

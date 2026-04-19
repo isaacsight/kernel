@@ -148,7 +148,7 @@ describe('web_search', () => {
       arguments: { query: 'xyznonexistentquery12345' },
     })
     expect(result.error).toBeUndefined()
-    expect(result.result).toContain('No instant results')
+    expect(result.result).toContain('No results')
     expect(result.result).toContain('url_fetch')
   })
 
@@ -164,7 +164,7 @@ describe('web_search', () => {
     })
     // Should not throw — should return fallback
     expect(result.error).toBeUndefined()
-    expect(result.result).toContain('No instant results')
+    expect(result.result).toContain('No results')
   })
 
   it('handles Wikipedia 404 gracefully', async () => {

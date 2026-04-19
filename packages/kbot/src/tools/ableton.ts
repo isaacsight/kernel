@@ -3,22 +3,27 @@
 //
 // Tools:
 //   ableton_transport       — play, stop, record, tempo, time sig, seek
-//   ableton_track           — list, create, mute, solo, arm, volume, pan, rename, delete
-//   ableton_clip            — fire, stop, create, delete, duplicate, info
+//   ableton_track           — list/mute/solo/arm/volume/pan/rename/info + set color/routing/monitoring
+//   ableton_clip            — fire/stop/create/delete/duplicate/info + set gain/warp/pitch/loop/color/launch
 //   ableton_scene           — fire, list, create, duplicate
+//   ableton_song            — undo/redo, tap_tempo, metronome, punch, cue points, loop, back_to_arranger
+//   ableton_view            — selected scene/track/clip/device (get + set)
 //   ableton_midi            — write/read/clear MIDI notes in clips
 //   ableton_device          — list, get/set params, enable/disable devices
 //   ableton_mixer           — snapshot levels, batch set, sends
 //   ableton_create_progression — chord progressions → MIDI in clips
+//   ableton_create_track    — create midi/audio/return track, optionally load instrument
 //   ableton_session_info    — full session state snapshot
 //   ableton_audio_analysis  — real-time audio level meters (track + master RMS)
 //   ableton_knowledge       — deep Ableton knowledge base queries (registered in ableton-knowledge.ts)
 //
 // Requires: AbletonOSC loaded in Ableton Live (Preferences → Link/Tempo/MIDI → Control Surface)
+// For UI-only operations OSC doesn't expose, fall back to Claude's computer-use MCP.
 
 import { registerTool } from './index.js'
 import { execSync } from 'node:child_process'
 import { ensureAbleton, formatAbletonError, type OscArg } from '../integrations/ableton-osc.js'
+import { tryKc } from '../integrations/ableton.js'
 import {
   parseProgression,
   parseChordSymbol,
@@ -72,6 +77,43 @@ export function registerAbletonTools(): void {
     async execute(args) {
       const action = String(args.action).toLowerCase()
       try {
+        // Try kbot-control first for supported methods
+        switch (action) {
+          case 'play':
+          case 'start': {
+            const kc = await tryKc<string>('song.play')
+            if (kc !== undefined) return '▶ Playing (via kbot-control)'
+            break
+          }
+          case 'stop': {
+            const kc = await tryKc<string>('song.stop')
+            if (kc !== undefined) return '⏹ Stopped (via kbot-control)'
+            break
+          }
+          case 'tempo':
+          case 'bpm': {
+            const bpm = Number(args.value)
+            if (!bpm || bpm < 20 || bpm > 999) return 'Error: BPM must be between 20 and 999'
+            const kc = await tryKc<number>('song.tempo', { value: bpm })
+            if (kc !== undefined) return `Tempo set to **${bpm} BPM** (via kbot-control)`
+            break
+          }
+          case 'status': {
+            const kc = await tryKc<Record<string, unknown>>('song.get_state')
+            if (kc !== undefined) {
+              return [
+                '## Transport Status (via kbot-control)',
+                `- Tempo: **${Number(kc.tempo).toFixed(1)} BPM**`,
+                `- Playing: ${kc.is_playing ? '▶ Yes' : '⏹ No'}`,
+                `- Recording: ${kc.record_mode ? '⏺ Yes' : 'No'}`,
+                `- Loop: ${kc.loop ? 'on' : 'off'}`,
+                `- Metronome: ${kc.metronome ? 'on' : 'off'}`,
+              ].join('\n')
+            }
+            break
+          }
+        }
+
         const osc = await ensureAbleton()
 
         switch (action) {
@@ -142,16 +184,54 @@ export function registerAbletonTools(): void {
 
   registerTool({
     name: 'ableton_track',
-    description: 'Control Ableton Live tracks — list all tracks, mute, solo, arm, set volume/pan, rename, create, delete. Track numbers are 1-based (track 1 = first track).',
+    description: 'Control Ableton Live tracks — list all tracks, mute, solo, arm, set volume/pan/color/routing/monitoring, rename, info. Track numbers are 1-based.',
     parameters: {
-      action: { type: 'string', description: 'Action: "list", "mute", "unmute", "solo", "unsolo", "arm", "disarm", "volume", "pan", "rename", "info"', required: true },
+      action: { type: 'string', description: '"list", "mute", "unmute", "solo", "unsolo", "arm", "disarm", "volume", "pan", "rename", "info", "color", "monitoring", "input_routing", "output_routing", "set"', required: true },
       track: { type: 'number', description: 'Track number (1-based). Required for all actions except "list"' },
-      value: { type: 'string', description: 'Volume (0-1), pan (-1 to 1), or new name for rename' },
+      value: { type: 'string', description: 'Volume (0-1), pan (-1 to 1), name, color index (0-69), monitoring ("in"/"auto"/"off"), or routing type/channel string.' },
+      property: { type: 'string', description: 'For "set" action: AbletonOSC property path (e.g. "color_index", "input_routing_type").' },
     },
     tier: 'free',
     timeout: 15_000,
     async execute(args) {
       const action = String(args.action).toLowerCase()
+
+      // kbot-control fast path
+      if (action === 'list') {
+        const kc = await tryKc<Array<Record<string, unknown>>>('track.list')
+        if (kc !== undefined) {
+          const lines: string[] = ['## Tracks (via kbot-control)', '']
+          lines.push('| # | Name | Volume | Pan | Mute | Solo | Armed |')
+          lines.push('|---|------|--------|-----|------|------|-------|')
+          for (const t of kc) {
+            lines.push(
+              `| ${Number(t.index) + 1} | ${t.name} | ${(Number(t.volume) * 100).toFixed(0)}% | ${Number(t.panning).toFixed(2)} | ${t.mute ? '🔇' : ''} | ${t.solo ? '🔊' : ''} | ${t.arm ? '⏺' : ''} |`,
+            )
+          }
+          return lines.join('\n')
+        }
+      }
+      if (args.track !== undefined && ['mute', 'unmute', 'solo', 'unsolo', 'arm', 'disarm', 'volume', 'vol', 'pan', 'color', 'rename'].includes(action)) {
+        const idx = userTrack(args.track)
+        const kcMap: Record<string, { method: string; params: Record<string, unknown>; label: string }> = {
+          mute: { method: 'track.mute', params: { index: idx, value: 1 }, label: `Track ${args.track} muted 🔇` },
+          unmute: { method: 'track.mute', params: { index: idx, value: 0 }, label: `Track ${args.track} unmuted` },
+          solo: { method: 'track.solo', params: { index: idx, value: 1 }, label: `Track ${args.track} soloed 🔊` },
+          unsolo: { method: 'track.solo', params: { index: idx, value: 0 }, label: `Track ${args.track} unsoloed` },
+          arm: { method: 'track.arm', params: { index: idx, value: 1 }, label: `Track ${args.track} armed ⏺` },
+          disarm: { method: 'track.arm', params: { index: idx, value: 0 }, label: `Track ${args.track} disarmed` },
+          volume: { method: 'track.volume', params: { index: idx, value: Math.max(0, Math.min(1, Number(args.value))) }, label: `Track ${args.track} volume → ${(Math.max(0, Math.min(1, Number(args.value))) * 100).toFixed(0)}%` },
+          vol: { method: 'track.volume', params: { index: idx, value: Math.max(0, Math.min(1, Number(args.value))) }, label: `Track ${args.track} volume → ${(Math.max(0, Math.min(1, Number(args.value))) * 100).toFixed(0)}%` },
+          color: { method: 'track.color', params: { index: idx, color_index: Number(args.value) }, label: `Track ${args.track} color → ${args.value}` },
+          rename: { method: 'track.rename', params: { index: idx, name: String(args.value || 'Track') }, label: `Track ${args.track} renamed to ${args.value}` },
+        }
+        const entry = kcMap[action]
+        if (entry) {
+          const kc = await tryKc<unknown>(entry.method, entry.params)
+          if (kc !== undefined) return entry.label + ' (via kbot-control)'
+        }
+      }
+
       try {
         const osc = await ensureAbleton()
 
@@ -214,6 +294,40 @@ export function registerAbletonTools(): void {
             osc.send('/live/track/set/name', t, name)
             return `Track ${args.track} renamed to **${name}**`
           }
+          case 'color': {
+            const idx = Math.max(0, Math.min(69, Number(args.value)))
+            osc.send('/live/track/set/color_index', t, idx)
+            return `Track ${args.track} color → ${idx}`
+          }
+          case 'monitoring': {
+            // 0 = In, 1 = Auto, 2 = Off
+            const mode = String(args.value || '').toLowerCase()
+            const mapped = mode === 'in' ? 0 : mode === 'off' ? 2 : 1
+            osc.send('/live/track/set/current_monitoring_state', t, mapped)
+            return `Track ${args.track} monitoring → **${['In', 'Auto', 'Off'][mapped]}**`
+          }
+          case 'input_routing':
+          case 'inroute': {
+            osc.send('/live/track/set/input_routing_type', t, String(args.value))
+            return `Track ${args.track} input routing → ${args.value}`
+          }
+          case 'output_routing':
+          case 'outroute': {
+            osc.send('/live/track/set/output_routing_type', t, String(args.value))
+            return `Track ${args.track} output routing → ${args.value}`
+          }
+          case 'set': {
+            // Escape hatch for any AbletonOSC track setter not covered above.
+            // e.g. property="color_index", value=5 → /live/track/set/color_index
+            const prop = String(args.property || '').trim()
+            if (!prop) return 'Error: "set" requires a property parameter.'
+            const address = `/live/track/set/${prop}`
+            const raw = args.value
+            const numeric = typeof raw === 'number' ? raw : (raw !== undefined && !isNaN(Number(raw)) ? Number(raw) : null)
+            if (numeric !== null) osc.send(address, t, numeric)
+            else osc.send(address, t, String(raw))
+            return `Set track ${args.track} ${prop} = ${raw}`
+          }
           case 'info': {
             const name = await osc.query('/live/track/get/name', t)
             const vol = await osc.query('/live/track/get/volume', t)
@@ -231,7 +345,7 @@ export function registerAbletonTools(): void {
             ].join('\n')
           }
           default:
-            return `Unknown action "${action}". Options: list, mute, unmute, solo, unsolo, arm, disarm, volume, pan, rename, info`
+            return `Unknown action "${action}". Options: list, mute, unmute, solo, unsolo, arm, disarm, volume, pan, rename, info, color, monitoring, input_routing, output_routing, set`
         }
       } catch (err) {
         return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
@@ -243,13 +357,15 @@ export function registerAbletonTools(): void {
 
   registerTool({
     name: 'ableton_clip',
-    description: 'Control Ableton Live clips in Session View — fire, stop, create, delete, duplicate, get info. Track and clip numbers are 1-based.',
+    description: 'Control Ableton Live clips in Session View — fire/stop/create/delete/duplicate/info/list, plus set gain, warp, pitch, loop_start/end, color, launch_mode, start_marker, end_marker, velocity_amount. Track and clip numbers are 1-based.',
     parameters: {
-      action: { type: 'string', description: '"fire", "stop", "create", "delete", "duplicate", "info", "list"', required: true },
+      action: { type: 'string', description: '"fire", "stop", "create", "delete", "duplicate", "info", "list", "set"', required: true },
       track: { type: 'number', description: 'Track number (1-based)', required: true },
       clip: { type: 'number', description: 'Clip slot number (1-based). Default: 1' },
       name: { type: 'string', description: 'Clip name (for create)' },
       length: { type: 'number', description: 'Clip length in beats (for create, default: 16 = 4 bars)' },
+      property: { type: 'string', description: 'For "set" action: clip property. One of: name, gain, pitch_coarse, pitch_fine, loop_start, loop_end, start_marker, end_marker, velocity_amount, color_index, launch_mode, launch_quantization, warp_mode, warping, legato, muted, ram_mode.' },
+      value: { type: 'string', description: 'For "set" action: the value to assign.' },
     },
     tier: 'free',
     timeout: 10_000,
@@ -257,6 +373,44 @@ export function registerAbletonTools(): void {
       const action = String(args.action).toLowerCase()
       const t = userTrack(args.track)
       const c = Math.max(0, (Number(args.clip) || 1) - 1)
+
+      // kbot-control fast path for common clip ops
+      const kcMap: Record<string, { method: string; params: Record<string, unknown>; label: string }> = {
+        fire: { method: 'clip.fire', params: { track: t, slot: c }, label: `Fired clip ${args.clip || 1} on track ${args.track} ▶ (via kbot-control)` },
+        launch: { method: 'clip.fire', params: { track: t, slot: c }, label: `Fired clip ${args.clip || 1} on track ${args.track} ▶ (via kbot-control)` },
+        stop: { method: 'clip.stop', params: { track: t, slot: c }, label: `Stopped clip ${args.clip || 1} on track ${args.track} ⏹ (via kbot-control)` },
+        delete: { method: 'clip.delete', params: { track: t, slot: c }, label: `Deleted clip in slot ${c + 1} on track ${args.track} (via kbot-control)` },
+        duplicate: { method: 'clip.duplicate', params: { track: t, slot: c }, label: `Duplicated clip to slot ${c + 2} on track ${args.track} (via kbot-control)` },
+      }
+      if (kcMap[action]) {
+        const kc = await tryKc<unknown>(kcMap[action].method, kcMap[action].params)
+        if (kc !== undefined) return kcMap[action].label
+      }
+      if (action === 'create') {
+        const length = Number(args.length) || 16
+        const name = String(args.name || `Clip ${c + 1}`)
+        const kc = await tryKc<unknown>('clip.create', { track: t, slot: c, length, name })
+        if (kc !== undefined) return `Created clip **${name}** (${length} beats / ${length / 4} bars) on track ${args.track}, slot ${c + 1} (via kbot-control)`
+      }
+      if (action === 'info') {
+        const kc = await tryKc<Record<string, unknown>>('clip.get_state', { track: t, slot: c })
+        if (kc !== undefined) {
+          return [
+            `## Clip Info — Track ${args.track}, Slot ${c + 1} (via kbot-control)`,
+            `- Name: ${kc.name || '?'}`,
+            `- Length: ${kc.length} beats`,
+            `- Type: ${kc.is_midi ? 'MIDI' : kc.is_audio ? 'Audio' : '?'}`,
+            `- Playing: ${kc.is_playing ? 'Yes' : 'No'}`,
+            `- Looping: ${kc.looping ? 'Yes' : 'No'}`,
+            kc.is_audio ? `- Gain: ${kc.gain}` : null,
+            kc.is_audio ? `- Warp: ${kc.warping ? 'on' : 'off'} (mode ${kc.warp_mode})` : null,
+          ].filter(Boolean).join('\n')
+        }
+      }
+      if (action === 'set' && args.property) {
+        const kc = await tryKc<unknown>('clip.set_property', { track: t, slot: c, property: String(args.property), value: args.value })
+        if (kc !== undefined) return `Set clip on track ${args.track} slot ${c + 1}: ${args.property} = ${args.value} (via kbot-control)`
+      }
 
       try {
         const osc = await ensureAbleton()
@@ -317,8 +471,27 @@ export function registerAbletonTools(): void {
             return lines.join('\n')
           }
 
+          case 'set': {
+            // Generic setter for any clip property AbletonOSC exposes.
+            // See /live/clip/set/* — name, gain, pitch_coarse, pitch_fine,
+            // loop_start, loop_end, start_marker, end_marker, velocity_amount,
+            // color_index, launch_mode, launch_quantization, warp_mode, warping,
+            // legato, muted, ram_mode.
+            const prop = String(args.property || '').trim()
+            if (!prop) return 'Error: "set" requires a property parameter.'
+            const address = `/live/clip/set/${prop}`
+            const raw = args.value
+            const numeric = typeof raw === 'number' ? raw : (raw !== undefined && !isNaN(Number(raw)) ? Number(raw) : null)
+            if (prop === 'name' || numeric === null) {
+              osc.send(address, t, c, String(raw))
+            } else {
+              osc.send(address, t, c, numeric)
+            }
+            return `Set clip on track ${args.track} slot ${c + 1}: ${prop} = ${raw}`
+          }
+
           default:
-            return `Unknown action "${action}". Options: fire, stop, create, delete, duplicate, info, list`
+            return `Unknown action "${action}". Options: fire, stop, create, delete, duplicate, info, list, set`
         }
       } catch (err) {
         return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
@@ -494,6 +667,20 @@ export function registerAbletonTools(): void {
       const action = String(args.action).toLowerCase()
       const t = userTrack(args.track)
       const d = Number(args.device) || 0
+
+      // kbot-control fast path
+      if (action === 'list') {
+        const kc = await tryKc<Array<Record<string, unknown>>>('device.list', { track: t })
+        if (kc !== undefined) {
+          if (kc.length === 0) return `No devices on track ${args.track}`
+          const lines = [`## Devices on Track ${args.track} (via kbot-control)`, '']
+          for (const dev of kc) {
+            const marker = dev.is_active ? '' : ' *(bypassed)*'
+            lines.push(`- [${dev.index}] **${dev.name}**${marker}`)
+          }
+          return lines.join('\n')
+        }
+      }
 
       try {
         const osc = await ensureAbleton()
@@ -1065,11 +1252,11 @@ return "ok"
 
   registerTool({
     name: 'ableton_create_track',
-    description: 'Create a new MIDI or audio track in Ableton and optionally load an instrument on it.',
+    description: 'Create a new MIDI, audio, or return track in Ableton and optionally load an instrument on it.',
     parameters: {
-      type: { type: 'string', description: '"midi" or "audio" (default: midi)', },
+      type: { type: 'string', description: '"midi", "audio", or "return" (default: midi)', },
       name: { type: 'string', description: 'Track name' },
-      instrument: { type: 'string', description: 'Optional: instrument to load (e.g. "Serum 2", "Operator")' },
+      instrument: { type: 'string', description: 'Optional: instrument to load (midi tracks only — e.g. "Serum 2", "Operator")' },
       manufacturer: { type: 'string', description: 'Optional: plugin manufacturer (e.g. "Xfer Records")' },
     },
     tier: 'free',
@@ -1083,6 +1270,10 @@ return "ok"
         // Create the track
         if (trackType === 'audio') {
           osc.send('/live/kbot/create_audio_track', -1)
+        } else if (trackType === 'return') {
+          // AbletonOSC native path for return tracks. kbot bridge may not
+          // wrap this, so we use the standard OSC address directly.
+          osc.send('/live/song/create_return_track')
         } else {
           osc.send('/live/kbot/create_midi_track', -1)
         }
@@ -1112,6 +1303,271 @@ return "ok"
         }
 
         return `Created ${trackType} track **${args.name || 'Track ' + (newTrackIdx + 1)}**${args.instrument ? ' with ' + args.instrument : ''} (track ${newTrackIdx + 1})`
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 13b. Song-level control ──────────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_song',
+    description: 'Song-level Ableton controls — undo, redo, tap tempo, metronome, punch in/out, cue points, loop, back to arranger, capture MIDI, stop all clips, groove, record_mode.',
+    parameters: {
+      action: { type: 'string', description: '"undo", "redo", "tap_tempo", "metronome", "punch_in", "punch_out", "cue_add", "cue_delete", "cue_next", "cue_prev", "cue_jump", "loop", "loop_start", "loop_length", "back_to_arranger", "capture_midi", "stop_all_clips", "groove", "record_mode", "jump_by", "status"', required: true },
+      value: { type: 'string', description: 'Value for the action: 1/0 for toggles (metronome/loop/punch/record_mode), beats for loop_start/length/jump_by/groove, name for cue_add.' },
+    },
+    tier: 'free',
+    timeout: 10_000,
+    async execute(args) {
+      const action = String(args.action).toLowerCase()
+
+      // kbot-control fast path: most song.* methods map 1:1 to dispatcher.
+      const kcMap: Record<string, { method: string; buildParams?: () => Record<string, unknown>; label?: string }> = {
+        undo: { method: 'song.undo', label: '↶ Undo' },
+        redo: { method: 'song.redo', label: '↷ Redo' },
+        tap_tempo: { method: 'song.tap_tempo', label: '👆 Tap tempo' },
+        tap: { method: 'song.tap_tempo', label: '👆 Tap tempo' },
+        capture_midi: { method: 'song.capture_midi', label: '🎹 Captured MIDI' },
+        stop_all_clips: { method: 'song.stop_all_clips', label: '⏹ Stopped all clips' },
+        back_to_arranger: { method: 'song.back_to_arranger', label: 'Switched to Arrangement view' },
+        metronome: { method: 'song.metronome', buildParams: () => ({ value: String(args.value).match(/^(1|true|on|yes)$/i) ? 1 : 0 }) },
+        loop: { method: 'song.loop', buildParams: () => ({ value: String(args.value).match(/^(1|true|on|yes)$/i) ? 1 : 0 }) },
+        record_mode: { method: 'song.record_mode', buildParams: () => ({ value: String(args.value).match(/^(1|true|on|yes)$/i) ? 1 : 0 }) },
+        jump_by: { method: 'song.jump_by', buildParams: () => ({ beats: Number(args.value) }) },
+        status: { method: 'song.get_state' },
+      }
+
+      const entry = kcMap[action]
+      if (entry) {
+        const kc = await tryKc<unknown>(entry.method, entry.buildParams?.())
+        if (kc !== undefined) {
+          if (action === 'status' && kc && typeof kc === 'object') {
+            const s = kc as Record<string, unknown>
+            return [
+              '## Song status (via kbot-control)',
+              `- Tempo: ${Number(s.tempo).toFixed(1)} BPM`,
+              `- Playing: ${s.is_playing ? 'Yes' : 'No'}`,
+              `- Loop: ${s.loop ? 'on' : 'off'}`,
+              `- Metronome: ${s.metronome ? 'on' : 'off'}`,
+              `- Punch in/out: ${s.punch_in ? 'on' : 'off'} / ${s.punch_out ? 'on' : 'off'}`,
+              `- Record mode: ${s.record_mode ? 'on' : 'off'}`,
+            ].join('\n')
+          }
+          return entry.label ?? `${entry.method} → ${typeof kc === 'string' ? kc : JSON.stringify(kc)}`
+        }
+      }
+
+      try {
+        const osc = await ensureAbleton()
+
+        const asBool = (v: unknown): number => {
+          const s = String(v).toLowerCase()
+          if (s === '1' || s === 'true' || s === 'on' || s === 'yes') return 1
+          if (s === '0' || s === 'false' || s === 'off' || s === 'no') return 0
+          return Number(v) ? 1 : 0
+        }
+
+        switch (action) {
+          case 'undo':
+            osc.send('/live/song/undo')
+            return '↶ Undo'
+          case 'redo':
+            osc.send('/live/song/redo')
+            return '↷ Redo'
+          case 'tap_tempo':
+          case 'tap':
+            osc.send('/live/song/tap_tempo')
+            return '👆 Tap tempo'
+          case 'metronome': {
+            const v = args.value === undefined ? 1 : asBool(args.value)
+            osc.send('/live/song/set/metronome', v)
+            return `Metronome → ${v ? 'on' : 'off'}`
+          }
+          case 'punch_in': {
+            const v = args.value === undefined ? 1 : asBool(args.value)
+            osc.send('/live/song/set/punch_in', v)
+            return `Punch-in → ${v ? 'on' : 'off'}`
+          }
+          case 'punch_out': {
+            const v = args.value === undefined ? 1 : asBool(args.value)
+            osc.send('/live/song/set/punch_out', v)
+            return `Punch-out → ${v ? 'on' : 'off'}`
+          }
+          case 'cue_add':
+            osc.send('/live/song/cue_point/add_or_delete')
+            if (args.value) osc.send('/live/song/cue_point/set/name', String(args.value))
+            return `Cue point added${args.value ? ` "${args.value}"` : ''}`
+          case 'cue_delete':
+            osc.send('/live/song/cue_point/add_or_delete')
+            return 'Cue point at playhead deleted'
+          case 'cue_next':
+            osc.send('/live/song/jump_to_next_cue')
+            return '→ Next cue'
+          case 'cue_prev':
+            osc.send('/live/song/jump_to_prev_cue')
+            return '← Previous cue'
+          case 'cue_jump': {
+            const v = Number(args.value)
+            if (isNaN(v)) return 'Error: cue_jump needs a cue index in value.'
+            osc.send('/live/song/cue_point/jump', v)
+            return `Jumped to cue ${v}`
+          }
+          case 'loop': {
+            const v = args.value === undefined ? 1 : asBool(args.value)
+            osc.send('/live/song/set/loop', v)
+            return `Loop → ${v ? 'on' : 'off'}`
+          }
+          case 'loop_start': {
+            const v = Number(args.value)
+            if (isNaN(v)) return 'Error: loop_start needs a beat position in value.'
+            osc.send('/live/song/set/loop_start', v)
+            return `Loop start → beat ${v}`
+          }
+          case 'loop_length': {
+            const v = Number(args.value)
+            if (isNaN(v)) return 'Error: loop_length needs a beat length in value.'
+            osc.send('/live/song/set/loop_length', v)
+            return `Loop length → ${v} beats`
+          }
+          case 'back_to_arranger':
+            osc.send('/live/song/set/back_to_arranger', 1)
+            return 'Switched to Arrangement view (back_to_arranger)'
+          case 'capture_midi':
+            osc.send('/live/song/capture_midi')
+            return '🎹 Captured MIDI from armed tracks'
+          case 'stop_all_clips':
+            osc.send('/live/song/stop_all_clips')
+            return '⏹ Stopped all clips'
+          case 'groove': {
+            const v = Math.max(0, Math.min(1, Number(args.value)))
+            osc.send('/live/song/set/groove_amount', v)
+            return `Groove amount → ${(v * 100).toFixed(0)}%`
+          }
+          case 'record_mode': {
+            const v = args.value === undefined ? 1 : asBool(args.value)
+            osc.send('/live/song/set/record_mode', v)
+            return `Arrangement record → ${v ? 'on' : 'off'}`
+          }
+          case 'jump_by': {
+            const v = Number(args.value)
+            if (isNaN(v)) return 'Error: jump_by needs a beat delta in value.'
+            osc.send('/live/song/jump_by', v)
+            return `Jumped by ${v} beats`
+          }
+          case 'status': {
+            const tempo = await osc.query('/live/song/get/tempo')
+            const playing = await osc.query('/live/song/get/is_playing')
+            const loop = await osc.query('/live/song/get/loop')
+            const metro = await osc.query('/live/song/get/metronome')
+            const punchIn = await osc.query('/live/song/get/punch_in')
+            const punchOut = await osc.query('/live/song/get/punch_out')
+            return [
+              `## Song status`,
+              `- Tempo: ${Number(extractArgs(tempo)[0]).toFixed(1)} BPM`,
+              `- Playing: ${extractArgs(playing)[0] ? 'Yes' : 'No'}`,
+              `- Loop: ${extractArgs(loop)[0] ? 'on' : 'off'}`,
+              `- Metronome: ${extractArgs(metro)[0] ? 'on' : 'off'}`,
+              `- Punch in/out: ${extractArgs(punchIn)[0] ? 'on' : 'off'} / ${extractArgs(punchOut)[0] ? 'on' : 'off'}`,
+            ].join('\n')
+          }
+          default:
+            return `Unknown action "${action}". Options: undo, redo, tap_tempo, metronome, punch_in, punch_out, cue_add, cue_delete, cue_next, cue_prev, cue_jump, loop, loop_start, loop_length, back_to_arranger, capture_midi, stop_all_clips, groove, record_mode, jump_by, status`
+        }
+      } catch (err) {
+        return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
+      }
+    },
+  })
+
+  // ─── 13c. View / selection control ────────────────────────────────────
+
+  registerTool({
+    name: 'ableton_view',
+    description: 'Drive the Ableton UI cursor — get or set the currently selected scene, track, clip, or device. Use this to focus the user\'s view before opening a device, or to read what the user is looking at.',
+    parameters: {
+      action: { type: 'string', description: '"get" or "set"', required: true },
+      target: { type: 'string', description: '"scene", "track", "clip", or "device"', required: true },
+      track: { type: 'number', description: 'Track number (1-based) — required for set target=clip or set target=device' },
+      clip: { type: 'number', description: 'Clip slot (1-based) — required for set target=clip' },
+      device: { type: 'number', description: 'Device index (0-based) — required for set target=device' },
+      value: { type: 'number', description: 'Scene number (1-based) or track number (1-based) when setting scene/track selection.' },
+    },
+    tier: 'free',
+    timeout: 10_000,
+    async execute(args) {
+      const action = String(args.action).toLowerCase()
+      const target = String(args.target).toLowerCase()
+      try {
+        const osc = await ensureAbleton()
+
+        if (action === 'get') {
+          switch (target) {
+            case 'scene': {
+              const r = await osc.query('/live/view/get/selected_scene')
+              const idx = Number(extractArgs(r)[0])
+              return `Selected scene: ${idx + 1} (0-based ${idx})`
+            }
+            case 'track': {
+              const r = await osc.query('/live/view/get/selected_track')
+              const idx = Number(extractArgs(r)[0])
+              return `Selected track: ${idx + 1} (0-based ${idx})`
+            }
+            case 'clip': {
+              const r = await osc.query('/live/view/get/selected_clip')
+              return `Selected clip: [${extractArgs(r).join(', ')}]`
+            }
+            case 'device': {
+              const r = await osc.query('/live/view/get/selected_device')
+              return `Selected device: [${extractArgs(r).join(', ')}]`
+            }
+            default:
+              return `Unknown target "${target}". Options: scene, track, clip, device`
+          }
+        }
+
+        if (action === 'set') {
+          switch (target) {
+            case 'scene': {
+              const s = Math.max(0, (Number(args.value) || 1) - 1)
+              // Prefer kbot-control (actually scrolls + highlights)
+              const kc = await tryKc<string>('view.focus_scene', { index: s })
+              if (kc !== undefined) return `Focused scene ${s + 1} (via kbot-control)`
+              osc.send('/live/view/set/selected_scene', s)
+              return `Focused scene ${s + 1}`
+            }
+            case 'track': {
+              const t = Math.max(0, (Number(args.value) || 1) - 1)
+              // kbot-control's view.focus_track also scrolls + highlights,
+              // fixing the bug that made OSC-based device loads hit the wrong track.
+              const kc = await tryKc<string>('view.focus_track', { index: t })
+              if (kc !== undefined) return `Focused track ${t + 1} (via kbot-control — scrolled + highlighted)`
+              osc.send('/live/view/set/selected_track', t)
+              return `Focused track ${t + 1}`
+            }
+            case 'clip': {
+              if (!args.track || !args.clip) return 'Error: set target=clip requires track and clip.'
+              const t = userTrack(args.track)
+              const c = Math.max(0, Number(args.clip) - 1)
+              const kc = await tryKc<string>('view.focus_clip', { track: t, slot: c })
+              if (kc !== undefined) return `Focused clip on track ${args.track} slot ${args.clip} (via kbot-control)`
+              osc.send('/live/view/set/selected_clip', t, c)
+              return `Focused clip on track ${args.track} slot ${args.clip}`
+            }
+            case 'device': {
+              if (!args.track || args.device === undefined) return 'Error: set target=device requires track and device index.'
+              const t = userTrack(args.track)
+              const d = Number(args.device)
+              osc.send('/live/view/set/selected_device', t, d)
+              return `Focused device ${d} on track ${args.track}`
+            }
+            default:
+              return `Unknown target "${target}". Options: scene, track, clip, device`
+          }
+        }
+
+        return `Unknown action "${action}". Options: get, set`
       } catch (err) {
         return `Ableton connection failed: ${(err as Error).message}\n\n${formatAbletonError()}`
       }

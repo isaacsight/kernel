@@ -88,7 +88,8 @@ packages/kbot/               # K:BOT — the main product
 │   │   ├── matrix.ts        # Agent matrix tools
 │   │   ├── finance.ts       # Stock, crypto, DeFi, wallet
 │   │   ├── social.ts        # Social media posting
-│   │   ├── ableton.ts       # Ableton Live OSC control
+│   │   ├── ableton.ts       # Ableton Live tools — routed through kbot-control TCP client (v3.99.21+)
+│   │   ├── kbot-control.ts  # Primary Ableton surface: unified TCP client (supersedes OSC)
 │   │   ├── serum2-preset.ts # Serum 2 preset creation
 │   │   ├── dj-set-builder.ts# DJ set builder
 │   │   ├── forge.ts         # Runtime tool creation
@@ -98,10 +99,24 @@ packages/kbot/               # K:BOT — the main product
 │   │   ├── lab-*.ts         # 11 science lab files (bio, chem, physics, neuro, etc.)
 │   │   └── ... (80+ more)
 │   ├── integrations/        # External integrations
-│   │   ├── ableton-live.ts  # Ableton Live OSC class
+│   │   ├── ableton-live.ts  # Legacy OSC class (deprecated — use kbot-control)
 │   │   ├── ableton-m4l.ts   # Max 4 Live device management
-│   │   ├── ableton-osc.ts   # OSC protocol bridge
+│   │   ├── ableton-osc.ts   # Legacy OSC bridge (deprecated)
 │   │   └── ableton-osc-installer.ts
+│   ├── planner/hierarchical/ # Hierarchical planner (Apr 2026) — types, session wrapper, persistence
+│   ├── growth.ts            # Growth dashboard — npm, GitHub, users, tools, traces
+│   └── critic-gate.ts       # Always-on adversarial critic (feature-flagged)
+├── CURATION_PLAN.md         # Tool curation plan — 670 → 52 target (Apr 2026)
+└── research/action-tokens/  # Action-token embedding research (pivoted from transformer approach after baseline measurement): PROPOSAL.md, BASELINE.md, embedding-nn/, _archive/
+
+packages/kbot-control-standalone/  # MIT npm package @kernel.chat/kbot-control
+├── kbot-control.amxd        # Max for Live device — primary Ableton control
+├── kbot-control.maxpat      # Max patch source
+├── kbot-control.js          # In-device JS — 37 LOM methods
+├── kbot-control-server.js   # TCP <-> OSC bridge
+├── PROTOCOL.md              # JSON protocol spec
+├── src/client.ts            # Typed TCP client (consumed by kbot/src/tools/)
+└── examples/                # 01-transport, 02-build-session, basic
 │   └── ide/                 # IDE integrations
 │       ├── mcp-server.ts    # MCP server for editors
 │       ├── acp-server.ts    # ACP server
@@ -517,6 +532,18 @@ npm run deploy            # From repo root — builds + pushes to gh-pages branc
 
 ## XII. RECENT CHANGES
 
+### v3.99.21+ (2026-04-19) — kbot-control superseding device, growth, critic, hierarchical planner
+- **kbot-control.amxd + TCP protocol**: one Max for Live device, JSON-over-TCP, 37 LOM methods. Supersedes AbletonOSC + KBotBridge.
+- **@kernel.chat/kbot-control** standalone npm package (`packages/kbot-control-standalone/`) — MIT, typed client, 3 examples, mocked tests.
+- **22 `ableton_*` tools migrated** onto the unified client. Single reconnect logic, consistent error shapes.
+- **Producer agent fallback**: when Live 12.4 LOM browser API refuses (`api_removed`), falls back to computer-use (screenshot → type → Return).
+- **Growth dashboard** (`src/growth.ts`, 362 LOC) — npm/GitHub/users/tools/traces surface tools.
+- **Adversarial critic** (`src/critic-gate.ts`, 244 LOC) — pre-response critic, feature-flagged until FP rate is measured.
+- **Hierarchical planner Phase 1** (`src/planner/hierarchical/`) — types + session-wrapper + JSONL persistence.
+- **Tool curation plan** (`packages/kbot/CURATION_PLAN.md`) — audit of all 670 tools, target 52 core + rest as plugins.
+- **Action-token embedding research** (`packages/kbot/research/action-tokens/`) — pivoted from transformer approach after baseline measurement (2026-04-19) showed the heuristic router already at 91.8% top-5. Current direction: embedding-NN + user-specific fine-tuning. Transformer-era artifacts preserved in `_archive/`.
+- **90s Atlanta soul demo beat** — FX chain + Mark1 Stage + chord progression, written via kbot-control.
+
 ### v3.60.0 (2026-03-31) — Computer-Use Desktop Agent
 - Full desktop control: screenshot, click, type, scroll, drag, key combos
 - macOS permission wizard (`computer_check` tool: Accessibility + Screen Recording checks)
@@ -615,3 +642,32 @@ Key agents:
 ### Session Memory
 
 - `SCRATCHPAD.md` — Persistent context between sessions. **Always update before ending a session.**
+
+---
+
+## XVII. Recent major additions (April 2026)
+
+- **kbot-control (Apr 19)** — superseding Ableton control layer. Single Max for Live device (`packages/kbot-control-standalone/kbot-control.amxd`) + JSON-over-TCP protocol covering 37 LOM methods. Replaces the fragmented AbletonOSC + KBotBridge stack. Use `kbot_control` / `ableton_*` tools; both route through the same typed client.
+- **Standalone open-source package (Apr 19)** — `packages/kbot-control-standalone/` published as `@kernel.chat/kbot-control` (MIT). Typed TCP client, 3 examples, mocked tests. Lets anyone drive Ableton from Node without installing kbot.
+- **Growth dashboard (Apr 19)** — `packages/kbot/src/growth.ts`. Surfaces npm downloads, GitHub stars, user count, tool count, session count, teacher-trace count via `growth_summary` + `growth_milestones`.
+- **Adversarial critic (Apr 19)** — `packages/kbot/src/critic-gate.ts`. Always-on pre-response critic (grounding, tool efficiency, sycophancy, scope creep). Emits go/no-go + reason. Feature-flagged off until false-positive rate is measured on a week of session logs.
+- **Hierarchical planner Phase 1 (Apr 19)** — `packages/kbot/src/planner/hierarchical/` (types.ts, session-planner.ts, persistence.ts, README.md). Session-level nesting with per-step verification and resumable JSONL state. Wraps the existing `planner.ts`.
+- **Action-token embedding research (Apr 19)** — `packages/kbot/research/action-tokens/`. Pivoted from the original transformer approach after baseline measurement showed the heuristic `learned-router.ts` already at 91.8% top-5 (`BASELINE.md`), which invalidated the transformer proposal's 40% ship bar. Current direction: embedding nearest-neighbor + user-specific fine-tuning (`PROPOSAL.md`, `embedding-nn/` prototype). Transformer-era artifacts preserved in `_archive/`.
+- **Tool curation plan (Apr 19)** — `packages/kbot/CURATION_PLAN.md`. Audit of all 670 registered tools with kept/dropped/merged decisions; target 52 curated core tools, rest to plugins.
+- **Producer agent + computer-use fallback (Apr 19)** — `producer-engine.ts` now falls back to the native computer-use MCP when Ableton 12.4's LOM browser API refuses preset loads (`api_removed`). Brittle but reliable.
+
+### Key new paths (April 2026)
+
+| Path | What |
+|---|---|
+| `packages/kbot-control-standalone/kbot-control.amxd` | Max for Live device (primary Ableton control) |
+| `packages/kbot-control-standalone/kbot-control.js` | In-device JS — 37 LOM methods |
+| `packages/kbot-control-standalone/PROTOCOL.md` | JSON-over-TCP protocol spec |
+| `packages/kbot-control-standalone/src/client.ts` | Typed TCP client |
+| `packages/kbot/src/tools/kbot-control.ts` | Top-level kbot tool surface |
+| `packages/kbot/src/growth.ts` | Growth dashboard |
+| `packages/kbot/src/critic-gate.ts` | Adversarial critic |
+| `packages/kbot/src/planner/hierarchical/` | Hierarchical planner skeleton |
+| `packages/kbot/CURATION_PLAN.md` | 670 → 52 tool curation plan |
+| `packages/kbot/research/action-tokens/` | Action-token embedding research (pivoted from transformer approach; see README.md for index) |
+| `RETROSPECTIVE_2026_04_19.md` | Today's session retrospective |

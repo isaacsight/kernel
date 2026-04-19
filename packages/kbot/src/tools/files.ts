@@ -15,6 +15,14 @@ function resolvePath(p: string): string {
   if (p.startsWith('~/') || p === '~') {
     return resolve(homedir(), p.slice(2) || '.')
   }
+  // Model-path quirk: some small models prefix relative paths with "/".
+  // If "/foo/bar" doesn't exist at filesystem root but "foo/bar" exists in cwd,
+  // use the cwd-relative version. This is non-destructive — real absolute
+  // paths still resolve normally.
+  if (p.startsWith('/') && !existsSync(p)) {
+    const relative = resolve(p.slice(1))
+    if (existsSync(relative)) return relative
+  }
   return resolve(p)
 }
 

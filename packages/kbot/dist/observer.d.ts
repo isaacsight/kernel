@@ -1,3 +1,8 @@
+/**
+ * Outcome classification for tool calls.
+ * Required for training an action-token model — cannot be backfilled from logs.
+ */
+export type ToolOutcome = 'success' | 'error' | 'timeout' | 'empty' | 'large';
 export interface ObservedToolCall {
     ts: string;
     tool: string;
@@ -5,6 +10,14 @@ export interface ObservedToolCall {
     result_length?: number;
     session?: string;
     error?: boolean;
+    /** Schema version. Absent = v1 (legacy). 2 = includes durationMs/outcome/resultSize. */
+    schema?: number;
+    /** Wall-clock duration of tool execution in milliseconds. (schema v2+) */
+    durationMs?: number;
+    /** Outcome classification for training. (schema v2+) */
+    outcome?: ToolOutcome;
+    /** Bytes of serialized result (Buffer.byteLength of result string). (schema v2+) */
+    resultSize?: number;
 }
 export interface ObserverStats {
     totalObserved: number;

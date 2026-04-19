@@ -4,9 +4,15 @@
 //! detune, feedback, and output level. Any operator can modulate any other
 //! operator's phase via a 4x4 modulation depth matrix.
 //!
-//! Through-zero FM means the modulation signal is bipolar — it can push
-//! the instantaneous frequency negative, which produces the characteristic
-//! "DX" timbres without the asymmetric spectrum of one-sided FM.
+//! True through-zero FM: modulation is integrated into a *signed* phase
+//! accumulator wrapped symmetrically in [-0.5, 0.5). When the instantaneous
+//! phase increment (base + modulator + feedback) goes negative, the
+//! accumulator moves backward — the oscillator literally plays through zero.
+//! This is the distinguishing property versus classic Chowning PM, whose
+//! accumulator is strictly monotonic and whose modulation only appears as
+//! a phase offset at the output. Under TZFM, the long-term phase integral
+//! depends on modulator history, producing spectra that reflect cleanly
+//! around DC without the asymmetry of one-sided FM.
 
 use std::f32::consts::{PI, TAU};
 
@@ -15,7 +21,9 @@ pub const NUM_OPERATORS: usize = 4;
 
 /// A single FM operator (sine oscillator with feedback).
 struct Operator {
-    /// Current phase accumulator in [0, 1).
+    /// Signed phase accumulator in [-0.5, 0.5). Signed so the oscillator
+    /// can reverse through zero when modulation drives the instantaneous
+    /// increment negative.
     phase: f32,
     /// Previous output sample, used for feedback.
     prev_output: f32,
@@ -29,31 +37,37 @@ impl Operator {
         }
     }
 
-    /// Advance phase and compute output.
+    /// Advance phase and compute output using true TZFM.
     ///
-    /// - `base_phase_inc`: the base phase increment (freq_ratio * base_freq / sample_rate)
-    /// - `phase_mod`: total phase modulation from other operators (radians, bipolar)
-    /// - `feedback`: self-feedback amount (0.0 = none, 1.0 = full)
+    /// - `base_phase_inc`: base phase increment per sample, cycles/sample
+    ///   (freq_ratio * base_freq / sample_rate). Always positive.
+    /// - `phase_mod`: total modulation signal from other operators, radians
+    ///   (PM-compatible unit). Converted here to frequency-domain contribution
+    ///   by /TAU so it integrates into the phase accumulator.
+    /// - `feedback`: self-feedback amount in [0.0, 1.0]. Scaled to ±0.5
+    ///   cycles/sample max — the Nyquist cap for a stable feedback oscillator.
     ///
     /// Returns the operator output in [-1, 1].
     #[inline]
     fn tick(&mut self, base_phase_inc: f32, phase_mod: f32, feedback: f32) -> f32 {
-        // Self-feedback: mix previous output into phase modulation.
-        // Attenuate feedback to keep it stable (pi is the stability limit for
-        // a sine oscillator with feedback; we scale to stay well within it).
-        let fb_mod = self.prev_output * feedback * PI;
+        // Self-feedback contributes to the instantaneous frequency.
+        // Scale by PI/TAU = 0.5 so max |fb| matches the Nyquist bound.
+        let fb = self.prev_output * feedback * (PI / TAU);
 
-        // Compute instantaneous phase including modulation.
-        // Through-zero: phase_mod is bipolar, so negative modulation
-        // reverses the phase direction momentarily.
-        let total_phase = self.phase * TAU + phase_mod + fb_mod;
-        let output = total_phase.sin();
+        // TZFM: integrate modulation + feedback into the phase accumulator.
+        // phase_mod is in radians; /TAU converts to cycles/sample to match
+        // base_phase_inc units. When this sum goes negative, the accumulator
+        // moves backward — the defining through-zero behavior.
+        let phase_inc = base_phase_inc + phase_mod / TAU + fb;
+        self.phase += phase_inc;
 
-        // Advance phase (through-zero: base_phase_inc can effectively go negative
-        // via the modulation, but we keep the accumulator positive).
-        self.phase += base_phase_inc;
-        // Wrap phase to [0, 1) to prevent floating-point drift.
-        self.phase -= self.phase.floor();
+        // Symmetric wrap to [-0.5, 0.5). Unlike a [0, 1) floor-wrap, round-wrap
+        // preserves the direction of travel across the zero crossing — a forward
+        // step at phase=0.49 and a backward step at phase=-0.49 both stay near
+        // zero rather than teleporting to the opposite end of the interval.
+        self.phase -= self.phase.round();
+
+        let output = (self.phase * TAU).sin();
 
         // Low-pass the feedback path slightly to prevent runaway high frequencies.
         // Simple one-pole: y = 0.5 * (current + previous)

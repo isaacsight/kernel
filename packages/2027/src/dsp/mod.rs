@@ -9,6 +9,7 @@
 //! - `mod_matrix`: Modulation routing matrix (32 slots, source → destination)
 
 pub mod drums;
+pub mod effects;
 pub mod envelope;
 pub mod filter;
 pub mod fm;

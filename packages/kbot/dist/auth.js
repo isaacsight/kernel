@@ -460,6 +460,13 @@ function isModelAvailable(model, available) {
 /** Select the best Ollama model for a given message, only from available models */
 export function selectOllamaModel(message, availableModels) {
     const available = availableModels || cachedOllamaModels;
+    // If the user has set a local_model in config, honor it — smart routing
+    // should never silently override the user's explicit choice. Only fall back
+    // to keyword routing when no config is set.
+    const userConfiguredModel = loadConfigRaw().local_model;
+    if (userConfiguredModel && (available.length === 0 || isModelAvailable(userConfiguredModel, available))) {
+        return userConfiguredModel;
+    }
     if (available.length === 0)
         return PROVIDERS.ollama.defaultModel;
     for (const route of OLLAMA_MODEL_ROUTES) {
@@ -490,7 +497,29 @@ export function getProviderModel(provider, speed, taskHint) {
     if (provider === 'ollama' && speed === 'default' && taskHint) {
         return selectOllamaModel(taskHint);
     }
+    // Respect user's configured local_model (Ollama) / fast_model / thinking_model
+    // from ~/.kbot/config.json BEFORE falling back to hardcoded defaults.
+    if (provider === 'ollama') {
+        try {
+            const cfg = loadConfigRaw();
+            if (speed === 'fast' && cfg.fast_model)
+                return cfg.fast_model;
+            if (speed === 'default' && cfg.local_model)
+                return cfg.local_model;
+        }
+        catch { /* config missing — fall through */ }
+    }
     return speed === 'fast' ? p.fastModel : p.defaultModel;
+}
+/** Lightweight config read — avoids circular dep with full loadConfig. */
+function loadConfigRaw() {
+    try {
+        const content = readFileSync(join(homedir(), '.kbot', 'config.json'), 'utf-8');
+        return JSON.parse(content);
+    }
+    catch {
+        return {};
+    }
 }
 /** Get the provider API URL */
 export function getProviderUrl(provider) {
@@ -852,7 +881,14 @@ export function classifyComplexity(message) {
         return 'complex';
     }
     // Moderate: code generation, file modifications, research
-    if (/\b(create|write|add|implement|update|modify|change|fix|search|research|find|analyze|generate|test)\b/i.test(lower)) {
+    if (/\b(create|write|add|implement|update|modify|change|fix|search|research|find|analyze|generate|test|read|look|check|show|tell|describe|audit|inspect)\b/i.test(lower)) {
+        return 'moderate';
+    }
+    // Any reference to a file path or directory requires tool use, which needs
+    // the default (larger) model. The fast model is for stateless chitchat only.
+    if (/\b[\w./-]+\.(ts|tsx|js|jsx|json|md|py|rs|go|toml|yaml|yml|sh|html|css|sql)\b/i.test(lower)
+        || /(?:\.\/|src\/|packages\/|tools\/|supabase\/|\.kbot\/|\.claude\/|~\/|\/users\/)/i.test(lower)
+        || /\b(file|directory|folder|path|repo|codebase|package\.json|readme)\b/i.test(lower)) {
         return 'moderate';
     }
     // Simple: questions, lookups, short tasks
@@ -862,6 +898,18 @@ export function classifyComplexity(message) {
 export function routeModelForTask(provider, message) {
     const complexity = classifyComplexity(message);
     const p = PROVIDERS[provider];
+    // For Ollama, honor the user's configured local_model / fast_model before
+    // falling back to the hardcoded provider defaults. Otherwise smart routing
+    // silently picks a different model than `kbot doctor` reports.
+    if (provider === 'ollama') {
+        const cfg = loadConfigRaw();
+        if ((complexity === 'trivial' || complexity === 'simple') && cfg.fast_model) {
+            return { model: cfg.fast_model, reason: `${complexity} task → user's fast_model` };
+        }
+        if (cfg.local_model) {
+            return { model: cfg.local_model, reason: `${complexity} task → user's local_model` };
+        }
+    }
     switch (complexity) {
         case 'trivial':
         case 'simple':

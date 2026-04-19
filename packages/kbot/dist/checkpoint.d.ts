@@ -51,6 +51,13 @@ export declare class CheckpointManager {
      */
     markCompleted(sessionId: string): Promise<void>;
     /**
+     * Flip any `in_progress` checkpoint older than `staleMs` to `completed`.
+     * A live run couldn't possibly still be pending after this cutoff — these
+     * are all crashed/killed sessions whose exit path never marked them done.
+     * Called on startup so stale checkpoints don't spam the recovery banner.
+     */
+    expireStaleInProgress(staleMs?: number): Promise<number>;
+    /**
      * Find all checkpoints with status 'in_progress'.
      * Returns them sorted by timestamp descending (most recent first).
      */

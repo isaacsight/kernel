@@ -1000,8 +1000,111 @@ impl DrumVoice for Percussion {
     }
 }
 
+// ---- Shaker ----
+
+/// Shaker: high-frequency bandpass-filtered noise with very short decay.
+/// Similar to a closed hihat but higher-pitched and more transient.
+pub struct Shaker {
+    sample_rate: f32,
+    active: bool,
+    velocity: f32,
+    level: f32,
+    /// Amplitude envelope.
+    amp_env: f32,
+    amp_decay: f32,
+    /// Default decay time in seconds (very short).
+    default_decay_time: f32,
+    bp: Bandpass,
+    hp: Highpass,
+    rng: Rng,
+    tune: f32,
+    decay_mult: f32,
+}
+
+impl Shaker {
+    pub fn new(sample_rate: f32) -> Self {
+        let decay_time = 0.03; // 30ms — very short, percussive
+        let mut bp = Bandpass::new();
+        bp.set_params(10000.0, 3.0, sample_rate); // High, narrow band
+        let mut hp = Highpass::new();
+        hp.set_params(8000.0, 0.7, sample_rate);
+        Self {
+            sample_rate,
+            active: false,
+            velocity: 0.0,
+            level: 1.0,
+            amp_env: 0.0,
+            amp_decay: (-1.0 / (sample_rate * decay_time)).exp(),
+            default_decay_time: decay_time,
+            bp,
+            hp,
+            rng: Rng::new(3141),
+            tune: 0.0,
+            decay_mult: 1.0,
+        }
+    }
+}
+
+impl DrumVoice for Shaker {
+    fn trigger(&mut self, velocity: f32) {
+        self.velocity = velocity;
+        self.amp_env = 1.0;
+        self.active = true;
+
+        let decay_time = self.default_decay_time * self.decay_mult;
+        self.amp_decay = (-1.0 / (self.sample_rate * decay_time)).exp();
+
+        let ratio = 2.0f32.powf(self.tune / 12.0);
+        self.hp.set_params(8000.0 * ratio, 0.7, self.sample_rate);
+        self.bp.set_params(10000.0 * ratio, 3.0, self.sample_rate);
+        self.hp.reset();
+        self.bp.reset();
+    }
+
+    fn set_tune(&mut self, semitones: f32) {
+        self.tune = semitones.clamp(-24.0, 24.0);
+    }
+
+    fn set_decay(&mut self, multiplier: f32) {
+        self.decay_mult = multiplier.clamp(0.1, 2.0);
+    }
+
+    fn set_level(&mut self, level: f32) {
+        self.level = level.clamp(0.0, 1.0);
+    }
+
+    fn process(&mut self) -> f32 {
+        if !self.active {
+            return 0.0;
+        }
+
+        let noise = self.rng.next_f32();
+        let filtered = self.hp.process(noise);
+        let shaped = self.bp.process(filtered);
+
+        self.amp_env *= self.amp_decay;
+
+        if self.amp_env < 0.0001 {
+            self.active = false;
+        }
+
+        shaped * self.amp_env * self.velocity * self.level
+    }
+
+    fn reset(&mut self) {
+        self.active = false;
+        self.amp_env = 0.0;
+        self.hp.reset();
+        self.bp.reset();
+    }
+
+    fn is_active(&self) -> bool {
+        self.active
+    }
+}
+
 // ---------------------------------------------------------------------------
-// DrumKit — holds all 8 voices, routes MIDI, mixes output
+// DrumKit — holds all 9 voices, routes MIDI, mixes output
 // ---------------------------------------------------------------------------
 
 /// MIDI note assignments for drum voices.
@@ -1013,12 +1116,13 @@ pub const MIDI_HIHAT_CLOSED: u8 = 42; // F#1
 pub const MIDI_PERCUSSION: u8 = 44;   // G#1
 pub const MIDI_HIHAT_OPEN: u8 = 46;   // A#1
 pub const MIDI_TOM: u8 = 48;         // C2
+pub const MIDI_SHAKER: u8 = 70;      // A#3
 
 /// The highest MIDI note routed to the drum kit.
 /// Notes above this go to the synth engine.
-pub const DRUM_NOTE_MAX: u8 = MIDI_TOM;
+pub const DRUM_NOTE_MAX: u8 = MIDI_SHAKER;
 
-/// Complete drum kit with 8 synthesized voices.
+/// Complete drum kit with 9 synthesized voices.
 pub struct DrumKit {
     pub kick: Kick,
     pub snare: Snare,
@@ -1028,6 +1132,7 @@ pub struct DrumKit {
     pub tom: Tom,
     pub rim: Rim,
     pub percussion: Percussion,
+    pub shaker: Shaker,
 }
 
 impl DrumKit {
@@ -1041,6 +1146,7 @@ impl DrumKit {
             tom: Tom::new(sample_rate),
             rim: Rim::new(sample_rate),
             percussion: Percussion::new(sample_rate),
+            shaker: Shaker::new(sample_rate),
         }
     }
 
@@ -1055,6 +1161,7 @@ impl DrumKit {
         self.tom = Tom::new(sample_rate);
         self.rim = Rim::new(sample_rate);
         self.percussion = Percussion::new(sample_rate);
+        self.shaker = Shaker::new(sample_rate);
     }
 
     /// Set global tune offset for all drum voices (in semitones).
@@ -1067,6 +1174,7 @@ impl DrumKit {
         self.tom.set_tune(semitones);
         self.rim.set_tune(semitones);
         self.percussion.set_tune(semitones);
+        self.shaker.set_tune(semitones);
     }
 
     /// Set global decay multiplier for all drum voices.
@@ -1079,6 +1187,7 @@ impl DrumKit {
         self.tom.set_decay(multiplier);
         self.rim.set_decay(multiplier);
         self.percussion.set_decay(multiplier);
+        self.shaker.set_decay(multiplier);
     }
 
     /// Trigger a drum voice by MIDI note number with velocity (0.0-1.0).
@@ -1121,6 +1230,10 @@ impl DrumKit {
                 self.percussion.trigger(velocity);
                 true
             }
+            MIDI_SHAKER => {
+                self.shaker.trigger(velocity);
+                true
+            }
             _ => false,
         }
     }
@@ -1136,6 +1249,7 @@ impl DrumKit {
         out += self.tom.process();
         out += self.rim.process();
         out += self.percussion.process();
+        out += self.shaker.process();
         out
     }
 
@@ -1149,5 +1263,6 @@ impl DrumKit {
         self.tom.reset();
         self.rim.reset();
         self.percussion.reset();
+        self.shaker.reset();
     }
 }

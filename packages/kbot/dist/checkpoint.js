@@ -92,6 +92,45 @@ export class CheckpointManager {
         await rename(tmpPath, filePath);
     }
     /**
+     * Flip any `in_progress` checkpoint older than `staleMs` to `completed`.
+     * A live run couldn't possibly still be pending after this cutoff — these
+     * are all crashed/killed sessions whose exit path never marked them done.
+     * Called on startup so stale checkpoints don't spam the recovery banner.
+     */
+    async expireStaleInProgress(staleMs = 30 * 60 * 1000) {
+        await this.ensureDir();
+        let files;
+        try {
+            files = await readdir(this.dir);
+        }
+        catch {
+            return 0;
+        }
+        const cutoff = Date.now() - staleMs;
+        let expired = 0;
+        for (const file of files) {
+            if (!file.endsWith('.json'))
+                continue;
+            const path = join(this.dir, file);
+            const cp = await this.readCheckpoint(path);
+            if (!cp)
+                continue;
+            if (cp.status !== 'in_progress')
+                continue;
+            if (cp.timestamp >= cutoff)
+                continue; // too recent, might still be live
+            cp.status = 'completed';
+            try {
+                const tmpPath = path + '.tmp';
+                await writeFile(tmpPath, JSON.stringify(cp, null, 2), 'utf-8');
+                await rename(tmpPath, path);
+                expired++;
+            }
+            catch { /* best-effort */ }
+        }
+        return expired;
+    }
+    /**
      * Find all checkpoints with status 'in_progress'.
      * Returns them sorted by timestamp descending (most recent first).
      */

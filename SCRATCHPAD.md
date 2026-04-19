@@ -2,7 +2,81 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-04-16) — TRAIN-SELF: LOCAL FINE-TUNING PIPELINE
+## Current Session (2026-04-19) — KBOT-CONTROL + SUNO-INSPIRED ROADMAP
+
+### What shipped
+- **kbot-control.amxd** — single M4L device, TCP 127.0.0.1:9000, JSON-RPC 2.0, 37+ LOM methods. Supersedes AbletonOSC + AbletonBridge + kbot-bridge (all three can be decommissioned).
+- **packages/kbot-control-standalone/** — open-source-ready package with client.ts, LICENSE, LAUNCH assets.
+- **packages/kbot/src/growth.ts** — "kbot is N% better this week" dashboard. The Suno "My Taste visible" play applied to an agent: surface measurable self-improvement to users.
+- **packages/kbot/src/critic-gate.ts** — always-on adversarial critic on every tool output. GAN-style generator/discriminator pattern; every agent move gets scored before it leaves the loop.
+- **packages/kbot/src/planner/hierarchical/** — 4-tier planner design inspired by Suno's 3-stage transformer: Goal / Phase / Action / ToolCall.
+- **packages/kbot/CURATION_PLAN.md** — 670 → 52 tools plan. 87% reduction. Plan only, not executed.
+- **packages/kbot/research/action-tokens/** — research proposal for an agent-action token LM. This is the Suno lesson applied literally: neural codec → audio pattern maps cleanly to agent-action tokens → agent outputs.
+- **Full migration**: 22 ableton_* tools now prefer kbot-control, fall back to OSC. Backwards-compatible rollout.
+- **Demo session**: 90s Atlanta soul — Serum 2 Mark1 Stage + 6-device stock FX chain + Cm9 / Ab△9 / Fm11 / G7♭9 progression.
+
+### Key findings
+- Ableton 12.4 beta 15 **removed LOM browser access** — this is a real Ableton regression, not a kbot bug. Worked around in the migration. Report upstream.
+- Suno's architecture (neural codec → audio pattern LM → audio) maps 1:1 onto agent design (action codec → action pattern LM → tool calls). That's the research moat.
+- Warner Music settled with Suno Nov 2025; licensed models launching 2026. Licensing precedent opens the door for agent-action training data deals.
+
+### Interview prep (hand-off docs)
+- `.claude/INTERVIEW_CHEAT.md` — the pitch.
+- `.claude/STUDIO_MODE.md` — the Claude Code prompt to replay the demo session.
+- TZFM one-breath defense is ready (see `packages/2027/src/dsp/fm.rs`).
+
+### Open gaps going forward
+- Action-token research pivoted to embedding nearest-neighbor after baseline measurement killed the transformer bet (2026-04-19) — heuristic `learned-router.ts` already hits 91.8% top-5, far above the transformer proposal's 40% ship bar. New direction: embedding-NN + user-specific fine-tuning; prototype in `packages/kbot/research/action-tokens/embedding-nn/`, transformer-era artifacts in `_archive/`.
+- Must add `durationMs` + outcome logging to `tool-pipeline.ts` — still relevant: the per-user fine-tune corpus for the embedding-NN approach depends on it.
+- `browser.load_by_name` needs UI fallback until Ableton restores the API.
+- Critic false-positive rate needs retrospective analysis to tune strictness. Currently shipping at default thresholds.
+- Hierarchical planner Phase 2 (real tier logic) not implemented yet — scaffolding only.
+- Tool curation not executed — plan only. 670 → 52 reduction remains a design doc.
+
+### Previous session notes follow below
+---
+
+## Prior Session (2026-04-17) — HERMES PARITY + SKILLS + SELF-AWARENESS (v3.99.0 → v3.99.2)
+
+### Three ships tonight
+1. **v3.99.0** — skills-loader v2 (agentskills.io format), 14 bundled native skills, Hermes import (76 skills), CLI `kbot skills list | import`. Outperforms Hermes on 8 of 10 axes per audit.
+2. **v3.99.1** — self-awareness.ts ground-truth block injected into every system prompt. Reads version, configured provider, model, platform. Fixed introspection hallucination (kbot was claiming "GPT-4 over WebSocket" when asked about itself).
+3. **v3.99.2** — stronger ground-truth directives. Explicit "NOT GPT-4, NOT Hermes, NOT Llama" disclaimers. kbot now answers self-referential questions accurately: "Kernel Bot v3.99.2, Node.js 22.18.0, Ollama's gemma3:12b."
+
+### Honest remaining gaps
+- Ground truth reflects CONFIGURED provider, not runtime fallback provider. If Ollama is down and Claude answers, kbot still says "Ollama" — needs a runtime probe.
+- Tokenizer doesn't stem — "dreams/dream" and "curate/curation" miss in relevance scoring. 2 of 10 benchmark queries still pick imported Hermes skill over native kbot skill. ~50 lines of stemming would fix.
+- `ollama launch kbot` not yet in Ollama's integration list. `openclaw` (predecessor) already is. Distribution work.
+
+### Previous session notes follow below
+---
+
+## Prior Session (2026-04-17) — HERMES PARITY + SKILLS SHIPPED (v3.99.0)
+
+### What shipped to npm tonight
+- **@kernel.chat/kbot@3.99.0** published + installed globally.
+- **14 bundled skills** in `packages/kbot/skills/` across 7 categories (software-development, self-improvement, orchestration, memory, music-production, deployment, emergent). Ship in the tarball via `files: ["skills/**/*.md"]`.
+- **skills-loader.ts v2** — recursive category-dir scan, YAML frontmatter (agentskills.io + Hermes + kbot.metadata), conditional activation (`requires_toolsets` / `fallback_for_toolsets` / `platforms`), relevance scoring with native-content boost, token budget (2000), dedup with precedence: project-local > bundled > user-global.
+- **CLI commands**: `kbot skills list`, `kbot skills import --from <hermes|claude|path>`. Import symlinks 76 Hermes skills into `~/.kbot/skills/imported/`.
+
+### Why: Hermes Agent shipped as an Ollama 0.21 integration
+Research conclusion (stored in `project_hermes_adoption.md`): Hermes's edge was curated skill bodies + agentskills.io format. kbot had the plumbing (skill-system.ts, skill-library.ts, skill-rating.ts) but disconnected from the standard. Now compatible and superior on 8 of 10 axes — agent orchestration, memory cascade, self-improvement, music production are native categories Hermes has nothing for.
+
+### Audit results before publish
+- Functional edge cases: 12/12 pass
+- Security: 10/10 pass (no eval, no Function(), YAML bombs stored as strings, path traversal inert)
+- Content truthfulness: 3 bugs found and fixed (`train-curate` → `train-self`; `recordSkillExecution/patchSkill` → `skill_manage`; "17 specialists" → "25+")
+- Fresh install: extracted tarball contains all 14 SKILL.md files at correct paths
+- 731/731 existing tests still pass; typecheck clean
+
+### Known follow-ups
+- Tokenizer doesn't stem — "dreams" vs "dream" miss, "curate" vs "curation" miss. 2 of 10 benchmark queries still pick imported Hermes skill over native kbot skill. Low-priority; stemming would add ~50 lines.
+- `ollama launch kbot` not yet in Ollama's integration list. `openclaw` (kbot's predecessor) already is. Distribution work, not code.
+
+### Previous session notes follow below
+---
+
+## Prior Session (2026-04-16) — TRAIN-SELF: LOCAL FINE-TUNING PIPELINE
 
 ### Clean state (all committed)
 

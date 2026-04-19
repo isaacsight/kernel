@@ -162,6 +162,111 @@ export function telemetryMiddleware(emit) {
         });
     };
 }
+// ── Outcome classification ──
+/**
+ * Thresholds for outcome classification.
+ * Exported so downstream code (training, analytics) can mirror them.
+ */
+export const OUTCOME_EMPTY_THRESHOLD = 5; // result under this many chars → "empty"
+export const OUTCOME_LARGE_THRESHOLD = 10_240; // result over this many bytes → "large"
+/**
+ * Classify a tool execution outcome from its ToolContext.
+ *
+ * Priority:
+ *   1. timeout  — aborted with timeout reason
+ *   2. error    — ctx.error is set (or aborted for any other reason)
+ *   3. empty    — result present but shorter than OUTCOME_EMPTY_THRESHOLD chars
+ *   4. large    — result byte length > OUTCOME_LARGE_THRESHOLD
+ *   5. success  — anything else
+ */
+export function classifyOutcome(ctx) {
+    // Timeout takes precedence over generic error because the error string is set too.
+    if (ctx.aborted && /timed?\s*out|timeout/i.test(ctx.abortReason ?? ctx.error ?? '')) {
+        return 'timeout';
+    }
+    if (ctx.error || ctx.aborted)
+        return 'error';
+    const result = ctx.result ?? '';
+    if (result.length < OUTCOME_EMPTY_THRESHOLD)
+        return 'empty';
+    if (Buffer.byteLength(result, 'utf8') > OUTCOME_LARGE_THRESHOLD)
+        return 'large';
+    return 'success';
+}
+/**
+ * Observer middleware — writes an observation to ~/.kbot/observer/session.jsonl.
+ *
+ * Records the three fields that cannot be backfilled for action-token training:
+ *   - durationMs: wall-clock time of tool execution
+ *   - outcome:    success | error | timeout | empty | large
+ *   - resultSize: byte length of the serialized result
+ *
+ * Emits schema v2 events. Backward compatible — consumers that don't know
+ * about the new fields will ignore them (the tokenizer has fallbacks).
+ *
+ * Place this as the OUTERMOST middleware so duration captures the true
+ * wall-clock of the full pipeline (including timeout, truncation, fallback).
+ */
+export function observerMiddleware(sessionId, options = {}) {
+    return async (ctx, next) => {
+        const start = Date.now();
+        let threw = undefined;
+        try {
+            await next();
+        }
+        catch (err) {
+            // Capture so we can still log; rethrow after.
+            threw = err;
+            if (!ctx.error)
+                ctx.error = err instanceof Error ? err.message : String(err);
+        }
+        const durationMs = Date.now() - start;
+        // Allow runtime opt-out (e.g. user disabled observer).
+        if (options.enabled && !options.enabled()) {
+            if (threw)
+                throw threw;
+            return;
+        }
+        const result = ctx.result ?? '';
+        const resultSize = Buffer.byteLength(result, 'utf8');
+        const outcome = classifyOutcome(ctx);
+        try {
+            const { recordObservation } = await import('./observer.js');
+            // Extract a few "safe" arg fields for indexing — mirror what agent.ts does.
+            const a = (ctx.toolArgs ?? {});
+            const args = {};
+            if (typeof a.file_path === 'string')
+                args.file_path = a.file_path;
+            else if (typeof a.path === 'string')
+                args.path = a.path;
+            if (typeof a.command === 'string')
+                args.command = a.command.slice(0, 200);
+            if (typeof a.pattern === 'string')
+                args.pattern = a.pattern;
+            if (typeof a.url === 'string')
+                args.url = a.url;
+            if (typeof a.query === 'string')
+                args.query = a.query;
+            recordObservation({
+                schema: 2,
+                ts: new Date(start).toISOString(),
+                tool: ctx.toolName,
+                args,
+                result_length: result.length,
+                session: sessionId,
+                error: Boolean(ctx.error),
+                durationMs,
+                outcome,
+                resultSize,
+            });
+        }
+        catch {
+            /* observer is non-critical — never break tool execution */
+        }
+        if (threw)
+            throw threw;
+    };
+}
 /**
  * Execution middleware — the actual tool call.
  * This should be the last middleware in the pipeline.
@@ -313,10 +418,13 @@ export function resourceAwareMiddleware() {
 }
 /**
  * Create the default pipeline with the standard middleware stack.
- * Order: telemetry? → permission → hooks → resource → metrics → timeout → truncation → fallback? → execution
+ * Order: observer? → telemetry? → permission → hooks → resource → metrics → timeout → truncation → fallback? → execution
  */
 export function createDefaultPipeline(deps) {
     const pipeline = new ToolPipeline();
+    if (deps.observerSessionId) {
+        pipeline.use(observerMiddleware(deps.observerSessionId, { enabled: deps.observerEnabled }));
+    }
     if (deps.emit) {
         pipeline.use(telemetryMiddleware(deps.emit));
     }

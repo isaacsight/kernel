@@ -1,101 +1,404 @@
-// Skills Loader — Auto-discover and load .md skill files
+// Skills Loader — Auto-discover and load skill documents
 //
-// Skill files are Markdown documents that inject domain knowledge, tool combinations,
-// and project-specific patterns into the agent's context. They're the kbot equivalent
-// of Copilot's "Agent Skills" or Cursor's "Rules for AI."
+// Supports two formats:
+//   1. kbot native:       ~/.kbot/skills/<name>.md                (flat)
+//   2. agentskills.io:    ~/.kbot/skills/<category>/<name>/SKILL.md (Claude/Hermes/Copilot standard)
+//
+// Frontmatter fields recognized (either format):
+//   name | title         — skill identifier
+//   description          — 1-line "when to use this"
+//   keywords | tags      — list for relevance matching
+//   metadata.hermes.tags — agentskills.io tag list (Hermes/Claude)
+//   domain               — kbot category
 //
 // Discovery locations (in priority order):
-//   1. ./.kbot/skills/*.md  — project-specific skills
-//   2. ~/.kbot/skills/*.md  — user global skills
+//   1. ./.kbot/skills/   — project-specific
+//   2. ~/.kbot/skills/   — user global (includes imported Hermes/Claude skills)
 //
-// Token budget: 2000 tokens max (~8000 characters) to leave room for
-// repo map, learning context, and memory.
+// Token budget: 2000 tokens max. When a message is provided, skills are
+// scored for relevance and only the top matches are injected — so a user
+// with 200 imported skills doesn't blow the budget on irrelevant docs.
 
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join, basename } from 'node:path'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { join, basename, dirname } from 'node:path'
 import { homedir } from 'node:os'
+import { fileURLToPath } from 'node:url'
+
+/** Package-bundled skills directory — ships with the npm tarball. */
+function getBundledSkillsDir(): string {
+  // dist/skills-loader.js → ../skills  (package root)
+  const here = dirname(fileURLToPath(import.meta.url))
+  return join(here, '..', 'skills')
+}
 
 const MAX_SKILL_TOKENS = 2000
+const MAX_SKILLS_WITHOUT_MESSAGE = 6   // unfiltered cap
+const MAX_SKILLS_WITH_MESSAGE = 4      // relevance-filtered cap
 const estimateTokens = (text: string) => Math.ceil(text.length / 4)
 
 export interface SkillFile {
   name: string
   path: string
   content: string
+  description: string
+  tags: string[]
   tokens: number
+  /** Skill only activates when these toolsets are available (Hermes: requires_toolsets) */
+  requiresToolsets: string[]
+  /** Skill only activates when these toolsets are UNAVAILABLE (fallback path) */
+  fallbackForToolsets: string[]
+  /** OS platforms this skill supports; empty = all */
+  platforms: string[]
+  /** Related skill names */
+  relatedSkills: string[]
+  /** True for skills that ship with kbot or declare `metadata.kbot.*` — boosted in ranking */
+  native: boolean
+}
+
+export interface SkillLoadContext {
+  /** Toolsets currently available — skills can require/fall-back based on these */
+  availableToolsets?: string[]
+  /** Current OS platform, e.g. 'darwin' | 'linux' | 'win32' */
+  platform?: string
 }
 
 /**
- * Discover and load skill files from project and global directories.
- * Returns formatted string ready to inject into system prompt.
+ * Discover and load skill files. Returns a prompt-ready string.
+ * When `message` is provided, skills are scored for relevance and only the
+ * most relevant are included (keeps token budget tight with a large library).
  */
-export function loadSkills(projectRoot: string): string {
-  const skills = discoverSkillFiles(projectRoot)
-  if (skills.length === 0) return ''
-  return formatSkillsForPrompt(skills)
+export function loadSkills(projectRoot: string, message?: string, ctx?: SkillLoadContext): string {
+  const all = discoverSkillFiles(projectRoot)
+  if (all.length === 0) return ''
+  const filtered = applyConditionalActivation(all, ctx)
+  if (filtered.length === 0) return ''
+  const selected = message ? rankByRelevance(filtered, message) : filtered
+  return formatSkillsForPrompt(selected, message ? MAX_SKILLS_WITH_MESSAGE : MAX_SKILLS_WITHOUT_MESSAGE)
 }
 
 /**
- * Discover .md files from both project-local and global skill directories.
- * Project skills take precedence (loaded first, consume token budget first).
+ * Filter skills by platform and toolset conditions.
+ * Matches Hermes's activation semantics:
+ *   - `platforms: [darwin]` — only loads on macOS
+ *   - `requires_toolsets: [browser]` — only loads when browser tools are available
+ *   - `fallback_for_toolsets: [browser]` — only loads when browser tools are NOT available
+ */
+function applyConditionalActivation(skills: SkillFile[], ctx?: SkillLoadContext): SkillFile[] {
+  const platform = ctx?.platform ?? process.platform
+  const toolsets = new Set((ctx?.availableToolsets ?? []).map(t => t.toLowerCase()))
+
+  return skills.filter(s => {
+    if (s.platforms.length > 0 && !s.platforms.some(p => platform.startsWith(p))) return false
+    if (s.requiresToolsets.length > 0 && !s.requiresToolsets.every(t => toolsets.has(t.toLowerCase()))) return false
+    if (s.fallbackForToolsets.length > 0 && s.fallbackForToolsets.some(t => toolsets.has(t.toLowerCase()))) return false
+    return true
+  })
+}
+
+/**
+ * Walk both skill roots and return every skill document found.
+ * Handles flat files (name.md) AND subdirectory layouts (cat/name/SKILL.md).
+ * Project skills take precedence over global skills with the same name.
  */
 export function discoverSkillFiles(projectRoot: string): SkillFile[] {
+  // Precedence (first wins on name collision):
+  //   1. project-local — most specific, author's own
+  //   2. bundled       — kbot-curated skills shipping with the package
+  //   3. user-global   — includes imported third-party skills (symlinks)
   const locations = [
-    join(projectRoot, '.kbot', 'skills'),       // Project-specific
-    join(homedir(), '.kbot', 'skills'),          // User global
+    join(projectRoot, '.kbot', 'skills'),
+    getBundledSkillsDir(),
+    join(homedir(), '.kbot', 'skills'),
   ]
 
   const skills: SkillFile[] = []
-  const seen = new Set<string>() // Deduplicate by filename
+  const seen = new Set<string>()
 
-  for (const dir of locations) {
-    if (!existsSync(dir)) continue
-    try {
-      const files = readdirSync(dir)
-        .filter(f => f.endsWith('.md'))
-        .sort() // Alphabetical for deterministic ordering
-      for (const file of files) {
-        if (seen.has(file)) continue // Project overrides global
-        seen.add(file)
-        try {
-          const path = join(dir, file)
-          const content = readFileSync(path, 'utf-8').trim()
-          if (content.length === 0) continue
-          skills.push({
-            name: basename(file, '.md'),
-            path,
-            content,
-            tokens: estimateTokens(content),
-          })
-        } catch { /* permission denied, etc. */ }
-      }
-    } catch { /* directory read error */ }
+  for (const root of locations) {
+    if (!existsSync(root)) continue
+    walkSkillRoot(root, skills, seen)
   }
 
   return skills
 }
 
+function walkSkillRoot(root: string, out: SkillFile[], seen: Set<string>, depth = 0): void {
+  if (depth > 3) return // guard against deep nesting
+  let entries: string[]
+  try {
+    entries = readdirSync(root)
+  } catch {
+    return
+  }
+
+  for (const entry of entries) {
+    if (entry.startsWith('.') || entry === 'node_modules') continue
+    const full = join(root, entry)
+    let stat
+    try { stat = statSync(full) } catch { continue }
+
+    if (stat.isDirectory()) {
+      // Subdirectory layout: look for SKILL.md first (agentskills.io standard)
+      const skillMd = join(full, 'SKILL.md')
+      if (existsSync(skillMd)) {
+        tryAddSkill(skillMd, entry, out, seen)
+      } else {
+        // Category directory — recurse
+        walkSkillRoot(full, out, seen, depth + 1)
+      }
+    } else if (entry.endsWith('.md') && entry !== 'README.md') {
+      const name = basename(entry, '.md')
+      tryAddSkill(full, name, out, seen)
+    }
+  }
+}
+
+function tryAddSkill(path: string, fallbackName: string, out: SkillFile[], seen: Set<string>): void {
+  let content: string
+  try {
+    content = readFileSync(path, 'utf-8').trim()
+  } catch {
+    return
+  }
+  if (!content) return
+
+  const parsed = parseFrontmatter(content)
+  const name = String(parsed.fm.name ?? parsed.fm.title ?? fallbackName).trim() || fallbackName
+  if (seen.has(name)) return
+  seen.add(name)
+
+  const description = String(parsed.fm.description ?? '').trim()
+  const tags = extractTags(parsed.fm)
+  const hermesMeta = (parsed.fm.metadata as any)?.hermes ?? {}
+  const kbotMeta = (parsed.fm.metadata as any)?.kbot ?? {}
+  const asList = (v: unknown): string[] => {
+    if (Array.isArray(v)) return v.map(String).map(s => s.trim()).filter(Boolean)
+    if (typeof v === 'string') return v.split(',').map(s => s.trim()).filter(Boolean)
+    return []
+  }
+
+  const bundledDir = getBundledSkillsDir()
+  const native = path.startsWith(bundledDir) || Object.keys(kbotMeta).length > 0
+
+  out.push({
+    name,
+    path,
+    content,
+    description,
+    tags,
+    tokens: estimateTokens(content),
+    requiresToolsets: [...asList(kbotMeta.requires_toolsets), ...asList(hermesMeta.requires_toolsets)],
+    fallbackForToolsets: [...asList(kbotMeta.fallback_for_toolsets), ...asList(hermesMeta.fallback_for_toolsets)],
+    platforms: asList(parsed.fm.platforms),
+    relatedSkills: [...asList(kbotMeta.related_skills), ...asList(hermesMeta.related_skills)],
+    native,
+  })
+}
+
 /**
- * Format skill files for prompt injection, respecting token budget.
+ * Lightweight YAML-frontmatter parser. Handles the subset skills use:
+ *   key: value
+ *   key: [a, b, c]
+ *   metadata:
+ *     hermes:
+ *       tags: [x, y]
+ * Avoids pulling in a full YAML dep. Good enough for flat skill metadata.
  */
-function formatSkillsForPrompt(skills: SkillFile[], maxTokens = MAX_SKILL_TOKENS): string {
+function parseFrontmatter(content: string): { fm: Record<string, any>; body: string } {
+  if (!content.startsWith('---')) return { fm: {}, body: content }
+  const end = content.indexOf('\n---', 3)
+  if (end < 0) return { fm: {}, body: content }
+
+  const yaml = content.slice(3, end).trim()
+  const body = content.slice(end + 4).trim()
+  const fm: Record<string, any> = {}
+  const stack: Array<{ indent: number; obj: Record<string, any> }> = [{ indent: -1, obj: fm }]
+
+  for (const rawLine of yaml.split('\n')) {
+    const line = rawLine.replace(/\s+$/, '')
+    if (!line.trim() || line.trim().startsWith('#')) continue
+
+    const indent = line.match(/^ */)![0].length
+    while (stack.length > 1 && indent <= stack[stack.length - 1].indent) stack.pop()
+    const parent = stack[stack.length - 1].obj
+
+    const m = line.trim().match(/^([A-Za-z0-9_\-]+)\s*:\s*(.*)$/)
+    if (!m) continue
+    const [, key, valueRaw] = m
+    const value = valueRaw.trim()
+
+    if (!value) {
+      // Nested object
+      const child: Record<string, any> = {}
+      parent[key] = child
+      stack.push({ indent, obj: child })
+      continue
+    }
+
+    parent[key] = parseScalar(value)
+  }
+
+  return { fm, body }
+}
+
+function parseScalar(value: string): any {
+  // Inline list: [a, b, "c"]
+  if (value.startsWith('[') && value.endsWith(']')) {
+    return value.slice(1, -1)
+      .split(',')
+      .map(s => s.trim().replace(/^["']|["']$/g, ''))
+      .filter(Boolean)
+  }
+  // Quoted string
+  if ((value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))) {
+    return value.slice(1, -1)
+  }
+  return value
+}
+
+function extractTags(fm: Record<string, any>): string[] {
+  const tags: string[] = []
+  const push = (v: unknown) => {
+    if (Array.isArray(v)) tags.push(...v.map(String))
+    else if (typeof v === 'string') tags.push(...v.split(',').map(s => s.trim()).filter(Boolean))
+  }
+  push(fm.keywords)
+  push(fm.tags)
+  const meta = fm.metadata
+  if (meta && typeof meta === 'object') {
+    push((meta as any).hermes?.tags)
+    push((meta as any).claude?.tags)
+  }
+  return [...new Set(tags.map(t => t.toLowerCase()))]
+}
+
+// ── Relevance scoring ────────────────────────────────────────────────
+
+function rankByRelevance(skills: SkillFile[], message: string): SkillFile[] {
+  const terms = tokenize(message)
+  if (terms.size === 0) return skills
+
+  const scored = skills.map(s => ({ skill: s, score: scoreSkill(s, terms) }))
+  scored.sort((a, b) => b.score - a.score)
+  // Keep skills with at least one hit; fall back to top-N if nothing matches
+  const hits = scored.filter(x => x.score > 0)
+  return (hits.length > 0 ? hits : scored).map(x => x.skill)
+}
+
+function scoreSkill(skill: SkillFile, terms: Set<string>): number {
+  let score = 0
+  const nameTokens = tokenize(skill.name)
+  const descTokens = tokenize(skill.description)
+  for (const t of terms) {
+    if (nameTokens.has(t)) score += 3
+    if (skill.tags.some(tag => tag === t || tag.includes(t))) score += 2
+    if (descTokens.has(t)) score += 1
+  }
+  // Bundled kbot-native skills get a curated-content boost over imported third-party skills.
+  // Only applied when the skill already matched on something (score > 0) — we don't surface
+  // unrelated native skills over perfectly-matched imported ones.
+  if (score > 0 && skill.native) score += 2
+  return score
+}
+
+const STOPWORDS = new Set([
+  'the','a','an','and','or','but','if','then','of','to','for','in','on','at',
+  'with','by','is','are','was','were','be','been','this','that','it','i','you',
+  'we','they','how','what','when','why','can','do','does','please',
+])
+
+function tokenize(text: string): Set<string> {
+  const out = new Set<string>()
+  // Split on non-alphanumeric AND on kebab/snake separators so "daemon-deployment"
+  // and "skill_self_authorship" both yield useful word tokens.
+  for (const raw of text.toLowerCase().split(/[^a-z0-9]+/)) {
+    if (raw.length < 3) continue
+    if (STOPWORDS.has(raw)) continue
+    out.add(raw)
+  }
+  return out
+}
+
+// ── Prompt formatting ────────────────────────────────────────────────
+
+function formatSkillsForPrompt(skills: SkillFile[], maxSkills: number): string {
   const parts: string[] = []
   let currentTokens = 0
+  let included = 0
 
   for (const skill of skills) {
-    if (currentTokens + skill.tokens > maxTokens) {
-      // Try to fit a truncated version
-      const remaining = maxTokens - currentTokens
+    if (included >= maxSkills) break
+    if (currentTokens + skill.tokens > MAX_SKILL_TOKENS) {
+      const remaining = MAX_SKILL_TOKENS - currentTokens
       if (remaining > 100) {
         const truncated = skill.content.slice(0, remaining * 4) + '\n...(truncated)'
         parts.push(`## Skill: ${skill.name}\n${truncated}`)
+        included++
       }
       break
     }
     parts.push(`## Skill: ${skill.name}\n${skill.content}`)
     currentTokens += skill.tokens
+    included++
   }
 
   if (parts.length === 0) return ''
   return `\n\n[Custom Skills]\n${parts.join('\n---\n')}`
+}
+
+// ── Import helpers (used by CLI `skills import`) ─────────────────────
+
+export interface ImportResult {
+  imported: number
+  skipped: number
+  source: string
+  destination: string
+}
+
+/**
+ * Copy (as symlinks) every SKILL.md under a foreign skills directory
+ * into ~/.kbot/skills/imported/<category>/<name>/SKILL.md.
+ * Non-destructive: existing symlinks are replaced, real files are skipped.
+ */
+export async function importExternalSkills(sourceRoot: string): Promise<ImportResult> {
+  const { mkdirSync, symlinkSync, unlinkSync, lstatSync } = await import('node:fs')
+  const destRoot = join(homedir(), '.kbot', 'skills', 'imported')
+  mkdirSync(destRoot, { recursive: true })
+
+  let imported = 0
+  let skipped = 0
+
+  const walk = (dir: string, rel: string): void => {
+    let entries: string[]
+    try { entries = readdirSync(dir) } catch { return }
+    for (const e of entries) {
+      if (e.startsWith('.')) continue
+      const full = join(dir, e)
+      let st
+      try { st = statSync(full) } catch { continue }
+      if (st.isDirectory()) {
+        const skillMd = join(full, 'SKILL.md')
+        if (existsSync(skillMd)) {
+          const destDir = join(destRoot, rel, e)
+          mkdirSync(destDir, { recursive: true })
+          const destFile = join(destDir, 'SKILL.md')
+          try {
+            if (existsSync(destFile)) {
+              const ls = lstatSync(destFile)
+              if (ls.isSymbolicLink()) unlinkSync(destFile)
+              else { skipped++; continue } // don't clobber user-authored file
+            }
+            symlinkSync(skillMd, destFile)
+            imported++
+          } catch { skipped++ }
+        } else {
+          walk(full, join(rel, e))
+        }
+      }
+    }
+  }
+
+  walk(sourceRoot, '')
+  return { imported, skipped, source: sourceRoot, destination: destRoot }
 }

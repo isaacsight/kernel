@@ -65,6 +65,7 @@ import { LoopDetector } from './godel-limits.js'
 import { CheckpointManager, newSessionId, type Checkpoint } from './checkpoint.js'
 import { TelemetryEmitter } from './telemetry.js'
 import { loadSkills } from './skills-loader.js'
+import { getSelfAwarenessPrompt } from './self-awareness.js'
 import { queueSignal, getCollectiveRecommendation, isCollectiveEnabled } from './collective.js'
 import { subscribeToBlackboard } from './agent-protocol.js'
 import { ActiveInferenceEngine } from './free-energy.js'
@@ -174,14 +175,19 @@ export interface AgentResponse {
 }
 
 
+// Track whether we've already warned about a weak-tool-calling model this process.
+let weakModelWarningShown = false
+
 // ── Local-first execution ──
 
 async function tryLocalFirst(message: string): Promise<string | null> {
   const lower = message.toLowerCase().trim()
 
-  // Only match file-like paths — avoid intercepting "open chrome" or "show me how to..."
-  const readMatch = lower.match(/^(?:read|cat|view)\s+(.+)$/i)
-    || lower.match(/^(?:show|open)\s+((?:\.{0,2}\/|~\/|\w+\.\w+).+)$/i)
+  // Only match simple "read <single-filepath>" — reject anything with trailing
+  // conversational text. Prevents "Read package.json and tell me X" from
+  // feeding the whole prompt to read_file as a filename.
+  const readMatch = lower.match(/^(?:read|cat|view)\s+(\S+)\s*$/i)
+    || lower.match(/^(?:show|open)\s+((?:\.{0,2}\/|~\/|[\w.-]+\.[\w-]+))\s*$/i)
   if (readMatch) {
     const tool = getTool('read_file')
     if (tool) return tool.execute({ path: readMatch[1].trim() })
@@ -437,6 +443,20 @@ function tryParseInlineToolCalls(
   }
   if (calls.length > 0) return calls
 
+  // Pattern 3b: ANY fenced code block whose first line starts with a known tool name.
+  // Catches ```bash\nread_file "path.json"\n``` and ```\nread_file path.ts\n```,
+  // which small local models like gemma4 emit when asked to use tools.
+  const anyBlockPattern = /```(?:[a-z_]+)?\s*\n([\s\S]*?)```/g
+  while ((match = anyBlockPattern.exec(content)) !== null) {
+    const block = match[1].trim()
+    const firstWord = block.split(/\s/)[0]
+    if (firstWord && knownTools.includes(firstWord)) {
+      const parsed = parseToolCodeBlock(block, knownTools)
+      if (parsed) calls.push(parsed)
+    }
+  }
+  if (calls.length > 0) return calls
+
   // Pattern 4: Natural language tool invocations — "I'll use write_file to create..."
   // followed by arguments like paths and content in code blocks
   for (const toolName of knownTools) {
@@ -486,6 +506,15 @@ function parseToolCodeBlock(block: string, knownTools: string[]): ProviderToolCa
   return null
 }
 
+/** Strip surrounding quotes from a CLI-style argument string */
+function unquote(s: string): string {
+  const t = s.trim()
+  if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith("'") && t.endsWith("'"))) {
+    return t.slice(1, -1)
+  }
+  return t
+}
+
 /** Build structured args from a tool_code invocation */
 function buildArgsFromToolCode(
   tool: string, argStr: string, restContent: string,
@@ -493,9 +522,9 @@ function buildArgsFromToolCode(
   switch (tool) {
     case 'read_file':
     case 'list_directory':
-      return { path: argStr || '.' }
+      return { path: unquote(argStr) || '.' }
     case 'write_file':
-      return { path: argStr, content: restContent }
+      return { path: unquote(argStr), content: restContent }
     case 'bash':
       return { command: argStr || restContent }
     case 'grep':
@@ -761,7 +790,13 @@ function isCasualMessage(message: string): boolean {
 
   // If it matches a casual pattern AND doesn't contain action words AND doesn't refer to kbot, it's casual
   const isCasualPattern = casualPatterns.some(p => p.test(lower))
-  const hasActionWords = /\b(fix|create|build|run|deploy|install|delete|remove|write|edit|make|generate|scaffold|refactor|update|add|implement|set up|configure|debug|test)\b/.test(lower)
+  const hasActionWords = /\b(fix|create|build|run|deploy|install|delete|remove|write|edit|make|generate|scaffold|refactor|update|add|implement|set up|configure|debug|test|read|check|show|list|find|search|view|tell|report|count|inspect|look|get|open|cat|grep|ls|dir|cd|diff|log|commit|push|pull|clone|audit|scan|probe|execute|execute|verify|confirm|validate)\b/.test(lower)
+
+  // Any message referencing a file path (*.json, *.ts, src/, ./, etc.) clearly needs tools — not casual.
+  const mentionsFileOrPath = /\b[\w./-]+\.(json|ts|tsx|js|jsx|md|py|rs|go|toml|yaml|yml|sh|html|css|sql)\b/.test(lower)
+    || /(?:^|\s)(?:\.\/|src\/|packages\/|tools\/|supabase\/|\.kbot\/|\.claude\/|\/users\/|~\/)/.test(lower)
+
+  if (mentionsFileOrPath) return false
 
   if (isCasualPattern && !hasActionWords && !refersToKbot) return true
 
@@ -788,7 +823,28 @@ const PLAN_MODE_TOOLS = new Set([
 ])
 
 /** Detect if a message describes a complex multi-step task */
+/**
+ * Recognize conversational / reflective prompts that should answer directly
+ * regardless of length. Without this, a long question like "Here's what happened…
+ * what does this mean?" gets flagged complex and kicks off a ceremonial planner
+ * that produces theatre instead of an answer.
+ */
+function isConversational(message: string): boolean {
+  const lower = message.toLowerCase().trim()
+  // Leading question/reflection word
+  if (/^(what|why|how|who|when|where|which|explain|describe|tell me|introduce|summarize|reflect|compare|contrast|define|list|give me one|in your own)\b/.test(lower)) return true
+  // Explicit "no tool calls / plain English / one paragraph" directives
+  if (/\b(no tool calls?|no json|no plan|plain english|one paragraph|in first person|in your own voice)\b/.test(lower)) return true
+  // Ends with ? and has no imperative action verb targeting code/files/systems
+  const endsWithQ = lower.endsWith('?')
+  const hasImperative = /\b(write|build|create|fix|refactor|migrate|deploy|ship|publish|install|run|make|set up|configure|generate|add|remove|delete|commit|push|rename|move|copy|replace)\b/.test(lower)
+  if (endsWithQ && !hasImperative) return true
+  return false
+}
+
 function isComplexTask(message: string): boolean {
+  // Conversational prompts never enter planner mode, no matter how long.
+  if (isConversational(message)) return false
   const lower = message.toLowerCase()
   const complexSignals = [
     /\b(refactor|migrate|convert|rewrite|restructure|reorganize)\b/,
@@ -925,6 +981,17 @@ export async function runAgent(
     warmOllamaModelCache().catch(() => {}) // non-blocking
   }
 
+  // Step 0b: One-time-per-session warning if configured model lacks tool calling
+  if (isLocal && !weakModelWarningShown) {
+    weakModelWarningShown = true
+    try {
+      const { getWeakModelWarning } = await import('./model-capabilities.js')
+      const model = getProviderModel(byokProvider, 'default')
+      const warning = await getWeakModelWarning(byokProvider, model)
+      if (warning) ui.onWarning(warning)
+    } catch { /* capability check is non-critical */ }
+  }
+
   // Step 0: Parse multimodal content (images in message)
   const parsed = options.multimodal || parseMultimodalMessage(message)
   if (parsed.isMultimodal) {
@@ -1044,7 +1111,8 @@ export async function runAgent(
   // Step 2: Build context (cached — only rebuilt when inputs change)
   const matrixPrompt = options.agent ? getMatrixSystemPrompt(options.agent) : null
   const contextSnippet = options.context ? formatContextForPrompt(options.context) : ''
-  const skillsSnippet = loadSkills(process.cwd())
+  const skillsSnippet = loadSkills(process.cwd(), message)
+  const selfAwarenessSnippet = getSelfAwarenessPrompt()
   const memorySnippet = getMemoryPrompt()
   const learningContext = buildFullLearningContext(message, process.cwd())
   const synthesisSnippet = getSynthesisContext(8) // Three-tier memory: reflection layer insights
@@ -1166,7 +1234,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
   const promptSections = createPromptSections({
     persona: PERSONA,
     matrixPrompt: matrixPrompt || undefined,
-    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet || undefined,
+    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet + '\n\n' + selfAwarenessSnippet || undefined,
     memorySnippet: (memorySnippet || '') + getDreamPrompt(8) + reflectionSnippet || undefined,
     learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '') + (correctionsSnippet ? '\n\n' + correctionsSnippet : '')) || undefined,
   })
@@ -1188,6 +1256,8 @@ Always quote file paths that contain spaces. Never reference internal system nam
   let toolCallCount = 0
   let lastResponse: any = null
   const toolSequenceLog: string[] = []
+  // Adversarial critic: track per-(tool+args) retry counts so we don't loop forever on reject.
+  const criticRetryCounts = new Map<string, number>()
   const toolSequenceWithArgs: Array<{ name: string; args: Record<string, unknown> }> = []
   const originalMessage = message
   let cumulativeCostUsd = 0
@@ -1893,6 +1963,25 @@ Always quote file paths that contain spaces. Never reference internal system nam
           error: !!ctx.error || ctx.aborted,
           duration_ms: ctx.durationMs,
         }
+        // ── Adversarial critic gate (generator/discriminator on tool output) ──
+        if (!result.error && process.env.KBOT_NO_CRITIC !== '1') {
+          try {
+            const { gateToolResult } = await import('./critic-gate.js')
+            const key = `${call.name}::${JSON.stringify(call.arguments || {}).slice(0, 200)}`
+            const prior = criticRetryCounts.get(key) || 0
+            const verdict = await gateToolResult(call.name, call.arguments || {}, result.result, {})
+            if (!verdict.accept) {
+              if (prior >= 2) {
+                result.result = `[critic-warning: ${verdict.reason || 'rejected'} — accepted after ${prior} retries] ${result.result}`
+              } else {
+                criticRetryCounts.set(key, prior + 1)
+                result.result = `[critic-reject] ${verdict.reason || 'output rejected'}\n` +
+                  `Retry hint: ${verdict.retry_hint || 'Try different arguments or a different tool.'}\n` +
+                  `Original output (for reference, do not trust):\n${result.result.slice(0, 1000)}`
+              }
+            }
+          } catch { /* critic is non-critical */ }
+        }
         results.push(result)
         ui.onToolCallEnd(call.name, result.result, result.error ? result.result : undefined, result.duration_ms)
 
@@ -1979,6 +2068,10 @@ Always quote file paths that contain spaces. Never reference internal system nam
       // ── Telemetry: session failure ──
       telemetry.emit('session_end', { status: 'failed', error: String(err), toolCallCount })
       telemetry.destroy().catch(() => {})
+      // Mark the checkpoint completed even on error — otherwise the stuck
+      // `in_progress` record will be re-detected on every subsequent launch
+      // and pollute the recovery banner forever.
+      checkpointManager.markCompleted(sessionId).catch(() => {})
       throw err
     }
   }

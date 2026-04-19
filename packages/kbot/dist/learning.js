@@ -597,15 +597,16 @@ export function updateProjectMemory(cwd, data) {
 // Enhance the existing buildLearningContext
 export function buildFullLearningContext(message, cwd) {
     const parts = [];
-    // A. Pattern hint
+    // A. Pattern hint — tool-sequence recipe; safe to reuse
     const pattern = findPattern(message);
     if (pattern) {
-        parts.push(`[Learned Pattern — ${pattern.hits}x success]`, `Tool sequence: ${pattern.toolSequence.join(' → ')}`);
+        parts.push(`[Learned Pattern — ${pattern.hits}x success · tool recipe only, not a cached answer]`, `Tool sequence: ${pattern.toolSequence.join(' → ')}`);
     }
-    // B. Relevant solutions
+    // B. Relevant solutions — tagged as potentially stale so the model doesn't
+    //    quote past values verbatim when a tool could verify the current state.
     const relevant = findSolutions(message, 2);
     if (relevant.length > 0) {
-        parts.push('[Cached Solutions]');
+        parts.push('[Cached Solutions — historical hints; verify specific values via tools before repeating them]');
         for (const s of relevant) {
             parts.push(`Q: ${s.question}\nA: ${s.solution}`);
         }
