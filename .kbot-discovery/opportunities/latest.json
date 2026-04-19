@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-19T16:01:34.695Z",
-  "count": 21,
+  "timestamp": "2026-04-19T16:30:21.587Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -85,6 +85,69 @@
       "url": "https://news.ycombinator.com/item?id=47800767",
       "why": "User looking for AI agent/tool — kbot could be relevant",
       "action": "REVIEW: Consider replying with kbot if genuinely helpful"
+    },
+    {
+      "source": "github-issue",
+      "title": "🏆 Bounty: Build MEEET MCP Server — 500 $MEEET",
+      "url": "https://github.com/Alvasilev12/meeet-solana-state/issues/7",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Harden Meta webhook verification, improve OpenAI error handling, add tests and DB FK index migration",
+      "url": "https://github.com/Arisofia/Nuvanx-System/pull/11",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Exercise: Expand your team with Copilot cloud agent",
+      "url": "https://github.com/Join-hu/skills-expand-your-team-with-copilot/issues/1",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Feat: Enhanced TCP Strategy, yaml-configurable command rules with interactive sessions",
+      "url": "https://github.com/beelzebub-labs/beelzebub/issues/286",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Update architecture and README for Claude Code plugins and skills",
+      "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/68",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Add initial plugin configurations for research ops ecosystem",
+      "url": "https://github.com/hoangsonww/AI-News-Briefing/pull/26",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "chore(master): release 0.38.0",
+      "url": "https://github.com/PlatoTheOne/rtk/pull/1",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "chore(deps): update pathweb workloads (non-major)",
+      "url": "https://github.com/ruifung/rfhome-infrastructure/pull/2377",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "fix(auto-reply): don't persist automatic fallback runtime as next-turn selected model",
+      "url": "https://github.com/openclaw/openclaw/pull/68991",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
     },
     {
       "source": "reddit-programming",
