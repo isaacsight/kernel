@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-19T16:00:45.939Z",
-  "count": 24,
+  "timestamp": "2026-04-19T16:01:22.122Z",
+  "count": 30,
   "opportunities": [
     {
       "source": "hn-comment",
@@ -104,6 +104,48 @@
       "source": "github-issue",
       "title": "chore(env): expand GitHub secrets uploader for production deploy chain",
       "url": "https://github.com/Arisofia/Nuvanx-System/pull/8",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Feat: Enhanced TCP Strategy, yaml-configurable command rules with interactive sessions",
+      "url": "https://github.com/beelzebub-labs/beelzebub/issues/286",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Update architecture and README for Claude Code plugins and skills",
+      "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor/pull/68",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "Add initial plugin configurations for research ops ecosystem",
+      "url": "https://github.com/hoangsonww/AI-News-Briefing/pull/26",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "chore(master): release 0.38.0",
+      "url": "https://github.com/PlatoTheOne/rtk/pull/1",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "chore(deps): update pathweb workloads (non-major)",
+      "url": "https://github.com/ruifung/rfhome-infrastructure/pull/2377",
+      "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
+      "action": "REVIEW: Consider contributing code or opening a PR"
+    },
+    {
+      "source": "github-issue",
+      "title": "fix(auto-reply): don't persist automatic fallback runtime as next-turn selected model",
+      "url": "https://github.com/openclaw/openclaw/pull/68991",
       "why": "Issue related to AI agents/MCP/plugins — kbot could contribute",
       "action": "REVIEW: Consider contributing code or opening a PR"
     },
