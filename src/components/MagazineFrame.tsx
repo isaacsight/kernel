@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { ISSUE } from '../content/issue'
 import type { IssueRecord } from '../content/issues'
+import { PopIcon } from './ornaments'
 import './MagazineFrame.css'
 
 interface MagazineFrameProps {
@@ -76,6 +77,7 @@ export function MagazineFrame({
             </button>
             <div className="pop-frame-issue">
               <span className="pop-folio">
+                <PopIcon name="asterisk" size="sm" className="pop-system-glyph" />
                 ISSUE {issue.number} · {issue.month} {issue.year}
               </span>
               <span className="pop-folio pop-frame-folio">{folio}</span>
@@ -121,6 +123,7 @@ export function MagazineFrame({
               </a>
             </div>
             <span className="pop-folio">
+              <PopIcon name="asterisk" size="sm" className="pop-system-glyph" />
               ISSUE {ISSUE.number} · {ISSUE.month} {ISSUE.year}
             </span>
           </div>

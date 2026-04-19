@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { IssueRecord } from '../content/issues'
+import { PopIcon } from './ornaments'
 
 interface IssueCoverProps {
   /** The issue being rendered. Used for both content (number, month,
@@ -59,7 +60,10 @@ export function IssueCover({ issue, footer }: IssueCoverProps) {
               <span className="pop-marquee-item">都会に住んで、コードで遊ぶための、自由なスタイルを作ろう。</span>
             </span>
           </span>
-          <span className="pop-folio">ISSUE {issue.number} · {issue.month} {issue.year}</span>
+          <span className="pop-folio">
+            <PopIcon name="asterisk" size="sm" className="pop-system-glyph" />
+            ISSUE {issue.number} · {issue.month} {issue.year}
+          </span>
         </div>
 
         <hr className="pop-rule" />
