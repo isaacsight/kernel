@@ -211,6 +211,41 @@ issue variants):
 
 Nothing else. No system fonts, no sans-serif.
 
+### System glyph — the kernel.chat folio mark
+
+**The asterisk (★)** — ratified ISSUE 370 — is the magazine's
+single recurring small mark, threaded through every folio strip in
+the system. Borrowed practice from PAPERSKY (whose paper-airplane
+glyph plays the same role), implemented through the existing
+`<PopIcon name="asterisk">` SVG and the `.pop-system-glyph` CSS
+class in `src/index.css`.
+
+**Where it appears** (one place per surface — never as decoration):
+
+| Surface | Position | Component |
+|---|---|---|
+| Cover dateline | Leading the issue folio (top-right of every cover) | `IssueCover.tsx` |
+| Frame masthead | Leading the issue folio (top of every inner page) | `MagazineFrame.tsx` |
+| Frame footer | Leading the issue folio (bottom of every inner page) | `MagazineFrame.tsx` |
+
+**Spec**: tomato spot color, `0.85em` of the surrounding folio
+text, vertically centred, `6px` right margin, `opacity: 0.95`.
+Renders the existing `PopIcon` `asterisk` stroke SVG — no new
+infrastructure.
+
+**Discipline**: this is the **only** small graphic mark that
+travels through the system. The rest of the `<PopIcon>` vocabulary
+(`leaf`, `coffee`, `pin`, `quote`, `thread`, etc.) remains
+available for *single-use editorial accents* inside specific
+issues, but none of them are systemwide. A system with eleven
+small marks has none. We have one. Keep it.
+
+**Promotion path** for future surfaces: section openers
+(`pop-section-header`), page-number folios on long features,
+colophon. Add only if the surface already carries the issue meta
+strip — otherwise the asterisk reads as decoration, not as a
+thread.
+
 ### Primitives (`src/index.css:29320+`)
 
 | Primitive | What it is | Where it appears |

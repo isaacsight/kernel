@@ -29405,6 +29405,16 @@ h4 {
 /* Folio — page number, byline, date in corners */
 .pop-folio { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); opacity: 0.7; }
 
+/* System glyph — the kernel.chat folio mark.
+   Ratified ISSUE 370 as the magazine's single recurring small mark
+   (per docs/design-language.md, Editorial Neighbours → PAPERSKY).
+   One mark, used everywhere a folio appears: cover dateline, frame
+   masthead, frame footer. Tomato spot, vertically aligned with the
+   adjacent mono folio text, sized down so it punctuates rather than
+   announces. Renders the existing PopIcon `asterisk` SVG. */
+.pop-system-glyph { display: inline-flex; vertical-align: middle; align-items: center; color: var(--pop-tomato); margin-right: 6px; opacity: 0.95; }
+.pop-system-glyph .pop-icon-svg { width: 0.85em; height: 0.85em; }
+
 /* Marquee — horizontal ticker, magazine-style.
    Used for the cover dateline JP tagline. Drifts at ~4px/second.
    Duplicated content + translate loop so there is no visible seam.
