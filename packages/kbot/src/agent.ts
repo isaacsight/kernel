@@ -67,6 +67,7 @@ import { TelemetryEmitter } from './telemetry.js'
 import { loadSkills } from './skills-loader.js'
 import { getSelfAwarenessPrompt } from './self-awareness.js'
 import { buildMathGuardBlock } from './math-guard.js'
+import { buildIdentityGuardBlock } from './identity-guard.js'
 import { queueSignal, getCollectiveRecommendation, isCollectiveEnabled } from './collective.js'
 import { subscribeToBlackboard } from './agent-protocol.js'
 import { ActiveInferenceEngine } from './free-energy.js'
@@ -1115,6 +1116,7 @@ export async function runAgent(
   const skillsSnippet = loadSkills(process.cwd(), message)
   const selfAwarenessSnippet = getSelfAwarenessPrompt()
   const mathGuardSnippet = buildMathGuardBlock(message)
+  const identityGuardSnippet = buildIdentityGuardBlock(message)
   const memorySnippet = getMemoryPrompt()
   const learningContext = buildFullLearningContext(message, process.cwd())
   const synthesisSnippet = getSynthesisContext(8) // Three-tier memory: reflection layer insights
@@ -1236,7 +1238,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
   const promptSections = createPromptSections({
     persona: PERSONA,
     matrixPrompt: matrixPrompt || undefined,
-    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet + '\n\n' + selfAwarenessSnippet + (mathGuardSnippet ? '\n\n' + mathGuardSnippet : '') || undefined,
+    contextSnippet: (contextSnippet || '') + repoMapSnippet + graphSnippet + skillsSnippet + skillLibrarySnippet + '\n\n' + selfAwarenessSnippet + (mathGuardSnippet ? '\n\n' + mathGuardSnippet : '') + (identityGuardSnippet ? '\n\n' + identityGuardSnippet : '') || undefined,
     memorySnippet: (memorySnippet || '') + getDreamPrompt(8) + reflectionSnippet || undefined,
     learningContext: ((learningContext || '') + (synthesisSnippet ? '\n\n' + synthesisSnippet : '') + (correctionsSnippet ? '\n\n' + correctionsSnippet : '')) || undefined,
   })

@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.99.24 (2026-04-20)
+
+### Fixed: version/identity hallucination on local small models
+- `identity-guard.ts` — detects self-queries ("what version/model/provider are you", "who are you") in the USER message and prepends a ground-truth block with the exact version string, product, provider, and model. Same user-message-prepend pattern as math-guard.
+- Root cause: system-context `self-awareness.ts` block is ignored by small local models (gemma4:latest, 4B class) for identity queries — v3.99.23 probes returned different fabricated versions (v3.99.14, v3.99.12) on repeated invocations. Strengthening the system block did not help; local models condition on user messages far more strongly.
+- 11 new tests.
+
 ## 3.99.23 (2026-04-20)
 
 ### Fixed: arithmetic hallucination (RF-16)

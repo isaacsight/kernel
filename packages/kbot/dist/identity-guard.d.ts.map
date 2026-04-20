@@ -1,0 +1,1 @@
+{"version":3,"file":"identity-guard.d.ts","sourceRoot":"","sources":["../src/identity-guard.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;GAiBG;AAOH,MAAM,MAAM,iBAAiB,GAAG,SAAS,GAAG,SAAS,GAAG,UAAU,GAAG,OAAO,CAAA;AAc5E,wBAAgB,mBAAmB,CAAC,OAAO,EAAE,MAAM,GAAG,GAAG,CAAC,iBAAiB,CAAC,CAS3E;AAqCD;;;;GAIG;AACH,wBAAgB,uBAAuB,CAAC,OAAO,EAAE,MAAM,GAAG,MAAM,CAyB/D"}
