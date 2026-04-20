@@ -1529,10 +1529,15 @@ Always quote file paths that contain spaces. Never reference internal system nam
         input_schema: t.input_schema,
       }))
 
-      // Build messages with RLM-style context management
+      // Build messages with RLM-style context management. Guards (math,
+      // identity) are also injected into the system context for long-turn
+      // coherence, but we repeat them here because small local models
+      // (4B-class) ignore system context for deterministic queries.
+      const guardPreamble = mathGuardSnippet + (mathGuardSnippet && identityGuardSnippet ? '\n' : '') + identityGuardSnippet
+      const guardedUserContent = guardPreamble ? guardPreamble + '\n' + message : message
       const rawMessages: ProviderMessage[] = [
         ...getPreviousMessages(memSession),
-        { role: 'user', content: message },
+        { role: 'user', content: guardedUserContent },
         ...loopMessages,
       ]
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.99.25 (2026-04-20)
+
+### Fixed: guards were being injected into system context only
+- v3.99.24 wired math-guard and identity-guard into `contextSnippet`, which flows through `createPromptSections` → system context. Small local models (gemma4:latest, 4B-class) ignore system context for deterministic queries; re-probe showed version still returned "v3.99.14".
+- v3.99.25 now also prepends the guard preamble to the user-role message content directly (agent.ts:1538). Highest salience — the LLM sees the ground truth immediately before the question. Belt-and-suspenders: kept in system context too for long-turn coherence.
+
 ## 3.99.24 (2026-04-20)
 
 ### Fixed: version/identity hallucination on local small models
