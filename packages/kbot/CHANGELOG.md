@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.99.28 (2026-04-20)
+
+### Fixed: identity confabulation (deterministic short-circuit)
+- Adds identity short-circuit to `tryLocalFirst`: "what version are you", "who are you", "what model are you" now return package.json values directly. gemma4:latest was still answering "v3.99.14" for version queries even with IDENTITY GUARD prepended to the user message. Same fix shape as the arithmetic short-circuit in v3.99.27.
+
+### Fixed: eval runner picked up stale kbot via npm script PATH
+- `eval/run.ts` now resolves kbot via `npm root -g` first, then falls back to a fresh-shell `command -v` that rejects any `/node_modules/.bin/` match. Without this, `npm run eval` picked up a v3.11.0 install from `~/node_modules/.bin/` that had been sitting there for months.
+- Latest eval on v3.99.27 (with correct binary): 14/18 passing. Arithmetic 5/5, tool-use 1/1, sycophancy 3/3.
+
 ## 3.99.27 (2026-04-20)
 
 ### Fixed: arithmetic short-circuit regex was too strict

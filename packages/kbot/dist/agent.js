@@ -172,6 +172,31 @@ async function tryLocalFirst(message) {
     if (lower === 'pwd' || lower === 'where am i') {
         return process.cwd();
     }
+    // Identity short-circuit — deterministic answers for self-queries that
+    // small models confabulate on. Eval 2026-04-20 showed gemma4:latest
+    // answering "v3.99.14" for "what version are you" even with the IDENTITY
+    // GUARD block prepended to the user message. If the answer is derivable
+    // from package.json + config, return it directly.
+    if (message.length < 120) {
+        const { detectIdentityQuery } = await import('./identity-guard.js');
+        const kinds = detectIdentityQuery(message);
+        if (kinds.size > 0) {
+            try {
+                const { readFileSync } = await import('node:fs');
+                const { fileURLToPath } = await import('node:url');
+                const { dirname, join } = await import('node:path');
+                const here = dirname(fileURLToPath(import.meta.url));
+                const pkg = JSON.parse(readFileSync(join(here, '..', 'package.json'), 'utf-8'));
+                if (kinds.has('version') && !kinds.has('product') && !kinds.has('model') && !kinds.has('provider')) {
+                    return `v${pkg.version}`;
+                }
+                if (kinds.has('product') || kinds.has('version')) {
+                    return `@kernel.chat/kbot v${pkg.version} — an open-source terminal AI agent.`;
+                }
+            }
+            catch { /* fall through to LLM */ }
+        }
+    }
     return null;
 }
 /** Anthropic Messages API (Claude) */

@@ -74,9 +74,42 @@ function loadProbes(version: string): Probe[] {
   }))
 }
 
+/**
+ * Resolve an absolute `kbot` path, skipping any local `node_modules/.bin`
+ * shim npm may have prepended. Without this, `npm run eval` from the repo
+ * picks up a stale kbot installed in a parent `node_modules` tree, so
+ * every probe runs against the wrong binary.
+ *
+ * Strategy: use `npm root -g` to locate the globally installed
+ * `@kernel.chat/kbot` and build the binary path from there. Fall back to
+ * a fresh-shell `command -v` lookup, then finally bare `kbot`.
+ */
+function resolveKbotPath(): string {
+  try {
+    const globalRoot = execFileSync('npm', ['root', '-g'], {
+      encoding: 'utf-8',
+      env: { ...process.env, PATH: process.env.PATH ?? '' },
+    }).trim()
+    if (globalRoot) {
+      const candidate = join(globalRoot, '@kernel.chat', 'kbot', 'dist', 'cli.js')
+      // dist/cli.js is the shebang'd entry; node will resolve the #! line.
+      return candidate
+    }
+  } catch { /* fall through */ }
+  try {
+    const out = execFileSync('/bin/sh', ['-lc', 'command -v kbot'], {
+      encoding: 'utf-8',
+    }).trim()
+    if (out && !out.includes('/node_modules/.bin/')) return out
+  } catch { /* fall through */ }
+  return 'kbot'
+}
+
+const KBOT_BIN = resolveKbotPath()
+
 function runKbot(prompt: string): { output: string; ms: number } {
   const start = Date.now()
-  const proc = spawnSync('kbot', ['--quiet', prompt], {
+  const proc = spawnSync(KBOT_BIN, ['--quiet', prompt], {
     encoding: 'utf-8',
     timeout: 60_000,
     maxBuffer: 1024 * 1024,
@@ -130,7 +163,7 @@ function parseArgs(argv: string[]): { category?: string; probe?: string } {
 
 function checkKbotInstalled(): boolean {
   try {
-    execFileSync('kbot', ['--version'], { stdio: 'pipe' })
+    execFileSync(KBOT_BIN, ['--version'], { stdio: 'pipe' })
     return true
   } catch {
     return false
@@ -144,7 +177,8 @@ async function main() {
   }
 
   const version = resolveKbotVersion()
-  const installed = execFileSync('kbot', ['--version'], { encoding: 'utf-8' }).trim()
+  const installed = execFileSync(KBOT_BIN, ['--version'], { encoding: 'utf-8' }).trim()
+  console.log(dim(`kbot binary: ${KBOT_BIN}`))
   const argv = parseArgs(process.argv.slice(2))
 
   let probes = loadProbes(version)
