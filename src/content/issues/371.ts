@@ -194,7 +194,7 @@ export const ISSUE_371: IssueRecord = {
         heading: 'THE OTHER SIDE OF THE CAMERA',
         headingJp: 'カメラの裏側',
         paragraphs: [
-          'Alongside the live photography and motion work, the feed carries a second body of output that does not require the camera at all. Animated event promos for a recurring night called 9PM Sharp — title cards that come in on a beat, hand-set in tomato sans against deep ground, ornamented with a kind of Saul-Bass-meets-club-flyer iconography. Illustrated posters. Branded film for clients who came for the cinematography and stayed for the design. The shop is wider than the lens.',
+          'Alongside the live cinematography and motion work, the feed carries a second body of output that does not require the camera at all. Animated event promos for a recurring night called 9PM Sharp — title cards that come in on a beat, hand-set in tomato sans against deep ground, ornamented with a kind of Saul-Bass-meets-club-flyer iconography. Illustrated posters. Branded film for clients who came for the cinematography and stayed for the design. The shop is wider than the lens.',
           'It is a useful breadth to have. A night that asks for a cinematographer is sometimes a night that also needs a poster three weeks earlier, a title card a day before, a logo lockup the morning of. The studios that survive are the ones that can turn each of those into the same job. Dañiel\u2019s feed makes the case that those four jobs — promo art, identity work, motion graphics, live cinematography — are not four jobs. They are one editorial sensibility expressed across four toolkits, and the toolkit chosen each time is the one the night needed.',
           'A magazine notices this kind of self-publishing because a magazine recognises the grammar. A nightlife studio that issues its own promotional material — designed in-house, published on the studio\u2019s own grid, repeated weekly — is, structurally, a magazine. 9PM Sharp is a magazine. @thisisatool is a magazine. They go out on the same publication schedule the room does.',
         ],
@@ -204,7 +204,7 @@ export const ISSUE_371: IssueRecord = {
         headingJp: 'カメラの用',
         paragraphs: [
           'The honest question under any cinematographer profile is what the camera is for. The commercial answer is: the camera is for the brand that paid for the shoot. The art-school answer is: the camera is for the cinematographer\u2019s eye. Both answers are partial. The answer this work suggests is closer to: the camera is for the room, on behalf of the people in it, on the chance that one of them will want, six months later, to remember being there.',
-          'A nightlife photographer is, in a non-trivial sense, the room\u2019s historian. The DJ remembers the set list. The bartender remembers the rush. The friend in the corner remembers the conversation. The cinematographer is the only person in the room whose entire job is to remember, on everyone else\u2019s behalf, what the light looked like and where the people stood and how the room felt at 12:43 when the bass dropped and the temperature went up two degrees. That is not a small job. It is, on the right night, the most important job in the room.',
+          'A nightlife cinematographer is, in a non-trivial sense, the room\u2019s historian. The DJ remembers the set list. The bartender remembers the rush. The friend in the corner remembers the conversation. The cinematographer is the only person in the room whose entire job is to remember, on everyone else\u2019s behalf, what the light looked like and where the people stood and how the room felt at 12:43 when the bass dropped and the temperature went up two degrees. That is not a small job. It is, on the right night, the most important job in the room.',
           'Dañiel does it on tungsten and on flash, on warm and on cool, on grain and on more grain, in a city that pretends not to need this kind of cultural memory because the next room is opening on Friday. This issue is for the grid, and for the camera, and for the cinematographer at the back of the room — who, when the night ends, is the reason the night will still exist.',
           '夜の撮影監督たちへ — stay in the room; shoot the flash, not the pose; let the grain stand.',
         ],
@@ -224,7 +224,9 @@ export const ISSUE_371: IssueRecord = {
     creativeDirection: 'kernel.chat group',
     artDirection: 'in-house',
     copy: 'kernel.chat editorial',
-    photography: 'Dañiel Aügust · @thisisatool',
+    /* No photography credit — this issue is text-only. Cinema-strip
+       module is preserved in the codebase but the spread itself
+       carries no stills from the subject. */
     japanese: 'kernel.chat editorial',
     production: 'kernel.chat group',
   },
