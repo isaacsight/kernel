@@ -112,6 +112,21 @@ let weakModelWarningShown = false;
 // ── Local-first execution ──
 async function tryLocalFirst(message) {
     const lower = message.toLowerCase().trim();
+    // Pure-arithmetic short-circuit. When the whole message reduces to a single
+    // "what is a op b" / bare "a op b" / "compute a op b" query, return the
+    // computed answer directly — never involve an LLM. Eval on 2026-04-20
+    // showed gemma4:latest ignoring an injected MATH GUARD block ("123 % 7 = 4"
+    // prepended to the message, answer still "2"). If we already have the
+    // answer deterministically, there is no reason to ask the model.
+    if (/^(?:what\s+is|what['']s|compute|calculate|evaluate)\s+[-\d.\s+*×/÷%]+\??$/i.test(lower)
+        || /^[-\d.\s+*×/÷%]+\??$/.test(lower)) {
+        const { extractArithmetic } = await import('./math-guard.js');
+        const exprs = extractArithmetic(message);
+        if (exprs.length === 1) {
+            const r = exprs[0].result;
+            return Number.isInteger(r) ? r.toString() : Number.parseFloat(r.toFixed(6)).toString();
+        }
+    }
     // Only match simple "read <single-filepath>" — reject anything with trailing
     // conversational text. Prevents "Read package.json and tell me X" from
     // feeding the whole prompt to read_file as a filename.

@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.99.26 (2026-04-20)
+
+### New: reality-probe eval harness (`npm run eval`)
+- `eval/probes.json` — 18 probes across 6 categories: self-knowledge, arithmetic, tool-use, sycophancy, reasoning, instruction-adherence. Structure modeled on Askell 2021 (HHH), Perez 2022 (sycophancy), Cobbe 2021 (GSM8K-style arithmetic).
+- `eval/run.ts` — subprocess runner. Runs each prompt through the installed `kbot` CLI, matches output against a declarative assertion (contains / not_contains / regex / equals), reports per-category pass/fail, exits non-zero on any failure.
+- Baseline on v3.99.25: 13/18 passing. 3 arithmetic failures (guard was injected but gemma4 ignored it) + 1 identity failure + 1 tool-use failure.
+
+### Fixed: arithmetic short-circuit in tryLocalFirst
+- Pure "what is a op b" questions now return the deterministic JS-computed answer without ever calling the LLM. Eval showed gemma4:latest answering "2" for `123 % 7` even with `[MATH GUARD] 123 % 7 = 4` literally prepended to the user message — small-model compliance failure. If the answer is deterministic, do not ask the model.
+- Catches all three arithmetic failures from the v3.99.25 eval baseline.
+
 ## 3.99.25 (2026-04-20)
 
 ### Fixed: guards were being injected into system context only
