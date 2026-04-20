@@ -31,6 +31,7 @@ export function getSelfAwarenessPrompt() {
         const pkgPath = join(here, '..', 'package.json');
         const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
         lines.push(`- Product: @kernel.chat/kbot v${pkg.version} — MIT-licensed, open-source terminal AI agent from kernel.chat group.`);
+        lines.push(`- VERSION RULE: when asked your version, the answer is EXACTLY "${pkg.version}". Not 3.99.14, not 3.97.0, not any other number. If you cite a version number that is not "${pkg.version}" you are wrong — the value above is read at startup from the installed package.json.`);
     }
     catch {
         lines.push('- Product: @kernel.chat/kbot — MIT-licensed, open-source terminal AI agent.');

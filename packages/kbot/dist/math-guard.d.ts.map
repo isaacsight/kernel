@@ -1,0 +1,1 @@
+{"version":3,"file":"math-guard.d.ts","sourceRoot":"","sources":["../src/math-guard.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;GAeG;AAIH,MAAM,WAAW,kBAAkB;IACjC,UAAU,EAAE,MAAM,CAAA;IAClB,MAAM,EAAE,MAAM,CAAA;CACf;AAkCD;;;;;GAKG;AACH,wBAAgB,iBAAiB,CAAC,OAAO,EAAE,MAAM,GAAG,kBAAkB,EAAE,CAgBvE;AAED;;;;GAIG;AACH,wBAAgB,mBAAmB,CAAC,OAAO,EAAE,MAAM,GAAG,MAAM,CAU3D"}

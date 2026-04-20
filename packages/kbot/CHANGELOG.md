@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.99.23 (2026-04-20)
+
+### Fixed: arithmetic hallucination (RF-16)
+- `math-guard.ts` — pre-processes user messages for single-operator arithmetic (`a op b`, op ∈ {+ - * × / ÷ %}), computes in JS, prepends a ground-truth block to the context snippet. Fixes probe failure where "847 × 239" returned 1,985,633 instead of 202,433 (order-of-magnitude error).
+- 14 new tests; catches word-boundary false positives (version strings like `v3.99.22` don't match).
+
+### Fixed: version self-report confabulation
+- `self-awareness.ts` — added explicit "VERSION RULE" line naming the exact version string the LLM must use. Probe showed kbot answering "v3.99.14" despite the ground-truth block already containing the real version — the block was being ignored. New line forbids any other number directly.
+
 ## 3.99.22 (2026-04-20)
 
 ### New: Research-grounded critic taxonomy (RF-01..RF-16)
