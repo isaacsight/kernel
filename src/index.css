@@ -29338,7 +29338,9 @@ h4 {
 .pop-rule--soft { background: var(--pop-hairline-soft); }
 .pop-rule--tomato {
   height: 2px;
-  background: var(--pop-tomato);
+  /* Inherits the issue's accent when inside an issue cover/spread;
+     falls back to the house tomato when used on landing/chrome. */
+  background: var(--issue-accent, var(--pop-tomato));
   /* Ambient breath — the hairline is alive but imperceptibly so.
      Matches the TikTok tomato-breath token (0.3Hz ≈ 3.33s period).
      The site-wide prefers-reduced-motion rule disables this. */
@@ -29355,7 +29357,7 @@ h4 {
 .pop-kicker { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); }
 .pop-kicker::before { content: '[ '; opacity: 0.6; }
 .pop-kicker::after  { content: ' ]'; opacity: 0.6; }
-.pop-kicker--tomato { color: var(--pop-tomato); }
+.pop-kicker--tomato { color: var(--issue-accent, var(--pop-tomato)); }
 
 /* Tomato banner tag — feature flag style, reversed rounded-corner box */
 .pop-banner { display: inline-block; font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; background: var(--pop-tomato); color: var(--pop-ivory); padding: 4px 12px; border-radius: 2px; font-weight: 700; }
@@ -29374,7 +29376,7 @@ h4 {
 
 /* Issue-number monument — stacked corner block */
 .pop-monument { font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1.4; letter-spacing: var(--letter-spacing-caps); text-transform: uppercase; color: var(--pop-ink); display: inline-flex; flex-direction: column; gap: 2px; text-align: left; }
-.pop-monument strong { font-size: 2.4em; font-weight: 700; letter-spacing: -0.02em; line-height: 0.95; color: var(--pop-tomato); font-variant-numeric: tabular-nums; text-transform: none; }
+.pop-monument strong { font-size: 2.4em; font-weight: 700; letter-spacing: -0.02em; line-height: 0.95; color: var(--issue-accent, var(--pop-tomato)); font-variant-numeric: tabular-nums; text-transform: none; }
 
 /* Bilingual lockup — Latin over Japanese */
 .pop-bilingual { display: flex; flex-direction: column; gap: 6px; align-items: inherit; }
@@ -29383,7 +29385,7 @@ h4 {
 
 /* Display headline — EB Garamond, tight, large */
 .pop-display { font-family: var(--font-serif); font-weight: 700; line-height: 0.98; letter-spacing: -0.025em; color: var(--pop-ink); }
-.pop-display em { font-style: italic; color: var(--pop-tomato); font-weight: 600; }
+.pop-display em { font-style: italic; color: var(--issue-accent, var(--pop-tomato)); font-weight: 600; }
 
 /* Swash / italic accent */
 .pop-swash { font-family: var(--font-serif); font-style: italic; font-weight: 500; letter-spacing: -0.01em; color: var(--pop-coffee); }

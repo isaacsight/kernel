@@ -25,6 +25,10 @@ import { ISSUE_369 } from './369'
 import { ISSUE_370 } from './370'
 import { ISSUE_371 } from './371'
 
+// Re-export accent types so issue files can import from a single place.
+export type { IssueAccent, InkSeedName, InkSeed } from './accents'
+export { INK_SEEDS, defaultAccentFor, resolveAccentHex, isPopeyeSafe, contrastRatio, STOCK_HEX } from './accents'
+
 export interface ContentsItem {
   /** Numbered catalog number, padded (e.g. "001") */
   n: string
@@ -435,6 +439,13 @@ export interface IssueRecord {
    *  corner. Orthogonal to the ornament — issues can use both,
    *  either, or neither. */
   coverSeal?: IssueCoverSeal
+  /** Adaptive issue accent — either a named seed from INK_SEEDS
+   *  (e.g., 'cobalt') or a raw hex string. Drives the entire
+   *  issue's color palette via five CSS-derived tones. When
+   *  omitted, falls back to the spread type's default (see
+   *  DEFAULT_ACCENT_BY_SPREAD in accents.ts). Existing issues
+   *  without this field inherit 'tomato' naturally. */
+  accent?: import('./accents').IssueAccent
   /** Optional long-form editorial feature (prose, no images). */
   spread?: IssueSpread
   /** Optional masthead / editorial team credits. */

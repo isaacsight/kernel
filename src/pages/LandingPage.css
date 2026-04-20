@@ -819,7 +819,7 @@
   color: var(--pop-ivory);
 }
 .pop-cover.pop-stock-ink .pop-feature-title em {
-  color: var(--pop-tomato);
+  color: var(--issue-accent, var(--pop-tomato));
 }
 .pop-cover.pop-stock-ink .pop-feature-swash {
   color: rgba(250, 249, 246, 0.78);
@@ -837,7 +837,7 @@
   color: rgba(250, 249, 246, 0.6);
 }
 .pop-cover.pop-stock-ink .pop-monument strong {
-  color: var(--pop-tomato);
+  color: var(--issue-accent, var(--pop-tomato));
 }
 .pop-cover.pop-stock-ink .pop-hash {
   color: rgba(250, 249, 246, 0.55);
@@ -847,8 +847,8 @@
   background: rgba(250, 249, 246, 0.18);
 }
 .pop-cover.pop-stock-ink .pop-rule--tomato {
-  background: var(--pop-tomato);
-  border-color: var(--pop-tomato);
+  background: var(--issue-accent, var(--pop-tomato));
+  border-color: var(--issue-accent, var(--pop-tomato));
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -867,7 +867,10 @@
 .pop-cover-ornament {
   position: absolute;
   pointer-events: none;
-  color: var(--pop-tomato);
+  /* Ornament picks up the issue's accent — ink-spread, warty-spots,
+     etc. all inherit the current issue's spot color. flash-burn is
+     a white radial, independent of accent; it doesn't use this. */
+  color: var(--issue-accent, var(--pop-tomato));
   z-index: 0;
 }
 
@@ -1005,7 +1008,9 @@
   width: clamp(84px, 9vw, 120px);
   height: auto;
   aspect-ratio: 1;
-  color: var(--pop-tomato);
+  /* Seal inherits the issue's accent so the rubber-stamp sits in
+     the same spot color as the rest of the cover's voice. */
+  color: var(--issue-accent, var(--pop-tomato));
   transform: rotate(-8deg);
   z-index: 2;
   pointer-events: none;

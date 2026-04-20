@@ -109,6 +109,52 @@ Three options:
 - `monument-hero` — issue number IS the cover art, headline shrinks (use when the number is thematic: anniversary, absence, milestone)
 - `asymmetric-left` — left-aligned lockup, editorial-column rhythm (fashion, culture, dispatch)
 
+### 4.5. What accent? (THE INK CABINET — introduced 371)
+
+Every issue now picks one **accent color** that drives the cover's
+spot color and every `.pop-kicker--tomato` / `.pop-rule--tomato` /
+`.pop-monument strong` / `<em>` inside the issue. Tomato remains
+the default — omit `accent` entirely and the magazine picks it
+based on your spread type (essay→tomato, interview→coffee,
+forecast→cobalt, dispatch→brick). Declare an accent when the
+issue's personality calls for a different register.
+
+**The cabinet** (see `src/content/issues/accents.ts` for hexes + fit notes):
+
+| Seed | Fit |
+|---|---|
+| `tomato` | THE default — 370+ issues |
+| `brick` | Deeper, archival — literature, memory, record-of-record |
+| `cobalt` | Winter, nocturnal, nightlife (introduced 371) |
+| `pool` | Systems, terminal, code, infrastructure |
+| `ivy` | Nature, outdoor, agriculture |
+| `olive` | Field work, labor, cartography |
+| `amethyst` | When the issue is about kernel.chat itself — mastheads, anniversaries |
+| `oxblood` | Literature, wine, memory, endings |
+| `coffee` | Interviews, craft, slow work |
+
+```ts
+accent: 'cobalt'          // named seed (preferred)
+accent: '#5E4A22'         // raw hex — must pass isPopeyeSafe()
+```
+
+**How it adapts**: from one hex, CSS derives five tones (base,
+strong, muted, whisper, ink) via `oklch(from ...)`. Each paper
+stock sets `--issue-accent-lift` so the same accent reads
+correctly on ivory, butter, kraft, cream, and ink. Dark mode +
+high-contrast media queries shift the lift further so accents
+hold up in every render mode.
+
+**Adding a new seed**: propose via PR. The seed must pass
+`isPopeyeSafe()` (rejects neon, zero-chroma grays, pure digital
+primaries) and carry a one-line "fit" note. No new seed ships
+without review — that stopped the electric-ultramarine mistake
+when 371 was being drafted.
+
+**Motion is NOT part of the palette**. Motion stays authored per
+issue when an issue needs distinctive motion, not derived
+systematically from the seed. Two instances before a pattern.
+
 ### 5. What signature move? (optional but preferred)
 
 One distinctive element that makes THIS cover recognizable at a glance.
@@ -125,13 +171,14 @@ in `index.ts`; new seals reuse the existing component.
 Propose new ones when the topic calls for them — these are meant to
 grow with the archive.
 
-**On color**: the magazine is monochrome + tomato. An attempt to add
-a second spot color (electric ultramarine for 371, "after-hours
-palette") was withdrawn before publication — it read as off-key
-against the magazine's warm POPEYE-coded grammar. If a future issue
-needs a "second register," express it materially (paper stock + new
-ornament) rather than chromatically. The standing tomato is the
-only spot color and should stay that way.
+**On color (updated 371)**: the magazine now picks ONE accent per
+issue from the Ink Cabinet (§III.4.5). Tomato remains the default;
+issues declare a different seed when the personality calls for it.
+A prior attempt to introduce a second simultaneous spot color
+(ultramarine alongside tomato, an "after-hours palette" for 371)
+was withdrawn — two live spot colors fight the magazine's warm
+grammar. The adaptive palette replaces that idea: the second
+register is expressed by SWITCHING the accent, not adding one.
 
 ---
 

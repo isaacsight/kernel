@@ -1,6 +1,8 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import type { IssueRecord, DispatchSpread } from '../content/issues'
+import { resolveAccentHex } from '../content/issues/accents'
 import './DispatchFeature.css'
+import './IssueAccent.css'
 
 interface DispatchFeatureProps {
   spread: DispatchSpread
@@ -30,6 +32,8 @@ interface DispatchFeatureProps {
  */
 export function DispatchFeature({ spread, issue }: DispatchFeatureProps) {
   const stockClass = `pop-stock-${spread.stock ?? 'ivory'}`
+  const accentHex = resolveAccentHex(issue.accent, spread.type)
+  const accentStyle = { '--issue-accent-base': accentHex } as CSSProperties
 
   const splitAt = Math.min(4, spread.propositions.length)
   const firstHalf = spread.propositions.slice(0, splitAt)
@@ -38,6 +42,7 @@ export function DispatchFeature({ spread, issue }: DispatchFeatureProps) {
   return (
     <section
       className={`pop-dispatch ${stockClass}`}
+      style={accentStyle}
       aria-labelledby="pop-dispatch-title"
     >
       {/* ── Wire slug band ─────────────────────────────────

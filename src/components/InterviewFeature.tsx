@@ -1,7 +1,10 @@
+import type { CSSProperties } from 'react'
 import type { IssueRecord, InterviewSpread } from '../content/issues'
+import { resolveAccentHex } from '../content/issues/accents'
 import { PopShape } from './ornaments'
 import './InterviewFeature.css'
 import './Filmstrip.css'
+import './IssueAccent.css'
 
 interface InterviewFeatureProps {
   spread: InterviewSpread
@@ -20,9 +23,11 @@ interface InterviewFeatureProps {
  */
 export function InterviewFeature({ spread, issue }: InterviewFeatureProps) {
   const stockClass = `pop-stock-${spread.stock ?? 'ivory'}`
+  const accentHex = resolveAccentHex(issue.accent, spread.type)
+  const accentStyle = { '--issue-accent-base': accentHex } as CSSProperties
 
   return (
-    <section className={`pop-interview ${stockClass}`} aria-labelledby="pop-interview-title">
+    <section className={`pop-interview ${stockClass}`} style={accentStyle} aria-labelledby="pop-interview-title">
       <div className="pop-interview-inner">
 
         {/* ── Interview head ─────────────────────────────── */}

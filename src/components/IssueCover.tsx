@@ -1,6 +1,8 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import type { IssueRecord } from '../content/issues'
+import { resolveAccentHex } from '../content/issues/accents'
 import { PopIcon } from './ornaments'
+import './IssueAccent.css'
 
 interface IssueCoverProps {
   /** The issue being rendered. Used for both content (number, month,
@@ -30,6 +32,12 @@ export function IssueCover({ issue, footer }: IssueCoverProps) {
   const layout = issue.coverLayout ?? 'classic'
   const ornament = issue.coverOrnament
   const seal = issue.coverSeal
+  // Adaptive accent — either the issue's declared accent (named
+  // seed or raw hex) or the spread type's default. Pushed onto
+  // the cover root as a CSS custom property; IssueAccent.css
+  // derives the five tones from there.
+  const accentHex = resolveAccentHex(issue.accent, issue.spread?.type)
+  const accentStyle = { '--issue-accent-base': accentHex } as CSSProperties
   const sectionClasses = [
     'pop-cover',
     `pop-stock-${stock}`,
@@ -41,7 +49,7 @@ export function IssueCover({ issue, footer }: IssueCoverProps) {
     .join(' ')
 
   return (
-    <section className={sectionClasses}>
+    <section className={sectionClasses} style={accentStyle}>
       {ornament === 'ink-spread' && <InkSpreadOrnament />}
       {ornament === 'warty-spots' && <WartySpotsOrnament />}
       {ornament === 'flash-burn' && <FlashBurnOrnament />}

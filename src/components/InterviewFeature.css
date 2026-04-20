@@ -33,7 +33,7 @@
 .pop-interview.pop-stock-ink .pop-interview-signoff-text { color: rgba(250, 249, 246, 0.78); }
 .pop-interview.pop-stock-ink .pop-interview-monument { color: var(--pop-ivory); }
 .pop-interview.pop-stock-ink .pop-interview-monument span { color: rgba(250, 249, 246, 0.55); }
-.pop-interview.pop-stock-ink .pop-interview-monument strong { color: var(--pop-tomato); }
+.pop-interview.pop-stock-ink .pop-interview-monument strong { color: var(--issue-accent); }
 
 /* Subject dossier on ink stock — invert the frame so it reads as
    a card stamped onto the dark page, not a hole punched into it. */
@@ -220,7 +220,7 @@
 .pop-interview-q {
   font-style: italic;
   font-weight: 500;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   font-size: clamp(17px, 1.4vw, 20px);
   letter-spacing: -0.01em;
 }
@@ -242,7 +242,7 @@
   font-style: normal;
 }
 
-.pop-interview-q-mark { color: var(--pop-tomato); }
+.pop-interview-q-mark { color: var(--issue-accent); }
 .pop-interview-a-mark { color: var(--pop-coffee); opacity: 0.8; }
 
 .pop-interview-divider {
@@ -259,7 +259,7 @@
   line-height: 0.85;
   float: left;
   margin: 0.08em 0.12em 0 -0.02em;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   font-style: italic;
 }
 

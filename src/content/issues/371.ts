@@ -60,10 +60,18 @@ export const ISSUE_371: IssueRecord = {
   /** Cover identity — see header comment. Ink stock + asymmetric-
       left + flash-burn + FILED seal. The flash-burn is the move:
       a hot white corner that reads as the Boiler-Room moment the
-      shutter opens. Tomato remains the only color. */
+      shutter opens. */
   coverStock: 'ink',
   coverLayout: 'asymmetric-left',
   coverOrnament: 'flash-burn',
+
+  /** First issue of the adaptive-palette era. Cobalt honors the
+      after-hours register chromatically — deep print blue is the
+      color of neon at 2am and of the cool on-camera flash Dañiel
+      uses when the room's tungsten gives out. The rest of the
+      magazine identity (tomato everywhere else) continues to
+      read on issues that omit `accent`. */
+  accent: 'cobalt',
 
   /** FILED-style seal in the top-right. Reads as a press
       credential — the kind a venue hands a cinematographer so

@@ -1,0 +1,129 @@
+/* ──────────────────────────────────────────────────────────────
+   kernel.chat — Adaptive issue accent (tones + stock-lift)
+
+   Wired by IssueCover and each feature component via an inline
+   style setting `--issue-accent-base` on the root. From that one
+   hex, CSS derives five tones with `oklch(from ...)` formulas:
+
+     --issue-accent          — base; kicker, seal, headline <em>
+     --issue-accent-strong   — deeper; pull-quote text, signoff
+     --issue-accent-muted    — pale tinted; supporting surfaces
+     --issue-accent-whisper  — near-white; grounds, tinted cards
+     --issue-accent-ink      — near-black; body-woven emphasis
+
+   Stock-lift — each paper stock sets `--issue-accent-lift`, an
+   offset added to the base lightness before the tones derive.
+   On ink stock the accent lifts 12% so cobalt doesn't disappear
+   into near-black; on butter the lift is slightly negative so
+   the accent doesn't wash against yellow paper. Same accent
+   reads correctly across every stock without per-issue tuning.
+
+   Fallback — when `--issue-accent-base` is not set, the tones
+   fall back to tomato. Every pre-adaptive issue inherits this.
+
+   Dark mode — the tones automatically adapt because the lift is
+   applied via calc(); the `@media (prefers-color-scheme: dark)`
+   block bumps lift further so accents hold up on the inverted
+   ground used by the web companion.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-cover,
+.pop-essay,
+.pop-interview,
+.pop-forecast,
+.pop-dispatch {
+  /* Base — falls back to tomato token when the issue didn't
+     declare an accent. Issues that set `accent` in the TS
+     record get their hex pushed into --issue-accent-base via
+     inline style on the root component. */
+  --issue-accent-base: var(--pop-tomato);
+
+  /* Lift is unitless (0 to 1 scale, mapping to OKLCH l which is
+     also 0-1). Using percentages here breaks oklch() calc math
+     in Chromium — 12% gets misinterpreted as 12.0 and clamps the
+     result to near-black. Stick to unitless 0.0-0.2 range. */
+  --issue-accent-lift: 0;
+
+  /* Tones — derived via OKLCH from the base, with the stock's
+     lift folded into lightness. All math is unitless so it
+     composes predictably across browsers. */
+  --issue-accent: oklch(
+    from var(--issue-accent-base)
+    calc(l + var(--issue-accent-lift))
+    c
+    h
+  );
+  --issue-accent-strong: oklch(
+    from var(--issue-accent-base)
+    calc(l * 0.78 + var(--issue-accent-lift))
+    c
+    h
+  );
+  --issue-accent-muted: oklch(
+    from var(--issue-accent-base)
+    calc(l * 1.15 + var(--issue-accent-lift))
+    calc(c * 0.45)
+    h
+  );
+  --issue-accent-whisper: oklch(
+    from var(--issue-accent-base)
+    calc(0.97 + var(--issue-accent-lift) * 0.1)
+    calc(c * 0.2)
+    h
+  );
+  --issue-accent-ink: oklch(
+    from var(--issue-accent-base)
+    calc(0.18 + var(--issue-accent-lift) * 0.2)
+    calc(c * 0.4)
+    h
+  );
+}
+
+/* ── Stock-lift ─────────────────────────────────────────────
+   Each paper stock nudges the lift so the same accent reads
+   correctly across ivory, butter, kraft, cream, and ink. Values
+   are unitless (OKLCH l is 0-1, so 0.12 ≈ 12 percentage-points). */
+
+.pop-stock-ink    { --issue-accent-lift: 0.18; }  /* lift on near-black paper */
+.pop-stock-kraft  { --issue-accent-lift: 0.04; }  /* camel — slight boost */
+.pop-stock-butter { --issue-accent-lift: -0.03; } /* push slightly on yellow */
+.pop-stock-cream  { --issue-accent-lift: 0; }     /* baseline warm */
+.pop-stock-ivory  { --issue-accent-lift: 0; }     /* baseline */
+
+/* ── Dark-mode adaptation ───────────────────────────────────
+   Dark mode bumps the lift further so accents hold against
+   inverted grounds. */
+@media (prefers-color-scheme: dark) {
+  .pop-cover,
+  .pop-essay,
+  .pop-interview,
+  .pop-forecast,
+  .pop-dispatch {
+    --issue-accent-lift: calc(var(--issue-accent-lift, 0) + 0.08);
+  }
+}
+
+/* ── Reduced-chroma for prefers-contrast: more ──────────────
+   When the reader prefers higher contrast, the muted / whisper
+   tones pull back toward base — the accent stays saturated
+   rather than washing into surfaces. */
+@media (prefers-contrast: more) {
+  .pop-cover,
+  .pop-essay,
+  .pop-interview,
+  .pop-forecast,
+  .pop-dispatch {
+    --issue-accent-muted: oklch(
+      from var(--issue-accent-base)
+      calc(l + var(--issue-accent-lift))
+      calc(c * 0.85)
+      h
+    );
+    --issue-accent-whisper: oklch(
+      from var(--issue-accent-base)
+      calc(0.92 + var(--issue-accent-lift) * 0.1)
+      calc(c * 0.35)
+      h
+    );
+  }
+}

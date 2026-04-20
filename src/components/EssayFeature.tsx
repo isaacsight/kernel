@@ -1,6 +1,9 @@
+import type { CSSProperties } from 'react'
 import type { IssueRecord, EssaySpread } from '../content/issues'
+import { resolveAccentHex } from '../content/issues/accents'
 import './EssayFeature.css'
 import './Filmstrip.css'
+import './IssueAccent.css'
 
 interface EssayFeatureProps {
   spread: EssaySpread
@@ -18,9 +21,11 @@ interface EssayFeatureProps {
  */
 export function EssayFeature({ spread, issue }: EssayFeatureProps) {
   const stockClass = `pop-stock-${spread.stock ?? 'kraft'}`
+  const accentHex = resolveAccentHex(issue.accent, spread.type)
+  const accentStyle = { '--issue-accent-base': accentHex } as CSSProperties
 
   return (
-    <section className={`pop-essay ${stockClass}`} aria-labelledby="pop-essay-title">
+    <section className={`pop-essay ${stockClass}`} style={accentStyle} aria-labelledby="pop-essay-title">
       <div className="pop-essay-inner">
 
         {/* ── Essay head ──────────────────────────────────── */}

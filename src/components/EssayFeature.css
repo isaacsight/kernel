@@ -85,7 +85,7 @@
   font-size: var(--text-xs);
   letter-spacing: var(--letter-spacing-caps);
   text-transform: uppercase;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   font-weight: 700;
 }
 
@@ -114,7 +114,7 @@
   line-height: 0.85;
   float: left;
   margin: 0.08em 0.08em 0 -0.05em;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   font-style: italic;
 }
 
@@ -122,7 +122,7 @@
 .pop-essay-pullquote {
   margin: 40px -8px;
   padding: 24px 0;
-  border-top: 2px solid var(--pop-tomato);
+  border-top: 2px solid var(--issue-accent);
   border-bottom: 1px solid var(--pop-hairline-soft);
   text-align: center;
 }
@@ -134,7 +134,7 @@
   font-size: clamp(22px, 3vw, 32px);
   line-height: 1.25;
   letter-spacing: -0.015em;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   margin: 0;
   max-width: 30ch;
   margin-left: auto;
@@ -178,7 +178,7 @@
   max-width: 640px;
   margin: 0 auto 56px;
   padding: 32px 28px;
-  border-top: 2px solid var(--pop-tomato);
+  border-top: 2px solid var(--issue-accent);
   border-bottom: 1px solid var(--pop-hairline);
 }
 
@@ -228,7 +228,7 @@
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   font-weight: 700;
 }
 
@@ -281,7 +281,7 @@
 .pop-essay-data {
   margin: 48px -8px;
   padding: 28px 16px 24px;
-  border-top: 2px solid var(--pop-tomato);
+  border-top: 2px solid var(--issue-accent);
   border-bottom: 1px solid var(--pop-hairline);
 }
 
@@ -339,7 +339,7 @@
   font-style: italic;
   font-size: clamp(36px, 5vw, 56px);
   line-height: 1;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   letter-spacing: -0.03em;
   text-align: left;
 }
@@ -424,7 +424,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.08em;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   font-weight: 700;
   padding-top: 2px;
 }

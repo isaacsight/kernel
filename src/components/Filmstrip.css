@@ -35,7 +35,7 @@
 
 .pop-filmstrip-kicker {
   letter-spacing: 0.16em;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
 }
 
 .pop-filmstrip-note {
@@ -96,7 +96,7 @@
 .pop-filmstrip-take {
   margin: 8px 0 0;
   letter-spacing: 0.16em;
-  color: var(--pop-tomato);
+  color: var(--issue-accent);
   font-size: 10px;
 }
 

@@ -1,6 +1,9 @@
+import type { CSSProperties } from 'react'
 import type { IssueRecord, ForecastSpread } from '../content/issues'
+import { resolveAccentHex } from '../content/issues/accents'
 import { PopShape } from './ornaments'
 import './ForecastFeature.css'
+import './IssueAccent.css'
 
 interface ForecastFeatureProps {
   spread: ForecastSpread
@@ -19,9 +22,11 @@ interface ForecastFeatureProps {
  */
 export function ForecastFeature({ spread, issue }: ForecastFeatureProps) {
   const stockClass = `pop-stock-${spread.stock ?? 'ink'}`
+  const accentHex = resolveAccentHex(issue.accent, spread.type)
+  const accentStyle = { '--issue-accent-base': accentHex } as CSSProperties
 
   return (
-    <section className={`pop-forecast ${stockClass}`} aria-labelledby="pop-forecast-title">
+    <section className={`pop-forecast ${stockClass}`} style={accentStyle} aria-labelledby="pop-forecast-title">
       <div className="pop-forecast-inner">
 
         {/* ── Header ─────────────────────────────────────── */}

@@ -198,7 +198,7 @@
 .pop-forecast-monument { margin-top: 8px; align-items: center; text-align: center; }
 .pop-stock-ink .pop-forecast-monument { color: var(--pop-ivory); }
 .pop-stock-ink .pop-forecast-monument span { color: var(--pop-sepia); }
-.pop-stock-ink .pop-forecast-monument strong { color: var(--pop-tomato); }
+.pop-stock-ink .pop-forecast-monument strong { color: var(--issue-accent); }
 
 /* ── Mobile ─────────────────────────────────────────────── */
 @media (max-width: 640px) {
