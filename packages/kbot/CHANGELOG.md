@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.99.22 (2026-04-20)
+
+### New: Research-grounded critic taxonomy (RF-01..RF-16)
+- `critic-taxonomy.ts` — 16-class reasoning-failure taxonomy from arXiv:2601.22208 ("Stalled, Biased, and Confused"). Rule-based detectors for fabrication (RF-01), evidential insufficiency (RF-08), simulation/role confusion (RF-10), excessive speculation (RF-11), repetition (RF-12, trajectory-level), and internal contradiction (RF-15).
+- `critic-gate.ts` — `CriticVerdict` now carries an optional `failure_class`. High-confidence taxonomy matches (≥0.8) short-circuit before the LLM critic runs. Per-class attribution makes FP-rate measurable.
+
+### New: TDP DAG node types for hierarchical planner
+- `planner/hierarchical/dag.ts` — Task-Decoupled Planning node shape (arXiv:2601.07577). `DAGNode` wraps `Phase` + `Action`s with explicit parent edges and an output summary. `buildScopedContext` returns ancestor summaries only (the 82%-token-reduction primitive from the paper). `topologicalOrder` + `readyNodes` for execution order.
+- Types-only; Phase 2 wires runtime against `session-planner.ts`.
+
+### Fixed
+- `critic-gate.test.ts` and `growth.test.ts` now import from `vitest` instead of `node:test` — were silently skipped under the `vitest run` harness.
+
+### Tests
+- 781 passing (+50 from 731). New suites: `critic-taxonomy.test.ts`, `planner/hierarchical/dag.test.ts`.
+
 ## 3.41.0 (2026-03-25)
 
 ### New: Memory Hot-Swap

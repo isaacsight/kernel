@@ -6,6 +6,7 @@
  * Hard disable: env KBOT_NO_CRITIC=1.
  */
 import { loadConfig } from './auth.js';
+import { classifyToolResult } from './critic-taxonomy.js';
 const TRUSTED_TOOLS = new Set([
     'read', 'read_file', 'kbot_read', 'kbot_read_file',
     'glob', 'kbot_glob', 'grep', 'kbot_grep', 'list_directory', 'ls',
@@ -166,13 +167,15 @@ export async function gateToolResult(tool, args, result, opts = {}) {
     if (isTriviallyValid(tool, resultText)) {
         return { accept: true, confidence: 0.9, reason: 'trivial-valid fast path' };
     }
-    // If result is empty, reject without calling LLM.
-    if (!resultText || resultText.trim().length === 0) {
+    // Rule-based RF classifier — cheap, no LLM. High-confidence hits short-circuit.
+    const rf = classifyToolResult(resultText);
+    if (rf && rf.confidence >= 0.8) {
         return {
             accept: false,
-            confidence: 0.9,
-            reason: 'empty tool result',
-            retry_hint: 'Tool produced no output. Try different arguments or a different tool.',
+            confidence: rf.confidence,
+            reason: `${rf.class}: ${rf.evidence}`,
+            retry_hint: 'Taxonomy match — try different arguments or a different tool.',
+            failure_class: rf.class,
         };
     }
     const userPrompt = buildUserPrompt(tool, args, resultText);

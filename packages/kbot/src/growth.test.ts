@@ -1,6 +1,6 @@
 // kbot growth — tests
 // Run: npx tsx --test src/growth.test.ts
-import { describe, it, beforeEach, afterEach } from 'node:test'
+import { describe, it, beforeEach, afterEach } from 'vitest'
 import assert from 'node:assert/strict'
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'

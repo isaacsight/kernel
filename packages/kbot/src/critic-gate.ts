@@ -7,12 +7,15 @@
  */
 
 import { loadConfig } from './auth.js'
+import { classifyToolResult, type RFClass } from './critic-taxonomy.js'
 
 export interface CriticVerdict {
   accept: boolean
   reason?: string
   retry_hint?: string
   confidence: number // 0..1
+  /** RF taxonomy class when a rule-based classifier fired (arXiv:2601.22208). */
+  failure_class?: RFClass
 }
 
 export interface GateOpts {
@@ -190,13 +193,15 @@ export async function gateToolResult(
     return { accept: true, confidence: 0.9, reason: 'trivial-valid fast path' }
   }
 
-  // If result is empty, reject without calling LLM.
-  if (!resultText || resultText.trim().length === 0) {
+  // Rule-based RF classifier — cheap, no LLM. High-confidence hits short-circuit.
+  const rf = classifyToolResult(resultText)
+  if (rf && rf.confidence >= 0.8) {
     return {
       accept: false,
-      confidence: 0.9,
-      reason: 'empty tool result',
-      retry_hint: 'Tool produced no output. Try different arguments or a different tool.',
+      confidence: rf.confidence,
+      reason: `${rf.class}: ${rf.evidence}`,
+      retry_hint: 'Taxonomy match — try different arguments or a different tool.',
+      failure_class: rf.class,
     }
   }
 

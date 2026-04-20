@@ -2,7 +2,7 @@
 // HOME is redirected before dynamic import so auth.ts's module-level
 // KBOT_DIR (from homedir()) points at an empty dir — loadConfig() returns
 // null, letting us test the "no provider" branch without real keys.
-import { describe, it, after, beforeEach, afterEach } from 'node:test'
+import { describe, it, afterAll as after, beforeEach, afterEach } from 'vitest'
 import assert from 'node:assert/strict'
 import { mkdirSync, rmSync } from 'node:fs'
 import { join } from 'node:path'

@@ -5,11 +5,14 @@
  * ~/.kbot/config.json: critic_enabled (bool), critic_strictness (0..1).
  * Hard disable: env KBOT_NO_CRITIC=1.
  */
+import { type RFClass } from './critic-taxonomy.js';
 export interface CriticVerdict {
     accept: boolean;
     reason?: string;
     retry_hint?: string;
     confidence: number;
+    /** RF taxonomy class when a rule-based classifier fired (arXiv:2601.22208). */
+    failure_class?: RFClass;
 }
 export interface GateOpts {
     strictness?: number;
