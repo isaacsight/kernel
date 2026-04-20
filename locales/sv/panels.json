@@ -1,0 +1,236 @@
+{
+  "goals": {
+    "title": "Mål",
+    "emptyTitle": "Sätt ditt första mål",
+    "emptyDesc": "Följ det som betyder något — Kernel följer upp dina framsteg automatiskt.",
+    "createGoal": "Skapa mål",
+    "addGoal": "Lägg till mål",
+    "completed": "Slutförda ({{count}})",
+    "target": "Mål: {{date}}",
+    "priority": {
+      "low": "Låg",
+      "medium": "Medium",
+      "high": "Hög"
+    },
+    "frequency": {
+      "daily": "Daglig incheckning",
+      "weekly": "Veckovis",
+      "biweekly": "Varannan vecka",
+      "monthly": "Månadsvis"
+    },
+    "errors": {
+      "addFailed": "Misslyckades med att lägga till mål",
+      "updateFailed": "Misslyckades med att uppdatera delmål",
+      "completeFailed": "Misslyckades med att slutföra mål",
+      "deleteFailed": "Misslyckades med att radera mål"
+    },
+    "deleteConfirm": "Radera detta mål? Detta kan inte ångras.",
+    "loading": "Laddar mål...",
+    "titlePlaceholder": "Vad jobbar du mot?",
+    "descPlaceholder": "Lägg till detaljer (valfritt)..."
+  },
+  "workflows": {
+    "title": "Arbetsflöden",
+    "loading": "Laddar arbetsflöden...",
+    "emptyTitle": "Bygg ditt första arbetsflöde",
+    "emptyDesc": "Automatisera flerstegsuppgifter — Kernel kör dem exakt som du designar dem.",
+    "newWorkflow": "Nytt arbetsflöde",
+    "createWorkflow": "Skapa arbetsflöde",
+    "runCount_one": "Körd {{count}} gång",
+    "runCount_other": "Körd {{count}} gånger",
+    "errors": {
+      "saveFailed": "Misslyckades med att spara arbetsflöde",
+      "deleteFailed": "Misslyckades med att radera arbetsflöde"
+    },
+    "deleteConfirm": "Radera detta arbetsflöde? Detta kan inte ångras."
+  },
+  "scheduled": {
+    "title": "Schemalagda uppgifter",
+    "loading": "Laddar uppgifter...",
+    "emptyTitle": "Schemalägg din första uppgift",
+    "emptyDesc": "Ställ in och glöm bort — Kernel kör uppgifter enligt ditt schema.",
+    "createTask": "Skapa uppgift",
+    "schedule": "Schemalägg",
+    "taskTypes": {
+      "reminder": "Påminnelse",
+      "workflow": "Kör arbetsflöde",
+      "briefing": "Daglig briefing",
+      "goalCheckin": "Mål-incheckning"
+    },
+    "presets": {
+      "daily": "Varje dag",
+      "weekdays": "Vardagar",
+      "weekly": "Veckovis (mån)",
+      "once": "En gång"
+    },
+    "channels": {
+      "inApp": "I appen",
+      "email": "E-post",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Misslyckades med att skapa schemalagd uppgift",
+      "updateFailed": "Misslyckades med att uppdatera uppgift",
+      "deleteFailed": "Misslyckades med att radera uppgift"
+    },
+    "deleteConfirm": "Radera denna schemalagda uppgift?"
+  },
+  "briefings": {
+    "title": "Briefingar",
+    "generateTooltip": "Generera en ny briefing baserat på dina intressen och senaste aktivitet",
+    "generating": "Genererar...",
+    "newBriefing": "Ny briefing",
+    "phases": {
+      "planning": "Planerar",
+      "researching": "Forskar",
+      "writing": "Skriver"
+    },
+    "loading": "Laddar briefingar...",
+    "emptyTitle": "Din dagliga briefing",
+    "emptyDesc": "Få en personlig sammanfattning av nyheter och insikter skräddarsydd efter dina intressen och mål.",
+    "generateFirst": "Generera din första briefing",
+    "errorTitle": "Denna briefing kunde inte genereras",
+    "errorDesc": "Forskningssteget returnerade inte tillräckligt med data för att skapa en användbar sammanfattning. Detta kan hända om söktjänsten var tillfälligt otillgänglig.",
+    "readTime": "{{count}} min läsning",
+    "wordCount": "{{count}} ord",
+    "topicsCovered": "Ämnen som täcks",
+    "continueReading": "Fortsätt läsa",
+    "readFull": "Läs hela briefingen",
+    "goDeeper": "Gå djupare i chatten",
+    "saveAsGoal": "Spara slutsatser som mål",
+    "errors": {
+      "generateFailed": "Misslyckades med att generera briefing"
+    },
+    "toast": {
+      "generated": "Briefing genererad",
+      "removed": "Briefing borttagen"
+    }
+  },
+  "stats": {
+    "title": "Din statistik",
+    "loading": "Laddar...",
+    "loadError": "Kunde inte ladda statistik.",
+    "messages": "Meddelanden",
+    "conversations": "Konversationer",
+    "entities": "Entiteter",
+    "helpful": "Hjälpsam",
+    "agentUsage": "Agent-användning",
+    "topTopics": "Toppämnen",
+    "activity": "Aktivitet",
+    "memberSince": "Medlem sedan {{date}}"
+  },
+  "kg": {
+    "title": "Vad Kernel vet",
+    "emptyTitle": "Kernel har inte lärt sig något än.",
+    "emptyHint": "Fortsätt chatta — den plockar upp folk, projekt och koncept som du nämner.",
+    "entitiesCount": "{{count}} entiteter",
+    "connectionsCount": "{{count}} kopplingar",
+    "confident": "{{value}}% säker",
+    "mentioned": "nämnd {{count}}x",
+    "types": {
+      "person": "Personer",
+      "company": "Företag",
+      "project": "Projekt",
+      "concept": "Koncept",
+      "preference": "Preferenser",
+      "location": "Platser"
+    }
+  },
+  "insights": {
+    "title": "Insikter",
+    "sections": {
+      "world": "Du",
+      "beliefs": "Övertygelser",
+      "memory": "Minne",
+      "reflections": "Kvalitet",
+      "agents": "Agenter"
+    },
+    "howISeeYou": "Hur jag ser dig",
+    "apparentGoal": "Tydligt mål",
+    "situation": "Nuvarande situation",
+    "conviction": "Övertygelse",
+    "whatIBelieve": "Vad jag tror",
+    "noBeliefsYet": "Inga övertygelser ännu. Fortsätt chatta — jag lär mig vad som är viktigt för dig.",
+    "challengeBelief": "Ifrågasätt denna övertygelse",
+    "dismissBelief": "Avfärda denna övertygelse",
+    "myMemory": "Mitt minne av dig",
+    "noMemoryYet": "Inget minne ännu. Jag lär mig om dig när vi pratar.",
+    "commStyle": "Kommunikationsstil",
+    "memory": {
+      "interests": "Intressen",
+      "goals": "Mål",
+      "facts": "Om dig",
+      "preferences": "Preferenser"
+    },
+    "performance": "Hur jag presterar",
+    "noReflectionsYet": "Inga reflektioner ännu. Jag börjar spåra kvalitet efter några konversationer.",
+    "avgQuality": "snitt kvalitet (senaste 20)",
+    "dims": {
+      "substance": "Substans",
+      "coherence": "Koherens",
+      "relevance": "Relevans",
+      "brevity": "Korthet",
+      "craft": "Hantverk"
+    },
+    "recentLessons": "Senaste lärdomar",
+    "patternNotes": "Mönsteranteckningar",
+    "agentPerformance": "Agentprestanda",
+    "noAgentDataYet": "Ingen agentdata ännu.",
+    "quality": "Kvalitet",
+    "usage": "Användning",
+    "challengedStat": "{{count}}x ifrågasatt",
+    "reinforcedStat": "{{count}}x förstärkt",
+    "challengeAction": "ifrågasätt"
+  },
+  "share": {
+    "title": "Dela konversation",
+    "checking": "Kollar efter befintlig länk...",
+    "existingLink": "Denna konversation har redan en offentlig länk.",
+    "anyoneCanView": "Alla med denna länk kan se konversationen.",
+    "revokeLink": "Återkalla länk",
+    "revoking": "Återkallar...",
+    "createDesc": "Skapa en offentlig länk som alla kan se. Ingen inloggning krävs.",
+    "linkExpires": "Länken går ut:",
+    "never": "Aldrig",
+    "hours24": "24 timmar",
+    "days7": "7 dagar",
+    "days30": "30 dagar",
+    "createLink": "Skapa delningslänk",
+    "creating": "Skapar...",
+    "errors": {
+      "createFailed": "Misslyckades med att skapa delningslänk",
+      "revokeFailed": "Misslyckades med att återkalla länk"
+    },
+    "toast": {
+      "revoked": "Delningslänk återkallad"
+    },
+    "shareableLink": "Delningslänk",
+    "copyLink": "Kopiera länk",
+    "copied": "Kopierat",
+    "copiedAnnounce": "Länk kopierad till urklipp",
+    "shareVia": "Dela via...",
+    "limitReached": "Du har nått din dagliga gräns på {{limit}} delade länkar. Uppgradera till Pro för fler delningar.",
+    "limitHint": "{{used}}/{{limit}} länkar använda idag",
+    "dailyCount": "{{used}}/{{limit}} kostnadsfria delningar använda idag"
+  },
+  "mirror": {
+    "title": "Spegeln",
+    "emptyTitle": "Spegeln håller fortfarande på att formas.",
+    "emptyDesc": "Fortsätt prata — Kernels agenter lär sig att se dig från olika vinklar.",
+    "convergenceTitle": "Vad spegeln ser",
+    "convergenceDesc": "Insikter som bara uppstår när flera agenter jämför anteckningar.",
+    "facetsTitle": "Agentperspektiv",
+    "facetsDesc": "Varje agent observerar en annan dimension av vem du är.",
+    "observations": "observationer",
+    "patterns": "Mönster",
+    "convergenceCount": "Konvergerat {{count}} gånger",
+    "dimensions": {
+      "relationship": "Relation",
+      "curiosity": "Nyfikenhet",
+      "craft": "Skicklighet",
+      "voice": "Röst",
+      "judgment": "Omdöme",
+      "arc": "Båge"
+    }
+  }
+}

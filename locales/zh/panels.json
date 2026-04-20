@@ -1,0 +1,236 @@
+{
+  "goals": {
+    "title": "目标",
+    "emptyTitle": "设定您的第一个目标",
+    "emptyDesc": "追踪重要事项 —— Kernel 会自动检查您的进度。",
+    "createGoal": "创建目标",
+    "addGoal": "添加目标",
+    "completed": "已完成 ({{count}})",
+    "target": "目标日期: {{date}}",
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "frequency": {
+      "daily": "每日检查",
+      "weekly": "每周",
+      "biweekly": "每两周",
+      "monthly": "每月"
+    },
+    "errors": {
+      "addFailed": "添加目标失败",
+      "updateFailed": "更新里程碑失败",
+      "completeFailed": "完成目标失败",
+      "deleteFailed": "删除目标失败"
+    },
+    "deleteConfirm": "删除此目标？此操作不可撤销。",
+    "loading": "正在加载目标...",
+    "titlePlaceholder": "您正在努力实现什么？",
+    "descPlaceholder": "添加一些细节（可选）..."
+  },
+  "workflows": {
+    "title": "工作流",
+    "loading": "正在加载工作流...",
+    "emptyTitle": "构建您的第一个工作流",
+    "emptyDesc": "自动化多步骤任务 —— Kernel 将完全按照您的设计运行。",
+    "newWorkflow": "新工作流",
+    "createWorkflow": "创建工作流",
+    "runCount_one": "运行 {{count}} 次",
+    "runCount_other": "运行 {{count}} 次",
+    "errors": {
+      "saveFailed": "保存工作流失败",
+      "deleteFailed": "删除工作流失败"
+    },
+    "deleteConfirm": "删除此工作流？此操作不可撤销。"
+  },
+  "scheduled": {
+    "title": "计划任务",
+    "loading": "正在加载任务...",
+    "emptyTitle": "安排您的第一个任务",
+    "emptyDesc": "只需设定好，Kernel 会按您的计划运行任务。",
+    "createTask": "创建任务",
+    "schedule": "安排计划",
+    "taskTypes": {
+      "reminder": "提醒",
+      "workflow": "运行工作流",
+      "briefing": "每日简报",
+      "goalCheckin": "目标检查"
+    },
+    "presets": {
+      "daily": "每日",
+      "weekdays": "工作日",
+      "weekly": "每周 (周一)",
+      "once": "一次性"
+    },
+    "channels": {
+      "inApp": "应用内",
+      "email": "电子邮件",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "创建计划任务失败",
+      "updateFailed": "更新任务失败",
+      "deleteFailed": "删除任务失败"
+    },
+    "deleteConfirm": "删除此计划任务？"
+  },
+  "briefings": {
+    "title": "简报",
+    "generateTooltip": "根据您的兴趣和近期活动生成新简报",
+    "generating": "正在生成...",
+    "newBriefing": "新简报",
+    "phases": {
+      "planning": "规划中",
+      "researching": "调研中",
+      "writing": "撰写中"
+    },
+    "loading": "正在加载简报...",
+    "emptyTitle": "您的每日简报",
+    "emptyDesc": "获取为您量身定制的新闻与见解摘要，契合您的兴趣与目标。",
+    "generateFirst": "生成您的首份简报",
+    "errorTitle": "简报生成失败",
+    "errorDesc": "调研步骤未能返回足够的数据来创建有用的摘要。如果搜索服务暂时不可用，可能会发生这种情况。",
+    "readTime": "阅读时长 {{count}} 分钟",
+    "wordCount": "字数 {{count}}",
+    "topicsCovered": "涵盖主题",
+    "continueReading": "继续阅读",
+    "readFull": "阅读简报全文",
+    "goDeeper": "去对话中深入讨论",
+    "saveAsGoal": "将核心观点存为目标",
+    "errors": {
+      "generateFailed": "生成简报失败"
+    },
+    "toast": {
+      "generated": "简报已生成",
+      "removed": "简报已移除"
+    }
+  },
+  "stats": {
+    "title": "您的统计",
+    "loading": "正在加载...",
+    "loadError": "无法加载统计数据。",
+    "messages": "消息数",
+    "conversations": "对话数",
+    "entities": "实体数",
+    "helpful": "有用",
+    "agentUsage": "代理使用情况",
+    "topTopics": "主要话题",
+    "activity": "活动",
+    "memberSince": "注册时间 {{date}}"
+  },
+  "kg": {
+    "title": "Kernel 掌握的信息",
+    "emptyTitle": "Kernel 尚未学习到任何信息。",
+    "emptyHint": "继续交谈 —— 它会记录您提到的个人、项目和概念。",
+    "entitiesCount": "{{count}} 个实体",
+    "connectionsCount": "{{count}} 条连接",
+    "confident": "置信度 {{value}}%",
+    "mentioned": "提及 {{count}} 次",
+    "types": {
+      "person": "人物",
+      "company": "公司",
+      "project": "项目",
+      "concept": "概念",
+      "preference": "偏好",
+      "location": "地点"
+    }
+  },
+  "insights": {
+    "title": "洞察",
+    "sections": {
+      "world": "你",
+      "beliefs": "信念",
+      "memory": "记忆",
+      "reflections": "质量",
+      "agents": "代理"
+    },
+    "howISeeYou": "我眼中的你",
+    "apparentGoal": "可能的目标",
+    "situation": "当前状况",
+    "conviction": "确信度",
+    "whatIBelieve": "我的看法",
+    "noBeliefsYet": "还没有形成任何看法。继续聊天吧——我会了解什么对你重要。",
+    "challengeBelief": "质疑这个看法",
+    "dismissBelief": "忽略这个看法",
+    "myMemory": "我对你的记忆",
+    "noMemoryYet": "还没有记忆。随着我们的交谈，我会了解你。",
+    "commStyle": "沟通风格",
+    "memory": {
+      "interests": "兴趣",
+      "goals": "目标",
+      "facts": "关于你",
+      "preferences": "偏好"
+    },
+    "performance": "我的表现",
+    "noReflectionsYet": "还没有反思。几次对话后，我会开始追踪质量。",
+    "avgQuality": "平均质量（最近 20 条）",
+    "dims": {
+      "substance": "深度",
+      "coherence": "连贯性",
+      "relevance": "相关性",
+      "brevity": "简洁度",
+      "craft": "表达力"
+    },
+    "recentLessons": "最近的经验",
+    "patternNotes": "模式记录",
+    "agentPerformance": "代理表现",
+    "noAgentDataYet": "暂无代理数据。",
+    "quality": "质量",
+    "usage": "使用情况",
+    "challengedStat": "{{count}}次质疑",
+    "reinforcedStat": "{{count}}次强化",
+    "challengeAction": "质疑"
+  },
+  "share": {
+    "title": "分享对话",
+    "checking": "正在检查现有链接...",
+    "existingLink": "此对话已有公开链接。",
+    "anyoneCanView": "任何拥有此链接的人都可以查看此对话。",
+    "revokeLink": "撤销链接",
+    "revoking": "正在撤销...",
+    "createDesc": "创建一个任何人都可以查看的公开链接。无需登录。",
+    "linkExpires": "链接有效期:",
+    "never": "永久",
+    "hours24": "24 小时",
+    "days7": "7 天",
+    "days30": "30 天",
+    "createLink": "创建分享链接",
+    "creating": "正在创建...",
+    "errors": {
+      "createFailed": "创建分享链接失败",
+      "revokeFailed": "撤销链接失败"
+    },
+    "toast": {
+      "revoked": "分享链接已撤销"
+    },
+    "shareableLink": "可分享链接",
+    "copyLink": "复制链接",
+    "copied": "已复制",
+    "copiedAnnounce": "链接已复制到剪贴板",
+    "shareVia": "通过...分享",
+    "limitReached": "您已达到每日分享链接的限制 {{limit}} 个。 升级到 Pro 以获得更多分享。",
+    "limitHint": "{{used}}/{{limit}} 个链接今天已使用",
+    "dailyCount": "{{used}}/{{limit}} 个免费分享今天已使用"
+  },
+  "mirror": {
+    "title": "镜像",
+    "emptyTitle": "镜像仍在构建中。",
+    "emptyDesc": "继续对话 — Kernel 的代理正在学习从不同角度看待您。",
+    "convergenceTitle": "镜像所见",
+    "convergenceDesc": "只有当多个智能体交流时才能浮现的洞见。",
+    "facetsTitle": "智能体视角",
+    "facetsDesc": "每个智能体观察你不同的一面。",
+    "observations": "观察结果",
+    "patterns": "模式",
+    "convergenceCount": "汇聚 {{count}} 次",
+    "dimensions": {
+      "relationship": "人际关系",
+      "curiosity": "好奇心",
+      "craft": "技艺",
+      "voice": "表达",
+      "judgment": "判断力",
+      "arc": "发展轨迹"
+    }
+  }
+}

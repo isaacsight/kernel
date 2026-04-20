@@ -1,0 +1,192 @@
+{
+  "tagline": "Een persoonlijke AI die je onthoudt, met je meedenkt en steeds beter wordt.",
+  "placeholder": "Praat met kernel.chat...",
+  "welcomeToPro": "Welkom bij Kernel Pro!",
+  "menu": {
+    "shareConversation": "Gesprek delen",
+    "exportMarkdown": "Exporteren als Markdown",
+    "goals": "Doelen",
+    "workflows": "Workflows",
+    "scheduledTasks": "Geplande taken",
+    "dailyBriefing": "Dagelijkse briefing",
+    "whatKernelKnows": "Wat Kernel weet",
+    "yourStats": "Jouw statistieken",
+    "insights": "Inzichten",
+    "upgradeToPro": "Upgraden naar Pro",
+    "manageSubscription": "Abonnement beheren",
+    "signOut": "Uitloggen",
+    "deleteAccount": "Account verwijderen",
+    "notifications": "Meldingen",
+    "notifInApp": "In-app meldingen",
+    "notifBriefings": "Briefing-meldingen",
+    "notifGoals": "Doelupdates",
+    "notifReminders": "Herinneringen",
+    "notifPush": "Pushmeldingen",
+    "darkMode": "Donkere modus",
+    "theme": "Thema",
+    "themeLight": "Licht",
+    "themeDark": "Donker",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Agent Builder",
+    "agentLibrary": "Agentbibliotheek",
+    "backgroundAgents": "Achtergrondagenten",
+    "myContent": "Mijn inhoud",
+    "bookmarks": "Bladwijzers",
+    "architecture": "Architectuur",
+    "designSystem": "Ontwerpsysteem",
+    "routingInsights": "Routeringsinzichten",
+    "system": "Systeem",
+    "communications": "Communicatie",
+    "adaptiveSystem": "Adaptief systeem",
+    "usage": "Gebruik",
+    "mirror": "De Spiegel",
+    "projectFiles": "Projectbestanden",
+    "imageGallery": "Afbeeldingengalerij",
+    "knowledgeBase": "Kennisbank",
+    "social": "Sociale media",
+    "platformEngine": "Content pipeline",
+    "explore": "Ontdekken",
+    "accountSettings": "Accountinstellingen",
+    "notifProactive": "Proactieve inzichten"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Briefing van vandaag",
+    "read": "Lezen",
+    "discuss": "Bespreken"
+  },
+  "upgrade": {
+    "title": "Je hebt je {{limit}} gratis berichten gebruikt",
+    "subtitle": "Pro geeft je onbeperkt berichten, een geheugen dat je leert kennen en volledige briefings.",
+    "resetsAt": "Je berichten worden vernieuwd om {{time}}. Upgrade voor 100 berichten per dag.",
+    "features": {
+      "unlimitedMessages": "Onbeperkt berichten",
+      "deepResearch": "Uitgebreid denken (30/mnd)",
+      "multiAgent": "Bestandsanalyse (10/mnd)",
+      "multiStep": "Doelen, spraak en agentische workflows",
+      "persistentMemory": "Geheugen + proactieve briefings"
+    },
+    "button": "Ga Pro — $29/mnd",
+    "annualButton": "$290/jaar — bespaar $58",
+    "buttonLoading": "Checkout openen...",
+    "maybeLater": "Misschien later",
+    "learnedTitle": "Wat Kernel over jou heeft geleerd",
+    "learnedCta": "Kom morgen terug en zet het gesprek voort.",
+    "maxButton": "Ga Max — €49/maand",
+    "maxAnnualButton": "€490/jaar — bespaar €98"
+  },
+  "deleteConfirm": {
+    "title": "Je account verwijderen?",
+    "subtitle": "Dit verwijdert permanent al je gegevens: gesprekken, geheugen en voorkeuren. Dit kan niet ongedaan worden gemaakt.",
+    "subtitleWithSub": " Je abonnement wordt ook opgezegd.",
+    "typeDelete": "Typ DELETE om te bevestigen:",
+    "confirm": "Ja, verwijder mijn account",
+    "confirming": "Verwijderen..."
+  },
+  "status": {
+    "assemblingAgents": "Agenten samenstellen...",
+    "agentsCollaborating": "Agenten werken samen",
+    "synthesizingPerspectives": "Perspectieven samenvoegen...",
+    "routingToSpecialist": "Doorsturen naar specialist...",
+    "isWorking": "{{agent}} is bezig...",
+    "lowConfidence": "lage betrouwbaarheid"
+  },
+  "feedback": {
+    "save": "Opslaan",
+    "cancel": "Annuleren"
+  },
+  "messagesRemaining": "{{count}} berichten resterend",
+  "lastFreeMessage": "Laatste gratis bericht",
+  "menuSection": {
+    "ai": "AI & Agents",
+    "content": "Content & Kennis",
+    "insights": "Inzichten & Doelen",
+    "system": "Instellingen & Systeem"
+  },
+  "usage": {
+    "title": "Gebruik",
+    "loading": "Gebruikgegevens aan het laden...",
+    "retry": "Opnieuw proberen",
+    "last30days": "Laatste 30 dagen",
+    "onPace": "Op schema voor {{projected}} van {{limit}} berichten",
+    "overLimit": "Op schema om je {{limit}} berichtenlimiet te overschrijden",
+    "byFeature": "Per functie",
+    "dailyTrend": "30-dagen trend",
+    "recommendation": "Aanbeveling",
+    "upgrade": "Upgraden"
+  },
+  "entity": {
+    "evolved": "Geëvolueerd naar {{tier}}",
+    "streak": "Dag {{count}}",
+    "goalCheckIn": "Check-in: {{title}}",
+    "mood": {
+      "happy": "blij",
+      "excited": "enthousiast",
+      "content": "tevreden",
+      "sad": "verdrietig",
+      "sleepy": "slaperig",
+      "lonely": "eenzaam",
+      "bored": "verveeld"
+    }
+  },
+  "entityInfo": {
+    "mood": "Stemming",
+    "streak": "Streep",
+    "days": "dagen",
+    "focus": "Focus"
+  },
+  "nudge": {
+    "insights": "Je hebt inmiddels al een paar gesprekken gehad — Kernel vindt patronen in waar je over praat.",
+    "knowledge": "Je kennisgrafiek groeit — bekijk de verbindingen die Kernel uit je gesprekken heeft in kaart gebracht.",
+    "stats": "Je hebt een doel bereikt — bekijk je statistieken om te zien hoe je gebruik evolueert.",
+    "workflows": "Je gebruikt Kernel regelmatig — workflows kunnen je terugkerende taken automatiseren.",
+    "showMe": "Laat me zien",
+    "notNow": "Niet nu"
+  },
+  "valuePreview": {
+    "message": "Pro-leden ontvangen dagelijkse briefings, diepgaand onderzoek en persistent geheugen.",
+    "gotIt": "Begrepen"
+  },
+  "messagesLeft": "{{count}} berichten over",
+  "agentWhy": {
+    "label": "Waarom?"
+  },
+  "thinking": {
+    "label": "Uitgebreid nadenken",
+    "duration": "Nagedacht {{seconds}}s",
+    "streaming": "Denkt na...",
+    "toggle": "Schakel uitgebreid nadenken in",
+    "tooltip": "Denk dieper na voordat je antwoordt"
+  },
+  "explain": {
+    "toggle": "Schakel uitlegmodus in",
+    "tooltip": "Uitlegmodus — stapsgewijze code"
+  },
+  "document": {
+    "active": "Analyseert: {{name}}",
+    "clear": "Document wissen",
+    "contextHint": "Stel vervolgvragen over dit document"
+  },
+  "proactive": {
+    "noticed": "Kernel heeft iets opgemerkt...",
+    "notification": "Kernel heeft een observatie voor je",
+    "explore": "Laten we dit verkennen"
+  },
+  "tour": {
+    "entity": "Dit is je Kernel entity. Deze verandert naarmate je chat — tik erop om de stemming, reeks en groeitier te zien.",
+    "moreMenu": "Tik hier voor alle functies van Kernel: agents, kennisbank, inzichten en meer.",
+    "inputBar": "Begin hier een gesprek. Voeg bestanden toe, schakel uitlegmodus in, of zeg gewoon hallo.",
+    "gotIt": "Begrepen",
+    "skip": "Rondleiding overslaan"
+  },
+  "workflow": {
+    "planning": "Stappen plannen...",
+    "executing": "Uitvoeren: {{step}}",
+    "complete": "Workflow voltooid",
+    "failed": "Stap mislukt: {{step}}",
+    "cancel": "Workflow annuleren",
+    "cancelled": "Workflow geannuleerd"
+  }
+}

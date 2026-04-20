@@ -1,0 +1,192 @@
+{
+  "tagline": "AI אישי שזוכר אותך, חושב איתך ומשתפר עם הזמן.",
+  "placeholder": "דבר עם kernel.chat...",
+  "welcomeToPro": "ברוך הבא ל-Kernel Pro!",
+  "menu": {
+    "shareConversation": "שתף שיחה",
+    "exportMarkdown": "ייצוא כ-Markdown",
+    "goals": "יעדים",
+    "workflows": "תהליכי עבודה",
+    "scheduledTasks": "משימות מתוזמנות",
+    "dailyBriefing": "תדרוך יומי",
+    "whatKernelKnows": "מה Kernel יודע",
+    "yourStats": "הסטטיסטיקה שלך",
+    "insights": "תובנות",
+    "upgradeToPro": "שדרג ל-Pro",
+    "manageSubscription": "נהל מנוי",
+    "signOut": "התנתק",
+    "deleteAccount": "מחק חשבון",
+    "notifications": "התראות",
+    "notifInApp": "התראות באפליקציה",
+    "notifBriefings": "התראות תדריך",
+    "notifGoals": "עדכוני יעדים",
+    "notifReminders": "תזכורות",
+    "notifPush": "התראות Push",
+    "darkMode": "מצב כהה",
+    "theme": "ערכת נושא",
+    "themeLight": "בהיר",
+    "themeDark": "כהה",
+    "themeEink": "E-Ink",
+    "agentBuilder": "בונה סוכנים",
+    "agentLibrary": "ספריית סוכנים",
+    "backgroundAgents": "סוכני רקע",
+    "myContent": "התוכן שלי",
+    "bookmarks": "סימניות",
+    "architecture": "ארכיטקטורה",
+    "designSystem": "מערכת עיצוב",
+    "routingInsights": "תובנות ניתוב",
+    "system": "מערכת",
+    "communications": "תקשורת",
+    "adaptiveSystem": "מערכת אדפטיבית",
+    "usage": "שימוש",
+    "mirror": "המשטח",
+    "projectFiles": "קבצי פרויקט",
+    "imageGallery": "גלריית תמונות",
+    "knowledgeBase": "בסיס ידע",
+    "social": "מדיה חברתית",
+    "platformEngine": "צינור תוכן",
+    "explore": "לגלות",
+    "accountSettings": "הגדרות חשבון",
+    "notifProactive": "תובנות יוזמות"
+  },
+  "admin": "מנהל",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "התדרוך של היום",
+    "read": "קרא",
+    "discuss": "דון"
+  },
+  "upgrade": {
+    "title": "ניצלת את {{limit}} ההודעות החינמיות שלך",
+    "subtitle": "Pro נותן לך הודעות ללא הגבלה, זיכרון שלומד אותך, ותדריכים מלאים.",
+    "resetsAt": "ההודעות שלך מתחדשות ב-{{time}}. שדרג ל-100 הודעות ביום.",
+    "features": {
+      "unlimitedMessages": "הודעות ללא הגבלה",
+      "deepResearch": "חשיבה מורחבת (30/חודש)",
+      "multiAgent": "ניתוח קבצים (10/חודש)",
+      "multiStep": "יעדים, קול ותהליכי עבודה סוכניים",
+      "persistentMemory": "זיכרון + תדריכים יזומים"
+    },
+    "button": "עבור ל-Pro — $29/חודש",
+    "annualButton": "$290/שנה — חסוך $58",
+    "buttonLoading": "פותח תשלום...",
+    "maybeLater": "אולי מאוחר יותר",
+    "learnedTitle": "מה קרנל למד עליך",
+    "learnedCta": "חזור מחר ולהמשיך את השיחה.",
+    "maxButton": "עבור ל-Max — $49/חודש",
+    "maxAnnualButton": "$490/שנה — חסוך $98"
+  },
+  "deleteConfirm": {
+    "title": "למחוק את החשבון?",
+    "subtitle": "פעולה זו תמחק לצמיתות את כל הנתונים שלך: שיחות, זיכרון והעדפות. לא ניתן לבטל פעולה זו.",
+    "subtitleWithSub": " המנוי שלך יבוטל גם כן.",
+    "typeDelete": "הקלד DELETE כדי לאשר:",
+    "confirm": "כן, מחק את החשבון שלי",
+    "confirming": "מוחק..."
+  },
+  "status": {
+    "assemblingAgents": "מקבץ סוכנים...",
+    "agentsCollaborating": "סוכנים משתפים פעולה",
+    "synthesizingPerspectives": "מסנתז נקודות מבט...",
+    "routingToSpecialist": "מנתב למומחה...",
+    "isWorking": "{{agent}} עובד...",
+    "lowConfidence": "ביטחון נמוך"
+  },
+  "feedback": {
+    "save": "שמור",
+    "cancel": "ביטול"
+  },
+  "messagesRemaining": "נותרו {{count}} הודעות",
+  "lastFreeMessage": "הודעה חינמית אחרונה",
+  "menuSection": {
+    "ai": "AI וסוכנים",
+    "content": "תוכן וידע",
+    "insights": "תובנות ומטרות",
+    "system": "הגדרות ומערכת"
+  },
+  "usage": {
+    "title": "שימוש",
+    "loading": "טוען נתוני שימוש...",
+    "retry": "נסה שוב",
+    "last30days": "30 יום אחרונים",
+    "onPace": "במסלול להגיע ל-{{projected}} מתוך {{limit}} הודעות",
+    "overLimit": "במסלול לעבור את מגבלת ה-{{limit}} ההודעות שלך",
+    "byFeature": "לפי תכונה",
+    "dailyTrend": "מגמת 30 יום",
+    "recommendation": "המלצה",
+    "upgrade": "שדרג"
+  },
+  "entity": {
+    "evolved": "התפתח ל-{{tier}}",
+    "streak": "יום {{count}}",
+    "goalCheckIn": "בדיקה: {{title}}",
+    "mood": {
+      "happy": "שמח",
+      "excited": "נרגש",
+      "content": "מרוצה",
+      "sad": "עצוב",
+      "sleepy": "עייף",
+      "lonely": "בדידות",
+      "bored": "משועמם"
+    }
+  },
+  "entityInfo": {
+    "mood": "מצב רוח",
+    "streak": "רצף",
+    "days": "ימים",
+    "focus": "מיקוד"
+  },
+  "nudge": {
+    "insights": "ניהלת כמה שיחות עכשיו - Kernel מוצאת דפוסים במה שאתה מדבר עליו.",
+    "knowledge": "גרף הידע שלך גדל - ראה את הקשרים ש-Kernel מיפתה מהשיחות שלך.",
+    "stats": "השלמת מטרה - בדוק את הנתונים שלך כדי לראות כיצד השימוש שלך מתפתח.",
+    "workflows": "אתה משתמש ב-Kernel באופן קבוע - Workflow יכול לאוטומט את המשימות החוזרות שלך.",
+    "showMe": "הראה לי",
+    "notNow": "לא עכשיו"
+  },
+  "valuePreview": {
+    "message": "מנויי Pro מקבלים סקירות יומיות, מחקר מעמיק וזיכרון קבוע.",
+    "gotIt": "הבנתי"
+  },
+  "messagesLeft": "{{count}} הודעות שנותרו",
+  "agentWhy": {
+    "label": "למה?"
+  },
+  "thinking": {
+    "label": "חשיבה מורחבת",
+    "duration": "חשבת במשך {{seconds}} שניות",
+    "streaming": "חושב...",
+    "toggle": "הפעל/כבה חשיבה מורחבת",
+    "tooltip": "חשוב לעומק לפני מתן תשובה"
+  },
+  "explain": {
+    "toggle": "הפעל/כבה מצב הסבר",
+    "tooltip": "מצב הסבר — קוד שלב אחר שלב"
+  },
+  "document": {
+    "active": "מנתח: {{name}}",
+    "clear": "נקה מסמך",
+    "contextHint": "שאל שאלות המשך לגבי המסמך הזה"
+  },
+  "proactive": {
+    "noticed": "Kernel הבחין...",
+    "notification": "ל-Kernel יש תובנה עבורך",
+    "explore": "בואו נחקור את זה"
+  },
+  "tour": {
+    "entity": "זה ה-Kernel entity שלך. הוא מתפתח ככל שאתה משוחח - הקש עליו כדי לראות את מצב הרוח, הרצף ורמת הצמיחה שלו.",
+    "moreMenu": "הקש כאן לכל הפיצ'רים של Kernel: סוכנים, בסיס ידע, תובנות ועוד.",
+    "inputBar": "התחל שיחה כאן. צרף קבצים, הפעל מצב הסבר או פשוט אמור שלום.",
+    "gotIt": "הבנתי",
+    "skip": "דלג על הסיור"
+  },
+  "workflow": {
+    "planning": "מתכנן שלבים...",
+    "executing": "מבצע: {{step}}",
+    "complete": "תהליך הושלם",
+    "failed": "שלב נכשל: {{step}}",
+    "cancel": "בטל תהליך",
+    "cancelled": "תהליך בוטל"
+  }
+}

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none">
+  <!-- Scheduled Tasks Empty State — Hourglass with falling sand -->
+
+  <!-- Dashed framing circle -->
+  <circle cx="100" cy="80" r="70" stroke="#D4C5A9" stroke-width="0.8" stroke-dasharray="4 4" fill="none" opacity="0.3"/>
+
+  <!-- Hourglass frame -->
+  <!-- Top plate -->
+  <line x1="76" y1="36" x2="124" y2="36" stroke="#6B5B95" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <!-- Bottom plate -->
+  <line x1="76" y1="124" x2="124" y2="124" stroke="#6B5B95" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Glass shape — top bulb -->
+  <path d="M80 38 Q80 68 100 76 Q120 68 120 38" stroke="#6B5B95" stroke-width="1" fill="none" opacity="0.35"/>
+  <!-- Glass shape — bottom bulb -->
+  <path d="M80 122 Q80 92 100 84 Q120 92 120 122" stroke="#6B5B95" stroke-width="1" fill="none" opacity="0.35"/>
+
+  <!-- Neck -->
+  <line x1="98" y1="76" x2="98" y2="84" stroke="#6B5B95" stroke-width="0.5" opacity="0.2"/>
+  <line x1="102" y1="76" x2="102" y2="84" stroke="#6B5B95" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- Sand in top (partial) -->
+  <path d="M88 44 Q88 58 100 68 Q112 58 112 44" stroke="#D4C5A9" stroke-width="0.5" fill="none" opacity="0.3"/>
+
+  <!-- Falling sand stream -->
+  <line x1="100" y1="76" x2="100" y2="84" stroke="#D4C5A9" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/>
+
+  <!-- Sand pile at bottom -->
+  <path d="M92 118 Q100 106 108 118" stroke="#D4C5A9" stroke-width="0.8" fill="none" opacity="0.35"/>
+
+  <!-- Sand grains (scattered dots) -->
+  <circle cx="100" cy="90" r="0.8" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="98" cy="94" r="0.6" fill="#D4C5A9" opacity="0.25"/>
+  <circle cx="102" cy="97" r="0.7" fill="#D4C5A9" opacity="0.2"/>
+
+  <!-- Small clock accent -->
+  <circle cx="148" cy="48" r="8" stroke="#D4C5A9" stroke-width="0.8" fill="none" opacity="0.25"/>
+  <line x1="148" y1="48" x2="148" y2="43" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="148" y1="48" x2="152" y2="48" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+</svg>

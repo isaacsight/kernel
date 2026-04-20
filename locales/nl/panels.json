@@ -1,0 +1,236 @@
+{
+  "goals": {
+    "title": "Doelen",
+    "emptyTitle": "Stel je eerste doel in",
+    "emptyDesc": "Houd bij wat belangrijk is — Kernel controleert automatisch je voortgang.",
+    "createGoal": "Doel maken",
+    "addGoal": "Doel toevoegen",
+    "completed": "Voltooid ({{count}})",
+    "target": "Doel: {{date}}",
+    "priority": {
+      "low": "Laag",
+      "medium": "Gemiddeld",
+      "high": "Hoog"
+    },
+    "frequency": {
+      "daily": "Dagelijkse check-in",
+      "weekly": "Wekelijks",
+      "biweekly": "Tweewekelijks",
+      "monthly": "Maandelijks"
+    },
+    "errors": {
+      "addFailed": "Doel toevoegen mislukt",
+      "updateFailed": "Mijlpaal bijwerken mislukt",
+      "completeFailed": "Doel voltooien mislukt",
+      "deleteFailed": "Doel verwijderen mislukt"
+    },
+    "deleteConfirm": "Dit doel verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "loading": "Doelen laden...",
+    "titlePlaceholder": "Waar werk je naartoe?",
+    "descPlaceholder": "Voeg wat details toe (optioneel)..."
+  },
+  "workflows": {
+    "title": "Workflows",
+    "loading": "Workflows laden...",
+    "emptyTitle": "Bouw je eerste workflow",
+    "emptyDesc": "Automatiseer taken met meerdere stappen — Kernel voert ze precies uit zoals jij ze ontwerpt.",
+    "newWorkflow": "Nieuwe workflow",
+    "createWorkflow": "Workflow maken",
+    "runCount_one": "{{count}} keer uitgevoerd",
+    "runCount_other": "{{count}} keer uitgevoerd",
+    "errors": {
+      "saveFailed": "Workflow opslaan mislukt",
+      "deleteFailed": "Workflow verwijderen mislukt"
+    },
+    "deleteConfirm": "Deze workflow verwijderen? Dit kan niet ongedaan worden gemaakt."
+  },
+  "scheduled": {
+    "title": "Geplande taken",
+    "loading": "Taken laden...",
+    "emptyTitle": "Plan je eerste taak",
+    "emptyDesc": "Stel het in en vergeet het — Kernel voert taken uit volgens jouw schema.",
+    "createTask": "Taak maken",
+    "schedule": "Plannen",
+    "taskTypes": {
+      "reminder": "Herinnering",
+      "workflow": "Workflow uitvoeren",
+      "briefing": "Dagelijkse briefing",
+      "goalCheckin": "Doel check-in"
+    },
+    "presets": {
+      "daily": "Dagelijks",
+      "weekdays": "Weekdagen",
+      "weekly": "Wekelijks (ma)",
+      "once": "Eenmalig"
+    },
+    "channels": {
+      "inApp": "In-app",
+      "email": "E-mail",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Geplande taak maken mislukt",
+      "updateFailed": "Taak bijwerken mislukt",
+      "deleteFailed": "Taak verwijderen mislukt"
+    },
+    "deleteConfirm": "Deze geplande taak verwijderen?"
+  },
+  "briefings": {
+    "title": "Briefings",
+    "generateTooltip": "Genereer een nieuwe briefing op basis van je interesses en recente activiteit",
+    "generating": "Genereren...",
+    "newBriefing": "Nieuwe briefing",
+    "phases": {
+      "planning": "Plannen",
+      "researching": "Onderzoeken",
+      "writing": "Schrijven"
+    },
+    "loading": "Briefings laden...",
+    "emptyTitle": "Je dagelijkse briefing",
+    "emptyDesc": "Ontvang een gepersonaliseerde samenvatting van nieuws en inzichten, afgestemd op jouw interesses en doelen.",
+    "generateFirst": "Genereer je eerste briefing",
+    "errorTitle": "Deze briefing kon niet worden gegenereerd",
+    "errorDesc": "De onderzoeksstap leverde niet genoeg gegevens op om een nuttige samenvatting te maken. Dit kan gebeuren als de zoekservice tijdelijk niet beschikbaar was.",
+    "readTime": "{{count}} min. leestijd",
+    "wordCount": "{{count}} woorden",
+    "topicsCovered": "Behandelde onderwerpen",
+    "continueReading": "Verder lezen",
+    "readFull": "Lees volledige briefing",
+    "goDeeper": "Dieper op ingaan in chat",
+    "saveAsGoal": "Opslaan als doel",
+    "errors": {
+      "generateFailed": "Briefing genereren mislukt"
+    },
+    "toast": {
+      "generated": "Briefing gegenereerd",
+      "removed": "Briefing verwijderd"
+    }
+  },
+  "stats": {
+    "title": "Jouw statistieken",
+    "loading": "Laden...",
+    "loadError": "Kan statistieken niet laden.",
+    "messages": "Berichten",
+    "conversations": "Gesprekken",
+    "entities": "Entiteiten",
+    "helpful": "Nuttig",
+    "agentUsage": "Agent gebruik",
+    "topTopics": "Top onderwerpen",
+    "activity": "Activiteit",
+    "memberSince": "Lid sinds {{date}}"
+  },
+  "kg": {
+    "title": "Wat Kernel weet",
+    "emptyTitle": "Kernel heeft nog niets geleerd.",
+    "emptyHint": "Blijf chatten — het pikt mensen, projecten en concepten op die je noemt.",
+    "entitiesCount": "{{count}} entiteiten",
+    "connectionsCount": "{{count}} verbindingen",
+    "confident": "{{value}}% zeker",
+    "mentioned": "{{count}}x genoemd",
+    "types": {
+      "person": "Mensen",
+      "company": "Bedrijven",
+      "project": "Projecten",
+      "concept": "Concepten",
+      "preference": "Voorkeuren",
+      "location": "Locaties"
+    }
+  },
+  "insights": {
+    "title": "Inzichten",
+    "sections": {
+      "world": "Jij",
+      "beliefs": "Overtuigingen",
+      "memory": "Geheugen",
+      "reflections": "Kwaliteit",
+      "agents": "Agenten"
+    },
+    "howISeeYou": "Hoe ik jou zie",
+    "apparentGoal": "Zichtbaar doel",
+    "situation": "Huidige situatie",
+    "conviction": "Overtuiging",
+    "whatIBelieve": "Wat ik geloof",
+    "noBeliefsYet": "Nog geen overtuigingen gevormd. Blijf chatten — ik leer wat belangrijk voor je is.",
+    "challengeBelief": "Daag deze overtuiging uit",
+    "dismissBelief": "Verwerp deze overtuiging",
+    "myMemory": "Mijn herinnering aan jou",
+    "noMemoryYet": "Nog geen geheugen. Ik leer je kennen terwijl we praten.",
+    "commStyle": "Communicatiestijl",
+    "memory": {
+      "interests": "Interesses",
+      "goals": "Doelen",
+      "facts": "Over jou",
+      "preferences": "Voorkeuren"
+    },
+    "performance": "Hoe ik presteer",
+    "noReflectionsYet": "Nog geen reflecties. Ik begin de kwaliteit te beoordelen na een paar gesprekken.",
+    "avgQuality": "gem. kwaliteit (laatste 20)",
+    "dims": {
+      "substance": "Inhoud",
+      "coherence": "Samenhang",
+      "relevance": "Relevantie",
+      "brevity": "Bondigheid",
+      "craft": "Vakmanschap"
+    },
+    "recentLessons": "Recente lessen",
+    "patternNotes": "Patroonnotities",
+    "agentPerformance": "Agentprestaties",
+    "noAgentDataYet": "Nog geen agentgegevens.",
+    "quality": "Kwaliteit",
+    "usage": "Gebruik",
+    "challengedStat": "{{count}}x betwist",
+    "reinforcedStat": "{{count}}x versterkt",
+    "challengeAction": "betwist"
+  },
+  "share": {
+    "title": "Gesprek delen",
+    "checking": "Controleren op bestaande link...",
+    "existingLink": "Dit gesprek heeft al een openbare link.",
+    "anyoneCanView": "Iedereen met deze link kan dit gesprek bekijken.",
+    "revokeLink": "Link intrekken",
+    "revoking": "Intrekken...",
+    "createDesc": "Maak een openbare link die voor iedereen zichtbaar is. Geen login vereist.",
+    "linkExpires": "Link verloopt op:",
+    "never": "Nooit",
+    "hours24": "24 uur",
+    "days7": "7 dagen",
+    "days30": "30 dagen",
+    "createLink": "Deellink maken",
+    "creating": "Maken...",
+    "errors": {
+      "createFailed": "Deellink maken mislukt",
+      "revokeFailed": "Link intrekken mislukt"
+    },
+    "toast": {
+      "revoked": "Deellink ingetrokken"
+    },
+    "shareableLink": "Deelbare link",
+    "copyLink": "Link kopiëren",
+    "copied": "Gekopiëerd",
+    "copiedAnnounce": "Link gekopieerd naar het klembord",
+    "shareVia": "Delen via...",
+    "limitReached": "Je hebt je dagelijkse limiet van {{limit}} gedeelde links bereikt. Upgrade naar Pro voor meer mogelijkheden.",
+    "limitHint": "{{used}}/{{limit}} links gebruikt vandaag",
+    "dailyCount": "{{used}}/{{limit}} gratis shares gebruikt vandaag"
+  },
+  "mirror": {
+    "title": "De Spiegel",
+    "emptyTitle": "De spiegel is nog aan het vormen.",
+    "emptyDesc": "Blijf praten — Kernel's agents leren je vanuit verschillende perspectieven te zien.",
+    "convergenceTitle": "Wat de spiegel ziet",
+    "convergenceDesc": "Inzichten die pas naar voren komen als meerdere agenten hun bevindingen delen.",
+    "facetsTitle": "Agentperspectieven",
+    "facetsDesc": "Elke agent observeert een andere dimensie van wie jij bent.",
+    "observations": "observaties",
+    "patterns": "Patronen",
+    "convergenceCount": "Geconverteerd {{count}} keer",
+    "dimensions": {
+      "relationship": "Relatie",
+      "curiosity": "Nieuwsgierigheid",
+      "craft": "Ambacht",
+      "voice": "Stem",
+      "judgment": "Oordeel",
+      "arc": "Boog"
+    }
+  }
+}

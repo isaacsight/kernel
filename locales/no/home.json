@@ -1,0 +1,192 @@
+{
+  "tagline": "En personlig AI som husker deg, tenker med deg og blir bedre over tid.",
+  "placeholder": "Snakk med kernel.chat...",
+  "welcomeToPro": "Velkommen til Kernel Pro!",
+  "menu": {
+    "shareConversation": "Del samtale",
+    "exportMarkdown": "Eksporter som Markdown",
+    "goals": "Mål",
+    "workflows": "Arbeidsflyter",
+    "scheduledTasks": "Planlagte oppgaver",
+    "dailyBriefing": "Daglig oppsummering",
+    "whatKernelKnows": "Hva Kernel vet",
+    "yourStats": "Din statistikk",
+    "insights": "Innsikt",
+    "upgradeToPro": "Oppgrader til Pro",
+    "manageSubscription": "Administrer abonnement",
+    "signOut": "Logg ut",
+    "deleteAccount": "Slett konto",
+    "notifications": "Varsler",
+    "notifInApp": "Varsler i appen",
+    "notifBriefings": "Briefing-varsler",
+    "notifGoals": "Måloppdateringer",
+    "notifReminders": "Påminnelser",
+    "notifPush": "Push-varsler",
+    "darkMode": "Mørk modus",
+    "theme": "Tema",
+    "themeLight": "Lys",
+    "themeDark": "Mørk",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Agentbygger",
+    "agentLibrary": "Agentbibliotek",
+    "backgroundAgents": "Bakgrunnsagenter",
+    "myContent": "Mitt innhold",
+    "bookmarks": "Bokmerker",
+    "architecture": "Arkitektur",
+    "designSystem": "Designsystem",
+    "routingInsights": "Rutingsinnsikt",
+    "system": "System",
+    "communications": "Kommunikasjon",
+    "adaptiveSystem": "Adaptivt system",
+    "usage": "Forbruk",
+    "mirror": "Speilet",
+    "projectFiles": "Prosjektfiler",
+    "imageGallery": "Bildegalleri",
+    "knowledgeBase": "Kunnskapsbase",
+    "social": "Sosiale medier",
+    "platformEngine": "Innholdspipeline",
+    "explore": "Utforsk",
+    "accountSettings": "Kontoinnstillinger",
+    "notifProactive": "Proaktive innsikter"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Dagens oppsummering",
+    "read": "Les",
+    "discuss": "Diskuter"
+  },
+  "upgrade": {
+    "title": "Du har brukt dine {{limit}} gratis meldinger",
+    "subtitle": "Pro gir deg ubegrenset meldinger, et minne som lærer deg å kjenne, og fulle briefinger.",
+    "resetsAt": "Meldingene dine fornyes kl. {{time}}. Oppgrader for 100 meldinger per dag.",
+    "features": {
+      "unlimitedMessages": "Ubegrenset meldinger",
+      "deepResearch": "Utvidet tenkning (30/mnd)",
+      "multiAgent": "Filanalyse (10/mnd)",
+      "multiStep": "Mål, stemme og agentiske arbeidsflyter",
+      "persistentMemory": "Minne + proaktive briefinger"
+    },
+    "button": "Bli Pro — $29/mnd",
+    "annualButton": "$290/år — spar $58",
+    "buttonLoading": "Åpner kassen...",
+    "maybeLater": "Kanskje senere",
+    "learnedTitle": "Hva Kernel har lært om deg",
+    "learnedCta": "Kom tilbake i morgen og fortsett samtalen.",
+    "maxButton": "Gå Max — 49 kr/mnd",
+    "maxAnnualButton": "490 kr/år — spar 98 kr"
+  },
+  "deleteConfirm": {
+    "title": "Slette kontoen din?",
+    "subtitle": "Dette sletter permanent alle dine data: samtaler, hukommelse og innstillinger. Dette kan ikke angres.",
+    "subtitleWithSub": " Abonnementet ditt vil også bli kansellert.",
+    "typeDelete": "Skriv DELETE for å bekrefte:",
+    "confirm": "Ja, slett kontoen min",
+    "confirming": "Sletter..."
+  },
+  "status": {
+    "assemblingAgents": "Samler agenter...",
+    "agentsCollaborating": "Agenter samarbeider",
+    "synthesizingPerspectives": "Syntetiserer perspektiver...",
+    "routingToSpecialist": "Ruter til spesialist...",
+    "isWorking": "{{agent}} jobber...",
+    "lowConfidence": "lav selvtillit"
+  },
+  "feedback": {
+    "save": "Lagre",
+    "cancel": "Avbryt"
+  },
+  "messagesRemaining": "{{count}} meldinger gjenstår",
+  "lastFreeMessage": "Siste gratis melding",
+  "menuSection": {
+    "ai": "AI og Agenter",
+    "content": "Innhold og Kunnskap",
+    "insights": "Innsikter og Mål",
+    "system": "Innstillinger og System"
+  },
+  "usage": {
+    "title": "Bruk",
+    "loading": "Laster bruksdata...",
+    "retry": "Prøv igjen",
+    "last30days": "Siste 30 dager",
+    "onPace": "På sporet til å bruke {{projected}} av {{limit}} meldinger",
+    "overLimit": "På sporet til å overskride din {{limit}} meldingers grense",
+    "byFeature": "Etter funksjon",
+    "dailyTrend": "30-dagers trend",
+    "recommendation": "Anbefaling",
+    "upgrade": "Oppgrader"
+  },
+  "entity": {
+    "evolved": "Utviklet til {{tier}}",
+    "streak": "Dag {{count}}",
+    "goalCheckIn": "Sjekk inn: {{title}}",
+    "mood": {
+      "happy": "lykkelig",
+      "excited": "oppspilt",
+      "content": "tilfreds",
+      "sad": "lei",
+      "sleepy": "trøtt",
+      "lonely": "ensom",
+      "bored": "kjeder meg"
+    }
+  },
+  "entityInfo": {
+    "mood": "Humør",
+    "streak": "Rekke",
+    "days": "dager",
+    "focus": "Fokus"
+  },
+  "nudge": {
+    "insights": "Du har hatt noen samtaler nå — Kernel har funnet mønstre i det du snakker om.",
+    "knowledge": "Kunnskapsgrafen din vokser — se koblingene Kernel har kartlagt fra samtalene dine.",
+    "stats": "Du fullførte et mål — sjekk statistikken din for å se hvordan bruken din utvikler seg.",
+    "workflows": "Du har brukt Kernel regelmessig — arbeidsflyter kan automatisere dine tilbakevendende oppgaver.",
+    "showMe": "Vis meg",
+    "notNow": "Ikke nå"
+  },
+  "valuePreview": {
+    "message": "Pro-medlemmer får daglige oppsummeringer, dypdykkende forskning og vedvarende minne.",
+    "gotIt": "Forstått"
+  },
+  "messagesLeft": "{{count}} meldinger igjen",
+  "agentWhy": {
+    "label": "Hvorfor?"
+  },
+  "thinking": {
+    "label": "Utvidet tenkning",
+    "duration": "Tenkte i {{seconds}}s",
+    "streaming": "Tenker...",
+    "toggle": "Slå på utvidet tenkning",
+    "tooltip": "Tenk dypere før du svarer"
+  },
+  "explain": {
+    "toggle": "Slå på forklaringsmodus",
+    "tooltip": "Forklaringsmodus — trinnvis kode"
+  },
+  "document": {
+    "active": "Analyserer: {{name}}",
+    "clear": "Tøm dokument",
+    "contextHint": "Still spørsmål om dette dokumentet"
+  },
+  "proactive": {
+    "noticed": "Kernel la merke til...",
+    "notification": "Kernel har en observasjon til deg",
+    "explore": "La oss utforske dette"
+  },
+  "tour": {
+    "entity": "Dette er din Kernel-entitet. Den utvikler seg etter hvert som du chatter — trykk på den for å se humøret, rekken og vekstnivået.",
+    "moreMenu": "Trykk her for alle Kernel sine funksjoner: agenter, kunnskapsbase, innsikt og mer.",
+    "inputBar": "Start en samtale her. Fest filer, slå på forklaringsmodus, eller si bare hei.",
+    "gotIt": "Forstått",
+    "skip": "Hopp over omvisning"
+  },
+  "workflow": {
+    "planning": "Planlegger trinn...",
+    "executing": "Utfører: {{step}}",
+    "complete": "Arbeidsflyt fullført",
+    "failed": "Trinn mislyktes: {{step}}",
+    "cancel": "Avbryt arbeidsflyt",
+    "cancelled": "Arbeidsflyt avbrutt"
+  }
+}

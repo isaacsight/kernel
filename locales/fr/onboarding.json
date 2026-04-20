@@ -1,0 +1,47 @@
+{
+  "welcome": {
+    "greeting": "Hey. I'm Kernel.",
+    "greetingUser": "Hey, {{name}}. I'm Kernel.",
+    "intro": "I'm your personal AI — built to learn how you think and get sharper over time."
+  },
+  "capabilities": {
+    "agents": "I have a team of specialists that handle different kinds of thinking.",
+    "agentsDetail": "A researcher for deep questions, a coder for technical work, a writer for creative tasks, and an analyst for strategy. Your messages get routed automatically.",
+    "memory": "I also build a memory of what matters to you. Every conversation makes the next one better."
+  },
+  "interests": {
+    "prompt": "One thing that helps me — what are you into?",
+    "tech": "Technologie",
+    "business": "Affaires",
+    "creative": "Écriture Créative",
+    "science": "Science",
+    "health": "Santé et Fitness",
+    "finance": "Finance",
+    "design": "Design",
+    "coding": "Programmation",
+    "music": "Musique",
+    "philosophy": "Philosophie",
+    "travel": "Voyages",
+    "education": "Éducation"
+  },
+  "ready": {
+    "noted": "Perfect. I'll keep that in mind.",
+    "notedNoInterests": "No worries. We'll figure it out as we go.",
+    "freeMessages": "You get 10 free messages to start. Ask me anything.",
+    "startCta": "Start chatting"
+  },
+  "replies": {
+    "whatCanYouDo": "What can you do?",
+    "tellMeMore": "Tell me more",
+    "letsStart": "Let's just start",
+    "thatsCool": "That's cool",
+    "howMemory": "How does memory work?",
+    "skipToChat": "Skip to chat"
+  },
+  "continue": "Continuer",
+  "skipIntro": "Passer l'introduction",
+  "greeting": "Salut. Je suis Kernel.",
+  "greetingUser": "Salut, {{name}}. Je suis Kernel.",
+  "tagline": "Posez-moi n'importe quelle question. Je m'occupe du reste.",
+  "placeholder": "Sur quoi travaillez-vous ?"
+}

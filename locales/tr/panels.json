@@ -1,0 +1,236 @@
+{
+  "goals": {
+    "title": "Hedefler",
+    "emptyTitle": "İlk Hedefinizi Belirleyin",
+    "emptyDesc": "Önemli olanı takip edin — Kernel ilerlemenizi otomatik olarak kontrol eder.",
+    "createGoal": "Hedef Oluştur",
+    "addGoal": "Hedef Ekle",
+    "completed": "Tamamlanan ({{count}})",
+    "target": "Hedef: {{date}}",
+    "priority": {
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek"
+    },
+    "frequency": {
+      "daily": "Günlük kontrol",
+      "weekly": "Haftalık",
+      "biweekly": "İki haftalık",
+      "monthly": "Aylık"
+    },
+    "errors": {
+      "addFailed": "Hedef eklenemedi",
+      "updateFailed": "Kilometre taşı güncellenemedi",
+      "completeFailed": "Hedef tamamlanamadı",
+      "deleteFailed": "Hedef silinemedi"
+    },
+    "deleteConfirm": "Bu hedef silinsin mi? Bu geri alınamaz.",
+    "loading": "Hedefler yükleniyor...",
+    "titlePlaceholder": "Ne üzerinde çalışıyorsunuz?",
+    "descPlaceholder": "Detay ekleyin (isteğe bağlı)..."
+  },
+  "workflows": {
+    "title": "İş Akışları",
+    "loading": "İş akışları yükleniyor...",
+    "emptyTitle": "İlk İş Akışınızı Oluşturun",
+    "emptyDesc": "Çok adımlı görevleri otomatikleştirin — Kernel onları tam tasarladığınız gibi çalıştırır.",
+    "newWorkflow": "Yeni İş Akışı",
+    "createWorkflow": "İş Akışı Oluştur",
+    "runCount_one": "{{count}} kez çalıştırıldı",
+    "runCount_other": "{{count}} kez çalıştırıldı",
+    "errors": {
+      "saveFailed": "İş akışı kaydedilemedi",
+      "deleteFailed": "İş akışı silinemedi"
+    },
+    "deleteConfirm": "Bu iş akışı silinsin mi? Bu geri alınamaz."
+  },
+  "scheduled": {
+    "title": "Zamanlanmış Görevler",
+    "loading": "Görevler yükleniyor...",
+    "emptyTitle": "İlk Görevinizi Zamanlayın",
+    "emptyDesc": "Ayarlayın ve unutun — Kernel görevleri programınıza göre çalıştırır.",
+    "createTask": "Görev Oluştur",
+    "schedule": "Zamanlama",
+    "taskTypes": {
+      "reminder": "Hatırlatma",
+      "workflow": "İş Akışı Çalıştır",
+      "briefing": "Günlük Brifing",
+      "goalCheckin": "Hedef Kontrolü"
+    },
+    "presets": {
+      "daily": "Günlük",
+      "weekdays": "Hafta içi",
+      "weekly": "Haftalık (Pzt)",
+      "once": "Bir kez"
+    },
+    "channels": {
+      "inApp": "Uygulama içi",
+      "email": "E-posta",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Zamanlanmış görev oluşturulamadı",
+      "updateFailed": "Görev güncellenemedi",
+      "deleteFailed": "Görev silinemedi"
+    },
+    "deleteConfirm": "Bu zamanlanmış görev silinsin mi?"
+  },
+  "briefings": {
+    "title": "Brifingleri",
+    "generateTooltip": "İlgi alanlarınıza ve son etkinliğinize göre yeni bir brifing oluşturun",
+    "generating": "Oluşturuluyor...",
+    "newBriefing": "Yeni brifing",
+    "phases": {
+      "planning": "Planlama",
+      "researching": "Araştırma",
+      "writing": "Yazma"
+    },
+    "loading": "Brifingleri yükleniyor...",
+    "emptyTitle": "Günlük brifinginiz",
+    "emptyDesc": "İlgi alanlarınıza ve hedeflerinize göre kişiselleştirilmiş haber ve içgörü özeti alın.",
+    "generateFirst": "İlk brifinginizi oluşturun",
+    "errorTitle": "Bu brifing oluşturulamadı",
+    "errorDesc": "Araştırma adımı yararlı bir özet oluşturmak için yeterli veri döndüremedi. Bu, arama hizmeti geçici olarak kullanılamadığında olabilir.",
+    "readTime": "{{count}} dk okuma",
+    "wordCount": "{{count}} kelime",
+    "topicsCovered": "İşlenen konular",
+    "continueReading": "Okumaya devam et",
+    "readFull": "Tam brifingi oku",
+    "goDeeper": "Sohbette derinleş",
+    "saveAsGoal": "Çıkarımları hedef olarak kaydet",
+    "errors": {
+      "generateFailed": "Brifing oluşturulamadı"
+    },
+    "toast": {
+      "generated": "Brifing oluşturuldu",
+      "removed": "Brifing kaldırıldı"
+    }
+  },
+  "stats": {
+    "title": "İstatistikleriniz",
+    "loading": "Yükleniyor...",
+    "loadError": "İstatistikler yüklenemedi.",
+    "messages": "Mesajlar",
+    "conversations": "Konuşmalar",
+    "entities": "Varlıklar",
+    "helpful": "Yararlı",
+    "agentUsage": "Ajan Kullanımı",
+    "topTopics": "Popüler Konular",
+    "activity": "Etkinlik",
+    "memberSince": "{{date}} tarihinden beri üye"
+  },
+  "kg": {
+    "title": "Kernel Ne Biliyor",
+    "emptyTitle": "Kernel henüz hiçbir şey öğrenmedi.",
+    "emptyHint": "Sohbet etmeye devam edin — bahsettiğiniz kişileri, projeleri ve kavramları algılar.",
+    "entitiesCount": "{{count}} varlık",
+    "connectionsCount": "{{count}} bağlantı",
+    "confident": "{{value}}% güvenilir",
+    "mentioned": "{{count}} kez bahsedildi",
+    "types": {
+      "person": "Kişiler",
+      "company": "Şirketler",
+      "project": "Projeler",
+      "concept": "Kavramlar",
+      "preference": "Tercihler",
+      "location": "Konumlar"
+    }
+  },
+  "insights": {
+    "title": "İçgörüler",
+    "sections": {
+      "world": "Sen",
+      "beliefs": "İnançlar",
+      "memory": "Hafıza",
+      "reflections": "Kalite",
+      "agents": "Ajanlar"
+    },
+    "howISeeYou": "Seni Nasıl Görüyorum",
+    "apparentGoal": "Belirgin hedef",
+    "situation": "Mevcut durum",
+    "conviction": "Kanaat",
+    "whatIBelieve": "Ne Düşünüyorum",
+    "noBeliefsYet": "Henüz oluşmuş bir inanç yok. Sohbet etmeye devam edin — sizin için neyin önemli olduğunu öğreneceğim.",
+    "challengeBelief": "Bu inancı sorgula",
+    "dismissBelief": "Bu inancı reddet",
+    "myMemory": "Sizinle İlgili Hafızam",
+    "noMemoryYet": "Henüz hafıza yok. Konuştukça sizin hakkınızda öğreniyorum.",
+    "commStyle": "İletişim tarzı",
+    "memory": {
+      "interests": "İlgi alanları",
+      "goals": "Hedefler",
+      "facts": "Hakkınızda",
+      "preferences": "Tercihler"
+    },
+    "performance": "Performansım",
+    "noReflectionsYet": "Henüz yansıma yok. Birkaç konuşmadan sonra kaliteyi takip etmeye başlayacağım.",
+    "avgQuality": "ort. kalite (son 20)",
+    "dims": {
+      "substance": "Öz",
+      "coherence": "Tutarlılık",
+      "relevance": "İlgililik",
+      "brevity": "Kısalık",
+      "craft": "Ustalık"
+    },
+    "recentLessons": "Son dersler",
+    "patternNotes": "Örüntü notları",
+    "agentPerformance": "Ajan Performansı",
+    "noAgentDataYet": "Henüz ajan verisi yok.",
+    "quality": "Kalite",
+    "usage": "Kullanım",
+    "challengedStat": "{{count}}x sorgulandı",
+    "reinforcedStat": "{{count}}x güçlendirildi",
+    "challengeAction": "sorgula"
+  },
+  "share": {
+    "title": "Konuşmayı paylaş",
+    "checking": "Mevcut bağlantı kontrol ediliyor...",
+    "existingLink": "Bu konuşmanın zaten bir genel bağlantısı var.",
+    "anyoneCanView": "Bu bağlantıya sahip herkes bu konuşmayı görüntüleyebilir.",
+    "revokeLink": "Bağlantıyı iptal et",
+    "revoking": "İptal ediliyor...",
+    "createDesc": "Herkesin görüntüleyebileceği genel bir bağlantı oluşturun. Giriş gerekli değil.",
+    "linkExpires": "Bağlantı süresi:",
+    "never": "Asla",
+    "hours24": "24 saat",
+    "days7": "7 gün",
+    "days30": "30 gün",
+    "createLink": "Paylaşım bağlantısı oluştur",
+    "creating": "Oluşturuluyor...",
+    "errors": {
+      "createFailed": "Paylaşım bağlantısı oluşturulamadı",
+      "revokeFailed": "Bağlantı iptal edilemedi"
+    },
+    "toast": {
+      "revoked": "Paylaşım bağlantısı iptal edildi"
+    },
+    "shareableLink": "Paylaşılabilir bağlantı",
+    "copyLink": "Bağlantıyı kopyala",
+    "copied": "Kopyalandı",
+    "copiedAnnounce": "Bağlantı panoya kopyalandı",
+    "shareVia": "Şu şekilde paylaş...",
+    "limitReached": "Günlük {{limit}} adet paylaşılan bağlantı sınırına ulaştınız. Daha fazla paylaşım için Pro'ya yükseltin.",
+    "limitHint": "{{used}}/{{limit}} bağlantı bugün kullanıldı",
+    "dailyCount": "{{used}}/{{limit}} ücretsiz paylaşım bugün kullanıldı"
+  },
+  "mirror": {
+    "title": "Ayna",
+    "emptyTitle": "Ayna henüz oluşuyor.",
+    "emptyDesc": "Konuşmaya devam edin — Kernel'ın ajanları sizi farklı açılardan görmeyi öğreniyor.",
+    "convergenceTitle": "Ayna ne görüyor",
+    "convergenceDesc": "Sadece birden fazla ajanın notlarını karşılaştırmasıyla ortaya çıkan içgörüler.",
+    "facetsTitle": "Ajan bakış açıları",
+    "facetsDesc": "Her ajan, sizi tanımlayan farklı bir boyutu gözlemler.",
+    "observations": "gözlemler",
+    "patterns": "Desenler",
+    "convergenceCount": "{{count}} kez birleşti",
+    "dimensions": {
+      "relationship": "İlişki",
+      "curiosity": "Merak",
+      "craft": "Beceri",
+      "voice": "Ses",
+      "judgment": "Yargı",
+      "arc": "Yol"
+    }
+  }
+}

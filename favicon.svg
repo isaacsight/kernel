@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Favicon — Ink Drop mark optimized for 32px -->
+  <circle cx="16" cy="16" r="14" fill="none" stroke="#D4C5A9" stroke-width="1"/>
+  <text x="16" y="21" text-anchor="middle" font-family="Georgia, serif"
+        font-style="italic" font-size="16" font-weight="400" fill="#6B5B95">K</text>
+  <circle cx="16" cy="27" r="1.2" fill="#6B5B95"/>
+</svg>

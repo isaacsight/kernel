@@ -1,0 +1,192 @@
+{
+  "tagline": "ذكاء اصطناعي شخصي يتذكرك، ويفكر معك، ويتحسن بمرور الوقت.",
+  "placeholder": "تحدث إلى kernel.chat...",
+  "welcomeToPro": "مرحبًا بك في Kernel Pro!",
+  "menu": {
+    "shareConversation": "مشاركة المحادثة",
+    "exportMarkdown": "تصدير كـ Markdown",
+    "goals": "الأهداف",
+    "workflows": "سير العمل",
+    "scheduledTasks": "المهام المجدولة",
+    "dailyBriefing": "الإحاطة اليومية",
+    "whatKernelKnows": "ما يعرفه Kernel",
+    "yourStats": "إحصائياتك",
+    "insights": "الرؤى",
+    "upgradeToPro": "الترقية إلى Pro",
+    "manageSubscription": "إدارة الاشتراك",
+    "signOut": "تسجيل الخروج",
+    "deleteAccount": "حذف الحساب",
+    "notifications": "إشعارات",
+    "notifInApp": "إشعارات داخل التطبيق",
+    "notifBriefings": "تنبيهات الملخصات",
+    "notifGoals": "تحديثات الأهداف",
+    "notifReminders": "التذكيرات",
+    "notifPush": "إشعارات الدفع",
+    "darkMode": "الوضع الداكن",
+    "theme": "المظهر",
+    "themeLight": "فاتح",
+    "themeDark": "داكن",
+    "themeEink": "E-Ink",
+    "agentBuilder": "منشئ الوكلاء",
+    "agentLibrary": "مكتبة الوكلاء",
+    "backgroundAgents": "وكلاء الخلفية",
+    "myContent": "محتواي",
+    "bookmarks": "الإشارات المرجعية",
+    "architecture": "البنية",
+    "designSystem": "نظام التصميم",
+    "routingInsights": "رؤى التوجيه",
+    "system": "النظام",
+    "communications": "الاتصالات",
+    "adaptiveSystem": "النظام التكيفي",
+    "usage": "الاستخدام",
+    "mirror": "المرآة",
+    "projectFiles": "ملفات المشروع",
+    "imageGallery": "معرض الصور",
+    "knowledgeBase": "قاعدة المعرفة",
+    "social": "وسائل التواصل الاجتماعي",
+    "platformEngine": "مسار المحتوى",
+    "explore": "استكشف",
+    "accountSettings": "إعدادات الحساب",
+    "notifProactive": "رؤى استباقية"
+  },
+  "admin": "مسؤول",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "إحاطة اليوم",
+    "read": "قراءة",
+    "discuss": "نقاش"
+  },
+  "upgrade": {
+    "title": "لقد استخدمت {{limit}} رسائلك المجانية",
+    "subtitle": "Pro يمنحك رسائل غير محدودة، وذاكرة تتعلم عنك، وإحاطات كاملة.",
+    "resetsAt": "ستتجدد رسائلك في {{time}}. قم بالترقية للحصول على 100 رسالة يوميًا.",
+    "features": {
+      "unlimitedMessages": "رسائل غير محدودة",
+      "deepResearch": "تفكير موسّع (30/شهريًا)",
+      "multiAgent": "تحليل الملفات (10/شهريًا)",
+      "multiStep": "أهداف، صوت وسير عمل ذكي",
+      "persistentMemory": "ذاكرة + إحاطات استباقية"
+    },
+    "button": "اشترك في Pro — $29/شهريًا",
+    "annualButton": "$290/سنويًا — وفّر $58",
+    "buttonLoading": "جاري فتح الدفع...",
+    "maybeLater": "ربما لاحقاً",
+    "learnedTitle": "ماذا تعلم Kernel عنك",
+    "learnedCta": "عد غدًا واستمر في المحادثة.",
+    "maxButton": "انتقل إلى Max - 49 دولارًا/شهريًا",
+    "maxAnnualButton": "490 دولارًا/سنويًا - وفر 98 دولارًا"
+  },
+  "deleteConfirm": {
+    "title": "حذف حسابك؟",
+    "subtitle": "هذا سيؤدي إلى حذف جميع بياناتك نهائياً: المحادثات والذاكرة والتفضيلات. لا يمكن التراجع عن هذا الإجراء.",
+    "subtitleWithSub": " سيتم إلغاء اشتراكك أيضاً.",
+    "typeDelete": "اكتب DELETE للتأكيد:",
+    "confirm": "نعم، احذف حسابي",
+    "confirming": "جاري الحذف..."
+  },
+  "status": {
+    "assemblingAgents": "جاري تجميع الوكلاء...",
+    "agentsCollaborating": "الوكلاء يتعاونون",
+    "synthesizingPerspectives": "توليف الرؤى...",
+    "routingToSpecialist": "التوجيه إلى أخصائي...",
+    "isWorking": "{{agent}} يعمل...",
+    "lowConfidence": "ثقة منخفضة"
+  },
+  "feedback": {
+    "save": "حفظ",
+    "cancel": "إلغاء"
+  },
+  "messagesRemaining": "تبقت {{count}} رسائل",
+  "lastFreeMessage": "آخر رسالة مجانية",
+  "menuSection": {
+    "ai": "الذكاء الاصطناعي والوكلاء",
+    "content": "المحتوى والمعرفة",
+    "insights": "الرؤى والأهداف",
+    "system": "الإعدادات والنظام"
+  },
+  "usage": {
+    "title": "الاستخدام",
+    "loading": "جاري تحميل بيانات الاستخدام...",
+    "retry": "إعادة المحاولة",
+    "last30days": "آخر 30 يومًا",
+    "onPace": "على المسار الصحيح لاستخدام {{projected}} من {{limit}} رسالة",
+    "overLimit": "على المسار لتجاوز حد الرسائل البالغ {{limit}}",
+    "byFeature": "حسب الميزة",
+    "dailyTrend": "اتجاه لمدة 30 يومًا",
+    "recommendation": "توصية",
+    "upgrade": "الترقية"
+  },
+  "entity": {
+    "evolved": "تطورت إلى {{tier}}",
+    "streak": "اليوم {{count}}",
+    "goalCheckIn": "تسجيل الدخول: {{title}}",
+    "mood": {
+      "happy": "سعيد",
+      "excited": "متحمس",
+      "content": "راض",
+      "sad": "حزين",
+      "sleepy": "نعسان",
+      "lonely": "وحيد",
+      "bored": "ممل"
+    }
+  },
+  "entityInfo": {
+    "mood": "المزاج",
+    "streak": "السلسلة",
+    "days": "أيام",
+    "focus": "التركيز"
+  },
+  "nudge": {
+    "insights": "لقد أجريتَ عدة محادثات الآن — Kernel يكتشف أنماطًا فيما تتحدث عنه.",
+    "knowledge": "رسم بياني للمعرفة الخاص بك يتزايد — انظر إلى الاتصالات التي قام Kernel بتعيينها من محادثاتك.",
+    "stats": "لقد أكملتَ هدفًا — تحقق من إحصائياتك لمعرفة كيف يتطور استخدامك.",
+    "workflows": "لقد كنت تستخدم Kernel بانتظام — يمكن أن تقوم سير العمل بأتمتة مهامك المتكررة.",
+    "showMe": "أرني",
+    "notNow": "ليس الآن"
+  },
+  "valuePreview": {
+    "message": "يحصل أعضاء Pro على موجزات يومية وأبحاث متعمقة وذاكرة دائمة.",
+    "gotIt": "فهمت"
+  },
+  "messagesLeft": "{{count}} رسائل متبقية",
+  "agentWhy": {
+    "label": "لماذا؟"
+  },
+  "thinking": {
+    "label": "تفكير متعمق",
+    "duration": "فكر لـ {{seconds}} ثانية",
+    "streaming": "يفكر...",
+    "toggle": "تفعيل التفكير المتعمق",
+    "tooltip": "فكر بعمق قبل الإجابة"
+  },
+  "explain": {
+    "toggle": "تفعيل وضع الشرح",
+    "tooltip": "وضع الشرح - كود خطوة بخطوة"
+  },
+  "document": {
+    "active": "التحليل: {{name}}",
+    "clear": "مسح المستند",
+    "contextHint": "اطرح أسئلة إضافية حول هذا المستند"
+  },
+  "proactive": {
+    "noticed": "لاحظ Kernel...",
+    "notification": "لدى Kernel ملاحظة لك",
+    "explore": "لنستكشف هذا"
+  },
+  "tour": {
+    "entity": "هذه هي الكيان الخاص بك في Kernel. تتطور مع المحادثة - انقر لرؤية حالته وسلسلة النمو ومستوى النمو.",
+    "moreMenu": "انقر هنا للحصول على جميع ميزات Kernel: وكلاء، وقاعدة المعرفة، والرؤى، والمزيد.",
+    "inputBar": "ابدأ محادثة هنا. أرفق ملفات، أو قم بتشغيل وضع الشرح، أو فقط قل مرحباً.",
+    "gotIt": "فهمت",
+    "skip": "تخطي الجولة"
+  },
+  "workflow": {
+    "planning": "تخطيط الخطوات...",
+    "executing": "جاري التنفيذ: {{step}}",
+    "complete": "اكتمل سير العمل",
+    "failed": "فشل الخطوة: {{step}}",
+    "cancel": "إلغاء سير العمل",
+    "cancelled": "تم إلغاء سير العمل"
+  }
+}

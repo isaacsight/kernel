@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- V4: Ink Drop — single ink droplet below the K like a period/seed -->
+  <defs>
+    <radialGradient id="drop-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6B5B95" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#6B5B95" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="#FAF9F6"/>
+  <circle cx="512" cy="512" r="340" fill="none" stroke="#D4C5A9" stroke-width="3"/>
+  <text x="512" y="580" text-anchor="middle" font-family="Georgia, 'EB Garamond', serif"
+        font-style="italic" font-size="400" font-weight="400" fill="#6B5B95">K</text>
+  <!-- Ink drop — the "kernel seed" -->
+  <circle cx="512" cy="740" r="18" fill="#6B5B95"/>
+  <!-- Subtle glow around drop -->
+  <circle cx="512" cy="740" r="40" fill="url(#drop-glow)"/>
+</svg>

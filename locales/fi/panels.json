@@ -1,0 +1,236 @@
+{
+  "goals": {
+    "title": "Tavoitteet",
+    "emptyTitle": "Aseta ensimmäinen tavoitteesi",
+    "emptyDesc": "Seuraa mikä on tärkeää — Kernel tarkistaa edistymisesi automaattisesti.",
+    "createGoal": "Luo tavoite",
+    "addGoal": "Lisää tavoite",
+    "completed": "Valmis ({{count}})",
+    "target": "Tavoite: {{date}}",
+    "priority": {
+      "low": "Matala",
+      "medium": "Keskitaso",
+      "high": "Korkea"
+    },
+    "frequency": {
+      "daily": "Päivittäinen tarkistus",
+      "weekly": "Viikoittain",
+      "biweekly": "Joka toinen viikko",
+      "monthly": "Kuukausittain"
+    },
+    "errors": {
+      "addFailed": "Tavoitteen lisääminen epäonnistui",
+      "updateFailed": "Välitavoitteen päivittäminen epäonnistui",
+      "completeFailed": "Tavoitteen viimeistely epäonnistui",
+      "deleteFailed": "Tavoitteen poistaminen epäonnistui"
+    },
+    "deleteConfirm": "Poistetaanko tämä tavoite? Tätä ei voi kumota.",
+    "loading": "Ladataan tavoitteita...",
+    "titlePlaceholder": "Mitä olet tekemässä?",
+    "descPlaceholder": "Lisää yksityiskohtia (valinnainen)..."
+  },
+  "workflows": {
+    "title": "Työnkulut",
+    "loading": "Ladataan työnkulkuja...",
+    "emptyTitle": "Rakenna ensimmäinen työnkulkusi",
+    "emptyDesc": "Automatisoi monivaiheisia tehtäviä — Kernel suorittaa ne juuri suunnittelemallasi tavalla.",
+    "newWorkflow": "Uusi työnkulku",
+    "createWorkflow": "Luo työnkulku",
+    "runCount_one": "Suoritettu {{count}} kerran",
+    "runCount_other": "Suoritettu {{count}} kertaa",
+    "errors": {
+      "saveFailed": "Työnkulun tallentaminen epäonnistui",
+      "deleteFailed": "Työnkulun poistaminen epäonnistui"
+    },
+    "deleteConfirm": "Poistetaanko tämä työnkulku? Tätä ei voi kumota."
+  },
+  "scheduled": {
+    "title": "Ajastetut tehtävät",
+    "loading": "Ladataan tehtäviä...",
+    "emptyTitle": "Ajasta ensimmäinen tehtäväsi",
+    "emptyDesc": "Aseta ja unohda — Kernel suorittaa tehtävät aikataulusi mukaan.",
+    "createTask": "Luo tehtävä",
+    "schedule": "Aikataulu",
+    "taskTypes": {
+      "reminder": "Muistutus",
+      "workflow": "Suorita työnkulku",
+      "briefing": "Päivittäinen katsaus",
+      "goalCheckin": "Tavoitetarkistus"
+    },
+    "presets": {
+      "daily": "Päivittäin",
+      "weekdays": "Arkipäivisin",
+      "weekly": "Viikoittain (ma)",
+      "once": "Kerran"
+    },
+    "channels": {
+      "inApp": "Sovelluksessa",
+      "email": "Sähköposti",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Ajastetun tehtävän luominen epäonnistui",
+      "updateFailed": "Tehtävän päivittäminen epäonnistui",
+      "deleteFailed": "Tehtävän poistaminen epäonnistui"
+    },
+    "deleteConfirm": "Poistetaanko tämä ajastettu tehtävä?"
+  },
+  "briefings": {
+    "title": "Katsaukset",
+    "generateTooltip": "Luo uusi katsaus kiinnostuksen kohteidesi ja viimeaikaisen toimintasi perusteella",
+    "generating": "Luodaan...",
+    "newBriefing": "Uusi katsaus",
+    "phases": {
+      "planning": "Suunnittelee",
+      "researching": "Tutkii",
+      "writing": "Kirjoittaa"
+    },
+    "loading": "Ladataan katsauksia...",
+    "emptyTitle": "Päivittäinen katsauksesi",
+    "emptyDesc": "Saat henkilökohtaisen uutis- ja oivalluskatsauksen räätälöitynä kiinnostuksen kohteisiisi ja tavoitteisiisi.",
+    "generateFirst": "Luo ensimmäinen katsauksesi",
+    "errorTitle": "Tätä katsausta ei voitu luoda",
+    "errorDesc": "Tutkimusvaihe ei palauttanut tarpeeksi tietoa hyödyllisen yhteenvedon luomiseksi. Tämä voi tapahtua jos hakupalvelu oli tilapäisesti poissa käytöstä.",
+    "readTime": "{{count}} min lukuaika",
+    "wordCount": "{{count}} sanaa",
+    "topicsCovered": "Käsitellyt aiheet",
+    "continueReading": "Jatka lukemista",
+    "readFull": "Lue koko katsaus",
+    "goDeeper": "Syvenny chatissa",
+    "saveAsGoal": "Tallenna johtopäätökset tavoitteeksi",
+    "errors": {
+      "generateFailed": "Katsauksen luominen epäonnistui"
+    },
+    "toast": {
+      "generated": "Katsaus luotu",
+      "removed": "Katsaus poistettu"
+    }
+  },
+  "stats": {
+    "title": "Tilastosi",
+    "loading": "Ladataan...",
+    "loadError": "Tilastoja ei voitu ladata.",
+    "messages": "Viestit",
+    "conversations": "Keskustelut",
+    "entities": "Entiteetit",
+    "helpful": "Hyödyllinen",
+    "agentUsage": "Agenttien käyttö",
+    "topTopics": "Suosituimmat aiheet",
+    "activity": "Toiminta",
+    "memberSince": "Jäsen alkaen {{date}}"
+  },
+  "kg": {
+    "title": "Mitä Kernel tietää",
+    "emptyTitle": "Kernel ei ole oppinut vielä mitään.",
+    "emptyHint": "Jatka keskustelua — se poimii mainitsemasi ihmiset, projektit ja käsitteet.",
+    "entitiesCount": "{{count}} entiteettiä",
+    "connectionsCount": "{{count}} yhteyttä",
+    "confident": "{{value}}% varma",
+    "mentioned": "{{count}}x mainittu",
+    "types": {
+      "person": "Ihmiset",
+      "company": "Yritykset",
+      "project": "Projektit",
+      "concept": "Käsitteet",
+      "preference": "Mieltymykset",
+      "location": "Sijainnit"
+    }
+  },
+  "insights": {
+    "title": "Näkemykset",
+    "sections": {
+      "world": "Sinä",
+      "beliefs": "Uskomukset",
+      "memory": "Muisti",
+      "reflections": "Laatu",
+      "agents": "Agentit"
+    },
+    "howISeeYou": "Miten näen sinut",
+    "apparentGoal": "Näennäinen tavoite",
+    "situation": "Nykyinen tilanne",
+    "conviction": "Vakaumus",
+    "whatIBelieve": "Mitä uskon",
+    "noBeliefsYet": "Ei vielä uskomuksia. Jatka keskustelua — opin, mikä sinulle on tärkeää.",
+    "challengeBelief": "Haasta tämä uskomus",
+    "dismissBelief": "Hylkää tämä uskomus",
+    "myMemory": "Muistoni sinusta",
+    "noMemoryYet": "Ei vielä muistoja. Opin sinusta keskustellessamme.",
+    "commStyle": "Viestintätyyli",
+    "memory": {
+      "interests": "Kiinnostuksen kohteet",
+      "goals": "Tavoitteet",
+      "facts": "Tietoa sinusta",
+      "preferences": "Mieltymykset"
+    },
+    "performance": "Miten suoriudun",
+    "noReflectionsYet": "Ei vielä havaintoja. Alan seurata laatua muutaman keskustelun jälkeen.",
+    "avgQuality": "keskimääräinen laatu (viimeiset 20)",
+    "dims": {
+      "substance": "Sisältö",
+      "coherence": "Johdonmukaisuus",
+      "relevance": "Osuvuus",
+      "brevity": "Tiiviys",
+      "craft": "Taituruus"
+    },
+    "recentLessons": "Viimeaikaiset opit",
+    "patternNotes": "Kaavahuomiot",
+    "agentPerformance": "Agenttien suorituskyky",
+    "noAgentDataYet": "Ei vielä agenttitietoja.",
+    "quality": "Laatu",
+    "usage": "Käyttö",
+    "challengedStat": "{{count}}x kyseenalaistettu",
+    "reinforcedStat": "{{count}}x vahvistettu",
+    "challengeAction": "kyseenalaista"
+  },
+  "share": {
+    "title": "Jaa keskustelu",
+    "checking": "Tarkistetaan olemassa olevaa linkkiä...",
+    "existingLink": "Tällä keskustelulla on jo julkinen linkki.",
+    "anyoneCanView": "Kuka tahansa tällä linkillä voi nähdä tämän keskustelun.",
+    "revokeLink": "Peruuta linkki",
+    "revoking": "Peruutetaan...",
+    "createDesc": "Luo julkinen linkki, jonka kuka tahansa voi nähdä. Kirjautumista ei vaadita.",
+    "linkExpires": "Linkki vanhenee:",
+    "never": "Ei koskaan",
+    "hours24": "24 tuntia",
+    "days7": "7 päivää",
+    "days30": "30 päivää",
+    "createLink": "Luo jakolinkki",
+    "creating": "Luodaan...",
+    "errors": {
+      "createFailed": "Jakolinkin luominen epäonnistui",
+      "revokeFailed": "Linkin peruuttaminen epäonnistui"
+    },
+    "toast": {
+      "revoked": "Jakolinkki peruutettu"
+    },
+    "shareableLink": "Jaettava linkki",
+    "copyLink": "Kopioi linkki",
+    "copied": "Kopioitu",
+    "copiedAnnounce": "Linkki kopioitu leikepöydälle",
+    "shareVia": "Jaa käyttäen...",
+    "limitReached": "Olet saavuttanut päivittäisen {{limit}} jaetun linkin rajan. Päivitä Pro-versioon saadaksesi lisää jakoja.",
+    "limitHint": "{{used}}/{{limit}} linkkiä käytetty tänään",
+    "dailyCount": "{{used}}/{{limit}} ilmaista jakoa käytetty tänään"
+  },
+  "mirror": {
+    "title": "Peili",
+    "emptyTitle": "Peili on vielä rakenteilla.",
+    "emptyDesc": "Jatka puhumista — Kernelin agentit oppivat näkemään sinut eri näkökulmista.",
+    "convergenceTitle": "Mitä peili näkee",
+    "convergenceDesc": "Oivalluksia, jotka nousevat esiin vasta kun useat agentit vertailevat havaintojaan.",
+    "facetsTitle": "Agenttien näkökulmat",
+    "facetsDesc": "Jokainen agentti tarkkailee eri ulottuvuutta siitä, kuka sinä olet.",
+    "observations": "havainnot",
+    "patterns": "Mallit",
+    "convergenceCount": "Yhtynyt {{count}} kertaa",
+    "dimensions": {
+      "relationship": "Suhde",
+      "curiosity": "Uteliaisuus",
+      "craft": "Taito",
+      "voice": "Ääni",
+      "judgment": "Arviointi",
+      "arc": "Kaari"
+    }
+  }
+}

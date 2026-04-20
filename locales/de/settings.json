@@ -1,0 +1,124 @@
+{
+  "title": "Kontoeinstellungen",
+  "profile": {
+    "heading": "Profil",
+    "displayName": "Anzeigenamen",
+    "displayNamePlaceholder": "{{Your name}}",
+    "username": "Benutzername",
+    "usernamePlaceholder": "@{{username}}",
+    "avatar": "Profilfoto",
+    "avatarChange": "Ändern",
+    "save": "Profil speichern",
+    "saved": "Profil gespeichert",
+    "resetProfile": "Profil zurücksetzen",
+    "profileReset": "Profil auf Standardwerte zurückgesetzt",
+    "usernameTaken": "Dieser Benutzername ist bereits vergeben",
+    "displayNameTaken": "Dieser Anzeigename ist bereits vergeben",
+    "available": "Verfügbar"
+  },
+  "security": {
+    "heading": "Anmeldedaten bearbeiten",
+    "credentialsHeading": "E-Mail & Passwort",
+    "verifyIdentity": "Überprüfen Sie Ihre Identität, um Änderungen vorzunehmen",
+    "verifyHint": "Ein Verifizierungscode wird an Ihre E-Mail-Adresse gesendet, bevor Sie die Anmeldedaten bearbeiten.",
+    "sendCode": "Verifizierungscode senden",
+    "codePlaceholder": "Geben Sie den 6-stelligen Code ein",
+    "codeRequired": "Geben Sie den Verifizierungscode aus Ihrer E-Mail ein",
+    "verificationRequired": "Senden Sie zuerst einen Verifizierungscode",
+    "codeSent": "Code gesendet – prüfen Sie Ihren E-Mail-Posteingang",
+    "verify": "Code bestätigen",
+    "verified": "Identität verifiziert – Sie können jetzt Änderungen vornehmen",
+    "resendCode": "Code erneut senden",
+    "resendIn": "Neu senden in {{seconds}}s",
+    "changeEmail": "E-Mail ändern",
+    "emailPlaceholder": "Neue E-Mail-Adresse",
+    "emailSubmit": "E-Mail aktualisieren",
+    "emailConfirmationSent": "Bestätigungs-E-Mail an Ihre neue Adresse gesendet",
+    "changePassword": "Passwort ändern",
+    "setPassword": "Passwort festlegen",
+    "newPasswordPlaceholder": "Neues Passwort",
+    "confirmPasswordPlaceholder": "Passwort bestätigen",
+    "passwordSubmit": "Passwort aktualisieren",
+    "passwordChanged": "Passwort aktualisiert",
+    "tooShort": "Passwort muss mindestens 8 Zeichen lang sein",
+    "mismatch": "Die Passwörter stimmen nicht überein",
+    "strength": {
+      "weak": "Schwach",
+      "fair": "Akzeptabel",
+      "strong": "Stark"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Verbundene Konten",
+    "connected": "Verbunden",
+    "connect": "Verbinden",
+    "disconnect": "Trennen",
+    "cannotUnlinkLast": "Kann Ihre einzige Anmeldeoption nicht entfernen",
+    "unlinked": "Konto getrennt",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Abonnement",
+    "free": "Kostenloser Plan",
+    "pro": "Pro-Plan",
+    "max": "Max-Plan",
+    "admin": "Admin",
+    "upgrade": "Auf Pro aktualisieren",
+    "upgradeMonthly": "Pro – 29 $/Monat",
+    "upgradeAnnual": "Pro — 290 $/Jahr",
+    "upgradeMax": "Max — 49 $/Monat",
+    "upgradeMaxAnnual": "Max — 490 $/Jahr",
+    "manage": "Abonnement verwalten"
+  },
+  "exportData": {
+    "heading": "Daten exportieren",
+    "description": "Laden Sie eine vollständige Kopie all Ihrer Daten im JSON-Format herunter.",
+    "button": "Meine Daten exportieren",
+    "success": "Export heruntergeladen",
+    "rateLimited": "Export ist in {{hours}} Stunden wieder verfügbar"
+  },
+  "resetData": {
+    "heading": "Daten zurücksetzen",
+    "description": "Löschen Sie selektiv Ihre Daten, ohne Ihr Konto zu löschen. Dies kann nicht rückgängig gemacht werden.",
+    "scopes": {
+      "conversations": "Gespräche",
+      "memory": "Gedächtnis",
+      "knowledge": "Wissensgraph",
+      "goals": "Ziele",
+      "preferences": "Einstellungen",
+      "all": "Alles"
+    },
+    "scopeDesc": {
+      "conversations": "Löscht alle Konversationen und Nachrichten",
+      "memory": "Löscht das gelernte Profil und die Verfahren",
+      "knowledge": "Entfernt alle Entitäten und Beziehungen",
+      "goals": "Löscht alle Ziele und Meilensteine",
+      "preferences": "Setzt Briefings und Metadaten zurück",
+      "all": "Löscht alle Daten und beginnt von Neuem"
+    },
+    "confirm": {
+      "conversations": "Dadurch werden alle Ihre Konversationen und Nachrichten dauerhaft gelöscht. Weiter?",
+      "memory": "Dadurch werden alle Informationen gelöscht, die Kernel über Sie gelernt hat. Weiter?",
+      "knowledge": "Dadurch werden alle Entitäten des Wissensgraphen und ihre Verbindungen entfernt. Weiter?",
+      "goals": "Dadurch werden alle Ihre Ziele und Fortschrittsverfolgung gelöscht. Weiter?",
+      "preferences": "Dadurch werden Ihre Briefings und Metadaten-Einstellungen zurückgesetzt. Weiter?",
+      "all": "Dadurch werden ALLE Ihre Daten gelöscht – Konversationen, Erinnerungen, Wissen, Ziele und Einstellungen. Ihr Konto und Ihr Abonnement bleiben erhalten. Weiter?"
+    },
+    "confirmBtn": "Ja, zurücksetzen",
+    "cancel": "Abbrechen",
+    "success": "{{scope}} wurde erfolgreich gelöscht",
+    "done": "Daten zurücksetzen abgeschlossen"
+  },
+  "danger": {
+    "heading": "Konto",
+    "signOut": "Abmelden",
+    "signOutDesc": "Abmelden von Ihrem Konto auf diesem Gerät",
+    "deleteAccount": "Konto löschen",
+    "deleteDesc": "Konto und alle Daten dauerhaft löschen"
+  }
+}
