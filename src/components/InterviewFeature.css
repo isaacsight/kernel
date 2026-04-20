@@ -12,6 +12,43 @@
   border-bottom: 1px solid var(--pop-hairline-soft);
 }
 
+/* On ink stock the page inverts: ivory text on near-black ground.
+   Rules and dossier card flip too. */
+.pop-interview.pop-stock-ink {
+  background: var(--pop-ink);
+  color: var(--pop-ivory);
+  border-top-color: rgba(250, 249, 246, 0.12);
+  border-bottom-color: rgba(250, 249, 246, 0.12);
+}
+
+.pop-interview.pop-stock-ink .pop-interview-title { color: var(--pop-ivory); }
+.pop-interview.pop-stock-ink .pop-interview-deck { color: rgba(250, 249, 246, 0.78); }
+.pop-interview.pop-stock-ink .pop-interview-byline { color: rgba(250, 249, 246, 0.55); }
+.pop-interview.pop-stock-ink .pop-interview-intro { color: rgba(250, 249, 246, 0.88); }
+.pop-interview.pop-stock-ink .pop-interview-body { color: var(--pop-ivory); }
+.pop-interview.pop-stock-ink .pop-interview-a { color: var(--pop-ivory); }
+.pop-interview.pop-stock-ink .pop-interview-a-mark { color: rgba(250, 249, 246, 0.55); }
+.pop-interview.pop-stock-ink .pop-interview-rule { background: rgba(250, 249, 246, 0.18); }
+.pop-interview.pop-stock-ink .pop-interview-divider { border-top-color: rgba(250, 249, 246, 0.12); }
+.pop-interview.pop-stock-ink .pop-interview-signoff-text { color: rgba(250, 249, 246, 0.78); }
+.pop-interview.pop-stock-ink .pop-interview-monument { color: var(--pop-ivory); }
+.pop-interview.pop-stock-ink .pop-interview-monument span { color: rgba(250, 249, 246, 0.55); }
+.pop-interview.pop-stock-ink .pop-interview-monument strong { color: var(--pop-tomato); }
+
+/* Subject dossier on ink stock — invert the frame so it reads as
+   a card stamped onto the dark page, not a hole punched into it. */
+.pop-interview.pop-stock-ink .pop-interview-subject-frame {
+  background: rgba(250, 249, 246, 0.04);
+  border-color: rgba(250, 249, 246, 0.32);
+}
+.pop-interview.pop-stock-ink .pop-interview-subject-name { color: var(--pop-ivory); }
+.pop-interview.pop-stock-ink .pop-interview-subject-name-jp { color: rgba(250, 249, 246, 0.55); }
+.pop-interview.pop-stock-ink .pop-interview-subject-role { color: var(--pop-ivory); }
+.pop-interview.pop-stock-ink .pop-interview-subject-role-jp { color: rgba(250, 249, 246, 0.55); }
+.pop-interview.pop-stock-ink .pop-interview-subject-meta { border-top-color: rgba(250, 249, 246, 0.18); }
+.pop-interview.pop-stock-ink .pop-interview-subject-location { border-top-color: rgba(250, 249, 246, 0.18); }
+.pop-interview.pop-stock-ink .pop-interview-subject-location-value { color: var(--pop-ivory); }
+
 .pop-interview-inner {
   max-width: 720px;
   margin: 0 auto;
@@ -188,6 +225,7 @@
   letter-spacing: -0.01em;
 }
 
+
 .pop-interview-a {
   color: var(--pop-ink);
   margin-bottom: 0;
@@ -267,3 +305,4 @@
   .pop-interview-a--last .pop-interview-a-text::first-letter { font-size: 2.8em; }
   .pop-interview-signoff { padding-top: 32px; margin-top: 32px; }
 }
+

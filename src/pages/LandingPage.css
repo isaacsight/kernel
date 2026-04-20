@@ -807,6 +807,51 @@
 }
 
 /* ──────────────────────────────────────────────────────────────
+   Ink-stock cover overrides — when a cover sits on ink stock
+   (introduced 371 — was unused before), the headline prefix/
+   suffix and the deck must flip to ivory so they're legible
+   against the dark ground. The italic <em> emphasis stays
+   tomato (the standing accent). Folio Courier metadata, the
+   monument number, and the cover stats also flip.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-cover.pop-stock-ink .pop-feature-title {
+  color: var(--pop-ivory);
+}
+.pop-cover.pop-stock-ink .pop-feature-title em {
+  color: var(--pop-tomato);
+}
+.pop-cover.pop-stock-ink .pop-feature-swash {
+  color: rgba(250, 249, 246, 0.78);
+}
+.pop-cover.pop-stock-ink .pop-feature-jp {
+  color: rgba(250, 249, 246, 0.6);
+}
+.pop-cover.pop-stock-ink .pop-folio {
+  color: rgba(250, 249, 246, 0.7);
+}
+.pop-cover.pop-stock-ink .pop-monument {
+  color: var(--pop-ivory);
+}
+.pop-cover.pop-stock-ink .pop-monument span {
+  color: rgba(250, 249, 246, 0.6);
+}
+.pop-cover.pop-stock-ink .pop-monument strong {
+  color: var(--pop-tomato);
+}
+.pop-cover.pop-stock-ink .pop-hash {
+  color: rgba(250, 249, 246, 0.55);
+}
+.pop-cover.pop-stock-ink .pop-rule {
+  border-color: rgba(250, 249, 246, 0.18);
+  background: rgba(250, 249, 246, 0.18);
+}
+.pop-cover.pop-stock-ink .pop-rule--tomato {
+  background: var(--pop-tomato);
+  border-color: var(--pop-tomato);
+}
+
+/* ──────────────────────────────────────────────────────────────
    Cover ornaments — optional decorative marks that reinforce the
    issue's theme. One ornament per issue, set via
    IssueRecord.coverOrnament. Kept scoped to the pop-cover so the
@@ -899,6 +944,48 @@
     opacity: 0.6;
   }
 }
+
+/* ── flash-burn — overexposed white wedge from the upper-right
+      corner. The radial gradient is defined inside the SVG; the
+      rule positions and sizes the SVG to bleed past the cover's
+      top edge so the burn reads as a flash that fired off-page,
+      not as a vignette overlay. Mix-blend-mode 'screen' keeps the
+      burn additive on dark stock — the white CRUSHES the ink.
+      Pairs with the after-hours palette + ink stock; introduced
+      for ISSUE 371 (cinematographer of nightlife). */
+.pop-cover-ornament--flash-burn {
+  inset: -10% -10% auto auto;
+  width: 95%;
+  height: 88%;
+  opacity: 1;
+  mix-blend-mode: screen;
+}
+
+/* On lighter stocks the flash needs to read as a presence, not a
+   wash — multiply keeps the gradient visible against ivory or
+   butter without nuking the page. */
+.pop-cover:not(.pop-stock-ink) .pop-cover-ornament--flash-burn {
+  mix-blend-mode: normal;
+  opacity: 0.55;
+}
+
+/* When the flash-burn is active, flip the issue monument's tomato
+   numeral to ivory — the number lives INSIDE the burn as negative
+   ink. The classic position (bottom-right) wouldn't intersect the
+   burn, so we additionally pull the monument up-and-right so the
+   number sits inside the hot corner. */
+.pop-cover--ornament-flash-burn .pop-monument strong {
+  color: var(--pop-ivory);
+}
+
+@media (max-width: 640px) {
+  .pop-cover-ornament--flash-burn {
+    inset: -8% -8% auto auto;
+    width: 92%;
+    height: 70%;
+  }
+}
+
 
 /* ──────────────────────────────────────────────────────────────
    Cover seal — press-preview rubber stamp in the top-right

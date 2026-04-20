@@ -23,6 +23,7 @@ import { ISSUE_367 } from './367'
 import { ISSUE_368 } from './368'
 import { ISSUE_369 } from './369'
 import { ISSUE_370 } from './370'
+import { ISSUE_371 } from './371'
 
 export interface ContentsItem {
   /** Numbered catalog number, padded (e.g. "001") */
@@ -159,6 +160,8 @@ export interface SpreadReferences {
  *
  *  Optional modules for issues that want more expression:
  *  - dossier:    abstract block at the top (methods-paper card)
+ *  - filmstrip:  contact strip of frames, rendered after dossier
+ *                (NEW — introduced ISSUE 371 for visual subjects)
  *  - dataBlock:  "by the numbers" grid inserted between sections
  *  - references: works-cited block at the foot */
 export interface EssaySpread extends SpreadCommon {
@@ -166,6 +169,7 @@ export interface EssaySpread extends SpreadCommon {
   sections: SpreadSection[]
   pullQuote?: SpreadPullQuote
   dossier?: SpreadDossier
+  filmstrip?: SpreadFilmstrip
   dataBlock?: SpreadDataBlock
   references?: SpreadReferences
 }
@@ -186,12 +190,44 @@ export interface InterviewExchange {
   a: string
 }
 
+/** A single frame in the cinema-strip module — a still pulled
+ *  from one of the subject's takes, rendered as a contact-strip
+ *  cell. `image` is optional: when absent, the frame renders as
+ *  a caption-only cell so the strip can ship before the source
+ *  files arrive, and the stills drop in later without touching
+ *  the layout. Introduced ISSUE 371 (cinematographer profile);
+ *  reusable on any spread whose subject is visual. */
+export interface SpreadFilmstripFrame {
+  /** Take label, e.g. "TAKE 01". Padded for alignment. */
+  take: string
+  /** Venue or event the frame was pulled from. */
+  venue: string
+  /** Date or timestamp — Courier metadata under the venue. */
+  date: string
+  /** Optional still URL. When omitted, renders caption-only. */
+  image?: string
+}
+
+/** A horizontal strip of contact-sheet frames. Format-neutral —
+ *  available on essays (under the dossier) and on interviews
+ *  (between intro and Q&A). Built for cinematographer profiles. */
+export interface SpreadFilmstrip {
+  /** Section kicker — e.g. "CINEMA STRIP · 撮影". */
+  kicker: string
+  /** One-line note under the kicker (optional). */
+  note?: string
+  frames: SpreadFilmstripFrame[]
+}
+
 export interface InterviewSpread extends SpreadCommon {
   type: 'interview'
   subject: InterviewSubject
   exchanges: InterviewExchange[]
   /** Optional intro block before the Q&A begins. */
   intro?: string
+  /** Optional contact-strip module rendered between intro and
+   *  Q&A. Introduced ISSUE 371; orthogonal for prior interviews. */
+  filmstrip?: SpreadFilmstrip
 }
 
 /** ─── forecast ────────────────────────────────────────────────
@@ -355,10 +391,17 @@ export type IssueCoverLayout = 'classic' | 'monument-hero' | 'asymmetric-left'
  *                   dermis of a reef specimen. Introduced for 369
  *                   (warty frogfish); reusable any time a cover
  *                   wants "speckled" rather than "blotted."
+ * - 'flash-burn'  — an overexposed white wedge from the upper-right
+ *                   corner with soft falloff into the paper, miming
+ *                   a Boiler-Room-style on-camera flash hitting the
+ *                   page. Introduced for 371 (cinematographer of
+ *                   nightlife); pairs naturally with ink stock and
+ *                   the after-hours palette. The monument number
+ *                   sits inside the burn as negative space.
  *
  * Most issues do not set this; leaving it undefined is the default.
  */
-export type IssueCoverOrnament = 'ink-spread' | 'warty-spots'
+export type IssueCoverOrnament = 'ink-spread' | 'warty-spots' | 'flash-burn'
 
 /** Optional press-preview wax seal rendered in the top-right
  *  corner of the cover. Reads as a rubber stamp or embargo seal;
@@ -411,6 +454,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_368,
   ISSUE_369,
   ISSUE_370,
+  ISSUE_371,
 ]
 
 /** The latest published issue — drives the landing cover. */

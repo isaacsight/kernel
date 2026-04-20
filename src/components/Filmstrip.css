@@ -1,0 +1,170 @@
+/* ──────────────────────────────────────────────────────────────
+   Filmstrip — shared cinema-strip module.
+
+   A horizontal contact-sheet of frames pulled from the subject's
+   takes, rendered as a strip of small 16:9 cells with Courier
+   take-numbers, venues, and dates. Format-neutral: used by both
+   EssayFeature (introduced ISSUE 371, cinematographer profile)
+   and InterviewFeature (available for visual subjects).
+
+   Selectors are NOT scoped to a parent format, so the rules apply
+   wherever the markup appears. Ink-stock variants are scoped to
+   the host (`.pop-essay.pop-stock-ink`, `.pop-interview.pop-stock-
+   ink`) so each format's invert palette stays correct.
+
+   Standalone tomato palette — no second spot color. The strip
+   reads as a contact sheet taped to the editor's wall before the
+   piece was written.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-filmstrip {
+  margin: 40px auto 0;
+  max-width: 720px;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+  padding: 24px 0 28px;
+}
+
+.pop-filmstrip-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 0 16px;
+}
+
+.pop-filmstrip-kicker {
+  letter-spacing: 0.16em;
+  color: var(--pop-tomato);
+}
+
+.pop-filmstrip-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--pop-coffee);
+  text-align: right;
+  max-width: 60%;
+}
+
+.pop-filmstrip-track {
+  display: flex;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.pop-filmstrip-cell {
+  flex: 0 0 auto;
+  width: clamp(132px, 18vw, 168px);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pop-filmstrip-frame {
+  aspect-ratio: 16 / 9;
+  background: var(--pop-ink);
+  border: 1px solid var(--pop-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.pop-filmstrip-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pop-filmstrip-placeholder {
+  font-family: var(--font-mono);
+  color: rgba(250, 249, 246, 0.18);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.pop-filmstrip-take {
+  margin: 8px 0 0;
+  letter-spacing: 0.16em;
+  color: var(--pop-tomato);
+  font-size: 10px;
+}
+
+.pop-filmstrip-venue {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--pop-ink);
+  margin: 2px 0 0;
+}
+
+.pop-filmstrip-date {
+  margin: 2px 0 0;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Caption-only cells — used when no still is available. The
+   frame stays drawn so the strip's rhythm is intact; the inside
+   shows a glyph placeholder. Reads as "image pending." */
+.pop-filmstrip-cell--caption-only .pop-filmstrip-frame {
+  background: rgba(31, 30, 29, 0.04);
+  border-style: dashed;
+  border-color: var(--pop-hairline);
+}
+
+/* ── Ink-stock invert (essay host) ─────────────────────── */
+.pop-essay.pop-stock-ink .pop-filmstrip {
+  border-top-color: rgba(250, 249, 246, 0.18);
+  border-bottom-color: rgba(250, 249, 246, 0.18);
+}
+.pop-essay.pop-stock-ink .pop-filmstrip-venue { color: var(--pop-ivory); }
+.pop-essay.pop-stock-ink .pop-filmstrip-date { color: rgba(250, 249, 246, 0.55); }
+.pop-essay.pop-stock-ink .pop-filmstrip-note { color: rgba(250, 249, 246, 0.7); }
+.pop-essay.pop-stock-ink .pop-filmstrip-frame {
+  background: rgba(250, 249, 246, 0.04);
+  border-color: rgba(250, 249, 246, 0.32);
+}
+.pop-essay.pop-stock-ink .pop-filmstrip-cell--caption-only .pop-filmstrip-frame {
+  background: rgba(250, 249, 246, 0.02);
+  border-style: dashed;
+  border-color: rgba(250, 249, 246, 0.22);
+}
+
+/* ── Ink-stock invert (interview host) ─────────────────── */
+.pop-interview.pop-stock-ink .pop-filmstrip {
+  border-top-color: rgba(250, 249, 246, 0.18);
+  border-bottom-color: rgba(250, 249, 246, 0.18);
+}
+.pop-interview.pop-stock-ink .pop-filmstrip-venue { color: var(--pop-ivory); }
+.pop-interview.pop-stock-ink .pop-filmstrip-date { color: rgba(250, 249, 246, 0.55); }
+.pop-interview.pop-stock-ink .pop-filmstrip-note { color: rgba(250, 249, 246, 0.7); }
+.pop-interview.pop-stock-ink .pop-filmstrip-frame {
+  background: rgba(250, 249, 246, 0.04);
+  border-color: rgba(250, 249, 246, 0.32);
+}
+.pop-interview.pop-stock-ink .pop-filmstrip-cell--caption-only .pop-filmstrip-frame {
+  background: rgba(250, 249, 246, 0.02);
+  border-style: dashed;
+  border-color: rgba(250, 249, 246, 0.22);
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .pop-filmstrip { padding: 18px 0 22px; margin-top: 24px; }
+  .pop-filmstrip-head { flex-direction: column; gap: 6px; padding-bottom: 12px; }
+  .pop-filmstrip-note { text-align: left; max-width: 100%; }
+  .pop-filmstrip-cell { width: 132px; }
+}

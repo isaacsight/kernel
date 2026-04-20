@@ -44,6 +44,7 @@ export function IssueCover({ issue, footer }: IssueCoverProps) {
     <section className={sectionClasses}>
       {ornament === 'ink-spread' && <InkSpreadOrnament />}
       {ornament === 'warty-spots' && <WartySpotsOrnament />}
+      {ornament === 'flash-burn' && <FlashBurnOrnament />}
       {seal && <CoverSeal label={seal.label} date={seal.date} />}
       <div className="pop-cover-inner">
 
@@ -286,6 +287,57 @@ function WartySpotsOrnament() {
         <circle cx="248" cy="430" r="1.8" />
         <circle cx="186" cy="140" r="2" />
       </g>
+    </svg>
+  )
+}
+
+/**
+ * FlashBurnOrnament — an overexposed white wedge from the
+ * upper-right corner of the cover, with a soft radial falloff
+ * into the paper. Reads as a Boiler-Room-style on-camera flash
+ * frozen in the moment the shutter opened. Built with a radial
+ * gradient (origin in the burnt corner) so the falloff stays
+ * smooth on dark stocks. The .pop-cover--ornament-flash-burn
+ * rule re-positions the issue monument so the number sits inside
+ * the burn as negative ink. Introduced for ISSUE 371.
+ */
+function FlashBurnOrnament() {
+  return (
+    <svg
+      className="pop-cover-ornament pop-cover-ornament--flash-burn"
+      viewBox="0 0 420 560"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <radialGradient
+          id="pop-flash-burn-gradient"
+          cx="100%"
+          cy="0%"
+          r="85%"
+          fx="100%"
+          fy="0%"
+        >
+          {/* Hot core — overexposed white at the corner */}
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+          {/* Halo — still bright, beginning to fall off */}
+          <stop offset="22%" stopColor="#FFFFFF" stopOpacity="0.92" />
+          {/* Mid-falloff — translucent veil */}
+          <stop offset="46%" stopColor="#FFFFFF" stopOpacity="0.55" />
+          {/* Outer wash — barely there, ghosts the page */}
+          <stop offset="72%" stopColor="#FFFFFF" stopOpacity="0.18" />
+          {/* Edge — fully transparent, paper takes over */}
+          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect
+        x="0"
+        y="0"
+        width="420"
+        height="560"
+        fill="url(#pop-flash-burn-gradient)"
+      />
     </svg>
   )
 }

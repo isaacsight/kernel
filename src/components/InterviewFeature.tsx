@@ -1,6 +1,7 @@
 import type { IssueRecord, InterviewSpread } from '../content/issues'
 import { PopShape } from './ornaments'
 import './InterviewFeature.css'
+import './Filmstrip.css'
 
 interface InterviewFeatureProps {
   spread: InterviewSpread
@@ -71,6 +72,52 @@ export function InterviewFeature({ spread, issue }: InterviewFeatureProps) {
         {/* ── Intro block (optional) ──────────────────────── */}
         {spread.intro && (
           <p className="pop-interview-intro">{spread.intro}</p>
+        )}
+
+        {/* ── Cinema strip (optional, shared module) ──────── */}
+        {spread.filmstrip && (
+          <aside
+            className="pop-filmstrip"
+            aria-label={spread.filmstrip.kicker}
+          >
+            <div className="pop-filmstrip-head">
+              <span className="pop-folio pop-filmstrip-kicker">
+                {spread.filmstrip.kicker}
+              </span>
+              {spread.filmstrip.note && (
+                <span className="pop-filmstrip-note">
+                  {spread.filmstrip.note}
+                </span>
+              )}
+            </div>
+            <ol className="pop-filmstrip-track">
+              {spread.filmstrip.frames.map((frame, i) => (
+                <li
+                  key={i}
+                  className={`pop-filmstrip-cell${
+                    frame.image ? '' : ' pop-filmstrip-cell--caption-only'
+                  }`}
+                >
+                  <div className="pop-filmstrip-frame">
+                    {frame.image ? (
+                      <img
+                        src={frame.image}
+                        alt={`${frame.take} — ${frame.venue}`}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span className="pop-filmstrip-placeholder" aria-hidden="true">
+                        ▮
+                      </span>
+                    )}
+                  </div>
+                  <p className="pop-folio pop-filmstrip-take">{frame.take}</p>
+                  <p className="pop-filmstrip-venue">{frame.venue}</p>
+                  <p className="pop-folio pop-filmstrip-date">{frame.date}</p>
+                </li>
+              ))}
+            </ol>
+          </aside>
         )}
 
         <hr className="pop-rule pop-interview-rule" />
