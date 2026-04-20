@@ -1,6 +1,22 @@
 import { describe, it } from 'vitest';
 import assert from 'node:assert/strict';
 import { extractArithmetic, buildMathGuardBlock } from './math-guard.js';
+describe('math-guard — word-form operators', () => {
+    it('"847 times 239" = 202433', () => {
+        const out = extractArithmetic('Calculate 847 times 239.');
+        assert.equal(out.length, 1);
+        assert.equal(out[0].result, 202433);
+    });
+    it('"3 plus 4" = 7', () => {
+        assert.equal(extractArithmetic('3 plus 4')[0].result, 7);
+    });
+    it('"10 divided by 2" = 5', () => {
+        assert.equal(extractArithmetic('10 divided by 2')[0].result, 5);
+    });
+    it('"8 minus 3" = 5', () => {
+        assert.equal(extractArithmetic('what is 8 minus 3')[0].result, 5);
+    });
+});
 describe('math-guard — extract single expressions', () => {
     it('catches the original probe failure: 847 * 239 = 202433', () => {
         const out = extractArithmetic('What is 847 * 239?');

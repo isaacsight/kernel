@@ -17,6 +17,14 @@
 
 const EXPR_RE = /(?<!\w)(-?\d+(?:\.\d+)?)\s*([+\-*×/÷%])\s*(-?\d+(?:\.\d+)?)(?!\w)/g
 
+const WORD_OPS: Array<{ re: RegExp; op: string }> = [
+  { re: /\b(-?\d+(?:\.\d+)?)\s+(?:times|multiplied\s+by)\s+(-?\d+(?:\.\d+)?)\b/gi, op: '*' },
+  { re: /\b(-?\d+(?:\.\d+)?)\s+plus\s+(-?\d+(?:\.\d+)?)\b/gi, op: '+' },
+  { re: /\b(-?\d+(?:\.\d+)?)\s+minus\s+(-?\d+(?:\.\d+)?)\b/gi, op: '-' },
+  { re: /\b(-?\d+(?:\.\d+)?)\s+(?:divided\s+by|over)\s+(-?\d+(?:\.\d+)?)\b/gi, op: '/' },
+  { re: /\b(-?\d+(?:\.\d+)?)\s+mod\s+(-?\d+(?:\.\d+)?)\b/gi, op: '%' },
+]
+
 export interface ComputedExpression {
   expression: string
   result: number
@@ -73,6 +81,21 @@ export function extractArithmetic(message: string): ComputedExpression[] {
     const r = compute(a, m[2], b)
     if (r === null || !Number.isFinite(r)) continue
     out.push({ expression: raw, result: r })
+    if (out.length >= 10) break
+  }
+  // Word-form operators — "847 times 239", "3 plus 4", "10 divided by 2".
+  for (const { re, op } of WORD_OPS) {
+    for (const m of message.matchAll(re)) {
+      const a = Number.parseFloat(m[1])
+      const b = Number.parseFloat(m[2])
+      const r = compute(a, op, b)
+      if (r === null || !Number.isFinite(r)) continue
+      const canonical = `${m[1]} ${op} ${m[2]}`
+      if (seen.has(canonical)) continue
+      seen.add(canonical)
+      out.push({ expression: canonical, result: r })
+      if (out.length >= 10) break
+    }
     if (out.length >= 10) break
   }
   return out

@@ -248,6 +248,27 @@ async function tryLocalFirst(message: string): Promise<string | null> {
     return process.cwd()
   }
 
+  // Open-source / license short-circuit. Discovered by the eval harness on
+  // 2026-04-20: gemma4:latest confidently answered "No, I'm proprietary" to
+  // "Are you open source?". kbot is MIT — this is a trust-damaging
+  // confabulation. Answer deterministically from the license field.
+  if (/\b(open\s+source|open-source|proprietary|closed\s+source|license)\b/i.test(lower)
+      && message.length < 120) {
+    return 'Yes — kbot is open source under the MIT License. Source: https://github.com/isaacsight/kernel'
+  }
+
+  // Fake-tool lookup. "Do you have a tool called X?" should be answered
+  // against the tool registry, not the LLM's priors. Probe-flake ("No" →
+  // "Yes" on the same question) observed on 2026-04-20.
+  const toolQuery = message.match(/do\s+you\s+have\s+a\s+tool\s+(?:called|named)?\s*['"]?([\w-]+)['"]?\??/i)
+  if (toolQuery) {
+    const name = toolQuery[1]
+    const exists = !!getTool(name)
+    return exists
+      ? `Yes — "${name}" is a registered tool.`
+      : `No — "${name}" is not a registered kbot tool.`
+  }
+
   // Identity short-circuit — deterministic answers for self-queries that
   // small models confabulate on. Eval 2026-04-20 showed gemma4:latest
   // answering "v3.99.14" for "what version are you" even with the IDENTITY

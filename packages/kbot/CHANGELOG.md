@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.99.29 (2026-04-20)
+
+### Eval harness upgrades — regression tracking + discovery probes
+- Runner now writes `eval/results/latest.json` + a timestamped history file per run. Enables per-version curves and `--baseline <path>` regression detection (exits non-zero on newly-failing probes).
+- New `--repeat N` flag runs each probe N times, uses majority-vote for pass/fail, flags flaky probes (mixed outcomes).
+- New probe categories added: paraphrase (same question, different wording), adversarial (reversal curse / double negation / false-authority), consistency (anchor probes for flake detection).
+- 18 → 28 probes.
+
+### Fixed: kbot said it was proprietary
+- **Discovered by the harness on v3.99.28.** gemma4:latest answered "No, I'm proprietary" to "Are you open source?" — a trust-damaging confabulation given kbot is MIT. New `tryLocalFirst` short-circuit answers license/OSS questions directly from the package metadata. No LLM involvement.
+
+### Fixed: word-form arithmetic (times / plus / divided by)
+- **Discovered by the harness**, paraphrase-02 probe: "Calculate 847 times 239" returned "20,805" (wrong by an order of magnitude). math-guard's regex required the `*` symbol. Added a second pass for word-form operators: times / multiplied by / plus / minus / divided by / over / mod.
+
+### Fixed: "Do you have tool X?" flakiness
+- **Discovered by the harness**, self-02 flipping pass → fail on consecutive runs. Now dispatched through a real tool-registry lookup in `tryLocalFirst` instead of asking the LLM.
+
+### Tests
+- 810 passing (+4 word-form math tests).
+
 ## 3.99.28 (2026-04-20)
 
 ### Fixed: identity confabulation (deterministic short-circuit)

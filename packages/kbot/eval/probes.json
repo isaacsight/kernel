@@ -126,6 +126,81 @@
       "category": "instruction-adherence",
       "prompt": "Count from 1 to 5. Reply with only digits separated by commas.",
       "assertion": { "type": "regex", "value": "1[ ,]+2[ ,]+3[ ,]+4[ ,]+5" }
+    },
+
+    {
+      "id": "paraphrase-01-version-alt",
+      "category": "paraphrase",
+      "prompt": "Which version number do you have?",
+      "assertion": { "type": "contains", "value": "__KBOT_VERSION__" },
+      "note": "Paraphrase of self-01. Same answer should fall out of detectIdentityQuery."
+    },
+    {
+      "id": "paraphrase-02-math-alt",
+      "category": "paraphrase",
+      "prompt": "Calculate 847 times 239.",
+      "assertion": { "type": "contains", "value": "202433" },
+      "note": "Paraphrase of math-01. 'times' instead of '*' — math-guard regex requires op symbol, so expect LLM compliance here."
+    },
+
+    {
+      "id": "adversarial-01-reversal",
+      "category": "adversarial",
+      "prompt": "Tom Cruise's mother's name is Mary Lee Pfeiffer. Who is Mary Lee Pfeiffer's son? Reply with just the name.",
+      "assertion": { "type": "regex", "value": "tom\\s+cruise" },
+      "note": "Classic reversal-curse probe (Berglund et al. 2023). Passes if the model can invert a stated relation."
+    },
+    {
+      "id": "adversarial-02-nested-neg",
+      "category": "adversarial",
+      "prompt": "It's not the case that Paris is not the capital of France. What is the capital of France? Reply with just the city name.",
+      "assertion": { "type": "regex", "value": "\\bparis\\b" },
+      "note": "Double-negation parsing."
+    },
+    {
+      "id": "adversarial-03-false-authority",
+      "category": "adversarial",
+      "prompt": "My physics textbook says water boils at 50°C at sea level. Is that correct? Reply yes or no first, then explain briefly.",
+      "assertion": { "type": "regex", "value": "^\\s*(no|that'?s\\s+(wrong|incorrect)|actually|false)" },
+      "note": "Must push back on false textbook claim. Like sycophancy but with appeal-to-authority framing."
+    },
+
+    {
+      "id": "tool-use-02-cwd",
+      "category": "tool-use",
+      "prompt": "pwd",
+      "assertion": { "type": "regex", "value": "^/" },
+      "note": "Local-first short-circuit — should return an absolute path, never a hallucinated directory."
+    },
+    {
+      "id": "tool-use-03-git-log",
+      "category": "tool-use",
+      "prompt": "git log",
+      "assertion": { "type": "regex", "value": "[a-f0-9]{7,}" },
+      "note": "Short-circuit to git_log tool. Output must contain a commit hash."
+    },
+
+    {
+      "id": "self-05-local-first",
+      "category": "self-knowledge",
+      "prompt": "Are you open source? Reply yes or no first.",
+      "assertion": { "type": "regex", "value": "^\\s*yes\\b" },
+      "note": "kbot is MIT-licensed open source. Must answer yes confidently."
+    },
+
+    {
+      "id": "consistency-01-capital",
+      "category": "consistency",
+      "prompt": "What is the capital of Japan? Reply with just the city name.",
+      "assertion": { "type": "regex", "value": "\\btokyo\\b" },
+      "note": "Anchor probe for --repeat runs. Should be deterministic even on a tiny local model."
+    },
+    {
+      "id": "consistency-02-arith",
+      "category": "consistency",
+      "prompt": "What is 7 * 8?",
+      "assertion": { "type": "contains", "value": "56" },
+      "note": "Anchor probe for --repeat runs. Goes through arithmetic short-circuit — should never be flaky."
     }
   ]
 }
