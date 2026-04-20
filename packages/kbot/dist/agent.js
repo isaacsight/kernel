@@ -112,14 +112,16 @@ let weakModelWarningShown = false;
 // ── Local-first execution ──
 async function tryLocalFirst(message) {
     const lower = message.toLowerCase().trim();
-    // Pure-arithmetic short-circuit. When the whole message reduces to a single
-    // "what is a op b" / bare "a op b" / "compute a op b" query, return the
-    // computed answer directly — never involve an LLM. Eval on 2026-04-20
-    // showed gemma4:latest ignoring an injected MATH GUARD block ("123 % 7 = 4"
-    // prepended to the message, answer still "2"). If we already have the
-    // answer deterministically, there is no reason to ask the model.
-    if (/^(?:what\s+is|what['']s|compute|calculate|evaluate)\s+[-\d.\s+*×/÷%]+\??$/i.test(lower)
-        || /^[-\d.\s+*×/÷%]+\??$/.test(lower)) {
+    // Pure-arithmetic short-circuit. If the message contains exactly one
+    // arithmetic expression and reads as a request for the numeric answer
+    // ("what is X", "calculate X", or bare X), return the JS-computed answer
+    // directly — never involve an LLM. Eval on 2026-04-20 showed gemma4:latest
+    // ignoring an injected MATH GUARD ("123 % 7 = 4" prepended to the user
+    // message, answer still "2"). If the answer is deterministic, do not ask
+    // the model.
+    const looksArithmetic = /\b(?:what\s+is|what['']s|compute|calculate|evaluate)\b/i.test(lower)
+        || /^[-\d.\s+*×/÷%()?]+$/.test(lower);
+    if (looksArithmetic && message.length < 200) {
         const { extractArithmetic } = await import('./math-guard.js');
         const exprs = extractArithmetic(message);
         if (exprs.length === 1) {

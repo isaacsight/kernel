@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.99.27 (2026-04-20)
+
+### Fixed: arithmetic short-circuit regex was too strict
+- v3.99.26 required the message to end with the expression (`$` anchor). Real queries like "What is 847 * 239? Reply with just the number." have trailing text, so the short-circuit never fired. Eval still showed 13/18.
+- v3.99.27 relaxes the check: if the message mentions "what is / compute / calculate" AND `extractArithmetic` finds exactly one expression AND the message is under 200 chars, short-circuit with the JS-computed answer.
+
 ## 3.99.26 (2026-04-20)
 
 ### New: reality-probe eval harness (`npm run eval`)
