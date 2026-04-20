@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.99.30 (2026-04-20)
+
+### Fixed: fake-tool lookup regex too greedy
+- **Discovered by baseline diff in v3.99.29.** "Do you have a tool that reads files?" captured "that" as the tool name and returned "No — 'that' is not a registered kbot tool." Regex now requires "called" or "named" before the tool name.
+
 ## 3.99.29 (2026-04-20)
 
 ### Eval harness upgrades — regression tracking + discovery probes

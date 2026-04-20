@@ -260,7 +260,10 @@ async function tryLocalFirst(message: string): Promise<string | null> {
   // Fake-tool lookup. "Do you have a tool called X?" should be answered
   // against the tool registry, not the LLM's priors. Probe-flake ("No" →
   // "Yes" on the same question) observed on 2026-04-20.
-  const toolQuery = message.match(/do\s+you\s+have\s+a\s+tool\s+(?:called|named)?\s*['"]?([\w-]+)['"]?\??/i)
+  // Require "called" or "named" before the tool name — otherwise a prompt
+  // like "a tool that reads files" matches with "that" as the tool name,
+  // which is a different question entirely.
+  const toolQuery = message.match(/do\s+you\s+have\s+a\s+tool\s+(?:called|named)\s+['"]?([\w-]+)['"]?\??/i)
   if (toolQuery) {
     const name = toolQuery[1]
     const exists = !!getTool(name)
