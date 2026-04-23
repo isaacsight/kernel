@@ -209,7 +209,7 @@ async function checkLocalProviderReachable(
       checkUrl = providerConfig.apiUrl.replace('/v1/chat/completions', '/v1/models')
     }
 
-    const res = await fetch(checkUrl, { signal: AbortSignal.timeout(3000) })
+    const res = await fetch(checkUrl, { signal: AbortSignal.timeout(5000) })
     if (!res.ok) {
       return { name: providerConfig.name, status: 'fail', message: `returned ${res.status}` }
     }
@@ -241,8 +241,11 @@ async function checkLocalProviderReachable(
     }
 
     return { name: providerConfig.name, status: 'pass', message: 'running' }
-  } catch {
-    return { name: providerConfig.name, status: 'fail', message: 'not responding' }
+  } catch (err) {
+    const reason = err instanceof Error
+      ? (err.name === 'TimeoutError' ? 'timed out (>5s)' : err.message)
+      : 'not responding'
+    return { name: providerConfig.name, status: 'fail', message: reason }
   }
 }
 
