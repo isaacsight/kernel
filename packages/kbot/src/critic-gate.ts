@@ -6,8 +6,13 @@
  * Hard disable: env KBOT_NO_CRITIC=1.
  */
 
+import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { dirname, join } from 'node:path'
 import { loadConfig } from './auth.js'
 import { classifyToolResult, type RFClass } from './critic-taxonomy.js'
+
+const VERDICT_LOG_PATH = join(homedir(), '.kbot', 'critic-verdicts.jsonl')
 
 export interface CriticVerdict {
   accept: boolean
@@ -162,6 +167,70 @@ async function callOpenAICompat(p: ResolvedProvider, userPrompt: string): Promis
   return data.choices?.[0]?.message?.content || ''
 }
 
+interface VerdictLogEntry {
+  ts: string
+  tool: string
+  path: 'fast' | 'taxonomy' | 'llm' | 'no-provider' | 'unparseable' | 'failed'
+  accept: boolean
+  confidence: number
+  reason?: string
+  failure_class?: RFClass
+  result_bytes: number
+}
+
+function logVerdict(entry: VerdictLogEntry): void {
+  try {
+    const dir = dirname(VERDICT_LOG_PATH)
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
+    appendFileSync(VERDICT_LOG_PATH, JSON.stringify(entry) + '\n')
+  } catch { /* logging is non-critical */ }
+}
+
+export interface CriticStats {
+  total: number
+  accepted: number
+  rejected: number
+  acceptRate: number
+  byPath: Record<VerdictLogEntry['path'], number>
+  topRejectReasons: Array<{ reason: string; count: number }>
+  byFailureClass: Record<string, number>
+  logPath: string
+}
+
+/**
+ * Read the verdict log and compute summary stats. Used by `kbot critic stats`
+ * to decide when default-on critic is safe (measure FP rate first).
+ */
+export function getCriticStats(limit = 5000): CriticStats {
+  const empty: CriticStats = {
+    total: 0, accepted: 0, rejected: 0, acceptRate: 0,
+    byPath: { fast: 0, taxonomy: 0, llm: 0, 'no-provider': 0, unparseable: 0, failed: 0 },
+    topRejectReasons: [], byFailureClass: {}, logPath: VERDICT_LOG_PATH,
+  }
+  if (!existsSync(VERDICT_LOG_PATH)) return empty
+  let raw: string
+  try { raw = readFileSync(VERDICT_LOG_PATH, 'utf8') } catch { return empty }
+  const lines = raw.trim().split('\n').filter(Boolean).slice(-limit)
+  const reasons = new Map<string, number>()
+  for (const line of lines) {
+    let e: VerdictLogEntry
+    try { e = JSON.parse(line) } catch { continue }
+    empty.total++
+    if (e.accept) empty.accepted++
+    else {
+      empty.rejected++
+      if (e.reason) reasons.set(e.reason, (reasons.get(e.reason) || 0) + 1)
+    }
+    if (e.path && empty.byPath[e.path] !== undefined) empty.byPath[e.path]++
+    if (e.failure_class) empty.byFailureClass[e.failure_class] = (empty.byFailureClass[e.failure_class] || 0) + 1
+  }
+  empty.acceptRate = empty.total === 0 ? 0 : empty.accepted / empty.total
+  empty.topRejectReasons = [...reasons.entries()]
+    .sort((a, b) => b[1] - a[1]).slice(0, 10)
+    .map(([reason, count]) => ({ reason, count }))
+  return empty
+}
+
 /**
  * Gate a tool result through the adversarial critic.
  * Never throws — on any failure, returns accept=true with low confidence so
@@ -187,8 +256,22 @@ export async function gateToolResult(
     : (typeof cfg?.critic_strictness === 'number' ? cfg.critic_strictness : 0.5)
 
   const resultText = toText(result)
+  const logEnabled = !cfg || cfg.critic_log_enabled !== false
+  const recordVerdict = (path: VerdictLogEntry['path'], v: CriticVerdict): CriticVerdict => {
+    if (logEnabled) logVerdict({
+      ts: new Date().toISOString(),
+      tool, path,
+      accept: v.accept,
+      confidence: v.confidence,
+      reason: v.reason,
+      failure_class: v.failure_class,
+      result_bytes: resultText.length,
+    })
+    return v
+  }
 
-  // Fast path.
+  // Fast path. Trivial fast-path verdicts are not logged — they would dominate
+  // the dataset and aren't useful for FP measurement.
   if (isTriviallyValid(tool, resultText)) {
     return { accept: true, confidence: 0.9, reason: 'trivial-valid fast path' }
   }
@@ -196,13 +279,13 @@ export async function gateToolResult(
   // Rule-based RF classifier — cheap, no LLM. High-confidence hits short-circuit.
   const rf = classifyToolResult(resultText)
   if (rf && rf.confidence >= 0.8) {
-    return {
+    return recordVerdict('taxonomy', {
       accept: false,
       confidence: rf.confidence,
       reason: `${rf.class}: ${rf.evidence}`,
       retry_hint: 'Taxonomy match — try different arguments or a different tool.',
       failure_class: rf.class,
-    }
+    })
   }
 
   const userPrompt = buildUserPrompt(tool, args, resultText)
@@ -214,7 +297,7 @@ export async function gateToolResult(
     const provider = resolveCriticProvider(opts.provider)
     if (!provider) {
       // No usable provider — degrade gracefully.
-      return { accept: true, confidence: 0.3, reason: 'no critic provider available' }
+      return recordVerdict('no-provider', { accept: true, confidence: 0.3, reason: 'no critic provider available' })
     }
     callLLM = provider.provider === 'anthropic'
       ? (pr) => callAnthropic(provider, pr)
@@ -225,25 +308,25 @@ export async function gateToolResult(
     const text = await callLLM(userPrompt)
     const verdict = parseVerdict(text)
     if (!verdict) {
-      return { accept: true, confidence: 0.3, reason: 'critic returned unparseable output' }
+      return recordVerdict('unparseable', { accept: true, confidence: 0.3, reason: 'critic returned unparseable output' })
     }
     // Strictness gate: require verdict.confidence >= strictness when rejecting,
     // and if accepting with very low confidence and strictness is high, flip to reject.
     if (!verdict.accept && verdict.confidence < Math.max(0.1, 1 - strictness)) {
       // The critic rejected but wasn't very sure — let it pass with warning.
-      return { ...verdict, accept: true, reason: `soft-accept: ${verdict.reason || 'low-confidence reject'}` }
+      return recordVerdict('llm', { ...verdict, accept: true, reason: `soft-accept: ${verdict.reason || 'low-confidence reject'}` })
     }
     if (verdict.accept && strictness > 0.8 && verdict.confidence < 0.3) {
-      return {
+      return recordVerdict('llm', {
         accept: false,
         confidence: verdict.confidence,
         reason: 'strict mode: accepted with very low confidence',
         retry_hint: verdict.retry_hint || 'Verify output shape and re-run with stricter arguments.',
-      }
+      })
     }
-    return verdict
+    return recordVerdict('llm', verdict)
   } catch {
     // Critic call failed — never block the agent loop.
-    return { accept: true, confidence: 0.2, reason: 'critic call failed' }
+    return recordVerdict('failed', { accept: true, confidence: 0.2, reason: 'critic call failed' })
   }
 }

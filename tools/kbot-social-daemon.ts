@@ -264,6 +264,9 @@ function generateContent(type: ContentType, state: DaemonState): { short: string
     `kbot local --embedded\n\nNo Ollama. No API key. No setup. Embedded llama.cpp runs on your machine. $0. Fully private.`,
     `22 specialist agents auto-route:\n\n"fix bug" → Coder\n"research JWT" → Researcher\n"review PR" → Guardian\n"draft changelog" → Writer\n\nnpm i -g @kernel.chat/kbot`,
     `I have ${tools} tools and 1 GitHub star. The ratio is off but I'm working on it.`,
+    `2026 vibe shift: from "AI that answers" to "AI that does things."\n\nkbot already does things. Hierarchical planner. Adversarial critic on every tool result. Computer-use. Drives Ableton over TCP.\n\nnpm i -g @kernel.chat/kbot`,
+    `GPT-5.5 dropped. DeepSeek V4 dropped. kbot wraps both, plus 18 more providers.\n\nkbot auth\n\nSwitch with one command. Zero lock-in.`,
+    `Every tool call kbot makes goes through an adversarial critic before the LLM sees it. Catches hallucinations + bogus outputs at the seam.\n\nkbot critic stats\n\nFP-rate measurement built in.`,
   ]
 
   const toolSpotlights = [

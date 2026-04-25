@@ -961,6 +961,44 @@ async function main(): Promise<void> {
       if (opts.dryRun) printInfo('(dry run — no changes written)')
     })
 
+  const criticCmd = program.command('critic').description('Inspect the adversarial critic gate (FP measurement before default-on)')
+
+  criticCmd
+    .command('stats')
+    .description('Summarize ~/.kbot/critic-verdicts.jsonl: accept rate, top reject reasons, failure-class breakdown')
+    .option('--limit <n>', 'Read only the most recent N entries', '5000')
+    .action(async (opts: { limit?: string }) => {
+      const { getCriticStats } = await import('./critic-gate.js')
+      const limit = opts.limit ? parseInt(opts.limit, 10) : 5000
+      const s = getCriticStats(limit)
+      if (s.total === 0) {
+        printInfo(`No critic verdicts logged yet. Log path: ${s.logPath}`)
+        printInfo('Run kbot normally to populate the log, then re-run `kbot critic stats`.')
+        return
+      }
+      printInfo(`Critic verdicts (last ${s.total} non-trivial):`)
+      printInfo(`  Accepted: ${s.accepted} (${(s.acceptRate * 100).toFixed(1)}%)`)
+      printInfo(`  Rejected: ${s.rejected} (${((1 - s.acceptRate) * 100).toFixed(1)}%)`)
+      printInfo(`\nBy code path:`)
+      for (const [path, count] of Object.entries(s.byPath)) {
+        if (count > 0) printInfo(`  ${path.padEnd(14)} ${count}`)
+      }
+      if (Object.keys(s.byFailureClass).length > 0) {
+        printInfo(`\nBy failure class (taxonomy):`)
+        for (const [cls, count] of Object.entries(s.byFailureClass)) {
+          printInfo(`  ${cls.padEnd(20)} ${count}`)
+        }
+      }
+      if (s.topRejectReasons.length > 0) {
+        printInfo(`\nTop reject reasons:`)
+        for (const { reason, count } of s.topRejectReasons) {
+          printInfo(`  [${count}] ${reason.slice(0, 100)}`)
+        }
+      }
+      printInfo(`\nLog: ${s.logPath}`)
+      printInfo(`Disable logging: set "critic_log_enabled": false in ~/.kbot/config.json`)
+    })
+
   program
     .command('design <brief...>')
     .description('Local-first alternative to Claude Design. Reads your repo\'s design tokens and generates an HTML prototype applying your visual system.')

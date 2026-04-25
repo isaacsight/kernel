@@ -75,12 +75,12 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     name: 'OpenAI',
     apiUrl: 'https://api.openai.com/v1/chat/completions',
     apiStyle: 'openai',
-    defaultModel: 'gpt-5.4',
+    defaultModel: 'gpt-5.5',
     fastModel: 'gpt-4.1-mini',
     inputCost: 2.0,
     outputCost: 8.0,
     authHeader: 'bearer',
-    models: ['gpt-5.4', 'gpt-5.4-pro', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano', 'o3', 'o4-mini'],
+    models: ['gpt-5.5', 'gpt-5.5-pro', 'gpt-5.4', 'gpt-5.4-pro', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano', 'o3', 'o4-mini'],
   },
   google: {
     name: 'Google (Gemini)',
@@ -119,12 +119,12 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     name: 'DeepSeek',
     apiUrl: 'https://api.deepseek.com/chat/completions',
     apiStyle: 'openai',
-    defaultModel: 'deepseek-v4',        // ~1T MoE (37B active), 1M context
-    fastModel: 'deepseek-chat',
+    defaultModel: 'deepseek-v4-pro',    // V4 preview (Apr 24, 2026) — pro/flash MoE, 1M context
+    fastModel: 'deepseek-v4-flash',
     inputCost: 0.50,                     // V4 pricing (cache hit: $0.10)
     outputCost: 2.0,
     authHeader: 'bearer',
-    models: ['deepseek-v4', 'deepseek-v4-reasoner', 'deepseek-chat', 'deepseek-reasoner'],
+    models: ['deepseek-v4-pro', 'deepseek-v4-flash', 'deepseek-v4', 'deepseek-v4-reasoner', 'deepseek-chat', 'deepseek-reasoner'],
   },
   groq: {
     name: 'Groq',
@@ -223,7 +223,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,   // varies by model — this is Claude Sonnet pricing
     outputCost: 15.0,
     authHeader: 'bearer',
-    models: ['anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
+    models: ['anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-5.5', 'openai/gpt-5.5-pro', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-v4-pro', 'deepseek/deepseek-r1'],
   },
   lmstudio: {
     name: 'LM Studio (Local)',
@@ -306,6 +306,9 @@ export interface KbotConfig {
   // Adversarial critic gate (generator/discriminator on tool outputs)
   critic_enabled?: boolean
   critic_strictness?: number // 0..1, default 0.5
+  // Append every non-trivial verdict to ~/.kbot/critic-verdicts.jsonl so we
+  // can measure false-positive rate before flipping defaults. Default: true.
+  critic_log_enabled?: boolean
 }
 
 function ensureDir(): void {

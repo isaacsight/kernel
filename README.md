@@ -27,7 +27,8 @@ npm install -g @kernel.chat/kbot
 
 Most terminal AI agents lock you into one provider, one model, one way of working. kbot doesn't.
 
-- **20 providers, zero lock-in** — Claude, GPT, Gemini, Grok, DeepSeek, Groq, Mistral, SambaNova, Cerebras, OpenRouter, and more. Switch with one command.
+- **Built for action, not answers** — hierarchical planner, adversarial critic gate on every tool result, computer-use desktop control, and a Max-for-Live device that drives Ableton over JSON-over-TCP. The agentic stack is shipped, not promised.
+- **20 providers, zero lock-in** — Claude, GPT-5.5, Gemini, Grok, DeepSeek V4, Groq, Mistral, SambaNova, Cerebras, OpenRouter, and more. Switch with one command.
 - **Runs fully offline** — Embedded llama.cpp, Ollama, LM Studio, or Jan. $0, fully private.
 - **Learns your patterns** — Bayesian skill ratings + pattern extraction. Gets faster over time.
 - **35 specialist agents** — auto-routes your request to the right expert (coder, researcher, writer, guardian, quant, and 30 more).
