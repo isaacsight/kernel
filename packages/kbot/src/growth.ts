@@ -6,6 +6,7 @@ import { readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import chalk from 'chalk'
+import { getCriticStats, type CriticStats } from './critic-gate.js'
 
 interface DataPaths {
   skill: string
@@ -72,6 +73,7 @@ interface GrowthResult {
   metrics: Array<{ label: string; current: number; prior: number; delta: number }>
   deltas: Array<{ tool: string; current: number; prior: number; delta: number }>
   agents: Array<{ agent: string; accuracy: number; samples: number }>
+  critic: CriticStats
 }
 
 function readJsonSafe<T>(path: string): T | null {
@@ -274,6 +276,26 @@ function renderPretty(result: GrowthResult): string {
     lines.push('')
   }
 
+  // Critic gate — aggregate (no window split yet; verdicts are append-only)
+  if (result.critic.total > 0) {
+    lines.push(`  ${chalk.bold('Critic gate')}  ${chalk.dim(`— ${result.critic.total} non-trivial verdicts`)}`)
+    lines.push(`  ${chalk.dim('─'.repeat(60))}`)
+    lines.push(
+      `  accept rate           ${pct(result.critic.acceptRate).padStart(8)}  ${chalk.dim(`(${result.critic.accepted} accept / ${result.critic.rejected} reject)`)}`,
+    )
+    const topReject = result.critic.topRejectReasons[0]
+    if (topReject) {
+      lines.push(`  top reject            ${chalk.dim(`[${topReject.count}]`)} ${topReject.reason.slice(0, 50)}`)
+    }
+    const failureClasses = Object.entries(result.critic.byFailureClass)
+      .sort((a, b) => b[1] - a[1]).slice(0, 3)
+    if (failureClasses.length > 0) {
+      const summary = failureClasses.map(([cls, n]) => `${cls}=${n}`).join('  ')
+      lines.push(`  ${chalk.dim(`failure classes: ${summary}`)}`)
+    }
+    lines.push('')
+  }
+
   lines.push(`  ${chalk.dim(`New patterns learned: ${s.newPatterns}`)}`)
   lines.push('')
   return lines.join('\n')
@@ -350,8 +372,9 @@ export function runGrowth(opts: { json?: boolean; days?: number; dataDir?: strin
 
   const deltas = topToolDeltas(cur.toolCounts, prior.toolCounts, 5)
   const agents = perAgentRouting(confidence, currentStart, now)
+  const critic = getCriticStats()
 
-  const result: GrowthResult = { summary, metrics, deltas, agents }
+  const result: GrowthResult = { summary, metrics, deltas, agents, critic }
 
   if (opts.json) {
     process.stdout.write(JSON.stringify(result, null, 2) + '\n')

@@ -29,10 +29,15 @@ import type {
 import {
   defaultStateDir,
   getActive,
+  getActivePhase,
   readGoal,
   setActive,
+  writeAction,
   writeGoal,
+  writePhase,
 } from './persistence.js'
+import { detectPhaseKind } from './phase-detect.js'
+import type { PhaseKind } from './types.js'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Phase-1 local type shims.
@@ -43,7 +48,7 @@ import {
 
 export type Ulid = string
 
-/** Minimal shape planAndExecute needs from the caller. Expand in Phase 2. */
+/** Minimal shape planAndExecute needs from the caller. */
 export interface SessionContext {
   /** Optional session identifier (e.g. from memory.ts). */
   sessionId?: string
@@ -51,6 +56,15 @@ export interface SessionContext {
   agentOpts: AgentOptions
   /** When true, skip interactive approval on the underlying planner. */
   autoApprove?: boolean
+  /**
+   * Optional executor override. Defaults to `autonomousExecute`. Tests use
+   * this to inject a fake plan without standing up the real LLM-driven planner.
+   */
+  executor?: (
+    userTurn: string,
+    agentOpts: AgentOptions,
+    opts: { autoApprove: boolean },
+  ) => Promise<Plan>
 }
 
 /**
@@ -120,8 +134,18 @@ export class HierarchicalPlanner {
   /**
    * Plan and execute one user turn.
    *
-   * Phase 1: feature-flag gated passthrough to autonomousExecute.
-   * Phase 2+: replace the body with the Tier 1–4 cascade.
+   * Phase 2: full goal → phase → action nesting. When `KBOT_PLANNER` is set
+   * to `hierarchical`, this method:
+   *   1. Loads the active SessionGoal (or runs goal-less, returning goal=null).
+   *   2. Resolves the active Phase under that goal — reusing it if the
+   *      detected PhaseKind matches, otherwise closing it and opening a new
+   *      one with the new kind.
+   *   3. Delegates execution to `autonomousExecute` (the existing flat planner).
+   *   4. Persists the resulting Action under the phase, and updates phase
+   *      status when the action terminates the phase's work.
+   *
+   * The optional ctx.executor lets tests inject a fake autonomousExecute so
+   * the persistence layer can be exercised without spinning the real planner.
    */
   async planAndExecute(
     userTurn: string,
@@ -131,27 +155,27 @@ export class HierarchicalPlanner {
     if (flag !== 'hierarchical') {
       throw new Error(
         `HierarchicalPlanner.planAndExecute is gated behind KBOT_PLANNER=hierarchical ` +
-          `(got ${flag ?? 'unset'}). This path is Phase-1 scaffolding only.`,
+          `(got ${flag ?? 'unset'}). Set the env var to opt in.`,
       )
     }
 
     const startedAt = Date.now()
 
-    const plan: Plan = await autonomousExecute(userTurn, ctx.agentOpts, {
+    // Tier 1 — load active goal (may be null; nesting is best-effort).
+    const goal = await getActive(this.stateDir)
+
+    // Tier 2 — resolve or roll the Phase. Only persist phases when a goal exists.
+    const detectedKind = detectPhaseKind(userTurn)
+    let phase = await this.resolvePhase(goal, detectedKind, userTurn, startedAt)
+
+    // Tier 3 — delegate execution. autonomousExecute is the existing flat
+    // planner; the hierarchical layer wraps it with goal/phase context.
+    const exec = ctx.executor ?? autonomousExecute
+    const plan: Plan = await exec(userTurn, ctx.agentOpts, {
       autoApprove: ctx.autoApprove ?? true,
     })
 
-    const phase: Phase = {
-      id: cryptoUlid(),
-      goalId: '', // no goal linked in Phase 1
-      kind: 'other',
-      objective: userTurn,
-      exitCriteria: [],
-      startedAt: new Date(startedAt).toISOString(),
-      endedAt: new Date().toISOString(),
-      status: plan.status === 'completed' ? 'done' : 'active',
-    }
-
+    // Tier 4 — record the action under the (possibly persisted) phase.
     const steps: ActionStep[] = plan.steps.map(step => ({ ...step }))
     const action: Action = {
       id: cryptoUlid(),
@@ -168,18 +192,74 @@ export class HierarchicalPlanner {
             : 'running',
     }
 
+    if (goal) {
+      await writeAction(this.stateDir, action)
+      // Mirror plan failure into the phase so the next turn can decide to roll.
+      if (plan.status === 'failed' && phase.status === 'active') {
+        phase = { ...phase, status: 'aborted', endedAt: new Date().toISOString() }
+        await writePhase(this.stateDir, phase)
+      }
+    }
+
     const metrics: TurnMetrics = {
-      tier1Calls: 0,
-      tier2Calls: 0,
-      tier3Calls: 1, // autonomousExecute counts as one tier-3 invocation
+      tier1Calls: goal ? 1 : 0,
+      tier2Calls: 1,
+      tier3Calls: 1,
       tier4Calls: steps.length,
       tokensIn: 0,
       tokensOut: 0,
       wallMs: Date.now() - startedAt,
     }
 
-    // Phase 1 never attaches a goal — that's Phase 2.
-    return { goal: null, phase, action, metrics }
+    return { goal, phase, action, metrics }
+  }
+
+  /**
+   * Pick the Phase to operate under: reuse the active one if PhaseKind
+   * matches, otherwise close it and open a new one. When no goal is set, an
+   * ephemeral phase is returned without persistence.
+   */
+  private async resolvePhase(
+    goal: SessionGoal | null,
+    detectedKind: PhaseKind,
+    userTurn: string,
+    startedAt: number,
+  ): Promise<Phase> {
+    const nowIso = new Date(startedAt).toISOString()
+    if (!goal) {
+      // Ephemeral phase — never persisted.
+      return {
+        id: cryptoUlid(),
+        goalId: '',
+        kind: detectedKind,
+        objective: userTurn,
+        exitCriteria: [],
+        startedAt: nowIso,
+        status: 'active',
+      }
+    }
+
+    const active = await getActivePhase(this.stateDir, goal.id)
+    if (active && active.kind === detectedKind) {
+      return active
+    }
+
+    // Roll: mark the old phase done and open a new one with the new kind.
+    if (active) {
+      const closed: Phase = { ...active, status: 'done', endedAt: nowIso }
+      await writePhase(this.stateDir, closed)
+    }
+    const fresh: Phase = {
+      id: cryptoUlid(),
+      goalId: goal.id,
+      kind: detectedKind,
+      objective: userTurn,
+      exitCriteria: [],
+      startedAt: nowIso,
+      status: 'active',
+    }
+    await writePhase(this.stateDir, fresh)
+    return fresh
   }
 
   /** Read the currently-active goal from disk, or null if none is set. */

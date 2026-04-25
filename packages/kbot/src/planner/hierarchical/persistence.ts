@@ -12,7 +12,7 @@
 import { promises as fs } from 'node:fs'
 import * as os from 'node:os'
 import * as path from 'node:path'
-import type { SessionGoal } from './types.js'
+import type { Action, Phase, SessionGoal } from './types.js'
 
 /** Default on-disk root: `~/.kbot/planner/`. */
 export function defaultStateDir(): string {
@@ -117,4 +117,103 @@ export async function clearActive(stateDir: string): Promise<void> {
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err
   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase persistence — `~/.kbot/planner/phases/<goalId>/<phaseId>.json`
+// ─────────────────────────────────────────────────────────────────────────────
+
+function phasesDir(stateDir: string, goalId: string): string {
+  return path.join(stateDir, 'phases', goalId)
+}
+
+function phasePath(stateDir: string, goalId: string, phaseId: string): string {
+  return path.join(phasesDir(stateDir, goalId), `${phaseId}.json`)
+}
+
+export async function writePhase(stateDir: string, phase: Phase): Promise<void> {
+  await ensureDir(phasesDir(stateDir, phase.goalId))
+  const tmp = phasePath(stateDir, phase.goalId, phase.id) + '.tmp'
+  const final = phasePath(stateDir, phase.goalId, phase.id)
+  await fs.writeFile(tmp, JSON.stringify(phase, null, 2), 'utf8')
+  await fs.rename(tmp, final)
+}
+
+export async function readPhase(stateDir: string, goalId: string, phaseId: string): Promise<Phase | null> {
+  try {
+    const raw = await fs.readFile(phasePath(stateDir, goalId, phaseId), 'utf8')
+    return JSON.parse(raw) as Phase
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return null
+    throw err
+  }
+}
+
+export async function listPhasesForGoal(stateDir: string, goalId: string): Promise<Phase[]> {
+  const dir = phasesDir(stateDir, goalId)
+  let entries: string[]
+  try {
+    entries = await fs.readdir(dir)
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return []
+    throw err
+  }
+  const phases: Phase[] = []
+  for (const entry of entries) {
+    if (!entry.endsWith('.json')) continue
+    try {
+      const raw = await fs.readFile(path.join(dir, entry), 'utf8')
+      phases.push(JSON.parse(raw) as Phase)
+    } catch { /* skip malformed */ }
+  }
+  return phases
+}
+
+/** Most recent active Phase for a goal, or null. */
+export async function getActivePhase(stateDir: string, goalId: string): Promise<Phase | null> {
+  const phases = await listPhasesForGoal(stateDir, goalId)
+  const active = phases.filter(p => p.status === 'active')
+  if (active.length === 0) return null
+  active.sort((a, b) => b.startedAt.localeCompare(a.startedAt))
+  return active[0]
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Action persistence — `~/.kbot/planner/actions/<phaseId>/<actionId>.json`
+// ─────────────────────────────────────────────────────────────────────────────
+
+function actionsDir(stateDir: string, phaseId: string): string {
+  return path.join(stateDir, 'actions', phaseId)
+}
+
+function actionPath(stateDir: string, phaseId: string, actionId: string): string {
+  return path.join(actionsDir(stateDir, phaseId), `${actionId}.json`)
+}
+
+export async function writeAction(stateDir: string, action: Action): Promise<void> {
+  await ensureDir(actionsDir(stateDir, action.phaseId))
+  const tmp = actionPath(stateDir, action.phaseId, action.id) + '.tmp'
+  const final = actionPath(stateDir, action.phaseId, action.id)
+  await fs.writeFile(tmp, JSON.stringify(action, null, 2), 'utf8')
+  await fs.rename(tmp, final)
+}
+
+export async function listActionsForPhase(stateDir: string, phaseId: string): Promise<Action[]> {
+  const dir = actionsDir(stateDir, phaseId)
+  let entries: string[]
+  try {
+    entries = await fs.readdir(dir)
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return []
+    throw err
+  }
+  const actions: Action[] = []
+  for (const entry of entries) {
+    if (!entry.endsWith('.json')) continue
+    try {
+      const raw = await fs.readFile(path.join(dir, entry), 'utf8')
+      actions.push(JSON.parse(raw) as Action)
+    } catch { /* skip malformed */ }
+  }
+  return actions
 }

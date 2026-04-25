@@ -254,3 +254,61 @@ describe('Critic Gate — retry hint on reject', () => {
     assert.equal(v.retry_hint, 'verify shape')
   })
 })
+
+// ── Verdict log + stats ──────────────────────────────────────────────
+describe('Critic Gate — verdict log + getCriticStats', () => {
+  it('logs LLM verdicts and aggregates stats', async () => {
+    const { getCriticStats } = await import('./critic-gate.js')
+    // Mix: two accepts, two rejects
+    await gateToolResult('web_search', { query: 'a' }, 'output', {
+      llmClient: stubLLM('{"accept":true,"confidence":0.9}'),
+    })
+    await gateToolResult('web_search', { query: 'b' }, 'output', {
+      llmClient: stubLLM('{"accept":true,"confidence":0.85}'),
+    })
+    await gateToolResult('web_search', { query: 'c' }, 'output', {
+      llmClient: stubLLM('{"accept":false,"confidence":0.95,"reason":"fabricated url"}'),
+    })
+    await gateToolResult('web_search', { query: 'd' }, 'output', {
+      llmClient: stubLLM('{"accept":false,"confidence":0.95,"reason":"fabricated url"}'),
+    })
+    const s = getCriticStats()
+    assert.ok(s.total >= 4, `total ${s.total} should be >= 4`)
+    assert.ok(s.accepted >= 2)
+    assert.ok(s.rejected >= 2)
+    assert.ok(s.byPath.llm >= 4)
+    const fabricated = s.topRejectReasons.find(r => /fabricated url/.test(r.reason))
+    assert.ok(fabricated, 'fabricated-url reason should appear in topRejectReasons')
+    assert.ok(fabricated.count >= 2, `expected count >= 2, got ${fabricated.count}`)
+  })
+
+  it('records taxonomy-path rejects with failure_class', async () => {
+    const { getCriticStats } = await import('./critic-gate.js')
+    // Use a result that the taxonomy classifier will hit with high confidence.
+    // Empty result on a non-trusted tool short-circuits to a reject (the
+    // 'empty/trivial' RF class). We rely on the existing fast-reject for this.
+    await gateToolResult('web_search', { query: 'x' }, '', { llmClient: stubLLM('{"accept":true}') })
+    const s = getCriticStats()
+    // At least one taxonomy entry should be present (we don't pin the class
+    // since the taxonomy classifier may evolve).
+    const taxonomyEntries = s.byPath.taxonomy
+    assert.ok(taxonomyEntries >= 1, `taxonomy entries: ${taxonomyEntries}`)
+  })
+
+  it('respects critic_log_enabled=false', async () => {
+    const { getCriticStats } = await import('./critic-gate.js')
+    const { writeFileSync, mkdirSync } = await import('node:fs')
+    const { join } = await import('node:path')
+    const cfgDir = join(process.env.HOME!, '.kbot')
+    mkdirSync(cfgDir, { recursive: true })
+    writeFileSync(join(cfgDir, 'config.json'), JSON.stringify({ critic_log_enabled: false }))
+    const before = getCriticStats().total
+    await gateToolResult('web_search', { query: 'no-log' }, 'out', {
+      llmClient: stubLLM('{"accept":true,"confidence":0.9}'),
+    })
+    const after = getCriticStats().total
+    assert.equal(after, before, 'log should not grow when critic_log_enabled is false')
+    // Restore
+    writeFileSync(join(cfgDir, 'config.json'), JSON.stringify({}))
+  })
+})
