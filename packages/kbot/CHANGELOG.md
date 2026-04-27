@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.99.32 (2026-04-27)
+
+### Claude Opus 4.7 + task budgets + Managed Agents
+- **Opus 4.7 support** — `claude-opus-4-7` added to provider model lists; `--teacher` default bumped from 4.6 → 4.7.
+- **`--effort` flag** — `low | medium | high | xhigh | max` maps to thinking budget (4K / 10K / 24K / 48K / 96K). `xhigh` matches Claude Code's Opus 4.7 default.
+- **`--task-budget` flag** — soft cap on total tokens for the full agent loop (thinking + tool calls + tool results + output). Opus 4.7 only; sets `output_config.task_budget` + `task-budgets-2026-03-13` beta header. Lets BYOK users enforce a per-session ceiling.
+- **`--managed` flag** — opt-in mode that offloads the agent loop to Anthropic's hosted Managed Agents runtime (`managed-agents-2026-04-01` beta). Creates agent + environment + session, sends `user.message`, streams SSE events. Trade-off: opposite of kbot's local-first ethos but useful for long-horizon work without managing infra. ~$0.08/agent-hour + model usage.
+- **High-res images** — per-image cap raised to 32MB; new `getMaxImageDimension(model)` helper exposes Opus 4.7's 2576px / 3.75MP support (up from 1568px).
+- **README** — documents new flags + the macOS+Linux vs Codex-BCU-macOS-only positioning.
+
 ## 3.99.30 (2026-04-20)
 
 ### Fixed: fake-tool lookup regex too greedy
