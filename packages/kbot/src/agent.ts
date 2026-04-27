@@ -149,6 +149,12 @@ export interface AgentOptions {
   thinking?: boolean
   /** Thinking budget in tokens (default: 10000) */
   thinkingBudget?: number
+  /** Effort level — maps to thinking budget. xhigh = Opus 4.7 default in Claude Code. */
+  effort?: 'low' | 'medium' | 'high' | 'xhigh' | 'max'
+  /** Task budget — total tokens Claude can spend across the agent loop
+   *  (thinking + tool calls + tool results + output). Soft hint, not a hard cap.
+   *  Requires Claude Opus 4.7+. See https://platform.claude.com/docs/en/build-with-claude/task-budgets */
+  taskBudget?: number
   /** Pre-parsed multimodal content (images from CLI) */
   multimodal?: ParsedMessage
   /** Skip planner re-entry (prevents infinite loop when planner calls runAgent) */
@@ -323,12 +329,30 @@ interface ProviderResult {
   stop_reason?: string
 }
 
+/** Map effort level → thinking budget tokens. xhigh sits between high and max,
+ *  matching Claude Code's default for Opus 4.7. */
+function effortToThinkingBudget(effort?: AgentOptions['effort']): number {
+  switch (effort) {
+    case 'low':    return 4_000
+    case 'medium': return 10_000
+    case 'high':   return 24_000
+    case 'xhigh':  return 48_000
+    case 'max':    return 96_000
+    default:       return 10_000
+  }
+}
+
+/** Opus 4.7 supports task budgets (beta) and high-res images. */
+function isOpus47(model: string): boolean {
+  return /claude-opus-4-7/.test(model)
+}
+
 /** Anthropic Messages API (Claude) */
 async function callAnthropic(
   apiKey: string, apiUrl: string, model: string,
   systemContext: string, messages: ProviderMessage[],
   tools?: Array<{ name: string; description: string; input_schema: Record<string, unknown> }>,
-  options?: { multimodal?: ParsedMessage; thinking?: boolean; thinkingBudget?: number },
+  options?: { multimodal?: ParsedMessage; thinking?: boolean; thinkingBudget?: number; effort?: AgentOptions['effort']; taskBudget?: number },
 ): Promise<ProviderResult> {
   // Build messages — use multimodal content blocks if images are present
   const apiMessages = messages.map((m, i) => {
@@ -347,16 +371,28 @@ async function callAnthropic(
   }
   if (tools && tools.length > 0) body.tools = tools
   if (options?.thinking) {
-    body.thinking = { type: 'enabled', budget_tokens: options.thinkingBudget || 10000 }
+    const budget = options.thinkingBudget ?? effortToThinkingBudget(options.effort)
+    body.thinking = { type: 'enabled', budget_tokens: budget }
   }
+
+  // Task budgets — Opus 4.7 only. Soft hint that tells Claude how many tokens it
+  // has across the full agent loop so it paces itself and finishes gracefully.
+  // Beta-gated: requires the task-budgets-2026-03-13 header.
+  const useTaskBudget = options?.taskBudget && options.taskBudget > 0 && isOpus47(model)
+  if (useTaskBudget) {
+    body.output_config = { task_budget: options!.taskBudget }
+  }
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'x-api-key': apiKey,
+    'anthropic-version': '2023-06-01',
+  }
+  if (useTaskBudget) headers['anthropic-beta'] = 'task-budgets-2026-03-13'
 
   const res = await fetch(apiUrl, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-    },
+    headers,
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(300_000), // 5 min timeout
   })
@@ -764,7 +800,7 @@ async function callProviderStreaming(
   provider: ByokProvider, apiKey: string, model: string,
   systemContext: string, messages: ProviderMessage[],
   tools?: Array<{ name: string; description: string; input_schema: Record<string, unknown> }>,
-  options?: { thinking?: boolean; thinkingBudget?: number; responseStream?: ResponseStream },
+  options?: { thinking?: boolean; thinkingBudget?: number; effort?: AgentOptions['effort']; taskBudget?: number; responseStream?: ResponseStream },
 ): Promise<ProviderResult> {
   const p = getProvider(provider)
 
@@ -775,7 +811,7 @@ async function callProviderStreaming(
       apiKey, p.apiUrl, model, systemContext,
       messages.map(m => ({ role: m.role, content: m.content as unknown })),
       tools,
-      { thinking: options?.thinking, thinkingBudget: options?.thinkingBudget, responseStream: options?.responseStream },
+      { thinking: options?.thinking, thinkingBudget: options?.thinkingBudget, effort: options?.effort, taskBudget: options?.taskBudget, responseStream: options?.responseStream },
     )
   } else {
     state = await streamOpenAIResponse(
@@ -933,7 +969,7 @@ async function callProvider(
   provider: ByokProvider, apiKey: string, model: string,
   systemContext: string, messages: ProviderMessage[],
   tools?: Array<{ name: string; description: string; input_schema: Record<string, unknown> }>,
-  options?: { multimodal?: ParsedMessage; thinking?: boolean; thinkingBudget?: number; sessionId?: string },
+  options?: { multimodal?: ParsedMessage; thinking?: boolean; thinkingBudget?: number; effort?: AgentOptions['effort']; taskBudget?: number; sessionId?: string },
 ): Promise<ProviderResult> {
   const p = getProvider(provider)
   const startTime = Date.now()
@@ -1649,12 +1685,16 @@ Always quote file paths that contain spaces. Never reference internal system nam
           ? await callProviderStreaming(provider, apiKey || 'local', model, systemContext, messages, byokTools, {
               thinking: options.thinking,
               thinkingBudget: options.thinkingBudget,
+              effort: options.effort,
+              taskBudget: options.taskBudget,
               responseStream: options.responseStream,
             })
           : await callProvider(provider, apiKey || 'local', model, systemContext, messages, byokTools, {
               multimodal: i === 0 ? parsed : undefined,
               thinking: options.thinking,
               thinkingBudget: options.thinkingBudget,
+              effort: options.effort,
+              taskBudget: options.taskBudget,
             })
       } catch (apiErr) {
         // ── Autopoiesis: report provider failure ──

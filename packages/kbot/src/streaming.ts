@@ -106,7 +106,7 @@ export async function streamAnthropicResponse(
   system: string,
   messages: Array<{ role: string; content: unknown }>,
   tools?: Array<{ name: string; description: string; input_schema: Record<string, unknown> }>,
-  options?: { thinking?: boolean; thinkingBudget?: number; responseStream?: ResponseStream },
+  options?: { thinking?: boolean; thinkingBudget?: number; effort?: 'low' | 'medium' | 'high' | 'xhigh' | 'max'; taskBudget?: number; responseStream?: ResponseStream },
 ): Promise<StreamState> {
   const body: Record<string, unknown> = {
     model,
@@ -116,12 +116,29 @@ export async function streamAnthropicResponse(
     stream: true,
   }
 
-  // Enable extended thinking if requested
+  // Enable extended thinking if requested. Effort level provides a default
+  // budget; xhigh (~48K) matches Claude Code's Opus 4.7 default.
   if (options?.thinking) {
+    const effortBudget = (() => {
+      switch (options.effort) {
+        case 'low':    return 4_000
+        case 'medium': return 10_000
+        case 'high':   return 24_000
+        case 'xhigh':  return 48_000
+        case 'max':    return 96_000
+        default:       return 10_000
+      }
+    })()
     body.thinking = {
       type: 'enabled',
-      budget_tokens: options.thinkingBudget || 10000,
+      budget_tokens: options.thinkingBudget ?? effortBudget,
     }
+  }
+
+  // Task budgets — Opus 4.7 only, beta-gated. Soft cap on full agent loop.
+  const useTaskBudget = options?.taskBudget && options.taskBudget > 0 && /claude-opus-4-7/.test(model)
+  if (useTaskBudget) {
+    body.output_config = { task_budget: options!.taskBudget }
   }
 
   if (tools && tools.length > 0) body.tools = tools
@@ -131,13 +148,16 @@ export async function streamAnthropicResponse(
 
   for (let attempt = 0; attempt <= MAX_STREAM_RETRIES; attempt++) {
     try {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      }
+      if (useTaskBudget) headers['anthropic-beta'] = 'task-budgets-2026-03-13'
+
       res = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-        },
+        headers,
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(300_000),
       })

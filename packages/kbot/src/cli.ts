@@ -76,6 +76,9 @@ async function main(): Promise<void> {
     .option('--computer-use', 'Enable computer use tools')
     .option('-t, --thinking', 'Show AI reasoning steps')
     .option('--thinking-budget <tokens>', 'Thinking token budget (default: 10000)')
+    .option('--effort <level>', 'Reasoning effort: low | medium | high | xhigh | max (Opus 4.7)')
+    .option('--task-budget <tokens>', 'Total token budget for the agent loop (Opus 4.7 only — soft cap)')
+    .option('--managed', "Run via Anthropic's hosted Managed Agents runtime instead of local tools (requires Anthropic API key, ~$0.08/agent-hour)")
     .option('--self-eval', 'Enable self-evaluation loop (score and retry low-quality responses)')
     .option('--plan', 'Plan mode — read-only exploration, no changes')
     .option('--architect', 'Architect mode — plan-review-implement with dual agents')
@@ -4278,7 +4281,7 @@ async function main(): Promise<void> {
     .command('train-cycle')
     .description('On-policy distillation: student generates → Claude grades/corrects → retrain')
     .option('--student <model>', 'Local student model (Ollama)', 'kernel-coder:latest')
-    .option('--teacher <model>', 'Teacher model', 'claude-opus-4-6')
+    .option('--teacher <model>', 'Teacher model', 'claude-opus-4-7')
     .option('--samples <n>', 'Prompts to sample per cycle', (v) => parseInt(v, 10), 50)
     .option('--threshold <score>', 'Pass threshold 0..1', parseFloat, 0.6)
     .option('--retrain', 'Trigger train-self after collecting corrections')
@@ -4612,6 +4615,9 @@ async function main(): Promise<void> {
   const config = loadConfig()
   const tier = 'free'
 
+  const effortRaw = typeof opts.effort === 'string' ? opts.effort.toLowerCase() : undefined
+  const effort = (['low', 'medium', 'high', 'xhigh', 'max'] as const).find(e => e === effortRaw)
+
   const agentOpts: AgentOptions = {
     agent: opts.agent || 'auto',
     model: opts.model,
@@ -4620,6 +4626,8 @@ async function main(): Promise<void> {
     tier,
     thinking: opts.thinking || false,
     thinkingBudget: opts.thinkingBudget ? (parseInt(opts.thinkingBudget, 10) || 10000) : undefined,
+    effort,
+    taskBudget: opts.taskBudget ? (parseInt(opts.taskBudget, 10) || undefined) : undefined,
     plan: opts.plan || false,
   }
 
@@ -4758,6 +4766,30 @@ async function main(): Promise<void> {
         toolCalls: response.toolCalls,
         usage: response.usage,
       }) + '\n')
+      return
+    }
+    // Managed Agents mode: offload the loop to Anthropic's hosted runtime.
+    // Bypasses local tool execution entirely — kbot just streams events.
+    if (opts.managed) {
+      const { runManagedSession } = await import('./managed-agents.js')
+      const { getByokKey, getByokProvider } = await import('./auth.js')
+      const apiKey = process.env.ANTHROPIC_API_KEY
+        || (getByokProvider() === 'anthropic' ? getByokKey() : null)
+      if (!apiKey) {
+        printError('Managed Agents requires an Anthropic API key. Run `kbot auth` (anthropic) or set ANTHROPIC_API_KEY.')
+        process.exit(1)
+      }
+      try {
+        await runManagedSession({
+          apiKey,
+          prompt: message,
+          model: opts.model || 'claude-opus-4-7',
+          title: message.slice(0, 60),
+        })
+      } catch (err) {
+        printError(err instanceof Error ? err.message : String(err))
+        process.exit(1)
+      }
       return
     }
     // Architect mode: plan-review-implement with dual agents

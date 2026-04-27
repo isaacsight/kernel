@@ -25,7 +25,18 @@ const IMAGE_MIMES: Record<string, string> = {
   '.svg': 'image/svg+xml',
 }
 
-const MAX_IMAGE_SIZE = 20 * 1024 * 1024 // 20MB per image
+const MAX_IMAGE_SIZE = 32 * 1024 * 1024 // 32MB per image (was 20MB; bumped for Opus 4.7 high-res 2576px / 3.75MP support)
+
+/** Per-model max image dimension (long edge, in pixels) accepted by the provider.
+ *  Opus 4.7 supports 2576px / 3.75MP — earlier Claude models cap at 1568px / 1.15MP.
+ *  This is informational for callers that want to downscale before upload. */
+export function getMaxImageDimension(model: string): number {
+  if (/claude-opus-4-7/.test(model)) return 2576
+  if (/claude-(opus|sonnet|haiku|mythos)-/.test(model)) return 1568
+  // OpenAI vision models accept up to 2048px on the long edge in high detail mode
+  if (/gpt-(4|5)|o[34]/.test(model)) return 2048
+  return 1568 // safe default
+}
 
 /** Content block types for multimodal messages */
 export interface TextBlock {

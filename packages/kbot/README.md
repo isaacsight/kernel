@@ -374,12 +374,19 @@ Works with Claude Code, Cursor, VS Code, Windsurf, Zed, Neovim.
 ### Power-User Flags
 
 ```bash
-kbot --architect "design the auth system"    # Architecture mode — plan before code
-kbot --thinking "solve this hard problem"    # Extended reasoning with thinking budget
-kbot --self-eval "write a parser"            # Self-evaluation loop — scores and retries
-kbot --computer-use "fill out this form"     # Computer use — controls mouse and keyboard
-kbot -p "query" > output.txt                 # Pipe mode — clean output for scripting
+kbot --architect "design the auth system"     # Architecture mode — plan before code
+kbot --thinking "solve this hard problem"     # Extended reasoning with thinking budget
+kbot --effort xhigh "refactor this module"    # Reasoning depth: low | medium | high | xhigh | max (Opus 4.7)
+kbot --task-budget 200000 "ship the feature"  # Soft cap on total tokens for the loop (Opus 4.7)
+kbot --self-eval "write a parser"             # Self-evaluation loop — scores and retries
+kbot --computer-use "fill out this form"      # Computer use — controls mouse and keyboard
+kbot --managed "build a Python web scraper"   # Run via Anthropic's hosted Managed Agents runtime
+kbot -p "query" > output.txt                  # Pipe mode — clean output for scripting
 ```
+
+> **Computer use note (April 2026):** kbot's `--computer-use` runs on macOS **and Linux**
+> (xdotool); OpenAI's Codex Background Computer Use is macOS-only as of April 16. Both
+> require explicit per-app approval before any GUI interaction.
 
 ## Security
 
