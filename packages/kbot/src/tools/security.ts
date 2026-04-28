@@ -19,6 +19,7 @@ export function registerSecurityTools(): void {
 
   registerTool({
     name: 'dep_audit',
+    deprecated: true,
     description: 'Audit project dependencies for known vulnerabilities. Runs npm audit, pip audit, or cargo audit depending on the project. Returns CVE IDs, severity, and fix recommendations.',
     parameters: {
       path: { type: 'string', description: 'Project directory to audit (default: current directory)' },
@@ -136,6 +137,7 @@ export function registerSecurityTools(): void {
 
   registerTool({
     name: 'secret_scan',
+    deprecated: true,
     description: 'Scan files for accidentally committed secrets — API keys, tokens, passwords, private keys. Checks common patterns (AWS, Stripe, GitHub, Supabase, etc). Does NOT read .env files.',
     parameters: {
       path: { type: 'string', description: 'Directory to scan (default: current directory)' },
@@ -238,6 +240,7 @@ export function registerSecurityTools(): void {
 
   registerTool({
     name: 'ssl_check',
+    deprecated: true,
     description: 'Check SSL/TLS certificate for any domain — expiry date, issuer, protocol, and security grade. Catches expiring certs before they break your site.',
     parameters: {
       domain: { type: 'string', description: 'Domain to check (e.g. "kernel.chat", "api.example.com")', required: true },
@@ -292,6 +295,7 @@ export function registerSecurityTools(): void {
 
   registerTool({
     name: 'headers_check',
+    deprecated: true,
     description: 'Check HTTP security headers for any URL — CSP, HSTS, X-Frame-Options, etc. Reports missing headers that leave you vulnerable to XSS, clickjacking, and MIME sniffing.',
     parameters: {
       url: { type: 'string', description: 'URL to check (e.g. "https://kernel.chat")', required: true },
@@ -351,6 +355,7 @@ export function registerSecurityTools(): void {
 
   registerTool({
     name: 'cve_lookup',
+    deprecated: true,
     description: 'Look up a CVE by ID or search for vulnerabilities affecting a specific package/product. Uses the NVD (National Vulnerability Database) API.',
     parameters: {
       query: { type: 'string', description: 'CVE ID (e.g. "CVE-2024-1234") or package name (e.g. "log4j", "openssl")', required: true },
@@ -506,6 +511,7 @@ export function registerSecurityTools(): void {
 
   registerTool({
     name: 'owasp_check',
+    deprecated: true,
     description: 'Quick OWASP Top 10 check against a codebase. Scans for common vulnerability patterns: SQL injection, XSS, command injection, path traversal, hardcoded secrets, insecure deserialization.',
     parameters: {
       path: { type: 'string', description: 'Directory to scan (default: current directory)' },

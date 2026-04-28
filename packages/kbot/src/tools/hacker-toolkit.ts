@@ -1352,6 +1352,7 @@ export function registerHackerToolkitTools(): void {
 
   registerTool({
     name: 'jwt_analyze',
+    deprecated: true,
     description: 'Analyze JWT tokens. Decode header/payload/signature, verify signatures with a secret, test for algorithm confusion (alg:none), and try common weak secrets.',
     parameters: {
       token: { type: 'string', description: 'JWT token to analyze', required: true },
@@ -1739,6 +1740,7 @@ export function registerHackerToolkitTools(): void {
 
   registerTool({
     name: 'cors_check',
+    deprecated: true,
     description: 'Detect CORS misconfigurations. Tests for arbitrary origin reflection, null origin acceptance, credentials with wildcard, and subdomain wildcard matching.',
     parameters: {
       url: { type: 'string', description: 'URL to check for CORS misconfigurations', required: true },
@@ -2058,6 +2060,7 @@ export function registerHackerToolkitTools(): void {
 
   registerTool({
     name: 'exploit_search',
+    deprecated: true,
     description: 'Search for known exploits and CVEs. Queries the NVD (National Vulnerability Database) API for CVE data. Returns CVE IDs, descriptions, CVSS scores, and references.',
     parameters: {
       query: { type: 'string', description: 'CVE ID (e.g., CVE-2024-1234), software name, or keyword', required: true },
@@ -2903,6 +2906,7 @@ export function registerHackerToolkitTools(): void {
 
   registerTool({
     name: 'ssl_analyze',
+    deprecated: true,
     description: 'Deep SSL/TLS analysis using Node.js tls module. Returns protocol version, cipher suite, certificate details (issuer, subject, validity, SANs), certificate chain, HSTS status, and potential security issues.',
     parameters: {
       host: { type: 'string', description: 'Hostname to analyze', required: true },
@@ -3328,6 +3332,7 @@ export function registerHackerToolkitTools(): void {
 
   registerTool({
     name: 'forensics_analyze',
+    deprecated: true,
     description: 'File forensics analysis. Identify file type by magic bytes, extract printable ASCII strings, get file metadata, hex dump, and calculate Shannon entropy (high entropy = encrypted/compressed).',
     parameters: {
       file_path: { type: 'string', description: 'Path to file to analyze', required: true },
@@ -3844,6 +3849,7 @@ export function registerHackerToolkitTools(): void {
 
   registerTool({
     name: 'security_headers_generate',
+    deprecated: true,
     description: 'Generate complete security header configurations for various frameworks. Includes CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, and more. Returns framework-specific code ready to copy-paste.',
     parameters: {
       framework: { type: 'string', description: 'Framework: express, nextjs, nginx, apache, cloudflare, generic', default: 'generic' },

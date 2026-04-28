@@ -1025,6 +1025,7 @@ export function registerThreatIntelTools(): void {
 
   registerTool({
     name: 'threat_feed',
+    deprecated: true,
     description: 'Aggregate cyber threat intelligence from free public sources. Fetches recent high/critical CVEs from NIST NVD, recent exploits from Exploit-DB, and optionally matches against your tech stack (from dream journal insights). Returns top threats with severity, affected software, and stack relevance.',
     parameters: {
       days: { type: 'number', description: 'Look-back period in days (default: 7, max: 30)' },
@@ -1479,6 +1480,7 @@ export function registerThreatIntelTools(): void {
 
   registerTool({
     name: 'incident_response',
+    deprecated: true,
     description: 'Generate an incident response playbook for a security incident. Given an incident type and description, produces a structured playbook with containment steps, eradication plan, recovery checklist, lessons learned template, and IOC indicators. Uses local Ollama for contextual AI analysis when available. Incident types: ransomware, data_breach, ddos, insider_threat, supply_chain.',
     parameters: {
       incident_type: { type: 'string', description: 'Type of incident: ransomware, data_breach, ddos, insider_threat, supply_chain', required: true },

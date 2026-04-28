@@ -185,6 +185,7 @@ export function registerGamedevTools(): void {
 
   registerTool({
     name: 'scaffold_game',
+    deprecated: true,
     description: 'Generate project scaffolding for a game engine. Supports godot, unity, unreal, bevy, phaser, three (Three.js), playcanvas, and defold. Writes real config files, entry points, and gitignore.',
     parameters: {
       engine: { type: 'string', description: 'Game engine: godot, unity, unreal, bevy, phaser, three, playcanvas, defold', required: true },
@@ -356,6 +357,7 @@ export function registerGamedevTools(): void {
 
   registerTool({
     name: 'game_config',
+    deprecated: true,
     description: 'Generate or modify game engine config files. Auto-detects engine from project directory. Supports project, build, input, physics, rendering, and audio config types.',
     parameters: {
       engine: { type: 'string', description: 'Engine: godot, unity, unreal, bevy, phaser, three, playcanvas, defold (auto-detected if path provided)' },
@@ -458,6 +460,7 @@ export function registerGamedevTools(): void {
 
   registerTool({
     name: 'shader_debug',
+    deprecated: true,
     description: 'Static analysis of shader code for performance issues, errors, and optimization opportunities. Supports GLSL, HLSL, and WGSL. Reports branching, precision, overdraw, math optimization, and texture access patterns.',
     parameters: {
       source: { type: 'string', description: 'Shader source code or file path', required: true },
@@ -938,6 +941,7 @@ void fragment() {
 
   registerTool({
     name: 'material_graph',
+    deprecated: true,
     description: 'Generate material/shader code for game engines. Supports PBR, toon, water, foliage, glass, and emissive materials for Three.js, Godot, and Unity.',
     parameters: {
       material_type: { type: 'string', description: 'Material type: pbr, toon, water, foliage, glass, emissive', required: true },
@@ -1321,6 +1325,7 @@ void fragment() {
 
   registerTool({
     name: 'mesh_generate',
+    deprecated: true,
     description: 'Procedural OBJ mesh generation. Supports plane, cube, sphere, cylinder, torus, heightmap, and terrain shapes with configurable parameters. Outputs valid OBJ with vertices, normals, and UVs.',
     parameters: {
       shape: { type: 'string', description: 'Shape: plane, cube, sphere, cylinder, torus, heightmap, terrain', required: true },
@@ -1355,6 +1360,7 @@ void fragment() {
   // ── Tool 6: Sprite Atlas Packer ────────────────────────────────────
   registerTool({
     name: 'sprite_pack',
+    deprecated: true,
     description: 'Pack multiple sprite images into a single texture atlas with metadata. Uses maxrects bin-packing for optimal layout. Outputs atlas image via ImageMagick and JSON/engine-specific metadata.',
     parameters: {
       input_dir: { type: 'string', description: 'Directory containing sprite images (png/jpg/webp)', required: true },
@@ -1691,6 +1697,7 @@ void fragment() {
   // ── Tool 7: Physics Setup Generator ──────────────────────────────────
   registerTool({
     name: 'physics_setup',
+    deprecated: true,
     description: 'Generate complete physics configuration code for game engines. Supports rigidbody, softbody, ragdoll (full humanoid skeleton), vehicle (suspension/wheels/steering), cloth, and joint systems across 7 physics engines.',
     parameters: {
       type: { type: 'string', description: 'Physics type: rigidbody, softbody, ragdoll, vehicle, cloth, joints', required: true },
@@ -2984,6 +2991,7 @@ const JOINT_CONFIG = ${JSON.stringify({
   // ── Tool 8: Particle System Generator ────────────────────────────────
   registerTool({
     name: 'particle_system',
+    deprecated: true,
     description: 'Generate engine-specific particle system code for common visual effects. Supports fire, smoke, rain, snow, sparks, magic, explosion, dust, bubbles, leaves, and confetti effects across 6 game engines.',
     parameters: {
       effect: { type: 'string', description: 'Effect type: fire, smoke, rain, snow, sparks, magic, explosion, dust, bubbles, leaves, confetti', required: true },
@@ -3698,6 +3706,7 @@ ${effect === 'fire' || effect === 'smoke' ? `    // Grow over lifetime
   // ── Tool 9: Procedural Level Generator ───────────────────────────────
   registerTool({
     name: 'level_generate',
+    deprecated: true,
     description: 'Generate procedural game levels with BSP dungeon, platformer terrain, maze, overworld, or arena layouts. Supports seeded PRNG for reproducibility and outputs in JSON, Tiled, or ASCII formats.',
     parameters: {
       type: { type: 'string', description: 'Level type: dungeon, platformer, overworld, maze, arena', required: true },
@@ -4290,6 +4299,7 @@ ${effect === 'fire' || effect === 'smoke' ? `    // Grow over lifetime
   // ── Tool 10: Tilemap Auto-Tiling Generator ──────────────────────────
   registerTool({
     name: 'tilemap_generate',
+    deprecated: true,
     description: 'Generate bitmask-based auto-tiling rules and tilemap data. Supports blob 47-tile, Wang 16-tile, and simple 4-tile tilesets with terrain definitions for grass, stone, water, sand, snow, and lava.',
     parameters: {
       tileset_type: { type: 'string', description: 'Tileset type: blob_47, wang_16, simple_4', required: true },
@@ -4656,6 +4666,7 @@ tile_${i}/terrain_peering/left = ${cardW ? 0 : -1}`
   // ── Tool 11: Navigation Mesh Configuration ──────────────────────────
   registerTool({
     name: 'navmesh_config',
+    deprecated: true,
     description: 'Generate engine-specific navigation mesh configuration and pathfinding helper code. Supports humanoid, vehicle, flying, and small creature agent types with appropriate defaults across 5 navigation systems.',
     parameters: {
       engine: { type: 'string', description: 'Navigation engine: godot, unity, unreal, recast, three (default: recast)' },
@@ -5794,6 +5805,7 @@ export class NavigationSystem {
   // ── Tool 12: game_audio ──────────────────────────────────────────────
   registerTool({
     name: 'game_audio',
+    deprecated: true,
     description: 'Generate game audio systems: spatial 3D audio, adaptive music layers, sound banks, Howler.js setup, or Web Audio API graphs. Produces complete, working audio code for any game engine.',
     parameters: {
       system: { type: 'string', description: 'Audio system type: spatial, music_layers, sound_bank, howler, web_audio', required: true },
@@ -7251,6 +7263,7 @@ export class AudioEngine {
   // ── Tool 13: netcode_scaffold ───────────────────────────────────────
   registerTool({
     name: 'netcode_scaffold',
+    deprecated: true,
     description: 'Generate multiplayer netcode scaffolding: server, client, and shared types. Supports WebSocket/WebRTC transports with Colyseus, Socket.IO, Geckos.io, Nakama, or raw implementations. Includes lobby, matchmaking, state sync, input prediction, chat, and reconnection features.',
     parameters: {
       architecture: { type: 'string', description: 'Network architecture: client_server, peer_to_peer, relay', required: true },
@@ -8677,6 +8690,7 @@ ${hasReconnect ? '    if (this.reconnectTimer) clearTimeout(this.reconnectTimer)
   // ── Tool 14: game_build ─────────────────────────────────────────────
   registerTool({
     name: 'game_build',
+    deprecated: true,
     description: 'Generate CI/CD pipelines and build configurations for game distribution. Supports Steam, itch.io, web, iOS, and Android targets with GitHub Actions or GitLab CI.',
     parameters: {
       engine: { type: 'string', description: 'Game engine or framework (e.g., godot, unity, unreal, three, phaser, bevy, web)' },
@@ -9191,6 +9205,7 @@ export default defineConfig({
   // ── Tool 15: game_test ──────────────────────────────────────────────
   registerTool({
     name: 'game_test',
+    deprecated: true,
     description: 'Generate game testing and profiling utilities: FPS profiler, memory tracker, input recorder/replayer, screenshot regression tests, and performance budgets with runtime validation.',
     parameters: {
       test_type: { type: 'string', description: 'Test type: fps_profiler, memory_tracker, input_recorder, screenshot_test, performance_budget', required: true },
@@ -10497,6 +10512,7 @@ export class PerformanceBudget {
   // ── Tool 16: ecs_generate ───────────────────────────────────────────
   registerTool({
     name: 'ecs_generate',
+    deprecated: true,
     description: 'Generate Entity Component System (ECS) code: components, systems, and entity archetypes. Produces idiomatic code for Bevy (Rust), bitecs (TypeScript), Unity DOTS (C#), miniplex (TypeScript), or ecsy (TypeScript).',
     parameters: {
       framework: { type: 'string', description: 'ECS framework: bevy, unity_dots, bitecs, miniplex, ecsy', required: true },

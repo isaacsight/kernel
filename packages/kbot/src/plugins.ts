@@ -182,9 +182,22 @@ export async function loadPlugins(
     ? new Set(integrity.verified)
     : null
 
-  const files = readdirSync(pluginsDir).filter(f =>
+  // Top-level plugin files
+  const topLevel = readdirSync(pluginsDir).filter(f =>
     PLUGIN_EXTENSIONS.some(ext => f.endsWith(ext))
   )
+  // Forged subdirectory (created by forge.ts at runtime). v3.99.31 and earlier
+  // persisted forged tools here without the loader scanning for them; fixed in v4.0.
+  let forgedFiles: string[] = []
+  try {
+    const forgedDir = join(pluginsDir, 'forged')
+    forgedFiles = readdirSync(forgedDir)
+      .filter(f => PLUGIN_EXTENSIONS.some(ext => f.endsWith(ext)))
+      .map(f => `forged/${f}`)
+  } catch {
+    // forged/ doesn't exist — nothing to load
+  }
+  const files = [...topLevel, ...forgedFiles]
 
   if (files.length === 0) return []
 

@@ -355,6 +355,7 @@ export function registerDeployTools(): void {
   // ── deploy ─────────────────────────────────────────────────────────
   registerTool({
     name: 'deploy',
+    deprecated: true,
     description:
       'Deploy the current project. Auto-detects platform from config files (vercel.json, netlify.toml, wrangler.toml, fly.toml, railway.json). Supports Vercel, Netlify, Cloudflare Workers/Pages, Fly.io, and Railway.',
     parameters: {

@@ -559,6 +559,7 @@ function runTests(
 export function registerTestRunnerTools(): void {
   registerTool({
     name: 'run_tests',
+    deprecated: true,
     description:
       'Run project tests. Auto-detects the test framework (vitest, jest, pytest, cargo, go, npm) by checking config files, runs tests, and returns structured pass/fail results with failure details the agent can use to auto-fix issues.',
     parameters: {

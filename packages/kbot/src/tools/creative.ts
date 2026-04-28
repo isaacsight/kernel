@@ -734,6 +734,7 @@ function evolveDesign(source: string, mutationIndex: number): string {
 export function registerCreativeTools(): void {
   registerTool({
     name: 'generate_art',
+    deprecated: true,
     description: 'Generate a self-contained p5.js sketch as an HTML file from a text description. Creates generative art that can be opened directly in a browser.',
     parameters: {
       description: { type: 'string', description: 'Text description of the desired artwork (e.g., "flowing ocean waves at sunset")', required: true },
@@ -759,6 +760,7 @@ export function registerCreativeTools(): void {
 
   registerTool({
     name: 'generate_shader',
+    deprecated: true,
     description: 'Generate a Shadertoy-compatible GLSL fragment shader from a text description. Creates animated procedural graphics using noise, raymarching, voronoi, or kaleidoscopic techniques.',
     parameters: {
       description: { type: 'string', description: 'Text description of the desired shader effect (e.g., "molten lava flowing through cracks")', required: true },
@@ -778,6 +780,7 @@ export function registerCreativeTools(): void {
 
   registerTool({
     name: 'generate_music_pattern',
+    deprecated: true,
     description: 'Generate a music pattern as Sonic Pi code or a MIDI-like JSON structure. Creates melodies, bass lines, and drum patterns based on genre and description.',
     parameters: {
       description: { type: 'string', description: 'Text description of the desired music (e.g., "upbeat jazz with walking bass")', required: true },
@@ -806,6 +809,7 @@ export function registerCreativeTools(): void {
 
   registerTool({
     name: 'generate_svg',
+    deprecated: true,
     description: 'Generate algorithmic SVG art from a text description. Creates generative patterns including concentric circles, mesh networks, Mondrian grids, spirographs, or wave patterns.',
     parameters: {
       description: { type: 'string', description: 'Text description of the desired SVG artwork', required: true },
@@ -832,6 +836,7 @@ export function registerCreativeTools(): void {
 
   registerTool({
     name: 'evolve_design',
+    deprecated: true,
     description: 'Take an existing design file (HTML, SVG, GLSL, CSS, etc.) and generate N mutations by tweaking numeric values, colors, and structure. Outputs each variant as a separate file. Useful for exploring design spaces.',
     parameters: {
       source_path: { type: 'string', description: 'Path to the source design file to mutate', required: true },

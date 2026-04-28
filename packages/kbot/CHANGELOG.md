@@ -1,5 +1,38 @@
 # Changelog
 
+## 4.0.0 (2026-04-28) — Evidence-driven curation
+
+**670+ tools → ~100 specialist skills.** Every kept skill is backed by telemetry, agent reference, or test coverage. See [RELEASE_NOTES_4_0.md](./RELEASE_NOTES_4_0.md) for the full data + reasoning.
+
+### Curation
+- 5 discovery agents analyzed 90-day call telemetry, test references, daemon dependencies, external surface (SDK/MCP/ACP/.claude/agents/specialists), and forge-tool readiness.
+- 754 of 793 tools had **0 calls** in 90 days. 738 of 794 had **0 test refs**. **0 daemons** depend on the registry.
+- Per-tool decision tree → 105 KEEP, 61 DEPRECATE (`@deprecated v4.0`, removed in 4.1+), 630 CUT-NOW (modules removed from `LAZY_MODULE_IMPORTS`; source files kept on disk for reversibility).
+- Audit trail at `packages/kbot/CURATION_DISCOVERY/CURATION_DECISION.csv`.
+
+### Architectural
+- **`forge_tool` load-path bug fixed.** v3.99.31 and earlier persisted forged tools to `~/.kbot/plugins/forged/` but the loader only scanned the top level. v4.0 scans `forged/` recursively. Existing forged tools auto-load on first launch after upgrade.
+- **Plugin integrity** now enforced in both `plugins.ts` (3.99.33) and `plugin-sdk.ts` (4.0). Manifest at `~/.kbot/plugins.json`. Fail-closed unless `KBOT_PLUGIN_INTEGRITY=off`.
+- **Vocabulary** refreshed: user-facing copy uses "skills" where the OpenAI/Claude Code framing fits. Internal identifiers unchanged.
+
+### Includes 3.99.32 → 3.99.35
+- `image_thoughtful` — OpenAI Images 2.0 with plan/refine reasoning loop.
+- Channels family — Slack (full), Office (full via Microsoft Graph), WhatsApp/Telegram/Signal/Matrix/Teams (stubs).
+- `local_image_thoughtful` — local image gen via LLaDA2.0-Uni (no OpenAI key required).
+- Workspace Agents — long-running named agents with scopes + permissions; optional Anthropic Managed Agents backend.
+- File Library — content-addressed file store at `~/.kbot/files/`.
+- Parallel computer-use Coordinator — multiple agents driving the Mac at once.
+- Security Agent — 17 static rules, 3 modes, wired into guardian + hacker.
+- `--architect` defaults to Claude Opus 4.7.
+- `kbot setup-claude-code` / `setup-cursor` / `setup-zed` — one-command MCP wiring + skill copy.
+- `.claude/skills/kbot.md` skill — pre-authorizes the kbot integration so Claude Code stops refusing legitimate calls.
+- MCP description audit — 15 ambiguous descriptions reframed across 7 files.
+
+### Migration
+Users on autoupdate: nothing breaks. Cut tools simply aren't registered. Deprecated tools still work and log a warning once per process. Restoring a cut tool: copy its `registerTool` block to `~/.kbot/plugins/<name>.js`.
+
+Deprecation removal timeline: 4.1 (lab-*) → 4.2 (stream-*) → 4.3 (engine-*) → 4.4 (misc) → 4.5 (forge_tool migration).
+
 ## 3.99.30 (2026-04-20)
 
 ### Fixed: fake-tool lookup regex too greedy

@@ -30,7 +30,14 @@ import { join, basename, resolve } from 'node:path'
 import { homedir } from 'node:os'
 import { pathToFileURL } from 'node:url'
 import { execSync, execFile } from 'node:child_process'
+import chalk from 'chalk'
 import { registerTool, type ToolDefinition } from './tools/index.js'
+import {
+  IntegrityError,
+  verifyAllPlugins,
+  enforce,
+  type VerifyAllResult,
+} from './plugins-integrity.js'
 
 // ── Types ────────────────────────────────────────────────────────────────
 
@@ -81,6 +88,18 @@ export interface PluginConfig {
   disabled: string[]
 }
 
+export interface LoadPluginsOptions {
+  /** Override the plugin directory (used by tests). Defaults to ~/.kbot/plugins. */
+  pluginsDir?: string
+  /** Override the integrity manifest path. Defaults to ~/.kbot/plugins.json. */
+  manifestPath?: string
+  /**
+   * Override the integrity-disabled flag. Defaults to reading
+   * `process.env.KBOT_PLUGIN_INTEGRITY === 'off'`.
+   */
+  integrityDisabled?: boolean
+}
+
 export interface SDKPluginManifest {
   name: string
   version: string
@@ -101,7 +120,27 @@ export interface SDKPluginManifest {
 
 const KBOT_DIR = join(homedir(), '.kbot')
 const PLUGINS_DIR = join(KBOT_DIR, 'plugins')
+// NOTE: PLUGINS_CONFIG (per-plugin enable/disable list) shares the path
+// `~/.kbot/plugins.json` with the integrity manifest used by plugins.ts. This
+// is a pre-existing collision in the SDK loader — the enable/disable JSON has
+// shape `{ enabled, disabled }`, while the integrity manifest has shape
+// `{ schemaVersion, plugins }`. In practice users running with the integrity
+// manifest must override the SDK config path, or the integrity manifest path,
+// via `KBOT_PLUGIN_MANIFEST`. The fix is out of scope for the integrity
+// wiring; flagged here so we do not mask the collision in tests.
 const PLUGINS_CONFIG = join(KBOT_DIR, 'plugins.json')
+
+/**
+ * Default integrity manifest path. Mirrors plugins.ts so a single manifest
+ * covers both drop-in `.js` plugins (handled by plugins.ts) and SDK-style
+ * directory plugins (handled here). The integrity manifest's `path` field is
+ * resolved relative to `~/.kbot/plugins/`, so:
+ *   - `hello.js`            → simple drop-in plugin
+ *   - `my-tool/index.js`    → SDK-style packaged plugin
+ * are both expressible in one manifest. Override via `KBOT_PLUGIN_MANIFEST`
+ * or the `manifestPath` option to `loadPlugins`.
+ */
+const DEFAULT_MANIFEST_PATH = join(homedir(), '.kbot', 'plugins.json')
 
 // ── State ────────────────────────────────────────────────────────────────
 
@@ -325,20 +364,23 @@ function registerPluginHooks(plugin: KBotPlugin): boolean {
 /**
  * Discover local plugins in ~/.kbot/plugins/<name>/ directories.
  * Each directory should contain an index.ts or index.js file.
+ *
+ * Pass `pluginsDir` to scan a custom location (used by tests). Defaults to
+ * the module-level `PLUGINS_DIR` (`~/.kbot/plugins`).
  */
-function discoverLocalPlugins(): Array<{ name: string; entryPath: string }> {
-  ensureDir(PLUGINS_DIR)
+function discoverLocalPlugins(pluginsDir: string = PLUGINS_DIR): Array<{ name: string; entryPath: string }> {
+  ensureDir(pluginsDir)
   const results: Array<{ name: string; entryPath: string }> = []
 
   let entries: string[]
   try {
-    entries = readdirSync(PLUGINS_DIR)
+    entries = readdirSync(pluginsDir)
   } catch {
     return results
   }
 
   for (const entry of entries) {
-    const dirPath = join(PLUGINS_DIR, entry)
+    const dirPath = join(pluginsDir, entry)
     try {
       const stat = statSync(dirPath)
       if (!stat.isDirectory()) continue
@@ -440,18 +482,125 @@ function discoverNpmPlugins(): Array<{ name: string; entryPath: string }> {
   return results
 }
 
+// ── Integrity Gate ───────────────────────────────────────────────────────
+
+/**
+ * Run the integrity manifest gate before loading any SDK plugin module.
+ *
+ * Mirrors `plugins.ts`'s `runIntegrityGate` so the two loaders enforce the
+ * same fail-closed contract against the same manifest at `~/.kbot/plugins.json`.
+ *
+ * Behaviour:
+ *   - If KBOT_PLUGIN_INTEGRITY=off (or `integrityDisabled === true`):
+ *     emit a yellow warning and return `null` (verification skipped, all
+ *     discovered plugins are eligible to load).
+ *   - If the manifest file does not exist: emit a yellow info note and
+ *     return `null` (back-compat — manifest is optional today).
+ *   - If the manifest exists and verifies: return the `VerifyAllResult` so
+ *     the caller can restrict loads to `result.verified`.
+ *   - If the manifest exists and any plugin fails: throw `IntegrityError`
+ *     (loader refuses to import any SDK plugin this session).
+ */
+async function runIntegrityGate(
+  manifestPath: string,
+  pluginsDir: string,
+  integrityDisabled: boolean,
+): Promise<VerifyAllResult | null> {
+  if (integrityDisabled) {
+    console.error(
+      chalk.yellow(
+        `  ⚠ KBOT_PLUGIN_INTEGRITY=off — skipping integrity check for SDK plugins (NOT FOR PRODUCTION). ` +
+          `Plugins under ${pluginsDir} will load without hash checking.`,
+      ),
+    )
+    return null
+  }
+
+  if (!existsSync(manifestPath)) {
+    console.error(
+      chalk.yellow(
+        `  ⚠ no plugin manifest at ${manifestPath} — plugin SDK loaded without integrity verification. ` +
+          `Create one to pin plugins by SHA-256 (see PLUGINS_INTEGRITY.md).`,
+      ),
+    )
+    return null
+  }
+
+  try {
+    const result = await verifyAllPlugins(manifestPath, pluginsDir)
+    if (result.failed.length > 0) {
+      const lines = result.failed
+        .map((f) => `    - ${f.name}: ${f.reason}`)
+        .join('\n')
+      console.error(
+        chalk.red(
+          `  ✗ Plugin integrity check failed for ${result.failed.length} SDK plugin(s):\n${lines}\n` +
+            `    Manifest: ${manifestPath}\n` +
+            `    To refresh hashes, recompute SHA-256 for each plugin entry and update the manifest. ` +
+            `Set KBOT_PLUGIN_INTEGRITY=off ONLY for local dev; never in production.`,
+        ),
+      )
+      enforce(result) // throws IntegrityError
+    }
+    return result
+  } catch (err) {
+    if (err instanceof IntegrityError) throw err
+    // loadManifest threw (malformed JSON, schema violation, etc.) — fail closed.
+    console.error(
+      chalk.red(
+        `  ✗ Failed to load plugin integrity manifest at ${manifestPath}: ${
+          (err as Error).message
+        }`,
+      ),
+    )
+    throw err
+  }
+}
+
 // ── Public API ───────────────────────────────────────────────────────────
 
 /**
  * Load all installed and enabled SDK plugins.
  * Called at startup after the legacy plugins.ts loadPlugins() runs.
+ *
+ * Integrity contract (mirrors plugins.ts):
+ *   - Reads the same manifest at `~/.kbot/plugins.json` (override via
+ *     `KBOT_PLUGIN_MANIFEST` or `opts.manifestPath`).
+ *   - If the manifest exists, only plugins whose `name` appears in
+ *     `result.verified` are imported. Drift → throws `IntegrityError`.
+ *   - If the manifest is missing, falls back to back-compat behaviour: all
+ *     discovered, enabled plugins are imported (with a yellow info note).
+ *   - `KBOT_PLUGIN_INTEGRITY=off` skips verification entirely with a loud
+ *     yellow warning.
  */
-export async function loadPlugins(verbose = false): Promise<SDKPluginManifest[]> {
+export async function loadPlugins(
+  verbose = false,
+  opts: LoadPluginsOptions = {},
+): Promise<SDKPluginManifest[]> {
+  const pluginsDir = opts.pluginsDir ?? PLUGINS_DIR
+  const manifestPath =
+    opts.manifestPath ?? process.env.KBOT_PLUGIN_MANIFEST ?? DEFAULT_MANIFEST_PATH
+  const integrityDisabled =
+    opts.integrityDisabled ?? process.env.KBOT_PLUGIN_INTEGRITY === 'off'
+
   const manifests: SDKPluginManifest[] = []
 
-  // Discover from both sources
-  const localPlugins = discoverLocalPlugins()
-  const npmPlugins = discoverNpmPlugins()
+  // Integrity gate — runs BEFORE any SDK plugin file is imported. Throws
+  // IntegrityError on drift unless KBOT_PLUGIN_INTEGRITY=off.
+  const integrity = await runIntegrityGate(manifestPath, pluginsDir, integrityDisabled)
+
+  // When a manifest verified successfully, restrict loads to verified names.
+  // When the manifest is missing or integrity is disabled, allow every file.
+  const verifiedNames: Set<string> | null = integrity
+    ? new Set(integrity.verified)
+    : null
+
+  // Discover from both sources. NPM plugins live in global node_modules and
+  // are not (yet) covered by the integrity manifest's relative-path scheme;
+  // when integrity is enforced, only local plugins listed in the manifest
+  // load. NPM plugins are skipped entirely under enforcement.
+  const localPlugins = discoverLocalPlugins(pluginsDir)
+  const npmPlugins = verifiedNames ? [] : discoverNpmPlugins()
 
   const allDiscovered = [
     ...localPlugins.map(p => ({ ...p, source: 'local' as const })),
@@ -474,6 +623,20 @@ export async function loadPlugins(verbose = false): Promise<SDKPluginManifest[]>
 
     if (!manifest.enabled) {
       if (verbose) console.log(`  [SDK] Skipping disabled plugin: ${name}`)
+      manifests.push(manifest)
+      continue
+    }
+
+    // When manifest verification ran, only load plugins whose name appears in
+    // the verified set. Discovered plugins not declared in the manifest are
+    // skipped (they could not have passed verification).
+    if (verifiedNames && !verifiedNames.has(name)) {
+      if (verbose) {
+        console.error(
+          chalk.yellow(`  ⚠ [SDK] Skipping ${name} — not declared in plugin manifest`),
+        )
+      }
+      manifest.error = 'not declared in plugin integrity manifest'
       manifests.push(manifest)
       continue
     }

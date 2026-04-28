@@ -529,6 +529,7 @@ export function getTrustReport(): string {
 export function registerAgentProtocolTools(): void {
   registerTool({
     name: 'agent_handoff',
+    deprecated: true,
     description: 'Create a handoff to transfer work to another agent. Includes context, artifacts, and priority. The receiving agent can accept or reject. Use this when a task is better suited for a different specialist.',
     parameters: {
       from: { type: 'string', description: 'Agent ID initiating the handoff', required: true },
@@ -573,6 +574,7 @@ export function registerAgentProtocolTools(): void {
 
   registerTool({
     name: 'blackboard_write',
+    deprecated: true,
     description: 'Write to the shared agent blackboard (working memory). Any agent can write facts, hypotheses, decisions, artifacts, or questions. Other agents can read these to coordinate without direct communication.',
     parameters: {
       key: { type: 'string', description: 'Key to write (e.g., "architecture_decision", "security_finding")', required: true },
@@ -611,6 +613,7 @@ export function registerAgentProtocolTools(): void {
 
   registerTool({
     name: 'blackboard_read',
+    deprecated: true,
     description: 'Read from the shared agent blackboard. Query a specific key or list all entries filtered by type. Use this to see what other agents have written and coordinate work.',
     parameters: {
       key: { type: 'string', description: 'Specific key to read. If omitted, returns all entries.' },
@@ -656,6 +659,7 @@ export function registerAgentProtocolTools(): void {
 
   registerTool({
     name: 'agent_propose',
+    deprecated: true,
     description: 'Propose an approach for multi-agent negotiation. Other agents can vote agree/disagree/abstain. Use resolve to determine the outcome. Ties are broken by trust scores.',
     parameters: {
       action: { type: 'string', description: 'Action: propose, vote, resolve, or status', required: true },
@@ -742,6 +746,7 @@ export function registerAgentProtocolTools(): void {
 
   registerTool({
     name: 'agent_trust',
+    deprecated: true,
     description: 'Check or update trust scores for agents. Trust is asymmetric: success adds 0.05, failure subtracts 0.10. Scores persist across sessions in ~/.kbot/trust.json.',
     parameters: {
       action: { type: 'string', description: 'Action: check, update, best, or report', required: true },

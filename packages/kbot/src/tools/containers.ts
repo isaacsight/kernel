@@ -409,6 +409,7 @@ export function registerContainerTools(): void {
   // ── License Check ─────────────────────────────────────────────────
   registerTool({
     name: 'license_check',
+    deprecated: true,
     description: 'Check license compatibility across a project\'s dependency tree.',
     parameters: {
       path: { type: 'string', description: 'Project directory path', required: true },

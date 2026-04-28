@@ -55,6 +55,7 @@ export function registerBrowserTools(): void {
 
   registerTool({
     name: 'browser_snapshot',
+    deprecated: true,
     description: 'Get the current page\'s accessibility tree (structured text representation).',
     parameters: {},
     tier: 'free',

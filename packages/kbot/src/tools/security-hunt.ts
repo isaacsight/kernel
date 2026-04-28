@@ -677,6 +677,7 @@ export function registerSecurityHuntTools(): void {
 
   registerTool({
     name: 'security_hunt',
+    deprecated: true,
     description: 'Defensive security audit — chains kbot\'s security scanners into a single comprehensive sweep. Scans for: open ports, SSL issues, missing headers, hardcoded secrets, dependency CVEs, supply chain risks, OWASP Top 10 code vulnerabilities, and dangerous patterns. Returns a scored report with severity ratings and fix recommendations. Defensive security context: use only on systems you own or have explicit permission to test.',
     parameters: {
       path: {

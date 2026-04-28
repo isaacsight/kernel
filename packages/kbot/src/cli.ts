@@ -130,7 +130,7 @@ async function main(): Promise<void> {
       console.log(`  ${chalk.cyan('https://github.com/isaacsight/kernel/issues')}  ${chalk.dim('Bug reports')}`)
       console.log(`  ${chalk.cyan('support@kernel.chat')}  ${chalk.dim('Email (AI-assisted replies)')}`)
       console.log()
-      console.log(`  ${chalk.dim('35 specialist agents · 787+ tools · 20 providers · MIT licensed')}`)
+      console.log(`  ${chalk.dim('35 specialist agents · 100+ skills · 20 providers · MIT licensed')}`)
       console.log()
       process.exit(0)
     })
@@ -610,11 +610,11 @@ async function main(): Promise<void> {
   // ── Discovery Agent ──
   const discoveryCmd = program
     .command('discovery')
-    .description('Autonomous outreach agent — finds conversations, drafts responses, posts for you')
+    .description('Background outreach agent — finds conversations, drafts responses, posts for you')
 
   discoveryCmd
     .command('start')
-    .description('Start the discovery loop — scans HN, GitHub, Reddit and posts autonomously')
+    .description('Start the discovery loop — scans HN, GitHub, Reddit and posts in the background')
     .option('--dry-run', 'Find and draft but don\'t post')
     .option('--interval <minutes>', 'Poll interval in minutes', '60')
     .option('--model <model>', 'Ollama model for analysis', 'qwen2.5-coder:32b')
@@ -4456,7 +4456,7 @@ async function main(): Promise<void> {
       printSuccess(`kbot connected to Ollama at ${ollamaHost}`)
       const models = await listOllamaModels()
       if (models.length > 0) printInfo(`${models.length} models available. Using: ${ollamaModel || PROVIDERS.ollama.defaultModel}`)
-      printInfo('670+ tools ready. Type your prompt or press Enter for interactive mode.')
+      printInfo('100+ skills ready. Type your prompt or press Enter for interactive mode.')
     } else {
       printError(`Cannot reach Ollama at ${ollamaHost}. Is it running?`)
       printInfo('Start Ollama: ollama serve')
@@ -4953,7 +4953,7 @@ async function byokFlow(): Promise<void> {
   console.log()
   printSuccess(`BYOK mode enabled — ${providerConfig.name}`)
   printInfo('You pay the provider directly. No message limits. No restrictions.')
-  printInfo('All 362 tools + 35 agents + learning system = yours.')
+  printInfo('All 100+ skills + 35 specialist agents + learning system = yours.')
   console.log()
   printSuccess('Ready. Run `kbot` to start.')
 }
@@ -5276,7 +5276,7 @@ async function startRepl(
     const suggestions = await detectProjectSuggestions()
     console.log()
     console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'))
-    console.log(chalk.dim('  │') + chalk.bold('  35 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'))
+    console.log(chalk.dim('  │') + chalk.bold('  35 agents. 100+ skills. Just say what you need.  ') + chalk.dim(' │'))
     console.log(chalk.dim('  │                                                 │'))
     if (suggestions.length > 0) {
       for (const s of suggestions.slice(0, 4)) {

@@ -200,6 +200,7 @@ export function registerQualityTools(): void {
 
   registerTool({
     name: 'deps_audit',
+    deprecated: true,
     description: 'Audit dependencies for known vulnerabilities. Returns CVE IDs, severity, and fix suggestions. Auto-detects npm, pip, cargo, go.',
     parameters: {
       fix: { type: 'boolean', description: 'Auto-fix vulnerabilities where possible (default: false)' },

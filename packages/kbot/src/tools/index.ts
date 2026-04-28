@@ -31,6 +31,10 @@ export {
 } from '../tool-pipeline.js'
 
 import { ToolPipeline, executionMiddleware, mcpAppsMiddleware, type ToolMiddleware } from '../tool-pipeline.js'
+import chalk from 'chalk'
+
+/** Tools whose deprecation warning has already been emitted this process. */
+const deprecationWarned = new Set<string>()
 
 export interface ToolDefinition {
   name: string
@@ -50,6 +54,8 @@ export interface ToolDefinition {
   timeout?: number
   /** Max result size in bytes (default: 50_000 = 50KB) */
   maxResultSize?: number
+  /** Marked deprecated as of v4.0; scheduled for removal in 4.1.0. */
+  deprecated?: boolean
 }
 
 export interface ToolCall {
@@ -194,6 +200,23 @@ export async function executeTool(call: ToolCall): Promise<ToolResult> {
     return { tool_call_id: call.id, result: suggestion, error: true, duration_ms: 0 }
   }
 
+  // Deprecation warn-once: emit a single chalk.yellow message per tool name per process.
+  if (tool.deprecated && !deprecationWarned.has(call.name)) {
+    deprecationWarned.add(call.name)
+    try {
+      console.warn(chalk.yellow(
+        `[kbot] Tool '${call.name}' is deprecated as of v4.0 and scheduled for removal in 4.1.0. ` +
+        `See https://github.com/isaacsight/kernel/blob/main/packages/kbot/RELEASE_NOTES_4_0.md`
+      ))
+    } catch {
+      // chalk may not be available in some test contexts — fall back to plain text.
+      console.warn(
+        `[kbot] Tool '${call.name}' is deprecated as of v4.0 and scheduled for removal in 4.1.0. ` +
+        `See https://github.com/isaacsight/kernel/blob/main/packages/kbot/RELEASE_NOTES_4_0.md`
+      )
+    }
+  }
+
   const timeout = tool.timeout ?? DEFAULT_TIMEOUT
   const maxResult = tool.maxResultSize ?? DEFAULT_MAX_RESULT
   const startTime = Date.now()
@@ -292,76 +315,35 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './parallel.js',        registerFn: 'registerParallelTools' },
   { path: './mcp-client.js',      registerFn: 'registerMcpClientTools' },
   { path: './tasks.js',           registerFn: 'registerTaskTools' },
-  { path: './notebook.js',        registerFn: 'registerNotebookTools' },
   { path: './background.js',      registerFn: 'registerBackgroundTools' },
   { path: './sandbox.js',         registerFn: 'registerSandboxTools' },
-  { path: './build-matrix.js',    registerFn: 'registerBuildMatrixTools' },
   { path: './subagent.js',        registerFn: 'registerSubagentTools' },
   { path: './worktree.js',        registerFn: 'registerWorktreeTools' },
-  { path: './kbot-local.js',      registerFn: 'registerKbotLocalTools' },
   { path: './quality.js',         registerFn: 'registerQualityTools' },
   { path: './memory-tools.js',    registerFn: 'registerMemoryTools' },
   { path: './browser.js',         registerFn: 'registerBrowserTools' },
-  { path: './e2b-sandbox.js',     registerFn: 'registerE2bTools' },
-  { path: './lsp-tools.js',       registerFn: 'registerLspTools' },
-  { path: '../mcp-plugins.js',    registerFn: 'registerMcpPluginTools' },
-  { path: '../graph-memory.js',   registerFn: 'registerGraphMemoryTools' },
-  { path: '../confidence.js',     registerFn: 'registerConfidenceTools' },
   { path: '../agent-protocol.js', registerFn: 'registerAgentProtocolTools' },
   { path: '../temporal.js',       registerFn: 'registerTemporalTools' },
-  { path: '../reasoning.js',      registerFn: 'registerReasoningTools' },
   { path: '../intentionality.js', registerFn: 'registerIntentionalityTools' },
   { path: './test-runner.js',     registerFn: 'registerTestRunnerTools' },
   { path: './creative.js',        registerFn: 'registerCreativeTools' },
-  { path: './comfyui-plugin.js',  registerFn: 'registerComfyUITools' },
   { path: './magenta-plugin.js',  registerFn: 'registerMagentaTools' },
-  { path: './research.js',        registerFn: 'registerResearchTools' },
   { path: './containers.js',      registerFn: 'registerContainerTools' },
   { path: './vfx.js',             registerFn: 'registerVfxTools' },
   { path: './gamedev.js',          registerFn: 'registerGamedevTools' },
   { path: './audit.js',           registerFn: 'registerAuditTools' },
-  { path: './documents.js',       registerFn: 'registerDocumentTools' },
-  { path: './contribute.js',      registerFn: 'registerContributeTools' },
-  { path: './composio.js',        registerFn: 'registerComposioTools' },
-  { path: '../marketplace.js',    registerFn: 'registerMarketplaceTools' },
   { path: './browser-agent.js',   registerFn: 'registerBrowserAgentTools' },
-  { path: '../workflows.js',      registerFn: 'registerWorkflowTools' },
   { path: './deploy.js',          registerFn: 'registerDeployTools' },
   { path: './mcp-marketplace.js', registerFn: 'registerMcpMarketplaceTools' },
   { path: './database.js',        registerFn: 'registerDatabaseTools' },
-  { path: '../team.js',           registerFn: 'registerTeamTools' },
   { path: '../plugin-sdk.js',     registerFn: 'registerPluginSDKTools' },
-  { path: './training.js',        registerFn: 'registerTrainingTools' },
   { path: './social.js',          registerFn: 'registerSocialTools' },
   { path: './forge.js',           registerFn: 'registerForgeTools' },
-  { path: '../mcp-apps.js',       registerFn: 'registerMcpAppTools' },
-  { path: './machine-tools.js',  registerFn: 'registerMachineTools' },
-  { path: './finance.js',        registerFn: 'registerFinanceTools' },
-  { path: './wallet.js',         registerFn: 'registerWalletTools' },
-  { path: './stocks.js',         registerFn: 'registerStockTools' },
-  { path: './sentiment.js',      registerFn: 'registerSentimentTools' },
   { path: './security.js',       registerFn: 'registerSecurityTools' },
   { path: './email.js',          registerFn: 'registerEmailTools' },
-  { path: './content-engine.js', registerFn: 'registerContentEngineTools' },
-  { path: './bootstrapper.js',   registerFn: 'registerBootstrapperTools' },
-  { path: './lab-core.js',       registerFn: 'registerLabCoreTools' },
-  { path: './lab-data.js',       registerFn: 'registerLabDataTools' },
-  { path: './lab-bio.js',        registerFn: 'registerLabBioTools' },
-  { path: './lab-chem.js',       registerFn: 'registerLabChemTools' },
-  { path: './lab-physics.js',    registerFn: 'registerLabPhysicsTools' },
-  { path: './lab-earth.js',      registerFn: 'registerLabEarthTools' },
-  { path: './lab-math.js',       registerFn: 'registerLabMathTools' },
-  { path: './lab-neuro.js',      registerFn: 'registerLabNeuroTools' },
-  { path: './lab-social.js',    registerFn: 'registerLabSocialTools' },
-  { path: './lab-humanities.js', registerFn: 'registerLabHumanitiesTools' },
-  { path: './lab-health.js',    registerFn: 'registerLabHealthTools' },
-  { path: './science-graph.js', registerFn: 'registerScienceGraphTools' },
-  { path: './research-pipeline.js', registerFn: 'registerResearchPipelineTools' },
-  { path: './research-notebook.js', registerFn: 'registerResearchNotebookTools' },
   { path: './hypothesis-engine.js', registerFn: 'registerHypothesisEngineTools' },
   { path: './emergent.js',          registerFn: 'registerEmergentTools' },
   { path: './security-hunt.js',     registerFn: 'registerSecurityHuntTools' },
-  { path: './lab-frontier.js',     registerFn: 'registerFrontierTools' },
   { path: './ableton.js',          registerFn: 'registerAbletonTools' },
   { path: './ableton-knowledge.js', registerFn: 'registerAbletonKnowledgeTools' },
   { path: './ableton-bridge-tools.js', registerFn: 'registerAbletonBridgeTools' },
@@ -370,59 +352,20 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './producer-engine.js',  registerFn: 'registerProducerEngine' },
   { path: './sound-designer.js',  registerFn: 'registerSoundDesignerTools' },
   { path: './arrangement-engine.js', registerFn: 'registerArrangementEngine' },
-  { path: '../behaviour.js',        registerFn: 'registerBehaviourTools' },
   { path: '../skill-system.js',    registerFn: 'registerSkillTools' },
-  { path: './admin.js',            registerFn: 'registerAdminTools' },
-  { path: './monitor.js',          registerFn: 'registerMonitorTools' },
-  { path: './deploy-all.js',       registerFn: 'registerDeployAllTools' },
   { path: './analytics.js',        registerFn: 'registerAnalyticsTools' },
-  { path: './env-manager.js',      registerFn: 'registerEnvTools' },
-  { path: './db-admin.js',         registerFn: 'registerDbAdminTools' },
-  { path: './visa-payments.js',    registerFn: 'registerVisaPaymentTools' },
   { path: './security-brain.js',   registerFn: 'registerSecurityBrainTools' },
-  { path: './ctf.js',              registerFn: 'registerCtfTools' },
-  { path: './pentest.js',          registerFn: 'registerPentestTools' },
   { path: './redblue.js',          registerFn: 'registerRedBlueTools' },
   { path: './hacker-toolkit.js',   registerFn: 'registerHackerToolkitTools' },
   { path: './threat-intel.js',     registerFn: 'registerThreatIntelTools' },
   { path: './dj-set-builder.js',  registerFn: 'registerDjSetBuilderTools' },
   { path: './serum2-preset.js',  registerFn: 'registerSerum2PresetTools' },
   { path: './dream-tools.js',   registerFn: 'registerDreamTools' },
-  { path: './collective-dream-tools.js', registerFn: 'registerCollectiveDreamTools' },
-  { path: './memory-scanner-tools.js', registerFn: 'registerMemoryScannerTools' },
-  { path: './buddy-tools.js',  registerFn: 'registerBuddyTools' },
-  { path: './voice-input-tools.js', registerFn: 'registerVoiceInputTools' },
-  { path: './watchdog.js',         registerFn: 'registerWatchdogTools' },
-  { path: './behavior-tools.js',   registerFn: 'registerBehaviorTools' },
-  { path: './a2a.js',              registerFn: 'registerA2ATools' },
-  { path: './financial-analysis.js', registerFn: 'registerFinancialAnalysisTools' },
-  { path: './ai-analysis.js',        registerFn: 'registerAIAnalysisTools' },
-  { path: './music-gen.js',          registerFn: 'registerMusicGenTools' },
   { path: './one-prompt-producer.js', registerFn: 'registerOnePromptTools' },
-  { path: './mobile-automation.js',  registerFn: 'registerMobileAutomationTools' },
-  { path: './iphone.js',             registerFn: 'registerIPhoneTools' },
-  { path: './ghost.js',        registerFn: 'registerGhostTools' },
-  { path: './streaming.js',    registerFn: 'registerStreamingTools' },
-  { path: './stream-character.js', registerFn: 'registerStreamCharacterTools' },
-  { path: './stream-renderer.js', registerFn: 'registerStreamRendererTools' },
   { path: './kbot-browser.js',   registerFn: 'registerKBotBrowserTools' },
   { path: './kbot-terminal.js',  registerFn: 'registerKBotTerminalTools' },
-  { path: './stream-control.js', registerFn: 'registerStreamControlTools' },
-  { path: './tile-world.js',    registerFn: 'registerTileWorldTools' },
-  { path: './stream-self-eval.js', registerFn: 'registerStreamSelfEvalTools' },
   { path: './audio-engine.js',    registerFn: 'registerAudioEngineTools' },
-  { path: './narrative-engine.js', registerFn: 'registerNarrativeEngineTools' },
-  { path: './social-engine.js',  registerFn: 'registerSocialEngineTools' },
-  { path: './evolution-engine.js', registerFn: 'registerEvolutionEngineTools' },
-  { path: './coordination-engine.js', registerFn: 'registerCoordinationEngineTools' },
   { path: './foundation-engines.js', registerFn: 'registerFoundationEngineTools' },
-  { path: './research-engine.js', registerFn: 'registerResearchEngineTools' },
-  { path: './stream-overlay.js',   registerFn: 'registerOverlayTools' },
-  { path: './stream-weather.js',   registerFn: 'registerStreamWeatherTools' },
-  { path: './stream-chat-ai.js',   registerFn: 'registerStreamChatAITools' },
-  { path: './stream-vod.js',       registerFn: 'registerStreamVODTools' },
-  { path: './stream-commands.js',  registerFn: 'registerStreamCommandsTools' },
-  { path: '../coordinator.js',    registerFn: 'registerCoordinatorTools' },
   { path: './swarm-2026-04.js',   registerFn: 'registerSwarm2026Tools' },
 ]
 

@@ -2324,6 +2324,7 @@ export function registerSecurityBrainTools(): void {
   // ── Tool 1: security_brain ──────────────────────────────────────────
   registerTool({
     name: 'security_brain',
+    deprecated: true,
     description: 'Query the security knowledge base. Covers MITRE ATT&CK (14 tactics, 200+ techniques), OWASP Top 10 (2025), Lockheed Martin Kill Chain, CVE patterns, and kbot security tool mapping. Use this as a first stop for any security question.',
     parameters: {
       topic: { type: 'string', description: 'What to look up — technique name, vulnerability type, attack pattern, tool name, or general security topic', required: true },
@@ -2475,6 +2476,7 @@ export function registerSecurityBrainTools(): void {
   // ── Tool 2: attack_lookup ───────────────────────────────────────────
   registerTool({
     name: 'attack_lookup',
+    deprecated: true,
     description: 'Look up MITRE ATT&CK techniques by ID (T1566) or keyword (phishing). Returns technique details including tactic, description, sub-techniques, detection methods, and mitigations. Covers all 14 ATT&CK tactics with top techniques for each.',
     parameters: {
       query: { type: 'string', description: 'Technique ID (e.g., T1566, T1059.001) or keyword (e.g., phishing, injection, credential dumping)', required: true },
@@ -2571,6 +2573,7 @@ export function registerSecurityBrainTools(): void {
   // ── Tool 3: killchain_analyze ───────────────────────────────────────
   registerTool({
     name: 'killchain_analyze',
+    deprecated: true,
     description: 'Map an attack or vulnerability description to Lockheed Martin Kill Chain stages. Provides kill chain stage mapping with confidence levels, related MITRE ATT&CK techniques, OWASP entries, CVE patterns, and defensive recommendations with specific kbot tools.',
     parameters: {
       description: { type: 'string', description: 'Description of the attack, vulnerability, or threat scenario to analyze and map to kill chain stages', required: true },

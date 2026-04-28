@@ -267,6 +267,7 @@ export function registerComputerTools(): void {
 
   registerTool({
     name: 'computer_check',
+    deprecated: true,
     description: 'Check computer use permissions and acquire the session lock. Call this before any other computer use tool. Returns permission status and any required setup steps.',
     parameters: {},
     tier: 'free',
@@ -293,6 +294,7 @@ export function registerComputerTools(): void {
 
   registerTool({
     name: 'app_approve',
+    deprecated: true,
     description: 'Approve an app for computer use in this session. Must be called before interacting with an app. Shows a warning for sensitive apps (terminals, Finder, System Settings).',
     parameters: {
       app: { type: 'string', description: 'App name (e.g., "Safari", "Finder", "Xcode")', required: true },
@@ -470,6 +472,7 @@ export function registerComputerTools(): void {
 
   registerTool({
     name: 'mouse_click',
+    deprecated: true,
     description: 'Click at specific screen coordinates.',
     parameters: {
       x: { type: 'number', description: 'X coordinate', required: true },
@@ -868,6 +871,7 @@ export function registerComputerTools(): void {
 
   registerTool({
     name: 'window_resize',
+    deprecated: true,
     description: 'Resize a window of a specific app.',
     parameters: {
       app: { type: 'string', description: 'App name', required: true },
@@ -917,6 +921,7 @@ export function registerComputerTools(): void {
 
   registerTool({
     name: 'window_move',
+    deprecated: true,
     description: 'Move a window to specific screen coordinates.',
     parameters: {
       app: { type: 'string', description: 'App name', required: true },
@@ -1061,6 +1066,7 @@ export function registerComputerTools(): void {
 
   registerTool({
     name: 'computer_release',
+    deprecated: true,
     description: 'Release the computer use lock and end the session. Call when done with computer use.',
     parameters: {},
     tier: 'free',

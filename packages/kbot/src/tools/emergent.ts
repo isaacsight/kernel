@@ -1079,6 +1079,7 @@ export function registerEmergentTools(): void {
 
   registerTool({
     name: 'question',
+    deprecated: true,
     description: 'Generate the most important unanswered questions based on kbot\'s knowledge graph and memory. Not questions the user asked — questions that SHOULD be asked based on what is known and what is missing.',
     parameters: {
       domain: { type: 'string', description: 'Optional domain focus (e.g., "biology", "physics", "social")' },
