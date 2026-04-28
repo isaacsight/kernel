@@ -423,6 +423,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './stream-vod.js',       registerFn: 'registerStreamVODTools' },
   { path: './stream-commands.js',  registerFn: 'registerStreamCommandsTools' },
   { path: '../coordinator.js',    registerFn: 'registerCoordinatorTools' },
+  { path: './swarm-2026-04.js',   registerFn: 'registerSwarm2026Tools' },
 ]
 
 /** Track whether lazy tools have been registered */

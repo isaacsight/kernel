@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "plugins": [
+    {
+      "name": "hello-world",
+      "version": "0.1.0",
+      "path": "hello-world/index.js",
+      "integrity": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="
+    },
+    {
+      "name": "kbot-weather",
+      "version": "1.2.3",
+      "path": "kbot-weather/dist/main.js",
+      "integrity": "sha256-2jmj7l5rSw0yVb/vlWAYkK/YBwk="
+    }
+  ]
+}
