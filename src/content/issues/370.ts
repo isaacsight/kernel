@@ -73,9 +73,9 @@ export const ISSUE_370: IssueRecord = {
   },
 
   headline: {
-    prefix: 'On',
-    emphasis: 'Finding',
-    suffix: 'a Design Language.',
+    prefix: 'A Design Language is',
+    emphasis: 'Found',
+    suffix: ', not Designed.',
     swash: 'Seven stakes for 2027, drawn from the magazines on the shelf.',
   },
 
