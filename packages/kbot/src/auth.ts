@@ -69,7 +69,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,
     outputCost: 15.0,
     authHeader: 'x-api-key',
-    models: ['claude-mythos-1', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+    models: ['claude-mythos-1', 'claude-opus-4-7', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
   },
   openai: {
     name: 'OpenAI',

@@ -424,6 +424,11 @@ export async function runArchitectMode(
   task: string,
   options: AgentOptions = {},
 ): Promise<ArchitectReport> {
+  // Default architect role to Claude Opus 4.7 (Apr 2026) — best long-horizon
+  // SWE + computer-use model. User --model flag still wins.
+  if (!options.model || options.model === 'auto') {
+    options = { ...options, model: 'claude-opus-4-7' }
+  }
   printInfo('Entering architect mode...')
   console.log()
 
