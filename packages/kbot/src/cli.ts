@@ -190,6 +190,82 @@ async function main(): Promise<void> {
       printInfo('  kbot ide acp    — IntelliJ, WebStorm, PyCharm, GoLand, Android Studio')
     })
 
+  // ── one-shot editor installers (Harrison-class onboarding) ──────────────
+  // Wires kbot's MCP servers into editor settings.json + (Claude Code only)
+  // copies the kbot skill into the project. Idempotent. No manual JSON edits.
+  const printSetupResult = (label: string, r: { configPath: string; mcpAdded: string[]; mcpAlreadyPresent: string[]; skillCopied?: string; skillAlreadyPresent?: string }) => {
+    printSuccess(`${label}: ${r.configPath}`)
+    if (r.mcpAdded.length > 0) printInfo(`  + added MCP servers: ${r.mcpAdded.join(', ')}`)
+    if (r.mcpAlreadyPresent.length > 0) printInfo(`  · already present: ${r.mcpAlreadyPresent.join(', ')}`)
+    if (r.skillCopied) printInfo(`  + skill copied: ${r.skillCopied}`)
+    if (r.skillAlreadyPresent) printWarn(`  · skill exists (use --force to overwrite): ${r.skillAlreadyPresent}`)
+  }
+
+  program
+    .command('setup-claude-code')
+    .description('Wire kbot into Claude Code (~/.claude/settings.json) + copy skill into project')
+    .option('-f, --force', 'Overwrite existing project skill if present')
+    .action(async (opts: { force?: boolean }) => {
+      const { setupClaudeCode } = await import('./setup-editor.js')
+      try {
+        const r = setupClaudeCode({ force: opts.force })
+        printSetupResult('Claude Code', r)
+      } catch (e) {
+        printError(`setup-claude-code failed: ${e instanceof Error ? e.message : String(e)}`)
+        process.exitCode = 1
+      }
+    })
+
+  program
+    .command('setup-cursor')
+    .description('Wire kbot into Cursor settings.json (mcp.servers)')
+    .option('-f, --force', 'Reserved for parity (Cursor has no skill copy step)')
+    .action(async (opts: { force?: boolean }) => {
+      const { setupCursor } = await import('./setup-editor.js')
+      try {
+        const r = setupCursor({ force: opts.force })
+        printSetupResult('Cursor', r)
+      } catch (e) {
+        printError(`setup-cursor failed: ${e instanceof Error ? e.message : String(e)}`)
+        process.exitCode = 1
+      }
+    })
+
+  program
+    .command('setup-zed')
+    .description('Wire kbot into Zed settings.json (assistant.mcpServers — best-effort shape)')
+    .option('-f, --force', 'Reserved for parity')
+    .action(async (opts: { force?: boolean }) => {
+      const { setupZed } = await import('./setup-editor.js')
+      try {
+        const r = setupZed({ force: opts.force })
+        printSetupResult('Zed', r)
+      } catch (e) {
+        printError(`setup-zed failed: ${e instanceof Error ? e.message : String(e)}`)
+        process.exitCode = 1
+      }
+    })
+
+  program
+    .command('setup-all')
+    .description('Run setup-claude-code, setup-cursor, and setup-zed in one shot')
+    .option('-f, --force', 'Overwrite existing project skill if present')
+    .action(async (opts: { force?: boolean }) => {
+      const { setupClaudeCode, setupCursor, setupZed } = await import('./setup-editor.js')
+      let failed = 0
+      const run = (label: string, fn: () => { configPath: string; mcpAdded: string[]; mcpAlreadyPresent: string[]; skillCopied?: string; skillAlreadyPresent?: string }) => {
+        try { printSetupResult(label, fn()) }
+        catch (e) {
+          failed++
+          printError(`${label} failed: ${e instanceof Error ? e.message : String(e)}`)
+        }
+      }
+      run('Claude Code', () => setupClaudeCode({ force: opts.force }))
+      run('Cursor', () => setupCursor({ force: opts.force }))
+      run('Zed', () => setupZed({ force: opts.force }))
+      if (failed > 0) process.exitCode = 1
+    })
+
   program
     .command('byok')
     .description('Bring Your Own Key — configure your LLM API key (20 providers)')

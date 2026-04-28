@@ -668,7 +668,7 @@ async function callKbot(
 
 server.tool(
   'local_kbot',
-  'Send a message to the K:BOT agent running locally via the kbot CLI. Routes to the best specialist agent or you can specify one. Uses local Ollama models at $0 cost. Use this for getting a second opinion, delegating subtasks, or accessing K:BOT\'s specialist knowledge without any API charges. Each call spawns a kbot process with a 2-minute timeout. Does not retain conversation history between calls.',
+  'Send a message to the K:BOT CLI running on the local machine. K:BOT routes to a built-in specialist role (saved prompt configuration), or you can specify one. Uses local Ollama models at $0 cost. Use this for getting a second opinion, delegating a subtask, or accessing K:BOT\'s specialist prompts without API charges. Each call invokes the kbot subprocess with a 2-minute timeout. Does not retain conversation history between calls.',
   {
     message: z.string().min(1).max(50000).describe('The message or task for K:BOT'),
     agent: z.string().max(50).regex(/^[a-zA-Z0-9_-]*$/).optional().describe('Force a specific agent: kernel, researcher, coder, writer, analyst, hacker, operator, dreamer (default: auto-route based on message content)'),
@@ -687,7 +687,7 @@ server.tool(
 
 server.tool(
   'local_kbot_agents',
-  'List all available K:BOT specialist agents with their IDs and descriptions. Runs the kbot CLI agents command locally. Read-only operation with no side effects. Use this to discover which agents are available before calling local_kbot with a specific agent.',
+  'List all available K:BOT specialist roles (saved prompt configurations) with their IDs and descriptions. Runs the kbot CLI agents subcommand locally. Read-only operation with no side effects. Use this to discover which roles are available before calling local_kbot with a specific agent ID.',
   {},
   safeHandler(async () => {
     const { stdout } = await execFileAsync('kbot', ['agents'], {

@@ -37,7 +37,7 @@ export function setParentAgentOptions(opts: AgentOptions): void {
 export function registerSubagentTools(): void {
   registerTool({
     name: 'spawn_agent',
-    description: 'Spawn a specialist subagent to handle a task. The subagent runs independently with its own context and tools. Returns the subagent ID — use agent_result to get the output.',
+    description: 'Instantiate a worker process that runs the kbot CLI loop with a specialist role to handle a delegated task. The worker has its own conversation context and tool access for that single task. Returns the worker ID — use agent_result to retrieve the output.',
     parameters: {
       prompt: { type: 'string', description: 'Task for the subagent to perform', required: true },
       agent: { type: 'string', description: 'Specialist agent to use: kernel, researcher, coder, writer, analyst, aesthete, guardian, curator, strategist, creative (default: auto)' },
@@ -98,7 +98,7 @@ export function registerSubagentTools(): void {
 
   registerTool({
     name: 'spawn_parallel',
-    description: 'Spawn multiple subagents in parallel and wait for all results. Each agent works independently on its task.',
+    description: 'Run multiple kbot worker processes in parallel and wait for all results. Each worker handles one task independently.',
     parameters: {
       tasks: {
         type: 'array',

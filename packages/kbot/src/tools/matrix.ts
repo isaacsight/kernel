@@ -9,10 +9,10 @@ import {
 export function registerMatrixTools(): void {
   registerTool({
     name: 'create_agent',
-    description: 'Create a new specialist agent in the matrix. The agent gets a custom system prompt and can be invoked later by switching to it with /agent <id>. Use this when a task needs a specific expert perspective (e.g., security auditor, UX critic, devil\'s advocate). Preset templates available: ' + Object.keys(PRESETS).join(', '),
+    description: 'Define a kbot specialist role (a saved prompt configuration with a custom system prompt). The user can later invoke this role by running /agent <id> in the kbot CLI. Useful when a task benefits from a specific expert framing (e.g., security auditor, UX critic, devil\'s advocate). Preset templates available: ' + Object.keys(PRESETS).join(', '),
     parameters: {
       name: { type: 'string', description: 'Human-readable name (e.g., "Security Auditor")', required: true },
-      system_prompt: { type: 'string', description: 'System prompt defining the agent\'s expertise, personality, and evaluation criteria', required: true },
+      system_prompt: { type: 'string', description: 'System prompt defining the role\'s expertise, tone, and evaluation criteria', required: true },
     },
     tier: 'free',
     execute: async (args) => {
@@ -32,7 +32,7 @@ export function registerMatrixTools(): void {
 
   registerTool({
     name: 'spawn_preset_agent',
-    description: 'Spawn a pre-built specialist agent from the template library. Available presets: ' + Object.entries(PRESETS).map(([id, p]) => `${id} (${p.name})`).join(', '),
+    description: 'Instantiate a pre-built kbot specialist role from the template library (saved prompt configurations the user can invoke manually). Available presets: ' + Object.entries(PRESETS).map(([id, p]) => `${id} (${p.name})`).join(', '),
     parameters: {
       preset: { type: 'string', description: 'Preset ID: ' + Object.keys(PRESETS).join(', '), required: true },
     },

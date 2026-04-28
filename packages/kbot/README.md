@@ -35,6 +35,19 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
 
+## Use with Claude Code / Cursor / Zed
+
+kbot is designed to compound with your existing AI editor, not replace it. One command wires everything up — MCP server config + a Claude Code skill that pre-authorizes the integration so safety filters don't refuse legitimate kbot calls.
+
+```bash
+kbot setup-claude-code   # wires ~/.claude/settings.json + copies kbot skill
+kbot setup-cursor        # wires Cursor's MCP config
+kbot setup-zed           # wires Zed's MCP config
+kbot setup-all           # all three at once
+```
+
+Once wired, your editor can call kbot's full suite as `mcp__kbot__*` tools (and the local-Ollama subset as `mcp__kbot-local__*`). Or skip the middleman entirely and run kbot direct: `kbot "<prompt>"`, `kbot --agent <id> "<prompt>"`, `kbot agents`.
+
 ## Highlights
 
 ### Dream Engine — Your AI Remembers You

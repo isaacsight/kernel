@@ -87,7 +87,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
     const staticTools = [
       {
         name: 'kbot_chat',
-        description: 'Send a natural language message to kbot and receive a specialist agent response. kbot automatically routes to the best-fit agent (coder, researcher, writer, analyst, guardian, or 30 others) based on message intent, or you can force a specific agent via the agent parameter. Use this tool when you need AI-powered assistance for coding, research, writing, analysis, security review, or any general task. Do not use this for direct file operations (use kbot_read_file, kbot_edit_file, kbot_write_file instead) or shell commands (use kbot_bash instead). Each call is stateless -- conversation history is not preserved between calls. Returns the agent response text, plus optional thinking traces and tool-use results if the agent invoked sub-tools.',
+        description: 'Send a natural language message to the kbot CLI and receive a response from one of its built-in specialist roles (saved prompt configurations such as coder, researcher, writer, analyst, guardian — invoked manually by the user). kbot routes to the best-fit role based on message intent, or you can force a specific role via the agent parameter. Use this tool when you need AI-assisted help for coding, research, writing, analysis, security review, or general developer tasks. Do not use this for direct file operations (use kbot_read_file, kbot_edit_file, kbot_write_file instead) or shell commands (use kbot_bash instead). Each call is stateless -- conversation history is not preserved between calls. Returns the response text, plus optional thinking traces and tool-use results if sub-tools were invoked.',
         inputSchema: {
           type: 'object' as const,
           properties: {
@@ -170,7 +170,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
       },
       {
         name: 'kbot_status',
-        description: 'Retrieve kbot runtime status as a JSON object. Returns the active specialist agent, learning engine statistics (patterns, solutions, knowledge entries, total messages processed), session count, and registered tool count. Use this tool to verify kbot is properly configured, check which agent is active, or monitor learning progress. Do not use this for project-specific status (use kbot_bash with "git status" instead). Read-only operation with no side effects.',
+        description: 'Retrieve kbot runtime status as a JSON object. Returns the active specialist role (saved prompt configuration), pattern-cache statistics (patterns, solutions, knowledge entries, total messages processed), session count, and registered tool count. Use this tool to verify kbot is properly configured, check which role is active, or monitor cached-pattern progress. Do not use this for project-specific status (use kbot_bash with "git status" instead). Read-only operation with no side effects.',
         inputSchema: {
           type: 'object' as const,
           properties: {},
@@ -178,7 +178,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
       },
       {
         name: 'kbot_agent',
-        description: 'Switch the active specialist agent for subsequent kbot_chat calls, or list all available agents when called without arguments. Use this tool to optimize responses by selecting the right specialist -- e.g., switch to "guardian" before a security review, or "researcher" before a deep-dive investigation. Do not use this if you only need to route a single message (pass the agent parameter to kbot_chat instead). Side effects: when agent ID is provided, changes the active agent for all future kbot_chat calls in this session.',
+        description: 'Switch the active specialist role (saved prompt configuration) for subsequent kbot_chat calls, or list all available roles when called without arguments. Use this tool to optimize responses by selecting the right specialist prompt -- e.g., switch to "guardian" before a security review, or "researcher" before a deep-dive investigation. Do not use this if you only need to route a single message (pass the agent parameter to kbot_chat instead). Side effects: when an ID is provided, changes the active role used by all future kbot_chat calls in this session.',
         inputSchema: {
           type: 'object' as const,
           properties: {
@@ -210,7 +210,7 @@ export async function startMcpServer(config: BridgeConfig = {}): Promise<void> {
       },
       {
         name: 'kbot_plan',
-        description: 'Generate and optionally execute an autonomous multi-step plan for a complex task. The planner analyzes the task, breaks it into ordered subtasks, selects appropriate tools for each step, executes them sequentially, and self-corrects on failures with retries. Use this tool for complex multi-file refactors, full-stack feature implementations, research-then-implement workflows, or any task requiring coordination of multiple tools. Do not use this for simple single-step operations (use the specific tool directly). Side effects: depends on plan steps -- may read/write files, run shell commands, make API calls. Set auto_approve=false to review the generated plan before any execution begins.',
+        description: 'Generate, and optionally execute, a multi-step plan for a complex task. The planner analyzes the task, breaks it into ordered subtasks, selects appropriate tools for each step, executes them sequentially, and retries failed steps with adjusted parameters. Use this tool for complex multi-file refactors, full-stack feature implementations, research-then-implement workflows, or any task requiring coordination of multiple tools. Do not use this for simple single-step operations (use the specific tool directly). Side effects: depends on plan steps -- may read/write files, run shell commands, make API calls. Set auto_approve=false (default) to review the generated plan before any execution begins; auto_approve=true is opt-in.',
         inputSchema: {
           type: 'object' as const,
           properties: {

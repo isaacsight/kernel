@@ -2930,7 +2930,7 @@ export function registerRedBlueTools(): void {
 
   registerTool({
     name: 'redteam_scan',
-    description: 'Red team: scan a codebase for vulnerabilities. Reads source files and pattern-matches for secrets, injection vectors, auth issues, crypto weaknesses, dependency vulnerabilities, and configuration problems. Thinks like an attacker. Returns findings with severity, file, line, evidence, exploitation scenario, and CWE ID.',
+    description: 'Security audit (defensive — finds issues before attackers): scan a codebase for vulnerabilities. Reads source files and pattern-matches for secrets, injection vectors, auth issues, crypto weaknesses, dependency vulnerabilities, and configuration problems. Returns findings with severity, file, line, evidence, an exploitation scenario for context, and CWE ID. Defensive security context: use only on codebases you own or have explicit permission to audit.',
     parameters: {
       path: { type: 'string', description: 'Directory to scan (default: current directory)' },
       focus: { type: 'string', description: 'Scan focus: "secrets", "injection", "auth", "crypto", "deps", "config", "all" (default: "all")' },
@@ -3181,7 +3181,7 @@ export function registerRedBlueTools(): void {
 
   registerTool({
     name: 'redteam_report',
-    description: 'Generate a professional penetration test report. Runs a full red team scan and formats results as an executive assessment with risk score, attack surface mapping, critical findings with exploitation scenarios, risk matrix, and prioritized remediation plan.',
+    description: 'Generate a professional penetration test report (defensive security assessment). Runs a full security audit and formats results as an executive assessment with risk score, attack surface mapping, critical findings with exploitation scenarios for context, risk matrix, and prioritized remediation plan. Defensive security context: use only on systems you own or have explicit permission to test.',
     parameters: {
       path: { type: 'string', description: 'Directory to assess (default: current directory)' },
     },

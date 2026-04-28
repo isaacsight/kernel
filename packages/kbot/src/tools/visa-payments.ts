@@ -144,7 +144,7 @@ export function registerVisaPaymentTools(): void {
 
   registerTool({
     name: 'visa_purchase',
-    description: 'Purchase a digital resource (API key, domain, cloud credits, SaaS subscription) via Visa CLI. The agent can autonomously buy resources needed for task completion.',
+    description: 'Purchase a digital resource (API key, domain, cloud credits, SaaS subscription) via the Visa CLI on the user\'s machine. The user\'s configured spend limit applies; purchases over $100 require manual confirmation in the CLI. Use only when the user has authorized a purchase.',
     parameters: {
       service: { type: 'string', description: 'Service name (e.g., "vercel", "aws", "namecheap", "openai")', required: true },
       product: { type: 'string', description: 'Product or plan to purchase', required: true },
