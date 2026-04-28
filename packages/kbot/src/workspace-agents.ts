@@ -20,6 +20,8 @@ import { promises as fs } from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
+import type { AgentOptions } from './agent.js'
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
@@ -158,50 +160,138 @@ async function listAll(root: string): Promise<WorkspaceAgentState[]> {
 // Planner adapter
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** A single tool call surfaced by the planner, ready to be gated + recorded. */
+export interface PlannerToolCall {
+  tool: string
+  args?: unknown
+  result?: unknown
+}
+
 export interface PlannerStartResult {
   planId: string
   steps: unknown[]
+  /**
+   * Optional list of tool calls the planner produced. When present, the
+   * WorkspaceAgent will run each through `gate()` and `recordToolCall()`,
+   * capturing `tool_blocked` events for any that ScopeError out.
+   */
+  toolCalls?: PlannerToolCall[]
+  /**
+   * Free-form notes the planner wants surfaced as history events. Each entry
+   * becomes a `planner_note` event on the agent's timeline.
+   */
+  notes?: string[]
 }
 
 export type PlannerStartFn = (
   taskInput: string,
   state: WorkspaceAgentState,
+  agentOpts?: AgentOptions | null,
 ) => Promise<PlannerStartResult>
 
 /**
- * Default planner adapter. Tries the hierarchical planner; if it's not
- * usable in this context (feature-flag gated, or its surface differs from
- * what we need) falls back to a deterministic stub.
+ * Default planner adapter — implements the 3-tier strategy:
  *
- * TODO: when the hierarchical planner gains a non-feature-flagged
- * `dispatchTask`-style surface, wire it in here directly.
+ *   Tier 1: KBOT_PLANNER=hierarchical AND non-null agentOpts → real
+ *           HierarchicalPlanner.planAndExecute. Tool calls extracted from
+ *           the resulting Action.steps and surfaced for gating.
+ *   Tier 2: HierarchicalPlanner module loadable but no agentOpts → call
+ *           createGoal only; emit a TODO note; return early.
+ *   Tier 3: Module import fails (e.g. test env) → deterministic stub
+ *           `{ planId: 'stub', steps: [] }`.
+ *
+ * The function never throws on planner-internal failures: each tier degrades
+ * to the next so the WorkspaceAgent.start() lifecycle stays predictable.
  */
 export const defaultPlannerStart: PlannerStartFn = async (
   taskInput,
   state,
+  agentOpts,
 ) => {
-  // Best-effort use of HierarchicalPlanner. Its `planAndExecute` is gated
-  // behind KBOT_PLANNER=hierarchical and requires real AgentOptions — which
-  // workspace agents don't have on their own. So we only attempt it when the
-  // env flag is set AND a global agentOpts has been wired in (not yet).
-  // For now: use the stub fallback. Returning a stub is intentional and
-  // tested. Real planner integration is Phase-2.
-  if (process.env.KBOT_PLANNER === 'hierarchical') {
+  // Try to import the planner module first. If this fails we're in Tier 3.
+  let mod: typeof import('./planner/hierarchical/session-planner.js')
+  try {
+    mod = await import('./planner/hierarchical/session-planner.js')
+  } catch {
+    // Tier 3: stub fallback (current behavior).
+    return { planId: 'stub', steps: [] }
+  }
+
+  const planner = new mod.HierarchicalPlanner()
+
+  // Tier 1: real planner — needs both the env flag and agentOpts.
+  if (process.env.KBOT_PLANNER === 'hierarchical' && agentOpts) {
     try {
-      const mod = await import('./planner/hierarchical/session-planner.js')
-      const planner = new mod.HierarchicalPlanner()
       const goal = await planner.createGoal({
         title: state.name,
         intent: state.mission,
         acceptance: [taskInput],
         tags: ['workspace-agent', state.id],
       })
-      return { planId: goal.id, steps: [] }
-    } catch {
-      // fall through to stub
+      const result = await planner.planAndExecute(taskInput, {
+        sessionId: state.id,
+        agentOpts,
+        autoApprove: true,
+      })
+
+      const steps = result.action.steps
+      const toolCalls: PlannerToolCall[] = steps
+        .filter(s => typeof s.tool === 'string' && s.tool.length > 0)
+        .map(s => ({
+          tool: s.tool as string,
+          args: s.args,
+          result: s.result,
+        }))
+
+      return {
+        planId: goal.id,
+        steps,
+        toolCalls,
+      }
+    } catch (err) {
+      // If tier-1 itself throws, don't crash the whole start() — degrade to
+      // Tier 2 so we still record the goal and a planner_note explaining why.
+      const msg = err instanceof Error ? err.message : String(err)
+      try {
+        const goal = await planner.createGoal({
+          title: state.name,
+          intent: state.mission,
+          acceptance: [taskInput],
+          tags: ['workspace-agent', state.id],
+        })
+        return {
+          planId: goal.id,
+          steps: [],
+          notes: [
+            `tier-1 planner failed (${msg}); recorded goal only`,
+          ],
+        }
+      } catch {
+        return { planId: 'stub', steps: [] }
+      }
     }
   }
-  return { planId: 'stub', steps: [] }
+
+  // Tier 2: planner loadable but no agentOpts (or flag absent) — record a
+  // goal and surface a TODO so callers know to wire AgentOptions through.
+  try {
+    const goal = await planner.createGoal({
+      title: state.name,
+      intent: state.mission,
+      acceptance: [taskInput],
+      tags: ['workspace-agent', state.id],
+    })
+    return {
+      planId: goal.id,
+      steps: [],
+      notes: [
+        'real planAndExecute requires AgentOptions; configure caller to pass them.',
+      ],
+    }
+  } catch {
+    // Tier 3: createGoal failed (e.g. read-only home dir) → stub.
+    return { planId: 'stub', steps: [] }
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -259,7 +349,11 @@ export class WorkspaceAgent {
     return { id: state.id, name: state.name }
   }
 
-  async start(agentId: string, taskInput: string): Promise<StartResult> {
+  async start(
+    agentId: string,
+    taskInput: string,
+    agentOpts: AgentOptions | null = null,
+  ): Promise<StartResult> {
     const state = await this.requireState(agentId)
     if (state.status === 'running') {
       throw new WorkspaceAgentError(
@@ -283,7 +377,7 @@ export class WorkspaceAgent {
 
     let planResult: PlannerStartResult
     try {
-      planResult = await this.plannerStart(taskInput, state)
+      planResult = await this.plannerStart(taskInput, state, agentOpts)
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       state.status = 'failed'
@@ -305,6 +399,34 @@ export class WorkspaceAgent {
       data: { planId: planResult.planId, stepCount: planResult.steps.length },
     })
     await writeState(this.root, state)
+
+    // Surface any planner-emitted notes onto the agent's timeline.
+    if (planResult.notes && planResult.notes.length > 0) {
+      for (const note of planResult.notes) {
+        await this.appendEvent(agentId, 'planner_note', { message: note })
+      }
+    }
+
+    // Gate + record every tool call the planner produced. ScopeError from
+    // gate() must NOT escape start() — convert to a `tool_blocked` event and
+    // continue with the rest.
+    if (planResult.toolCalls && planResult.toolCalls.length > 0) {
+      for (const call of planResult.toolCalls) {
+        try {
+          await this.gate(agentId, call.tool)
+        } catch (err) {
+          if (err instanceof ScopeError) {
+            await this.appendEvent(agentId, 'tool_blocked', {
+              tool: call.tool,
+              reason: err.message,
+            })
+            continue
+          }
+          throw err
+        }
+        await this.recordToolCall(agentId, call.tool, call.args, call.result)
+      }
+    }
 
     return {
       id: state.id,
@@ -392,6 +514,18 @@ export class WorkspaceAgent {
   }
 
   // ── Internals ────────────────────────────────────────────────────────────
+
+  private async appendEvent(
+    agentId: string,
+    event: string,
+    data?: unknown,
+  ): Promise<void> {
+    const state = await this.requireState(agentId)
+    const ts = new Date().toISOString()
+    state.history.push({ ts, event, data })
+    state.updatedAt = ts
+    await writeState(this.root, state)
+  }
 
   private async requireState(agentId: string): Promise<WorkspaceAgentState> {
     const state = await readState(this.root, agentId)

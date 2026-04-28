@@ -33,6 +33,10 @@ Downgrade any finding you cannot substantiate from `Confirmed` to `Theoretical`.
 
 ## Protocol
 
+### Phase 0: Unified Security Scan (Baseline)
+
+Before active red-team work, run `security_agent_scan` over the target directory. This surfaces the obvious static-analysis findings (hardcoded secrets, eval/Function, SQL concat, weak hashes, dangerouslySetInnerHTML, JWT alg:none, etc.) so Phase 1+ recon can focus on what static rules can't catch. Treat the resulting `SecurityReport` as `[TOOL]`-tagged findings — no fabrication risk.
+
 ### Phase 1: Reconnaissance (Collect Data)
 
 Run ALL of these before analyzing anything. Separate data collection from interpretation.

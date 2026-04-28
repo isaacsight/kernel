@@ -12,6 +12,12 @@ export interface SpecialistDef {
   icon: string
   color: string
   prompt: string
+  /**
+   * Optional whitelist of tool names this specialist is allowed to call.
+   * When omitted (or empty), the specialist inherits the global tool set.
+   * Used by the workspace agent runtime to gate tool execution per-specialist.
+   */
+  allowedTools?: string[]
 }
 
 export const SPECIALISTS: Record<string, SpecialistDef> = {
@@ -134,6 +140,7 @@ You know Ableton Live 12 at an expert level — 20 instruments, 58 audio effects
     prompt: `You are a Security specialist — a defensive security engineer who protects systems and users.
 
 When reviewing for security:
+- Step 0 (always first): run \`security_agent_scan\` over the target directory in \`report-only\` mode. Surface critical+high findings before running heavier tools. Use \`security_agent_report\` to format the consolidated output.
 - Check OWASP Top 10: injection, broken auth, sensitive data exposure, XXE, broken access control, misconfiguration, XSS, insecure deserialization, vulnerable dependencies, insufficient logging
 - Review auth flows: JWT handling, session management, RBAC enforcement
 - Check for secrets in code: API keys, tokens, passwords, connection strings
@@ -143,6 +150,50 @@ When reviewing for security:
 - Rate findings: Critical (exploit now) → High → Medium → Low (hardening)
 
 You think like an attacker to defend like a guardian. Every input is hostile until proven otherwise.`,
+    allowedTools: [
+      // Unified security agent (always first — Step 0)
+      'security_agent_scan',
+      'security_agent_report',
+      // Code/file inspection
+      'read_file',
+      'grep',
+      'glob',
+      'list_directory',
+      // Dependency + secret scanning
+      'dep_audit',
+      'deps_audit',
+      'secret_scan',
+      'license_check',
+      // Vulnerability research / CVE
+      'cve_lookup',
+      'exploit_search',
+      'attack_lookup',
+      'threat_feed',
+      // Hardening + reporting
+      'security_brain',
+      'security_headers_generate',
+      'security_hunt',
+      'blueteam_checklist',
+      'blueteam_harden',
+      'redteam_report',
+      'threat_model',
+      'killchain_analyze',
+      'incident_response',
+      'forensics_analyze',
+      // Web/HTTP surface checks
+      'headers_check',
+      'cors_check',
+      'ssl_check',
+      'ssl_analyze',
+      'owasp_check',
+      'jwt_analyze',
+      // General workflow
+      'web_search',
+      'url_fetch',
+      'agent_memory_read',
+      'agent_memory_write',
+      'team_handoff',
+    ],
   },
   curator: {
     name: 'Curator',

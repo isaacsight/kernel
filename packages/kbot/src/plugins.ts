@@ -15,10 +15,35 @@ import { existsSync, readdirSync, mkdirSync, writeFileSync, statSync } from 'nod
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { pathToFileURL } from 'node:url'
+import chalk from 'chalk'
 import { registerTool, type ToolDefinition } from './tools/index.js'
+import {
+  IntegrityError,
+  verifyAllPlugins,
+  enforce,
+  type VerifyAllResult,
+} from './plugins-integrity.js'
 
 const PLUGINS_DIR = join(homedir(), '.kbot', 'plugins')
 const PLUGIN_EXTENSIONS = ['.js', '.mjs']
+
+/**
+ * Default integrity manifest path. Override with KBOT_PLUGIN_MANIFEST env var
+ * or the `manifestPath` option to `loadPlugins`.
+ */
+const DEFAULT_MANIFEST_PATH = join(homedir(), '.kbot', 'plugins.json')
+
+export interface LoadPluginsOptions {
+  /** Override the plugin directory (used by tests). Defaults to ~/.kbot/plugins. */
+  pluginsDir?: string
+  /** Override the integrity manifest path. Defaults to ~/.kbot/plugins.json. */
+  manifestPath?: string
+  /**
+   * Override the integrity-disabled flag. Defaults to reading
+   * `process.env.KBOT_PLUGIN_INTEGRITY === 'off'`.
+   */
+  integrityDisabled?: boolean
+}
 
 export interface PluginDefinition {
   name: string
@@ -44,20 +69,101 @@ export interface PluginManifest {
 const loadedPlugins: PluginManifest[] = []
 
 /** Ensure the plugins directory exists */
-export function ensurePluginsDir(): string {
-  if (!existsSync(PLUGINS_DIR)) {
-    mkdirSync(PLUGINS_DIR, { recursive: true })
+export function ensurePluginsDir(dir: string = PLUGINS_DIR): string {
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true })
   }
-  return PLUGINS_DIR
+  return dir
+}
+
+/**
+ * Run the integrity manifest gate before discovery.
+ *
+ * Behaviour:
+ *   - If KBOT_PLUGIN_INTEGRITY=off (or `opts.integrityDisabled === true`):
+ *     emit a yellow warning and return `null` (verification skipped, all
+ *     discovered plugins will load).
+ *   - If the manifest file does not exist: emit a yellow info note and
+ *     return `null` (back-compat — manifest is optional today).
+ *   - If the manifest exists and verifies: return the `VerifyAllResult` so
+ *     the caller can restrict loads to `result.verified`.
+ *   - If the manifest exists and any plugin fails: throw `IntegrityError`
+ *     (kbot refuses to start).
+ */
+async function runIntegrityGate(
+  manifestPath: string,
+  pluginsDir: string,
+  integrityDisabled: boolean,
+): Promise<VerifyAllResult | null> {
+  if (integrityDisabled) {
+    console.error(
+      chalk.yellow(
+        `  ⚠ Plugin integrity verification is DISABLED (KBOT_PLUGIN_INTEGRITY=off). ` +
+          `Plugins under ${pluginsDir} will load without hash checking.`,
+      ),
+    )
+    return null
+  }
+
+  if (!existsSync(manifestPath)) {
+    console.error(
+      chalk.yellow(
+        `  ⚠ no plugin manifest at ${manifestPath} — plugins are unverified. ` +
+          `Create one to pin plugins by SHA-256 (see PLUGINS_INTEGRITY.md).`,
+      ),
+    )
+    return null
+  }
+
+  // verifyAllPlugins resolves manifest entry paths against pluginsDir, so the
+  // file layout is: <pluginsDir>/<entry.path> matches the hash in the manifest.
+  try {
+    const result = await verifyAllPlugins(manifestPath, pluginsDir)
+    if (result.failed.length > 0) {
+      const lines = result.failed
+        .map((f) => `    - ${f.name}: ${f.reason}`)
+        .join('\n')
+      console.error(
+        chalk.red(
+          `  ✗ Plugin integrity check failed for ${result.failed.length} plugin(s):\n${lines}\n` +
+            `    Manifest: ${manifestPath}\n` +
+            `    To refresh hashes, recompute SHA-256 for each plugin file and update the manifest. ` +
+            `Set KBOT_PLUGIN_INTEGRITY=off ONLY for local dev; never in production.`,
+        ),
+      )
+      enforce(result) // throws IntegrityError
+    }
+    return result
+  } catch (err) {
+    if (err instanceof IntegrityError) throw err
+    // loadManifest threw (malformed JSON, schema violation, etc.) — fail closed.
+    console.error(
+      chalk.red(
+        `  ✗ Failed to load plugin integrity manifest at ${manifestPath}: ${
+          (err as Error).message
+        }`,
+      ),
+    )
+    throw err
+  }
 }
 
 /** Load all plugins from ~/.kbot/plugins/ */
-export async function loadPlugins(verbose = false): Promise<PluginManifest[]> {
-  ensurePluginsDir()
+export async function loadPlugins(
+  verbose = false,
+  opts: LoadPluginsOptions = {},
+): Promise<PluginManifest[]> {
+  const pluginsDir = opts.pluginsDir ?? PLUGINS_DIR
+  const manifestPath =
+    opts.manifestPath ?? process.env.KBOT_PLUGIN_MANIFEST ?? DEFAULT_MANIFEST_PATH
+  const integrityDisabled =
+    opts.integrityDisabled ?? process.env.KBOT_PLUGIN_INTEGRITY === 'off'
+
+  ensurePluginsDir(pluginsDir)
 
   // Security: reject plugins if directory is world/group-writable
   try {
-    const dirStat = statSync(PLUGINS_DIR)
+    const dirStat = statSync(pluginsDir)
     if ((dirStat.mode & 0o022) !== 0) {
       if (verbose) console.error('  ⚠ Plugin directory is writable by others — skipping plugins for security')
       return []
@@ -66,16 +172,40 @@ export async function loadPlugins(verbose = false): Promise<PluginManifest[]> {
     return []
   }
 
-  const files = readdirSync(PLUGINS_DIR).filter(f =>
+  // Integrity gate — runs BEFORE any file is imported. Throws IntegrityError
+  // on drift unless KBOT_PLUGIN_INTEGRITY=off.
+  const integrity = await runIntegrityGate(manifestPath, pluginsDir, integrityDisabled)
+
+  // When a manifest verified successfully, restrict loads to verified names.
+  // When the manifest is missing or integrity is disabled, allow every file.
+  const verifiedNames: Set<string> | null = integrity
+    ? new Set(integrity.verified)
+    : null
+
+  const files = readdirSync(pluginsDir).filter(f =>
     PLUGIN_EXTENSIONS.some(ext => f.endsWith(ext))
   )
 
   if (files.length === 0) return []
 
   for (const file of files) {
+    const pluginName = file.replace(/\.[^.]+$/, '')
+
+    // When manifest verification ran, only load plugins whose name appears in
+    // the verified set. Files not declared in the manifest are silently
+    // skipped (they did not pass — and could not have passed — verification).
+    if (verifiedNames && !verifiedNames.has(pluginName)) {
+      if (verbose) {
+        console.error(
+          chalk.yellow(`  ⚠ Skipping ${file} — not declared in plugin manifest`),
+        )
+      }
+      continue
+    }
+
     // Security: reject plugin files that are group/world-writable
     try {
-      const fileStat = statSync(join(PLUGINS_DIR, file))
+      const fileStat = statSync(join(pluginsDir, file))
       if ((fileStat.mode & 0o022) !== 0) {
         loadedPlugins.push({
           name: file.replace(/\.[^.]+$/, ''),
@@ -89,7 +219,7 @@ export async function loadPlugins(verbose = false): Promise<PluginManifest[]> {
     } catch {
       continue
     }
-    const filePath = join(PLUGINS_DIR, file)
+    const filePath = join(pluginsDir, file)
     const manifest: PluginManifest = {
       name: file.replace(/\.[^.]+$/, ''),
       file,

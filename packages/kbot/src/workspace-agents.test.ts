@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { promises as fs } from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -6,8 +6,11 @@ import {
   WorkspaceAgent,
   ScopeError,
   WorkspaceAgentError,
+  defaultPlannerStart,
   type PlannerStartFn,
+  type WorkspaceAgentState,
 } from './workspace-agents.js'
+import type { AgentOptions } from './agent.js'
 
 let tmpRoot: string
 
@@ -247,5 +250,226 @@ describe('WorkspaceAgent — env override for storage root', () => {
       else process.env.KBOT_WORKSPACE_AGENTS_ROOT = prev
       await fs.rm(envRoot, { recursive: true, force: true })
     }
+  })
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Hierarchical planner integration — 3-tier strategy
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Helper: run `fn` with a tmp HOME so the real planner persistence layer
+ * (which writes under `~/.kbot/planner/`) lands in an isolated directory.
+ */
+async function withTmpHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
+  const home = await fs.mkdtemp(path.join(os.tmpdir(), 'kbot-tmp-home-'))
+  const prevHome = process.env.HOME
+  const prevUser = process.env.USERPROFILE
+  process.env.HOME = home
+  process.env.USERPROFILE = home
+  try {
+    return await fn(home)
+  } finally {
+    if (prevHome === undefined) delete process.env.HOME
+    else process.env.HOME = prevHome
+    if (prevUser === undefined) delete process.env.USERPROFILE
+    else process.env.USERPROFILE = prevUser
+    await fs.rm(home, { recursive: true, force: true })
+  }
+}
+
+describe('WorkspaceAgent — Tier 2 (planner loadable, no agentOpts)', () => {
+  it('persists a goal id onto state.currentPlanId and emits a planner_note TODO', async () => {
+    await withTmpHome(async () => {
+      // Make sure the env flag is NOT set so we land in Tier 2.
+      const prevFlag = process.env.KBOT_PLANNER
+      delete process.env.KBOT_PLANNER
+      try {
+        const wa = new WorkspaceAgent({
+          root: tmpRoot,
+          plannerStart: defaultPlannerStart,
+        })
+        const { id } = await wa.create({ name: 't2', mission: 'survey' })
+        const started = await wa.start(id, 'do tier-2 thing')
+
+        // Tier 2 returns a real (non-stub) plan id.
+        expect(started.planId).toBeTruthy()
+        expect(started.planId).not.toBe('stub')
+        expect(started.steps).toEqual([])
+
+        const state = await wa.status(id)
+        expect(state.currentPlanId).toBe(started.planId)
+
+        const noteEvent = state.history.find(h => h.event === 'planner_note')
+        expect(noteEvent).toBeTruthy()
+        expect(
+          (noteEvent!.data as { message: string }).message,
+        ).toMatch(/AgentOptions/)
+      } finally {
+        if (prevFlag === undefined) delete process.env.KBOT_PLANNER
+        else process.env.KBOT_PLANNER = prevFlag
+      }
+    })
+  })
+})
+
+describe('WorkspaceAgent — Tier 1 (real planner)', () => {
+  afterEach(() => {
+    vi.doUnmock('./planner/hierarchical/session-planner.js')
+    vi.resetModules()
+  })
+
+  it('invokes planAndExecute and records tool calls through gate()', async () => {
+    const planAndExecute = vi.fn(async () => ({
+      goal: null,
+      phase: {
+        id: 'phase-1',
+        goalId: '',
+        kind: 'other' as const,
+        objective: 'do tier-1 thing',
+        exitCriteria: [],
+        startedAt: new Date().toISOString(),
+        endedAt: new Date().toISOString(),
+        status: 'done' as const,
+      },
+      action: {
+        id: 'action-1',
+        phaseId: 'phase-1',
+        userTurn: 'do tier-1 thing',
+        summary: 'mock',
+        steps: [
+          {
+            id: 1,
+            description: 'read a file',
+            tool: 'read_file',
+            args: { path: '/tmp/x' },
+            status: 'done' as const,
+            result: 'ok',
+          },
+        ],
+        createdAt: new Date().toISOString(),
+        status: 'done' as const,
+      },
+      metrics: {
+        tier1Calls: 0,
+        tier2Calls: 0,
+        tier3Calls: 1,
+        tier4Calls: 1,
+        tokensIn: 0,
+        tokensOut: 0,
+        wallMs: 1,
+      },
+    }))
+
+    const createGoal = vi.fn(async () => ({
+      id: 'goal-tier1',
+      title: 't1',
+      intent: 'm',
+      acceptance: ['do tier-1 thing'],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      status: 'active' as const,
+    }))
+
+    vi.doMock('./planner/hierarchical/session-planner.js', () => ({
+      HierarchicalPlanner: class {
+        createGoal = createGoal
+        planAndExecute = planAndExecute
+      },
+    }))
+
+    // Re-import so the dynamic `await import(...)` in defaultPlannerStart
+    // picks up the mock.
+    const mod = await import('./workspace-agents.js')
+    const prevFlag = process.env.KBOT_PLANNER
+    process.env.KBOT_PLANNER = 'hierarchical'
+    try {
+      const wa = new mod.WorkspaceAgent({
+        root: tmpRoot,
+        plannerStart: mod.defaultPlannerStart,
+      })
+      const { id } = await wa.create({
+        name: 't1',
+        mission: 'm',
+        allowedTools: ['read_file'],
+      })
+      const fakeOpts: AgentOptions = { agent: 'kernel' }
+      const started = await wa.start(id, 'do tier-1 thing', fakeOpts)
+
+      expect(planAndExecute).toHaveBeenCalledOnce()
+      expect(createGoal).toHaveBeenCalledOnce()
+      expect(started.planId).toBe('goal-tier1')
+
+      const state = await wa.status(id)
+      expect(state.currentPlanId).toBe('goal-tier1')
+
+      const events = state.history.map(h => h.event)
+      expect(events).toContain('tool_allowed')
+      expect(events).toContain('tool_call')
+
+      const toolCallEvent = state.history.find(h => h.event === 'tool_call')
+      expect(toolCallEvent).toBeTruthy()
+      expect((toolCallEvent!.data as { tool: string }).tool).toBe('read_file')
+    } finally {
+      if (prevFlag === undefined) delete process.env.KBOT_PLANNER
+      else process.env.KBOT_PLANNER = prevFlag
+    }
+  })
+
+  it('emits tool_blocked when the planner produces a disallowed tool, without throwing', async () => {
+    // Use injected planner so the test stays focused on the gating contract.
+    const blockingPlanner: PlannerStartFn = async (
+      _taskInput: string,
+      _state: WorkspaceAgentState,
+      _agentOpts?: AgentOptions | null,
+    ) => ({
+      planId: 'goal-block',
+      steps: [],
+      toolCalls: [
+        { tool: 'read_file', args: { path: '/ok' }, result: 'ok' },
+        { tool: 'shell_exec', args: { cmd: 'rm -rf /' } },
+      ],
+    })
+
+    const wa = new WorkspaceAgent({
+      root: tmpRoot,
+      plannerStart: blockingPlanner,
+    })
+    const { id } = await wa.create({
+      name: 'blocker',
+      mission: 'm',
+      allowedTools: ['read_file'],
+    })
+
+    // Must NOT throw despite the disallowed tool.
+    await expect(
+      wa.start(id, 'do blocked thing', { agent: 'kernel' }),
+    ).resolves.toBeTruthy()
+
+    const state = await wa.status(id)
+    const events = state.history.map(h => h.event)
+    expect(events).toContain('tool_blocked')
+    expect(events).toContain('tool_call') // the allowed one still recorded
+
+    const blocked = state.history.find(h => h.event === 'tool_blocked')
+    expect((blocked!.data as { tool: string }).tool).toBe('shell_exec')
+  })
+})
+
+describe('WorkspaceAgent — Tier 3 stub (existing contract)', () => {
+  it('returns the deterministic stub when the planner module is unavailable', async () => {
+    // Inject a planner that mimics the import-failure fallback path.
+    const stubPlanner: PlannerStartFn = async () => ({
+      planId: 'stub',
+      steps: [],
+    })
+    const wa = new WorkspaceAgent({ root: tmpRoot, plannerStart: stubPlanner })
+    const { id } = await wa.create({ name: 't3', mission: 'm' })
+    const started = await wa.start(id, 'task')
+
+    expect(started.planId).toBe('stub')
+    expect(started.steps).toEqual([])
+    const state = await wa.status(id)
+    expect(state.currentPlanId).toBe('stub')
   })
 })

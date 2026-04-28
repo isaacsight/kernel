@@ -3,21 +3,27 @@
 // Capabilities: screenshot, click, type, scroll, drag, key combos,
 //   app launch/focus, window management (list/resize/move/minimize)
 //
-// Safety: per-app session approval, machine-wide lock file,
-//   terminal excluded from screenshots, permission check flow
+// Safety: per-app sub-locks via the Coordinator (parallel multi-agent),
+//   per-app session approval, terminal excluded from screenshots,
+//   permission check flow.
 //
 // Requires explicit opt-in via --computer-use flag.
 // macOS: AppleScript + screencapture + cliclick fallback
 // Linux: xdotool + import/gnome-screenshot
 
 import { execSync, exec } from 'node:child_process'
+import { randomUUID } from 'node:crypto'
 import { tmpdir, homedir } from 'node:os'
 import { join } from 'node:path'
 import { readFileSync, writeFileSync, unlinkSync, existsSync, mkdirSync, rmSync } from 'node:fs'
 import { registerTool } from './index.js'
+import { Coordinator } from '../computer-use-coordinator.js'
 
 const platform = process.platform
 const LOCK_DIR = join(homedir(), '.kbot')
+// Legacy single-session lock path. Retained as a constant for back-compat
+// with any callers that referenced it; the actual locking is now performed
+// per-app via the Coordinator.
 const LOCK_FILE = join(LOCK_DIR, 'computer-use.lock')
 
 // ── Session state ──────────────────────────────────────────────────
@@ -28,47 +34,86 @@ const approvedApps = new Set<string>()
 /** Whether permissions have been verified this session */
 let permissionsVerified = false
 
-/** Current lock holder PID */
+/** Legacy single-session "lock held" flag — kept so computer_check / screen_info
+ *  can still report something meaningful. The real locking is the Coordinator. */
 let lockHeld = false
 
-// ── Lock file (one session at a time) ──────────────────────────────
+// ── Coordinator (per-app sub-locks) ────────────────────────────────
 
-function acquireLock(): string | null {
-  if (!existsSync(LOCK_DIR)) mkdirSync(LOCK_DIR, { recursive: true })
+/** Stable agent id for this kbot process. Override with KBOT_COMPUTER_USE_AGENT_ID
+ *  for deterministic tests / multi-process coordination. */
+const AGENT_ID: string = process.env.KBOT_COMPUTER_USE_AGENT_ID || randomUUID()
 
-  if (existsSync(LOCK_FILE)) {
-    try {
-      const lock = JSON.parse(readFileSync(LOCK_FILE, 'utf-8'))
-      // Check if the holding process is still alive
-      try {
-        process.kill(lock.pid, 0) // signal 0 = existence check
-        return `Computer use is held by another kbot session (PID ${lock.pid}, started ${lock.started}). Finish that session first.`
-      } catch {
-        // Process is dead — stale lock, clean it up
-        rmSync(LOCK_FILE)
-      }
-    } catch {
-      rmSync(LOCK_FILE)
-    }
+/** Module-scoped coordinator. Lock files live on disk under
+ *  ~/.kbot/computer-use/<app>.lock, so even if other processes have their own
+ *  Coordinator instance, they'll see each other's locks. */
+const coordinator = new Coordinator()
+
+/** Format a Coordinator denial as a single error string. */
+function formatDenied(app: string, heldBy: string | undefined, since: number | undefined): string {
+  const sinceStr = since ? new Date(since).toISOString() : 'unknown'
+  return `computer_use: app '${app}' is held by ${heldBy ?? 'unknown'} since ${sinceStr} — wait or unregister that agent.`
+}
+
+/** Acquire a per-app claim. Returns an error string on denial, or null on success.
+ *  When `app` is undefined (legacy callers that didn't specify an app), falls
+ *  back to the single-session legacy behaviour: just mark `lockHeld = true` and
+ *  let any prior global lock file get cleaned up.
+ *
+ *  App names are normalised to lowercase for the Coordinator so that
+ *  `Ableton` and `ableton` collide on the same lock file. */
+function claimApp(app: string | undefined): string | null {
+  if (!app) {
+    // Legacy single-lock fallback — don't break existing scripts that call a
+    // tool without specifying an app. We still set lockHeld so screen_info /
+    // computer_check report sane state.
+    if (!existsSync(LOCK_DIR)) mkdirSync(LOCK_DIR, { recursive: true })
+    lockHeld = true
+    return null
   }
 
-  writeFileSync(LOCK_FILE, JSON.stringify({
-    pid: process.pid,
-    started: new Date().toISOString(),
-  }))
+  const key = app.toLowerCase()
+
+  // Make sure this agent is registered for the app before claiming.
+  if (!approvedApps.has(key)) {
+    return `Error: ${app} is not approved. Call app_approve first.`
+  }
+  // Re-register so the coordinator knows about the (possibly new) app.
+  coordinator.register(AGENT_ID, { apps: [...approvedApps] })
+
+  const result = coordinator.claim(AGENT_ID, key)
+  if (!result.granted) {
+    return formatDenied(app, result.heldBy, result.since)
+  }
   lockHeld = true
-
-  // Clean up on exit
-  const cleanup = () => {
-    try { if (existsSync(LOCK_FILE)) rmSync(LOCK_FILE) } catch { /* best effort */ }
-  }
-  process.on('exit', cleanup)
-  process.on('SIGINT', cleanup)
-  process.on('SIGTERM', cleanup)
-
   return null
 }
 
+/** Release a per-app claim. Safe to call when nothing was claimed. */
+function releaseApp(app: string | undefined): void {
+  if (!app) return
+  try { coordinator.release(AGENT_ID, app.toLowerCase()) } catch { /* best effort */ }
+}
+
+// Clean up any locks held by this process on exit.
+const cleanupOnExit = () => {
+  try { coordinator.unregister(AGENT_ID) } catch { /* best effort */ }
+  try { if (existsSync(LOCK_FILE)) rmSync(LOCK_FILE) } catch { /* best effort */ }
+}
+process.on('exit', cleanupOnExit)
+process.on('SIGINT', cleanupOnExit)
+process.on('SIGTERM', cleanupOnExit)
+
+// ── Legacy lock helpers (kept as no-op stubs for back-compat) ──────
+
+/** @deprecated kept for back-compat — Coordinator handles locking now. */
+function acquireLock(): string | null {
+  if (!existsSync(LOCK_DIR)) mkdirSync(LOCK_DIR, { recursive: true })
+  lockHeld = true
+  return null
+}
+
+/** @deprecated kept for back-compat — Coordinator handles locking now. */
 function releaseLock(): void {
   if (lockHeld) {
     try { if (existsSync(LOCK_FILE)) rmSync(LOCK_FILE) } catch { /* best effort */ }
@@ -150,10 +195,11 @@ function ensurePermissions(): string | null {
   return null
 }
 
-/** Ensure lock is acquired */
+/** Ensure base lock dir exists. Per-app claims are handled by claimApp(). */
 function ensureLock(): string | null {
-  if (lockHeld) return null
-  return acquireLock()
+  if (!existsSync(LOCK_DIR)) mkdirSync(LOCK_DIR, { recursive: true })
+  lockHeld = true
+  return null
 }
 
 // ── App approval system ────────────────────────────────────────────
@@ -232,11 +278,13 @@ export function registerComputerTools(): void {
       if (permErr) return permErr
 
       const approvedList = getApprovedApps()
+      const coordStatus = coordinator.status()
       return [
         'Computer use ready.',
         `Platform: ${platform}`,
-        `Lock: held (PID ${process.pid})`,
+        `Agent ID: ${AGENT_ID}`,
         `Approved apps: ${approvedList.length > 0 ? approvedList.join(', ') : 'none yet (use app_approve to approve apps)'}`,
+        `Coordinator: ${JSON.stringify(coordStatus)}`,
       ].join('\n')
     },
   })
@@ -261,6 +309,13 @@ export function registerComputerTools(): void {
       }
 
       approveApp(app)
+      // Re-register with the coordinator so it knows this agent intends to
+      // drive the newly-approved app.
+      try {
+        coordinator.register(AGENT_ID, { apps: [...approvedApps] })
+      } catch (err) {
+        return `${result}Approved ${app} but coordinator registration failed: ${err instanceof Error ? err.message : String(err)}`
+      }
       result += `Approved ${app} for this session.`
       return result
     },
@@ -293,26 +348,33 @@ export function registerComputerTools(): void {
         return `Error: ${app} is not approved. Call app_approve first.`
       }
 
-      if (platform === 'darwin') {
-        try {
-          osascript(`tell application "${escapeAppleScript(app)}" to activate`)
-          // Wait a beat for the app to come forward
-          await new Promise(r => setTimeout(r, 500))
-          return `Launched/focused: ${app}`
-        } catch (err) {
-          return `Error launching ${app}: ${err instanceof Error ? err.message : String(err)}`
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
+
+      try {
+        if (platform === 'darwin') {
+          try {
+            osascript(`tell application "${escapeAppleScript(app)}" to activate`)
+            // Wait a beat for the app to come forward
+            await new Promise(r => setTimeout(r, 500))
+            return `Launched/focused: ${app}`
+          } catch (err) {
+            return `Error launching ${app}: ${err instanceof Error ? err.message : String(err)}`
+          }
+        } else if (platform === 'linux') {
+          try {
+            execSync(`wmctrl -a "${app}" 2>/dev/null || xdg-open "${app}" 2>/dev/null`, {
+              timeout: 10_000, stdio: 'pipe',
+            })
+            return `Launched/focused: ${app}`
+          } catch {
+            return `Error: Could not launch ${app}. Ensure it's installed.`
+          }
         }
-      } else if (platform === 'linux') {
-        try {
-          execSync(`wmctrl -a "${app}" 2>/dev/null || xdg-open "${app}" 2>/dev/null`, {
-            timeout: 10_000, stdio: 'pipe',
-          })
-          return `Launched/focused: ${app}`
-        } catch {
-          return `Error: Could not launch ${app}. Ensure it's installed.`
-        }
+        return 'Error: Unsupported platform'
+      } finally {
+        releaseApp(app)
       }
-      return 'Error: Unsupported platform'
     },
   })
 
@@ -324,11 +386,18 @@ export function registerComputerTools(): void {
     parameters: {
       window: { type: 'string', description: 'Window title to capture (optional — captures full screen if omitted)' },
       region: { type: 'string', description: 'Capture region as "x,y,w,h" (optional)' },
+      // Optional `app` enables Coordinator per-app locking. When omitted we
+      // fall back to the legacy single-lock path so existing scripts work.
+      app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
     },
     tier: 'free',
     async execute(args) {
       const lockErr = ensureLock()
       if (lockErr) return `Error: ${lockErr}`
+
+      const app = args.app ? String(args.app) : undefined
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
 
       const tmpPath = join(tmpdir(), `kbot-screenshot-${Date.now()}.png`)
 
@@ -391,6 +460,8 @@ export function registerComputerTools(): void {
         })
       } catch (err) {
         return `Screenshot failed: ${err instanceof Error ? err.message : String(err)}`
+      } finally {
+        releaseApp(app)
       }
     },
   })
@@ -404,17 +475,29 @@ export function registerComputerTools(): void {
       x: { type: 'number', description: 'X coordinate', required: true },
       y: { type: 'number', description: 'Y coordinate', required: true },
       button: { type: 'string', description: 'Mouse button: left, right, double (default: left)' },
+      // Optional `app` enables per-app coordination so multiple agents can
+      // drive different apps in parallel. Omit for legacy single-lock fallback.
+      app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
     },
     tier: 'free',
     async execute(args) {
       const lockErr = ensureLock()
       if (lockErr) return `Error: ${lockErr}`
 
+      const app = args.app ? String(args.app) : undefined
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
+
       const x = Math.round(Number(args.x))
       const y = Math.round(Number(args.y))
       const button = String(args.button || 'left').toLowerCase()
 
-      if (isNaN(x) || isNaN(y)) return 'Error: x and y must be numbers'
+      if (isNaN(x) || isNaN(y)) {
+        releaseApp(app)
+        return 'Error: x and y must be numbers'
+      }
+
+      try {
 
       if (platform === 'darwin') {
         try {
@@ -454,6 +537,10 @@ export function registerComputerTools(): void {
         }
       }
       return 'Error: Unsupported platform'
+
+      } finally {
+        releaseApp(app)
+      }
     },
   })
 
@@ -467,12 +554,19 @@ export function registerComputerTools(): void {
       amount: { type: 'number', description: 'Scroll amount in clicks (default: 3)' },
       x: { type: 'number', description: 'X coordinate to scroll at (optional — uses current position)' },
       y: { type: 'number', description: 'Y coordinate to scroll at (optional)' },
+      // Optional `app` enables Coordinator per-app locking. Omit for legacy fallback.
+      app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
     },
     tier: 'free',
     async execute(args) {
       const lockErr = ensureLock()
       if (lockErr) return `Error: ${lockErr}`
 
+      const app = args.app ? String(args.app) : undefined
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
+
+      try {
       const direction = String(args.direction).toLowerCase()
       const amount = Math.round(Number(args.amount) || 3)
 
@@ -526,6 +620,9 @@ export function registerComputerTools(): void {
         }
       }
       return 'Error: Unsupported platform'
+      } finally {
+        releaseApp(app)
+      }
     },
   })
 
@@ -540,12 +637,19 @@ export function registerComputerTools(): void {
       to_x: { type: 'number', description: 'End X coordinate', required: true },
       to_y: { type: 'number', description: 'End Y coordinate', required: true },
       duration_ms: { type: 'number', description: 'Drag duration in milliseconds (default: 500)' },
+      // Optional `app` enables Coordinator per-app locking. Omit for legacy fallback.
+      app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
     },
     tier: 'free',
     async execute(args) {
       const lockErr = ensureLock()
       if (lockErr) return `Error: ${lockErr}`
 
+      const app = args.app ? String(args.app) : undefined
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
+
+      try {
       const fx = Math.round(Number(args.from_x))
       const fy = Math.round(Number(args.from_y))
       const tx = Math.round(Number(args.to_x))
@@ -582,6 +686,9 @@ export function registerComputerTools(): void {
         }
       }
       return 'Error: Unsupported platform'
+      } finally {
+        releaseApp(app)
+      }
     },
   })
 
@@ -592,32 +699,42 @@ export function registerComputerTools(): void {
     description: 'Type text using the keyboard. Types each character as if pressed by the user.',
     parameters: {
       text: { type: 'string', description: 'Text to type', required: true },
+      // Optional `app` enables Coordinator per-app locking. Omit for legacy fallback.
+      app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
     },
     tier: 'free',
     async execute(args) {
       const lockErr = ensureLock()
       if (lockErr) return `Error: ${lockErr}`
 
-      const text = String(args.text)
-      if (!text) return 'Error: text is required'
+      const app = args.app ? String(args.app) : undefined
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
 
-      if (platform === 'darwin') {
-        const escaped = escapeAppleScript(text)
-        try {
-          osascript(`tell application "System Events" to keystroke "${escaped}"`, 10_000)
-          return `Typed: ${text.slice(0, 80)}${text.length > 80 ? '...' : ''}`
-        } catch {
-          return 'Error: Typing requires Accessibility permissions'
+      try {
+        const text = String(args.text)
+        if (!text) return 'Error: text is required'
+
+        if (platform === 'darwin') {
+          const escaped = escapeAppleScript(text)
+          try {
+            osascript(`tell application "System Events" to keystroke "${escaped}"`, 10_000)
+            return `Typed: ${text.slice(0, 80)}${text.length > 80 ? '...' : ''}`
+          } catch {
+            return 'Error: Typing requires Accessibility permissions'
+          }
+        } else if (platform === 'linux') {
+          try {
+            execSync(`xdotool type -- "${text.replace(/"/g, '\\"')}"`, { timeout: 10_000 })
+            return `Typed: ${text.slice(0, 80)}${text.length > 80 ? '...' : ''}`
+          } catch {
+            return 'Error: Typing requires xdotool'
+          }
         }
-      } else if (platform === 'linux') {
-        try {
-          execSync(`xdotool type -- "${text.replace(/"/g, '\\"')}"`, { timeout: 10_000 })
-          return `Typed: ${text.slice(0, 80)}${text.length > 80 ? '...' : ''}`
-        } catch {
-          return 'Error: Typing requires xdotool'
-        }
+        return 'Error: Unsupported platform'
+      } finally {
+        releaseApp(app)
       }
-      return 'Error: Unsupported platform'
     },
   })
 
@@ -628,12 +745,19 @@ export function registerComputerTools(): void {
     description: 'Press a key or key combination. Supports modifiers: cmd/ctrl/alt/shift + key.',
     parameters: {
       key: { type: 'string', description: 'Key: enter, tab, escape, space, backspace, delete, up, down, left, right, cmd+c, ctrl+v, cmd+shift+s, etc.', required: true },
+      // Optional `app` enables Coordinator per-app locking. Omit for legacy fallback.
+      app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
     },
     tier: 'free',
     async execute(args) {
       const lockErr = ensureLock()
       if (lockErr) return `Error: ${lockErr}`
 
+      const app = args.app ? String(args.app) : undefined
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
+
+      try {
       const key = String(args.key).toLowerCase()
 
       if (platform === 'darwin') {
@@ -687,6 +811,9 @@ export function registerComputerTools(): void {
         }
       }
       return 'Error: Unsupported platform'
+      } finally {
+        releaseApp(app)
+      }
     },
   })
 
@@ -756,28 +883,35 @@ export function registerComputerTools(): void {
       if (!isAppApproved(app)) return `Error: ${app} not approved. Call app_approve first.`
       if (isNaN(w) || isNaN(h)) return 'Error: width and height must be numbers'
 
-      if (platform === 'darwin') {
-        try {
-          osascript(`tell application "${escapeAppleScript(app)}" to set bounds of front window to {0, 0, ${w}, ${h}}`, 5_000)
-          return `Resized ${app} to ${w}x${h}`
-        } catch {
-          // Fallback via System Events
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
+
+      try {
+        if (platform === 'darwin') {
           try {
-            osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set size of front window to {${w}, ${h}}`)
+            osascript(`tell application "${escapeAppleScript(app)}" to set bounds of front window to {0, 0, ${w}, ${h}}`, 5_000)
             return `Resized ${app} to ${w}x${h}`
-          } catch (err) {
-            return `Error: ${err instanceof Error ? err.message : String(err)}`
+          } catch {
+            // Fallback via System Events
+            try {
+              osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set size of front window to {${w}, ${h}}`)
+              return `Resized ${app} to ${w}x${h}`
+            } catch (err) {
+              return `Error: ${err instanceof Error ? err.message : String(err)}`
+            }
+          }
+        } else if (platform === 'linux') {
+          try {
+            execSync(`wmctrl -r "${app}" -e 0,-1,-1,${w},${h}`, { timeout: 5_000 })
+            return `Resized ${app} to ${w}x${h}`
+          } catch {
+            return 'Error: Requires wmctrl'
           }
         }
-      } else if (platform === 'linux') {
-        try {
-          execSync(`wmctrl -r "${app}" -e 0,-1,-1,${w},${h}`, { timeout: 5_000 })
-          return `Resized ${app} to ${w}x${h}`
-        } catch {
-          return 'Error: Requires wmctrl'
-        }
+        return 'Error: Unsupported platform'
+      } finally {
+        releaseApp(app)
       }
-      return 'Error: Unsupported platform'
     },
   })
 
@@ -797,22 +931,29 @@ export function registerComputerTools(): void {
 
       if (!isAppApproved(app)) return `Error: ${app} not approved. Call app_approve first.`
 
-      if (platform === 'darwin') {
-        try {
-          osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set position of front window to {${x}, ${y}}`)
-          return `Moved ${app} to (${x}, ${y})`
-        } catch (err) {
-          return `Error: ${err instanceof Error ? err.message : String(err)}`
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
+
+      try {
+        if (platform === 'darwin') {
+          try {
+            osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set position of front window to {${x}, ${y}}`)
+            return `Moved ${app} to (${x}, ${y})`
+          } catch (err) {
+            return `Error: ${err instanceof Error ? err.message : String(err)}`
+          }
+        } else if (platform === 'linux') {
+          try {
+            execSync(`wmctrl -r "${app}" -e 0,${x},${y},-1,-1`, { timeout: 5_000 })
+            return `Moved ${app} to (${x}, ${y})`
+          } catch {
+            return 'Error: Requires wmctrl'
+          }
         }
-      } else if (platform === 'linux') {
-        try {
-          execSync(`wmctrl -r "${app}" -e 0,${x},${y},-1,-1`, { timeout: 5_000 })
-          return `Moved ${app} to (${x}, ${y})`
-        } catch {
-          return 'Error: Requires wmctrl'
-        }
+        return 'Error: Unsupported platform'
+      } finally {
+        releaseApp(app)
       }
-      return 'Error: Unsupported platform'
     },
   })
 
@@ -830,30 +971,37 @@ export function registerComputerTools(): void {
 
       if (!isAppApproved(app)) return `Error: ${app} not approved. Call app_approve first.`
 
-      if (platform === 'darwin') {
-        try {
-          if (action === 'restore') {
-            osascript(`tell application "${escapeAppleScript(app)}" to activate`)
-          } else {
-            osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set miniaturized of front window to true`)
+      const claimErr = claimApp(app)
+      if (claimErr) return `Error: ${claimErr}`
+
+      try {
+        if (platform === 'darwin') {
+          try {
+            if (action === 'restore') {
+              osascript(`tell application "${escapeAppleScript(app)}" to activate`)
+            } else {
+              osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set miniaturized of front window to true`)
+            }
+            return `${action === 'restore' ? 'Restored' : 'Minimized'} ${app}`
+          } catch (err) {
+            return `Error: ${err instanceof Error ? err.message : String(err)}`
           }
-          return `${action === 'restore' ? 'Restored' : 'Minimized'} ${app}`
-        } catch (err) {
-          return `Error: ${err instanceof Error ? err.message : String(err)}`
-        }
-      } else if (platform === 'linux') {
-        try {
-          if (action === 'restore') {
-            execSync(`wmctrl -r "${app}" -b remove,hidden`, { timeout: 5_000 })
-          } else {
-            execSync(`xdotool search --name "${app}" windowminimize`, { timeout: 5_000 })
+        } else if (platform === 'linux') {
+          try {
+            if (action === 'restore') {
+              execSync(`wmctrl -r "${app}" -b remove,hidden`, { timeout: 5_000 })
+            } else {
+              execSync(`xdotool search --name "${app}" windowminimize`, { timeout: 5_000 })
+            }
+            return `${action === 'restore' ? 'Restored' : 'Minimized'} ${app}`
+          } catch {
+            return 'Error: Requires wmctrl/xdotool'
           }
-          return `${action === 'restore' ? 'Restored' : 'Minimized'} ${app}`
-        } catch {
-          return 'Error: Requires wmctrl/xdotool'
         }
+        return 'Error: Unsupported platform'
+      } finally {
+        releaseApp(app)
       }
-      return 'Error: Unsupported platform'
     },
   })
 
@@ -917,10 +1065,17 @@ export function registerComputerTools(): void {
     parameters: {},
     tier: 'free',
     async execute() {
+      let released: string[] = []
+      try {
+        released = coordinator.unregister(AGENT_ID)
+      } catch { /* best effort */ }
       releaseLock()
       approvedApps.clear()
       permissionsVerified = false
-      return 'Computer use session ended. Lock released.'
+      const releasedNote = released.length > 0
+        ? ` Released app locks: ${released.join(', ')}.`
+        : ''
+      return `Computer use session ended.${releasedNote}`
     },
   })
 }

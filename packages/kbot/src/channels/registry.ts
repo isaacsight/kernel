@@ -11,6 +11,7 @@ import { telegramAdapter } from './telegram.js'
 import { signalAdapter } from './signal.js'
 import { matrixAdapter } from './matrix.js'
 import { teamsAdapter } from './teams.js'
+import { officeAdapter } from './office.js'
 
 const adapters: Record<string, ChannelAdapter> = {
   slack: slackAdapter,
@@ -19,6 +20,7 @@ const adapters: Record<string, ChannelAdapter> = {
   signal: signalAdapter,
   matrix: matrixAdapter,
   teams: teamsAdapter,
+  office: officeAdapter,
 }
 
 export function getChannel(name: string): ChannelAdapter {
