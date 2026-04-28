@@ -4,6 +4,7 @@
 
 import { registerTool, type ToolDefinition } from './index.js'
 import { imageThoughtfulTool } from './image-thoughtful.js'
+import { lladaImageTool } from './llada-image.js'
 import { channelSendTool, channelReceiveTool } from './channel-tools.js'
 import {
   fileLibraryAddTool,
@@ -95,6 +96,7 @@ function adaptSecurityTool(t: SecurityToolShape): ToolDefinition {
 
 export function registerSwarm2026Tools(): void {
   registerTool(imageThoughtfulTool)
+  registerTool(lladaImageTool)
   registerTool(channelSendTool)
   registerTool(channelReceiveTool)
   registerTool(fileLibraryAddTool)

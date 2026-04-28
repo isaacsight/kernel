@@ -22,6 +22,7 @@ const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://localhost:11434'
 const LMSTUDIO_HOST = process.env.LMSTUDIO_HOST || 'http://localhost:1234'
 const JAN_HOST = process.env.JAN_HOST || 'http://localhost:1337'
 const KBOT_LOCAL_HOST = process.env.KBOT_LOCAL_HOST || 'http://127.0.0.1:18789'
+const LLADA_HOST = process.env.KBOT_LLADA_URL || 'http://localhost:8000'
 
 // ── All supported providers ──
 
@@ -45,6 +46,7 @@ export type ByokProvider =
   | 'jan'          // Jan (local, open-source AI)
   | 'ollama'       // Ollama (local open-weight models)
   | 'kbot-local'   // kbot local gateway (local AI assistant)
+  | 'llada'        // LLaDA2.0-Uni (local unified diffusion LLM, multimodal + image gen)
   | 'embedded'     // Embedded llama.cpp (no external service needed)
 
 export interface ProviderConfig {
@@ -282,6 +284,23 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     outputCost: 0,
     authHeader: 'bearer',
   },
+  llada: {
+    // LLaDA2.0-Uni — Inclusion AI unified discrete-diffusion multimodal LLM.
+    // Local, $0 path to image generation + multimodal understanding.
+    // SPEC: refine when LLaDA's API stabilizes — currently assumes an
+    // OpenAI-compatible server at $KBOT_LLADA_URL (default http://localhost:8000).
+    // The upstream repo (github.com/inclusionAI/LLaDA2.0-Uni) ships Python
+    // inference scripts today; SGLang serving is on their TODO list.
+    name: 'LLaDA2.0-Uni (Local)',
+    apiUrl: `${LLADA_HOST}/v1/chat/completions`,
+    apiStyle: 'openai',
+    defaultModel: 'llada2.0-uni',
+    fastModel: 'llada2.0-uni',
+    inputCost: 0,
+    outputCost: 0,
+    authHeader: 'bearer',  // Auth is ignored when no key is set; local servers usually don't require one.
+    models: ['llada2.0-uni'],
+  },
   embedded: {
     name: 'Embedded (llama.cpp)',
     apiUrl: 'embedded://local',  // Not a real URL — inference runs in-process
@@ -436,12 +455,12 @@ const ENV_KEYS: Array<{ env: string; provider: ByokProvider }> = [
 
 /** Check if a provider is local (runs on this machine, may still need a token) */
 export function isLocalProvider(provider: ByokProvider): boolean {
-  return provider === 'ollama' || provider === 'kbot-local' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded'
+  return provider === 'ollama' || provider === 'kbot-local' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded' || provider === 'llada'
 }
 
 /** Check if a provider needs no API key at all */
 export function isKeylessProvider(provider: ByokProvider): boolean {
-  return provider === 'ollama' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded'
+  return provider === 'ollama' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded' || provider === 'llada'
 }
 
 /** Check if BYOK mode is enabled (via env var or config) */
