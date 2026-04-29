@@ -14,11 +14,12 @@ You are the engineering engine for **K:BOT** — an open-source terminal AI agen
 ## II. PROJECT OVERVIEW
 
 - **Package**: `@kernel.chat/kbot` on npm — MIT license
-- **Version**: 3.60.0 (as of 2026-03-31)
-- **npm downloads**: ~4,806/week | **GitHub stars**: 6 | **GitHub repo**: `isaacsight/kernel`
+- **Version**: 4.0.1 (published 2026-04-29) — v4.0 line tagged "evidence-based curation"
+- **npm downloads**: ~1,266/week (last 7 days), ~12,074/month | **GitHub repo**: `isaacsight/kernel`
+- **First publish**: 2026-03-04 (~8 weeks on npm)
 - **Philosophy — BYOK (Bring Your Own Key)**: No subscription required. Users supply their own API keys for any of 20 supported AI providers. Keys are stored encrypted at `~/.kbot/config.json` (AES-256-CBC).
-- **Local-first**: File reads, git, grep execute instantly with no API cost. Local Ollama models are deeply integrated via daemons and the `kbot-local` MCP.
-- **670+ registered tools**, **35 agents**, **20 AI providers**
+- **Local-first**: File reads, git, grep execute instantly with no API cost. Local Ollama models are deeply integrated via daemons and the `kbot-local` MCP. v4.0 also embeds llama.cpp directly (GGUF models, no Ollama required).
+- **100+ specialist skills**, **35 specialist agents**, **20 AI providers** (the pre-v4 "670+ tools" surface was curated down per `packages/kbot/CURATION_PLAN.md`)
 - **Web companion**: kernel.chat — React 19 PWA, deployed to GitHub Pages
 
 ---
@@ -122,6 +123,15 @@ packages/kbot-control-standalone/  # MIT npm package @kernel.chat/kbot-control
 │       ├── acp-server.ts    # ACP server
 │       ├── lsp-bridge.ts    # LSP bridge
 │       └── bridge.ts        # Shared bridge logic
+
+# Other workspace packages (under packages/)
+# - 2027/             — experimental
+# - memory-tiers/     — tiered memory subsystem
+# - prompt-evolver/   — prompt mutation / evolution
+# - skill-router/     — skill routing (successor to learned-router)
+# - synth/            — web synth (built into public/play/ for kernel.chat)
+# - tool-forge/       — runtime tool creation
+# - vscode-kbot/      — VS Code extension
 
 src/                         # Web companion (kernel.chat)
 ├── agents/                  # Agent definitions
@@ -531,6 +541,20 @@ npm run deploy            # From repo root — builds + pushes to gh-pages branc
 ---
 
 ## XII. RECENT CHANGES
+
+### v4.0.x (2026-04-28 / 2026-04-29) — Evidence-based curation, embedded llama.cpp
+- **v4.0 line tagged "evidence-based curation"** — the 670-tool surface is curated down to ~100 specialist skills (the curated core); the rest moved to plugins per `packages/kbot/CURATION_PLAN.md`.
+- **Embedded llama.cpp engine** — kbot now runs GGUF models directly without requiring a separate Ollama install (npm description: "embedded llama.cpp engine").
+- **Rapid release cadence** — 3.99.34 → 3.99.35 → 4.0.0 → 4.0.1 published over 2026-04-28..29.
+- **Note**: `CHANGELOG.md` in repo root only goes up through 3.97.0 (2026-04-06) at time of writing — the 3.98 / 3.99 / 4.0 entries are not yet recorded there. Treat the CHANGELOG as lagging until updated.
+
+### v3.90–3.97 (2026-04-05 → 2026-04-06) — "Digital organism" stream system
+Per `CHANGELOG.md`:
+- **Stream V2** with intelligence coordinator for live streaming, self-hosting infrastructure, coordination engine.
+- **17 engines** forming a "full digital organism": coordination, research, memory, identity, growth, terrain, palette cycling, audio, narrative, social, evolution, ROM, etc.
+- **Robot exploration** — builds real structures, scans terrain, ROM hack rendering engine (3 ROM hacks: stars, tile world, brighter eyes).
+- **Stream platform control** — 13 tools managing Twitch / Kick / Rumble from terminal.
+- **AGI decision engine** (Gemma 4) and gorilla pixel art character.
 
 ### v3.99.21+ (2026-04-19) — kbot-control superseding device, growth, critic, hierarchical planner
 - **kbot-control.amxd + TCP protocol**: one Max for Live device, JSON-over-TCP, 37 LOM methods. Supersedes AbletonOSC + KBotBridge.
