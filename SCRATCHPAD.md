@@ -2,7 +2,58 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-04-19) — KBOT-CONTROL + SUNO-INSPIRED ROADMAP
+## Current Session (2026-04-29) — V5 RESEARCH + FUTURES PLAN
+
+### What happened
+- Verified live state: kbot is at **v4.0.1**, published 2026-04-29 (CLAUDE.md was at 3.60.0 / 3.99.21 — stale). Real npm downloads ~1,266/wk, not the 4,806 stated.
+- **CLAUDE.md updated** in this session to match v4.0.1 reality. Committed as `b497466` on `claude/project-scope-definition-Z7fbx`, pushed.
+- Researched HF Daily Papers (2026-04-29) — pulled 5 high-relevance papers for kbot's architecture:
+  - **Sylph.AI "The Last Harness You'll Ever Build"** (2604.21003) — formalizes Worker / Evaluator / Evolution Agent loop. Maps directly onto kbot's existing critic-gate + learning systems.
+  - **Tencent SkillSynth** (2604.25727) — scenario-mediated skill graph for terminal task synthesis. Maps onto skill-router package.
+  - **Stanford RecursiveMAS** (2604.25917) — latent-state multi-agent. Top of HF page (121 upvotes). Successor architecture to text-handoff multi-agent.
+  - **Plurai BARRED** (2604.25203) — asymmetric debate generates guardrail training data. Recipe to ship critic-gate.ts (currently feature-flagged off awaiting FP measurement).
+  - **Alibaba TCOD** (2604.24005) — temporal curriculum on-policy distillation. Recipe for distilling frontier models to local llama.cpp runtime.
+- Researched competitive landscape: terminal coding agents have consolidated into a real category; MCP at 97M installs (mainstream); agentic sovereignty / "Thick Agents" recognized as a tier.
+
+### Strategic positions identified
+1. Harness Evolution Loop (Sylph) — foundation for self-improving kbot
+2. Skill Graph (Tencent) — formalizes skill-router as a graph
+3. Latent-state envelope (Stanford) — prep for multi-agent v2
+4. Forecast / predictions module — addresses user framing literally
+5. Persona / privilege scoping (Cequence Apr-28) — wraps permissions.ts as identity-bound
+6. Asymmetric debate (Plurai) — generates the data that ships critic-gate
+
+### What's drafted (not built)
+- **`packages/kbot/V5_FUTURES_PLAN.md`** — full plan, sequenced into 4 phases, ~1,200 LOC TS + 400 LOC tests + 300 lines markdown. **Read this when back.**
+- **`packages/kbot/src/futures/harness/types.ts`** — concrete sample. Full Harness Evolution Loop type system. Pure types, no runtime, no risk. Demonstrates the contract every other module would target.
+- **`packages/kbot/src/futures/{harness,skill-graph,latent-state,forecast,persona,debate}/`** — empty directories, placeholder for the 6 modules.
+
+### Key decisions deferred to user (see V5_FUTURES_PLAN.md "Open decisions")
+1. Module name: `futures/` vs `v5/` vs `experimental/`
+2. CLI surface: subcommand vs flag
+3. Forecast as new tool or arg on existing
+4. Public API export path
+5. Phase ordering: Phase 1 first (recommended), or do forecast first for visibility
+
+### What didn't ship this session
+- No code beyond the types.ts sample (user redirected to "prepare and plan till I get home")
+- Critic-gate still feature-flagged off
+- BARRED debate not implemented
+- Terminal-Bench evaluation not run
+
+### Recommended next session opener
+> "Read `packages/kbot/V5_FUTURES_PLAN.md`, pick a phase, ship it."
+
+The plan is structured so any single phase is independently shippable and reversible (everything additive under `src/futures/`).
+
+### Branch state
+- Current branch: `claude/project-scope-definition-Z7fbx`
+- Pushed commits: `b497466` (CLAUDE.md refresh)
+- **Uncommitted at session end**: `V5_FUTURES_PLAN.md`, `futures/harness/types.ts`, this SCRATCHPAD entry
+
+---
+
+## Previous Session (2026-04-19) — KBOT-CONTROL + SUNO-INSPIRED ROADMAP
 
 ### What shipped
 - **kbot-control.amxd** — single M4L device, TCP 127.0.0.1:9000, JSON-RPC 2.0, 37+ LOM methods. Supersedes AbletonOSC + AbletonBridge + kbot-bridge (all three can be decommissioned).
