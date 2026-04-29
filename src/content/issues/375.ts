@@ -266,7 +266,7 @@ export const ISSUE_375: IssueRecord = {
           journal: 'IN-HOUSE · NO SOURCE PAPER → packages/kbot/src/futures/forecast/ — linear, exponential, and flat projection over npm, GitHub, users, tools and traces, joined to the existing growth.ts surface',
         },
         {
-          authors: 'Cequence Security',
+          authors: 'Cequence',
           year: '2026',
           title: 'Agent Personas — type-checked privilege scoping for agent invocations',
           journal: 'press signal, April 2026 → packages/kbot/src/futures/persona/ — Persona allowlists, args-shape constraints, blast-radius bounds; runtime check before any tool execution',
