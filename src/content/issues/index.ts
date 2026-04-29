@@ -24,6 +24,10 @@ import { ISSUE_368 } from './368'
 import { ISSUE_369 } from './369'
 import { ISSUE_370 } from './370'
 import { ISSUE_371 } from './371'
+import { ISSUE_372 } from './372'
+import { ISSUE_373 } from './373'
+import { ISSUE_374 } from './374'
+import { ISSUE_375 } from './375'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -366,8 +370,19 @@ export interface IssueCredits {
 }
 
 /** Cover paper stock — each issue picks one so the covers are
- *  visually distinct at a glance. Defaults to 'cream'. */
-export type IssueStock = 'cream' | 'butter' | 'kraft' | 'ivory' | 'ink'
+ *  visually distinct at a glance. Defaults to 'cream'.
+ *
+ *  Stock cabinet (what each stock signals):
+ *  - 'cream'   — anchor stock, the default; warm magazine paper
+ *  - 'butter'  — pale yellow, summer/leisure register
+ *  - 'kraft'   — recycled brown, field-report / outdoor register
+ *  - 'ivory'   — slightly cooler than cream, serious-sober register
+ *  - 'ink'     — dark stock for night / after-hours (introduced 371)
+ *  - 'ledger'  — pale graph-ruled accountant's paper, audit register
+ *               (introduced 372: THE AUDIT — debuts with the
+ *                postmark dateline mechanic; the cover IS the audit)
+ */
+export type IssueStock = 'cream' | 'butter' | 'kraft' | 'ivory' | 'ink' | 'ledger'
 
 /**
  * Cover layout variant — controls the composition of the cover,
@@ -381,7 +396,19 @@ export type IssueStock = 'cream' | 'butter' | 'kraft' | 'ivory' | 'ink'
  * - 'asymmetric-left' — left-aligned everything, editorial rhythm;
  *                       suits fashion / culture features.
  */
-export type IssueCoverLayout = 'classic' | 'monument-hero' | 'asymmetric-left'
+export type IssueCoverLayout =
+  | 'classic'
+  | 'monument-hero'
+  | 'asymmetric-left'
+  /** 'ledger-rule' — horizontal rules + numbered totals across the
+   *  cover; the cover IS the audit. Introduced 372: THE AUDIT.
+   *  Pairs naturally with `coverStock: 'ledger'`. */
+  | 'ledger-rule'
+  /** 'numbered-catalog' — monument-hero number + a 1–N catalog
+   *  lockup as secondary art, rather than a single feature
+   *  monument. Introduced 375: THE SIX BORROWS. Suits issues
+   *  whose argument *is* the numbered route. */
+  | 'numbered-catalog'
 
 /**
  * Optional cover ornament — a decorative mark that reinforces
@@ -405,7 +432,17 @@ export type IssueCoverLayout = 'classic' | 'monument-hero' | 'asymmetric-left'
  *
  * Most issues do not set this; leaving it undefined is the default.
  */
-export type IssueCoverOrnament = 'ink-spread' | 'warty-spots' | 'flash-burn'
+export type IssueCoverOrnament =
+  | 'ink-spread'
+  | 'warty-spots'
+  | 'flash-burn'
+  /** 'asterisk-stamp' — a small asterisk rendered as a postmark-
+   *  style stamp (rotated, slightly off-register), placed where a
+   *  reader would expect a footnote pointer. Distinct from the
+   *  system-glyph asterisk that travels through every folio. The
+   *  metaphor: the asterisk that should have shipped with the
+   *  headline number. Introduced 374: AGAINST VIRAL BENCHMARKS. */
+  | 'asterisk-stamp'
 
 /** Optional press-preview wax seal rendered in the top-right
  *  corner of the cover. Reads as a rubber stamp or embargo seal;
@@ -415,6 +452,26 @@ export interface IssueCoverSeal {
   /** Upper arc label, e.g. "EMBARGO LIFTED". */
   label: string
   /** Center-bottom date, e.g. "IV·26". */
+  date: string
+}
+
+/** Postmark dateline — the fourth starred mechanic borrowed from
+ *  PAPERSKY (see docs/design-language.md). Small-caps Latin lockup
+ *  anchored at the bottom centre of the cover, separate from the
+ *  monument and the seal. The format is `<PLACE> · <DATE>`, where
+ *  place is a specific location (city, room, beat) and date is the
+ *  POPEYE-style Roman-numeral month + two-digit year (e.g. `IV·26`).
+ *
+ *  Held back from 360–371 because no subject earned the geographic
+ *  grounding it implies. First fired in 372: THE AUDIT — where the
+ *  honest dateline is the room and the night the cut happened. */
+export interface IssueCoverPostmark {
+  /** Place label, small-caps Latin (e.g. "ROOM 503", "TOKYO",
+   *  "OAKLAND"). Specific. The postmark is a claim about where
+   *  the work happened, not where the magazine is filed. */
+  place: string
+  /** Date stamp, POPEYE-grammar Roman-numeral month + 2-digit
+   *  year (e.g. "IV·26" for April 2026). */
   date: string
 }
 
@@ -439,6 +496,11 @@ export interface IssueRecord {
    *  corner. Orthogonal to the ornament — issues can use both,
    *  either, or neither. */
   coverSeal?: IssueCoverSeal
+  /** Optional postmark dateline at the bottom-centre of the cover.
+   *  The fourth starred PAPERSKY mechanic (see
+   *  docs/design-language.md). Use only when the subject is
+   *  geographically grounded; otherwise leave undefined. */
+  coverPostmark?: IssueCoverPostmark
   /** Adaptive issue accent — either a named seed from INK_SEEDS
    *  (e.g., 'cobalt') or a raw hex string. Drives the entire
    *  issue's color palette via five CSS-derived tones. When
@@ -466,6 +528,10 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_369,
   ISSUE_370,
   ISSUE_371,
+  ISSUE_372,
+  ISSUE_373,
+  ISSUE_374,
+  ISSUE_375,
 ]
 
 /** The latest published issue — drives the landing cover. */

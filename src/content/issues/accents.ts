@@ -125,6 +125,12 @@ export const INK_SEEDS = {
     family: 'neutral',
     fit: 'Rich brown — interviews, craft, slow work; carries quietly on every stock.',
   },
+  graphite: {
+    name: 'Graphite',
+    hex: '#3F3D3A',
+    family: 'neutral',
+    fit: 'Pencil-lead grey — audits, ledgers, accounting registers; the quiet ink (introduced 372: THE AUDIT, paired with ledger stock).',
+  },
 } as const satisfies Record<string, InkSeed>
 
 /** The seed identifier type — derived from INK_SEEDS keys. */

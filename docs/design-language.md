@@ -169,6 +169,72 @@ ranked by usefulness to kernel.chat:
 **postmark dateline**. Adopt these first; the others are
 optional.
 
+**Status of the four** (current run, IV·26):
+
+| Mechanic | First exercised | Status |
+|---|---|---|
+| Restraint (earned quiet cover) | 370 | In active use across 370, 372, 373 |
+| Single-glyph system thread (★) | 370 | Ratified — three surfaces (cover dateline, frame masthead, frame footer) |
+| Place-and-route structure | 370 (seven stakes) | Re-exercised in 375 (six borrows) at the references layer |
+| Postmark dateline | **372** (ROOM 503 · IV·26) | First fired this drop. The fourth chamber, no longer unfired |
+
+### WIRED
+
+WIRED (San Francisco, 1993–present, Condé Nast) is the second
+editorial neighbour the magazine reads from. Where PAPERSKY is
+the quiet field-trip register, WIRED is the **data-journalism**
+register: charts as headlines, fact-boxes as paragraphs, and
+footnoted methodology as the editorial value-add. We do not want
+to look like WIRED — its cover language (high-saturation acid
+yellow + caps-locked single-word headlines + glitch type) is so
+specifically WIRED that direct mimicry would read as a third
+homage on top of POPEYE × PAPERSKY. What we want is a **small
+set of mechanics** that POPEYE and PAPERSKY don't already give
+us, drawn from WIRED's discipline at the data layer.
+
+#### The WIRED feature, decoded
+
+| Element | What it does | Notes |
+|---|---|---|
+| Inline fact-box callouts (mid-paragraph) | Pulls a number out of running prose into a typeset card readers scan first | Tabular nums, tracked tight, accent-rule above |
+| Footnoted methodology, set in the same point size as the body | Treats the method as part of the text, not as a back-of-book appendix | Footnote markers in tomato spot, not page-marginal |
+| Numbered sources at the foot of long features | Publishes the working bibliography inline, not as a credit page | Author surname + year or arXiv id, never bare URLs |
+| Pull-quote with the number, not the sentence | When a feature turns on a measurement, the pull-quote *is* the measurement | "8.8×" sized as the pull-quote, source line below |
+| "Methods" sidebar adjacent to the headline | The credibility lives next to the claim, not behind it | Shorter than the lede; longer than the standfirst |
+
+#### Transferable mechanics
+
+Things kernel.chat could borrow without copying the cover voice:
+
+1. **The methods sidebar adjacent to the claim**, not at the end.
+   When an issue turns on a measurement (374's `8.8× / 13.9× /
+   19.7×`, 372's `670 → 105`), the method sits next to the
+   number. We have `EssaySpread.dataBlock` infrastructure for
+   this; the discipline we lack is *placing* the data block
+   adjacent to the headline rather than after the closing.
+2. **Numbered references at the foot of every long feature.**
+   PAPERSKY footnotes places. WIRED footnotes papers and
+   measurements. We started this in 375 (THE SIX BORROWS) with
+   a `references` block credit page; the next move is making
+   it standard for any feature whose argument cites a paper,
+   benchmark, or external source.
+3. **Pull-quote with the number, not the sentence.** When the
+   feature is methodologically driven, the quote should be the
+   measurement, the unit, and the source line — not the most
+   quotable English. Exercised quietly in 374; codify going
+   forward.
+4. **Footnote markers in tomato spot, set inline.** Tiny lift
+   from cover to body: the asterisk is already our system
+   glyph; admitting tomato-tinted superscript markers
+   (`¹ ² ³`) for in-text footnotes joins the system glyph
+   discipline to the footnote discipline. Not yet shipped.
+
+These four sit alongside the four PAPERSKY-starred mechanics.
+The two neighbours together give the magazine a complete
+working register: PAPERSKY for the quiet-field, WIRED for the
+data-grounded. Most issues need neither set fully exercised;
+the catalog is for when an issue's subject calls for them.
+
 ---
 
 ## The system
@@ -183,6 +249,19 @@ optional.
 - `--pop-kraft` `#C8A97E` — camel / outdoor issue
 - `--pop-coffee` `#6B4E3D` — warm brown text
 - `--pop-ink` `#1F1E1D` — primary dark ground
+- `--pop-ledger` (introduced 372) — pale graph-ruled accountant's
+  paper. Audit register; pairs with the `graphite` accent.
+
+**Stock cabinet — when each stock signals what:**
+
+| Stock | Signal | First used |
+|---|---|---|
+| `cream` | Anchor — the default; warm magazine paper | Run-wide |
+| `ivory` | Serious-sober — methodological / press-preview register | 374 (AGAINST VIRAL BENCHMARKS) — the lab-bench paper |
+| `butter` | Summer / leisure — slow reading | (per-issue) |
+| `kraft` | Field-report / outdoor | (per-issue) |
+| `ink` | Night / after-hours | 371 (AFTER HOURS) — the tungsten dark |
+| **`ledger`** | **Audit / account — graph-ruled accountant's paper** | **372 (THE AUDIT) — debuts with the postmark mechanic** |
 
 **Spot color** — the punch:
 - `--pop-tomato` `#E24E1B` — banners, rules, italic em accents,
@@ -227,6 +306,7 @@ class in `src/index.css`.
 | Cover dateline | Leading the issue folio (top-right of every cover) | `IssueCover.tsx` |
 | Frame masthead | Leading the issue folio (top of every inner page) | `MagazineFrame.tsx` |
 | Frame footer | Leading the issue folio (bottom of every inner page) | `MagazineFrame.tsx` |
+| Postmark dateline | Leading `coverPostmark.place` at the bottom-centre of covers that fire the fourth PAPERSKY mechanic (introduced 372) | `IssueCover.tsx` (postmark variant) |
 
 **Spec**: tomato spot color, `0.85em` of the surrounding folio
 text, vertically centred, `6px` right margin, `opacity: 0.95`.
