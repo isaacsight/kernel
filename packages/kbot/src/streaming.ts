@@ -126,6 +126,24 @@ export async function streamAnthropicResponse(
 
   if (tools && tools.length > 0) body.tools = tools
 
+  // Anthropic prompt-cache TTL warning (jcode borrow). Warn once per (model,
+  // prompt-hash) cold event when the cache likely expired since last call.
+  if (apiUrl.includes('anthropic') && system && process.env.KBOT_CACHE_WARMTH_WARN !== 'off') {
+    try {
+      const { hashPrompt, checkCacheWarmth, recordCacheCall } = await import('./cache-warmth.js')
+      const promptHash = hashPrompt(system)
+      const inputCostPerMTok = model.includes('opus') ? 15 : model.includes('haiku') ? 0.8 : 3
+      const promptTokenEstimate = Math.ceil(system.length / 4)
+      const check = checkCacheWarmth(model, promptHash, inputCostPerMTok, promptTokenEstimate)
+      if (!check.warm && check.message) {
+        console.warn((await import('chalk')).default.yellow(check.message))
+      }
+      recordCacheCall(model, promptHash)
+    } catch {
+      // never let warning logic break the API call
+    }
+  }
+
   let res: Response | undefined
   let lastError: Error | undefined
 

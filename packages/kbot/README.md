@@ -36,6 +36,12 @@ Most terminal AI agents lock you into one provider, one model, one way of workin
 - **Programmatic SDK** — use kbot as a library in your own apps.
 - **MCP server built in** — plug kbot into Claude Code, Cursor, VS Code, Zed, or Neovim as a tool provider.
 
+## Benchmarks
+
+Methodology-explicit comparison vs other CLI agents → [BENCHMARKS.md](./BENCHMARKS.md). TL;DR: kbot beats Aider (4.4×) and OpenCode (5.7×) on cold start; loses to Claude Code, Codex, and jcode on raw boot but wins on cost-per-task (BYOK + Ollama fallback), vertical depth (Ableton/security/computer-use/channels), and offline availability (~70% of representative tasks).
+
+Using jcode? Wire kbot in as an MCP backend → [templates/jcode-integration.md](./templates/jcode-integration.md).
+
 ## Use with Claude Code / Cursor / Zed
 
 kbot is designed to compound with your existing AI editor, not replace it. One command wires everything up — MCP server config + a Claude Code skill that pre-authorizes the integration so safety filters don't refuse legitimate kbot calls.

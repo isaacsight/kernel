@@ -1,0 +1,19 @@
+{
+  "_comment": "Drop this into your jcode MCP config to wrap kbot's specialty surface. After saving, jcode will see all kbot tools as `mcp__kbot__*`.",
+  "_install": "npm install -g @kernel.chat/kbot",
+  "_doc": "https://github.com/isaacsight/kernel/blob/main/packages/kbot/templates/jcode-integration.md",
+  "mcpServers": {
+    "kbot": {
+      "command": "kbot",
+      "args": ["ide", "mcp"],
+      "env": {
+        "KBOT_LITE": "0"
+      }
+    },
+    "kbot-local": {
+      "command": "npx",
+      "args": ["tsx", "<path-to-kernel-repo>/tools/kbot-local-mcp.ts"],
+      "_note": "Optional. Local-Ollama subset only ($0 cost). Replace <path-to-kernel-repo> with your clone of github.com/isaacsight/kernel, or omit this entry to skip the local-MCP."
+    }
+  }
+}
