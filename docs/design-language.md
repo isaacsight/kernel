@@ -271,6 +271,7 @@ file is the long version. This table is the index.
 | 373 | cream | asymmetric-left | — | — | tomato | essay | Editorial-neighbours framework applied at the AI-tools layer; restraint by absence | first under-decorated cover (no ornament + no seal + no accent override) |
 | 374 | ivory | classic | **asterisk-stamp** | — | tomato | essay | Numbers-with-methodology piece; first WIRED-mechanic exercise (methods sidebar adjacent to claim) | `asterisk-stamp` ornament |
 | 375 | cream | **numbered-catalog** | — | seal: CREDITED · SIX BORROWS | tomato | essay | Place-and-route at the references layer; first **dossier** + **references** spread elements (WIRED's methods + numbered references mechanics) | `numbered-catalog` layout, `dossier` spread element, `references` block as credit page |
+| 376 | ivory | classic | — | seal: FILED · STANDARDS · IV·26 | tomato | essay | First WIRED `references` block exercised at full strength as a craft mechanic (seven cited sources at the foot of a 1,500-word spread); confirms 374's ivory + classic + sober register as a repeatable editorial pattern, not a one-off | first issue where the WIRED `references` mechanic does load-bearing editorial work (the route is paper → adoption → local example) |
 
 ★ marks an issue that ratified a PAPERSKY-starred mechanic into
 active service. Three are now ratified across the run; the

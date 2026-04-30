@@ -16,6 +16,7 @@ import { workspaceAgentTools } from './workspace-agent-tools.js'
 import { computerCoordinatorTools } from './computer-coordinator-tools.js'
 import { SECURITY_AGENT_TOOLS } from './security-agent-tools.js'
 import { anthropicManagedAgentTools } from './anthropic-managed-agents-tools.js'
+import { forecastSummaryTool } from './forecast-summary.js'
 import type { z } from 'zod'
 
 interface CoordinatorToolShape {
@@ -103,6 +104,7 @@ export function registerSwarm2026Tools(): void {
   registerTool(fileLibraryListTool)
   registerTool(fileLibrarySearchTool)
   registerTool(fileLibraryGetTool)
+  registerTool(forecastSummaryTool)
   for (const t of workspaceAgentTools) registerTool(t)
   for (const t of anthropicManagedAgentTools) registerTool(t)
   for (const t of computerCoordinatorTools) registerTool(adaptCoordinatorTool(t))

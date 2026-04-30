@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.1.1 (2026-04-29) — forecast_summary: first 4.2 substrate-to-product hop
+
+Wires the v5 `futures/forecast/` substrate (shipped in 4.1.0 as standalone code) into the growth tool surface as a new opt-in tool.
+
+### Added
+- **`forecast_summary` tool** — projects npm downloads, GitHub stars, users, tools built, and other growth metrics forward at 1d/7d/30d/90d horizons using the existing linear/exponential/flat best-fit selector. Returns markdown narrative + structured JSON. Tier `'free'`.
+- Rolling history persisted to `~/.kbot/growth/history.jsonl` (atomic tmp+rename writes, capped at 90 entries). Bootstraps over 5 samples; below that emits a polite "sample N of 5" warning.
+- Per-signal `clampHorizon` check — short-history signals are skipped with a note rather than fabricated.
+
+### Untouched (deliberately)
+- `growth_summary` tool registration and return shape unchanged — `forecast_summary` is a sibling, not a replacement.
+- All `src/futures/` modules unchanged — this is the wire-in, not a substrate edit.
+
+### Tests
+- 8 new tests for forecast-summary; full suite up to **1077 passing across 57 files** (was 1069 / 56).
+
 ## 4.1.0 (2026-04-29) — V5 futures: self-improving harness substrate
 
 **Six new modules under `packages/kbot/src/futures/`** drawn from frontier research published in late April 2026. Each is opt-in, additive, reversible. None changes default agent behavior unless explicitly invoked. **+95 tests, all stub-driven (zero LLM calls in CI).**
