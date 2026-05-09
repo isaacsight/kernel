@@ -2,7 +2,69 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-04-28 → 04-29 overnight) — THE BIG BUILD: V5 EXECUTION + 4-ISSUE EDITORIAL DROP + KERNEL.MD SUPERSESSION
+## Current Session (2026-05-09) — MAY-NEWS RESPONSE: SECURITY-AUDIT SKILLS + AGENT SDK ADAPTER
+
+### Headline
+Started as a "where's AI at right now" question, ended as a build sprint against the May 2026 news cycle. Two new things land on `claude/ai-current-state-8f4vr`: a security-audit skill family (the BYOK/local-first answer to Project Glasswing + Claude Mythos) and an Agent SDK adapter (the schema-only response to Anthropic opening the Agent SDK to external developers).
+
+### What shipped (kbot)
+
+**1. `skills/security-audit/` — four new skills**
+- `local-vulnerability-hunt/SKILL.md` — Mythos-style audit workflow, BYOK frontier model, audit trail at `~/.kbot/security-audits/<session>/`. Five phases: Scope → Surface map → Hypothesize → Confirm → File. Iron laws: no remote scan without consent; no finding without evidence; no fix without verification.
+- `dependency-audit/SKILL.md` — `npm audit` + lockfile diff + provenance review. Lockfile is the truth; transitive counts double.
+- `secrets-leak-scan/SKILL.md` — working-tree + git-history sweep with named patterns (AWS, sk-, Slack, GitHub PAT, JWT, private keys). Rotate before scrub; never rely on rewriting public history.
+- `threat-model-quickdraw/SKILL.md` — STRIDE-lite, 30 minutes, produces `docs/threat-models/<feature>.md` artifact.
+
+**2. `src/tools/security-audit-local.ts` — substrate tool**
+- `security_audit_local` registered tool. Walks a tree, applies pattern set across JS/TS/Py/Go/Rust/Ruby/Java/PHP/Shell, persists JSONL surface map. Detects: eval-shaped sinks, subprocess calls, route registrations, weak crypto, JWT verify-skip, SQL string concat, FS writes near user input, TLS-skip flags, non-constant-time comparisons.
+- 16 tests, all stub-driven, deterministic. Caps at 5,000 files / 2,000 signals / 1MB per file.
+- Wired into `swarm-2026-04.ts` registration.
+
+**3. `src/adapters/agent-sdk/` — bidirectional adapter**
+- `types.ts` — `AgentSdkTool` / `AgentSdkExecutableTool` / `AgentSdkInputSchema` / JSON Schema property types. NO runtime dependency on `@anthropic-ai/sdk` — kbot stays provider-agnostic.
+- `to-agent-sdk.ts` — kbot `ToolDefinition` → Agent SDK tool. Options: `preserveName`, `renameTool`, `strict`.
+- `from-agent-sdk.ts` — Agent SDK tool → kbot `ToolDefinition`. Two flavors: schema-only (with optional `fallbackExecutor`) and executable (handler embedded). Type-union fallback for `["string","null"]`.
+- `index.ts` — public surface.
+- `adapter.test.ts` — 20 tests, including round-trip preservation.
+
+### Test math
+- New: **36 tests** (16 security-audit-local + 20 agent-sdk adapter), all green.
+- Regression check: futures/ suite still 95/95 green.
+- Type-check: zero errors in new files. Pre-existing chalk/ora type warnings unchanged.
+
+### Decisions worth remembering
+- Forecast module was already shipped end-to-end (4.2.0 wire-up via `forecast-summary.ts` was done) — pulled it from the build list when the README revealed it.
+- Adapter is schema-only by design — kbot's BYOK contract means we don't ship `@anthropic-ai/sdk` as a dep just to translate JSON.
+- Skill family pairs with existing `pentest`/`hacker-toolkit` (remote, authorized) and existing `agents/security-agent.ts` (the runtime under `security_agent_scan`). The new skills are the *narrative* layer on top of the substrate, not duplicates.
+
+### Why the Mythos echo is on-brand
+Glasswing only goes to ~6 organizations (AWS, Apple, Cisco, Google, JPM, Microsoft). The democratized version that fits kbot's positioning: same phased workflow, but BYOK any frontier model, against your own code, audit trail on disk you control. MIT, no phone-home, no allowlist.
+
+### Open ends for the next session
+- Optional v4.3.0: ship a "second-opinion" hook that fans the same surface signal across two providers and diffs the verdicts. The local-vulnerability-hunt skill already names this in its anti-patterns; make it real.
+- Issue 376 candidate: editorial on the Mythos / Glasswing posture vs the BYOK alternative, with the audit trail as the evidence pack. Probably writes itself off the new skill family.
+- The Agent SDK adapter could grow a thin `messages-api-router.ts` that takes a `tool_use` block and dispatches into the kbot registry — a pure convenience for users wiring kbot into Anthropic Messages API loops.
+
+### Files touched
+```
+A packages/kbot/skills/security-audit/local-vulnerability-hunt/SKILL.md
+A packages/kbot/skills/security-audit/dependency-audit/SKILL.md
+A packages/kbot/skills/security-audit/secrets-leak-scan/SKILL.md
+A packages/kbot/skills/security-audit/threat-model-quickdraw/SKILL.md
+A packages/kbot/src/tools/security-audit-local.ts
+A packages/kbot/src/tools/security-audit-local.test.ts
+A packages/kbot/src/adapters/agent-sdk/types.ts
+A packages/kbot/src/adapters/agent-sdk/to-agent-sdk.ts
+A packages/kbot/src/adapters/agent-sdk/from-agent-sdk.ts
+A packages/kbot/src/adapters/agent-sdk/index.ts
+A packages/kbot/src/adapters/agent-sdk/adapter.test.ts
+M packages/kbot/src/tools/swarm-2026-04.ts  (register security_audit_local)
+M SCRATCHPAD.md                              (this entry)
+```
+
+---
+
+## Prior Session (2026-04-28 → 04-29 overnight) — THE BIG BUILD: V5 EXECUTION + 4-ISSUE EDITORIAL DROP + KERNEL.MD SUPERSESSION
 
 ### Headline
 The plan from the previous V5-research session got built tonight, plus four magazine issues, plus the canonical project doc rewrite. Roughly 18 hours of execution against the work the prior session had set up.
