@@ -17,19 +17,15 @@
 
    Identity decisions:
 
-     • coverStock — 'ledger' was the intended stock for this issue.
-       A pale graph-ruled accountant's paper would have been the
-       right material answer to a register-and-audit subject. The
-       IssueStock union in src/content/issues/index.ts currently
-       only admits 'cream' | 'butter' | 'kraft' | 'ivory' | 'ink'.
-       Per the brief, do NOT extend the type today; the follow-up
-       work is to add 'ledger' to IssueStock, paint --pop-ledger in
-       src/index.css (a cool ivory tinted with the faintest
-       graph-rule blue), and add a stock case to LandingPage.css.
-       For this drop the cover ships on 'cream' — the closest
-       in-cabinet neighbour, and the canonical anchor stock the
-       rest of the run varies against. The cream is a placeholder;
-       the ledger is the brief.
+     • coverStock = 'ledger' — pale graph-ruled accountant's paper,
+       the right material answer to a register-and-audit subject.
+       Status: shipped. The IssueStock union admits 'ledger', the
+       --pop-ledger token is painted in src/index.css (#F2EFE2),
+       the .pop-stock-ledger class and STOCK_HEX entry are wired,
+       and the spread-side SpreadCommon.stock union admits ledger
+       too (closed in the same commit that ships ISSUE 378's
+       review-spread first use, May 2026 — the editor that 372
+       wrote this note for turned out to be the same editor).
 
      • coverLayout = 'monument-hero' — the issue number 372 IS the
        cover art. The headline shrinks to a subtitle. This reuses
@@ -41,36 +37,26 @@
        first earned the quiet cover; the second cashes it in
        against the audit.
 
-     • coverPostmark — this is the first issue to exercise the
-       fourth starred mechanic from the PAPERSKY decode (see
-       docs/design-language.md, "Editorial neighbours"). The
-       postmark is small-caps Latin, anchored bottom-centre,
-       grounding the issue in a specific room rather than in
-       serial position. Format: ROOM 503 · IV·26 — the accountant's
-       terseness, named after the room where the audit ran. The
-       IssueRecord type does not yet carry a `coverPostmark` field;
-       per the brief, do NOT extend the type today. We ship the
-       postmark text inside the existing `coverSeal` slot
-       (top-right rubber-stamp), formatted to read as a postmark.
-       The follow-up work is to add a real `coverPostmark` field
-       to IssueRecord, render it as a centred bottom-of-cover
-       lockup in IssueCover.tsx, and migrate this issue's seal
-       text up to the new field. The seal is a placeholder; the
-       postmark is the brief.
+     • coverPostmark = { place: 'ROOM 503', date: 'IV·26' } — the
+       first issue to exercise the fourth starred mechanic from the
+       PAPERSKY decode (see docs/design-language.md, "Editorial
+       neighbours"). Small-caps Latin, anchored bottom-centre,
+       grounding the issue in a specific room rather than in serial
+       position. The accountant's terseness, named after the room
+       where the audit ran. Status: shipped. The coverPostmark
+       field is on IssueRecord; IssueCover.tsx renders it as the
+       centred bottom-of-cover lockup; this issue's seal text was
+       migrated up to the field. The mechanic that 372 placeholdered
+       inside coverSeal is the mechanic 372 now exercises directly.
 
-     • accent — the brief proposes a new seed named 'graphite' for
-       this issue. It does not exist in INK_SEEDS yet (see
-       src/content/issues/accents.ts, where only nine seeds are
-       enumerated and adding a new one requires PR review per
-       PUBLISHING.md §III.4.5). Per the brief, do NOT modify
-       accents.ts today. We omit the accent field entirely; the
-       essay spread type defaults to 'tomato' (the house warmth)
-       which reads correctly on cream stock and against the
-       audit's archival register. The follow-up work — when a
-       graphite seed is reviewed and admitted to the cabinet — is
-       a one-line add here. Graphite would carry the audit's
-       pencil-on-paper register; tomato is the safe default until
-       then. The default is a placeholder; graphite is the brief.
+     • accent = 'graphite' — pencil-lead grey (#3F3D3A), the audit's
+       ink. Pairs with the ledger stock as the issue's quiet-but-
+       considered palette. Status: shipped. The graphite seed is in
+       INK_SEEDS (neutral family), passes isPopeyeSafe (chroma ≈
+       0.08, well above the 0.015 gray floor and well below the 0.88
+       saturation ceiling), and the audit's pencil-on-paper register
+       reads as the brief intended. The placeholder tomato that 372
+       considered shipping with is the default the seed displaced.
 
      • spread.type = 'essay' — ~1,500 words of long-form prose
        drawing the parallel between editorial cuts and software
@@ -92,21 +78,24 @@
    the route through one editorial cut — opening the registry,
    counting what got read, writing the audit, shipping the version.
 
-   What's deferred (do NOT do today; written up here so the next
-   editor doesn't lose the thread):
-     1. Add 'ledger' to IssueStock union in index.ts
-     2. Paint --pop-ledger in src/index.css and the matching
-        .pop-stock-ledger class
-     3. Add 'ledger' case to STOCK_HEX in accents.ts
-     4. Add coverPostmark: { label, place } field to IssueRecord
-     5. Render coverPostmark in IssueCover.tsx (centred, bottom of
-        cover, small-caps Latin)
-     6. Migrate this issue's seal text to coverPostmark when (4)+
-        (5) ship
-     7. Submit 'graphite' seed for INK_SEEDS review (cool,
-        slightly warm-tinged charcoal — pencil-on-paper register;
-        proposed hex around #3F3D3A; must pass isPopeyeSafe)
-     8. Once admitted, switch this issue's accent to 'graphite'
+   Status of the eight deferred items 372 wrote down for a future
+   editor (all closed; kept as a record of what the wedge looked
+   like before the work landed):
+     1. ✓ 'ledger' admitted to IssueStock union
+     2. ✓ --pop-ledger token painted (#F2EFE2); .pop-stock-ledger
+          class wired in src/index.css
+     3. ✓ 'ledger' row added to STOCK_HEX in accents.ts
+     4. ✓ coverPostmark: { place, date } field on IssueRecord
+     5. ✓ IssueCover.tsx renders coverPostmark centred bottom-of-
+          cover, small-caps Latin
+     6. ✓ This issue's seal text migrated up to coverPostmark
+     7. ✓ 'graphite' seed admitted to INK_SEEDS (neutral family,
+          #3F3D3A, passes isPopeyeSafe)
+     8. ✓ This issue's accent switched to 'graphite'
+   Plus one item not on the original list, also closed:
+     9. ✓ SpreadCommon.stock union extended to admit 'ledger', so
+          spreads — not just covers — can sit on ledger paper. This
+          let ISSUE 378 carry the audit register on both surfaces.
    ────────────────────────────────────────────────────────────── */
 
 import type { IssueRecord } from './index'

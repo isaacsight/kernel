@@ -28,8 +28,9 @@
      accent: '#9E3A2B'         // free-form; validator runs in dev
 
    Omit `accent` entirely → resolves to the spread type's default
-   (essay→tomato, interview→coffee, forecast→cobalt, dispatch→brick).
-   Every pre-adaptive issue inherits the default naturally.
+   (essay→tomato, interview→coffee, forecast→cobalt,
+   dispatch→brick, review→olive). Every pre-adaptive issue inherits
+   the default naturally.
 
    Motion is NOT part of this system. Per-issue motion would
    over-engineer what the magazine actually needs; motion stays
@@ -156,6 +157,7 @@ export const DEFAULT_ACCENT_BY_SPREAD: Record<IssueSpread['type'], InkSeedName> 
   interview: 'coffee',
   forecast: 'cobalt',
   dispatch: 'brick',
+  review: 'olive',
 }
 
 /** Pick the default accent for a spread type. */
@@ -261,10 +263,11 @@ export function contrastRatio(accentHex: string, stockHex: string): number {
 /** Stock-hex lookup for the five paper stocks. Kept in sync with
  *  the --pop-* tokens in src/index.css. Used by the runtime
  *  warning when an accent × stock pair is under-contrast. */
-export const STOCK_HEX: Record<'cream' | 'butter' | 'kraft' | 'ivory' | 'ink', string> = {
+export const STOCK_HEX: Record<'cream' | 'butter' | 'kraft' | 'ivory' | 'ink' | 'ledger', string> = {
   cream: '#F3E9D2',
   butter: '#EFD9A0',
   kraft: '#C8A97E',
   ivory: '#FAF9F6',
   ink: '#1F1E1D',
+  ledger: '#F2EFE2',
 }

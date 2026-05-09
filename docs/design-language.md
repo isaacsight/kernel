@@ -507,6 +507,9 @@ union** — each issue picks the right tool, and the
 |---|---|---|---|---|
 | Essay | `'essay'` | `EssayFeature` | ISSUE 363 | Mono section kickers, serif prose, drop cap on lead paragraph, tomato pull-quote, sign-off |
 | Interview | `'interview'` | `InterviewFeature` | (available) | Subject dossier card with tomato corner badge, alternating Q./A. blocks, drop cap on final answer |
+| Forecast | `'forecast'` | `ForecastFeature` | (available) | Cobalt-led forward projection — signals, horizons, confidence bands. Surfaces `forecast_summary` numerics in editorial form |
+| Dispatch | `'dispatch'` | `DispatchFeature` | ISSUE 376 | Wire-style news filing — repeating slug band, dateline, numbered propositions with tomato check-squares, mid-spread bulletin, optional bridge to a prior issue, terminator rule |
+| Review | `'review'` | `ReviewFeature` | (available, ISSUE 378 candidate) | Olive-led graded survey — top-line italic verdict, numbered rubric (criteria), optional standout award, grid of subject cards with score monument, stars, pros/cons, per-card verdict |
 
 ### How to add a new tool
 
@@ -523,12 +526,8 @@ union** — each issue picks the right tool, and the
 - **`recipe`** — ingredients list (numbered rows), method block
   (numbered steps), field variables (time, yield, temp). POPEYE
   runs these in food issues.
-- **`review`** — product review grid: 4–6 cards with rating,
-  price, pros/cons. Good for gear / tools / café issues.
 - **`letters`** — reader letters column: one block per letter
   with italic signature right-aligned.
-- **`dispatch`** — field report: location-date header, monospace
-  diary entries, observation notes.
 - **`gallery`** — when images arrive: caption-first photo grid.
 
 ---
@@ -696,6 +695,10 @@ shared with the TikTok grammar, a quiet cross-medium tie-in.
 ## Future moves (not yet shipped)
 
 - PDF export per route — actual printable issue file
-- Cobalt / ivy / pool accents wired to seasonal issue variants
 - Template builder layer (Adobe Express analog): one-call helpers
   like `createEssayIssue({...})` that fill in defaults
+
+(The seasonal accent move shipped: cobalt, ivy, pool are seeded
+in `src/content/issues/accents.ts` alongside tomato, brick, olive,
+amethyst, oxblood, coffee — nine seeds total, each with a default
+spread-type binding.)

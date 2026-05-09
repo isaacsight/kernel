@@ -1,0 +1,531 @@
+/* ReviewFeature — graded survey, head-to-head form.
+ *
+ * Editorial tool #5. Distinct from EssayFeature (single argument)
+ * and DispatchFeature (timed news filing): a measured comparison
+ * with a top-line verdict, numbered rubric, and a grid of subject
+ * cards each carrying a score monument.
+ *
+ * Visual logic:
+ *   - Verdict block is the loudest type after the title — single
+ *     italic line, set in display weight.
+ *   - Rubric reads as a methods-paper checklist (numbered dossier).
+ *   - Subject cards use a three-column head (rank gutter, naming
+ *     block, score monument) that collapses to single column under
+ *     720px. Pros/cons are two columns; collapse to stacked.
+ *   - Stars render as small filled tomato lozenges, never glyphs.
+ */
+
+.pop-review {
+  --review-edge: clamp(20px, 5vw, 56px);
+  --review-rule: color-mix(in oklch, var(--issue-accent-base) 70%, var(--color-ink) 30%);
+  --review-soft: color-mix(in oklch, var(--issue-accent-base) 18%, transparent 82%);
+  background: var(--stock-bg, var(--color-ivory));
+  color: var(--color-ink);
+  padding: clamp(48px, 8vw, 96px) var(--review-edge);
+  font-family: 'EB Garamond', Garamond, serif;
+}
+
+.pop-review-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* ── Slug band — repeating Courier marquee ─────────────────────── */
+.pop-review-slug {
+  display: flex;
+  gap: 1em;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--review-rule);
+  border-block: 1px solid var(--review-rule);
+  padding: 6px 0;
+  margin-bottom: clamp(24px, 4vw, 40px);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.pop-review-slug span {
+  display: inline-block;
+  padding-inline: 1em;
+}
+
+/* ── Header ────────────────────────────────────────────────────── */
+.pop-review-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: clamp(20px, 3vw, 36px);
+}
+
+.pop-review-title {
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.pop-review-title-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  letter-spacing: 0.04em;
+  color: var(--color-ink);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.pop-review-deck {
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.45;
+  margin: 0;
+  max-width: 56ch;
+}
+
+.pop-review-byline {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--review-rule);
+  margin: 0;
+}
+
+/* ── Verdict block — the loudest line on the page ──────────────── */
+.pop-review-verdict {
+  border-block: 2px solid var(--review-rule);
+  padding: clamp(20px, 3vw, 32px) clamp(16px, 3vw, 28px);
+  margin: clamp(24px, 4vw, 40px) 0;
+  background: var(--review-soft);
+}
+
+.pop-review-verdict-kicker {
+  display: block;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--review-rule);
+  margin-bottom: 10px;
+}
+
+.pop-review-verdict-text {
+  font-style: italic;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  line-height: 1.18;
+  margin: 0;
+  max-width: 38ch;
+}
+
+/* ── Standfirst intro ──────────────────────────────────────────── */
+.pop-review-intro {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.65;
+  max-width: 60ch;
+  margin: 0 0 clamp(28px, 4vw, 44px);
+}
+
+/* ── Rubric — numbered methods checklist ───────────────────────── */
+.pop-review-rubric {
+  border: 1px solid var(--review-rule);
+  border-radius: 2px;
+  padding: clamp(20px, 3vw, 32px);
+  margin-bottom: clamp(24px, 4vw, 40px);
+  background: var(--stock-bg-alt, color-mix(in oklch, var(--stock-bg, var(--color-ivory)) 92%, var(--color-ink) 8%));
+}
+
+.pop-review-rubric-kicker {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.pop-review-rubric-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 0;
+}
+
+.pop-review-rubric-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  border-top: 1px solid var(--review-rule);
+  padding-top: 12px;
+}
+
+.pop-review-rubric-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.pop-review-rubric-term {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pop-review-rubric-n {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: var(--review-rule);
+  min-width: 2.4em;
+}
+
+.pop-review-rubric-label {
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+.pop-review-rubric-label-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.pop-review-rubric-weight {
+  margin-left: auto;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--review-rule);
+}
+
+.pop-review-rubric-desc {
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: calc(2.4em + 12px);
+  opacity: 0.85;
+}
+
+/* ── Standout award ────────────────────────────────────────────── */
+.pop-review-standout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 24px;
+  align-items: baseline;
+  border-left: 4px solid var(--issue-accent-base);
+  padding: 14px 20px;
+  margin-bottom: clamp(24px, 4vw, 36px);
+}
+
+.pop-review-standout-label {
+  grid-column: 1;
+  grid-row: 1;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--review-rule);
+}
+
+.pop-review-standout-name {
+  grid-column: 2;
+  grid-row: 1;
+  font-weight: 500;
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.pop-review-standout-reason {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 6px 0 0;
+  max-width: 60ch;
+}
+
+/* ── Divider ───────────────────────────────────────────────────── */
+.pop-review-divider {
+  border: none;
+  border-top: 1px solid var(--review-rule);
+  margin: clamp(20px, 3vw, 32px) 0;
+}
+
+/* ── Subject grid ──────────────────────────────────────────────── */
+.pop-review-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 3vw, 32px);
+}
+
+@media (min-width: 880px) {
+  .pop-review-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pop-review-card {
+  border: 1px solid var(--review-rule);
+  border-radius: 2px;
+  background: var(--stock-bg, var(--color-ivory));
+}
+
+.pop-review-card-inner {
+  padding: clamp(18px, 2.5vw, 28px);
+  display: grid;
+  gap: 14px;
+}
+
+/* ── Card head — rank | naming | score ─────────────────────────── */
+.pop-review-card-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: start;
+}
+
+.pop-review-card-rank {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 1.25rem;
+  letter-spacing: 0.12em;
+  color: var(--review-rule);
+  padding-top: 4px;
+}
+
+.pop-review-card-naming {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pop-review-card-name {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.pop-review-card-name-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.pop-review-card-read {
+  font-style: italic;
+  font-size: 0.98rem;
+  line-height: 1.4;
+  margin: 4px 0 0;
+}
+
+.pop-review-card-score {
+  text-align: center;
+  padding: 8px 14px;
+  border: 2px solid var(--issue-accent-base);
+  background: var(--review-soft);
+  display: grid;
+  gap: 2px;
+}
+
+.pop-review-card-score span {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: var(--review-rule);
+}
+
+.pop-review-card-score strong {
+  font-family: 'EB Garamond', Garamond, serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--issue-accent-base);
+}
+
+@media (max-width: 540px) {
+  .pop-review-card-head {
+    grid-template-columns: auto 1fr;
+  }
+  .pop-review-card-score {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+/* ── Meta row — stars + price ──────────────────────────────────── */
+.pop-review-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--review-rule);
+  border-bottom: 1px solid var(--review-rule);
+  padding-block: 8px;
+}
+
+.pop-review-card-stars {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.pop-review-star {
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--issue-accent-base);
+  transform: rotate(45deg);
+  background: transparent;
+}
+
+.pop-review-star--on {
+  background: var(--issue-accent-base);
+}
+
+.pop-review-card-price {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  color: var(--color-ink);
+}
+
+.pop-review-card-priceband {
+  margin-left: auto;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  color: var(--review-rule);
+}
+
+/* ── Pros / cons columns ───────────────────────────────────────── */
+.pop-review-card-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 540px) {
+  .pop-review-card-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pop-review-card-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pop-review-card-col-kicker {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--review-rule);
+}
+
+.pop-review-card-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pop-review-card-list li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 0.96rem;
+  line-height: 1.45;
+}
+
+.pop-review-card-col--pros .pop-review-card-list li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  font-weight: 600;
+  color: var(--issue-accent-base);
+}
+
+.pop-review-card-col--cons .pop-review-card-list li::before {
+  content: '\2212'; /* minus sign */
+  position: absolute;
+  left: 0;
+  font-weight: 600;
+  color: var(--review-rule);
+  opacity: 0.85;
+}
+
+/* ── Per-card verdict line ─────────────────────────────────────── */
+.pop-review-card-verdict {
+  font-weight: 500;
+  font-style: italic;
+  font-size: 1.02rem;
+  line-height: 1.4;
+  border-top: 1px solid var(--review-rule);
+  padding-top: 10px;
+  margin: 0;
+}
+
+/* ── Outro + signoff + monument ───────────────────────────────── */
+.pop-review-outro {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.65;
+  max-width: 60ch;
+  margin: clamp(24px, 4vw, 40px) 0 0;
+}
+
+.pop-review-signoff {
+  display: grid;
+  gap: 12px;
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+.pop-review-signoff-text {
+  font-style: italic;
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  margin: 0;
+  max-width: 56ch;
+}
+
+.pop-review-monument {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  color: var(--review-rule);
+}
+
+.pop-review-monument strong {
+  font-family: 'EB Garamond', Garamond, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.4rem;
+  letter-spacing: 0;
+  color: var(--issue-accent-base);
+}
+
+/* ── Print stylesheet — review carries to paper ────────────────── */
+@media print {
+  .pop-review {
+    padding: 24mm 18mm;
+    background: white;
+  }
+  .pop-review-slug {
+    display: none;
+  }
+  .pop-review-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8mm;
+  }
+  .pop-review-card {
+    break-inside: avoid;
+  }
+  .pop-review-verdict {
+    break-after: avoid;
+  }
+}
