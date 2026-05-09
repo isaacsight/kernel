@@ -3,66 +3,111 @@
 // Capabilities: screenshot, click, type, scroll, drag, key combos,
 //   app launch/focus, window management (list/resize/move/minimize)
 //
-// Safety: per-app session approval, machine-wide lock file,
-//   terminal excluded from screenshots, permission check flow
+// Safety: per-app sub-locks via the Coordinator (parallel multi-agent),
+//   per-app session approval, terminal excluded from screenshots,
+//   permission check flow.
 //
 // Requires explicit opt-in via --computer-use flag.
 // macOS: AppleScript + screencapture + cliclick fallback
 // Linux: xdotool + import/gnome-screenshot
 import { execSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 import { tmpdir, homedir } from 'node:os';
 import { join } from 'node:path';
-import { readFileSync, writeFileSync, unlinkSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+import { readFileSync, unlinkSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { registerTool } from './index.js';
+import { Coordinator } from '../computer-use-coordinator.js';
 const platform = process.platform;
 const LOCK_DIR = join(homedir(), '.kbot');
+// Legacy single-session lock path. Retained as a constant for back-compat
+// with any callers that referenced it; the actual locking is now performed
+// per-app via the Coordinator.
 const LOCK_FILE = join(LOCK_DIR, 'computer-use.lock');
 // ── Session state ──────────────────────────────────────────────────
 /** Apps approved for this session */
 const approvedApps = new Set();
 /** Whether permissions have been verified this session */
 let permissionsVerified = false;
-/** Current lock holder PID */
+/** Legacy single-session "lock held" flag — kept so computer_check / screen_info
+ *  can still report something meaningful. The real locking is the Coordinator. */
 let lockHeld = false;
-// ── Lock file (one session at a time) ──────────────────────────────
+// ── Coordinator (per-app sub-locks) ────────────────────────────────
+/** Stable agent id for this kbot process. Override with KBOT_COMPUTER_USE_AGENT_ID
+ *  for deterministic tests / multi-process coordination. */
+const AGENT_ID = process.env.KBOT_COMPUTER_USE_AGENT_ID || randomUUID();
+/** Module-scoped coordinator. Lock files live on disk under
+ *  ~/.kbot/computer-use/<app>.lock, so even if other processes have their own
+ *  Coordinator instance, they'll see each other's locks. */
+const coordinator = new Coordinator();
+/** Format a Coordinator denial as a single error string. */
+function formatDenied(app, heldBy, since) {
+    const sinceStr = since ? new Date(since).toISOString() : 'unknown';
+    return `computer_use: app '${app}' is held by ${heldBy ?? 'unknown'} since ${sinceStr} — wait or unregister that agent.`;
+}
+/** Acquire a per-app claim. Returns an error string on denial, or null on success.
+ *  When `app` is undefined (legacy callers that didn't specify an app), falls
+ *  back to the single-session legacy behaviour: just mark `lockHeld = true` and
+ *  let any prior global lock file get cleaned up.
+ *
+ *  App names are normalised to lowercase for the Coordinator so that
+ *  `Ableton` and `ableton` collide on the same lock file. */
+function claimApp(app) {
+    if (!app) {
+        // Legacy single-lock fallback — don't break existing scripts that call a
+        // tool without specifying an app. We still set lockHeld so screen_info /
+        // computer_check report sane state.
+        if (!existsSync(LOCK_DIR))
+            mkdirSync(LOCK_DIR, { recursive: true });
+        lockHeld = true;
+        return null;
+    }
+    const key = app.toLowerCase();
+    // Make sure this agent is registered for the app before claiming.
+    if (!approvedApps.has(key)) {
+        return `Error: ${app} is not approved. Call app_approve first.`;
+    }
+    // Re-register so the coordinator knows about the (possibly new) app.
+    coordinator.register(AGENT_ID, { apps: [...approvedApps] });
+    const result = coordinator.claim(AGENT_ID, key);
+    if (!result.granted) {
+        return formatDenied(app, result.heldBy, result.since);
+    }
+    lockHeld = true;
+    return null;
+}
+/** Release a per-app claim. Safe to call when nothing was claimed. */
+function releaseApp(app) {
+    if (!app)
+        return;
+    try {
+        coordinator.release(AGENT_ID, app.toLowerCase());
+    }
+    catch { /* best effort */ }
+}
+// Clean up any locks held by this process on exit.
+const cleanupOnExit = () => {
+    try {
+        coordinator.unregister(AGENT_ID);
+    }
+    catch { /* best effort */ }
+    try {
+        if (existsSync(LOCK_FILE))
+            rmSync(LOCK_FILE);
+    }
+    catch { /* best effort */ }
+};
+process.on('exit', cleanupOnExit);
+process.on('SIGINT', cleanupOnExit);
+process.on('SIGTERM', cleanupOnExit);
+// ── Legacy lock helpers (kept as no-op stubs for back-compat) ──────
+/** @deprecated kept for back-compat — Coordinator handles locking now. */
 function acquireLock() {
     if (!existsSync(LOCK_DIR))
         mkdirSync(LOCK_DIR, { recursive: true });
-    if (existsSync(LOCK_FILE)) {
-        try {
-            const lock = JSON.parse(readFileSync(LOCK_FILE, 'utf-8'));
-            // Check if the holding process is still alive
-            try {
-                process.kill(lock.pid, 0); // signal 0 = existence check
-                return `Computer use is held by another kbot session (PID ${lock.pid}, started ${lock.started}). Finish that session first.`;
-            }
-            catch {
-                // Process is dead — stale lock, clean it up
-                rmSync(LOCK_FILE);
-            }
-        }
-        catch {
-            rmSync(LOCK_FILE);
-        }
-    }
-    writeFileSync(LOCK_FILE, JSON.stringify({
-        pid: process.pid,
-        started: new Date().toISOString(),
-    }));
     lockHeld = true;
-    // Clean up on exit
-    const cleanup = () => {
-        try {
-            if (existsSync(LOCK_FILE))
-                rmSync(LOCK_FILE);
-        }
-        catch { /* best effort */ }
-    };
-    process.on('exit', cleanup);
-    process.on('SIGINT', cleanup);
-    process.on('SIGTERM', cleanup);
     return null;
 }
+/** @deprecated kept for back-compat — Coordinator handles locking now. */
 function releaseLock() {
     if (lockHeld) {
         try {
@@ -141,11 +186,12 @@ function ensurePermissions() {
     permissionsVerified = true;
     return null;
 }
-/** Ensure lock is acquired */
+/** Ensure base lock dir exists. Per-app claims are handled by claimApp(). */
 function ensureLock() {
-    if (lockHeld)
-        return null;
-    return acquireLock();
+    if (!existsSync(LOCK_DIR))
+        mkdirSync(LOCK_DIR, { recursive: true });
+    lockHeld = true;
+    return null;
 }
 // ── App approval system ────────────────────────────────────────────
 /** Apps with elevated access warnings */
@@ -207,6 +253,7 @@ export function registerComputerTools() {
     // ── Permission & lock check ──
     registerTool({
         name: 'computer_check',
+        deprecated: true,
         description: 'Check computer use permissions and acquire the session lock. Call this before any other computer use tool. Returns permission status and any required setup steps.',
         parameters: {},
         tier: 'free',
@@ -218,17 +265,20 @@ export function registerComputerTools() {
             if (permErr)
                 return permErr;
             const approvedList = getApprovedApps();
+            const coordStatus = coordinator.status();
             return [
                 'Computer use ready.',
                 `Platform: ${platform}`,
-                `Lock: held (PID ${process.pid})`,
+                `Agent ID: ${AGENT_ID}`,
                 `Approved apps: ${approvedList.length > 0 ? approvedList.join(', ') : 'none yet (use app_approve to approve apps)'}`,
+                `Coordinator: ${JSON.stringify(coordStatus)}`,
             ].join('\n');
         },
     });
     // ── App approval ──
     registerTool({
         name: 'app_approve',
+        deprecated: true,
         description: 'Approve an app for computer use in this session. Must be called before interacting with an app. Shows a warning for sensitive apps (terminals, Finder, System Settings).',
         parameters: {
             app: { type: 'string', description: 'App name (e.g., "Safari", "Finder", "Xcode")', required: true },
@@ -244,6 +294,14 @@ export function registerComputerTools() {
                 result += `Warning: ${app} — ${warning}\n`;
             }
             approveApp(app);
+            // Re-register with the coordinator so it knows this agent intends to
+            // drive the newly-approved app.
+            try {
+                coordinator.register(AGENT_ID, { apps: [...approvedApps] });
+            }
+            catch (err) {
+                return `${result}Approved ${app} but coordinator registration failed: ${err instanceof Error ? err.message : String(err)}`;
+            }
             result += `Approved ${app} for this session.`;
             return result;
         },
@@ -273,29 +331,37 @@ export function registerComputerTools() {
             if (!isAppApproved(app)) {
                 return `Error: ${app} is not approved. Call app_approve first.`;
             }
-            if (platform === 'darwin') {
-                try {
-                    osascript(`tell application "${escapeAppleScript(app)}" to activate`);
-                    // Wait a beat for the app to come forward
-                    await new Promise(r => setTimeout(r, 500));
-                    return `Launched/focused: ${app}`;
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
+            try {
+                if (platform === 'darwin') {
+                    try {
+                        osascript(`tell application "${escapeAppleScript(app)}" to activate`);
+                        // Wait a beat for the app to come forward
+                        await new Promise(r => setTimeout(r, 500));
+                        return `Launched/focused: ${app}`;
+                    }
+                    catch (err) {
+                        return `Error launching ${app}: ${err instanceof Error ? err.message : String(err)}`;
+                    }
                 }
-                catch (err) {
-                    return `Error launching ${app}: ${err instanceof Error ? err.message : String(err)}`;
+                else if (platform === 'linux') {
+                    try {
+                        execSync(`wmctrl -a "${app}" 2>/dev/null || xdg-open "${app}" 2>/dev/null`, {
+                            timeout: 10_000, stdio: 'pipe',
+                        });
+                        return `Launched/focused: ${app}`;
+                    }
+                    catch {
+                        return `Error: Could not launch ${app}. Ensure it's installed.`;
+                    }
                 }
+                return 'Error: Unsupported platform';
             }
-            else if (platform === 'linux') {
-                try {
-                    execSync(`wmctrl -a "${app}" 2>/dev/null || xdg-open "${app}" 2>/dev/null`, {
-                        timeout: 10_000, stdio: 'pipe',
-                    });
-                    return `Launched/focused: ${app}`;
-                }
-                catch {
-                    return `Error: Could not launch ${app}. Ensure it's installed.`;
-                }
+            finally {
+                releaseApp(app);
             }
-            return 'Error: Unsupported platform';
         },
     });
     // ── Screenshot ──
@@ -305,12 +371,19 @@ export function registerComputerTools() {
         parameters: {
             window: { type: 'string', description: 'Window title to capture (optional — captures full screen if omitted)' },
             region: { type: 'string', description: 'Capture region as "x,y,w,h" (optional)' },
+            // Optional `app` enables Coordinator per-app locking. When omitted we
+            // fall back to the legacy single-lock path so existing scripts work.
+            app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
         },
         tier: 'free',
         async execute(args) {
             const lockErr = ensureLock();
             if (lockErr)
                 return `Error: ${lockErr}`;
+            const app = args.app ? String(args.app) : undefined;
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
             const tmpPath = join(tmpdir(), `kbot-screenshot-${Date.now()}.png`);
             try {
                 if (platform === 'darwin') {
@@ -377,73 +450,91 @@ export function registerComputerTools() {
             catch (err) {
                 return `Screenshot failed: ${err instanceof Error ? err.message : String(err)}`;
             }
+            finally {
+                releaseApp(app);
+            }
         },
     });
     // ── Mouse click ──
     registerTool({
         name: 'mouse_click',
+        deprecated: true,
         description: 'Click at specific screen coordinates.',
         parameters: {
             x: { type: 'number', description: 'X coordinate', required: true },
             y: { type: 'number', description: 'Y coordinate', required: true },
             button: { type: 'string', description: 'Mouse button: left, right, double (default: left)' },
+            // Optional `app` enables per-app coordination so multiple agents can
+            // drive different apps in parallel. Omit for legacy single-lock fallback.
+            app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
         },
         tier: 'free',
         async execute(args) {
             const lockErr = ensureLock();
             if (lockErr)
                 return `Error: ${lockErr}`;
+            const app = args.app ? String(args.app) : undefined;
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
             const x = Math.round(Number(args.x));
             const y = Math.round(Number(args.y));
             const button = String(args.button || 'left').toLowerCase();
-            if (isNaN(x) || isNaN(y))
+            if (isNaN(x) || isNaN(y)) {
+                releaseApp(app);
                 return 'Error: x and y must be numbers';
-            if (platform === 'darwin') {
-                try {
-                    if (button === 'double') {
-                        // Double click
-                        try {
-                            execSync(`cliclick dc:${x},${y}`, { timeout: 5_000, stdio: 'pipe' });
-                        }
-                        catch {
-                            osascript(`tell application "System Events" to click at {${x}, ${y}}`);
-                            await new Promise(r => setTimeout(r, 100));
-                            osascript(`tell application "System Events" to click at {${x}, ${y}}`);
-                        }
-                    }
-                    else if (button === 'right') {
-                        try {
-                            execSync(`cliclick rc:${x},${y}`, { timeout: 5_000, stdio: 'pipe' });
-                        }
-                        catch {
-                            osascript(`tell application "System Events" to click at {${x}, ${y}} using control down`);
-                        }
-                    }
-                    else {
-                        try {
-                            execSync(`cliclick c:${x},${y}`, { timeout: 5_000, stdio: 'pipe' });
-                        }
-                        catch {
-                            osascript(`tell application "System Events" to click at {${x}, ${y}}`);
-                        }
-                    }
-                    return `Clicked ${button} at (${x}, ${y})`;
-                }
-                catch (err) {
-                    return `Click failed: ${err instanceof Error ? err.message : String(err)}`;
-                }
             }
-            else if (platform === 'linux') {
-                try {
-                    const btn = button === 'right' ? 3 : button === 'double' ? '--repeat 2 1' : '1';
-                    execSync(`xdotool mousemove ${x} ${y} click ${btn}`, { timeout: 5_000 });
-                    return `Clicked ${button} at (${x}, ${y})`;
+            try {
+                if (platform === 'darwin') {
+                    try {
+                        if (button === 'double') {
+                            // Double click
+                            try {
+                                execSync(`cliclick dc:${x},${y}`, { timeout: 5_000, stdio: 'pipe' });
+                            }
+                            catch {
+                                osascript(`tell application "System Events" to click at {${x}, ${y}}`);
+                                await new Promise(r => setTimeout(r, 100));
+                                osascript(`tell application "System Events" to click at {${x}, ${y}}`);
+                            }
+                        }
+                        else if (button === 'right') {
+                            try {
+                                execSync(`cliclick rc:${x},${y}`, { timeout: 5_000, stdio: 'pipe' });
+                            }
+                            catch {
+                                osascript(`tell application "System Events" to click at {${x}, ${y}} using control down`);
+                            }
+                        }
+                        else {
+                            try {
+                                execSync(`cliclick c:${x},${y}`, { timeout: 5_000, stdio: 'pipe' });
+                            }
+                            catch {
+                                osascript(`tell application "System Events" to click at {${x}, ${y}}`);
+                            }
+                        }
+                        return `Clicked ${button} at (${x}, ${y})`;
+                    }
+                    catch (err) {
+                        return `Click failed: ${err instanceof Error ? err.message : String(err)}`;
+                    }
                 }
-                catch {
-                    return 'Error: Click requires xdotool (apt install xdotool)';
+                else if (platform === 'linux') {
+                    try {
+                        const btn = button === 'right' ? 3 : button === 'double' ? '--repeat 2 1' : '1';
+                        execSync(`xdotool mousemove ${x} ${y} click ${btn}`, { timeout: 5_000 });
+                        return `Clicked ${button} at (${x}, ${y})`;
+                    }
+                    catch {
+                        return 'Error: Click requires xdotool (apt install xdotool)';
+                    }
                 }
+                return 'Error: Unsupported platform';
             }
-            return 'Error: Unsupported platform';
+            finally {
+                releaseApp(app);
+            }
         },
     });
     // ── Mouse scroll ──
@@ -455,72 +546,83 @@ export function registerComputerTools() {
             amount: { type: 'number', description: 'Scroll amount in clicks (default: 3)' },
             x: { type: 'number', description: 'X coordinate to scroll at (optional — uses current position)' },
             y: { type: 'number', description: 'Y coordinate to scroll at (optional)' },
+            // Optional `app` enables Coordinator per-app locking. Omit for legacy fallback.
+            app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
         },
         tier: 'free',
         async execute(args) {
             const lockErr = ensureLock();
             if (lockErr)
                 return `Error: ${lockErr}`;
-            const direction = String(args.direction).toLowerCase();
-            const amount = Math.round(Number(args.amount) || 3);
-            if (!['up', 'down', 'left', 'right'].includes(direction)) {
-                return 'Error: direction must be up, down, left, or right';
-            }
-            // Move mouse first if coordinates given
-            if (args.x !== undefined && args.y !== undefined) {
-                const x = Math.round(Number(args.x));
-                const y = Math.round(Number(args.y));
+            const app = args.app ? String(args.app) : undefined;
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
+            try {
+                const direction = String(args.direction).toLowerCase();
+                const amount = Math.round(Number(args.amount) || 3);
+                if (!['up', 'down', 'left', 'right'].includes(direction)) {
+                    return 'Error: direction must be up, down, left, or right';
+                }
+                // Move mouse first if coordinates given
+                if (args.x !== undefined && args.y !== undefined) {
+                    const x = Math.round(Number(args.x));
+                    const y = Math.round(Number(args.y));
+                    if (platform === 'darwin') {
+                        try {
+                            execSync(`cliclick m:${x},${y}`, { timeout: 3_000, stdio: 'pipe' });
+                        }
+                        catch { /* best effort move */ }
+                    }
+                    else if (platform === 'linux') {
+                        try {
+                            execSync(`xdotool mousemove ${x} ${y}`, { timeout: 3_000, stdio: 'pipe' });
+                        }
+                        catch { /* best effort move */ }
+                    }
+                }
                 if (platform === 'darwin') {
                     try {
-                        execSync(`cliclick m:${x},${y}`, { timeout: 3_000, stdio: 'pipe' });
+                        // cliclick scroll: positive = up, negative = down
+                        const scrollDir = direction === 'up' ? amount : direction === 'down' ? -amount : 0;
+                        if (direction === 'up' || direction === 'down') {
+                            try {
+                                execSync(`cliclick "ku:${scrollDir > 0 ? `+${scrollDir}` : scrollDir}"`, { timeout: 5_000, stdio: 'pipe' });
+                            }
+                            catch {
+                                // Fallback to AppleScript scroll
+                                const scrollAmount = direction === 'up' ? -amount : amount;
+                                osascript(`tell application "System Events" to scroll area 1 by ${scrollAmount}`);
+                            }
+                        }
+                        else {
+                            // Horizontal scroll via AppleScript
+                            const horiz = direction === 'left' ? -amount : amount;
+                            osascript(`tell application "System Events" to scroll area 1 by ${horiz}`);
+                        }
+                        return `Scrolled ${direction} by ${amount}`;
                     }
-                    catch { /* best effort move */ }
+                    catch (err) {
+                        return `Scroll failed: ${err instanceof Error ? err.message : String(err)}`;
+                    }
                 }
                 else if (platform === 'linux') {
                     try {
-                        execSync(`xdotool mousemove ${x} ${y}`, { timeout: 3_000, stdio: 'pipe' });
+                        // xdotool: button 4=up, 5=down, 6=left, 7=right
+                        const buttonMap = { up: 4, down: 5, left: 6, right: 7 };
+                        const btn = buttonMap[direction];
+                        execSync(`xdotool click --repeat ${amount} ${btn}`, { timeout: 5_000 });
+                        return `Scrolled ${direction} by ${amount}`;
                     }
-                    catch { /* best effort move */ }
-                }
-            }
-            if (platform === 'darwin') {
-                try {
-                    // cliclick scroll: positive = up, negative = down
-                    const scrollDir = direction === 'up' ? amount : direction === 'down' ? -amount : 0;
-                    if (direction === 'up' || direction === 'down') {
-                        try {
-                            execSync(`cliclick "ku:${scrollDir > 0 ? `+${scrollDir}` : scrollDir}"`, { timeout: 5_000, stdio: 'pipe' });
-                        }
-                        catch {
-                            // Fallback to AppleScript scroll
-                            const scrollAmount = direction === 'up' ? -amount : amount;
-                            osascript(`tell application "System Events" to scroll area 1 by ${scrollAmount}`);
-                        }
+                    catch {
+                        return 'Error: Scroll requires xdotool';
                     }
-                    else {
-                        // Horizontal scroll via AppleScript
-                        const horiz = direction === 'left' ? -amount : amount;
-                        osascript(`tell application "System Events" to scroll area 1 by ${horiz}`);
-                    }
-                    return `Scrolled ${direction} by ${amount}`;
                 }
-                catch (err) {
-                    return `Scroll failed: ${err instanceof Error ? err.message : String(err)}`;
-                }
+                return 'Error: Unsupported platform';
             }
-            else if (platform === 'linux') {
-                try {
-                    // xdotool: button 4=up, 5=down, 6=left, 7=right
-                    const buttonMap = { up: 4, down: 5, left: 6, right: 7 };
-                    const btn = buttonMap[direction];
-                    execSync(`xdotool click --repeat ${amount} ${btn}`, { timeout: 5_000 });
-                    return `Scrolled ${direction} by ${amount}`;
-                }
-                catch {
-                    return 'Error: Scroll requires xdotool';
-                }
+            finally {
+                releaseApp(app);
             }
-            return 'Error: Unsupported platform';
         },
     });
     // ── Mouse drag ──
@@ -533,48 +635,59 @@ export function registerComputerTools() {
             to_x: { type: 'number', description: 'End X coordinate', required: true },
             to_y: { type: 'number', description: 'End Y coordinate', required: true },
             duration_ms: { type: 'number', description: 'Drag duration in milliseconds (default: 500)' },
+            // Optional `app` enables Coordinator per-app locking. Omit for legacy fallback.
+            app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
         },
         tier: 'free',
         async execute(args) {
             const lockErr = ensureLock();
             if (lockErr)
                 return `Error: ${lockErr}`;
-            const fx = Math.round(Number(args.from_x));
-            const fy = Math.round(Number(args.from_y));
-            const tx = Math.round(Number(args.to_x));
-            const ty = Math.round(Number(args.to_y));
-            if ([fx, fy, tx, ty].some(isNaN))
-                return 'Error: All coordinates must be numbers';
-            if (platform === 'darwin') {
-                try {
+            const app = args.app ? String(args.app) : undefined;
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
+            try {
+                const fx = Math.round(Number(args.from_x));
+                const fy = Math.round(Number(args.from_y));
+                const tx = Math.round(Number(args.to_x));
+                const ty = Math.round(Number(args.to_y));
+                if ([fx, fy, tx, ty].some(isNaN))
+                    return 'Error: All coordinates must be numbers';
+                if (platform === 'darwin') {
                     try {
-                        execSync(`cliclick dd:${fx},${fy} du:${tx},${ty}`, { timeout: 10_000, stdio: 'pipe' });
-                    }
-                    catch {
-                        // Fallback: AppleScript mouse down, move, mouse up
-                        osascript(`
+                        try {
+                            execSync(`cliclick dd:${fx},${fy} du:${tx},${ty}`, { timeout: 10_000, stdio: 'pipe' });
+                        }
+                        catch {
+                            // Fallback: AppleScript mouse down, move, mouse up
+                            osascript(`
               tell application "System Events"
                 set mouseLocation to {${fx}, ${fy}}
                 click at mouseLocation
               end tell
             `.trim(), 10_000);
+                        }
+                        return `Dragged from (${fx},${fy}) to (${tx},${ty})`;
                     }
-                    return `Dragged from (${fx},${fy}) to (${tx},${ty})`;
+                    catch (err) {
+                        return `Drag failed: ${err instanceof Error ? err.message : String(err)}`;
+                    }
                 }
-                catch (err) {
-                    return `Drag failed: ${err instanceof Error ? err.message : String(err)}`;
+                else if (platform === 'linux') {
+                    try {
+                        execSync(`xdotool mousemove ${fx} ${fy} mousedown 1 mousemove --sync ${tx} ${ty} mouseup 1`, { timeout: 10_000 });
+                        return `Dragged from (${fx},${fy}) to (${tx},${ty})`;
+                    }
+                    catch {
+                        return 'Error: Drag requires xdotool';
+                    }
                 }
+                return 'Error: Unsupported platform';
             }
-            else if (platform === 'linux') {
-                try {
-                    execSync(`xdotool mousemove ${fx} ${fy} mousedown 1 mousemove --sync ${tx} ${ty} mouseup 1`, { timeout: 10_000 });
-                    return `Dragged from (${fx},${fy}) to (${tx},${ty})`;
-                }
-                catch {
-                    return 'Error: Drag requires xdotool';
-                }
+            finally {
+                releaseApp(app);
             }
-            return 'Error: Unsupported platform';
         },
     });
     // ── Keyboard type ──
@@ -583,35 +696,46 @@ export function registerComputerTools() {
         description: 'Type text using the keyboard. Types each character as if pressed by the user.',
         parameters: {
             text: { type: 'string', description: 'Text to type', required: true },
+            // Optional `app` enables Coordinator per-app locking. Omit for legacy fallback.
+            app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
         },
         tier: 'free',
         async execute(args) {
             const lockErr = ensureLock();
             if (lockErr)
                 return `Error: ${lockErr}`;
-            const text = String(args.text);
-            if (!text)
-                return 'Error: text is required';
-            if (platform === 'darwin') {
-                const escaped = escapeAppleScript(text);
-                try {
-                    osascript(`tell application "System Events" to keystroke "${escaped}"`, 10_000);
-                    return `Typed: ${text.slice(0, 80)}${text.length > 80 ? '...' : ''}`;
+            const app = args.app ? String(args.app) : undefined;
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
+            try {
+                const text = String(args.text);
+                if (!text)
+                    return 'Error: text is required';
+                if (platform === 'darwin') {
+                    const escaped = escapeAppleScript(text);
+                    try {
+                        osascript(`tell application "System Events" to keystroke "${escaped}"`, 10_000);
+                        return `Typed: ${text.slice(0, 80)}${text.length > 80 ? '...' : ''}`;
+                    }
+                    catch {
+                        return 'Error: Typing requires Accessibility permissions';
+                    }
                 }
-                catch {
-                    return 'Error: Typing requires Accessibility permissions';
+                else if (platform === 'linux') {
+                    try {
+                        execSync(`xdotool type -- "${text.replace(/"/g, '\\"')}"`, { timeout: 10_000 });
+                        return `Typed: ${text.slice(0, 80)}${text.length > 80 ? '...' : ''}`;
+                    }
+                    catch {
+                        return 'Error: Typing requires xdotool';
+                    }
                 }
+                return 'Error: Unsupported platform';
             }
-            else if (platform === 'linux') {
-                try {
-                    execSync(`xdotool type -- "${text.replace(/"/g, '\\"')}"`, { timeout: 10_000 });
-                    return `Typed: ${text.slice(0, 80)}${text.length > 80 ? '...' : ''}`;
-                }
-                catch {
-                    return 'Error: Typing requires xdotool';
-                }
+            finally {
+                releaseApp(app);
             }
-            return 'Error: Unsupported platform';
         },
     });
     // ── Keyboard key ──
@@ -620,72 +744,83 @@ export function registerComputerTools() {
         description: 'Press a key or key combination. Supports modifiers: cmd/ctrl/alt/shift + key.',
         parameters: {
             key: { type: 'string', description: 'Key: enter, tab, escape, space, backspace, delete, up, down, left, right, cmd+c, ctrl+v, cmd+shift+s, etc.', required: true },
+            // Optional `app` enables Coordinator per-app locking. Omit for legacy fallback.
+            app: { type: 'string', description: 'App being targeted, for parallel-agent coordination (optional)' },
         },
         tier: 'free',
         async execute(args) {
             const lockErr = ensureLock();
             if (lockErr)
                 return `Error: ${lockErr}`;
-            const key = String(args.key).toLowerCase();
-            if (platform === 'darwin') {
-                // Key code map for non-character keys
-                const keyCodeMap = {
-                    enter: 36, return: 36, tab: 48, escape: 53, space: 49,
-                    backspace: 51, delete: 117, up: 126, down: 125, left: 123, right: 124,
-                    home: 115, end: 119, pageup: 116, pagedown: 121,
-                    f1: 122, f2: 120, f3: 99, f4: 118, f5: 96, f6: 97,
-                    f7: 98, f8: 100, f9: 101, f10: 109, f11: 103, f12: 111,
-                };
-                try {
-                    if (key.includes('+')) {
-                        const parts = key.split('+');
-                        const mainKey = parts.pop();
-                        const modifiers = parts.map(m => {
-                            if (m === 'cmd' || m === 'command')
-                                return 'command down';
-                            if (m === 'ctrl' || m === 'control')
-                                return 'control down';
-                            if (m === 'alt' || m === 'option')
-                                return 'option down';
-                            if (m === 'shift')
-                                return 'shift down';
-                            return '';
-                        }).filter(Boolean).join(', ');
-                        const code = keyCodeMap[mainKey];
-                        if (code !== undefined) {
-                            osascript(`tell application "System Events" to key code ${code} using {${modifiers}}`);
+            const app = args.app ? String(args.app) : undefined;
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
+            try {
+                const key = String(args.key).toLowerCase();
+                if (platform === 'darwin') {
+                    // Key code map for non-character keys
+                    const keyCodeMap = {
+                        enter: 36, return: 36, tab: 48, escape: 53, space: 49,
+                        backspace: 51, delete: 117, up: 126, down: 125, left: 123, right: 124,
+                        home: 115, end: 119, pageup: 116, pagedown: 121,
+                        f1: 122, f2: 120, f3: 99, f4: 118, f5: 96, f6: 97,
+                        f7: 98, f8: 100, f9: 101, f10: 109, f11: 103, f12: 111,
+                    };
+                    try {
+                        if (key.includes('+')) {
+                            const parts = key.split('+');
+                            const mainKey = parts.pop();
+                            const modifiers = parts.map(m => {
+                                if (m === 'cmd' || m === 'command')
+                                    return 'command down';
+                                if (m === 'ctrl' || m === 'control')
+                                    return 'control down';
+                                if (m === 'alt' || m === 'option')
+                                    return 'option down';
+                                if (m === 'shift')
+                                    return 'shift down';
+                                return '';
+                            }).filter(Boolean).join(', ');
+                            const code = keyCodeMap[mainKey];
+                            if (code !== undefined) {
+                                osascript(`tell application "System Events" to key code ${code} using {${modifiers}}`);
+                            }
+                            else {
+                                osascript(`tell application "System Events" to keystroke "${escapeAppleScript(mainKey)}" using {${modifiers}}`);
+                            }
                         }
                         else {
-                            osascript(`tell application "System Events" to keystroke "${escapeAppleScript(mainKey)}" using {${modifiers}}`);
+                            const code = keyCodeMap[key];
+                            if (code !== undefined) {
+                                osascript(`tell application "System Events" to key code ${code}`);
+                            }
+                            else {
+                                osascript(`tell application "System Events" to keystroke "${escapeAppleScript(key)}"`);
+                            }
                         }
+                        return `Pressed: ${key}`;
                     }
-                    else {
-                        const code = keyCodeMap[key];
-                        if (code !== undefined) {
-                            osascript(`tell application "System Events" to key code ${code}`);
-                        }
-                        else {
-                            osascript(`tell application "System Events" to keystroke "${escapeAppleScript(key)}"`);
-                        }
+                    catch {
+                        return 'Error: Key press requires Accessibility permissions';
                     }
-                    return `Pressed: ${key}`;
                 }
-                catch {
-                    return 'Error: Key press requires Accessibility permissions';
+                else if (platform === 'linux') {
+                    try {
+                        // xdotool uses + for combos: ctrl+c, super+l, etc.
+                        const xdoKey = key.replace('cmd', 'super').replace('command', 'super');
+                        execSync(`xdotool key ${xdoKey}`, { timeout: 5_000 });
+                        return `Pressed: ${key}`;
+                    }
+                    catch {
+                        return 'Error: Key press requires xdotool';
+                    }
                 }
+                return 'Error: Unsupported platform';
             }
-            else if (platform === 'linux') {
-                try {
-                    // xdotool uses + for combos: ctrl+c, super+l, etc.
-                    const xdoKey = key.replace('cmd', 'super').replace('command', 'super');
-                    execSync(`xdotool key ${xdoKey}`, { timeout: 5_000 });
-                    return `Pressed: ${key}`;
-                }
-                catch {
-                    return 'Error: Key press requires xdotool';
-                }
+            finally {
+                releaseApp(app);
             }
-            return 'Error: Unsupported platform';
         },
     });
     // ── Window management ──
@@ -741,6 +876,7 @@ export function registerComputerTools() {
     });
     registerTool({
         name: 'window_resize',
+        deprecated: true,
         description: 'Resize a window of a specific app.',
         parameters: {
             app: { type: 'string', description: 'App name', required: true },
@@ -756,36 +892,45 @@ export function registerComputerTools() {
                 return `Error: ${app} not approved. Call app_approve first.`;
             if (isNaN(w) || isNaN(h))
                 return 'Error: width and height must be numbers';
-            if (platform === 'darwin') {
-                try {
-                    osascript(`tell application "${escapeAppleScript(app)}" to set bounds of front window to {0, 0, ${w}, ${h}}`, 5_000);
-                    return `Resized ${app} to ${w}x${h}`;
-                }
-                catch {
-                    // Fallback via System Events
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
+            try {
+                if (platform === 'darwin') {
                     try {
-                        osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set size of front window to {${w}, ${h}}`);
+                        osascript(`tell application "${escapeAppleScript(app)}" to set bounds of front window to {0, 0, ${w}, ${h}}`, 5_000);
                         return `Resized ${app} to ${w}x${h}`;
                     }
-                    catch (err) {
-                        return `Error: ${err instanceof Error ? err.message : String(err)}`;
+                    catch {
+                        // Fallback via System Events
+                        try {
+                            osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set size of front window to {${w}, ${h}}`);
+                            return `Resized ${app} to ${w}x${h}`;
+                        }
+                        catch (err) {
+                            return `Error: ${err instanceof Error ? err.message : String(err)}`;
+                        }
                     }
                 }
-            }
-            else if (platform === 'linux') {
-                try {
-                    execSync(`wmctrl -r "${app}" -e 0,-1,-1,${w},${h}`, { timeout: 5_000 });
-                    return `Resized ${app} to ${w}x${h}`;
+                else if (platform === 'linux') {
+                    try {
+                        execSync(`wmctrl -r "${app}" -e 0,-1,-1,${w},${h}`, { timeout: 5_000 });
+                        return `Resized ${app} to ${w}x${h}`;
+                    }
+                    catch {
+                        return 'Error: Requires wmctrl';
+                    }
                 }
-                catch {
-                    return 'Error: Requires wmctrl';
-                }
+                return 'Error: Unsupported platform';
             }
-            return 'Error: Unsupported platform';
+            finally {
+                releaseApp(app);
+            }
         },
     });
     registerTool({
         name: 'window_move',
+        deprecated: true,
         description: 'Move a window to specific screen coordinates.',
         parameters: {
             app: { type: 'string', description: 'App name', required: true },
@@ -799,25 +944,33 @@ export function registerComputerTools() {
             const y = Math.round(Number(args.y));
             if (!isAppApproved(app))
                 return `Error: ${app} not approved. Call app_approve first.`;
-            if (platform === 'darwin') {
-                try {
-                    osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set position of front window to {${x}, ${y}}`);
-                    return `Moved ${app} to (${x}, ${y})`;
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
+            try {
+                if (platform === 'darwin') {
+                    try {
+                        osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set position of front window to {${x}, ${y}}`);
+                        return `Moved ${app} to (${x}, ${y})`;
+                    }
+                    catch (err) {
+                        return `Error: ${err instanceof Error ? err.message : String(err)}`;
+                    }
                 }
-                catch (err) {
-                    return `Error: ${err instanceof Error ? err.message : String(err)}`;
+                else if (platform === 'linux') {
+                    try {
+                        execSync(`wmctrl -r "${app}" -e 0,${x},${y},-1,-1`, { timeout: 5_000 });
+                        return `Moved ${app} to (${x}, ${y})`;
+                    }
+                    catch {
+                        return 'Error: Requires wmctrl';
+                    }
                 }
+                return 'Error: Unsupported platform';
             }
-            else if (platform === 'linux') {
-                try {
-                    execSync(`wmctrl -r "${app}" -e 0,${x},${y},-1,-1`, { timeout: 5_000 });
-                    return `Moved ${app} to (${x}, ${y})`;
-                }
-                catch {
-                    return 'Error: Requires wmctrl';
-                }
+            finally {
+                releaseApp(app);
             }
-            return 'Error: Unsupported platform';
         },
     });
     registerTool({
@@ -833,35 +986,43 @@ export function registerComputerTools() {
             const action = String(args.action || 'minimize').toLowerCase();
             if (!isAppApproved(app))
                 return `Error: ${app} not approved. Call app_approve first.`;
-            if (platform === 'darwin') {
-                try {
-                    if (action === 'restore') {
-                        osascript(`tell application "${escapeAppleScript(app)}" to activate`);
+            const claimErr = claimApp(app);
+            if (claimErr)
+                return `Error: ${claimErr}`;
+            try {
+                if (platform === 'darwin') {
+                    try {
+                        if (action === 'restore') {
+                            osascript(`tell application "${escapeAppleScript(app)}" to activate`);
+                        }
+                        else {
+                            osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set miniaturized of front window to true`);
+                        }
+                        return `${action === 'restore' ? 'Restored' : 'Minimized'} ${app}`;
                     }
-                    else {
-                        osascript(`tell application "System Events" to tell process "${escapeAppleScript(app)}" to set miniaturized of front window to true`);
+                    catch (err) {
+                        return `Error: ${err instanceof Error ? err.message : String(err)}`;
                     }
-                    return `${action === 'restore' ? 'Restored' : 'Minimized'} ${app}`;
                 }
-                catch (err) {
-                    return `Error: ${err instanceof Error ? err.message : String(err)}`;
+                else if (platform === 'linux') {
+                    try {
+                        if (action === 'restore') {
+                            execSync(`wmctrl -r "${app}" -b remove,hidden`, { timeout: 5_000 });
+                        }
+                        else {
+                            execSync(`xdotool search --name "${app}" windowminimize`, { timeout: 5_000 });
+                        }
+                        return `${action === 'restore' ? 'Restored' : 'Minimized'} ${app}`;
+                    }
+                    catch {
+                        return 'Error: Requires wmctrl/xdotool';
+                    }
                 }
+                return 'Error: Unsupported platform';
             }
-            else if (platform === 'linux') {
-                try {
-                    if (action === 'restore') {
-                        execSync(`wmctrl -r "${app}" -b remove,hidden`, { timeout: 5_000 });
-                    }
-                    else {
-                        execSync(`xdotool search --name "${app}" windowminimize`, { timeout: 5_000 });
-                    }
-                    return `${action === 'restore' ? 'Restored' : 'Minimized'} ${app}`;
-                }
-                catch {
-                    return 'Error: Requires wmctrl/xdotool';
-                }
+            finally {
+                releaseApp(app);
             }
-            return 'Error: Unsupported platform';
         },
     });
     // ── Screen info ──
@@ -924,14 +1085,23 @@ export function registerComputerTools() {
     // ── Release lock ──
     registerTool({
         name: 'computer_release',
+        deprecated: true,
         description: 'Release the computer use lock and end the session. Call when done with computer use.',
         parameters: {},
         tier: 'free',
         async execute() {
+            let released = [];
+            try {
+                released = coordinator.unregister(AGENT_ID);
+            }
+            catch { /* best effort */ }
             releaseLock();
             approvedApps.clear();
             permissionsVerified = false;
-            return 'Computer use session ended. Lock released.';
+            const releasedNote = released.length > 0
+                ? ` Released app locks: ${released.join(', ')}.`
+                : '';
+            return `Computer use session ended.${releasedNote}`;
         },
     });
 }

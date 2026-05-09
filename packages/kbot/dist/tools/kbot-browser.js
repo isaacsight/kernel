@@ -939,6 +939,7 @@ export function registerKBotBrowserTools() {
     });
     registerTool({
         name: 'kbot_read',
+        deprecated: true,
         description: "Get the current page content in reader mode (clean text, no clutter). Uses kbot's built-in browser.",
         parameters: {},
         tier: 'free',

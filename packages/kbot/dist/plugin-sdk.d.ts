@@ -35,6 +35,17 @@ export interface PluginConfig {
     enabled: string[];
     disabled: string[];
 }
+export interface LoadPluginsOptions {
+    /** Override the plugin directory (used by tests). Defaults to ~/.kbot/plugins. */
+    pluginsDir?: string;
+    /** Override the integrity manifest path. Defaults to ~/.kbot/plugins.json. */
+    manifestPath?: string;
+    /**
+     * Override the integrity-disabled flag. Defaults to reading
+     * `process.env.KBOT_PLUGIN_INTEGRITY === 'off'`.
+     */
+    integrityDisabled?: boolean;
+}
 export interface SDKPluginManifest {
     name: string;
     version: string;
@@ -53,8 +64,18 @@ export interface SDKPluginManifest {
 /**
  * Load all installed and enabled SDK plugins.
  * Called at startup after the legacy plugins.ts loadPlugins() runs.
+ *
+ * Integrity contract (mirrors plugins.ts):
+ *   - Reads the same manifest at `~/.kbot/plugins.json` (override via
+ *     `KBOT_PLUGIN_MANIFEST` or `opts.manifestPath`).
+ *   - If the manifest exists, only plugins whose `name` appears in
+ *     `result.verified` are imported. Drift → throws `IntegrityError`.
+ *   - If the manifest is missing, falls back to back-compat behaviour: all
+ *     discovered, enabled plugins are imported (with a yellow info note).
+ *   - `KBOT_PLUGIN_INTEGRITY=off` skips verification entirely with a loud
+ *     yellow warning.
  */
-export declare function loadPlugins(verbose?: boolean): Promise<SDKPluginManifest[]>;
+export declare function loadPlugins(verbose?: boolean, opts?: LoadPluginsOptions): Promise<SDKPluginManifest[]>;
 /**
  * Scaffold a new plugin with a full project structure.
  * Creates ~/.kbot/plugins/<name>/ with index.ts and package.json.

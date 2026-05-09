@@ -56,6 +56,7 @@ async function main() {
         .option('--lite', 'Lightweight mode — skip heavy tools (auto-enabled on Replit)')
         .option('--safe', 'Confirm destructive operations')
         .option('--strict', 'Confirm ALL operations')
+        .option('--persona <id>', 'Scope tool access to a persona (researcher, coder, computer-use)')
         .option('--ollama-launch', 'Auto-configure for ollama launch (sets Ollama as provider)')
         .argument('[prompt...]', 'One-shot prompt')
         .helpOption('-h, --help', 'display help for command')
@@ -102,7 +103,7 @@ async function main() {
         console.log(`  ${chalk.cyan('https://github.com/isaacsight/kernel/issues')}  ${chalk.dim('Bug reports')}`);
         console.log(`  ${chalk.cyan('support@kernel.chat')}  ${chalk.dim('Email (AI-assisted replies)')}`);
         console.log();
-        console.log(`  ${chalk.dim('35 specialist agents · 787+ tools · 20 providers · MIT licensed')}`);
+        console.log(`  ${chalk.dim('35 specialist agents · 100+ skills · 20 providers · MIT licensed')}`);
         console.log();
         process.exit(0);
     });
@@ -155,6 +156,87 @@ async function main() {
         printInfo('Protocols:');
         printInfo('  kbot ide mcp    — VS Code, Cursor, Windsurf, Zed, Neovim');
         printInfo('  kbot ide acp    — IntelliJ, WebStorm, PyCharm, GoLand, Android Studio');
+    });
+    // ── one-shot editor installers (Harrison-class onboarding) ──────────────
+    // Wires kbot's MCP servers into editor settings.json + (Claude Code only)
+    // copies the kbot skill into the project. Idempotent. No manual JSON edits.
+    const printSetupResult = (label, r) => {
+        printSuccess(`${label}: ${r.configPath}`);
+        if (r.mcpAdded.length > 0)
+            printInfo(`  + added MCP servers: ${r.mcpAdded.join(', ')}`);
+        if (r.mcpAlreadyPresent.length > 0)
+            printInfo(`  · already present: ${r.mcpAlreadyPresent.join(', ')}`);
+        if (r.skillCopied)
+            printInfo(`  + skill copied: ${r.skillCopied}`);
+        if (r.skillAlreadyPresent)
+            printWarn(`  · skill exists (use --force to overwrite): ${r.skillAlreadyPresent}`);
+    };
+    program
+        .command('setup-claude-code')
+        .description('Wire kbot into Claude Code (~/.claude/settings.json) + copy skill into project')
+        .option('-f, --force', 'Overwrite existing project skill if present')
+        .action(async (opts) => {
+        const { setupClaudeCode } = await import('./setup-editor.js');
+        try {
+            const r = setupClaudeCode({ force: opts.force });
+            printSetupResult('Claude Code', r);
+        }
+        catch (e) {
+            printError(`setup-claude-code failed: ${e instanceof Error ? e.message : String(e)}`);
+            process.exitCode = 1;
+        }
+    });
+    program
+        .command('setup-cursor')
+        .description('Wire kbot into Cursor settings.json (mcp.servers)')
+        .option('-f, --force', 'Reserved for parity (Cursor has no skill copy step)')
+        .action(async (opts) => {
+        const { setupCursor } = await import('./setup-editor.js');
+        try {
+            const r = setupCursor({ force: opts.force });
+            printSetupResult('Cursor', r);
+        }
+        catch (e) {
+            printError(`setup-cursor failed: ${e instanceof Error ? e.message : String(e)}`);
+            process.exitCode = 1;
+        }
+    });
+    program
+        .command('setup-zed')
+        .description('Wire kbot into Zed settings.json (assistant.mcpServers — best-effort shape)')
+        .option('-f, --force', 'Reserved for parity')
+        .action(async (opts) => {
+        const { setupZed } = await import('./setup-editor.js');
+        try {
+            const r = setupZed({ force: opts.force });
+            printSetupResult('Zed', r);
+        }
+        catch (e) {
+            printError(`setup-zed failed: ${e instanceof Error ? e.message : String(e)}`);
+            process.exitCode = 1;
+        }
+    });
+    program
+        .command('setup-all')
+        .description('Run setup-claude-code, setup-cursor, and setup-zed in one shot')
+        .option('-f, --force', 'Overwrite existing project skill if present')
+        .action(async (opts) => {
+        const { setupClaudeCode, setupCursor, setupZed } = await import('./setup-editor.js');
+        let failed = 0;
+        const run = (label, fn) => {
+            try {
+                printSetupResult(label, fn());
+            }
+            catch (e) {
+                failed++;
+                printError(`${label} failed: ${e instanceof Error ? e.message : String(e)}`);
+            }
+        };
+        run('Claude Code', () => setupClaudeCode({ force: opts.force }));
+        run('Cursor', () => setupCursor({ force: opts.force }));
+        run('Zed', () => setupZed({ force: opts.force }));
+        if (failed > 0)
+            process.exitCode = 1;
     });
     program
         .command('byok')
@@ -501,10 +583,10 @@ async function main() {
     // ── Discovery Agent ──
     const discoveryCmd = program
         .command('discovery')
-        .description('Autonomous outreach agent — finds conversations, drafts responses, posts for you');
+        .description('Background outreach agent — finds conversations, drafts responses, posts for you');
     discoveryCmd
         .command('start')
-        .description('Start the discovery loop — scans HN, GitHub, Reddit and posts autonomously')
+        .description('Start the discovery loop — scans HN, GitHub, Reddit and posts in the background')
         .option('--dry-run', 'Find and draft but don\'t post')
         .option('--interval <minutes>', 'Poll interval in minutes', '60')
         .option('--model <model>', 'Ollama model for analysis', 'qwen2.5-coder:32b')
@@ -4121,7 +4203,7 @@ async function main() {
             const models = await listOllamaModels();
             if (models.length > 0)
                 printInfo(`${models.length} models available. Using: ${ollamaModel || PROVIDERS.ollama.defaultModel}`);
-            printInfo('670+ tools ready. Type your prompt or press Enter for interactive mode.');
+            printInfo('100+ skills ready. Type your prompt or press Enter for interactive mode.');
         }
         else {
             printError(`Cannot reach Ollama at ${ollamaHost}. Is it running?`);
@@ -4288,7 +4370,7 @@ async function main() {
     }
     // Permission mode: autonomous by default, users opt-in to confirmations
     {
-        const { setPermissionMode } = await import('./permissions.js');
+        const { setPermissionMode, setActivePersona } = await import('./permissions.js');
         if (opts.yes) {
             // --yes / -y: skip all confirmations (for scripts & CI)
             setPermissionMode('permissive');
@@ -4302,6 +4384,19 @@ async function main() {
         else {
             // DEFAULT: permissive — kbot acts autonomously, no confirmation prompts
             setPermissionMode('permissive');
+        }
+        // Persona scoping (v4.2.0). Optional. Falls back to env var.
+        const personaId = opts.persona || process.env.KBOT_PERSONA || null;
+        if (personaId) {
+            try {
+                setActivePersona(personaId);
+                if (!opts.quiet && !opts.pipe)
+                    printInfo(`Persona: ${personaId}`);
+            }
+            catch (err) {
+                printError(err.message);
+                process.exit(1);
+            }
         }
     }
     // Register built-in agents (hacker, operator, dreamer) so --agent flag works
@@ -4615,7 +4710,7 @@ async function byokFlow() {
     console.log();
     printSuccess(`BYOK mode enabled — ${providerConfig.name}`);
     printInfo('You pay the provider directly. No message limits. No restrictions.');
-    printInfo('All 362 tools + 35 agents + learning system = yours.');
+    printInfo('All 100+ skills + 35 specialist agents + learning system = yours.');
     console.log();
     printSuccess('Ready. Run `kbot` to start.');
 }
@@ -4915,7 +5010,7 @@ async function startRepl(agentOpts, context, tier, byokActive = false, localActi
         const suggestions = await detectProjectSuggestions();
         console.log();
         console.log(chalk.dim('  ┌─────────────────────────────────────────────────┐'));
-        console.log(chalk.dim('  │') + chalk.bold('  35 agents. 362 tools. Just say what you need.  ') + chalk.dim(' │'));
+        console.log(chalk.dim('  │') + chalk.bold('  35 agents. 100+ skills. Just say what you need.  ') + chalk.dim(' │'));
         console.log(chalk.dim('  │                                                 │'));
         if (suggestions.length > 0) {
             for (const s of suggestions.slice(0, 4)) {

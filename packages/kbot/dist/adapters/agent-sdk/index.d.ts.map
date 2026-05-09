@@ -1,0 +1,1 @@
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../src/adapters/agent-sdk/index.ts"],"names":[],"mappings":"AAYA,YAAY,EACV,YAAY,EACZ,sBAAsB,EACtB,mBAAmB,EACnB,kBAAkB,EAClB,cAAc,GACf,MAAM,YAAY,CAAA;AAEnB,OAAO,EACL,cAAc,EACd,eAAe,EACf,KAAK,iBAAiB,GACvB,MAAM,mBAAmB,CAAA;AAE1B,OAAO,EACL,gBAAgB,EAChB,0BAA0B,EAC1B,iBAAiB,EACjB,KAAK,mBAAmB,GACzB,MAAM,qBAAqB,CAAA"}

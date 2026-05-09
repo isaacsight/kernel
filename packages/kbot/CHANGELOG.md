@@ -1,5 +1,36 @@
 # Changelog
 
+## 4.3.0 (2026-05-09) — Security audit skill family + Anthropic Agent SDK adapter
+
+The May 2026 news cycle response. Project Glasswing handed Claude Mythos to ~6 named partners; this release ships the BYOK / local-first counterpart so every kbot user can run the same five-phase audit workflow against their own repos with the audit trail filed locally.
+
+Plus a schema-only adapter for the Anthropic Agent SDK — kbot tools can be advertised to Agent SDK projects (and imported back) without taking a runtime dependency on `@anthropic-ai/sdk`. kbot stays provider-agnostic.
+
+### Added
+- **`security_audit_local` tool** — walks a local source tree across nine languages (JS/TS/Py/Go/Rust/Ruby/Java/PHP/Shell), applies a 25-pattern set covering subprocess sinks, eval-shaped calls, route handlers, weak crypto, JWT verify-skip, SQL string concat, FS writes near user input, TLS-skip flags, and non-constant-time comparisons. Persists JSONL surface map + meta to `~/.kbot/security-audits/<session>/`. Local-only; never phones home. Tier `'free'`.
+- **`skills/security-audit/` family** — four SKILL.md files setting the workflow that the `security_audit_local` tool feeds:
+  - `local-vulnerability-hunt` — five phases (Scope → Surface map → Hypothesize → Confirm → File). BYOK frontier model, audit trail on disk.
+  - `dependency-audit` — `npm audit` + lockfile diff + provenance review. Lockfile is the truth; transitive counts double.
+  - `secrets-leak-scan` — working-tree + git-history sweep with named patterns (AWS, sk-, Slack, GitHub PAT, JWT, private keys). Rotate before scrub; never rely on rewriting public history.
+  - `threat-model-quickdraw` — STRIDE-lite, 30 minutes, produces `docs/threat-models/<feature>.md` artifact.
+- **`src/adapters/agent-sdk/`** — bidirectional schema adapter between kbot `ToolDefinition` and Anthropic Agent SDK tool format. NO runtime dep on `@anthropic-ai/sdk`. `toAgentSdkTool` / `toAgentSdkTools` for export; `fromAgentSdkTool` / `fromAgentSdkExecutableTool` / `fromAgentSdkTools` for import (with optional `fallbackExecutor`). Round-trip kbot → SDK → kbot is stable for parameter shapes kbot uses.
+
+### Untouched (deliberately)
+- All `src/futures/` modules unchanged — this release is in `tools/` and `adapters/`, not the v5 substrate.
+- Default agent behavior unchanged. `security_audit_local` is opt-in; no automatic scans.
+- `forecast_summary` (4.1.1) and persona-scoped permissions (4.2.0) untouched.
+
+### Tests
+- 36 new tests: 16 for `security-audit-local` (file walking, pattern detection across languages, severity floors, exclude rules, persistence shape, ToolDefinition wrapper) + 20 for the Agent SDK adapter (schema mapping both directions, round-trip preservation, fallback executor, embedded handler, type-union fallback for `["string","null"]`).
+- All deterministic, no LLM calls in CI.
+
+### News-cycle context
+Anthropic's Project Glasswing (April–May 2026) handed Claude Mythos Preview to ~6 named partners (AWS, Apple, Cisco, Google, JPMorganChase, Microsoft) for vulnerability hunting. The Mozilla Firefox 150 result was real (271 zero-days in a single pass). The third-party-vendor incident on launch day was also real. The 4.3 skill family is the BYOK / local-first counterpart — same phased workflow, against your own code, audit trail filed locally on disk. Mythos's eligibility is an application form; this release's eligibility is `npm install`.
+
+The Agent SDK adapter ships in the same release because Anthropic opened the Agent SDK to external developers in the same news cycle. kbot tools can now participate in that ecosystem without coupling to it.
+
+See [RELEASE_NOTES_4_3.md](./RELEASE_NOTES_4_3.md) for the full notes.
+
 ## 4.2.0 (2026-04-30) — Persona-scoped permissions: second substrate-to-product hop
 
 The `futures/persona/` substrate (shipped as code-only in v4.1.0) is now wired into kbot's live permission chain. Pass `--persona researcher`, `--persona coder`, or `--persona computer-use` (or set `KBOT_PERSONA`) to bound a session's tool surface to a typed scope set with deny-patterns, rate limits, and blast-radius caps.

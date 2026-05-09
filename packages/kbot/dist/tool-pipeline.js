@@ -11,6 +11,7 @@
 //   pipeline.use(metricsMiddleware(recordMetrics))
 //   pipeline.use(executionMiddleware(executeTool))
 //   await pipeline.execute(ctx)
+import { checkPersonaScope } from './permissions.js';
 export class ToolPipeline {
     middleware = [];
     /** Append middleware to the end of the pipeline */
@@ -56,6 +57,16 @@ export class ToolPipeline {
  */
 export function permissionMiddleware(checkPermission) {
     return async (ctx, next) => {
+        // v4.2.0: persona scope check fires BEFORE the destructive-op
+        // confirmation. A persona denial blocks the tool with a clear reason
+        // and is non-interactive — no prompt, no retry.
+        const personaDenial = checkPersonaScope(ctx.toolName, ctx.toolArgs);
+        if (personaDenial) {
+            ctx.aborted = true;
+            ctx.abortReason = personaDenial;
+            ctx.error = personaDenial;
+            return;
+        }
         const allowed = await checkPermission(ctx.toolName, ctx.toolArgs);
         if (!allowed) {
             ctx.aborted = true;

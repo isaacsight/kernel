@@ -18,6 +18,8 @@ export interface ToolDefinition {
     timeout?: number;
     /** Max result size in bytes (default: 50_000 = 50KB) */
     maxResultSize?: number;
+    /** Marked deprecated as of v4.0; scheduled for removal in 4.1.0. */
+    deprecated?: boolean;
 }
 export interface ToolCall {
     id: string;

@@ -2721,7 +2721,7 @@ export function registerRedBlueTools() {
     // ─── Tool 1: Red Team Scan ───────────────────────────────────────────────────
     registerTool({
         name: 'redteam_scan',
-        description: 'Red team: scan a codebase for vulnerabilities. Reads source files and pattern-matches for secrets, injection vectors, auth issues, crypto weaknesses, dependency vulnerabilities, and configuration problems. Thinks like an attacker. Returns findings with severity, file, line, evidence, exploitation scenario, and CWE ID.',
+        description: 'Security audit (defensive — finds issues before attackers): scan a codebase for vulnerabilities. Reads source files and pattern-matches for secrets, injection vectors, auth issues, crypto weaknesses, dependency vulnerabilities, and configuration problems. Returns findings with severity, file, line, evidence, an exploitation scenario for context, and CWE ID. Defensive security context: use only on codebases you own or have explicit permission to audit.',
         parameters: {
             path: { type: 'string', description: 'Directory to scan (default: current directory)' },
             focus: { type: 'string', description: 'Scan focus: "secrets", "injection", "auth", "crypto", "deps", "config", "all" (default: "all")' },
@@ -2824,6 +2824,7 @@ export function registerRedBlueTools() {
     // ─── Tool 2: Blue Team Harden ────────────────────────────────────────────────
     registerTool({
         name: 'blueteam_harden',
+        deprecated: true,
         description: 'Blue team: generate security hardening recommendations with ready-to-use code snippets. Produces security headers middleware, input validation patterns, auth hardening, crypto best practices, and logging/monitoring setup. Returns actionable code that can be directly applied.',
         parameters: {
             path: { type: 'string', description: 'Directory to analyze for context (default: current directory)' },
@@ -2941,7 +2942,8 @@ export function registerRedBlueTools() {
     // ─── Tool 3: Red Team Report ─────────────────────────────────────────────────
     registerTool({
         name: 'redteam_report',
-        description: 'Generate a professional penetration test report. Runs a full red team scan and formats results as an executive assessment with risk score, attack surface mapping, critical findings with exploitation scenarios, risk matrix, and prioritized remediation plan.',
+        deprecated: true,
+        description: 'Generate a professional penetration test report (defensive security assessment). Runs a full security audit and formats results as an executive assessment with risk score, attack surface mapping, critical findings with exploitation scenarios for context, risk matrix, and prioritized remediation plan. Defensive security context: use only on systems you own or have explicit permission to test.',
         parameters: {
             path: { type: 'string', description: 'Directory to assess (default: current directory)' },
         },
@@ -3193,6 +3195,7 @@ export function registerRedBlueTools() {
     // ─── Tool 4: Blue Team Checklist ─────────────────────────────────────────────
     registerTool({
         name: 'blueteam_checklist',
+        deprecated: true,
         description: 'Generate a comprehensive security hardening checklist tailored to a specific framework. Covers authentication, input validation, security headers, cryptography, logging, rate limiting, CORS/CSRF, dependency management, secrets, and infrastructure. Returns checkboxes for tracking completion.',
         parameters: {
             framework: { type: 'string', description: 'Framework: "express", "nextjs", "fastify", "django", "flask", "rails", "generic" (default: "generic")' },
@@ -3211,6 +3214,7 @@ export function registerRedBlueTools() {
     // ─── Tool 5: Threat Model ────────────────────────────────────────────────────
     registerTool({
         name: 'threat_model',
+        deprecated: true,
         description: 'Perform threat modeling on a codebase. Analyzes code structure to identify data flows, trust boundaries, and threats. Supports STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Elevation of Privilege), DREAD (Damage, Reproducibility, Exploitability, Affected Users, Discoverability), and PASTA (Process for Attack Simulation and Threat Analysis) methodologies.',
         parameters: {
             path: { type: 'string', description: 'Directory to analyze (default: current directory)' },

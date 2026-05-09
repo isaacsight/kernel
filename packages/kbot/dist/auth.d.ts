@@ -1,6 +1,6 @@
 declare const KBOT_DIR: string;
 declare const CONFIG_PATH: string;
-export type ByokProvider = 'anthropic' | 'openai' | 'google' | 'mistral' | 'xai' | 'deepseek' | 'groq' | 'together' | 'fireworks' | 'perplexity' | 'cohere' | 'nvidia' | 'sambanova' | 'cerebras' | 'openrouter' | 'lmstudio' | 'jan' | 'ollama' | 'kbot-local' | 'embedded';
+export type ByokProvider = 'anthropic' | 'openai' | 'google' | 'mistral' | 'xai' | 'deepseek' | 'groq' | 'together' | 'fireworks' | 'perplexity' | 'cohere' | 'nvidia' | 'sambanova' | 'cerebras' | 'openrouter' | 'lmstudio' | 'jan' | 'ollama' | 'kbot-local' | 'llada' | 'embedded';
 export interface ProviderConfig {
     name: string;
     apiUrl: string;

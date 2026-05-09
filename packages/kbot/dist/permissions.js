@@ -13,7 +13,46 @@
 //   'strict'      — confirm all file writes and tool calls
 import { createInterface } from 'node:readline';
 import chalk from 'chalk';
+import { canInvoke, PERSONA_REGISTRY, } from './futures/persona/index.js';
 let currentMode = 'normal';
+/** Active persona for this CLI run. null = no persona-scoping (default). */
+let activePersona = null;
+/**
+ * Set (or clear) the active persona by id. Pass null to disable persona checking.
+ * Throws if id is not found in PERSONA_REGISTRY.
+ *
+ * v4.2.0 wires the futures/persona substrate into the live permissions chain.
+ * When a persona is set, every checkPermission() call runs canInvoke() FIRST;
+ * if the persona denies, the tool is blocked before the destructive-op prompt.
+ */
+export function setActivePersona(id) {
+    if (id === null) {
+        activePersona = null;
+        return;
+    }
+    const persona = PERSONA_REGISTRY[id];
+    if (!persona) {
+        const known = Object.keys(PERSONA_REGISTRY).join(', ');
+        throw new Error(`unknown persona "${id}". Known personas: ${known}`);
+    }
+    activePersona = persona;
+}
+/** Get the currently active persona, or null if none. */
+export function getActivePersona() {
+    return activePersona;
+}
+/**
+ * Check the active persona (if any) against a tool invocation.
+ * Returns the denial reason string if denied, or null if allowed (or no persona set).
+ */
+export function checkPersonaScope(toolName, args) {
+    if (!activePersona)
+        return null;
+    const verdict = canInvoke(activePersona, toolName, args);
+    if (verdict.allowed)
+        return null;
+    return `Persona '${activePersona.id}' denies '${toolName}': ${verdict.reason ?? 'permission denied'}`;
+}
 /** Patterns that always require confirmation in normal mode */
 const DESTRUCTIVE_PATTERNS = [
     { pattern: /^git\s+push/i, reason: 'Pushes code to remote — visible to others' },
@@ -119,6 +158,15 @@ export async function confirmToolCall(toolName, args, reason) {
  * Used as middleware in the tool execution pipeline.
  */
 export async function checkPermission(toolName, args) {
+    // Persona check fires BEFORE the destructive-op prompt. If a persona is
+    // set and denies the tool, fail fast — no confirmation prompt, no retry.
+    const personaDenial = checkPersonaScope(toolName, args);
+    if (personaDenial) {
+        console.log();
+        console.log(`  ${chalk.red('✗')} ${personaDenial}`);
+        console.log();
+        return false;
+    }
     const reason = needsConfirmation(toolName, args);
     if (!reason)
         return true;
