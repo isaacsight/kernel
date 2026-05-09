@@ -68,6 +68,24 @@ M docs/design-language.md                   (current-tools table updated; future
 M SCRATCHPAD.md                              (this entry)
 ```
 
+### Editorial follow-on (ISSUE 378)
+First use of the new `review` spread tool: ISSUE 378 — ON THE BENCH —
+ledger stock + classic + olive accent + FILED · BENCH · V·26 seal.
+Five subjects graded against a five-criterion rubric (access ceiling,
+coverage, audit trail, cost ceiling, second-opinion friction):
+Mythos, GPT-5.5-Cyber, Sec-Gemini v1, Llama 4 + PurpleLlama, kbot
+security_audit_local + BYOK frontier. Standout (BEST AVAILABLE)
+goes to Llama 4 + PurpleLlama, deliberately not the house toolkit.
+kbot scores A− with its limits written down. Continues the small
+filed-pattern arc 376 STANDARDS → 377 API TIER → 378 BENCH on the
+AI-tools beat.
+
+Caveat written into the issue file: SpreadCommon.stock does not yet
+admit `ledger`, so the cover carries ledger and the spread falls back
+to ivory. Worth resolving in a future commit if the editor wants
+ledger inside-spreads; for now ivory under the score monuments reads
+cleanly enough that this isn't a regression.
+
 ### Editorial follow-on (review spread)
 Built on top of the security-audit work in the same session. The
 news-cycle response on the kbot side (security-audit skills + Agent
