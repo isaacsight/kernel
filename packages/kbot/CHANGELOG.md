@@ -1,5 +1,40 @@
 # Changelog
 
+## 4.3.0 (2026-05-09) — Local security audit + Agent SDK adapter: response to the May 2026 news cycle
+
+Two additive surfaces land in 4.3.0, each a deliberate response to AI-news events from the first week of May 2026.
+
+### Added — `skills/security-audit/` (4 SKILL.md files)
+- **`local-vulnerability-hunt`** — five-phase audit workflow (surface map → category sweep → reachability → severity scoring → audit trail). BYOK / local-first. The democratized version of Project Glasswing + Claude Mythos, which ships only to ~6 organizations.
+- **`dependency-audit`** — package manifest + lockfile sweep across npm/pip/cargo/go.mod, CVE matching, fix-path generation.
+- **`secrets-leak-scan`** — entropy + regex pattern set for tokens / keys / private credentials in tracked + untracked files.
+- **`threat-model-quickdraw`** — STRIDE-lite, 15-minute pass; produces a structured JSON model + markdown brief.
+
+### Added — `src/tools/security-audit-local.ts` (substrate)
+- Walks a tree, applies a **25-pattern set across 9 languages** (JS/TS, Python, Go, Rust, Ruby, Java, PHP, Shell).
+- Persists JSONL surface map + meta to `~/.kbot/security-audits/<session>/{surface.jsonl,meta.json}`.
+- Wired into the `swarm-2026-04` registry. Local-only by contract; remote scanning still routes through `pentest`.
+
+### Added — `src/adapters/agent-sdk/`
+- Schema-only bidirectional adapter between kbot `ToolDefinition` and the Anthropic Agent SDK tool format.
+- **No runtime dep** on `@anthropic-ai/sdk` — kbot stays provider-agnostic. The thinnest possible response to the Agent SDK opening to external developers in May 2026.
+- Round-trip safe: `toAgentSdkTool` → wire to a Messages API call → `fromAgentSdkTool` → register.
+
+### Untouched (deliberately)
+- The existing `pentest`, `hacker-toolkit`, and `agents/security-agent.ts` surfaces are unchanged. The new skills are a *narrative* layer on top, not duplicates.
+- Default behavior unchanged for sessions that don't invoke the new tools.
+- `forecast/` substrate unchanged — already wired in 4.1.1.
+
+### Tests
+- +36 tests (16 `security-audit-local` + 20 `agent-sdk` adapter); full suite remains green.
+- `npx vitest run src/futures/` — 95/95 (no regression in v5 substrate).
+- `tsc --noEmit` — zero new errors in added files (47 pre-existing chalk/ora ambient warnings unchanged).
+
+### Provenance
+PR #41, merged 2026-05-09 19:27 UTC. Started as a "where's AI at right now" question, ended as a multi-surface response to the May 2026 news cycle on both kbot (skill family + adapter) and kernel.chat (review spread + ISSUE 378 + ledger plumbing).
+
+See [RELEASE_NOTES_4_3.md](./RELEASE_NOTES_4_3.md) for the full narrative.
+
 ## 4.2.0 (2026-04-30) — Persona-scoped permissions: second substrate-to-product hop
 
 The `futures/persona/` substrate (shipped as code-only in v4.1.0) is now wired into kbot's live permission chain. Pass `--persona researcher`, `--persona coder`, or `--persona computer-use` (or set `KBOT_PERSONA`) to bound a session's tool surface to a typed scope set with deny-patterns, rate limits, and blast-radius caps.
