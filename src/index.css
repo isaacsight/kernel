@@ -122,6 +122,7 @@
     --pop-butter:   #EFD9A0;   /* summer / reading issue stock */
     --pop-sepia:    #D4C5A9;   /* = rubin-sepia */
     --pop-kraft:    #C8A97E;   /* camel / outdoor issue */
+    --pop-ledger:   #F2EFE2;   /* pale graph-ruled accountant's paper (372 + 378 audit register) */
     --pop-coffee:   #6B4E3D;   /* rich brown */
     --pop-ink:      #1F1E1D;   /* = rubin-slate */
 
@@ -29396,6 +29397,7 @@ h4 {
 .pop-stock-kraft { background: var(--pop-kraft); color: var(--pop-ink); }
 .pop-stock-ivory { background: var(--pop-ivory); color: var(--pop-ink); }
 .pop-stock-ink { background: var(--pop-ink); color: var(--pop-ivory); }
+.pop-stock-ledger { background: var(--pop-ledger, #F2EFE2); color: var(--pop-ink); }
 
 /* Catalog row — 001. · ITEM · bilingual · price · hairline */
 .pop-row { display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--pop-hairline-soft); font-family: var(--font-serif); font-size: var(--text-base); }

@@ -141,13 +141,17 @@ export const ISSUE_378: IssueRecord = {
     titleJp: 'ベンチにて。',
     deck: 'A graded survey of the five routes a working defender can take to AI-augmented security audit work in May 2026 — gated frontier, application-tier prototype, open-weight stack, BYOK substrate, and the local-only fallback. The rubric is the one a defender already applies; the verdict is the one the magazine commits to.',
     byline: 'BY THE EDITORS · KERNEL.CHAT',
-    /** Cover stock is `ledger` (the audit-register callback to 372).
-        Spread stock falls back to `ivory` because SpreadCommon.stock
-        does not yet admit `ledger` — and the inside spread is best
-        served by clean ivory under the rubric anyway. The cover
-        carries the ledger identity; the spread reads cleanly under
-        the score monuments. */
-    stock: 'ivory',
+    /** Spread carries the same ledger stock as the cover. The
+        SpreadCommon.stock union admits `ledger` as of the same
+        commit that ships this issue; --pop-ledger is now painted
+        in src/index.css and the .pop-stock-ledger lift is in
+        IssueAccent.css. The cover and the spread on the same
+        ledger paper reinforce the audit register the issue is
+        committing to — the bench is the audit, the audit is on
+        ledger paper, the ledger paper is the same on both
+        surfaces. Resolves the deferred items 372 wrote down for
+        a future editor; this is that editor. */
+    stock: 'ledger',
 
     /** Wire-style slug band — the marquee Courier rule that opens
         the spread. Three repetitions read as a printed-press

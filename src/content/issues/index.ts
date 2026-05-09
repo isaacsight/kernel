@@ -93,7 +93,7 @@ interface SpreadCommon {
   /** Closing sign-off line (italic) */
   signoff: string
   /** Paper stock for the feature — usually different from cover */
-  stock?: 'cream' | 'butter' | 'kraft' | 'ivory' | 'ink'
+  stock?: 'cream' | 'butter' | 'kraft' | 'ivory' | 'ink' | 'ledger'
 }
 
 /** A section within a long-form essay — mono kicker + serif prose. */

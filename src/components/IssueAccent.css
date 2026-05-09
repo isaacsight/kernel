@@ -89,6 +89,7 @@
 .pop-stock-butter { --issue-accent-lift: -0.03; } /* push slightly on yellow */
 .pop-stock-cream  { --issue-accent-lift: 0; }     /* baseline warm */
 .pop-stock-ivory  { --issue-accent-lift: 0; }     /* baseline */
+.pop-stock-ledger { --issue-accent-lift: 0.02; }  /* pale graph-ruled — barely above baseline */
 
 /* ── Dark-mode adaptation ───────────────────────────────────
    Dark mode bumps the lift further so accents hold against
@@ -98,7 +99,8 @@
   .pop-essay,
   .pop-interview,
   .pop-forecast,
-  .pop-dispatch {
+  .pop-dispatch,
+  .pop-review {
     --issue-accent-lift: calc(var(--issue-accent-lift, 0) + 0.08);
   }
 }
