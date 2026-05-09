@@ -353,12 +353,104 @@ export interface DispatchSpread extends SpreadCommon {
   terminator?: string
 }
 
+/** ─── review ──────────────────────────────────────────────────
+ *  A graded survey — the editorial form for "we tested N things,
+ *  here is how they stack up." Distinct grammar from essay (one
+ *  argument), interview (one subject), forecast (forward-leaning),
+ *  and dispatch (timed news filing). The review form is measured,
+ *  comparative, and committed to a verdict at the top.
+ *
+ *  Used for: tools, models, gear, releases, services. Anything that
+ *  benefits from a head-to-head with named criteria. The first
+ *  intended use is grading frontier security capabilities.
+ *  ────────────────────────────────────────────────────────────── */
+
+/** A criterion in the rubric — what was tested. Numbered to read
+ *  as a methods-paper checklist rather than a bullet list. */
+export interface ReviewCriterion {
+  /** Catalog number, padded — "01", "02", ... */
+  n: string
+  /** Short label, sentence case. */
+  label: string
+  /** Optional Japanese subtitle. */
+  labelJp?: string
+  /** Optional weight string, e.g. "30%". */
+  weight?: string
+  /** Optional one-sentence elaboration shown under the label. */
+  description?: string
+}
+
+/** A single graded subject. Renders as a card in the review grid. */
+export interface ReviewSubject {
+  /** 1-indexed rank — used for sort order and display. */
+  rank: number
+  /** Subject name, e.g. "Claude Mythos Preview". */
+  name: string
+  /** Optional Japanese subtitle. */
+  nameJp?: string
+  /** One-line characterisation — italic serif under the name. */
+  read: string
+  /** Numeric score (e.g. "87") or letter grade ("A-") — rendered
+   *  as a monument-style block. The shape is editorial, not strict. */
+  score: string
+  /** Optional 0–5 stars (rendered as filled tomato lozenges). */
+  stars?: number
+  /** Free-form price label, e.g. "BYOK", "$20/mo", "Allowlist". */
+  priceLabel?: string
+  /** Optional symbolic price band — '$' to '$$$$'. */
+  priceBand?: string
+  /** Bullet list of pros, sentence case. */
+  pros: string[]
+  /** Bullet list of cons, sentence case. */
+  cons: string[]
+  /** Optional bold-serif single-line verdict under pros/cons. */
+  verdict?: string
+}
+
+/** Standout pull-out — best-in-class, best-value, dark-horse
+ *  callout that sits between the criteria and the grid. */
+export interface ReviewStandout {
+  /** Award label, uppercase, e.g. "BEST IN CLASS", "BEST VALUE". */
+  label: string
+  /** Subject this award attaches to. */
+  subjectName: string
+  /** One-sentence reason — italic serif. */
+  reason: string
+}
+
+export interface ReviewSpread extends SpreadCommon {
+  type: 'review'
+  /** Optional repeating Courier band at the top — e.g.
+   *  "TESTED · CRITIQUED · GRADED". When omitted, the spread
+   *  opens directly with the kicker. */
+  slug?: string
+  /** Top-line verdict — single italic sentence, large display.
+   *  This is the loudest line on the page; commit to it. */
+  verdict: string
+  /** Standfirst prose before the rubric — what was tested,
+   *  for whom, with what apparatus. 1–3 short paragraphs. */
+  intro?: string
+  /** Numbered rubric — the criteria the subjects were judged
+   *  against. Set as a dossier card. */
+  criteria: ReviewCriterion[]
+  /** Optional standout award between rubric and grid. */
+  standout?: ReviewStandout
+  /** N graded subjects. Order is used as written; the rank field
+   *  is rendered, not used for sort. */
+  subjects: ReviewSubject[]
+  /** Closing paragraph — final recommendation, single short prose
+   *  block. Optional; some reviews carry the verdict at the top
+   *  and let the grid speak. */
+  outro?: string
+}
+
 /** Discriminated union — add new editorial tools here. */
 export type IssueSpread =
   | EssaySpread
   | InterviewSpread
   | ForecastSpread
   | DispatchSpread
+  | ReviewSpread
 
 export interface IssueCredits {
   editorInChief: string

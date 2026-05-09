@@ -28,8 +28,9 @@
      accent: '#9E3A2B'         // free-form; validator runs in dev
 
    Omit `accent` entirely → resolves to the spread type's default
-   (essay→tomato, interview→coffee, forecast→cobalt, dispatch→brick).
-   Every pre-adaptive issue inherits the default naturally.
+   (essay→tomato, interview→coffee, forecast→cobalt,
+   dispatch→brick, review→olive). Every pre-adaptive issue inherits
+   the default naturally.
 
    Motion is NOT part of this system. Per-issue motion would
    over-engineer what the magazine actually needs; motion stays
@@ -156,6 +157,7 @@ export const DEFAULT_ACCENT_BY_SPREAD: Record<IssueSpread['type'], InkSeedName> 
   interview: 'coffee',
   forecast: 'cobalt',
   dispatch: 'brick',
+  review: 'olive',
 }
 
 /** Pick the default accent for a spread type. */

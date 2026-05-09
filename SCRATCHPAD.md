@@ -2,7 +2,7 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-05-09) — MAY-NEWS RESPONSE: SECURITY-AUDIT SKILLS + AGENT SDK ADAPTER
+## Current Session (2026-05-09) — MAY-NEWS RESPONSE: SECURITY-AUDIT SKILLS + AGENT SDK ADAPTER + REVIEW SPREAD
 
 ### Headline
 Started as a "where's AI at right now" question, ended as a build sprint against the May 2026 news cycle. Two new things land on `claude/ai-current-state-8f4vr`: a security-audit skill family (the BYOK/local-first answer to Project Glasswing + Claude Mythos) and an Agent SDK adapter (the schema-only response to Anthropic opening the Agent SDK to external developers).
@@ -59,8 +59,32 @@ A packages/kbot/src/adapters/agent-sdk/from-agent-sdk.ts
 A packages/kbot/src/adapters/agent-sdk/index.ts
 A packages/kbot/src/adapters/agent-sdk/adapter.test.ts
 M packages/kbot/src/tools/swarm-2026-04.ts  (register security_audit_local)
+A src/components/ReviewFeature.tsx          (new editorial tool #5)
+A src/components/ReviewFeature.css
+M src/components/IssueFeature.tsx           (router case for review)
+M src/content/issues/index.ts               (ReviewSpread + types)
+M src/content/issues/accents.ts             (review→olive default)
+M docs/design-language.md                   (current-tools table updated; future-moves drift fixed)
 M SCRATCHPAD.md                              (this entry)
 ```
+
+### Editorial follow-on (review spread)
+Built on top of the security-audit work in the same session. The
+news-cycle response on the kbot side (security-audit skills + Agent
+SDK adapter) needed a magazine form to carry the editorial: the
+review spread is that form. Top-line italic verdict, numbered
+rubric, optional standout award, grid of subject cards with score
+monument + stars + pros/cons + per-card verdict. Olive-led by
+default. ISSUE 378 candidate: grade frontier model security
+capabilities (Mythos, Glasswing partners, BYOK alternatives) using
+the new tool against the new audit substrate.
+
+Drift the doc patch caught: the design-language.md "Future moves"
+list still claimed cobalt/ivy/pool weren't shipped — they've been
+in `accents.ts` for weeks. The dispatch and forecast tools were
+also live but undocumented in the current-tools table. All five
+tools (essay/interview/forecast/dispatch/review) are now in the
+table with their grammar one-liners and default accents.
 
 ---
 
