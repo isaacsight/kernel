@@ -1,1 +1,1 @@
-{"version":3,"file":"peekaboo.d.ts","sourceRoot":"","sources":["../../src/tools/peekaboo.ts"],"names":[],"mappings":"AAaA,OAAO,EAAgB,KAAK,cAAc,EAAE,MAAM,YAAY,CAAA;AA8W9D,eAAO,MAAM,aAAa,EAAE,SAAS,cAAc,EAOlD,CAAA;AAED,wBAAgB,qBAAqB,IAAI,IAAI,CAE5C"}
+{"version":3,"file":"peekaboo.d.ts","sourceRoot":"","sources":["../../src/tools/peekaboo.ts"],"names":[],"mappings":"AAaA,OAAO,EAAgB,KAAK,cAAc,EAAE,MAAM,YAAY,CAAA;AAiV9D,eAAO,MAAM,aAAa,EAAE,SAAS,cAAc,EAOlD,CAAA;AAED,wBAAgB,qBAAqB,IAAI,IAAI,CAE5C"}

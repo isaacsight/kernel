@@ -79,18 +79,17 @@ describe('peekaboo tool registration', () => {
 });
 // ── Binary-missing path ────────────────────────────────────────────────
 describe('peekaboo binary missing', () => {
-    it('returns a CLI-not-found error from every tool when peekabooAvailable is false', async () => {
+    it('returns a CLI-not-found error from every binary-backed tool when peekabooAvailable is false', async () => {
         mocks.peekabooAvailable.mockImplementation(async () => false);
         plantApprovalLock('Safari');
-        const calls = [
+        // Tools that actually invoke the CLI gate on the binary check.
+        const binaryBacked = [
             ['peekaboo_see', { app: 'Safari' }],
-            ['peekaboo_click', { app: 'Safari', snapshot: 's', on: 'B1' }],
+            ['peekaboo_click', { app: 'Safari', snapshot: 's', on: 'elem_169' }],
             ['peekaboo_type', { app: 'Safari', text: 'hi' }],
-            ['peekaboo_set_value', { app: 'Safari', snapshot: 's', on: 'T1', value: 'x' }],
-            ['peekaboo_perform_action', { app: 'Safari', snapshot: 's', on: 'B1', action: 'AXPress' }],
             ['peekaboo_agent', { prompt: 'Open Safari' }],
         ];
-        for (const [name, args] of calls) {
+        for (const [name, args] of binaryBacked) {
             const tool = getTool(name);
             expect(tool).toBeDefined();
             const out = await tool.execute(args);
@@ -100,8 +99,6 @@ describe('peekaboo binary missing', () => {
         expect(mocks.see).not.toHaveBeenCalled();
         expect(mocks.click).not.toHaveBeenCalled();
         expect(mocks.type_).not.toHaveBeenCalled();
-        expect(mocks.setValue).not.toHaveBeenCalled();
-        expect(mocks.performAction).not.toHaveBeenCalled();
         expect(mocks.agent).not.toHaveBeenCalled();
     });
 });
@@ -205,36 +202,29 @@ describe('success-path serialisation', () => {
         expect(mocks.agent).toHaveBeenCalledWith({ prompt: 'Reload' });
         expect(out).toContain('"output": "Done.');
     });
-    it('peekaboo_set_value forwards all three args', async () => {
+    it('peekaboo_set_value returns the upstream-missing stub error without calling the adapter', async () => {
         plantApprovalLock('Safari');
-        mocks.setValue.mockResolvedValue({ ok: true, target: 'T1', value: 'isaac' });
-        await getTool('peekaboo_set_value').execute({
+        const out = await getTool('peekaboo_set_value').execute({
             app: 'Safari',
             snapshot: 'snap',
-            on: 'T1',
+            on: 'elem_85',
             value: 'isaac',
         });
-        expect(mocks.setValue).toHaveBeenCalledWith({
-            snapshot: 'snap',
-            on: 'T1',
-            value: 'isaac',
-        });
+        expect(out).toMatch(/^Error: peekaboo_set_value requires Peekaboo CLI with the 'set-value'/);
+        expect(out).toContain('not present in 3.0.0-beta4');
+        expect(mocks.setValue).not.toHaveBeenCalled();
     });
-    it('peekaboo_perform_action forwards action name', async () => {
+    it('peekaboo_perform_action returns the upstream-missing stub error without calling the adapter', async () => {
         plantApprovalLock('Safari');
-        mocks.performAction.mockResolvedValue({ ok: true, target: 'B1', action: 'AXPress' });
         const out = await getTool('peekaboo_perform_action').execute({
             app: 'Safari',
             snapshot: 'snap',
-            on: 'B1',
+            on: 'elem_169',
             action: 'AXPress',
         });
-        expect(mocks.performAction).toHaveBeenCalledWith({
-            snapshot: 'snap',
-            on: 'B1',
-            action: 'AXPress',
-        });
-        expect(out).toContain('"action": "AXPress"');
+        expect(out).toMatch(/^Error: peekaboo_perform_action requires Peekaboo CLI with the 'perform-action'/);
+        expect(out).toContain('not present in 3.0.0-beta4');
+        expect(mocks.performAction).not.toHaveBeenCalled();
     });
 });
 //# sourceMappingURL=peekaboo.test.js.map

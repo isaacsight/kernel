@@ -23,13 +23,13 @@ export interface SetValueOptions {
     on: string;
     value: string;
 }
-export declare function setValue(opts: SetValueOptions): Promise<PeekabooOutcome<PeekabooSetValueResult>>;
+export declare function setValue(_opts: SetValueOptions): Promise<PeekabooOutcome<PeekabooSetValueResult>>;
 export interface PerformActionOptions {
     snapshot: string;
     on: string;
     action: string;
 }
-export declare function performAction(opts: PerformActionOptions): Promise<PeekabooOutcome<PeekabooPerformActionResult>>;
+export declare function performAction(_opts: PerformActionOptions): Promise<PeekabooOutcome<PeekabooPerformActionResult>>;
 export interface AgentOptions {
     prompt: string;
 }

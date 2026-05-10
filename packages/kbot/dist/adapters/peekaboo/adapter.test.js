@@ -3,6 +3,11 @@
 // Mocks node:child_process so the suite never spawns the real binary. Each
 // test installs an execFile stub that asserts argv and returns canned
 // stdout/stderr/exit-code, mirroring the contract of the real CLI.
+//
+// Stub payloads are calibrated to peekaboo 3.0.0-beta4: every command wraps
+// its output in `{ success, data, error? }`, element ids look like `elem_NN`,
+// and elements expose `role_description` / `is_actionable` rather than
+// `frame` / `named_actions` arrays.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 const calls = [];
 let nextResponse = {
@@ -47,44 +52,65 @@ function setStdout(stdout, code = 0, stderr = '') {
     nextResponse = { stdout, stderr, code };
 }
 describe('see', () => {
-    it('parses a successful see snapshot', async () => {
+    it('parses a successful see snapshot in the {success,data} envelope', async () => {
         setStdout(JSON.stringify({
-            snapshot: 'snap-123',
-            app: 'Safari',
-            window: 'Apple',
-            elements: [
-                {
-                    id: 'B1',
-                    role: 'AXButton',
-                    label: 'Reload',
-                    frame: { x: 10, y: 20, width: 100, height: 40 },
-                    settable: false,
-                    named_actions: ['AXPress'],
-                },
-                {
-                    id: 'T1',
-                    role: 'AXTextField',
-                    frame: { x: 50, y: 60, width: 200, height: 30 },
-                    settable: true,
-                },
-            ],
-            screenshot_path: '/tmp/snap.png',
+            success: true,
+            data: {
+                snapshot_id: '0CD023AB-A103-43A1-921D-EDF3FF026925',
+                ui_map: '/tmp/ui-map.json',
+                capture_mode: 'window',
+                element_count: 180,
+                interactable_count: 105,
+                application_name: 'Finder',
+                window_title: 'Downloads',
+                ui_elements: [
+                    {
+                        id: 'elem_19',
+                        role: 'button',
+                        role_description: 'button',
+                        is_actionable: false,
+                        title: '',
+                    },
+                    {
+                        id: 'elem_169',
+                        role: 'button',
+                        role_description: 'button',
+                        label: 'Share',
+                        description: 'Share',
+                        help: 'Share the selected items',
+                        identifier: 'ShareButton',
+                        is_actionable: true,
+                    },
+                ],
+            },
         }));
         const r = await see();
         expect(r.ok).toBe(true);
         if (!r.ok)
             return;
-        expect(r.snapshot).toBe('snap-123');
-        expect(r.app).toBe('Safari');
+        expect(r.snapshot).toBe('0CD023AB-A103-43A1-921D-EDF3FF026925');
+        expect(r.applicationName).toBe('Finder');
+        expect(r.windowTitle).toBe('Downloads');
+        expect(r.elementCount).toBe(180);
+        expect(r.interactableCount).toBe(105);
+        expect(r.captureMode).toBe('window');
+        expect(r.uiMap).toBe('/tmp/ui-map.json');
         expect(r.elements).toHaveLength(2);
-        expect(r.elements[0].id).toBe('B1');
-        expect(r.elements[0].frame.width).toBe(100);
-        expect(r.elements[0].named_actions).toEqual(['AXPress']);
-        expect(r.elements[1].settable).toBe(true);
-        expect(r.screenshot_path).toBe('/tmp/snap.png');
+        expect(r.elements[0].id).toBe('elem_19');
+        expect(r.elements[0].role).toBe('button');
+        expect(r.elements[0].roleDescription).toBe('button');
+        expect(r.elements[0].isActionable).toBe(false);
+        expect(r.elements[1].id).toBe('elem_169');
+        expect(r.elements[1].label).toBe('Share');
+        expect(r.elements[1].help).toBe('Share the selected items');
+        expect(r.elements[1].identifier).toBe('ShareButton');
+        expect(r.elements[1].isActionable).toBe(true);
     });
     it('passes --app argument when supplied', async () => {
-        setStdout(JSON.stringify({ snapshot: 's', elements: [] }));
+        setStdout(JSON.stringify({
+            success: true,
+            data: { snapshot_id: 's', ui_elements: [] },
+        }));
         await see({ app: 'Finder', mode: 'window', retina: true });
         expect(calls).toHaveLength(1);
         expect(calls[0].args).toEqual([
@@ -97,26 +123,39 @@ describe('see', () => {
             '--retina',
         ]);
     });
+    it('returns a malformed-json error when success=false', async () => {
+        setStdout(JSON.stringify({
+            success: false,
+            error: { code: 'PERMISSION_DENIED', message: 'screen recording disabled' },
+        }));
+        const r = await see();
+        expect(r.ok).toBe(false);
+        if (r.ok)
+            return;
+        expect(r.error.code).toBe('malformed-json');
+        expect(r.error.message).toContain('success=false');
+        expect(r.error.message).toContain('screen recording disabled');
+    });
 });
 describe('click', () => {
-    it('clicks by element id with --on', async () => {
-        setStdout(JSON.stringify({ ok: true, target: 'B1' }));
-        const r = await click({ snapshot: 'snap-123', on: 'B1' });
+    it('clicks by element id with --on (envelope-wrapped success)', async () => {
+        setStdout(JSON.stringify({ success: true, data: { target: 'elem_169' } }));
+        const r = await click({ snapshot: 'snap-123', on: 'elem_169' });
         expect(r.ok).toBe(true);
         if (!r.ok)
             return;
-        expect(r.target).toBe('B1');
+        expect(r.target).toBe('elem_169');
         expect(calls[0].args).toEqual([
             'click',
             '--json',
             '--snapshot',
             'snap-123',
             '--on',
-            'B1',
+            'elem_169',
         ]);
     });
-    it('clicks by coordinates with --coords', async () => {
-        setStdout(JSON.stringify({ ok: true, coords: [120, 240] }));
+    it('clicks by coordinates with --coords and uses --wait-for', async () => {
+        setStdout(JSON.stringify({ success: true, data: { coords: [120, 240] } }));
         const r = await click({ snapshot: 'snap', coords: [120, 240], wait: 500 });
         expect(r.ok).toBe(true);
         if (!r.ok)
@@ -129,14 +168,17 @@ describe('click', () => {
             'snap',
             '--coords',
             '120,240',
-            '--wait',
+            '--wait-for',
             '500',
         ]);
     });
 });
 describe('type_', () => {
-    it('types with --clear', async () => {
-        setStdout(JSON.stringify({ ok: true, typed: 'hello world', cleared: true }));
+    it('passes text as a positional argument with --clear and --delay', async () => {
+        setStdout(JSON.stringify({
+            success: true,
+            data: { typed: 'hello world', cleared: true },
+        }));
         const r = await type_({ text: 'hello world', clear: true, delayMs: 25 });
         expect(r.ok).toBe(true);
         if (!r.ok)
@@ -146,7 +188,6 @@ describe('type_', () => {
         expect(calls[0].args).toEqual([
             'type',
             '--json',
-            '--text',
             'hello world',
             '--clear',
             '--delay',
@@ -154,45 +195,27 @@ describe('type_', () => {
         ]);
     });
 });
-describe('setValue', () => {
-    it('sets a value on an element', async () => {
-        setStdout(JSON.stringify({ ok: true, target: 'T1', value: 'isaac' }));
-        const r = await setValue({ snapshot: 'snap', on: 'T1', value: 'isaac' });
-        expect(r.ok).toBe(true);
-        if (!r.ok)
+describe('setValue (stub)', () => {
+    it("returns a structured 'unknown' error since the binary lacks set-value", async () => {
+        const r = await setValue({ snapshot: 'snap', on: 'elem_85', value: 'isaac' });
+        expect(r.ok).toBe(false);
+        if (r.ok)
             return;
-        expect(r.target).toBe('T1');
-        expect(r.value).toBe('isaac');
-        expect(calls[0].args).toEqual([
-            'set-value',
-            '--json',
-            '--snapshot',
-            'snap',
-            '--on',
-            'T1',
-            '--value',
-            'isaac',
-        ]);
+        expect(r.error.code).toBe('unknown');
+        expect(r.error.message).toMatch(/set-value/);
+        // Critically: no CLI invocation.
+        expect(calls).toHaveLength(0);
     });
 });
-describe('performAction', () => {
-    it('invokes a named action', async () => {
-        setStdout(JSON.stringify({ ok: true, target: 'B1', action: 'AXPress' }));
-        const r = await performAction({ snapshot: 'snap', on: 'B1', action: 'AXPress' });
-        expect(r.ok).toBe(true);
-        if (!r.ok)
+describe('performAction (stub)', () => {
+    it("returns a structured 'unknown' error since the binary lacks perform-action", async () => {
+        const r = await performAction({ snapshot: 'snap', on: 'elem_169', action: 'AXPress' });
+        expect(r.ok).toBe(false);
+        if (r.ok)
             return;
-        expect(r.action).toBe('AXPress');
-        expect(calls[0].args).toEqual([
-            'perform-action',
-            '--json',
-            '--snapshot',
-            'snap',
-            '--on',
-            'B1',
-            '--action',
-            'AXPress',
-        ]);
+        expect(r.error.code).toBe('unknown');
+        expect(r.error.message).toMatch(/perform-action/);
+        expect(calls).toHaveLength(0);
     });
 });
 describe('agent', () => {
@@ -243,7 +266,7 @@ describe('peekabooAvailable', () => {
 describe('binary resolution', () => {
     it('honors PEEKABOO_BIN when set', async () => {
         process.env.PEEKABOO_BIN = '/custom/path/peekaboo';
-        setStdout(JSON.stringify({ snapshot: 's', elements: [] }));
+        setStdout(JSON.stringify({ success: true, data: { snapshot_id: 's', ui_elements: [] } }));
         await see();
         expect(calls[0].file).toBe('/custom/path/peekaboo');
     });

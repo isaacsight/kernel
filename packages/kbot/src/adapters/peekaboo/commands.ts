@@ -4,6 +4,10 @@
 // through `runPeekaboo`, and parses stdout into the appropriate result
 // type. Non-zero exits and malformed JSON are returned as `PeekabooError`
 // rather than thrown — callers fan out via discriminated unions.
+//
+// Every peekaboo 3.0.0-beta4 JSON command wraps its payload in
+// `{ success, data, error? }`. Helpers unwrap that envelope and treat
+// `success: false` as a structured failure rather than a parse error.
 
 import { runPeekaboo } from './runner.js'
 import type {
@@ -57,12 +61,49 @@ function asString(v: unknown, fallback = ''): string {
   return typeof v === 'string' ? v : fallback
 }
 
-function asBool(v: unknown, fallback = false): boolean {
-  return typeof v === 'boolean' ? v : fallback
+function asOptString(v: unknown): string | undefined {
+  return typeof v === 'string' ? v : undefined
+}
+
+function asOptBool(v: unknown): boolean | undefined {
+  return typeof v === 'boolean' ? v : undefined
+}
+
+function asOptNumber(v: unknown): number | undefined {
+  return typeof v === 'number' && Number.isFinite(v) ? v : undefined
 }
 
 function asNumber(v: unknown, fallback = 0): number {
   return typeof v === 'number' && Number.isFinite(v) ? v : fallback
+}
+
+/**
+ * Unwrap the `{ success, data, error? }` envelope every peekaboo 3.0.0-beta4
+ * JSON command emits. On `success: true` returns the inner `data` record; on
+ * `success: false` (or missing fields) returns a structured PeekabooError so
+ * callers can propagate it through their discriminated union.
+ */
+function unwrapEnvelope(
+  command: string,
+  parsed: unknown,
+  stdout: string,
+): { ok: true; data: Record<string, unknown> } | { ok: false; err: PeekabooError } {
+  if (!isRecord(parsed)) {
+    return { ok: false, err: failParse(`${command}: expected object at root`, stdout) }
+  }
+  if (parsed.success === false) {
+    const errMsg = isRecord(parsed.error)
+      ? asString(parsed.error.message, asString(parsed.error.code, 'unknown error'))
+      : asString(parsed.error, 'unknown error')
+    return {
+      ok: false,
+      err: failParse(`${command}: success=false: ${errMsg}`, stdout),
+    }
+  }
+  if (!isRecord(parsed.data)) {
+    return { ok: false, err: failParse(`${command}: missing data field`, stdout) }
+  }
+  return { ok: true, data: parsed.data }
 }
 
 // --- see ---------------------------------------------------------------
@@ -84,39 +125,39 @@ export async function see(opts: SeeOptions = {}): Promise<PeekabooOutcome<Peekab
   const parsed = parseJson(stdout)
   if (!parsed.ok) return parsed.err
 
-  const v = parsed.value
-  if (!isRecord(v)) return failParse('see: expected object at root', stdout)
+  const env = unwrapEnvelope('see', parsed.value, stdout)
+  if (!env.ok) return env.err
+  const data = env.data
 
-  const rawElements = Array.isArray(v.elements) ? v.elements : []
+  const rawElements = Array.isArray(data.ui_elements) ? data.ui_elements : []
   const elements = rawElements.flatMap((el): PeekabooSeeResult['elements'] => {
     if (!isRecord(el)) return []
-    const frameRaw = isRecord(el.frame) ? el.frame : {}
     return [
       {
         id: asString(el.id),
         role: asString(el.role),
-        label: typeof el.label === 'string' ? el.label : undefined,
-        frame: {
-          x: asNumber(frameRaw.x),
-          y: asNumber(frameRaw.y),
-          width: asNumber(frameRaw.width),
-          height: asNumber(frameRaw.height),
-        },
-        settable: typeof el.settable === 'boolean' ? el.settable : undefined,
-        named_actions: Array.isArray(el.named_actions)
-          ? el.named_actions.filter((a): a is string => typeof a === 'string')
-          : undefined,
+        roleDescription: asOptString(el.role_description),
+        label: asOptString(el.label),
+        description: asOptString(el.description),
+        help: asOptString(el.help),
+        identifier: asOptString(el.identifier),
+        title: asOptString(el.title),
+        isActionable: asOptBool(el.is_actionable),
       },
     ]
   })
 
   return {
     ok: true,
-    snapshot: asString(v.snapshot),
-    app: typeof v.app === 'string' ? v.app : undefined,
-    window: typeof v.window === 'string' ? v.window : undefined,
+    snapshot: asString(data.snapshot_id),
     elements,
-    screenshot_path: typeof v.screenshot_path === 'string' ? v.screenshot_path : undefined,
+    applicationName: asOptString(data.application_name),
+    windowTitle: asOptString(data.window_title),
+    elementCount: asOptNumber(data.element_count),
+    interactableCount: asOptNumber(data.interactable_count),
+    captureMode: asOptString(data.capture_mode),
+    uiMap: asOptString(data.ui_map),
+    screenshotPath: asOptString(data.screenshot_path),
   }
 }
 
@@ -133,17 +174,18 @@ export async function click(opts: ClickOptions): Promise<PeekabooOutcome<Peekabo
   const args = ['click', '--json', '--snapshot', opts.snapshot]
   if (opts.on) args.push('--on', opts.on)
   if (opts.coords) args.push('--coords', `${opts.coords[0]},${opts.coords[1]}`)
-  if (typeof opts.wait === 'number') args.push('--wait', String(opts.wait))
+  if (typeof opts.wait === 'number') args.push('--wait-for', String(opts.wait))
 
   const { stdout, stderr, code } = await runPeekaboo(args)
   if (code !== 0) return failNonZero(code, stdout, stderr)
   const parsed = parseJson(stdout)
   if (!parsed.ok) return parsed.err
-  if (!isRecord(parsed.value)) return failParse('click: expected object at root', stdout)
-  const v = parsed.value
+  const env = unwrapEnvelope('click', parsed.value, stdout)
+  if (!env.ok) return env.err
+  const v = env.data
   return {
     ok: true,
-    target: typeof v.target === 'string' ? v.target : undefined,
+    target: asOptString(v.target),
     coords:
       Array.isArray(v.coords) && v.coords.length === 2
         ? [asNumber(v.coords[0]), asNumber(v.coords[1])]
@@ -160,8 +202,9 @@ export interface TypeOptions {
 }
 
 // `type` is reserved in TS; export the helper as `type_`.
+// peekaboo 3.0.0-beta4 takes the text as a positional argument, not a --text flag.
 export async function type_(opts: TypeOptions): Promise<PeekabooOutcome<PeekabooTypeResult>> {
-  const args = ['type', '--json', '--text', opts.text]
+  const args = ['type', '--json', opts.text]
   if (opts.clear) args.push('--clear')
   if (typeof opts.delayMs === 'number') args.push('--delay', String(opts.delayMs))
 
@@ -169,16 +212,22 @@ export async function type_(opts: TypeOptions): Promise<PeekabooOutcome<Peekaboo
   if (code !== 0) return failNonZero(code, stdout, stderr)
   const parsed = parseJson(stdout)
   if (!parsed.ok) return parsed.err
-  if (!isRecord(parsed.value)) return failParse('type: expected object at root', stdout)
-  const v = parsed.value
+  const env = unwrapEnvelope('type', parsed.value, stdout)
+  if (!env.ok) return env.err
+  const v = env.data
   return {
     ok: true,
     typed: asString(v.typed, opts.text),
-    cleared: typeof v.cleared === 'boolean' ? v.cleared : undefined,
+    cleared: asOptBool(v.cleared),
   }
 }
 
 // --- set-value ---------------------------------------------------------
+//
+// peekaboo 3.0.0-beta4 has NO `set-value` top-level command. The README
+// references one but the installed binary lacks it. The helper is kept so
+// callers compile, but it returns a structured error so the absence is
+// surfaced loudly.
 
 export interface SetValueOptions {
   snapshot: string
@@ -187,32 +236,23 @@ export interface SetValueOptions {
 }
 
 export async function setValue(
-  opts: SetValueOptions,
+  _opts: SetValueOptions,
 ): Promise<PeekabooOutcome<PeekabooSetValueResult>> {
-  const args = [
-    'set-value',
-    '--json',
-    '--snapshot',
-    opts.snapshot,
-    '--on',
-    opts.on,
-    '--value',
-    opts.value,
-  ]
-  const { stdout, stderr, code } = await runPeekaboo(args)
-  if (code !== 0) return failNonZero(code, stdout, stderr)
-  const parsed = parseJson(stdout)
-  if (!parsed.ok) return parsed.err
-  if (!isRecord(parsed.value)) return failParse('set-value: expected object at root', stdout)
-  const v = parsed.value
   return {
-    ok: true,
-    target: asString(v.target, opts.on),
-    value: asString(v.value, opts.value),
+    ok: false,
+    error: {
+      code: 'unknown',
+      message:
+        "peekaboo 3.0.0-beta4 does not expose a 'set-value' top-level command. " +
+        'Track upstream: https://github.com/openclaw/Peekaboo',
+    },
   }
 }
 
 // --- perform-action ----------------------------------------------------
+//
+// Same story as set-value — README references it, installed binary doesn't
+// expose it. Kept so callers compile, returns a structured error on use.
 
 export interface PerformActionOptions {
   snapshot: string
@@ -221,28 +261,16 @@ export interface PerformActionOptions {
 }
 
 export async function performAction(
-  opts: PerformActionOptions,
+  _opts: PerformActionOptions,
 ): Promise<PeekabooOutcome<PeekabooPerformActionResult>> {
-  const args = [
-    'perform-action',
-    '--json',
-    '--snapshot',
-    opts.snapshot,
-    '--on',
-    opts.on,
-    '--action',
-    opts.action,
-  ]
-  const { stdout, stderr, code } = await runPeekaboo(args)
-  if (code !== 0) return failNonZero(code, stdout, stderr)
-  const parsed = parseJson(stdout)
-  if (!parsed.ok) return parsed.err
-  if (!isRecord(parsed.value)) return failParse('perform-action: expected object at root', stdout)
-  const v = parsed.value
   return {
-    ok: true,
-    target: asString(v.target, opts.on),
-    action: asString(v.action, opts.action),
+    ok: false,
+    error: {
+      code: 'unknown',
+      message:
+        "peekaboo 3.0.0-beta4 does not expose a 'perform-action' top-level command. " +
+        'Track upstream: https://github.com/openclaw/Peekaboo',
+    },
   }
 }
 

@@ -6,7 +6,6 @@
 // distribution. All execution flows through `runPeekaboo`.
 
 export type {
-  PeekabooFrame,
   PeekabooElement,
   PeekabooSeeResult,
   PeekabooClickResult,

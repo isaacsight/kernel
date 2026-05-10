@@ -1,28 +1,34 @@
-export interface PeekabooFrame {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-}
 export interface PeekabooElement {
-    /** Element handle, e.g. "B1" (button), "T1" (text field). */
+    /** Element handle, e.g. "elem_19", "elem_169" — integer-suffixed in 3.0.0-beta4. */
     id: string;
     role: string;
+    /** Human-readable role description, e.g. "increment page button". */
+    roleDescription?: string;
     label?: string;
-    frame: PeekabooFrame;
-    /** Whether the element accepts a value (text fields, sliders, etc.). */
-    settable?: boolean;
-    /** Action names the element advertises via the AX API. */
-    named_actions?: string[];
+    description?: string;
+    /** AX help text, e.g. "Share the selected items". */
+    help?: string;
+    /** Stable AX identifier when the app sets one (e.g. "QuickActionMoreButton"). */
+    identifier?: string;
+    /** Window/element title; often empty for buttons. */
+    title?: string;
+    /** Whether the element is interactable (clickable / focusable). */
+    isActionable?: boolean;
 }
 export interface PeekabooSeeResult {
     /** Snapshot id used by subsequent `--snapshot $id` arguments. */
     snapshot: string;
-    app?: string;
-    window?: string;
     elements: PeekabooElement[];
+    /** Application name as reported by Peekaboo. */
+    applicationName?: string;
+    windowTitle?: string;
+    elementCount?: number;
+    interactableCount?: number;
+    captureMode?: string;
+    /** Path to the JSON UI map written by Peekaboo. */
+    uiMap?: string;
     /** Optional path on disk where the screenshot was written. */
-    screenshot_path?: string;
+    screenshotPath?: string;
 }
 export interface PeekabooClickResult {
     ok: boolean;

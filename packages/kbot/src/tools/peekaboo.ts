@@ -82,7 +82,7 @@ async function ensureBinary(): Promise<string | null> {
 const peekabooSee: ToolDefinition = {
   name: 'peekaboo_see',
   description:
-    'Capture an AX snapshot of an app or the screen via the Peekaboo CLI. Returns a snapshot id plus a list of labeled element ids (B1, T1, …) usable by peekaboo_click / peekaboo_set_value / peekaboo_perform_action.',
+    'Capture an AX snapshot of an app or the screen via the Peekaboo CLI. Returns a snapshot id plus a list of element ids (e.g. elem_19, elem_169) usable by peekaboo_click / peekaboo_type.',
   parameters: {
     app: {
       type: 'string',
@@ -142,7 +142,7 @@ const peekabooClick: ToolDefinition = {
     },
     on: {
       type: 'string',
-      description: 'Element id (e.g. "B1") or query string. Mutually exclusive with coords.',
+      description: 'Element id (e.g. "elem_169") or query string. Mutually exclusive with coords.',
     },
     coords: {
       type: 'string',
@@ -249,7 +249,7 @@ const peekabooType: ToolDefinition = {
 const peekabooSetValue: ToolDefinition = {
   name: 'peekaboo_set_value',
   description:
-    'Set a settable AX value directly on an element (skips clicking). Faster than click+type for text fields, sliders, etc.',
+    "Set a settable AX value directly on an element (skips clicking). NOTE: requires Peekaboo CLI with the 'set-value' top-level command, which is absent in 3.0.0-beta4. Use peekaboo_click + peekaboo_type as a workaround.",
   parameters: {
     app: {
       type: 'string',
@@ -273,34 +273,20 @@ const peekabooSetValue: ToolDefinition = {
     },
   },
   tier: 'free',
-  async execute(args) {
-    const binErr = await ensureBinary()
-    if (binErr) return binErr
-
-    const app = String(args.app ?? '')
-    if (!app) return 'Error: app is required.'
-    const gate = requireApproval(app)
-    if (gate) return gate
-
-    const snapshot = String(args.snapshot ?? '')
-    const on = String(args.on ?? '')
-    const value = typeof args.value === 'string' ? args.value : ''
-    if (!snapshot) return 'Error: snapshot is required.'
-    if (!on) return 'Error: on is required.'
-
-    try {
-      const out = await setValue({ snapshot, on, value })
-      return outcomeToString(out)
-    } catch (e) {
-      return `Error: ${(e as Error).message}`
-    }
+  async execute(_args) {
+    void setValue
+    return (
+      "Error: peekaboo_set_value requires Peekaboo CLI with the 'set-value' top-level command, " +
+      'which is not present in 3.0.0-beta4. Workaround: peekaboo_click then peekaboo_type. ' +
+      'Track upstream: https://github.com/openclaw/Peekaboo'
+    )
   },
 }
 
 const peekabooPerformAction: ToolDefinition = {
   name: 'peekaboo_perform_action',
   description:
-    'Invoke a named AX action (e.g. AXPress, AXShowMenu) on an element from a Peekaboo snapshot.',
+    "Invoke a named AX action (e.g. AXPress, AXShowMenu) on an element from a Peekaboo snapshot. NOTE: requires Peekaboo CLI with the 'perform-action' top-level command, which is absent in 3.0.0-beta4. Use peekaboo_click as a workaround.",
   parameters: {
     app: {
       type: 'string',
@@ -324,28 +310,13 @@ const peekabooPerformAction: ToolDefinition = {
     },
   },
   tier: 'free',
-  async execute(args) {
-    const binErr = await ensureBinary()
-    if (binErr) return binErr
-
-    const app = String(args.app ?? '')
-    if (!app) return 'Error: app is required.'
-    const gate = requireApproval(app)
-    if (gate) return gate
-
-    const snapshot = String(args.snapshot ?? '')
-    const on = String(args.on ?? '')
-    const action = String(args.action ?? '')
-    if (!snapshot) return 'Error: snapshot is required.'
-    if (!on) return 'Error: on is required.'
-    if (!action) return 'Error: action is required.'
-
-    try {
-      const out = await performAction({ snapshot, on, action })
-      return outcomeToString(out)
-    } catch (e) {
-      return `Error: ${(e as Error).message}`
-    }
+  async execute(_args) {
+    void performAction
+    return (
+      "Error: peekaboo_perform_action requires Peekaboo CLI with the 'perform-action' top-level command, " +
+      'which is not present in 3.0.0-beta4. Workaround: peekaboo_click on the element. ' +
+      'Track upstream: https://github.com/openclaw/Peekaboo'
+    )
   },
 }
 

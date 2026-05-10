@@ -35,7 +35,7 @@ ELEMENT ID OVER COORDINATES.
 PERFORM-ACTION OVER CLICK.
 ```
 
-A snapshot is a contract: while the UI does not change, the IDs are stable. Capture once, act many times, re-snapshot only on visible state change. An element ID survives where coordinates do not — themes shift, windows resize, scroll positions move; `B7` does not. And when an AX action is named (`AXPress`, `AXShowMenu`, `AXIncrement`), perform it directly; clicking the rendered pixel is a worse approximation of the user's intent.
+A snapshot is a contract: while the UI does not change, the IDs are stable. Capture once, act many times, re-snapshot only on visible state change. An element ID survives where coordinates do not — themes shift, windows resize, scroll positions move; `elem_169` does not. And when an AX action is named (`AXPress`, `AXShowMenu`, `AXIncrement`), perform it directly; clicking the rendered pixel is a worse approximation of the user's intent.
 
 ## Five Phases
 
@@ -55,19 +55,21 @@ Pull the AX snapshot once.
 peekaboo see --app <Name> --json
 ```
 
-The response contains a snapshot ID and labeled element IDs by role: `B1` for the first button, `T1` for the first text field, `L1` for a link, `M1` for a menu. Read the labels, not the pixels. The snapshot ID is the handle every subsequent call references.
+The response contains a snapshot ID (`data.snapshot_id`) and a list of UI elements (`data.ui_elements`), each with an integer-suffixed id like `elem_19`, `elem_85`, `elem_169`. Read the labels and roles, not the pixels. The snapshot ID is the handle every subsequent call references.
+
+> Element IDs in 3.0.0-beta4 are `elem_NN` integers; the README's `B1`/`T2` examples target a future schema.
 
 ### Phase 3 — Choose the right verb
 
 Three verbs cover almost every native interaction. Pick the most specific one that fits.
 
-- `set-value` — for any settable field (text inputs, sliders, steppers). Faster and more reliable than `click + type`. Sets the AX value directly.
-- `perform-action` — for any named AX action (`AXPress`, `AXShowMenu`, `AXConfirm`, `AXIncrement`, `AXDecrement`). Names the intent the OS already understands.
-- `click` — only when neither of the above applies (custom non-AX views, web content embedded in a native shell).
+- `click` — the universal verb in 3.0.0-beta4. Targets an element by id (`--on elem_169`), by query string, or by raw `--coords x,y`.
+- `type` — text input. Assumes a focused field; pair with a prior `click` to focus.
+- `set-value` / `perform-action` — reserved for future Peekaboo releases. The 3.0.0-beta4 binary does not expose them as top-level commands; the kbot tools surface a clear error pointing at the workaround (`click` + `type`). Track upstream at https://github.com/openclaw/Peekaboo.
 
 ### Phase 4 — Reuse the snapshot
 
-Successive actions reference the same `--snapshot $ID` until the UI changes. Filling a five-field form is one snapshot and five `set-value` calls, not five snapshots and five clicks. Re-snapshot only when the visible state actually changes — a panel opens, a sheet appears, a navigation transitions. Re-snapshotting before every action defeats the entire pattern and is slower than synthetic input.
+Successive actions reference the same `--snapshot $ID` until the UI changes. Filling a five-field form is one snapshot and five `click`/`type` pairs, not five snapshots and five blind clicks. Re-snapshot only when the visible state actually changes — a panel opens, a sheet appears, a navigation transitions. Re-snapshotting before every action defeats the entire pattern and is slower than synthetic input.
 
 ### Phase 5 — Fall back gracefully
 
@@ -77,7 +79,7 @@ If the AX path fails — element ID stale, app exposes no AX tree, action return
 
 - Re-snapshotting before every click. The whole point is reuse — one snapshot, many actions.
 - Using coordinates when an element ID exists. IDs survive resize, theme, and scale changes; coordinates do not.
-- Ignoring `set-value` and falling through to `click + type` for text fields. Slower, less reliable, and breaks on focus drift.
+- Assuming the README's `set-value` / `perform-action` commands exist in the installed binary. Until 3.x ships them, `click + type` is the path.
 - Driving Chrome with Peekaboo. Chrome MCP exists for a reason; the DOM is the right surface for the web.
 - Skipping `app_approve`. The per-app session lock and sensitive-app warnings still apply — Peekaboo does not bypass kbot's trust model.
 
