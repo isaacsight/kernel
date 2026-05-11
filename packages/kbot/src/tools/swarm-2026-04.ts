@@ -19,6 +19,7 @@ import { anthropicManagedAgentTools } from './anthropic-managed-agents-tools.js'
 import { forecastSummaryTool } from './forecast-summary.js'
 import { securityAuditLocalTool } from './security-audit-local.js'
 import { registerPeekabooTools } from './peekaboo.js'
+import { registerKbotFinanceTools } from '@kernel.chat/kbot-finance/kbot-tool'
 import type { z } from 'zod'
 
 interface CoordinatorToolShape {
@@ -109,6 +110,7 @@ export function registerSwarm2026Tools(): void {
   registerTool(forecastSummaryTool)
   registerTool(securityAuditLocalTool)
   registerPeekabooTools()
+  registerKbotFinanceTools(registerTool)
   for (const t of workspaceAgentTools) registerTool(t)
   for (const t of anthropicManagedAgentTools) registerTool(t)
   for (const t of computerCoordinatorTools) registerTool(adaptCoordinatorTool(t))

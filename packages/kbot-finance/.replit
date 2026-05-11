@@ -1,0 +1,21 @@
+modules = ["nodejs-22"]
+
+run = "npm install && npm run demo"
+entrypoint = "src/demo.ts"
+
+hidden = [".config", "package-lock.json", "node_modules", "dist", ".vitest"]
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "cloudrun"
+build = ["sh", "-c", "npm install && npm run build"]
+run = ["sh", "-c", "npm run demo"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
+
+[env]
+NODE_ENV = "development"

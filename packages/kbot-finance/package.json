@@ -1,0 +1,101 @@
+{
+  "name": "@kernel.chat/kbot-finance",
+  "version": "0.2.0",
+  "description": "Audit-grade AI infrastructure for capital markets. Deterministic engine adapters + content-addressed envelopes + hash-chained audit log + regulatory verifier + MCP server. The AI Intelligence Layer never produces the number.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "bin": {
+    "kbot-finance": "dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./envelope": {
+      "import": "./dist/envelope.js",
+      "types": "./dist/envelope.d.ts"
+    },
+    "./audit-log": {
+      "import": "./dist/audit-log.js",
+      "types": "./dist/audit-log.d.ts"
+    },
+    "./verifier": {
+      "import": "./dist/verifier/index.js",
+      "types": "./dist/verifier/index.d.ts"
+    },
+    "./adapters/polymarket": {
+      "import": "./dist/adapters/polymarket/index.js",
+      "types": "./dist/adapters/polymarket/index.d.ts"
+    },
+    "./kbot-tool": {
+      "import": "./dist/kbot-tool.js",
+      "types": "./dist/kbot-tool.d.ts"
+    },
+    "./mcp-server": {
+      "import": "./dist/mcp-server.js",
+      "types": "./dist/mcp-server.d.ts"
+    },
+    "./adapters/edgar": {
+      "import": "./dist/adapters/edgar/index.js",
+      "types": "./dist/adapters/edgar/index.d.ts"
+    },
+    "./exporters/annex-iv": {
+      "import": "./dist/exporters/annex-iv.js",
+      "types": "./dist/exporters/annex-iv.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/cli.js dist/mcp-server.js 2>/dev/null || true",
+    "dev": "tsx src/index.ts",
+    "demo": "tsx src/demo.ts",
+    "mcp": "tsx src/cli.ts mcp",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:live": "vitest run --reporter=verbose test/polymarket.live.test.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "RFC-content-addressed-mcp.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/kbot-finance"
+  },
+  "homepage": "https://kernel.chat",
+  "bugs": {
+    "url": "https://github.com/isaacsight/kernel/issues"
+  },
+  "author": "kernel.chat group",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "keywords": [
+    "capital-markets",
+    "ai-infrastructure",
+    "deterministic",
+    "audit",
+    "mcp",
+    "polymarket",
+    "compliance-as-code"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  }
+}
