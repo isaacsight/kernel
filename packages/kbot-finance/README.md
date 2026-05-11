@@ -183,6 +183,17 @@ replay-retention, certified determinism) — the Aeron / PyKX dual-shape.
 
 ## Status
 
-v0.1 reference implementation. Not yet certified for production trading.
+v0.2 reference implementation. Not yet certified for production trading.
 Not investment advice. Not affiliated with Polymarket, Bloomberg, FINOS,
 ISDA, or any regulator.
+
+## For people, not machines
+
+- **[ROLE.md](./ROLE.md)** — Provenance engineer role definition (the
+  field, the six-discipline overlap, how to enter).
+- **[HIRING.md](./HIRING.md)** — We're hiring a founding provenance
+  engineer. JD, comp band, 90-day milestones, how to apply.
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** — How to contribute, the
+  contribution ladder, good first issues, PR checklist.
+- **[RFC-content-addressed-mcp.md](./RFC-content-addressed-mcp.md)** —
+  Spec proposal for the MCP audit-extension this package implements.
