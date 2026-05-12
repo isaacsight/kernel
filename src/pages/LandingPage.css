@@ -1049,3 +1049,138 @@
   .pop-cover-seal-label { font-size: 8px; letter-spacing: 0.18em; }
   .pop-cover-seal-date { font-size: 12px; }
 }
+
+/* ────────────────────────────────────────────────────────────
+   THE REFUSALS — the brand by negation
+   See: docs/persona.md · src/content/refusals.ts
+   The standing list of what the magazine doesn't do, printed
+   into the colophon on every issue and given a full route at
+   /refusals.
+   ──────────────────────────────────────────────────────────── */
+
+.pop-refusals {
+  font-family: 'EB Garamond', Garamond, Georgia, serif;
+  color: var(--color-ink, #1a1814);
+  margin: 1.25rem 0;
+}
+
+.pop-refusals--colophon {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.pop-refusals-label {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--issue-accent-muted, #6a5a3a);
+  margin: 0 0 0.25rem 0;
+}
+
+.pop-refusals-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.pop-refusals--colophon .pop-refusals-item {
+  display: list-item;
+  list-style: none;
+}
+
+.pop-refusals--colophon .pop-refusals-text {
+  font-size: 12px;
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--color-ink, #1a1814);
+  opacity: 0.86;
+}
+
+/* Feature variant — used on the /refusals route */
+.pop-refusals--feature {
+  max-width: 640px;
+  margin: 2.5rem auto;
+}
+
+.pop-refusals-header {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--issue-accent-whisper, rgba(0, 0, 0, 0.12));
+  padding-bottom: 1rem;
+}
+
+.pop-refusals-title {
+  font-family: 'EB Garamond', Garamond, Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 2rem;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+  margin: 0.5rem 0 0.75rem 0;
+  color: var(--color-ink, #1a1814);
+}
+
+.pop-refusals-deck {
+  font-size: 14px;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--color-ink, #1a1814);
+  opacity: 0.78;
+  margin: 0;
+}
+
+.pop-refusals-list--feature {
+  display: grid;
+  gap: 1.25rem;
+  counter-reset: refusal;
+}
+
+.pop-refusals-list--feature .pop-refusals-item {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.pop-refusals-num {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--issue-accent-base, #a3543f);
+  font-weight: 700;
+}
+
+.pop-refusals--feature .pop-refusals-text {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
+  color: var(--color-ink, #1a1814);
+}
+
+.pop-refusals-note {
+  font-family: 'EB Garamond', Garamond, Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0.2rem 0 0 0;
+  color: var(--color-ink, #1a1814);
+  opacity: 0.65;
+}
+
+.pop-refusals-footer {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--issue-accent-whisper, rgba(0, 0, 0, 0.08));
+  padding-top: 0.75rem;
+}
+
+.pop-folio-fine {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  opacity: 0.65;
+  display: inline-block;
+  margin-top: 0.35rem;
+}
+

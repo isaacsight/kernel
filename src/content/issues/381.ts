@@ -125,6 +125,20 @@ export const ISSUE_381: IssueRecord = {
       that kind of issue. */
   accent: 'amethyst',
 
+  /** First back cover under the spec at docs/back-cover-spec.md.
+      The issue that names provenance engineering as a discipline
+      gets, on its verso, the physical artefact provenance is
+      modelled on — a hand-stamped notary mark on cream paper.
+      Ledger stock (front is ink; the back wants the daylight
+      register). Image asset to be commissioned; the renderer falls
+      back to a textured placeholder until it lands. */
+  backCover: {
+    subject: 'HAND-STAMPED NOTARY MARK ON CREAM PAPER',
+    subjectJp: '公証印',
+    stock: 'ledger',
+    // image: '/back-covers/381-notary.jpg',  // commissioned, not yet shipped
+  },
+
   headline: {
     prefix: 'On',
     emphasis: 'Provenance.',

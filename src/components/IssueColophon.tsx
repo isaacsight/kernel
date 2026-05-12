@@ -1,4 +1,5 @@
 import type { IssueRecord } from '../content/issues'
+import { MagazineRefusals } from './MagazineRefusals'
 
 interface IssueColophonProps {
   issue: IssueRecord
@@ -31,14 +32,23 @@ export function IssueColophon({ issue }: IssueColophonProps) {
 
         <hr className="pop-rule pop-rule--soft" />
 
+        <MagazineRefusals variant="colophon" />
+
+        <hr className="pop-rule pop-rule--soft" />
+
         <div className="pop-colophon-links">
           <a href="#/issues">Back Issues</a>
+          <a href="#/refusals">The Refusals</a>
           <a href="#/privacy">Privacy</a>
           <a href="#/terms">Terms</a>
         </div>
 
         <p className="pop-folio pop-colophon-copy">
           MIT · kernel.chat group · Published monthly.
+          <br />
+          <span className="pop-folio-fine">
+            Free because the work it reports on — provenance engineering at <span className="pop-mono">@kernel.chat/kbot-finance</span> — is the thing we sell.
+          </span>
         </p>
       </div>
     </footer>
