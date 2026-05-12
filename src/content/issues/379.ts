@@ -67,6 +67,17 @@ export const ISSUE_379: IssueRecord = {
   coverLayout: 'classic',
   accent: 'graphite',
 
+  /** Back cover — a printer's composing stick with hand-set wood
+      type spelling ISSUE. The verso the magazine asked for in
+      this exact issue, given retroactively to the issue that
+      asked for it. Cream stock — the artefact's natural surface
+      and the issue's own front register. */
+  backCover: {
+    subject: "PRINTER'S COMPOSING STICK WITH WOOD-TYPE 'ISSUE'",
+    subjectJp: '組版用ステッキ',
+    stock: 'cream',
+  },
+
   coverSeal: {
     label: 'FILED · IN-HOUSE',
     date: 'V·26',

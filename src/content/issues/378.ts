@@ -119,6 +119,17 @@ export const ISSUE_378: IssueRecord = {
       survey that commits to a verdict. */
   accent: 'olive',
 
+  /** Back cover — a jeweler's loupe resting on a folded shop
+      cloth. The piece is a review/inspection; the back is the
+      inspection tool. Ledger stock gives the verso the
+      daylight-bench register that pairs with the front's
+      gradebook olive. */
+  backCover: {
+    subject: "JEWELER'S LOUPE ON A FOLDED SHOP CLOTH",
+    subjectJp: '宝石用ルーペ',
+    stock: 'ledger',
+  },
+
   headline: {
     prefix: 'On the',
     emphasis: 'Bench.',

@@ -140,6 +140,18 @@ export const ISSUE_380: IssueRecord = {
       Reads cool, quiet, three-column. */
   accent: 'cobalt',
 
+  /** Back cover — a vintage 5-pin DIN MIDI cable, coiled, on a
+      workbench. The cable is one of the three idioms named in
+      the spread (OSC's wire ancestor); the verso resonates with
+      the argument without illustrating it. Kraft stock: the
+      workshop register, the right place for a piece of cable to
+      rest. */
+  backCover: {
+    subject: 'VINTAGE 5-PIN DIN MIDI CABLE, COILED',
+    subjectJp: '五芯DINケーブル',
+    stock: 'kraft',
+  },
+
   headline: {
     prefix: 'Three',
     emphasis: 'Idioms.',

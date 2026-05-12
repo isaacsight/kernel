@@ -150,6 +150,16 @@ export const ISSUE_377: IssueRecord = {
       the canonical warm grammar is the right register. */
   accent: 'tomato',
 
+  /** Back cover — an accordion file folder, one leaf partially
+      extended, labelled "API · TIER" in Courier. The piece is a
+      filing; the back is the file. Kraft stock keeps the
+      workshop register the issue's argument lives in. */
+  backCover: {
+    subject: 'ACCORDION FILE FOLDER, ONE LEAF EXTENDED',
+    subjectJp: '蛇腹ファイル',
+    stock: 'kraft',
+  },
+
   headline: {
     prefix: 'The',
     emphasis: 'Tier',
