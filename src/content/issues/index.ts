@@ -573,6 +573,43 @@ export interface IssueCoverPostmark {
   date: string
 }
 
+/**
+ * Optional back-cover specification.
+ *
+ * The verso surface — the magazine's recurring back cover, introduced
+ * by the spec at docs/back-cover-spec.md. One still-life subject per
+ * issue, photographed under one light setup, laid out on one paper
+ * stock, with the issue's dateline and tomato spot beneath. The setup
+ * never changes; the subject rotates. By the tenth issue the back
+ * covers form a series; by the thirtieth they read as the magazine's
+ * second face.
+ *
+ * Set this field when the issue has commissioned (or placeholder)
+ * back-cover art. Leave undefined to omit the verso for that issue —
+ * the absence is fine; not every issue earns a back.
+ */
+export interface BackCoverSpec {
+  /** Subject name in English, set as a small-caps caption beneath
+   *  the image (e.g., "HAND-STAMPED NOTARY MARK"). */
+  subject: string
+  /** Subject name in Japanese, set in italic above the English
+   *  caption (e.g., "公証印"). */
+  subjectJp: string
+  /** Optional image asset path (relative to public/). When omitted,
+   *  the renderer falls back to a textured stock-coloured placeholder
+   *  with the subject set across the centre — useful for issues that
+   *  ship before the photograph is commissioned. */
+  image?: string
+  /** Paper stock for the back cover. Inherits the issue's front
+   *  `coverStock` if omitted. Deliberate exceptions are documented
+   *  in §V of docs/back-cover-spec.md (ledger for ink fronts, cream
+   *  for paper subjects, kraft for industrial subjects). */
+  stock?: IssueStock
+  /** Optional photographer credit. Appears in the colophon (not on
+   *  the back cover itself). */
+  photographer?: string
+}
+
 export interface IssueRecord {
   number: string
   month: string
@@ -599,6 +636,13 @@ export interface IssueRecord {
    *  docs/design-language.md). Use only when the subject is
    *  geographically grounded; otherwise leave undefined. */
   coverPostmark?: IssueCoverPostmark
+  /** Optional back-cover specification. When set, the issue carries
+   *  a verso surface — a recurring still-life subject under the
+   *  established back-cover layout. Subject rotates per issue;
+   *  layout is fixed. Full design spec at docs/back-cover-spec.md;
+   *  the move was named in ISSUE 379 (ON BECOMING A REAL MAGAZINE)
+   *  and ratified in ISSUE 381 (ON PROVENANCE). */
+  backCover?: BackCoverSpec
   /** Adaptive issue accent — either a named seed from INK_SEEDS
    *  (e.g., 'cobalt') or a raw hex string. Drives the entire
    *  issue's color palette via five CSS-derived tones. When
