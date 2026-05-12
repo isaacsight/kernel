@@ -12,6 +12,7 @@ const TermsPage = lazyRetry(() => import('./pages/TermsPage').then(m => ({ defau
 const IssuesPage = lazyRetry(() => import('./pages/IssuesPage').then(m => ({ default: m.IssuesPage })))
 const IssueDetailPage = lazyRetry(() => import('./pages/IssueDetailPage').then(m => ({ default: m.IssueDetailPage })))
 const IssueBackCoverPage = lazyRetry(() => import('./pages/IssueBackCoverPage').then(m => ({ default: m.IssueBackCoverPage })))
+const BackCoversPage = lazyRetry(() => import('./pages/BackCoversPage').then(m => ({ default: m.BackCoversPage })))
 const RefusalsPage = lazyRetry(() => import('./pages/RefusalsPage').then(m => ({ default: m.RefusalsPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
@@ -57,6 +58,11 @@ export const router = createHashRouter([
       { path: 'issues/:number/back', element: withErrorBoundary(
         <Suspense fallback={<div className="ka-page-loading">Loading verso...</div>}>
           <IssueBackCoverPage />
+        </Suspense>
+      ) },
+      { path: 'back-covers', element: withErrorBoundary(
+        <Suspense fallback={<div className="ka-page-loading">Loading the wall...</div>}>
+          <BackCoversPage />
         </Suspense>
       ) },
       { path: 'refusals', element: withErrorBoundary(

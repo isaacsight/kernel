@@ -1367,7 +1367,8 @@
 
 @media print {
   .pop-back-cover-route-foot,
-  .pop-refusals-page-foot {
+  .pop-refusals-page-foot,
+  .pop-back-covers-foot {
     display: none;
   }
   .pop-back-cover {
@@ -1377,5 +1378,147 @@
     height: 100vh;
     page-break-before: always;
   }
+}
+
+/* ────────────────────────────────────────────────────────────
+   THE WALL — /back-covers archive view
+   ──────────────────────────────────────────────────────────── */
+
+.pop-back-covers-page {
+  padding: 2rem 1rem 4rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pop-back-covers-header {
+  max-width: 640px;
+  margin: 0 auto 2.5rem auto;
+  text-align: center;
+  border-bottom: 1px solid var(--issue-accent-whisper, rgba(0, 0, 0, 0.12));
+  padding-bottom: 1.5rem;
+}
+
+.pop-back-covers-title {
+  font-family: 'EB Garamond', Garamond, Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 2.5rem;
+  line-height: 1.1;
+  margin: 0.5rem 0 0.75rem 0;
+  color: var(--color-ink, #1a1814);
+}
+
+.pop-back-covers-deck {
+  font-family: 'EB Garamond', Garamond, Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0;
+  color: var(--color-ink, #1a1814);
+  opacity: 0.78;
+}
+
+.pop-back-covers-count {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-top: 1rem;
+  color: var(--issue-accent-muted, #6a5a3a);
+}
+
+.pop-back-covers-empty {
+  max-width: 480px;
+  margin: 4rem auto;
+  padding: 2rem;
+  text-align: center;
+  border: 1px dashed var(--issue-accent-whisper, rgba(0, 0, 0, 0.18));
+}
+
+.pop-back-covers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem 1.5rem;
+  margin: 0 auto;
+}
+
+.pop-back-covers-tile {
+  display: grid;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 200ms ease;
+}
+
+.pop-back-covers-tile:hover,
+.pop-back-covers-tile:focus-visible {
+  transform: translateY(-2px);
+}
+
+.pop-back-covers-tile-inner {
+  /* Shrink the IssueBackCover component to thumbnail scale.
+     The full-bleed verso uses 2.5rem padding; we override here. */
+  --tile-scale: 1;
+  pointer-events: none;
+}
+
+.pop-back-covers-tile-inner .pop-back-cover {
+  max-width: none;
+  padding: 1rem 0.75rem 0.5rem 0.75rem;
+}
+
+.pop-back-covers-tile-inner .pop-back-cover-placeholder-mark {
+  font-size: 2rem;
+}
+
+.pop-back-covers-tile-inner .pop-back-cover-placeholder-label {
+  font-size: 7px;
+  max-width: 22ch;
+}
+
+.pop-back-covers-tile-inner .pop-back-cover-placeholder-note {
+  font-size: 8px;
+}
+
+.pop-back-covers-tile-inner .pop-back-cover-caption-jp { font-size: 11px; }
+.pop-back-covers-tile-inner .pop-back-cover-caption-en { font-size: 7px; }
+.pop-back-covers-tile-inner .pop-back-cover-glyph { font-size: 10px; }
+.pop-back-covers-tile-inner .pop-back-cover-dateline { font-size: 8px; }
+
+.pop-back-covers-tile-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0 0.25rem;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pop-back-covers-tile-num {
+  color: var(--issue-accent-base, #a3543f);
+  font-weight: 700;
+}
+
+.pop-back-covers-tile-feature {
+  color: var(--color-ink, #1a1814);
+  opacity: 0.7;
+  font-style: normal;
+  text-align: right;
+  flex: 1;
+}
+
+.pop-back-covers-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--issue-accent-whisper, rgba(0, 0, 0, 0.12));
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
