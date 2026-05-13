@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use @kernel.chat/agent-os in academic work, please cite it as below."
+title: "@kernel.chat/agent-os: POSIX for AI agents"
+abstract: >-
+  An OS-level substrate for AI agents providing ten primitives:
+  spawn, acap (signed capability tokens), namespaces, ulimit-tok
+  (per-agent quotas), chexec (taint-tracked tool execution),
+  audit (content-addressed event log), handoff (downscoped task
+  transfer), snapshot, vault (server-side credential injection),
+  and outcomes (rubric-graded iteration). Runs above Modal-class
+  sandboxes and below MCP/A2A wire formats. Apache 2.0.
+authors:
+  - name: "kernel.chat contributors"
+    website: "https://kernel.chat"
+type: software
+license: Apache-2.0
+repository-code: "https://github.com/isaacsight/kernel"
+url: "https://kernel.chat"
+keywords:
+  - agent-os
+  - ai-agents
+  - multi-agent
+  - agent-permissions
+  - posix-for-agents
+  - mcp
+  - a2a
+  - capability-based-security
+  - taint-tracking
+  - rubric-evaluation
+version: "0.2.0-alpha.0"
+date-released: "2026-05-09"
+preferred-citation:
+  type: software
+  title: "@kernel.chat/agent-os: POSIX for AI agents"
+  authors:
+    - name: "kernel.chat contributors"
+  version: "0.2.0-alpha.0"
+  year: 2026
+  url: "https://www.npmjs.com/package/@kernel.chat/agent-os"
