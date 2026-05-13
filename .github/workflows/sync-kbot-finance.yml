@@ -37,6 +37,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Don't persist the default GITHUB_TOKEN as a git credential —
+          # it would override the MIRROR_TOKEN we supply in the push URL
+          # and the push would attempt to use github-actions[bot]'s
+          # permissions on the standalone repo (which it doesn't have).
+          persist-credentials: false
 
       - name: Verify mirror token is set
         env:
