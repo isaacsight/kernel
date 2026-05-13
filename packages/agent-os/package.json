@@ -1,7 +1,7 @@
 {
   "name": "@kernel.chat/agent-os",
-  "version": "0.1.0-alpha.0",
-  "description": "POSIX for AI agents — permissions, namespaces, resource quotas, content-addressed audit, and downscoped handoff. The OS-level substrate that runs above Modal-class sandboxes and below MCP/A2A.",
+  "version": "0.2.0-alpha.0",
+  "description": "POSIX for AI agents — permissions, namespaces, resource quotas, content-addressed audit, downscoped handoff, server-side credential vaults, and rubric-graded outcomes. The OS-level substrate that runs above Modal-class sandboxes and below MCP/A2A.",
   "type": "module",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
@@ -22,6 +22,14 @@
     "./audit": {
       "import": "./dist/audit.js",
       "types": "./dist/audit.d.ts"
+    },
+    "./vault": {
+      "import": "./dist/vault.js",
+      "types": "./dist/vault.d.ts"
+    },
+    "./outcomes": {
+      "import": "./dist/outcomes.js",
+      "types": "./dist/outcomes.d.ts"
     }
   },
   "scripts": {
