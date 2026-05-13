@@ -1,0 +1,73 @@
+{
+  "name": "@kernel.chat/agent-os",
+  "version": "0.1.0-alpha.0",
+  "description": "POSIX for AI agents — permissions, namespaces, resource quotas, content-addressed audit, and downscoped handoff. The OS-level substrate that runs above Modal-class sandboxes and below MCP/A2A.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./acap": {
+      "import": "./dist/acap.js",
+      "types": "./dist/acap.d.ts"
+    },
+    "./spawn": {
+      "import": "./dist/spawn.js",
+      "types": "./dist/spawn.d.ts"
+    },
+    "./audit": {
+      "import": "./dist/audit.js",
+      "types": "./dist/audit.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/agent-os"
+  },
+  "homepage": "https://kernel.chat",
+  "bugs": {
+    "url": "https://github.com/isaacsight/kernel/issues"
+  },
+  "author": "kernel.chat group",
+  "keywords": [
+    "agent-os",
+    "ai-agents",
+    "multi-agent",
+    "agent-permissions",
+    "agent-namespaces",
+    "agent-quotas",
+    "agent-audit",
+    "posix-for-agents",
+    "mcp",
+    "a2a",
+    "model-context-protocol",
+    "agent-protocol",
+    "typescript"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
