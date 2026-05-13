@@ -33,16 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout monorepo (full history)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          # Don't persist the default GITHUB_TOKEN as a git credential —
-          # it would override the MIRROR_TOKEN we supply in the push URL
-          # and the push would attempt to use github-actions[bot]'s
-          # permissions on the standalone repo (which it doesn't have).
-          persist-credentials: false
-
       - name: Verify mirror token is set
         env:
           MIRROR_TOKEN: ${{ secrets.KBOT_FINANCE_MIRROR_PAT }}
@@ -56,6 +46,21 @@ jobs:
             exit 1
           fi
           echo "Token present (length=${#MIRROR_TOKEN})."
+
+      - name: Clone monorepo (full history, bypassing actions/checkout)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # actions/checkout@v4 fails on this repo because of a phantom
+          # submodule entry under .claude/worktrees/ — its post-checkout
+          # `git submodule foreach` step trips over it. Cloning by hand
+          # bypasses the submodule machinery entirely. We don't need
+          # submodules for the subtree-split anyway.
+          git clone --no-single-branch \
+            "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" .
+          git checkout "${{ github.sha }}"
+          echo "HEAD: $(git rev-parse HEAD)"
 
       - name: Configure git identity
         run: |
