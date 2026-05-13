@@ -5,7 +5,15 @@
 [![Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](./LICENSE)
 [![node >=22](https://img.shields.io/badge/node-%3E%3D22.0.0-green.svg?style=flat-square)](https://nodejs.org/)
 [![CI](https://img.shields.io/github/actions/workflow/status/isaacsight/kernel/kbot-finance.yml?branch=main&style=flat-square&label=CI)](https://github.com/isaacsight/kernel/actions/workflows/kbot-finance.yml)
-[![Run on Replit](https://replit.com/badge/github/isaacsight/kernel)](https://replit.com/new/github/isaacsight/kernel)
+[![Run on Replit](https://replit.com/badge/github/isaacsight/kbot-finance)](https://replit.com/new/github/isaacsight/kbot-finance)
+
+> **Two GitHub homes for the same package.** Canonical development happens
+> in the [`isaacsight/kernel` monorepo](https://github.com/isaacsight/kernel/tree/main/packages/kbot-finance)
+> alongside @kernel.chat/kbot and the kernel.chat magazine. A standalone
+> mirror at [`isaacsight/kbot-finance`](https://github.com/isaacsight/kbot-finance)
+> exists for clean one-click Replit import and focused discovery. Both
+> stay in sync; the standalone repo is updated via `git subtree push`
+> after each release.
 
 **Audit-grade AI infrastructure for capital markets and other regulated industries.**
 
