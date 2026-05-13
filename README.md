@@ -23,6 +23,17 @@
 npm install -g @kernel.chat/kbot
 ```
 
+## This repo ships two packages
+
+| Package | What it is | npm | Source |
+|---|---|---|---|
+| **[@kernel.chat/kbot](https://www.npmjs.com/package/@kernel.chat/kbot)** | Open-source terminal AI agent — 100+ skills, multi-provider, BYOK, MIT | `npm i -g @kernel.chat/kbot` | [`packages/kbot/`](./packages/kbot) |
+| **[@kernel.chat/kbot-finance](https://www.npmjs.com/package/@kernel.chat/kbot-finance)** | Audit-grade AI infrastructure for capital markets — content-addressed envelopes, hash-chained audit log, regulatory verifier, MCP server. Apache 2.0 | `npm i @kernel.chat/kbot-finance` | [`packages/kbot-finance/`](./packages/kbot-finance) |
+
+Plus this repo also serves [kernel.chat](https://kernel.chat) — the editorial magazine documenting the rise of **provenance engineering** as a discipline. ISSUE 381 — *On Provenance* — declares the magazine's five-year throughline. See [`packages/kbot-finance/ROLE.md`](./packages/kbot-finance/ROLE.md) for the field definition.
+
+---
+
 ## Why kbot?
 
 Most terminal AI agents lock you into one provider, one model, one way of working. kbot doesn't.

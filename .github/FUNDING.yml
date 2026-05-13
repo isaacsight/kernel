@@ -1,0 +1,11 @@
+# GitHub surfaces these links on every repo page under "Sponsor this project."
+# Enable GitHub Sponsors via github.com/sponsors/onboard to activate the
+# `github: isaacsight` line below.
+
+# github: [isaacsight]                  # uncomment when GitHub Sponsors is set up
+# patreon: kernelchat                   # if relevant
+# ko_fi: kernelchat                     # if relevant
+# tidelift: npm/@kernel.chat/kbot
+custom:
+  - "https://kernel.chat"
+  - "https://www.npmjs.com/package/@kernel.chat/kbot-finance"

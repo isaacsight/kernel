@@ -4,6 +4,8 @@
 [![npm downloads](https://img.shields.io/npm/dm/@kernel.chat/kbot-finance.svg?style=flat-square)](https://www.npmjs.com/package/@kernel.chat/kbot-finance)
 [![Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](./LICENSE)
 [![node >=22](https://img.shields.io/badge/node-%3E%3D22.0.0-green.svg?style=flat-square)](https://nodejs.org/)
+[![CI](https://img.shields.io/github/actions/workflow/status/isaacsight/kernel/kbot-finance.yml?branch=main&style=flat-square&label=CI)](https://github.com/isaacsight/kernel/actions/workflows/kbot-finance.yml)
+[![Run on Replit](https://replit.com/badge/github/isaacsight/kernel)](https://replit.com/new/github/isaacsight/kernel)
 
 **Audit-grade AI infrastructure for capital markets and other regulated industries.**
 

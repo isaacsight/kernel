@@ -1,0 +1,74 @@
+name: kbot-finance CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/kbot-finance/**'
+      - '.github/workflows/kbot-finance.yml'
+  pull_request:
+    paths:
+      - 'packages/kbot-finance/**'
+      - '.github/workflows/kbot-finance.yml'
+
+defaults:
+  run:
+    working-directory: packages/kbot-finance
+
+jobs:
+  test:
+    name: typecheck + unit tests
+    runs-on: ubuntu-latest
+    env:
+      KBOT_FINANCE_OFFLINE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: packages/kbot-finance/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: packages/kbot-finance/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: Verify dist contains the MCP server entry
+        run: |
+          test -f dist/cli.js
+          test -f dist/mcp-server.js
+          test -f dist/index.js
+          test -f dist/envelope.js
+          test -f dist/audit-log.js
+
+  live-smoke:
+    name: live smoke (Polymarket Gamma + SEC EDGAR)
+    runs-on: ubuntu-latest
+    needs: test
+    # Live tests hit real APIs. Skip on forks (secrets unavailable),
+    # but the OFFLINE-gated unit tests above always run.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      KBOT_FINANCE_SEC_UA: "kbot-finance-ci ci@kernel.chat"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: packages/kbot-finance/package-lock.json
+      - run: npm ci
+      - run: npm run test:live
+        continue-on-error: true
