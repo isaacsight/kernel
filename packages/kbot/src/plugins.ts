@@ -216,21 +216,27 @@ export async function loadPlugins(
       continue
     }
 
-    // Security: reject plugin files that are group/world-writable
-    try {
-      const fileStat = statSync(join(pluginsDir, file))
-      if ((fileStat.mode & 0o022) !== 0) {
-        loadedPlugins.push({
-          name: file.replace(/\.[^.]+$/, ''),
-          file,
-          toolCount: 0,
-          loadedAt: new Date().toISOString(),
-          error: 'Skipped: file is writable by others (security)',
-        })
+    // Security: reject plugin files that are group/world-writable.
+    // NTFS doesn't use POSIX mode bits — Node fills `mode` with synthetic
+    // values on Windows that always look world-writable, so this check
+    // would skip every plugin. Skip the gate on Windows; security model
+    // there comes from NTFS ACLs, not the mode field.
+    if (process.platform !== 'win32') {
+      try {
+        const fileStat = statSync(join(pluginsDir, file))
+        if ((fileStat.mode & 0o022) !== 0) {
+          loadedPlugins.push({
+            name: file.replace(/\.[^.]+$/, ''),
+            file,
+            toolCount: 0,
+            loadedAt: new Date().toISOString(),
+            error: 'Skipped: file is writable by others (security)',
+          })
+          continue
+        }
+      } catch {
         continue
       }
-    } catch {
-      continue
     }
     const filePath = join(pluginsDir, file)
     const manifest: PluginManifest = {

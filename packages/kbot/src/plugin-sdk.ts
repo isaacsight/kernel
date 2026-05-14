@@ -388,12 +388,15 @@ function discoverLocalPlugins(pluginsDir: string = PLUGINS_DIR): Array<{ name: s
       continue
     }
 
-    // Security: reject directories writable by others
-    try {
-      const dirStat = statSync(dirPath)
-      if ((dirStat.mode & 0o022) !== 0) continue
-    } catch {
-      continue
+    // Security: reject directories writable by others.
+    // POSIX-only — see plugins.ts loadPlugins for the same note.
+    if (process.platform !== 'win32') {
+      try {
+        const dirStat = statSync(dirPath)
+        if ((dirStat.mode & 0o022) !== 0) continue
+      } catch {
+        continue
+      }
     }
 
     // Look for entry point: index.ts, index.js, or main from package.json

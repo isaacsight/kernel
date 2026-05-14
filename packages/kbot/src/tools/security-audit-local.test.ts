@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync, readdirSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { join, dirname } from 'node:path'
 import {
   buildSurfaceMap,
   persistSurfaceMap,
@@ -25,8 +25,7 @@ afterEach(() => {
 
 function write(rel: string, body: string): void {
   const full = join(workDir, rel)
-  const dir = full.substring(0, full.lastIndexOf('/'))
-  mkdirSync(dir, { recursive: true })
+  mkdirSync(dirname(full), { recursive: true })
   writeFileSync(full, body, 'utf8')
 }
 

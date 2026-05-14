@@ -11,7 +11,7 @@
 //   − near-duplicate of another example (hash-based)
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, readdirSync, statSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { join, resolve, dirname } from 'node:path'
 import { homedir } from 'node:os'
 import { createHash } from 'node:crypto'
 
@@ -260,7 +260,7 @@ export function curate(opts: CurateOptions = {}): CurateResult {
   const maxResp = opts.maxResponseLen ?? 32000
   const dedupe = opts.dedupe !== false
 
-  const outDir = output.substring(0, output.lastIndexOf('/'))
+  const outDir = dirname(output)
   if (outDir && !existsSync(outDir)) mkdirSync(outDir, { recursive: true })
 
   const bySource: Record<string, number> = {}

@@ -9,7 +9,7 @@
 // does NOT modify growth_summary.
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, dirname } from 'node:path'
 import { homedir } from 'node:os'
 import type { ToolDefinition } from './index.js'
 import { loadGrowth, type GrowthMetrics, type GrowthEngine } from './foundation-engines.js'
@@ -60,8 +60,7 @@ export function readHistory(path: string = historyPath()): HistoryRecord[] {
 
 /** Append a record, cap to MAX_HISTORY entries. Atomic via tmp + rename. */
 export function appendHistory(rec: HistoryRecord, path: string = historyPath()): void {
-  const dir = path.substring(0, path.lastIndexOf('/'))
-  mkdirSync(dir, { recursive: true })
+  mkdirSync(dirname(path), { recursive: true })
   const existing = readHistory(path)
   existing.push(rec)
   // Keep only the last MAX_HISTORY records
