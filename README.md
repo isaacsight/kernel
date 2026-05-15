@@ -31,7 +31,7 @@ npm install -g @kernel.chat/kbot
 | **[@kernel.chat/kbot-finance](https://www.npmjs.com/package/@kernel.chat/kbot-finance)** | Audit-grade AI infrastructure for capital markets — content-addressed envelopes, hash-chained audit log, regulatory verifier, MCP server. Apache 2.0 | `npm i @kernel.chat/kbot-finance` | [`packages/kbot-finance/`](./packages/kbot-finance) |
 | **[@kernel.chat/agent-os](https://www.npmjs.com/package/@kernel.chat/agent-os)** | **POSIX for AI agents** — ten OS-level primitives: signed capability tokens (acap), namespaces, per-agent quotas (ulimit-tok), taint-tracked exec (chexec), content-addressed audit, downscoped handoff, snapshot, credential vault, rubric-graded outcomes. Runs above Modal-class sandboxes, below MCP/A2A. Apache 2.0 | `npm i @kernel.chat/agent-os` | [`packages/agent-os/`](./packages/agent-os) |
 
-Plus this repo also serves [kernel.chat](https://kernel.chat) — the editorial magazine documenting the rise of **provenance engineering** as a discipline. ISSUE 381 — *On Provenance* — declares the magazine's five-year throughline. See [`packages/kbot-finance/ROLE.md`](./packages/kbot-finance/ROLE.md) for the field definition.
+Plus this repo also serves [kernel.chat](https://kernel.chat) — the editorial magazine documenting the rise of **provenance engineering** as a discipline. ISSUE 381 — *On Provenance* — declares the magazine's five-year throughline. See [`packages/kbot-finance/ROLE.md`](./packages/kbot-finance/ROLE.md) for the field definition, and [`docs/agents-and-money.md`](./docs/agents-and-money.md) for the practitioner's note on what agents can actually earn and what they need to earn it.
 
 ### The stack, end-to-end
 

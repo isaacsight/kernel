@@ -230,3 +230,7 @@ ISDA, or any regulator.
   contribution ladder, good first issues, PR checklist.
 - **[RFC-content-addressed-mcp.md](./RFC-content-addressed-mcp.md)** —
   Spec proposal for the MCP audit-extension this package implements.
+- **[agents-and-money.md](../../docs/agents-and-money.md)** — Practitioner's
+  note on what AI agents can actually earn, what they need to earn it,
+  and why the audit trail (this package) is the product, not the
+  trading strategy. Filed alongside ISSUE 381.
