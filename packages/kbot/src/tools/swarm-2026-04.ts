@@ -19,8 +19,23 @@ import { anthropicManagedAgentTools } from './anthropic-managed-agents-tools.js'
 import { forecastSummaryTool } from './forecast-summary.js'
 import { securityAuditLocalTool } from './security-audit-local.js'
 import { registerPeekabooTools } from './peekaboo.js'
-import { registerKbotFinanceTools } from '@kernel.chat/kbot-finance/kbot-tool'
 import type { z } from 'zod'
+
+type RegisterKbotFinanceFn = (register: typeof registerTool) => void
+let registerKbotFinanceTools: RegisterKbotFinanceFn = () => {
+  // No-op when @kernel.chat/kbot-finance/kbot-tool subpath isn't available
+  // (e.g. when the installed npm version predates the export). The finance
+  // tools simply won't register; everything else in this module works.
+}
+try {
+  // @ts-ignore — optional subpath, may not exist in older published versions
+  const mod = await import('@kernel.chat/kbot-finance/kbot-tool')
+  if (mod && typeof mod.registerKbotFinanceTools === 'function') {
+    registerKbotFinanceTools = mod.registerKbotFinanceTools as RegisterKbotFinanceFn
+  }
+} catch {
+  // optional; skip silently
+}
 
 interface CoordinatorToolShape {
   name: string

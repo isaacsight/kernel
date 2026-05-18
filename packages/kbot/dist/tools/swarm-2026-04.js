@@ -13,6 +13,21 @@ import { anthropicManagedAgentTools } from './anthropic-managed-agents-tools.js'
 import { forecastSummaryTool } from './forecast-summary.js';
 import { securityAuditLocalTool } from './security-audit-local.js';
 import { registerPeekabooTools } from './peekaboo.js';
+let registerKbotFinanceTools = () => {
+    // No-op when @kernel.chat/kbot-finance/kbot-tool subpath isn't available
+    // (e.g. when the installed npm version predates the export). The finance
+    // tools simply won't register; everything else in this module works.
+};
+try {
+    // @ts-ignore — optional subpath, may not exist in older published versions
+    const mod = await import('@kernel.chat/kbot-finance/kbot-tool');
+    if (mod && typeof mod.registerKbotFinanceTools === 'function') {
+        registerKbotFinanceTools = mod.registerKbotFinanceTools;
+    }
+}
+catch {
+    // optional; skip silently
+}
 function adaptCoordinatorTool(t) {
     const props = t.inputSchema.properties ?? {};
     const required = new Set(t.inputSchema.required ?? []);
@@ -86,6 +101,7 @@ export function registerSwarm2026Tools() {
     registerTool(forecastSummaryTool);
     registerTool(securityAuditLocalTool);
     registerPeekabooTools();
+    registerKbotFinanceTools(registerTool);
     for (const t of workspaceAgentTools)
         registerTool(t);
     for (const t of anthropicManagedAgentTools)
