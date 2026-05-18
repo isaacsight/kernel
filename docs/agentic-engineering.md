@@ -52,7 +52,7 @@ It is not ML engineering. ML engineering is upstream — training, fine-tuning, 
 
 ## The discipline map
 
-Six disciplines sit inside the field as of mid-2026. Some have names. Some don't.
+Six disciplines sit inside the field as of mid-2026. Three are now coined and held by kernel.chat; three remain open.
 
 ### 1. Substrate — provenance engineering
 
@@ -60,11 +60,11 @@ The discipline of building the substrate that makes agent actions provable, audi
 
 Coined and held by kernel.chat (ISSUE 381, May 12 2026). Open to fork.
 
-### 2. Orchestration — currently unnamed
+### 2. Orchestration — orchestration engineering
 
-The discipline of structuring how multiple agents pass work between each other. Routing, delegation, handoff protocols, blackboard patterns, multi-agent dispatch. Most agentic systems today either ignore this (single-agent loop) or solve it ad hoc per project.
+The discipline of structuring how multiple agents (and the humans they report to) pass work between each other so that real-world outcomes ship end to end. Routing, delegation, handoff protocols, briefing formats, audit trails across agent boundaries, human approval gates at material steps. The reference role is [`packages/kbot-orchestrator/ROLE.md`](../packages/kbot-orchestrator/ROLE.md); the reference implementation is [`@kernel.chat/kbot-orchestrator`](../packages/kbot-orchestrator/).
 
-Practitioners are visible: NousResearch, Anthropic's multi-agent harness, AutoGen, CrewAI, kernel.chat's specialist dispatch. The discipline has not coalesced under a name.
+Coined and held by kernel.chat (ISSUE 387, May 18 2026). Open to fork. Other practitioners in this discipline whose work is worth naming alongside: NousResearch (Hermes Agent), Anthropic's multi-agent harness, AutoGen, CrewAI.
 
 ### 3. System primitives — agent-OS
 

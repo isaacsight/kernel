@@ -1,0 +1,69 @@
+{
+  "name": "@kernel.chat/kbot-orchestrator",
+  "version": "0.1.0-alpha.0",
+  "description": "Reference implementation of orchestration engineering — the discipline of structuring how agents pass work to each other and to humans, with audit trails. Drives the outreach + content + maintenance loops behind kernel.chat.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "kbot-orchestrator": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./outreach": {
+      "import": "./dist/outreach.js",
+      "types": "./dist/outreach.d.ts"
+    },
+    "./briefing": {
+      "import": "./dist/briefing.js",
+      "types": "./dist/briefing.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "ROLE.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "agentic-engineering",
+    "orchestration-engineering",
+    "agent-orchestration",
+    "multi-agent",
+    "agent-delegation",
+    "outreach-automation",
+    "kbot",
+    "kernel-chat"
+  ],
+  "license": "MIT",
+  "author": "kernel.chat group",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacsight/kernel.git",
+    "directory": "packages/kbot-orchestrator"
+  },
+  "homepage": "https://kernel.chat",
+  "bugs": {
+    "url": "https://github.com/isaacsight/kernel/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.16"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/nodemailer": "^6.4.17",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

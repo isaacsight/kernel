@@ -23,28 +23,38 @@
 npm install -g @kernel.chat/kbot
 ```
 
-## This repo ships three packages
+## This repo ships four packages
 
 | Package | What it is | npm | Source |
 |---|---|---|---|
 | **[@kernel.chat/kbot](https://www.npmjs.com/package/@kernel.chat/kbot)** | Open-source terminal AI agent — 100+ skills, multi-provider, BYOK, MIT | `npm i -g @kernel.chat/kbot` | [`packages/kbot/`](./packages/kbot) |
-| **[@kernel.chat/kbot-finance](https://www.npmjs.com/package/@kernel.chat/kbot-finance)** | Audit-grade AI infrastructure for capital markets — content-addressed envelopes, hash-chained audit log, regulatory verifier, MCP server. Apache 2.0 | `npm i @kernel.chat/kbot-finance` | [`packages/kbot-finance/`](./packages/kbot-finance) |
+| **[@kernel.chat/kbot-finance](https://www.npmjs.com/package/@kernel.chat/kbot-finance)** | Audit-grade AI infrastructure for capital markets — content-addressed envelopes, hash-chained audit log, regulatory verifier, MCP server. Reference implementation of **provenance engineering**. Apache 2.0 | `npm i @kernel.chat/kbot-finance` | [`packages/kbot-finance/`](./packages/kbot-finance) |
 | **[@kernel.chat/agent-os](https://www.npmjs.com/package/@kernel.chat/agent-os)** | **POSIX for AI agents** — ten OS-level primitives: signed capability tokens (acap), namespaces, per-agent quotas (ulimit-tok), taint-tracked exec (chexec), content-addressed audit, downscoped handoff, snapshot, credential vault, rubric-graded outcomes. Runs above Modal-class sandboxes, below MCP/A2A. Apache 2.0 | `npm i @kernel.chat/agent-os` | [`packages/agent-os/`](./packages/agent-os) |
+| **[@kernel.chat/kbot-orchestrator](https://www.npmjs.com/package/@kernel.chat/kbot-orchestrator)** | Reference implementation of **orchestration engineering** — pipelines that route work between agents and humans with audit trails. v0.1 ships the outreach pipeline. MIT | `npm i -g @kernel.chat/kbot-orchestrator` | [`packages/kbot-orchestrator/`](./packages/kbot-orchestrator) |
 
-Plus this repo also serves [kernel.chat](https://kernel.chat) — **the magazine of agentic engineering**. The editorial beat is the whole field; the disciplines this group has coined and shipped reference implementations for are **provenance engineering** (substrate underneath the agent — see [`packages/kbot-finance/ROLE.md`](./packages/kbot-finance/ROLE.md), declared in [ISSUE 381 — *On Provenance*](./src/content/issues/381.ts)) and **agent-OS** (system primitives the agent runs on top of — see [`packages/agent-os/`](./packages/agent-os/), positioned as POSIX for AI agents).
+Plus this repo also serves [kernel.chat](https://kernel.chat) — **the magazine of agentic engineering**. The editorial beat is the whole field; the disciplines this group has coined and shipped reference implementations for are:
 
-The field map is at [`docs/agentic-engineering.md`](./docs/agentic-engineering.md): six disciplines, two named and held by kernel.chat, four open to whoever names them first. ISSUE 386 — *On the Field* — makes the magazine's beat explicit. The practitioner's note on what agents can actually earn is at [`docs/agents-and-money.md`](./docs/agents-and-money.md).
+1. **Provenance engineering** — substrate underneath the agent. [`packages/kbot-finance/ROLE.md`](./packages/kbot-finance/ROLE.md). Declared in [ISSUE 381 — *On Provenance*](./src/content/issues/381.ts).
+2. **agent-OS** — system primitives the agent runs on top of. [`packages/agent-os/`](./packages/agent-os/). Positioned as POSIX for AI agents.
+3. **Orchestration engineering** — pipelines that route work between agents and humans with audit trails. [`packages/kbot-orchestrator/ROLE.md`](./packages/kbot-orchestrator/ROLE.md). Declared in [ISSUE 387 — *On Orchestration*](./src/content/issues/387.ts).
+
+The field map is at [`docs/agentic-engineering.md`](./docs/agentic-engineering.md): six disciplines, three coined and held by kernel.chat, three open to whoever names them first (skill curation, evaluation, operations). ISSUE 386 — *On the Field* — makes the magazine's beat explicit. The practitioner's note on what agents can actually earn is at [`docs/agents-and-money.md`](./docs/agents-and-money.md).
 
 ### The stack, end-to-end
 
 ```
-your AI agent  →  @kernel.chat/agent-os  (permissions, quotas, audit, vault)
+            @kernel.chat/kbot-orchestrator   (pipelines — orchestration engineering)
                        │
-                       ├─→  @kernel.chat/kbot          (the agent itself)
-                       └─→  @kernel.chat/kbot-finance  (regulated-industry verifier)
+                       │   reads briefings, routes work to specialist agents,
+                       │   gates at material approval points, appends audit trails
+                       │
+            your AI agent  →  @kernel.chat/agent-os  (permissions, quotas, audit, vault)
+                                   │
+                                   ├─→  @kernel.chat/kbot          (the agent itself)
+                                   └─→  @kernel.chat/kbot-finance  (regulated-industry verifier)
 ```
 
-`agent-os` is the OS-level substrate; `kbot` is one tenant of that OS; `kbot-finance` is the compliance verifier those tenants call when the work is regulated. Open core throughout, with commercial offerings downstream.
+`agent-os` is the OS-level substrate; `kbot` is one tenant of that OS; `kbot-finance` is the compliance verifier those tenants call when the work is regulated; `kbot-orchestrator` is the pipeline layer that drives all of them through real-world multi-step outcomes. Open core throughout, with commercial offerings downstream.
 
 ---
 
