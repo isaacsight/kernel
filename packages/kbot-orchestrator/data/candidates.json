@@ -36,6 +36,16 @@
       "subject": "{artifact_subject} — would value your read if it merits a hot take",
       "tier": "TIER 3 — Optional; fire only if Tier 1 signal is strong",
       "body": "{name_first},\n\nJust shipped {artifact_subject}. You're one of the practitioners I trust to engage seriously OR dismiss decisively. Both are useful; ambivalence isn't.\n\n{artifact_link}\n\nIsaac"
+    },
+    "frontier-domain-practitioner": {
+      "subject": "{artifact_subject} — the substrate disciplines your work might use",
+      "tier": "TIER 4 — Frontier domains (robotics / sciences / neuro)",
+      "body": "{name_first},\n\nYour work is at one of the frontiers where AI agents will land hardest in the next five years. kernel.chat just shipped {artifact_subject} ({artifact_license}) — a definition of agentic engineering as a software field plus six substrate disciplines inside it.\n\nThree are coined and held by us (provenance engineering: audit substrate for AI actions; agent-OS: POSIX-style primitives; orchestration engineering: pipelines that route work across agents and humans). All open-source, all designed to be used by people working in domains like yours.\n\nThe pitch is not that you should adopt our framework. The pitch is that when your domain needs audit-grade AI substrate, multi-agent orchestration, or OS-level isolation for agents acting in your stack, these are the working reference implementations to fork or borrow from.\n\n{artifact_link}\n\nIsaac"
+    },
+    "frontier-domain-researcher": {
+      "subject": "{artifact_subject} — agentic substrate that intersects {role}",
+      "tier": "TIER 4 — Frontier domains (robotics / sciences / neuro)",
+      "body": "{name_first},\n\nYour research in {role} sits at one of the frontiers I think agentic engineering most needs to learn from.\n\nkernel.chat just shipped {artifact_subject}, mapping six disciplines inside the software side of agents. Three are coined and held by us; three are open. Some of the open ones (skill curation, evaluation) are areas your community is ahead on; some of the coined ones (agent-OS, provenance engineering, orchestration engineering) might be useful substrates for your work.\n\nNo ask — curious whether the framing reads as useful or as a software-bubble miss from where you sit.\n\n{artifact_link}\n\nIsaac"
     }
   },
   "candidates": [
@@ -260,6 +270,285 @@
       ],
       "template": "discipline-practitioner-unnamed",
       "notes": "Anthropic CPO; would care about discipline-naming around their product surface."
+    },
+
+    {
+      "_section": "FRONTIER — HUMANOID ROBOTICS"
+    },
+    {
+      "name": "Brett Adcock",
+      "role": "Founder/CEO, Figure",
+      "tags": ["robotics", "humanoid-robotics", "embodied-agents", "autonomy-engineering", "frontier"],
+      "channels": [
+        { "kind": "x", "value": "adcock_brett" },
+        { "kind": "email", "value": "brett@figure.ai", "confidence": "low" },
+        { "kind": "linkedin", "value": "brettadcock" }
+      ],
+      "template": "frontier-domain-practitioner",
+      "notes": "Figure ($2.6B+ raise, Sunnyvale); humanoid robots at scale. Provenance engineering matters when a robot acts in a warehouse."
+    },
+    {
+      "name": "Eric Jang",
+      "role": "VP AI, 1X Technologies",
+      "tags": ["robotics", "humanoid-robotics", "embodied-agents", "foundation-models-robots", "frontier"],
+      "channels": [
+        { "kind": "email", "value": "evjang@1x.tech", "confidence": "low" },
+        { "kind": "x", "value": "ericjang11" }
+      ],
+      "template": "frontier-domain-practitioner",
+      "notes": "1X is the Norway-Sunnyvale humanoid play; Jang writes thoughtfully about embodied AI."
+    },
+    {
+      "name": "Bernt Børnich",
+      "role": "Founder/CEO, 1X Technologies",
+      "tags": ["robotics", "humanoid-robotics", "embodied-agents", "autonomy-engineering", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "berntbornich" }
+      ],
+      "template": "frontier-domain-practitioner",
+      "notes": "Co-leads 1X; LinkedIn is the practical channel."
+    },
+    {
+      "name": "Jeff Cardenas",
+      "role": "Founder/CEO, Apptronik",
+      "tags": ["robotics", "humanoid-robotics", "embodied-agents", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "jeff-cardenas-19103a26" },
+        { "kind": "email", "value": "jeff@apptronik.com", "confidence": "low" }
+      ],
+      "template": "frontier-domain-practitioner",
+      "notes": "Apptronik (Austin); Apollo humanoid; NASA partner."
+    },
+    {
+      "name": "Marc Raibert",
+      "role": "Executive Director, Boston Dynamics AI Institute",
+      "tags": ["robotics", "embodied-agents", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "marc-raibert-3a72ba91" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Founded Boston Dynamics; now runs the AI Institute; legendary."
+    },
+
+    {
+      "_section": "FRONTIER — FOUNDATION MODELS FOR ROBOTICS"
+    },
+    {
+      "name": "Karol Hausman",
+      "role": "Co-founder, Physical Intelligence (PI)",
+      "tags": ["robotics", "foundation-models-robots", "embodied-agents", "frontier"],
+      "channels": [
+        { "kind": "x", "value": "hausman_k" },
+        { "kind": "linkedin", "value": "karolhausman" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "PI is the leading foundation-model-for-robots play; ex-Google Brain robotics."
+    },
+    {
+      "name": "Chelsea Finn",
+      "role": "Assistant Professor, Stanford; co-founder PI",
+      "tags": ["robotics", "foundation-models-robots", "embodied-agents", "frontier", "academic"],
+      "channels": [
+        { "kind": "email", "value": "cbfinn@cs.stanford.edu", "confidence": "medium" },
+        { "kind": "x", "value": "chelseabfinn" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Major robotics + meta-learning name; PI co-founder; academic email reliable."
+    },
+    {
+      "name": "Sergey Levine",
+      "role": "Associate Professor, UC Berkeley; co-founder PI",
+      "tags": ["robotics", "foundation-models-robots", "embodied-agents", "frontier", "academic"],
+      "channels": [
+        { "kind": "email", "value": "svlevine@eecs.berkeley.edu", "confidence": "medium" },
+        { "kind": "x", "value": "svlevine" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Leading robotics ML researcher; PI co-founder."
+    },
+    {
+      "name": "Deepak Pathak",
+      "role": "Asst Professor CMU; co-founder Skild AI",
+      "tags": ["robotics", "foundation-models-robots", "embodied-agents", "frontier", "academic"],
+      "channels": [
+        { "kind": "email", "value": "dpathak@cs.cmu.edu", "confidence": "medium" },
+        { "kind": "x", "value": "pathak2206" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Skild AI is the brain-for-robots play; raised at $1.5B valuation."
+    },
+
+    {
+      "_section": "FRONTIER — COMPUTATIONAL BIOLOGY / DRUG DISCOVERY"
+    },
+    {
+      "name": "Daphne Koller",
+      "role": "Founder/CEO, Insitro",
+      "tags": ["computational-biology", "drug-discovery", "scientific-ai", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "daphne-koller" },
+        { "kind": "email", "value": "daphne@insitro.com", "confidence": "low" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Insitro = AI-first drug discovery; Koller is the foundational PGM textbook author."
+    },
+    {
+      "name": "Chris Gibson",
+      "role": "Co-founder/CEO, Recursion Pharma",
+      "tags": ["computational-biology", "drug-discovery", "scientific-ai", "lab-automation", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "chrishgibson" }
+      ],
+      "template": "frontier-domain-practitioner",
+      "notes": "Recursion runs one of the largest automated cellular biology platforms; multi-agent pipelines all over."
+    },
+    {
+      "name": "Demis Hassabis",
+      "role": "CEO Google DeepMind / co-founder Isomorphic Labs",
+      "tags": ["scientific-ai", "drug-discovery", "computational-biology", "frontier"],
+      "channels": [
+        { "kind": "x", "value": "demishassabis" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Very low-probability reach; included for completeness. Public channels only."
+    },
+    {
+      "name": "Molly Gibson",
+      "role": "Co-founder/CTO, Generate Biomedicines",
+      "tags": ["computational-biology", "drug-discovery", "scientific-ai", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "mollygibson" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Generative protein design; AI-first drug company."
+    },
+    {
+      "name": "Stef van Grieken",
+      "role": "Co-founder/CEO, Cradle Bio",
+      "tags": ["computational-biology", "drug-discovery", "scientific-ai", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "stefvg" }
+      ],
+      "template": "frontier-domain-practitioner",
+      "notes": "Cradle = protein design with AI; smaller team, very technical leadership."
+    },
+
+    {
+      "_section": "FRONTIER — LAB AUTOMATION"
+    },
+    {
+      "name": "Anthony Costello",
+      "role": "Co-founder/CEO, Strateos",
+      "tags": ["lab-automation", "scientific-ai", "embodied-agents", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "ahcostello" }
+      ],
+      "template": "frontier-domain-practitioner",
+      "notes": "Cloud lab; orchestrates physical experiments via API. Orchestration engineering applies directly."
+    },
+    {
+      "name": "Charles Fracchia",
+      "role": "Founder, BioBright (now Dotmatics)",
+      "tags": ["lab-automation", "scientific-ai", "frontier"],
+      "channels": [
+        { "kind": "linkedin", "value": "cfracchia" }
+      ],
+      "template": "frontier-domain-practitioner",
+      "notes": "Long-time lab-automation practitioner; data-provenance for science is his beat."
+    },
+
+    {
+      "_section": "FRONTIER — AI FOR MATHEMATICS / FORMAL METHODS"
+    },
+    {
+      "name": "Christian Szegedy",
+      "role": "Researcher, xAI; ex-Google Brain (Inception, BatchNorm)",
+      "tags": ["ai4math", "formal-methods", "scientific-ai", "frontier", "academic"],
+      "channels": [
+        { "kind": "x", "value": "ChrSzegedy" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Leading AI-for-mathematics researcher; Lean + formal-proof agents."
+    },
+    {
+      "name": "Yuhuai (Tony) Wu",
+      "role": "Researcher, xAI; AI for math",
+      "tags": ["ai4math", "formal-methods", "scientific-ai", "frontier", "academic"],
+      "channels": [
+        { "kind": "x", "value": "Yuhu_ai_" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Autoformalization + AI-for-math reasoning."
+    },
+
+    {
+      "_section": "FRONTIER — NEUROSCIENCE + AI"
+    },
+    {
+      "name": "Jeff Hawkins",
+      "role": "Founder, Numenta; author A Thousand Brains",
+      "tags": ["neuroscience", "neuro-ai", "frontier"],
+      "channels": [
+        { "kind": "email", "value": "jhawkins@numenta.com", "confidence": "low" },
+        { "kind": "x", "value": "jhawkins_" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Brain-inspired cortical-column theory; reads framing pieces."
+    },
+    {
+      "name": "Sam Gershman",
+      "role": "Professor, Harvard (Cognitive Neuroscience)",
+      "tags": ["neuroscience", "neuro-ai", "frontier", "academic"],
+      "channels": [
+        { "kind": "email", "value": "gershman@fas.harvard.edu", "confidence": "medium" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Computational cognitive neuroscience; engages with AI."
+    },
+    {
+      "name": "Karl Friston",
+      "role": "Professor, UCL (Active Inference / Free Energy)",
+      "tags": ["neuroscience", "neuro-ai", "frontier", "academic"],
+      "channels": [
+        { "kind": "email", "value": "k.friston@ucl.ac.uk", "confidence": "medium" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Active inference framework; agent theory adjacent."
+    },
+    {
+      "name": "Tony Zador",
+      "role": "Professor, CSHL (NeuroAI)",
+      "tags": ["neuroscience", "neuro-ai", "frontier", "academic"],
+      "channels": [
+        { "kind": "email", "value": "zador@cshl.edu", "confidence": "medium" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Co-organized the NeuroAI workshop tradition."
+    },
+
+    {
+      "_section": "FRONTIER — AI FOR SCIENCE (BROAD)"
+    },
+    {
+      "name": "Alán Aspuru-Guzik",
+      "role": "Professor, University of Toronto; Vector Institute; CIFAR",
+      "tags": ["scientific-ai", "chemistry", "ai4science", "frontier", "academic"],
+      "channels": [
+        { "kind": "email", "value": "alan@aspuru.com", "confidence": "low" },
+        { "kind": "x", "value": "AlanAspuruGuzik" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Major AI-for-chemistry researcher; self-driving labs advocate."
+    },
+    {
+      "name": "Jakob Foerster",
+      "role": "Associate Professor, University of Oxford (Multi-agent RL)",
+      "tags": ["multi-agent", "orchestration", "scientific-ai", "frontier", "academic"],
+      "channels": [
+        { "kind": "email", "value": "jakob.foerster@eng.ox.ac.uk", "confidence": "medium" }
+      ],
+      "template": "frontier-domain-researcher",
+      "notes": "Multi-agent learning theory; intersects orchestration engineering directly."
     }
   ]
 }

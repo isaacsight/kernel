@@ -16,7 +16,19 @@ export function loadCorpus(path) {
         throw new Error(`Corpus file not found: ${path}`);
     }
     const text = readFileSync(path, 'utf-8');
-    const parsed = JSON.parse(text);
+    const raw = JSON.parse(text);
+    // Filter out organizational section markers ({_section: "..."} entries used
+    // for human readability inside the JSON file). These are not candidates.
+    const candidates = (raw.candidates ?? []).filter((c) => {
+        if (!c || typeof c !== 'object')
+            return false;
+        return 'name' in c && 'tags' in c && 'channels' in c;
+    });
+    const parsed = {
+        version: raw.version,
+        candidates,
+        templates: raw.templates,
+    };
     validateCorpus(parsed, path);
     return parsed;
 }

@@ -64,7 +64,18 @@ export function loadCorpus(path: string): CandidateCorpus {
     throw new Error(`Corpus file not found: ${path}`)
   }
   const text = readFileSync(path, 'utf-8')
-  const parsed = JSON.parse(text) as CandidateCorpus
+  const raw = JSON.parse(text) as { version: number; candidates: unknown[]; templates: Record<string, PitchTemplate> }
+  // Filter out organizational section markers ({_section: "..."} entries used
+  // for human readability inside the JSON file). These are not candidates.
+  const candidates = (raw.candidates ?? []).filter((c): c is Candidate => {
+    if (!c || typeof c !== 'object') return false
+    return 'name' in c && 'tags' in c && 'channels' in c
+  })
+  const parsed: CandidateCorpus = {
+    version: raw.version,
+    candidates,
+    templates: raw.templates,
+  }
   validateCorpus(parsed, path)
   return parsed
 }
