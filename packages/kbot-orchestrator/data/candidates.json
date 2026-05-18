@@ -1,0 +1,265 @@
+{
+  "version": 1,
+  "_comment": "Seed corpus assembled from kernel.chat's 2026-05-11..18 outreach push. Candidates are organized by the disciplines they care about. Channels are listed preferred-first. Email confidence is 'verified' only where the address has been confirmed delivered or replied; 'medium' for org-convention guesses; 'low' for personal-domain guesses. Templates are reusable across artifacts.",
+  "templates": {
+    "discipline-namer-radar": {
+      "subject": "{artifact_subject} — written for Radar's beat",
+      "tier": "TIER 1 — Send today",
+      "body": "{name_first},\n\nTim's coaching this past week landed on a framing distinction: field vs discipline. We applied it.\n\nJust shipped {artifact_path} ({artifact_license}) — {artifact_subject}.\n\nThe shape is the kind of discipline-mapping work Radar has covered seriously for two decades. Offering this either as source material for Radar's own coverage or as a guest piece if that's the right fit.\n\n{artifact_link}\n\nIsaac"
+    },
+    "discipline-practitioner-unnamed": {
+      "subject": "{artifact_subject} — and you're the obvious namer for one of the open disciplines",
+      "tier": "TIER 2 — Send 48-72h after Tier 1",
+      "body": "{name_first},\n\nJust shipped {artifact_path}. The doc maps six disciplines inside agentic engineering. Three are coined and held by kernel.chat. Three remain open to whoever names them first.\n\nYour work sits inside one of the open three. The naming move (and the ROLE.md-style definition that goes with it) is yours if you want it.\n\nCurious whether the field/discipline distinction matches your read.\n\n{artifact_link}\n\nIsaac"
+    },
+    "discipline-namer-roast": {
+      "subject": "{artifact_subject} — would value a roast if it merits one",
+      "tier": "TIER 1 — Send today",
+      "body": "{name_first},\n\nI trust your read on discipline-naming work because you engage seriously or destroy decisively. Both are useful; ambivalence is not.\n\nJust shipped {artifact_path}. {artifact_context}\n\nIf the framing is wrong I'd rather hear it from you now than have it land badly with someone less direct.\n\n{artifact_link}\n\nIsaac"
+    },
+    "discipline-namer-precedent": {
+      "subject": "{artifact_subject} — your framing pattern is the closest precedent",
+      "tier": "TIER 1 — Send today",
+      "body": "{name_first},\n\nYour {role} work is one of the patterns I learned discipline-naming from.\n\nApplied the same shape to agentic engineering. {artifact_subject} ({artifact_license}).\n\nCurious whether the discipline frame reads as serious work to you.\n\n{artifact_link}\n\nIsaac"
+    },
+    "thought-leader-context": {
+      "subject": "{artifact_subject} — might intersect your work",
+      "tier": "TIER 2 — Send 48-72h after Tier 1",
+      "body": "{name_first},\n\nYour work is upstream of where this is going.\n\nJust shipped {artifact_path}.\n\nCurious whether the framing maps to anything in your own taxonomy.\n\n{artifact_link}\n\nIsaac"
+    },
+    "magazine-peer": {
+      "subject": "{artifact_subject} — would value 60 seconds of your read",
+      "tier": "TIER 2 — Send 48-72h after Tier 1",
+      "body": "{name_first},\n\nkernel.chat just shipped {artifact_subject}. Your publication is the working model for this kind of positioning move.\n\nOne direct question if you have a minute: does the move read as serious work or as a small publication overreaching? I'd rather get the answer now than from silence later.\n\n{artifact_link}\n\nIsaac"
+    },
+    "hot-take-or-dismiss": {
+      "subject": "{artifact_subject} — would value your read if it merits a hot take",
+      "tier": "TIER 3 — Optional; fire only if Tier 1 signal is strong",
+      "body": "{name_first},\n\nJust shipped {artifact_subject}. You're one of the practitioners I trust to engage seriously OR dismiss decisively. Both are useful; ambivalence isn't.\n\n{artifact_link}\n\nIsaac"
+    }
+  },
+  "candidates": [
+    {
+      "name": "Mike Loukides",
+      "role": "VP Content Strategy, O'Reilly Media",
+      "tags": ["discipline-naming", "editorial", "radar", "publishing", "field-mapping", "agentic-engineering"],
+      "channels": [
+        { "kind": "linkedin", "value": "mike-loukides", "confidence": "verified" },
+        { "kind": "email", "value": "mloukides@oreilly.com", "confidence": "low", "note": "best-guess corporate convention; mike@oreilly.com bounced 2026-05-18" }
+      ],
+      "template": "discipline-namer-radar",
+      "last_pitched": "2026-05-18",
+      "notes": "Tim O'Reilly's collaborator on Radar; natural escalation post-Tim engagement."
+    },
+    {
+      "name": "Bryan Cantrill",
+      "role": "Founder/CTO, Oxide Computer",
+      "tags": ["discipline-naming", "systems", "hardware", "engineering-culture", "agentic-engineering"],
+      "channels": [
+        { "kind": "email", "value": "bryan@oxide.computer", "confidence": "medium" },
+        { "kind": "x", "value": "bcantrill" }
+      ],
+      "template": "discipline-namer-roast",
+      "last_pitched": "2026-05-18"
+    },
+    {
+      "name": "Adam Jacob",
+      "role": "Founder, System Initiative (ex-Chef)",
+      "tags": ["discipline-naming", "devops", "infrastructure", "field-mapping", "agentic-engineering"],
+      "channels": [
+        { "kind": "email", "value": "adam@systeminit.com", "confidence": "medium" },
+        { "kind": "linkedin", "value": "adamhjk" }
+      ],
+      "template": "discipline-namer-precedent",
+      "last_pitched": "2026-05-18"
+    },
+    {
+      "name": "Charity Majors",
+      "role": "Co-founder/CTO, Honeycomb",
+      "tags": ["operations", "agent-sre", "sre", "observability", "agentic-engineering"],
+      "channels": [
+        { "kind": "email", "value": "charity@honeycomb.io", "confidence": "medium" },
+        { "kind": "bluesky", "value": "mipsytipsy.bsky.social" }
+      ],
+      "template": "discipline-practitioner-unnamed",
+      "last_pitched": "2026-05-18",
+      "notes": "Natural namer for the operations / agent-SRE discipline (one of the unnamed three)."
+    },
+    {
+      "name": "Harrison Chase",
+      "role": "Co-founder/CEO, LangChain",
+      "tags": ["orchestration", "multi-agent", "delegation", "agentic-engineering"],
+      "channels": [
+        { "kind": "email", "value": "harrison@langchain.dev", "confidence": "medium" },
+        { "kind": "linkedin", "value": "harrison-chase-961287167" }
+      ],
+      "template": "discipline-practitioner-unnamed",
+      "last_pitched": "2026-05-18",
+      "notes": "Now that orchestration engineering is named and held by kernel.chat, his role shifts from 'natural namer' to 'practitioner whose framework sits in the discipline.'"
+    },
+    {
+      "name": "Linus Lee",
+      "role": "Notion AI / @thesephist",
+      "tags": ["skill-curation", "agent-ux", "tools-for-thought", "agentic-engineering"],
+      "channels": [
+        { "kind": "email", "value": "linus@thesephist.com", "confidence": "low" },
+        { "kind": "linkedin", "value": "linus-lee" }
+      ],
+      "template": "discipline-practitioner-unnamed",
+      "last_pitched": "2026-05-18",
+      "notes": "Practitioner in the unnamed skill-curation discipline."
+    },
+    {
+      "name": "Andy Matuschak",
+      "role": "Independent researcher (tools for thought)",
+      "tags": ["skill-curation", "agent-ux", "tools-for-thought", "learning-systems"],
+      "channels": [
+        { "kind": "linkedin", "value": "andymatuschak", "note": "verify; email at hello@andymatuschak.org bounced 2026-05-18" },
+        { "kind": "email", "value": "hello@andymatuschak.org", "confidence": "low", "note": "BOUNCED 2026-05-18" }
+      ],
+      "template": "thought-leader-context",
+      "last_pitched": "2026-05-18"
+    },
+    {
+      "name": "Mitchell Hashimoto",
+      "role": "Founder, HashiCorp / Ghostty",
+      "tags": ["discipline-naming", "infrastructure", "devops", "engineering-culture"],
+      "channels": [
+        { "kind": "linkedin", "value": "mitchellh", "note": "verify; email at hashimotos.org bounced 2026-05-18 — try mitchellh.com" },
+        { "kind": "email", "value": "mitchell@mitchellh.com", "confidence": "low" }
+      ],
+      "template": "discipline-namer-precedent",
+      "last_pitched": "2026-05-18"
+    },
+    {
+      "name": "Ben Thompson",
+      "role": "Founder/editor, Stratechery",
+      "tags": ["magazine", "editorial", "publishing", "positioning"],
+      "channels": [
+        { "kind": "email", "value": "ben@stratechery.com", "confidence": "low" }
+      ],
+      "template": "magazine-peer",
+      "last_pitched": "2026-05-18"
+    },
+    {
+      "name": "DHH",
+      "role": "Founder, 37signals",
+      "tags": ["engineering-culture", "opinion-leader", "open-source"],
+      "channels": [
+        { "kind": "email", "value": "david@37signals.com", "confidence": "low" },
+        { "kind": "x", "value": "dhh" }
+      ],
+      "template": "hot-take-or-dismiss",
+      "last_pitched": "2026-05-18"
+    },
+    {
+      "name": "Anil Dash",
+      "role": "Independent (long-time tech sociology + field-naming)",
+      "tags": ["field-mapping", "tech-sociology", "discipline-naming", "publishing"],
+      "channels": [
+        { "kind": "email", "value": "anil@dashes.com", "confidence": "medium" },
+        { "kind": "bluesky", "value": "anildash.com" }
+      ],
+      "template": "thought-leader-context",
+      "last_pitched": "2026-05-18"
+    },
+    {
+      "name": "Avery Pennarun",
+      "role": "CEO, Tailscale",
+      "tags": ["systems", "discipline-naming", "engineering-culture", "infrastructure"],
+      "channels": [
+        { "kind": "email", "value": "apenwarr@tailscale.com", "confidence": "low" },
+        { "kind": "email", "value": "apenwarr@gmail.com", "confidence": "medium", "note": "historical-known address" }
+      ],
+      "template": "discipline-namer-precedent",
+      "last_pitched": "2026-05-18"
+    },
+    {
+      "name": "Yohei Nakajima",
+      "role": "Founder, Untapped Capital / creator of BabyAGI",
+      "tags": ["orchestration", "multi-agent", "agentic-engineering", "early-practitioner"],
+      "channels": [
+        { "kind": "linkedin", "value": "yoheinakajima" },
+        { "kind": "x", "value": "yoheinakajima" },
+        { "kind": "email", "value": "yohei@untapped.vc", "confidence": "low" }
+      ],
+      "template": "thought-leader-context",
+      "notes": "Practiced agentic engineering before the field had a name."
+    },
+    {
+      "name": "Aaron Patterson (tenderlove)",
+      "role": "Ruby core; Shopify",
+      "tags": ["engineering-culture", "framing-work", "open-source"],
+      "channels": [
+        { "kind": "bluesky", "value": "tenderlove.bsky.social" },
+        { "kind": "mastodon", "value": "tenderlove@ruby.social" }
+      ],
+      "template": "hot-take-or-dismiss",
+      "notes": "Email-unreliable; use Bluesky or Mastodon in user's hands."
+    },
+    {
+      "name": "Bret Taylor",
+      "role": "Co-founder/CEO Sierra; OpenAI board chair",
+      "tags": ["orchestration", "multi-agent", "agentic-engineering", "enterprise-agents"],
+      "channels": [
+        { "kind": "linkedin", "value": "brettaylor", "note": "verify exact handle" },
+        { "kind": "email", "value": "bret@sierra.ai", "confidence": "low" }
+      ],
+      "template": "discipline-practitioner-unnamed",
+      "notes": "Sierra is the purest enterprise orchestration play; relevant post-orchestration-engineering naming."
+    },
+    {
+      "name": "Erik Bernhardsson",
+      "role": "Founder, Modal Labs",
+      "tags": ["agent-os", "infrastructure", "substrate", "engineering-culture"],
+      "channels": [
+        { "kind": "email", "value": "erik@modal.com", "confidence": "low" },
+        { "kind": "x", "value": "bernhardsson" }
+      ],
+      "template": "discipline-namer-precedent",
+      "notes": "Modal sits adjacent to agent-OS at the runtime layer."
+    },
+    {
+      "name": "swyx (Shawn Wang)",
+      "role": "Latent Space podcast; AI Engineer Summit",
+      "tags": ["agentic-engineering", "publishing", "podcast", "ai-engineer"],
+      "channels": [
+        { "kind": "email", "value": "swyx@latent.space", "confidence": "low" },
+        { "kind": "x", "value": "swyx" }
+      ],
+      "template": "thought-leader-context",
+      "notes": "Latent Space is the closest podcast match for the field-map artifact."
+    },
+    {
+      "name": "Dwarkesh Patel",
+      "role": "Host, Dwarkesh Patel podcast",
+      "tags": ["agentic-engineering", "podcast", "long-form", "field-mapping"],
+      "channels": [
+        { "kind": "email", "value": "dwarkesh@dwarkesh.com", "confidence": "low" },
+        { "kind": "x", "value": "dwarkesh_sp" }
+      ],
+      "template": "thought-leader-context",
+      "notes": "Newer podcast; reads pitches more carefully than Lex."
+    },
+    {
+      "name": "Gergely Orosz",
+      "role": "Author, The Pragmatic Engineer",
+      "tags": ["publishing", "newsletter", "engineering-culture", "field-mapping"],
+      "channels": [
+        { "kind": "email", "value": "gergely@pragmaticengineer.com", "confidence": "low" }
+      ],
+      "template": "magazine-peer",
+      "notes": "Reaches senior engineers; field-mapping work is on his beat."
+    },
+    {
+      "name": "Mike Krieger",
+      "role": "CPO, Anthropic (ex-Instagram)",
+      "tags": ["product-strategy", "agentic-engineering", "anthropic"],
+      "channels": [
+        { "kind": "linkedin", "value": "mikekrieger" }
+      ],
+      "template": "discipline-practitioner-unnamed",
+      "notes": "Anthropic CPO; would care about discipline-naming around their product surface."
+    }
+  ]
+}

@@ -8,4 +8,6 @@ export { parseBriefing, pending, emailable, } from './briefing.js';
 export { GmailSender, } from './send.js';
 export { runOutreach, } from './outreach.js';
 export { appendSendResults } from './log.js';
+export { loadCorpus, validateCorpus, preferredEmail, bestChannel, } from './corpus.js';
+export { explore, } from './explore.js';
 //# sourceMappingURL=index.js.map

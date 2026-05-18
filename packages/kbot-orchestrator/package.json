@@ -1,7 +1,7 @@
 {
   "name": "@kernel.chat/kbot-orchestrator",
-  "version": "0.1.0-alpha.0",
-  "description": "Reference implementation of orchestration engineering — the discipline of structuring how agents pass work to each other and to humans, with audit trails. Drives the outreach + content + maintenance loops behind kernel.chat.",
+  "version": "0.2.0-alpha.0",
+  "description": "Reference implementation of orchestration engineering \u2014 the discipline of structuring how agents pass work to each other and to humans, with audit trails. Drives the outreach + content + maintenance loops behind kernel.chat.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,13 +20,22 @@
     "./briefing": {
       "import": "./dist/briefing.js",
       "types": "./dist/briefing.d.ts"
+    },
+    "./explore": {
+      "import": "./dist/explore.js",
+      "types": "./dist/explore.d.ts"
+    },
+    "./corpus": {
+      "import": "./dist/corpus.js",
+      "types": "./dist/corpus.d.ts"
     }
   },
   "files": [
     "dist",
     "README.md",
     "LICENSE",
-    "ROLE.md"
+    "ROLE.md",
+    "data"
   ],
   "scripts": {
     "build": "tsc",

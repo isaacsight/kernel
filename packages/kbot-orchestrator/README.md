@@ -10,12 +10,19 @@ See [`ROLE.md`](./ROLE.md) for the discipline definition.
 ## What this is
 
 A working pipeline runner for multi-step outcomes that mix agent work,
-deterministic engine calls, and human approval gates. v0.1 ships the
-**outreach pipeline** because that's the load-bearing loop kernel.chat
-itself has been running by hand for months.
+deterministic engine calls, and human approval gates. Two pipelines as of
+v0.2:
 
-Roadmap: content pipeline, code-maintenance pipeline, multi-agent research
-pipeline.
+- **outreach** — read a briefing markdown of recipients, send via SMTP,
+  append an audit table back into the briefing.
+- **explore** — read a candidate registry, filter by tag + recency,
+  assemble a calibrated briefing in the format the outreach pipeline
+  consumes. Discovery is registry-driven for now; v0.3+ adds real
+  public-internet discovery (GitHub stargazers, npm dependents, web
+  research).
+
+Roadmap: reply tracking (v0.3), content pipeline (v0.4), code-maintenance
+pipeline (v0.5), multi-agent research pipeline (v0.6).
 
 ## Install
 
@@ -55,6 +62,38 @@ kbot-orchestrator outreach --briefing .claude/OUTREACH.md --confirm --limit 3
 
 After a run, results are appended to the briefing as a `## Send log
 (machine-appended)` table at the bottom of the file.
+
+## Explore (discovery) usage
+
+```bash
+# Assemble a briefing of candidates who care about a specific artifact.
+# Filters by tag overlap; excludes anyone pitched within 14 days.
+kbot-orchestrator explore \
+  --corpus packages/kbot-orchestrator/data/candidates.json \
+  --artifact docs/agentic-engineering.md \
+  --link "https://github.com/isaacsight/kernel/blob/main/docs/agentic-engineering.md" \
+  --subject "the agentic engineering field map" \
+  --license "CC BY 4.0" \
+  --tags "discipline-naming,agentic-engineering,orchestration" \
+  --output .claude/OUTREACH_GENERATED.md
+
+# Then pipe straight into the outreach pipeline:
+kbot-orchestrator outreach --briefing .claude/OUTREACH_GENERATED.md --confirm
+```
+
+The corpus is a JSON file with two top-level keys: `candidates` (people +
+their tags + channels + pitch-template reference) and `templates` (named
+pitch templates with `{name_first}`, `{artifact_path}`, `{artifact_link}`,
+`{artifact_subject}`, `{artifact_license}`, `{artifact_context}`, `{role}`
+placeholders). A seed corpus ships in `data/candidates.json` with the
+~20 practitioners kernel.chat has identified across its 2026-05 outreach
+push.
+
+The intelligence lives in the corpus curation, not in the agent.
+v0.2 ships the assembler; v0.3+ adds real discovery via public-internet
+sources (GitHub stargazers, npm dependents, web research). v0.2 is
+honest about being a registry-driven briefing generator, not LLM-driven
+candidate research.
 
 ## Briefing format
 
