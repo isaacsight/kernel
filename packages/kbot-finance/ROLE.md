@@ -10,14 +10,14 @@
 
 A provenance engineer builds the substrate that lets AI agents operate
 safely inside regulated industries. The core engineering question they
-answer, over and over, is:
+answer is:
 
 > *"After this AI agent took an action, can we prove what it knew, what
 > it asked, what it received, what it computed, what it decided, who
 > approved it, and replay the decision byte-for-byte under audit?"*
 
 If the answer is yes, the substrate is sound. If the answer is no,
-the substrate is the work.
+the substrate needs work.
 
 ## The structural rule
 
