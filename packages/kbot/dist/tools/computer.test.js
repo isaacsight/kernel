@@ -7,6 +7,23 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { mkdtempSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { execSync } from 'node:child_process';
+// On Linux, computer_check shells out to xdotool to inspect the active
+// window before returning coordinator status. CI runners don't have xdotool,
+// so the early-error short-circuits the coordinator output the test checks
+// for. Skip on Linux-without-xdotool; macOS uses AppleScript (always present).
+const hasXdotool = (() => {
+    if (process.platform !== 'linux')
+        return true;
+    try {
+        execSync('which xdotool', { stdio: 'pipe' });
+        return true;
+    }
+    catch {
+        return false;
+    }
+})();
+const itDeps = it.skipIf(!hasXdotool);
 // These env vars MUST be set before importing computer.ts so the module-scoped
 // coordinator + agent id pick them up.
 const TEST_ROOT = mkdtempSync(join(tmpdir(), 'kbot-computer-test-'));
@@ -44,7 +61,7 @@ describe('computer.ts coordinator integration', () => {
         // as held (registration alone doesn't create a lock file).
         expect(status.apps['TestApp1'] ?? null).toBeNull();
     });
-    it('computer_check includes coordinator status JSON', async () => {
+    itDeps('computer_check includes coordinator status JSON', async () => {
         await call('app_approve', { app: 'StatusApp' });
         const result = await call('computer_check');
         expect(result).toContain('Coordinator:');
