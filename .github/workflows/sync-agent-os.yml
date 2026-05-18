@@ -1,0 +1,115 @@
+name: Sync agent-os to standalone repo
+
+# Mirrors packages/agent-os/** from this monorepo to the standalone
+# repo at github.com/isaacsight/agent-os whenever the subtree changes
+# on main. Source of truth stays here; standalone repo stays a clean
+# public mirror suitable for focused discovery + topic-page presence.
+#
+# Requires a repo secret: AGENT_OS_MIRROR_PAT
+#   - Create a fine-scoped Personal Access Token at:
+#       https://github.com/settings/personal-access-tokens/new
+#   - Repository access: only "isaacsight/agent-os"
+#   - Permissions: Contents → Read and write
+#   - Add as a secret named AGENT_OS_MIRROR_PAT at:
+#       https://github.com/isaacsight/kernel/settings/secrets/actions/new
+#
+# Until the secret exists this workflow fails fast with a clear error.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/agent-os/**'
+      - '.github/workflows/sync-agent-os.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-agent-os
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Subtree-split and push to standalone
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify mirror token is set
+        env:
+          MIRROR_TOKEN: ${{ secrets.AGENT_OS_MIRROR_PAT }}
+        run: |
+          if [ -z "$MIRROR_TOKEN" ]; then
+            echo "::error::Secret AGENT_OS_MIRROR_PAT is not set."
+            echo "Create a fine-scoped PAT on github.com/settings/personal-access-tokens/new:"
+            echo "  - Repository access: isaacsight/agent-os only"
+            echo "  - Permissions: Contents → Read and write"
+            echo "Add as a secret named AGENT_OS_MIRROR_PAT on this repo's Actions settings."
+            exit 1
+          fi
+          echo "Token present (length=${#MIRROR_TOKEN})."
+
+      - name: Clone monorepo (full history, bypassing actions/checkout)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # actions/checkout@v4 fails on this repo because of a phantom
+          # submodule entry under .claude/worktrees/ — its post-checkout
+          # `git submodule foreach` step trips over it. Cloning by hand
+          # bypasses the submodule machinery entirely. We don't need
+          # submodules for the subtree-split anyway.
+          git clone --no-single-branch \
+            "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" .
+          git checkout "${{ github.sha }}"
+          echo "HEAD: $(git rev-parse HEAD)"
+
+      - name: Configure git identity
+        run: |
+          git config user.name "kernel.chat sync bot"
+          git config user.email "noreply@kernel.chat"
+
+      - name: Subtree-split packages/agent-os
+        run: |
+          set -euo pipefail
+          git subtree split --prefix=packages/agent-os -b agent-os-mirror
+          echo "Split head: $(git rev-parse agent-os-mirror)"
+
+      - name: Push to standalone mirror
+        env:
+          MIRROR_TOKEN: ${{ secrets.AGENT_OS_MIRROR_PAT }}
+        run: |
+          set -euo pipefail
+          git push \
+            "https://x-access-token:${MIRROR_TOKEN}@github.com/isaacsight/agent-os.git" \
+            "agent-os-mirror:main" --force-with-lease
+
+      - name: Confirm mirror state
+        env:
+          MIRROR_TOKEN: ${{ secrets.AGENT_OS_MIRROR_PAT }}
+        run: |
+          set -euo pipefail
+          LATEST_LOCAL=$(git rev-parse agent-os-mirror)
+          LATEST_REMOTE=$(curl -sS -H "Authorization: token ${MIRROR_TOKEN}" \
+            "https://api.github.com/repos/isaacsight/agent-os/commits/main" \
+            | python3 -c "import sys,json; print(json.load(sys.stdin)['sha'])")
+          echo "Local subtree HEAD: $LATEST_LOCAL"
+          echo "Remote mirror HEAD: $LATEST_REMOTE"
+          if [ "$LATEST_LOCAL" != "$LATEST_REMOTE" ]; then
+            echo "::warning::Local subtree HEAD does not match remote mirror HEAD."
+            echo "::warning::This is normal on the first run; subsequent runs should match."
+          fi
+
+  notify-on-failure:
+    name: Notify on failure
+    runs-on: ubuntu-latest
+    needs: sync
+    if: failure()
+    steps:
+      - name: Log the failure
+        run: |
+          echo "::error::The agent-os mirror sync failed."
+          echo "Check the sync job log above for the specific error."
+          echo "Most common: AGENT_OS_MIRROR_PAT secret missing or expired."
+          echo "Manual fallback: run locally —"
+          echo "  git subtree split --prefix=packages/agent-os -b ao-sync"
+          echo "  git push https://github.com/isaacsight/agent-os.git ao-sync:main"
+          echo "  git branch -D ao-sync"

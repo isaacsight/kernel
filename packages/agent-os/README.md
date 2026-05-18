@@ -6,12 +6,19 @@ substrate that runs above Modal-class sandboxes (Modal, Daytona,
 RunPod, E2B, local Docker) and below MCP/A2A as the wire formats
 agents speak to each other.
 
-Apache 2.0. Node 22+. Status: `v0.1.0-alpha.0` — reference
+Apache 2.0. Node 22+. Status: `v0.2.0-alpha.0` — reference
 implementation, not yet certified for multi-tenant production.
 
 ```bash
 npm install @kernel.chat/agent-os
 ```
+
+> **Two homes:** the canonical source is this package in the
+> [`isaacsight/kernel`](https://github.com/isaacsight/kernel/tree/main/packages/agent-os)
+> monorepo. A clean mirror auto-syncs to the standalone repo at
+> [`isaacsight/agent-os`](https://github.com/isaacsight/agent-os) on every
+> push, for focused discovery, topic-page presence, and clone-without-the-
+> monorepo workflows. Open issues and PRs against the canonical monorepo.
 
 ---
 
