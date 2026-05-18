@@ -40,6 +40,7 @@ import { ISSUE_384 } from './384'
 import { ISSUE_385 } from './385'
 import { ISSUE_386 } from './386'
 import { ISSUE_387 } from './387'
+import { ISSUE_388 } from './388'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -660,6 +661,23 @@ export interface IssueRecord {
   spread?: IssueSpread
   /** Optional masthead / editorial team credits. */
   credits?: IssueCredits
+  /** Optional named series this issue belongs to. Series group issues
+   *  thematically across the back catalog (e.g., a multi-issue arc on
+   *  one topic). Surfaces on cover + in the catalog index for grouping.
+   *  Introduced in ISSUE 388 to anchor the "Agentic Substrates for the
+   *  Frontier" series. */
+  series?: IssueSeries
+}
+
+export interface IssueSeries {
+  /** The series name (used as a tag/label on covers + indexes). */
+  name: string
+  /** Optional Japanese rendering of the series name. */
+  nameJp?: string
+  /** Optional one-sentence description of what the series covers. */
+  about?: string
+  /** Optional 1-based position of this issue within the series. */
+  position?: number
 }
 
 /** Every issue ever published, oldest first. */
@@ -692,6 +710,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_385,
   ISSUE_386,
   ISSUE_387,
+  ISSUE_388,
 ]
 
 /** The latest published issue — drives the landing cover. */

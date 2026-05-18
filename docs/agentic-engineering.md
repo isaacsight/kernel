@@ -2,7 +2,9 @@
 
 *A working definition of the field, and a map of the disciplines inside it. Written from the position of one magazine and one open-source agent stack working in it.*
 
-Dated 2026-05-17. Filed alongside [`packages/kbot`](../packages/kbot/), [`packages/kbot-finance`](../packages/kbot-finance/), and [`packages/agent-os`](../packages/agent-os/).
+Dated 2026-05-17 (updated 2026-05-18). Filed alongside [`packages/kbot`](../packages/kbot/), [`packages/kbot-finance`](../packages/kbot-finance/), [`packages/agent-os`](../packages/agent-os/), and [`packages/kbot-orchestrator`](../packages/kbot-orchestrator/).
+
+> **Position note (2026-05-18, added in ISSUE 388):** agentic engineering is the **software branch of autonomy engineering** — the broader field, already in working use across defense, aerospace, robotics, and scientific-AI communities. Autonomy engineering has at least four branches: software (agentic engineering, this document), embodied (robotics + autonomous vehicles), scientific (AI4Science + autonomous research), and neuro (NeuroAI). kernel.chat covers agentic engineering as its discipline; the magazine's new series "Agentic Substrates for the Frontier" reads the other branches through the substrate-discipline lens this document defines.
 
 ---
 
