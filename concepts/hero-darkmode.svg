@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <!-- Dark Mode Hero — Lamplight reading desk scene -->
+  <defs>
+    <radialGradient id="lamplight" cx="55%" cy="30%" r="45%">
+      <stop offset="0%" stop-color="#C4A882" stop-opacity="0.18"/>
+      <stop offset="40%" stop-color="#C4A882" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#C4A882" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="desk-surface" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#36322E"/>
+      <stop offset="100%" stop-color="#262320"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background — warm dark -->
+  <rect width="800" height="500" fill="#1C1A18"/>
+
+  <!-- Lamp glow cone -->
+  <ellipse cx="440" cy="200" rx="300" ry="250" fill="url(#lamplight)"/>
+
+  <!-- Desk surface -->
+  <rect x="0" y="320" width="800" height="180" fill="url(#desk-surface)"/>
+  <line x1="0" y1="320" x2="800" y2="320" stroke="#C4A882" stroke-width="0.5" opacity="0.15"/>
+
+  <!-- Lamp -->
+  <!-- Lamp base -->
+  <ellipse cx="580" cy="318" rx="24" ry="6" fill="#36322E" stroke="#C4A882" stroke-width="0.5" opacity="0.3"/>
+  <!-- Lamp stem -->
+  <line x1="580" y1="312" x2="580" y2="180" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/>
+  <!-- Lamp arm -->
+  <line x1="580" y1="180" x2="480" y2="140" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/>
+  <!-- Lamp shade -->
+  <path d="M450 130 Q465 120 480 130 L490 150 Q465 145 440 150 Z" fill="#36322E" stroke="#C4A882" stroke-width="0.8" opacity="0.5"/>
+  <!-- Light beam from shade -->
+  <path d="M455 150 L420 320 L530 320 L495 150" fill="#C4A882" fill-opacity="0.03"/>
+
+  <!-- Open notebook on desk -->
+  <!-- Left page -->
+  <path d="M260 340 L260 440 L390 445 L390 335 Z" fill="#262320" stroke="#C4A882" stroke-width="0.5" opacity="0.3"/>
+  <!-- Right page -->
+  <path d="M390 335 L390 445 L520 440 L520 340 Z" fill="#2A2723" stroke="#C4A882" stroke-width="0.5" opacity="0.3"/>
+  <!-- Spine -->
+  <line x1="390" y1="335" x2="390" y2="445" stroke="#C4A882" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- Text lines on pages — gold in lamplight -->
+  <line x1="280" y1="360" x2="375" y2="358" stroke="#C4A882" stroke-width="0.5" opacity="0.25"/>
+  <line x1="280" y1="372" x2="360" y2="370" stroke="#C4A882" stroke-width="0.5" opacity="0.22"/>
+  <line x1="280" y1="384" x2="370" y2="382" stroke="#C4A882" stroke-width="0.5" opacity="0.2"/>
+  <line x1="280" y1="396" x2="340" y2="394" stroke="#C4A882" stroke-width="0.5" opacity="0.18"/>
+  <line x1="405" y1="358" x2="500" y2="360" stroke="#C4A882" stroke-width="0.5" opacity="0.25"/>
+  <line x1="405" y1="370" x2="490" y2="372" stroke="#C4A882" stroke-width="0.5" opacity="0.22"/>
+  <line x1="405" y1="382" x2="505" y2="384" stroke="#C4A882" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- Pen on desk -->
+  <line x1="540" y1="360" x2="600" y2="400" stroke="#C4A882" stroke-width="1.5" opacity="0.3" stroke-linecap="round"/>
+
+  <!-- Coffee cup — small circle -->
+  <circle cx="200" cy="370" r="18" stroke="#C4A882" stroke-width="0.8" fill="none" opacity="0.2"/>
+  <ellipse cx="200" cy="370" rx="14" ry="4" stroke="#C4A882" stroke-width="0.5" fill="none" opacity="0.15"/>
+  <!-- Steam wisps -->
+  <path d="M195 354 Q193 346 197 340" stroke="#C4A882" stroke-width="0.5" fill="none" opacity="0.1"/>
+  <path d="M203 352 Q201 344 205 338" stroke="#C4A882" stroke-width="0.5" fill="none" opacity="0.08"/>
+
+  <!-- Ambient K watermark — very faint -->
+  <text x="400" y="280" text-anchor="middle" font-family="Georgia, serif" font-style="italic"
+        font-size="200" fill="#C4A882" opacity="0.06">K</text>
+</svg>

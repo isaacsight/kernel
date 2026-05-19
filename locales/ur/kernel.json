@@ -1,0 +1,69 @@
+{
+    "observer": {
+        "phasePipeline": "فیز پائپ لائن",
+        "phases": {
+            "perceiving": "محسوس کرنا",
+            "attending": "توجہ دینا",
+            "deciding": "فیصلہ کرنا",
+            "acting": "عمل کرنا",
+            "reflecting": "غور و فکر"
+        },
+        "perception": "ادراک",
+        "intent": "ارادہ",
+        "urgency": "فوری ضرورت",
+        "complexity": "پیچیدگی",
+        "sentiment": "جذبات",
+        "impliedNeed": "ضمنی ضرورت",
+        "noActivePerception": "کوئی فعال ادراک نہیں",
+        "attention": "توجہ",
+        "focus": "مرکز",
+        "depth": "گہرائی",
+        "noActiveAttention": "کوئی فعال توجہ نہیں",
+        "conviction": "یقین",
+        "trend": {
+            "rising": "بڑھ رہا ہے",
+            "falling": "کم ہو رہا ہے",
+            "stable": "مستحکم ہے"
+        },
+        "beliefs": "عقائد ({{count}})",
+        "noBeliefsFormed": "کوئی عقیدہ نہیں بنا",
+        "eventFeed": "ایونٹ فیڈ",
+        "noEventsYet": "ابھی تک کوئی ایونٹ نہیں ہے",
+        "lastReflection": "آخری غور و فکر",
+        "noReflectionsYet": "ابھی تک کوئی غور و فکر نہیں ہے"
+    },
+    "controls": {
+        "engine": "انجن",
+        "stop": "روکیں",
+        "reset": "دوبارہ ترتیب دیں",
+        "agentOverride": "ایجنٹ اوور رائیڈ",
+        "overrideNext": "اگلے کو اوور رائیڈ کریں",
+        "conviction": "یقین",
+        "beliefs": "عقائد",
+        "newBeliefPlaceholder": "نیا عقیدہ...",
+        "challenge": "چیلنج",
+        "reflections": "غور و فکر",
+        "pruneLabel": "معیار سے نیچے کو ہٹائیں:",
+        "prune": "ہٹائیں",
+        "pruneResult": "{{count}} غور و فکر ہٹا دیے گئے",
+        "agentPerformance": "ایجنٹ کی کارکردگی",
+        "noPerformanceData": "ابھی تک کوئی کارکردگی کا ڈیٹا نہیں ہے"
+    },
+    "chat": {
+        "emptyTitle": "kernel.chat سے پوچھیں",
+        "emptySubtitle": "یہ وہ سب دیکھتا ہے جو انجن دیکھتا ہے۔",
+        "placeholder": "Kernel سے پوچھیں...",
+        "send": "بھیجیں"
+    },
+    "pill": {
+        "openKernel": "kernel.chat کھولیں",
+        "phases": {
+            "idle": "خالی",
+            "perceiving": "محسوس کر رہا ہے",
+            "attending": "توجہ دے رہا ہے",
+            "deciding": "فیصلہ کر رہا ہے",
+            "acting": "عمل کر رہا ہے",
+            "reflecting": "غور کر رہا ہے"
+        }
+    }
+}

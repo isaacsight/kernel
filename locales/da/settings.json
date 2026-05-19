@@ -1,0 +1,124 @@
+{
+  "title": "Kontoinstillinger",
+  "profile": {
+    "heading": "Profil",
+    "displayName": "Vis navn",
+    "displayNamePlaceholder": "Dit navn",
+    "username": "Brugernavn",
+    "usernamePlaceholder": "@brugernavn",
+    "avatar": "Profilbillede",
+    "avatarChange": "Skift",
+    "save": "Gem profil",
+    "saved": "Profil gemt",
+    "resetProfile": "Nulstil profil",
+    "profileReset": "Profil nulstillet til standardindstillinger",
+    "usernameTaken": "Dette brugernavn er allerede taget",
+    "displayNameTaken": "Dette vis navn er allerede taget",
+    "available": "Tilgængelig"
+  },
+  "security": {
+    "heading": "Rediger legitimationsoplysninger",
+    "credentialsHeading": "E-mail & adgangskode",
+    "verifyIdentity": "Bekræft for at foretage ændringer",
+    "verifyHint": "Der sendes en bekræftelseskode til din e-mail, før du redigerer legitimationsoplysninger",
+    "sendCode": "Send bekræftelseskode",
+    "codePlaceholder": "Indtast 6-cifret kode",
+    "codeRequired": "Indtast bekræftelseskoden fra din e-mail",
+    "verificationRequired": "Send en bekræftelseskode først",
+    "codeSent": "Kode sendt — tjek din e-mail",
+    "verify": "Bekræft kode",
+    "verified": "Identitet bekræftet — du kan nu foretage ændringer",
+    "resendCode": "Send koden igen",
+    "resendIn": "Send igen om {{seconds}}s",
+    "changeEmail": "Skift e-mail",
+    "emailPlaceholder": "Ny e-mailadresse",
+    "emailSubmit": "Opdater e-mail",
+    "emailConfirmationSent": "Bekræftelsesmail sendt til din nye adresse",
+    "changePassword": "Skift adgangskode",
+    "setPassword": "Angiv en adgangskode",
+    "newPasswordPlaceholder": "Ny adgangskode",
+    "confirmPasswordPlaceholder": "Bekræft adgangskode",
+    "passwordSubmit": "Opdater adgangskode",
+    "passwordChanged": "Adgangskode opdateret",
+    "tooShort": "Adgangskoden skal være mindst 8 tegn",
+    "mismatch": "Adgangskoderne stemmer ikke overens",
+    "strength": {
+      "weak": "Svag",
+      "fair": "Rimelig",
+      "strong": "Stærk"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Koblede konti",
+    "connected": "Forbundet",
+    "connect": "Opret forbindelse",
+    "disconnect": "Afbryd forbindelse",
+    "cannotUnlinkLast": "Du kan ikke fjerne din eneste login-metode",
+    "unlinked": "Konto afbrudt",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Abonnement",
+    "free": "Gratis plan",
+    "pro": "Pro plan",
+    "max": "Max plan",
+    "admin": "Admin",
+    "upgrade": "Opgrader til Pro",
+    "upgradeMonthly": "Pro – 29$/md",
+    "upgradeAnnual": "Pro — 290 kr./år",
+    "upgradeMax": "Max — 49 kr./md.",
+    "upgradeMaxAnnual": "Max — 490 kr./år",
+    "manage": "Administrer abonnement"
+  },
+  "exportData": {
+    "heading": "Eksportér data",
+    "description": "Download en komplet kopi af alle dine data i JSON-format.",
+    "button": "Eksportér mine data",
+    "success": "Eksport downloadet",
+    "rateLimited": "Eksport tilgængelig igen om {{hours}} timer"
+  },
+  "resetData": {
+    "heading": "Nulstil data",
+    "description": "Slet selektivt dine data uden at slette din konto. Dette kan ikke fortrydes.",
+    "scopes": {
+      "conversations": "Samtaler",
+      "memory": "Hukommelse",
+      "knowledge": "Viden graf",
+      "goals": "Mål",
+      "preferences": "Indstillinger",
+      "all": "Alt"
+    },
+    "scopeDesc": {
+      "conversations": "Slet alle samtaler og beskeder",
+      "memory": "Ryd den lærte profil og procedurer",
+      "knowledge": "Fjern alle enheder og relationer",
+      "goals": "Slet alle mål og milepæle",
+      "preferences": "Nulstil briefings og metadata",
+      "all": "Ryd alle data og start forfra"
+    },
+    "confirm": {
+      "conversations": "Dette vil permanent slette alle dine samtaler og beskeder. Fortsæt?",
+      "memory": "Dette vil slette alt Kernel har lært om dig. Fortsæt?",
+      "knowledge": "Dette vil fjerne alle viden graf-enheder og deres forbindelser. Fortsæt?",
+      "goals": "Dette vil slette alle dine mål og fremskridtsovervågning. Fortsæt?",
+      "preferences": "Dette vil nulstille dine briefings og metadata-præferencer. Fortsæt?",
+      "all": "Dette vil rydde ALLE dine data – samtaler, hukommelse, viden, mål og præferencer. Din konto og dit abonnement forbliver intakt. Fortsæt?"
+    },
+    "confirmBtn": "Ja, nulstil",
+    "cancel": "Fortryd",
+    "success": "{{scope}} er blevet nulstillet",
+    "done": "Datarensning fuldført"
+  },
+  "danger": {
+    "heading": "Konto",
+    "signOut": "Log ud",
+    "signOutDesc": "Log ud af din konto på denne enhed",
+    "deleteAccount": "Slet konto",
+    "deleteDesc": "Slet permanent din konto og alle data"
+  }
+}

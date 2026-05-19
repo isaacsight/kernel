@@ -1,0 +1,69 @@
+{
+    "observer": {
+        "phasePipeline": "Pipeline delle Fasi",
+        "phases": {
+            "perceiving": "percependo",
+            "attending": "ascoltando",
+            "deciding": "decidendo",
+            "acting": "agendo",
+            "reflecting": "riflettendo"
+        },
+        "perception": "Percezione",
+        "intent": "Intento",
+        "urgency": "Urgenza",
+        "complexity": "Complessità",
+        "sentiment": "Sentiment",
+        "impliedNeed": "Bisogno Implicito",
+        "noActivePerception": "Nessuna percezione attiva",
+        "attention": "Attenzione",
+        "focus": "Focus",
+        "depth": "Profondità",
+        "noActiveAttention": "Nessuna attenzione attiva",
+        "conviction": "Convinzione",
+        "trend": {
+            "rising": "in crescita",
+            "falling": "in calo",
+            "stable": "stabile"
+        },
+        "beliefs": "Convinzioni ({{count}})",
+        "noBeliefsFormed": "Nessuna convinzione formata",
+        "eventFeed": "Feed degli Eventi",
+        "noEventsYet": "Ancora nessun evento",
+        "lastReflection": "Ultima Riflessione",
+        "noReflectionsYet": "Ancora nessuna riflessione"
+    },
+    "controls": {
+        "engine": "Motore",
+        "stop": "Ferma",
+        "reset": "Resetta",
+        "agentOverride": "Override dell'Agente",
+        "overrideNext": "Override Prossimo",
+        "conviction": "Convinzione",
+        "beliefs": "Convinzioni",
+        "newBeliefPlaceholder": "Nuova convinzione...",
+        "challenge": "Sfida",
+        "reflections": "Riflessioni",
+        "pruneLabel": "Pota sotto qualità:",
+        "prune": "Pota",
+        "pruneResult": "Rimosse {{count}} riflessioni",
+        "agentPerformance": "Prestazioni Agente",
+        "noPerformanceData": "Nessun dato sulle prestazioni"
+    },
+    "chat": {
+        "emptyTitle": "Chiedi a kernel.chat",
+        "emptySubtitle": "Vede tutto ciò che vede il motore.",
+        "placeholder": "Chiedi al Kernel...",
+        "send": "Invia"
+    },
+    "pill": {
+        "openKernel": "Apri kernel.chat",
+        "phases": {
+            "idle": "inattivo",
+            "perceiving": "percependo",
+            "attending": "ascoltando",
+            "deciding": "decidendo",
+            "acting": "agendo",
+            "reflecting": "riflettendo"
+        }
+    }
+}

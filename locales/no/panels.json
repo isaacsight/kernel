@@ -1,0 +1,236 @@
+{
+  "goals": {
+    "title": "Mål",
+    "emptyTitle": "Sett ditt første mål",
+    "emptyDesc": "Følg med på det som betyr noe — Kernel sjekker fremgangen din automatisk.",
+    "createGoal": "Opprett mål",
+    "addGoal": "Legg til mål",
+    "completed": "Fullført ({{count}})",
+    "target": "Mål: {{date}}",
+    "priority": {
+      "low": "Lav",
+      "medium": "Middels",
+      "high": "Høy"
+    },
+    "frequency": {
+      "daily": "Daglig innsjekk",
+      "weekly": "Ukentlig",
+      "biweekly": "Annenhver uke",
+      "monthly": "Månedlig"
+    },
+    "errors": {
+      "addFailed": "Kunne ikke legge til mål",
+      "updateFailed": "Kunne ikke oppdatere milepæl",
+      "completeFailed": "Kunne ikke fullføre mål",
+      "deleteFailed": "Kunne ikke slette mål"
+    },
+    "deleteConfirm": "Slette dette målet? Dette kan ikke angres.",
+    "loading": "Laster inn mål...",
+    "titlePlaceholder": "Hva jobber du mot?",
+    "descPlaceholder": "Legg til detaljer (valgfritt)..."
+  },
+  "workflows": {
+    "title": "Arbeidsflyter",
+    "loading": "Laster arbeidsflyter...",
+    "emptyTitle": "Bygg din første arbeidsflyt",
+    "emptyDesc": "Automatiser flertrinnsoppgaver — Kernel kjører dem nøyaktig slik du designer.",
+    "newWorkflow": "Ny arbeidsflyt",
+    "createWorkflow": "Opprett arbeidsflyt",
+    "runCount_one": "Kjørt {{count}} gang",
+    "runCount_other": "Kjørt {{count}} ganger",
+    "errors": {
+      "saveFailed": "Kunne ikke lagre arbeidsflyt",
+      "deleteFailed": "Kunne ikke slette arbeidsflyt"
+    },
+    "deleteConfirm": "Slette denne arbeidsflyten? Dette kan ikke angres."
+  },
+  "scheduled": {
+    "title": "Planlagte oppgaver",
+    "loading": "Laster oppgaver...",
+    "emptyTitle": "Planlegg din første oppgave",
+    "emptyDesc": "Sett det opp og glem det — Kernel kjører oppgaver etter din timeplan.",
+    "createTask": "Opprett oppgave",
+    "schedule": "Tidsplan",
+    "taskTypes": {
+      "reminder": "Påminnelse",
+      "workflow": "Kjør arbeidsflyt",
+      "briefing": "Daglig oppsummering",
+      "goalCheckin": "Målinnsjekk"
+    },
+    "presets": {
+      "daily": "Daglig",
+      "weekdays": "Hverdager",
+      "weekly": "Ukentlig (man)",
+      "once": "En gang"
+    },
+    "channels": {
+      "inApp": "I appen",
+      "email": "E-post",
+      "discord": "Discord"
+    },
+    "errors": {
+      "createFailed": "Kunne ikke opprette planlagt oppgave",
+      "updateFailed": "Kunne ikke oppdatere oppgave",
+      "deleteFailed": "Kunne ikke slette oppgave"
+    },
+    "deleteConfirm": "Slette denne planlagte oppgaven?"
+  },
+  "briefings": {
+    "title": "Oppsummeringer",
+    "generateTooltip": "Generer en ny oppsummering basert på dine interesser og nylig aktivitet",
+    "generating": "Genererer...",
+    "newBriefing": "Ny oppsummering",
+    "phases": {
+      "planning": "Planlegger",
+      "researching": "Forsker",
+      "writing": "Skriver"
+    },
+    "loading": "Laster oppsummeringer...",
+    "emptyTitle": "Din daglige oppsummering",
+    "emptyDesc": "Få en personlig nyhets- og innsiktsammendrag skreddersydd til dine interesser og mål.",
+    "generateFirst": "Generer din første oppsummering",
+    "errorTitle": "Denne oppsummeringen kunne ikke genereres",
+    "errorDesc": "Forskningssteget returnerte ikke nok data til å lage et nyttig sammendrag. Dette kan skje hvis søketjenesten var midlertidig utilgjengelig.",
+    "readTime": "{{count}} min lesing",
+    "wordCount": "{{count}} ord",
+    "topicsCovered": "Emner dekket",
+    "continueReading": "Fortsett å lese",
+    "readFull": "Les hele oppsummeringen",
+    "goDeeper": "Gå dypere i chat",
+    "saveAsGoal": "Lagre konklusjoner som mål",
+    "errors": {
+      "generateFailed": "Kunne ikke generere oppsummering"
+    },
+    "toast": {
+      "generated": "Oppsummering generert",
+      "removed": "Oppsummering fjernet"
+    }
+  },
+  "stats": {
+    "title": "Din statistikk",
+    "loading": "Laster...",
+    "loadError": "Kunne ikke laste statistikk.",
+    "messages": "Meldinger",
+    "conversations": "Samtaler",
+    "entities": "Enheter",
+    "helpful": "Nyttig",
+    "agentUsage": "Agentbruk",
+    "topTopics": "Toppemner",
+    "activity": "Aktivitet",
+    "memberSince": "Medlem siden {{date}}"
+  },
+  "kg": {
+    "title": "Hva Kernel vet",
+    "emptyTitle": "Kernel har ikke lært noe ennå.",
+    "emptyHint": "Fortsett å chatte — den plukker opp folk, prosjekter og konsepter du nevner.",
+    "entitiesCount": "{{count}} enheter",
+    "connectionsCount": "{{count}} forbindelser",
+    "confident": "{{value}}% sikker",
+    "mentioned": "{{count}}x nevnt",
+    "types": {
+      "person": "Personer",
+      "company": "Selskaper",
+      "project": "Prosjekter",
+      "concept": "Konsepter",
+      "preference": "Preferanser",
+      "location": "Steder"
+    }
+  },
+  "insights": {
+    "title": "Innsikt",
+    "sections": {
+      "world": "Deg",
+      "beliefs": "Overbevisninger",
+      "memory": "Hukommelse",
+      "reflections": "Kvalitet",
+      "agents": "Agenter"
+    },
+    "howISeeYou": "Hvordan jeg ser deg",
+    "apparentGoal": "Tilsynelatende mål",
+    "situation": "Nåværende situasjon",
+    "conviction": "Overbevisning",
+    "whatIBelieve": "Hva jeg tror",
+    "noBeliefsYet": "Ingen overbevisninger ennå. Fortsett å snakke — jeg lærer hva som er viktig for deg.",
+    "challengeBelief": "Utfordre denne overbevisningen",
+    "dismissBelief": "Avvis denne overbevisningen",
+    "myMemory": "Mitt minne om deg",
+    "noMemoryYet": "Ingen hukommelse ennå. Jeg lærer om deg mens vi snakker.",
+    "commStyle": "Kommunikasjonsstil",
+    "memory": {
+      "interests": "Interesser",
+      "goals": "Mål",
+      "facts": "Om deg",
+      "preferences": "Preferanser"
+    },
+    "performance": "Hvordan jeg presterer",
+    "noReflectionsYet": "Ingen refleksjoner ennå. Jeg begynner å spore kvalitet etter noen samtaler.",
+    "avgQuality": "snitt kvalitet (siste 20)",
+    "dims": {
+      "substance": "Substans",
+      "coherence": "Sammenheng",
+      "relevance": "Relevans",
+      "brevity": "Korthet",
+      "craft": "Håndverk"
+    },
+    "recentLessons": "Nylige lærdommer",
+    "patternNotes": "Mønsternotater",
+    "agentPerformance": "Agentytelse",
+    "noAgentDataYet": "Ingen agentdata ennå.",
+    "quality": "Kvalitet",
+    "usage": "Bruk",
+    "challengedStat": "{{count}}x utfordret",
+    "reinforcedStat": "{{count}}x forsterket",
+    "challengeAction": "utfordr"
+  },
+  "share": {
+    "title": "Del samtale",
+    "checking": "Sjekker etter eksisterende lenke...",
+    "existingLink": "Denne samtalen har allerede en offentlig lenke.",
+    "anyoneCanView": "Alle med denne lenken kan se denne samtalen.",
+    "revokeLink": "Tilbakekall lenke",
+    "revoking": "Tilbakekaller...",
+    "createDesc": "Opprett en offentlig lenke som alle kan se. Ingen innlogging kreves.",
+    "linkExpires": "Lenken utløper:",
+    "never": "Aldri",
+    "hours24": "24 timer",
+    "days7": "7 dager",
+    "days30": "30 dager",
+    "createLink": "Opprett delingslenke",
+    "creating": "Oppretter...",
+    "errors": {
+      "createFailed": "Kunne ikke opprette delingslenke",
+      "revokeFailed": "Kunne ikke tilbakekalle lenke"
+    },
+    "toast": {
+      "revoked": "Delingslenke tilbakekalt"
+    },
+    "shareableLink": "Delbar lenke",
+    "copyLink": "Kopier lenke",
+    "copied": "Kopiert",
+    "copiedAnnounce": "Lenke kopiert til utklippstavlen",
+    "shareVia": "Del via...",
+    "limitReached": "Du har nådd din daglige grense på {{limit}} delte lenker. Oppgrader til Pro for mer deling.",
+    "limitHint": "{{used}}/{{limit}} lenker brukt i dag",
+    "dailyCount": "{{used}}/{{limit}} gratis delinger brukt i dag"
+  },
+  "mirror": {
+    "title": "Speilet",
+    "emptyTitle": "Speilet er fortsatt under forming.",
+    "emptyDesc": "Fortsett å snakke – Kernels agenter lærer å se deg fra forskjellige vinkler.",
+    "convergenceTitle": "Hva speilet ser",
+    "convergenceDesc": "Innsikter som bare oppstår når flere agenter sammenligner notater.",
+    "facetsTitle": "Agentperspektiver",
+    "facetsDesc": "Hver agent observerer en annen dimensjon av hvem du er.",
+    "observations": "observasjoner",
+    "patterns": "Mønstre",
+    "convergenceCount": "Konvergert {{count}} ganger",
+    "dimensions": {
+      "relationship": "Relasjon",
+      "curiosity": "Nysgjerrighet",
+      "craft": "Håndverk",
+      "voice": "Stemme",
+      "judgment": "Dømmekraft",
+      "arc": "Bue"
+    }
+  }
+}

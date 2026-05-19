@@ -1,0 +1,192 @@
+{
+  "tagline": "一個記住你、與你一起思考、隨時間變得更好的個人 AI。",
+  "placeholder": "與 kernel.chat 對話...",
+  "welcomeToPro": "歡迎使用 Kernel Pro！",
+  "menu": {
+    "shareConversation": "分享對話",
+    "exportMarkdown": "匯出為 Markdown",
+    "goals": "目標",
+    "workflows": "工作流程",
+    "scheduledTasks": "排程任務",
+    "dailyBriefing": "每日簡報",
+    "whatKernelKnows": "Kernel 知道什麼",
+    "yourStats": "你的統計數據",
+    "insights": "洞察",
+    "upgradeToPro": "升級為 Pro",
+    "manageSubscription": "管理訂閱",
+    "signOut": "登出",
+    "deleteAccount": "刪除帳號",
+    "notifications": "通知",
+    "notifInApp": "應用程式內通知",
+    "notifBriefings": "簡報提醒",
+    "notifGoals": "目標更新",
+    "notifReminders": "提醒",
+    "notifPush": "推送通知",
+    "darkMode": "深色模式",
+    "theme": "主題",
+    "themeLight": "淺色",
+    "themeDark": "深色",
+    "themeEink": "E-Ink",
+    "agentBuilder": "代理建構器",
+    "agentLibrary": "代理資料庫",
+    "backgroundAgents": "背景代理",
+    "myContent": "我的內容",
+    "bookmarks": "書籤",
+    "architecture": "架構",
+    "designSystem": "設計系統",
+    "routingInsights": "路由洞察",
+    "system": "系統",
+    "communications": "通訊",
+    "adaptiveSystem": "自適應系統",
+    "usage": "使用量",
+    "mirror": "鏡像",
+    "projectFiles": "專案檔案",
+    "imageGallery": "圖片庫",
+    "knowledgeBase": "知識庫",
+    "social": "社交媒體",
+    "platformEngine": "內容管線",
+    "explore": "探索",
+    "accountSettings": "帳戶設定",
+    "notifProactive": "主動提示"
+  },
+  "admin": "管理員",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "今日簡報",
+    "read": "閱讀",
+    "discuss": "討論"
+  },
+  "upgrade": {
+    "title": "您已使用完 {{limit}} 則免費訊息",
+    "subtitle": "Pro 為您提供無限訊息、能了解您的記憶和完整簡報。",
+    "resetsAt": "您的訊息將在 {{time}} 重置。升級享受每日 100 則訊息。",
+    "features": {
+      "unlimitedMessages": "無限訊息",
+      "deepResearch": "擴展思考（30次/月）",
+      "multiAgent": "檔案分析（10次/月）",
+      "multiStep": "目標、語音和智能工作流程",
+      "persistentMemory": "記憶 + 主動式簡報"
+    },
+    "button": "升級 Pro — $29/月",
+    "annualButton": "$290/年 — 節省 $58",
+    "buttonLoading": "正在開啟結帳...",
+    "maybeLater": "稍後再說",
+    "learnedTitle": "Kernel 了解你的情況",
+    "learnedCta": "明天回來繼續對話。",
+    "maxButton": "升級至 Max — 每月 $49",
+    "maxAnnualButton": "$490/年 — 節省 $98"
+  },
+  "deleteConfirm": {
+    "title": "刪除您的帳號？",
+    "subtitle": "這將永久刪除您所有的資料：對話、記憶和偏好設定。此操作無法復原。",
+    "subtitleWithSub": " 您的訂閱也將被取消。",
+    "typeDelete": "輸入 DELETE 以確認：",
+    "confirm": "是的，刪除我的帳號",
+    "confirming": "刪除中..."
+  },
+  "status": {
+    "assemblingAgents": "正在組裝代理...",
+    "agentsCollaborating": "代理協作中",
+    "synthesizingPerspectives": "正在綜合觀點...",
+    "routingToSpecialist": "正在路由至專家...",
+    "isWorking": "{{agent}} 工作中...",
+    "lowConfidence": "低信心度"
+  },
+  "feedback": {
+    "save": "儲存",
+    "cancel": "取消"
+  },
+  "messagesRemaining": "剩餘 {{count}} 則訊息",
+  "lastFreeMessage": "最後一則免費訊息",
+  "menuSection": {
+    "ai": "AI 與代理",
+    "content": "內容與知識",
+    "insights": "洞察與目標",
+    "system": "設定與系統"
+  },
+  "usage": {
+    "title": "使用情況",
+    "loading": "正在載入使用情況資料...",
+    "retry": "重試",
+    "last30days": "過去30天",
+    "onPace": "預計達到 {{projected}} / {{limit}} 條訊息",
+    "overLimit": "預計超過您的 {{limit}} 條訊息限制",
+    "byFeature": "依功能",
+    "dailyTrend": "30天趨勢",
+    "recommendation": "建議",
+    "upgrade": "升級"
+  },
+  "entity": {
+    "evolved": "已進化至 {{tier}}",
+    "streak": "第 {{count}} 天",
+    "goalCheckIn": "檢查項目：{{title}}",
+    "mood": {
+      "happy": "開心",
+      "excited": "興奮",
+      "content": "滿足",
+      "sad": "難過",
+      "sleepy": "睏倦",
+      "lonely": "孤單",
+      "bored": "無聊"
+    }
+  },
+  "entityInfo": {
+    "mood": "情緒",
+    "streak": "連線",
+    "days": "天",
+    "focus": "專注"
+  },
+  "nudge": {
+    "insights": "您已經進行了幾次對話，Kernel 正在尋找您談論內容中的模式。",
+    "knowledge": "您的知識圖譜正在增長，查看 Kernel 從您的對話中繪製的關聯。",
+    "stats": "您已完成一個目標，請查看您的統計數據以了解您的使用方式的演變。",
+    "workflows": "您一直在定期使用 Kernel，工作流程可以自動化您的重複性任務。",
+    "showMe": "顯示給我",
+    "notNow": "稍後"
+  },
+  "valuePreview": {
+    "message": "專業會員可以獲得每日摘要、深入研究和持久記憶。",
+    "gotIt": "知道了"
+  },
+  "messagesLeft": "{{count}} 條訊息剩餘",
+  "agentWhy": {
+    "label": "為什麼？"
+  },
+  "thinking": {
+    "label": "擴展思考",
+    "duration": "思考了 {{seconds}} 秒",
+    "streaming": "正在思考...",
+    "toggle": "啟用擴展思考",
+    "tooltip": "在回答前更深入地思考"
+  },
+  "explain": {
+    "toggle": "啟用說明模式",
+    "tooltip": "說明模式 — 逐步程式碼"
+  },
+  "document": {
+    "active": "正在分析：{{name}}",
+    "clear": "清除文件",
+    "contextHint": "就此文件提出後續問題"
+  },
+  "proactive": {
+    "noticed": "Kernel 發現...",
+    "notification": "Kernel 有一個觀察想告訴您",
+    "explore": "我們來探索一下"
+  },
+  "tour": {
+    "entity": "這是您的 Kernel 實體。它會隨著您聊天而演進 — 點擊它以查看其情緒、連線次數和成長等級。",
+    "moreMenu": "點擊這裡查看 Kernel 的所有功能：代理程式、知識庫、洞察力等等。",
+    "inputBar": "在此開始對話。附加檔案、切換說明模式或只是打招呼。",
+    "gotIt": "知道了",
+    "skip": "跳過教學"
+  },
+  "workflow": {
+    "planning": "規劃步驟中...",
+    "executing": "執行：{{step}}",
+    "complete": "工作流程完成",
+    "failed": "步驟失敗：{{step}}",
+    "cancel": "取消工作流程",
+    "cancelled": "工作流程已取消"
+  }
+}

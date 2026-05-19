@@ -1,0 +1,124 @@
+{
+  "title": "Kontoinställningar",
+  "profile": {
+    "heading": "Profil",
+    "displayName": "Visningsnamn",
+    "displayNamePlaceholder": "Ditt namn",
+    "username": "Användarnamn",
+    "usernamePlaceholder": "@användarnamn",
+    "avatar": "Profilbild",
+    "avatarChange": "Ändra",
+    "save": "Spara profil",
+    "saved": "Profil sparad",
+    "resetProfile": "Återställ profil",
+    "profileReset": "Profilen återställs till standardvärden",
+    "usernameTaken": "Detta användarnamn är redan taget",
+    "displayNameTaken": "Detta visningsnamn är redan taget",
+    "available": "Tillgängligt"
+  },
+  "security": {
+    "heading": "Redigera inloggningsuppgifter",
+    "credentialsHeading": "E-post & lösenord",
+    "verifyIdentity": "Verifiera för att göra ändringar",
+    "verifyHint": "En verifieringskod skickas till din e-postadress innan du redigerar inloggningsuppgifter",
+    "sendCode": "Skicka verifieringskod",
+    "codePlaceholder": "Ange 6-siffrig kod",
+    "codeRequired": "Ange verifieringskoden från din e-post",
+    "verificationRequired": "Skicka en verifieringskod först",
+    "codeSent": "Kod skickad — kolla din e-post",
+    "verify": "Verifiera kod",
+    "verified": "Identitet verifierad — du kan nu göra ändringar",
+    "resendCode": "Skicka kod igen",
+    "resendIn": "Skicka om om {{seconds}}s",
+    "changeEmail": "Ändra e-post",
+    "emailPlaceholder": "Ny e-postadress",
+    "emailSubmit": "Uppdatera e-post",
+    "emailConfirmationSent": "Bekräftelsemejl skickat till din nya adress",
+    "changePassword": "Ändra lösenord",
+    "setPassword": "Ange ett lösenord",
+    "newPasswordPlaceholder": "Nytt lösenord",
+    "confirmPasswordPlaceholder": "Bekräfta lösenord",
+    "passwordSubmit": "Uppdatera lösenord",
+    "passwordChanged": "Lösenord uppdaterat",
+    "tooShort": "Lösenordet måste vara minst 8 tecken",
+    "mismatch": "Lösenorden matchar inte",
+    "strength": {
+      "weak": "Svag",
+      "fair": "Acceptabel",
+      "strong": "Stark"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Länkade konton",
+    "connected": "Ansluten",
+    "connect": "Anslut",
+    "disconnect": "Koppla bort",
+    "cannotUnlinkLast": "Du kan inte ta bort din enda inloggningsmetod",
+    "unlinked": "Konto kopplat bort",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Prenumeration",
+    "free": "Gratis plan",
+    "pro": "Pro plan",
+    "max": "Max plan",
+    "admin": "Admin",
+    "upgrade": "Uppgradera till Pro",
+    "upgradeMonthly": "Pro — 29 kr/mån",
+    "upgradeAnnual": "Pro — 290 kr/år",
+    "upgradeMax": "Max — 49 kr/mån",
+    "upgradeMaxAnnual": "Max — 490 kr/år",
+    "manage": "Hantera prenumeration"
+  },
+  "exportData": {
+    "heading": "Exportera data",
+    "description": "Ladda ner en komplett kopia av alla dina data i JSON-format.",
+    "button": "Exportera mina data",
+    "success": "Export nedladdad",
+    "rateLimited": "Export tillgänglig igen om {{hours}} timmar"
+  },
+  "resetData": {
+    "heading": "Återställ data",
+    "description": "Rensa dina data selektivt utan att radera ditt konto. Detta kan inte ångras.",
+    "scopes": {
+      "conversations": "Konversationer",
+      "memory": "Minne",
+      "knowledge": "Kunskapsgraf",
+      "goals": "Mål",
+      "preferences": "Inställningar",
+      "all": "Allt"
+    },
+    "scopeDesc": {
+      "conversations": "Radera alla konversationer och meddelanden",
+      "memory": "Rensa bort inlärd profil och procedurer",
+      "knowledge": "Ta bort alla entiteter och relationer",
+      "goals": "Radera alla mål och milstolpar",
+      "preferences": "Återställ briefingar och metadata",
+      "all": "Rensa all data och börja om"
+    },
+    "confirm": {
+      "conversations": "Detta raderar permanent alla dina konversationer och meddelanden. Fortsätt?",
+      "memory": "Detta kommer att radera allt Kernel har lärt sig om dig. Fortsätt?",
+      "knowledge": "Detta tar bort alla kunskapsgrafentiteter och deras kopplingar. Fortsätt?",
+      "goals": "Detta raderar alla dina mål och framstegsspårning. Fortsätt?",
+      "preferences": "Detta återställer dina briefingar och metadata-inställningar. Fortsätt?",
+      "all": "Detta rensar ALL din data – konversationer, minne, kunskap, mål och inställningar. Ditt konto och din prenumeration förblir intakta. Fortsätt?"
+    },
+    "confirmBtn": "Ja, återställ",
+    "cancel": "Avbryt",
+    "success": "{{scope}} rensades framgångsrikt",
+    "done": "Dataåterställning slutförd"
+  },
+  "danger": {
+    "heading": "Kontot",
+    "signOut": "Logga ut",
+    "signOutDesc": "Logga ut från ditt konto på den här enheten",
+    "deleteAccount": "Ta bort konto",
+    "deleteDesc": "Ta permanent bort ditt konto och all data"
+  }
+}

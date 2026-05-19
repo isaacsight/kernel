@@ -1,0 +1,192 @@
+{
+  "tagline": "एक व्यक्तिगत AI जो आपको याद रखता है, आपके साथ सोचता है, और समय के साथ बेहतर होता जाता है।",
+  "placeholder": "kernel.chat से बात करें...",
+  "welcomeToPro": "Kernel Pro में आपका स्वागत है!",
+  "menu": {
+    "shareConversation": "बातचीत साझा करें",
+    "exportMarkdown": "Markdown के रूप में निर्यात करें",
+    "goals": "लक्ष्य",
+    "workflows": "वर्कफ़्लो",
+    "scheduledTasks": "अनुसूचित कार्य",
+    "dailyBriefing": "दैनिक ब्रीफिंग",
+    "whatKernelKnows": "Kernel क्या जानता है",
+    "yourStats": "आपके आँकड़े",
+    "insights": "अंतर्दृष्टि",
+    "upgradeToPro": "Pro में अपग्रेड करें",
+    "manageSubscription": "सदस्यता प्रबंधित करें",
+    "signOut": "साइन आउट करें",
+    "deleteAccount": "खाता हटाएं",
+    "notifications": "सूचनाएं",
+    "notifInApp": "ऐप में सूचनाएं",
+    "notifBriefings": "ब्रीफिंग अलर्ट",
+    "notifGoals": "लक्ष्य अपडेट",
+    "notifReminders": "रिमाइंडर",
+    "notifPush": "पुश सूचनाएँ",
+    "darkMode": "डार्क मोड",
+    "theme": "थीम",
+    "themeLight": "लाइट",
+    "themeDark": "डार्क",
+    "themeEink": "E-Ink",
+    "agentBuilder": "एजेंट बिल्डर",
+    "agentLibrary": "एजेंट लाइब्रेरी",
+    "backgroundAgents": "बैकग्राउंड एजेंट्स",
+    "myContent": "मेरा कंटेंट",
+    "bookmarks": "बुकमार्क्स",
+    "architecture": "आर्किटेक्चर",
+    "designSystem": "डिज़ाइन सिस्टम",
+    "routingInsights": "रूटिंग इनसाइट्स",
+    "system": "सिस्टम",
+    "communications": "संचार",
+    "adaptiveSystem": "अनुकूली प्रणाली",
+    "usage": "उपयोग",
+    "mirror": "द मिरर",
+    "projectFiles": "परियोजना फ़ाइलें",
+    "imageGallery": "चित्र गैलरी",
+    "knowledgeBase": "ज्ञान आधार",
+    "social": "सोशल मीडिया",
+    "platformEngine": "सामग्री पाइपलाइन",
+    "explore": "खोजें",
+    "accountSettings": "खाता सेटिंग",
+    "notifProactive": "सक्रिय अंतर्दृष्टि"
+  },
+  "admin": "एडमिन",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "आज की ब्रीफिंग",
+    "read": "पढ़ें",
+    "discuss": "चर्चा करें"
+  },
+  "upgrade": {
+    "title": "आपने अपने {{limit}} मुफ्त संदेश उपयोग कर लिए हैं",
+    "subtitle": "Pro आपको असीमित मैसेजिंग, आपको समझने वाली मेमोरी, और पूर्ण ब्रीफिंग देता है।",
+    "resetsAt": "आपके संदेश {{time}} पर रीसेट होंगे। प्रतिदिन 100 संदेशों के लिए अपग्रेड करें।",
+    "features": {
+      "unlimitedMessages": "असीमित मैसेजिंग",
+      "deepResearch": "विस्तारित सोच (30/माह)",
+      "multiAgent": "फ़ाइल विश्लेषण (10/माह)",
+      "multiStep": "लक्ष्य, वॉइस और एजेंटिक वर्कफ़्लो",
+      "persistentMemory": "मेमोरी + सक्रिय ब्रीफिंग"
+    },
+    "button": "Pro बनें — $29/माह",
+    "annualButton": "$290/वर्ष — $58 बचाएं",
+    "buttonLoading": "चेकआउट खोल रहा है...",
+    "maybeLater": "शायद बाद में",
+    "learnedTitle": "कर्नेल ने आपके बारे में क्या सीखा",
+    "learnedCta": "कल वापस आएं और बातचीत जारी रखें।",
+    "maxButton": "मैक्स पर जाएं — $49/माह",
+    "maxAnnualButton": "$490/वर्ष — $98 की बचत"
+  },
+  "deleteConfirm": {
+    "title": "अपना खाता हटाएं?",
+    "subtitle": "यह आपका सारा डेटा स्थायी रूप से हटा देगा: बातचीत, मेमोरी, और प्राथमिकताएं। इसे पूर्ववत नहीं किया जा सकता।",
+    "subtitleWithSub": " आपकी सदस्यता भी रद्द कर दी जाएगी।",
+    "typeDelete": "पुष्टि के लिए DELETE टाइप करें:",
+    "confirm": "हां, मेरा खाता हटाएं",
+    "confirming": "हटा रहा है..."
+  },
+  "status": {
+    "assemblingAgents": "एजेंट्स को एकत्रित कर रहा है...",
+    "agentsCollaborating": "एजेंट्स सहयोग कर रहे हैं",
+    "synthesizingPerspectives": "दृष्टिकोणों का संश्लेषण कर रहा है...",
+    "routingToSpecialist": "विशेषज्ञ को रूट कर रहा है...",
+    "isWorking": "{{agent}} काम कर रहा है...",
+    "lowConfidence": "कम विश्वास"
+  },
+  "feedback": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें"
+  },
+  "messagesRemaining": "{{count}} संदेश शेष",
+  "lastFreeMessage": "अंतिम मुफ्त संदेश",
+  "menuSection": {
+    "ai": "एआई और एजेंट",
+    "content": "सामग्री और ज्ञान",
+    "insights": "अंतर्दृष्टि और लक्ष्य",
+    "system": "सेटिंग और सिस्टम"
+  },
+  "usage": {
+    "title": "उपयोग",
+    "loading": "उपयोग डेटा लोड हो रहा है...",
+    "retry": "फिर से प्रयास करें",
+    "last30days": "पिछले 30 दिन",
+    "onPace": "{{projected}} में {{limit}} संदेशों के लिए सही गति पर",
+    "overLimit": "{{limit}} संदेश सीमा से अधिक होने की संभावना",
+    "byFeature": "फ़ीचर द्वारा",
+    "dailyTrend": "30-दिन का रुझान",
+    "recommendation": "सिफारिश",
+    "upgrade": "अपग्रेड करें"
+  },
+  "entity": {
+    "evolved": "{{tier}} में विकसित",
+    "streak": "दिन {{count}}",
+    "goalCheckIn": "चेक इन: {{title}}",
+    "mood": {
+      "happy": "खुश",
+      "excited": "उत्साहित",
+      "content": "संतुष्ट",
+      "sad": "दुखी",
+      "sleepy": "नींद की",
+      "lonely": "अकेलापन",
+      "bored": "ऊब"
+    }
+  },
+  "entityInfo": {
+    "mood": "मूड",
+    "streak": "स्ट्रिक",
+    "days": "दिन",
+    "focus": "फोकस"
+  },
+  "nudge": {
+    "insights": "आपने अब तक कुछ बातचीत की है — Kernel को पता चल रहे हैं कि आप किस बारे में बात करते हैं, उसमें पैटर्न।",
+    "knowledge": "आपका ज्ञान ग्राफ बढ़ रहा है — देखें Kernel ने आपकी बातचीत से जो कनेक्शन मैप किए हैं।",
+    "stats": "आपने एक लक्ष्य पूरा किया — देखें कि आपका उपयोग कैसे विकसित हो रहा है, इसके लिए अपने आँकड़े देखें।",
+    "workflows": "आप नियमित रूप से Kernel का उपयोग कर रहे हैं — वर्कफ़्लो आपकी आवर्ती कार्यों को स्वचालित कर सकते हैं।",
+    "showMe": "मुझे दिखाओ",
+    "notNow": "अभी नहीं"
+  },
+  "valuePreview": {
+    "message": "प्रो सदस्य दैनिक ब्रीफिंग, गहन शोध और लगातार मेमोरी प्राप्त करते हैं।",
+    "gotIt": "समझ गया"
+  },
+  "messagesLeft": "{{count}} संदेश बचे हैं",
+  "agentWhy": {
+    "label": "क्यों?"
+  },
+  "thinking": {
+    "label": "विस्तारित सोच",
+    "duration": "{{seconds}} सेकंड के लिए सोचा",
+    "streaming": "सोच रहा हूँ...",
+    "toggle": "विस्तारित सोच टॉगल करें",
+    "tooltip": "उत्तर देने से पहले गहराई से सोचें"
+  },
+  "explain": {
+    "toggle": "समझाइए मोड टॉगल करें",
+    "tooltip": "समझाइए मोड - चरण-दर-चरण कोड"
+  },
+  "document": {
+    "active": "विश्लेषण: {{name}}",
+    "clear": "दस्तावेज़ साफ़ करें",
+    "contextHint": "इस दस्तावेज़ के बारे में अनुवर्ती प्रश्न पूछें"
+  },
+  "proactive": {
+    "noticed": "कर्नेल ने देखा...",
+    "notification": "कर्नेल के पास आपके लिए एक अवलोकन है",
+    "explore": "चलो इसे एक्सप्लोर करें"
+  },
+  "tour": {
+    "entity": "यह आपका कर्नेल एंटिटी है। यह आपके चैट करने के तरीके के अनुसार विकसित होता है - इसके मूड, स्ट्रीक और ग्रोथ टियर को देखने के लिए इसे टैप करें।",
+    "moreMenu": "कर्नेल की सभी सुविधाओं के लिए यहां टैप करें: एजेंट, ज्ञान आधार, अंतर्दृष्टि और बहुत कुछ।",
+    "inputBar": "यहां बातचीत शुरू करें। फ़ाइलें संलग्न करें, स्पष्टीकरण मोड टॉगल करें, या बस नमस्ते कहें।",
+    "gotIt": "समझ गया",
+    "skip": "टूर छोड़ें"
+  },
+  "workflow": {
+    "planning": "योजना बनाने के चरण...",
+    "executing": "निष्पादित कर रहा है: {{step}}",
+    "complete": "कार्यप्रवाह पूरा हुआ",
+    "failed": "चरण विफल हुआ: {{step}}",
+    "cancel": "कार्यप्रवाह रद्द करें",
+    "cancelled": "कार्यप्रवाह रद्द कर दिया गया"
+  }
+}

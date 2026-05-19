@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" fill="none">
+  <!-- Onboarding Step 1: Welcome — Seed sprouting into constellation K -->
+  <rect width="280" height="280" fill="#FAF9F6"/>
+
+  <!-- Ground line — earthy -->
+  <path d="M60 210 Q140 205 220 210" stroke="#D4C5A9" stroke-width="1" fill="none"/>
+
+  <!-- Seed underground -->
+  <ellipse cx="140" cy="220" rx="10" ry="6" fill="#D4C5A9" opacity="0.4"/>
+
+  <!-- Stem growing upward -->
+  <path d="M140 214 Q140 180 138 150 Q136 130 140 110"
+        stroke="#6B5B95" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- First leaf unfurling — left -->
+  <path d="M138 150 Q120 140 112 148 Q118 155 138 150"
+        stroke="#6B5B95" stroke-width="1" fill="#6B5B95" fill-opacity="0.08"/>
+
+  <!-- Second leaf — right -->
+  <path d="M139 132 Q158 122 165 130 Q158 138 139 132"
+        stroke="#6B5B95" stroke-width="1" fill="#6B5B95" fill-opacity="0.08"/>
+
+  <!-- Constellation dots forming K shape at the top -->
+  <!-- Vertical stroke of K -->
+  <circle cx="130" cy="50" r="2.5" fill="#6B5B95"/>
+  <circle cx="130" cy="66" r="2" fill="#6B5B95" opacity="0.7"/>
+  <circle cx="130" cy="82" r="2.5" fill="#6B5B95"/>
+  <circle cx="130" cy="98" r="2" fill="#6B5B95" opacity="0.7"/>
+
+  <!-- Upper diagonal of K -->
+  <circle cx="140" cy="60" r="1.5" fill="#6B5B95" opacity="0.5"/>
+  <circle cx="150" cy="50" r="2.5" fill="#6B5B95"/>
+  <circle cx="158" cy="42" r="2" fill="#6B5B95" opacity="0.6"/>
+
+  <!-- Lower diagonal of K -->
+  <circle cx="140" cy="78" r="1.5" fill="#6B5B95" opacity="0.5"/>
+  <circle cx="150" cy="88" r="2.5" fill="#6B5B95"/>
+  <circle cx="158" cy="96" r="2" fill="#6B5B95" opacity="0.6"/>
+
+  <!-- Constellation lines connecting the stars -->
+  <line x1="130" y1="50" x2="130" y2="98" stroke="#6B5B95" stroke-width="0.5" opacity="0.2"/>
+  <line x1="130" y1="66" x2="150" y2="50" stroke="#6B5B95" stroke-width="0.5" opacity="0.2"/>
+  <line x1="130" y1="82" x2="150" y2="88" stroke="#6B5B95" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- Tiny scattered stars -->
+  <circle cx="100" cy="44" r="1" fill="#D4C5A9" opacity="0.4"/>
+  <circle cx="175" cy="56" r="1" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="110" cy="76" r="0.8" fill="#D4C5A9" opacity="0.3"/>
+  <circle cx="170" cy="80" r="1" fill="#D4C5A9" opacity="0.35"/>
+</svg>

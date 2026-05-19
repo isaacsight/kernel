@@ -1,0 +1,192 @@
+{
+  "tagline": "En personlig AI som kommer ihåg dig, tänker med dig och blir bättre över tid.",
+  "placeholder": "Prata med kernel.chat...",
+  "welcomeToPro": "Välkommen till Kernel Pro!",
+  "menu": {
+    "shareConversation": "Dela konversation",
+    "exportMarkdown": "Exportera som Markdown",
+    "goals": "Mål",
+    "workflows": "Arbetsflöden",
+    "scheduledTasks": "Schemalagda uppgifter",
+    "dailyBriefing": "Daglig briefing",
+    "whatKernelKnows": "Vad Kernel vet",
+    "yourStats": "Din statistik",
+    "insights": "Insikter",
+    "upgradeToPro": "Uppgradera till Pro",
+    "manageSubscription": "Hantera prenumeration",
+    "signOut": "Logga ut",
+    "deleteAccount": "Radera konto",
+    "notifications": "Aviseringar",
+    "notifInApp": "Aviseringar i appen",
+    "notifBriefings": "Briefing-aviseringar",
+    "notifGoals": "Måluppdateringar",
+    "notifReminders": "Påminnelser",
+    "notifPush": "Push-notiser",
+    "darkMode": "Mörkt läge",
+    "theme": "Tema",
+    "themeLight": "Ljust",
+    "themeDark": "Mörkt",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Agentbyggare",
+    "agentLibrary": "Agentbibliotek",
+    "backgroundAgents": "Bakgrundsagenter",
+    "myContent": "Mitt innehåll",
+    "bookmarks": "Bokmärken",
+    "architecture": "Arkitektur",
+    "designSystem": "Designsystem",
+    "routingInsights": "Routinginsikter",
+    "system": "System",
+    "communications": "Kommunikation",
+    "adaptiveSystem": "Adaptivt system",
+    "usage": "Användning",
+    "mirror": "Spegeln",
+    "projectFiles": "Projektfiler",
+    "imageGallery": "Bildgalleri",
+    "knowledgeBase": "Kunskapsbas",
+    "social": "Sociala medier",
+    "platformEngine": "Innehållspipeline",
+    "explore": "Utforska",
+    "accountSettings": "Kontoinställningar",
+    "notifProactive": "Proaktiva insikter"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Dagens briefing",
+    "read": "Läs",
+    "discuss": "Diskutera"
+  },
+  "upgrade": {
+    "title": "Du har använt dina {{limit}} gratis meddelanden",
+    "subtitle": "Pro ger dig obegränsade meddelanden, ett minne som lär känna dig och fullständiga briefingar.",
+    "resetsAt": "Dina meddelanden förnyas kl. {{time}}. Uppgradera för 100 meddelanden per dag.",
+    "features": {
+      "unlimitedMessages": "Obegränsade meddelanden",
+      "deepResearch": "Utökat tänkande (30/mån)",
+      "multiAgent": "Filanalys (10/mån)",
+      "multiStep": "Mål, röst och agentiska arbetsflöden",
+      "persistentMemory": "Minne + proaktiva briefingar"
+    },
+    "button": "Bli Pro — $29/mån",
+    "annualButton": "$290/år — spara $58",
+    "buttonLoading": "Öppnar kassan...",
+    "maybeLater": "Kanske senare",
+    "learnedTitle": "Vad Kernel har lärt sig om dig",
+    "learnedCta": "Kom tillbaka imorgon och fortsätt samtalet.",
+    "maxButton": "Gå Max — 49 kr/mån",
+    "maxAnnualButton": "490 kr/år — spara 98 kr"
+  },
+  "deleteConfirm": {
+    "title": "Radera ditt konto?",
+    "subtitle": "Detta raderar permanent all din data: konversationer, minne och inställningar. Detta kan inte ångras.",
+    "subtitleWithSub": " Din prenumeration kommer också att avslutas.",
+    "typeDelete": "Skriv DELETE för att bekräfta:",
+    "confirm": "Ja, radera mitt konto",
+    "confirming": "Raderar..."
+  },
+  "status": {
+    "assemblingAgents": "Samlar agenter...",
+    "agentsCollaborating": "Agenter samarbetar",
+    "synthesizingPerspectives": "Syntetiserar perspektiv...",
+    "routingToSpecialist": "Routerar till specialist...",
+    "isWorking": "{{agent}} arbetar...",
+    "lowConfidence": "låg tillförlitlighet"
+  },
+  "feedback": {
+    "save": "Spara",
+    "cancel": "Avbryt"
+  },
+  "messagesRemaining": "{{count}} meddelanden kvar",
+  "lastFreeMessage": "Sista gratis meddelandet",
+  "menuSection": {
+    "ai": "AI & Agenter",
+    "content": "Innehåll & Kunskap",
+    "insights": "Insikter & Mål",
+    "system": "Inställningar & System"
+  },
+  "usage": {
+    "title": "Användning",
+    "loading": "Laddar användningsdata...",
+    "retry": "Försök igen",
+    "last30days": "Senaste 30 dagarna",
+    "onPace": "Håller kollon för {{projected}} av {{limit}} meddelanden",
+    "overLimit": "Håller kollon för att överskrida din gräns på {{limit}} meddelanden",
+    "byFeature": "Efter funktion",
+    "dailyTrend": "30-dagars trend",
+    "recommendation": "Rekommendation",
+    "upgrade": "Uppgradera"
+  },
+  "entity": {
+    "evolved": "Utvecklats till {{tier}}",
+    "streak": "Dag {{count}}",
+    "goalCheckIn": "Checka in: {{title}}",
+    "mood": {
+      "happy": "glad",
+      "excited": "upprymd",
+      "content": "nöjd",
+      "sad": "ledsen",
+      "sleepy": "trött",
+      "lonely": "ensam",
+      "bored": "uttråkad"
+    }
+  },
+  "entityInfo": {
+    "mood": "Humör",
+    "streak": "Serie",
+    "days": "dagar",
+    "focus": "Fokus"
+  },
+  "nudge": {
+    "insights": "Du har haft några samtal nu — Kernel har hittat mönster i det du pratar om.",
+    "knowledge": "Din kunskapsgraf växer — se kopplingarna Kernel har kartlagt från dina samtal.",
+    "stats": "Du slutförde ett mål — kolla dina statistik för att se hur din användning utvecklas.",
+    "workflows": "Du har använt Kernel regelbundet — arbetsflöden kan automatisera dina återkommande uppgifter.",
+    "showMe": "Visa mig",
+    "notNow": "Inte nu"
+  },
+  "valuePreview": {
+    "message": "Pro-medlemmar får dagliga sammanfattningar, djupgående forskning och bestående minne.",
+    "gotIt": "Förstått"
+  },
+  "messagesLeft": "{{count}} meddelanden kvar",
+  "agentWhy": {
+    "label": "Varför?"
+  },
+  "thinking": {
+    "label": "Utökat tänkande",
+    "duration": "Tänkte i {{seconds}}s",
+    "streaming": "Tänker...",
+    "toggle": "Aktivera utökat tänkande",
+    "tooltip": "Tänk djupare innan du svarar"
+  },
+  "explain": {
+    "toggle": "Aktivera förklaringsläge",
+    "tooltip": "Förklaringsläge — steg-för-steg-kod"
+  },
+  "document": {
+    "active": "Analyserar: {{name}}",
+    "clear": "Rensa dokument",
+    "contextHint": "Ställ följdfrågor om detta dokument"
+  },
+  "proactive": {
+    "noticed": "Kernel har märkt...",
+    "notification": "Kernel har en observation till dig",
+    "explore": "Låt oss utforska detta"
+  },
+  "tour": {
+    "entity": "Detta är din Kernel-entitet. Den utvecklas när du chattar – tryck på den för att se dess humör, streak och tillväxtnivå.",
+    "moreMenu": "Tryck här för alla Kernel-funktioner: agenter, kunskapsbas, insikter och mer.",
+    "inputBar": "Starta en konversation här. Bifoga filer, slå på förklaringsläge eller säg bara hej.",
+    "gotIt": "Okej",
+    "skip": "Hoppa över rundturen"
+  },
+  "workflow": {
+    "planning": "Planerar steg...",
+    "executing": "Utför: {{step}}",
+    "complete": "Arbetsflöde slutfört",
+    "failed": "Steg misslyckades: {{step}}",
+    "cancel": "Avbryt arbetsflöde",
+    "cancelled": "Arbetsflöde avbrutet"
+  }
+}

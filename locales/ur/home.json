@@ -1,0 +1,192 @@
+{
+  "tagline": "ایک ذاتی AI جو آپ کو یاد رکھتا ہے، آپ کے ساتھ سوچتا ہے، اور وقت کے ساتھ بہتر ہوتا ہے۔",
+  "placeholder": "kernel.chat سے بات کریں...",
+  "welcomeToPro": "Kernel Pro میں خوش آمدید!",
+  "menu": {
+    "shareConversation": "گفتگو شیئر کریں",
+    "exportMarkdown": "Markdown کے طور پر ایکسپورٹ کریں",
+    "goals": "اہداف",
+    "workflows": "ورک فلوز",
+    "scheduledTasks": "شیڈول شدہ کام",
+    "dailyBriefing": "روزانہ بریفنگ",
+    "whatKernelKnows": "Kernel کیا جانتا ہے",
+    "yourStats": "آپ کے اعداد و شمار",
+    "insights": "بصیرت",
+    "upgradeToPro": "Pro میں اپ گریڈ کریں",
+    "manageSubscription": "سبسکرپشن کا انتظام کریں",
+    "signOut": "سائن آؤٹ",
+    "deleteAccount": "اکاؤنٹ حذف کریں",
+    "notifications": "اطلاعات",
+    "notifInApp": "ایپ میں اطلاعات",
+    "notifBriefings": "بریفنگ الرٹس",
+    "notifGoals": "مقاصد کی تازہ کاری",
+    "notifReminders": "یاد دہانیاں",
+    "notifPush": "پش اطلاعات",
+    "darkMode": "ڈارک موڈ",
+    "theme": "تھیم",
+    "themeLight": "ہلکا",
+    "themeDark": "گہرا",
+    "themeEink": "E-Ink",
+    "agentBuilder": "ایجنٹ بلڈر",
+    "agentLibrary": "ایجنٹ لائبریری",
+    "backgroundAgents": "پس منظر ایجنٹس",
+    "myContent": "میرا مواد",
+    "bookmarks": "بُک مارکس",
+    "architecture": "فن تعمیر",
+    "designSystem": "ڈیزائن سسٹم",
+    "routingInsights": "روٹنگ بصیرت",
+    "system": "سسٹم",
+    "communications": "مواصلات",
+    "adaptiveSystem": "موافق نظام",
+    "usage": "استعمال",
+    "mirror": "آئنہ",
+    "projectFiles": "پروجیکٹ فائلیں",
+    "imageGallery": "تصویری گیلری",
+    "knowledgeBase": "دانشی ماخذ",
+    "social": "سوشل میڈیا",
+    "platformEngine": "مواد پائپ لائن",
+    "explore": "جاکو",
+    "accountSettings": "اکاؤنٹ سیٹنگز",
+    "notifProactive": "پیشگی بصیرت"
+  },
+  "admin": "ایڈمن",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "آج کی بریفنگ",
+    "read": "پڑھیں",
+    "discuss": "تبادلہ خیال کریں"
+  },
+  "upgrade": {
+    "title": "آپ نے اپنے {{limit}} مفت پیغامات استعمال کر لیے ہیں",
+    "subtitle": "Pro آپ کو لامحدود پیغام رسانی، آپ کو سمجھنے والی یادداشت، اور مکمل بریفنگز دیتا ہے۔",
+    "resetsAt": "آپ کے پیغامات {{time}} پر ری سیٹ ہوں گے۔ روزانہ 100 پیغامات کے لیے اپ گریڈ کریں۔",
+    "features": {
+      "unlimitedMessages": "لامحدود پیغام رسانی",
+      "deepResearch": "توسیعی سوچ (30/ماہ)",
+      "multiAgent": "فائل تجزیہ (10/ماہ)",
+      "multiStep": "اہداف، آواز اور ایجنٹک ورک فلوز",
+      "persistentMemory": "یادداشت + فعال بریفنگز"
+    },
+    "button": "Pro بنیں — $29/ماہ",
+    "annualButton": "$290/سال — $58 بچائیں",
+    "buttonLoading": "ادائیگی کا عمل شروع ہو رہا ہے...",
+    "maybeLater": "شاید بعد میں",
+    "learnedTitle": "کِرنل نے آپ کے بارے میں کیا سیکھا",
+    "learnedCta": "کل پھر سے آؤ اور بات چیت جاری رکھیں۔",
+    "maxButton": "Max جاؤ — $49/مہینہ",
+    "maxAnnualButton": "$490/سال — $98 کی risparmio"
+  },
+  "deleteConfirm": {
+    "title": "اپنا اکاؤنٹ حذف کریں؟",
+    "subtitle": "یہ آپ کا تمام ڈیٹا مستقل طور پر حذف کر دے گا: گفتگو، یادداشت، اور ترجیحات۔ یہ عمل واپس نہیں لیا جا سکتا۔",
+    "subtitleWithSub": " آپ کی سبسکرپشن بھی منسوخ کر دی جائے گی۔",
+    "typeDelete": "تصدیق کے لیے DELETE ٹائپ کریں:",
+    "confirm": "ہاں، میرا اکاؤنٹ حذف کریں",
+    "confirming": "حذف ہو رہا ہے..."
+  },
+  "status": {
+    "assemblingAgents": "ایجنٹس جمع ہو رہے ہیں...",
+    "agentsCollaborating": "ایجنٹس تعاون کر رہے ہیں",
+    "synthesizingPerspectives": "نقطہ نظر کا خلاصہ ہو رہا ہے...",
+    "routingToSpecialist": "ماہر کی طرف بھیجا جا رہا ہے...",
+    "isWorking": "{{agent}} کام کر رہا ہے...",
+    "lowConfidence": "کم اعتماد"
+  },
+  "feedback": {
+    "save": "محفوظ کریں",
+    "cancel": "منسوخ کریں"
+  },
+  "messagesRemaining": "{{count}} پیغامات باقی ہیں",
+  "lastFreeMessage": "آخری مفت پیغام",
+  "menuSection": {
+    "ai": "AI اور ایجنٹس",
+    "content": "مواد اور علم",
+    "insights": "بصیرت اور اہداف",
+    "system": "سیٹنگز اور سسٹم"
+  },
+  "usage": {
+    "title": "استعمال",
+    "loading": "استعمال کا ڈیٹا لوڈ ہو رہا ہے...",
+    "retry": " دوبارہ کوشش کریں",
+    "last30days": "آخری 30 دن",
+    "onPace": "{{projected}} میں {{limit}} پیغاموں کے لیے راستہ پر",
+    "overLimit": "آپ کی {{limit}} پیغام کی حد سے تجاوز کرنے کے لیے راستہ پر",
+    "byFeature": "خصوصیت کے لحاظ سے",
+    "dailyTrend": "30 دنوں کا رجحان",
+    "recommendation": "توصیہ",
+    "upgrade": "ترقی یافتہ بنائیں"
+  },
+  "entity": {
+    "evolved": "{{tier}} میں ارتقا یافتہ",
+    "streak": "دن {{count}}",
+    "goalCheckIn": "اندردستی: {{title}}",
+    "mood": {
+      "happy": "خوش",
+      "excited": "پرجوش",
+      "content": "خوشگوار",
+      "sad": "اداس",
+      "sleepy": "سونے کی خواہش",
+      "lonely": "تنہا",
+      "bored": "کنجوس"
+    }
+  },
+  "entityInfo": {
+    "mood": "مزاج",
+    "streak": "لسلسبہ",
+    "days": "دن",
+    "focus": "توجہ"
+  },
+  "nudge": {
+    "insights": "آپ نے اب تک کچھ باتیں کی ہیں - Kernel کو آپ جو بولتے ہیں اس میں نمونے مل رہے ہیں۔",
+    "knowledge": "آپ کا علم گراف بڑھ رہا ہے - Kernel نے آپ کی باتوں سے بنائے گئے روابط دیکھیں。",
+    "stats": "آپ نے ایک ہدف مکمل کر لیا - آپ کے استعمال کا جائزہ لینے کے لیے اپنے اعدادوشمار چیک کریں۔",
+    "workflows": "آپ Kernel کو باقاعدگی سے استعمال کر رہے ہیں - ورک فلو آپ کے متناہی کاموں کو خودکار بنا سکتے ہیں۔",
+    "showMe": "دکھاؤ مجھے",
+    "notNow": "اب نہیں"
+  },
+  "valuePreview": {
+    "message": "پروفیشنل ممبرز کو روزانہ کی بریفنگ، گہرے ریسرچ اور مستقل میموری ملتی ہے۔",
+    "gotIt": "سمجھ گیا"
+  },
+  "messagesLeft": "{{count}} messaggi rimanenti",
+  "agentWhy": {
+    "label": "کیوں؟"
+  },
+  "thinking": {
+    "label": "تکلیف دہ سوچ",
+    "duration": "{{seconds}}s کے لیے سوچ",
+    "streaming": "سوچ رہا ہوں...",
+    "toggle": "تکلیف دہ سوچ کو فعال/غیر فعال کریں",
+    "tooltip": "جواب دینے سے پہلے گہری سوچ کریں۔"
+  },
+  "explain": {
+    "toggle": "وضاحت موڈ کو فعال/غیر فعال کریں",
+    "tooltip": "وضاحت موڈ — قدم بہ قدم کوڈ"
+  },
+  "document": {
+    "active": "تحلیل کر رہا ہوں: {{name}}",
+    "clear": "دستاویز صاف کریں",
+    "contextHint": "اس دستاویز کے بارے میں مزید سوالات پوچھیں"
+  },
+  "proactive": {
+    "noticed": "Kernel نے دیکھا...",
+    "notification": "Kernel کے پاس آپ کے لیے ایک مشاہدہ ہے",
+    "explore": "چلیے اس کا جائزہ لیں"
+  },
+  "tour": {
+    "entity": "یہ آپ کا Kernel entity ہے۔ آپ کے چیٹ کرنے کے ساتھ ہی یہ ترقی کرتا ہے - اس کے مزاج، streak اور ترقی کے Tier کو دیکھنے کے لیے اس پر ٹیپ کریں۔",
+    "moreMenu": "Kernel کی تمام خصوصیات: ایجنٹس، علم کا βάση, بصیرت، اور مزید دیکھنے کے لیے یہاں ٹیپ کریں۔",
+    "inputBar": "یہاں گفتگو شروع کریں۔ فائلیں منسلک کریں، وضاحت موڈ کو آن یا آف کریں، یا بس ہیلو کہیں。",
+    "gotIt": "سمجھ گیا۔",
+    "skip": "ٹور چھوڑیں"
+  },
+  "workflow": {
+    "planning": "قومی اقدامات کی منصوبہ بندی...",
+    "executing": "عمل درآمد: {{step}}",
+    "complete": "کام مکمل",
+    "failed": "قومی اقدام ناکام: {{step}}",
+    "cancel": "کام منسوخ کریں",
+    "cancelled": "کام منسوخ کر دیا گیا"
+  }
+}

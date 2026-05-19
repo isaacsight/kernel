@@ -1,0 +1,124 @@
+{
+  "title": "계정 설정",
+  "profile": {
+    "heading": "프로필",
+    "displayName": "표시 이름",
+    "displayNamePlaceholder": "{{Your name}}",
+    "username": "사용자 이름",
+    "usernamePlaceholder": "@{{username}}",
+    "avatar": "프로필 사진",
+    "avatarChange": "변경",
+    "save": "프로필 저장",
+    "saved": "프로필 저장됨",
+    "resetProfile": "프로필 초기화",
+    "profileReset": "프로필을 기본값으로 초기화합니다.",
+    "usernameTaken": "이 사용자 이름은 이미 사용 중입니다.",
+    "displayNameTaken": "이 표시 이름은 이미 사용 중입니다.",
+    "available": "사용 가능"
+  },
+  "security": {
+    "heading": "자격 증명 편집",
+    "credentialsHeading": "이메일 & 비밀번호",
+    "verifyIdentity": "변경을 위해 인증",
+    "verifyHint": "자격 증명을 편집하기 전에 이메일로 인증 코드가 전송됩니다.",
+    "sendCode": "인증 코드 보내기",
+    "codePlaceholder": "6자리 코드를 입력하세요",
+    "codeRequired": "이메일에서 받은 인증 코드를 입력하세요",
+    "verificationRequired": "먼저 인증 코드를 보내세요",
+    "codeSent": "코드가 전송되었습니다 — 이메일을 확인하세요",
+    "verify": "코드 확인",
+    "verified": "신원 확인 완료 — 이제 변경할 수 있습니다",
+    "resendCode": "코드 재전송",
+    "resendIn": "{{seconds}}초 후에 재전송",
+    "changeEmail": "이메일 변경",
+    "emailPlaceholder": "새 이메일 주소",
+    "emailSubmit": "이메일 업데이트",
+    "emailConfirmationSent": "새 주소로 확인 이메일이 발송되었습니다.",
+    "changePassword": "비밀번호 변경",
+    "setPassword": "비밀번호 설정",
+    "newPasswordPlaceholder": "새 비밀번호",
+    "confirmPasswordPlaceholder": "비밀번호 확인",
+    "passwordSubmit": "비밀번호 업데이트",
+    "passwordChanged": "비밀번호가 변경되었습니다.",
+    "tooShort": "비밀번호는 최소 8자 이상이어야 합니다.",
+    "mismatch": "비밀번호가 일치하지 않습니다.",
+    "strength": {
+      "weak": "약함",
+      "fair": "보통",
+      "strong": "강함"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "연결된 계정",
+    "connected": "연결됨",
+    "connect": "연결",
+    "disconnect": "연결 해제",
+    "cannotUnlinkLast": "유일한 로그인 방법은 제거할 수 없습니다.",
+    "unlinked": "계정 연결 해제됨",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "구독",
+    "free": "무료 플랜",
+    "pro": "프로 플랜",
+    "max": "맥스 플랜",
+    "admin": "관리자",
+    "upgrade": "프로 플랜으로 업그레이드",
+    "upgradeMonthly": "프로 — $29/월",
+    "upgradeAnnual": "프로 — 연간 $290",
+    "upgradeMax": "맥스 — 월 $49",
+    "upgradeMaxAnnual": "맥스 — 연간 $490",
+    "manage": "구독 관리"
+  },
+  "exportData": {
+    "heading": "데이터 내보내기",
+    "description": "JSON 형식으로 모든 데이터를 완벽하게 복사하여 다운로드하세요.",
+    "button": "내 데이터 내보내기",
+    "success": "내보내기 완료",
+    "rateLimited": "{{hours}}시간 후에 다시 내보내기가 가능합니다"
+  },
+  "resetData": {
+    "heading": "데이터 초기화",
+    "description": "계정을 삭제하지 않고 데이터를 선택적으로 삭제합니다. 되돌릴 수 없습니다.",
+    "scopes": {
+      "conversations": "대화",
+      "memory": "메모리",
+      "knowledge": "지식 그래프",
+      "goals": "목표",
+      "preferences": "설정",
+      "all": "전체"
+    },
+    "scopeDesc": {
+      "conversations": "대화 및 메시지를 모두 삭제합니다.",
+      "memory": "학습된 프로필 및 절차를 삭제합니다.",
+      "knowledge": "모든 개체 및 관계를 제거합니다.",
+      "goals": "모든 목표 및 이정표를 삭제합니다.",
+      "preferences": "브리핑 및 메타데이터를 재설정합니다.",
+      "all": "모든 데이터를 삭제하고 처음부터 시작합니다."
+    },
+    "confirm": {
+      "conversations": "대화 및 메시지가 영구적으로 삭제됩니다. 계속하시겠습니까?",
+      "memory": "Kernel이 당신에 대해 학습한 모든 것을 지웁니다. 계속하시겠습니까?",
+      "knowledge": "지식 그래프 개체와 연결을 모두 제거합니다. 계속하시겠습니까?",
+      "goals": "모든 목표와 진행 상황 추적이 삭제됩니다. 계속하시겠습니까?",
+      "preferences": "브리핑 및 메타데이터 설정을 재설정합니다. 계속하시겠습니까?",
+      "all": "대화, 메모리, 지식, 목표 및 설정 등 모든 데이터를 삭제합니다. 계정 및 구독은 유지됩니다. 계속하시겠습니까?"
+    },
+    "confirmBtn": "네, 재설정",
+    "cancel": "취소",
+    "success": "{{scope}}가 성공적으로 삭제되었습니다",
+    "done": "데이터 초기화 완료"
+  },
+  "danger": {
+    "heading": "계정",
+    "signOut": "로그아웃",
+    "signOutDesc": "이 기기에서 계정 로그아웃",
+    "deleteAccount": "계정 삭제",
+    "deleteDesc": "계정 및 모든 데이터를 영구적으로 삭제"
+  }
+}

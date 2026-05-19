@@ -1,0 +1,69 @@
+{
+    "observer": {
+        "phasePipeline": "צינור שלבים",
+        "phases": {
+            "perceiving": "תופס",
+            "attending": "מתייחס",
+            "deciding": "מחליט",
+            "acting": "פועל",
+            "reflecting": "משקף"
+        },
+        "perception": "תפיסה",
+        "intent": "כוונה",
+        "urgency": "דחיפות",
+        "complexity": "מורכبات",
+        "sentiment": "סנטימנט",
+        "impliedNeed": "צורך מרומז",
+        "noActivePerception": "אין תפיסה פעילה",
+        "attention": "תשומת לב",
+        "focus": "מיקוד",
+        "depth": "עומק",
+        "noActiveAttention": "אין תשומת לב פעילה",
+        "conviction": "שכנוע עצמי",
+        "trend": {
+            "rising": "עולה",
+            "falling": "יורד",
+            "stable": "יציב"
+        },
+        "beliefs": "אמונות ({{count}})",
+        "noBeliefsFormed": "לא נוצרו אמונות",
+        "eventFeed": "פיד אירועים",
+        "noEventsYet": "אין עדיין אירועים",
+        "lastReflection": "שיקוף אחרון",
+        "noReflectionsYet": "אין עדיין שיקופים"
+    },
+    "controls": {
+        "engine": "מנוע",
+        "stop": "עצור",
+        "reset": "אפס",
+        "agentOverride": "עקיפת סוכן",
+        "overrideNext": "עקוף את הבא",
+        "conviction": "שכנוע עצمی",
+        "beliefs": "אמונות",
+        "newBeliefPlaceholder": "אמונה חדשה...",
+        "challenge": "אתגר",
+        "reflections": "שיקופים",
+        "pruneLabel": "גיזום תת-איכות:",
+        "prune": "גזום",
+        "pruneResult": "הוסרו {{count}} שיקופים",
+        "agentPerformance": "ביצועי סוכן",
+        "noPerformanceData": "אין עדיין נתוני ביצועים"
+    },
+    "chat": {
+        "emptyTitle": "שאל את kernel.chat",
+        "emptySubtitle": "הוא רואה כל מה שהמנוע רואה.",
+        "placeholder": "שאל את Kernel...",
+        "send": "שלח"
+    },
+    "pill": {
+        "openKernel": "פתח את kernel.chat",
+        "phases": {
+            "idle": "בהמתנה",
+            "perceiving": "תופס",
+            "attending": "מתייחס",
+            "deciding": "מחליט",
+            "acting": "פועל",
+            "reflecting": "משקף"
+        }
+    }
+}

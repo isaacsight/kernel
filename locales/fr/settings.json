@@ -1,0 +1,124 @@
+{
+  "title": "Paramètres du compte",
+  "profile": {
+    "heading": "Profil",
+    "displayName": "Nom d'affichage",
+    "displayNamePlaceholder": "{{Your name}}",
+    "username": "Nom d'utilisateur",
+    "usernamePlaceholder": "@{{username}}",
+    "avatar": "Photo de profil",
+    "avatarChange": "Modifier",
+    "save": "Enregistrer le profil",
+    "saved": "Profil enregistré",
+    "resetProfile": "Réinitialiser le profil",
+    "profileReset": "Profil réinitialisé aux paramètres par défaut",
+    "usernameTaken": "Ce nom d'utilisateur est déjà pris",
+    "displayNameTaken": "Ce nom d'affichage est déjà pris",
+    "available": "Disponible"
+  },
+  "security": {
+    "heading": "Modifier les informations d'identification",
+    "credentialsHeading": "Email et mot de passe",
+    "verifyIdentity": "Vérifier pour effectuer des modifications",
+    "verifyHint": "Un code de vérification sera envoyé à votre email avant de modifier les informations d'identification",
+    "sendCode": "Envoyer le code de vérification",
+    "codePlaceholder": "Entrez le code à 6 chiffres",
+    "codeRequired": "Entrez le code de vérification reçu par email",
+    "verificationRequired": "Envoyez d'abord un code de vérification",
+    "codeSent": "Code envoyé — vérifiez votre email",
+    "verify": "Vérifier le code",
+    "verified": "Identité vérifiée — vous pouvez maintenant effectuer des modifications",
+    "resendCode": "Renvoi du code",
+    "resendIn": "Renvoi dans {{seconds}}s",
+    "changeEmail": "Modifier l'adresse email",
+    "emailPlaceholder": "Nouvelle adresse email",
+    "emailSubmit": "Mettre à jour l'adresse e-mail",
+    "emailConfirmationSent": "E-mail de confirmation envoyé à votre nouvelle adresse",
+    "changePassword": "Modifier le mot de passe",
+    "setPassword": "Définir un mot de passe",
+    "newPasswordPlaceholder": "Nouveau mot de passe",
+    "confirmPasswordPlaceholder": "Confirmer le mot de passe",
+    "passwordSubmit": "Mettre à jour le mot de passe",
+    "passwordChanged": "Mot de passe mis à jour",
+    "tooShort": "Le mot de passe doit comporter au moins 8 caractères",
+    "mismatch": "Les mots de passe ne correspondent pas",
+    "strength": {
+      "weak": "Faible",
+      "fair": "Moyen",
+      "strong": "Fort"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Comptes liés",
+    "connected": "Connecté",
+    "connect": "Connecter",
+    "disconnect": "Déconnecter",
+    "cannotUnlinkLast": "Impossible de supprimer votre seule méthode de connexion",
+    "unlinked": "Compte déconnecté",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Abonnement",
+    "free": "Plan gratuit",
+    "pro": "Plan Pro",
+    "max": "Plan Max",
+    "admin": "Admin",
+    "upgrade": "Passez à Pro",
+    "upgradeMonthly": "Pro — 29 $/mois",
+    "upgradeAnnual": "Pro — 290 $ / an",
+    "upgradeMax": "Max — 49 $ / mois",
+    "upgradeMaxAnnual": "Max — 490 $ / an",
+    "manage": "Gérer mon abonnement"
+  },
+  "exportData": {
+    "heading": "Exporter mes données",
+    "description": "Téléchargez une copie complète de toutes vos données au format JSON.",
+    "button": "Exporter mes données",
+    "success": "Exportation téléchargée",
+    "rateLimited": "L'exportation sera de nouveau disponible dans {{hours}} heures"
+  },
+  "resetData": {
+    "heading": "Réinitialiser mes données",
+    "description": "Effacez sélectivement vos données sans supprimer votre compte. Cette action ne peut être annulée.",
+    "scopes": {
+      "conversations": "Conversations",
+      "memory": "Mémoire",
+      "knowledge": "Graphe de connaissances",
+      "goals": "Objectifs",
+      "preferences": "Préférences",
+      "all": "Tout"
+    },
+    "scopeDesc": {
+      "conversations": "Supprimer toutes les conversations et messages",
+      "memory": "Effacer le profil et les procédures apprises",
+      "knowledge": "Supprimer toutes les entités et relations",
+      "goals": "Supprimer tous les objectifs et jalons",
+      "preferences": "Réinitialiser les briefings et les métadonnées",
+      "all": "Effacer toutes les données et repartir à zéro"
+    },
+    "confirm": {
+      "conversations": "Cela supprimera définitivement toutes vos conversations et messages. Continuer ?",
+      "memory": "Cela effacera tout ce que Kernel a appris sur vous. Continuer ?",
+      "knowledge": "Cela supprimera toutes les entités du graphe de connaissances et leurs connexions. Continuer ?",
+      "goals": "Cela supprimera tous vos objectifs et le suivi de vos progrès. Continuer ?",
+      "preferences": "Cela réinitialisera vos préférences de briefings et de métadonnées. Continuer ?",
+      "all": "Cela effacera TOUTES vos données - conversations, mémoire, connaissances, objectifs et préférences. Votre compte et votre abonnement restent inchangés. Continuer ?"
+    },
+    "confirmBtn": "Oui, réinitialiser",
+    "cancel": "Annuler",
+    "success": "{{scope}} effacé(e) avec succès",
+    "done": "Réinitialisation des données terminée"
+  },
+  "danger": {
+    "heading": "Compte",
+    "signOut": "Déconnexion",
+    "signOutDesc": "Déconnectez-vous de votre compte sur cet appareil",
+    "deleteAccount": "Supprimer le compte",
+    "deleteDesc": "Supprimez définitivement votre compte et toutes les données"
+  }
+}

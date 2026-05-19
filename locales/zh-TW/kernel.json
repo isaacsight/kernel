@@ -1,0 +1,52 @@
+{
+  "observer": {
+    "phasePipeline": "階段管線",
+    "phases": { "perceiving": "感知中", "attending": "關注中", "deciding": "決策中", "acting": "行動中", "reflecting": "反思中" },
+    "perception": "感知",
+    "intent": "意圖",
+    "urgency": "緊急度",
+    "complexity": "複雜度",
+    "sentiment": "情感",
+    "impliedNeed": "隱含需求",
+    "noActivePerception": "無活躍感知",
+    "attention": "注意力",
+    "focus": "焦點",
+    "depth": "深度",
+    "noActiveAttention": "無活躍注意力",
+    "conviction": "信心",
+    "trend": { "rising": "上升", "falling": "下降", "stable": "穩定" },
+    "beliefs": "信念 ({{count}})",
+    "noBeliefsFormed": "尚未形成信念",
+    "eventFeed": "事件動態",
+    "noEventsYet": "尚無事件",
+    "lastReflection": "最近反思",
+    "noReflectionsYet": "尚無反思"
+  },
+  "controls": {
+    "engine": "引擎",
+    "stop": "停止",
+    "reset": "重置",
+    "agentOverride": "代理覆寫",
+    "overrideNext": "覆寫下一個",
+    "conviction": "信心",
+    "beliefs": "信念",
+    "newBeliefPlaceholder": "新信念...",
+    "challenge": "挑戰",
+    "reflections": "反思",
+    "pruneLabel": "修剪低於品質：",
+    "prune": "修剪",
+    "pruneResult": "已移除 {{count}} 則反思",
+    "agentPerformance": "代理效能",
+    "noPerformanceData": "尚無效能資料"
+  },
+  "chat": {
+    "emptyTitle": "詢問 kernel.chat",
+    "emptySubtitle": "它看到引擎看到的一切。",
+    "placeholder": "詢問 Kernel...",
+    "send": "傳送"
+  },
+  "pill": {
+    "openKernel": "開啟 kernel.chat",
+    "phases": { "idle": "閒置", "perceiving": "感知中", "attending": "關注中", "deciding": "決策中", "acting": "行動中", "reflecting": "反思中" }
+  }
+}
