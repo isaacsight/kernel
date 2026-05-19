@@ -1,0 +1,152 @@
+name: kernel.chat cert + site health monitor
+
+# Watches the GitHub Pages HTTPS certificate state and the live site,
+# alerts via Discord when:
+#   - Certificate state is not "approved"
+#   - Certificate expires within 14 days
+#   - Live site returns non-200 (anything other than a healthy response)
+#
+# Background: the cert expired on 2026-05-19 because Let's Encrypt
+# renewal had been silently failing (Cloudflare proxy intercepting the
+# ACME HTTP-01 challenge). Site went down with HTTP 526. This workflow
+# exists so the next time renewal starts failing we get a 30-day
+# warning instead of a same-day outage.
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # daily at 14:00 UTC (≈7am Pacific)
+  workflow_dispatch:        # manual trigger
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check cert + live site
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check GitHub Pages cert state
+        id: cert
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          pages=$(gh api repos/${{ github.repository }}/pages)
+          echo "$pages" > /tmp/pages.json
+
+          state=$(echo "$pages" | python3 -c "import json,sys; d=json.load(sys.stdin); c=d.get('https_certificate') or {}; print(c.get('state', 'missing'))")
+          expires=$(echo "$pages" | python3 -c "import json,sys; d=json.load(sys.stdin); c=d.get('https_certificate') or {}; print(c.get('expires_at', '') or '')")
+          description=$(echo "$pages" | python3 -c "import json,sys; d=json.load(sys.stdin); c=d.get('https_certificate') or {}; print(c.get('description', '') or '')")
+          pages_status=$(echo "$pages" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('status', 'missing'))")
+
+          echo "state=$state" >> $GITHUB_OUTPUT
+          echo "expires=$expires" >> $GITHUB_OUTPUT
+          echo "description=$description" >> $GITHUB_OUTPUT
+          echo "pages_status=$pages_status" >> $GITHUB_OUTPUT
+
+          # Days-until-expiry math
+          if [ -n "$expires" ]; then
+            days_left=$(python3 -c "
+          from datetime import datetime, timezone
+          e = datetime.fromisoformat('$expires'.replace('Z','+00:00'))
+          now = datetime.now(timezone.utc)
+          print((e - now).days)
+          ")
+            echo "days_left=$days_left" >> $GITHUB_OUTPUT
+          else
+            echo "days_left=-999" >> $GITHUB_OUTPUT
+          fi
+
+          echo "Cert state: $state"
+          echo "Cert expires: $expires"
+          echo "Pages status: $pages_status"
+
+      - name: Check live site
+        id: live
+        run: |
+          set +e
+          http_status=$(curl -sS -o /dev/null -w "%{http_code}" -L --max-time 10 https://kernel.chat)
+          echo "http_status=$http_status" >> $GITHUB_OUTPUT
+          echo "Live site HTTP status: $http_status"
+          if [ "$http_status" != "200" ]; then
+            echo "site_unhealthy=true" >> $GITHUB_OUTPUT
+          else
+            echo "site_unhealthy=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Decide whether to alert
+        id: decide
+        run: |
+          alert=false
+          reason=""
+
+          # Cert in bad state
+          if [ "${{ steps.cert.outputs.state }}" != "approved" ]; then
+            alert=true
+            reason="Cert state is '${{ steps.cert.outputs.state }}' (expected 'approved'). ${{ steps.cert.outputs.description }}"
+          fi
+
+          # Cert expiring soon
+          days_left=${{ steps.cert.outputs.days_left }}
+          if [ "$days_left" -lt 14 ] && [ "$days_left" -gt -900 ]; then
+            alert=true
+            reason="Cert expires in $days_left days (${{ steps.cert.outputs.expires }})."
+          fi
+
+          # Site is unhealthy
+          if [ "${{ steps.live.outputs.site_unhealthy }}" = "true" ]; then
+            alert=true
+            reason="$reason Live site returns HTTP ${{ steps.live.outputs.http_status }}."
+          fi
+
+          echo "alert=$alert" >> $GITHUB_OUTPUT
+          echo "reason=$reason" >> $GITHUB_OUTPUT
+
+      - name: Notify Discord on alert
+        if: steps.decide.outputs.alert == 'true'
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
+        run: |
+          if [ -z "$WEBHOOK_URL" ]; then
+            echo "::warning::DISCORD_GITHUB_WEBHOOK not set; skipping Discord notification."
+            exit 0
+          fi
+          curl -sS -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" -d "{
+            \"embeds\": [{
+              \"title\": \"⚠️ kernel.chat cert/site health alert\",
+              \"description\": \"${{ steps.decide.outputs.reason }}\",
+              \"color\": 15548997,
+              \"fields\": [
+                {\"name\": \"Cert state\", \"value\": \"${{ steps.cert.outputs.state }}\", \"inline\": true},
+                {\"name\": \"Days to expiry\", \"value\": \"${{ steps.cert.outputs.days_left }}\", \"inline\": true},
+                {\"name\": \"Live site HTTP\", \"value\": \"${{ steps.live.outputs.http_status }}\", \"inline\": true},
+                {\"name\": \"Pages status\", \"value\": \"${{ steps.cert.outputs.pages_status }}\", \"inline\": true},
+                {\"name\": \"Cert expires at\", \"value\": \"${{ steps.cert.outputs.expires }}\", \"inline\": true},
+                {\"name\": \"Action\", \"value\": \"Check Cloudflare proxy + GitHub Pages settings\", \"inline\": false}
+              ],
+              \"footer\": {\"text\": \"kernel.chat cert monitor · daily @ 14:00 UTC\"}
+            }]
+          }"
+
+      - name: Workflow summary
+        run: |
+          echo "## kernel.chat cert + site monitor" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Cert state | ${{ steps.cert.outputs.state }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Cert expires | ${{ steps.cert.outputs.expires }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Days to expiry | ${{ steps.cert.outputs.days_left }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Pages status | ${{ steps.cert.outputs.pages_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Live site HTTP | ${{ steps.live.outputs.http_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Alert raised | ${{ steps.decide.outputs.alert }} |" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.decide.outputs.alert }}" = "true" ]; then
+            echo "| Reason | ${{ steps.decide.outputs.reason }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Fail the workflow on alert
+        if: steps.decide.outputs.alert == 'true'
+        run: |
+          echo "::error::Alert raised: ${{ steps.decide.outputs.reason }}"
+          exit 1
