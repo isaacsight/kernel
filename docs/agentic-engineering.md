@@ -62,6 +62,11 @@ The discipline of building the substrate that makes agent actions provable, audi
 
 Coined and held by kernel.chat (ISSUE 381, May 12 2026). Open to fork.
 
+External validation of the primitive (independent convergence on the same substrate shape):
+- **C2PA Content Credentials** (Coalition for Content Provenance and Authenticity) — camera-manufacturer-driven standard for media provenance, deployed default-on in Gemini app from 21 May 2026 (Google I/O 2026), rolling to Search and Chrome. Reads as the consumer-surface manifestation of the substrate. ISSUE 390 covers.
+- **OWASP Top 10 for Agentic Applications** (Dec 2025) — first peer-reviewed framework dedicated to autonomous tool-using AI agents. Security-community version of the same substrate concerns.
+- **NIST + DoD federal guidance** (May 2026) — explicit framing of agentic-AI safety as a compliance requirement rather than design aspiration, requiring documented governance + audit-ready processes.
+
 ### 2. Orchestration — orchestration engineering
 
 The discipline of structuring how multiple agents (and the humans they report to) pass work between each other so that real-world outcomes ship end to end. Routing, delegation, handoff protocols, briefing formats, audit trails across agent boundaries, human approval gates at material steps. The reference role is [`packages/kbot-orchestrator/ROLE.md`](../packages/kbot-orchestrator/ROLE.md); the reference implementation is [`@kernel.chat/kbot-orchestrator`](../packages/kbot-orchestrator/).
