@@ -46,3 +46,38 @@ export {
   type ExploreOptions,
   type ExploreResult,
 } from './explore.js'
+
+// ── v0.3 agent-fidelity primitives ──────────────────────────────
+
+export {
+  evaluateRefusals,
+  refuseFabricatedReferences,
+  refuseUnauthorizedAttestation,
+  refuseImpersonation,
+  refuseCredentialPhishing,
+  refuseFalseWitness,
+  DEFAULT_REFUSAL_PREDICATES,
+  type RefusalCategory,
+  type RefusalReason,
+  type ProposedAction,
+  type RefusalPredicate,
+} from './refusal.js'
+
+export {
+  FidelityClassifier,
+  createDefaultClassifier,
+  type RefusalKind,
+  type Classification,
+  type ClassifierConfig,
+} from './classifier.js'
+
+export {
+  createAttestation,
+  canonicalize,
+  recordHash,
+  verifyAttestation,
+  sha256Hex,
+  type AuthorshipState,
+  type AttestationRecord,
+  type AttestationBuilder,
+} from './attestation.js'

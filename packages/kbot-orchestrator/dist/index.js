@@ -10,4 +10,8 @@ export { runOutreach, } from './outreach.js';
 export { appendSendResults } from './log.js';
 export { loadCorpus, validateCorpus, preferredEmail, bestChannel, } from './corpus.js';
 export { explore, } from './explore.js';
+// ── v0.3 agent-fidelity primitives ──────────────────────────────
+export { evaluateRefusals, refuseFabricatedReferences, refuseUnauthorizedAttestation, refuseImpersonation, refuseCredentialPhishing, refuseFalseWitness, DEFAULT_REFUSAL_PREDICATES, } from './refusal.js';
+export { FidelityClassifier, createDefaultClassifier, } from './classifier.js';
+export { createAttestation, canonicalize, recordHash, verifyAttestation, sha256Hex, } from './attestation.js';
 //# sourceMappingURL=index.js.map
