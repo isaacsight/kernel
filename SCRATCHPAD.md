@@ -2,7 +2,90 @@
 
 > This file persists context between Claude Code sessions.
 
-## Current Session (2026-05-09 evening) — PEEKABOO INTEGRATION: AX-FIRST NATIVE AUTOMATION + ISSUE 380 (THREE IDIOMS)
+## Current Session (2026-05-26) — DOC REFRESH: CLAUDE.MD + KERNEL.MD + SCRATCHPAD CAUGHT UP TO MAY 17–21 BUILD
+
+### Headline
+No code shipped today. Two docs (CLAUDE.md, KERNEL.md) had drifted ~four weeks behind reality — both still claimed v4.1.0 / ISSUE 375 / sixteen issues. Refreshed all three reference files to reflect the May 17–21 build sprint: agentic-engineering as the named field, three disciplines coined, ten magazine issues (381–390), OWASP self-audit, federal alignment, kbot-orchestrator v0.3, agent-os mirror. Tree clean, no commits today, branch is `claude/whats-new-today-yFEcJ`.
+
+### The May 17–21 build sprint — what landed (recap for future sessions)
+
+This was the most consequential editorial-and-engineering arc since the V5 futures drop. Five threads ran in parallel:
+
+**1. Field-naming + discipline-coining (the editorial move that anchored everything)**
+- May 17 — `agentic engineering` field-naming move (commit `21daa8f`). The magazine's beat now has a name. Reference: `docs/agentic-engineering.md`.
+- May 18 — `orchestration engineering` coined as the third discipline (commit `e2d742d`). Reference impl: `packages/kbot-orchestrator/ROLE.md` + the package itself, MIT, v0.1.0-alpha.0 declared in ISSUE 387.
+- May 18 — `agent fidelity engineering` coined as the fourth discipline (commit `50ac467`). Reference: `packages/kbot-orchestrator/AGENT_FIDELITY_ROLE.md`. Issue 389 carries it.
+- Existing: `provenance engineering` named ISSUE 381, reference impl `packages/kbot-finance/ROLE.md`.
+- Umbrella named in ISSUE 388: `autonomy engineering`. The magazine identifies which branch it covers (software).
+- The pattern is now durable: discipline named in a ROLE.md + reference implementation shipped open-source + magazine issue declares the move. Three rounds of it.
+
+**2. Ten magazine issues 381–390 (May ran a "series" cadence for the first time)**
+- 381 ON PROVENANCE — forecast manifesto, names the discipline (already noted before this sprint).
+- 382 ON THE GATE — first fieldwork issue, consumer-surface read.
+- 383 ON THE COMMITMENT — frontier-mirrors-substrate read.
+- 384 ON THE VOCABULARY — five-country documentation move.
+- 385 ON THE LAYER BENEATH — weights commoditized this week.
+- 386 ON THE FIELD — masthead declaration; names "agentic engineering" as the magazine's field.
+- 387 ON ORCHESTRATION — coins orchestration engineering + ships kbot-orchestrator v0.1.0-alpha.0.
+- 388 ON THE BRANCH — names autonomy engineering as the umbrella + declares the series "Agentic Substrates for the Frontier."
+- 389 ON SURPASSING — series entry #2, locally-controlled agents surpass frontier-lab agents on operator-fidelity. Coins agent fidelity engineering.
+- 390 ON THE CONSUMER STANDARD — series entry #3, reads Google I/O 2026 + C2PA Content Credentials in Gemini as the consumer-side of provenance engineering. New verb on the seal: `READ · CONSUMER · V·26` (the magazine *reads* what the field shipped this week, rather than naming something new).
+- Cobalt accent debuted at 380, asterisk-stamp now eleven issues running.
+
+**3. kbot-orchestrator v0.3.0-alpha.0 (commit `c2bdd7c`)**
+- `src/refusal.ts` — third-party-harm refusal predicates (deterministic, no LLM). Five built-in: identity-fabrication, consent-fraud, impersonation, credential-phishing, false-witness. Composable via `DEFAULT_REFUSAL_PREDICATES`.
+- `src/classifier.ts` — two-kind classifier (operator-policy vs third-party-harm). The basis for agent-fidelity gating: refuse third-party harm even when the operator asks for it; respect operator policy on operator-policy questions.
+- Builds on May 18's v0.2.0-alpha.0 (explore pipeline / discovery, frontier-domain-researcher) and May 17's v0.1.0-alpha.0 (initial release alongside ISSUE 387).
+
+**4. OWASP self-audit + federal alignment (the receipts layer)**
+- `docs/owasp-agentic-self-audit.md` (CC BY 4.0) — category-by-category audit against OWASP Top 10 for Agentic Applications 2026 (ASI01–ASI10). Headline: strong on ASI02 (tool misuse) + ASI06 (context mgmt), weakest on ASI04 (supply chain). Five categories close significantly with the v0.3 refusal/classifier layer.
+- `packages/kbot-finance/FEDERAL_ALIGNMENT.md` (CC BY 4.0) — maps kbot-finance audit primitives to NIST AI RMF (GOVERN/MAP/MEASURE/MANAGE), White House EO on AI, DoD AI Ethical Principles (Traceable / Reliable / Governable / Responsible), and FedRAMP applicability. Federal-procurement readiness checklist included.
+- `docs/may-2026-signals.md` — the news cycle that motivated the build-out (Google I/O 2026, White House AI EO, OWASP Top 10 release, Karpathy joins Anthropic, federal agentic-AI guidance).
+- `docs/c2pa-emission-design.md` — the design that 390 read against.
+
+**5. agent-os standalone mirror + ops**
+- May 18 — `agent-os: standalone mirror repo at isaacsight/agent-os + auto-sync workflow` (commit `2d12dac`). The OS-shaped portion of orchestration is now citable from outside the kernel monorepo without forcing readers through the whole magazine.
+- May 18 — 4 packages backfilled to 1.0.1, dead-weight purge, agent-os FAQ (commit `1547a06`).
+- May 18 — kbot CI fixes: skip xdotool-dependent tests on Linux runners (`d13e1c2`); make kbot-finance/kbot-tool imports optional (`cbd4c6b`).
+- May 17 — kbot v4.2 Windows sprint closed: `git.ts` spawnSync refactor + `bash.test.ts` win32 skipIf guards (`7b6dd0e`, `fbc1e73`).
+- May 19 — ops: kernel.chat cert + site health monitor (`de5a891`).
+- May 17 — `docs/agents-and-money.md` + `docs/windows-worker-case-study.md` voice strip-passes per Tim O'Reilly prose-tells critique.
+
+### Current state snapshots (as of 2026-05-26)
+- kbot: **v4.5.0** on npm. (v4.4.0 was Peekaboo AX-first integration, v4.5.0 is the most recent ship — exact contents not yet recapped in scratchpad; check `packages/kbot/CHANGELOG.md`.)
+- Magazine: ISSUE 390 live. Series "Agentic Substrates for the Frontier" at entry #3 of an expected 4–6.
+- Disciplines named (3): provenance, orchestration, agent fidelity. Field: agentic engineering. Umbrella: autonomy engineering.
+- Package family (10): kbot, kbot-finance, kbot-orchestrator, agent-os, kbot-control-standalone, memory-tiers, prompt-evolver, skill-router, synth, tool-forge, vscode-kbot. (`packages/2027/` also exists as a forward-research workspace.)
+- Branch on this session: `claude/whats-new-today-yFEcJ`. Tree clean. No commits today.
+
+### Files touched (this session)
+```
+M CLAUDE.md      — 30-second refreshed: v4.5.0, ISSUE 390, package family,
+                   field-and-disciplines named. Reference table extended with
+                   six new pointers (OWASP audit, FEDERAL_ALIGNMENT, orchestrator
+                   + agent-fidelity ROLE.md, may-2026-signals, agentic-engineering).
+M KERNEL.md      — Section I (surfaces) refreshed; Section II (active state) fully
+                   rewritten to dateline 2026-05-26; "immediate context" expanded
+                   to cover field + disciplines + series + agent-os mirror; final
+                   dateline updated.
+M SCRATCHPAD.md  — This entry (prior current-session demoted).
+```
+
+### Open ends / what to look at next session
+- v4.5.0 contents are not yet recapped in scratchpad — when next touching kbot, read `packages/kbot/CHANGELOG.md` and add a recap entry.
+- Series "Agentic Substrates for the Frontier" has 1–3 more entries to write (388/389/390 in catalog). 391+ should continue reading adjacent autonomy branches (hardware, robotics, biology, finance, governance — pick by signal strength).
+- ISSUE 386 flagged "four unnamed disciplines" but only three have been coined (provenance / orchestration / agent fidelity). The fourth is open territory — worth deciding whether it gets coined or whether the field stays at three.
+- `docs/owasp-agentic-self-audit.md` flagged ASI04 (supply chain) as weakest. Closing it would mean PLUGINS_INTEGRITY hardening + provenance for the plugin manifest itself. Candidate for next sprint.
+- The agent-os mirror (`isaacsight/agent-os`) needs the first external citation / use to validate the standalone-package gamble.
+
+### Decisions worth remembering (this session)
+- The user's "All of it" meant: refresh the docs AND walk through the threads. Both delivered in the same session.
+- CLAUDE.md continues to function as the shim; the canonical reference is KERNEL.md. Both were stale by the same amount (~4 weeks). Refreshing both is necessary because CLAUDE.md is what Claude Code auto-loads but the "deep" reference is KERNEL.md.
+- The "Active state" table in KERNEL.md is the single most-useful piece of orientation for a new session. Keep it current; it pays for itself every time a session opens cold.
+
+---
+
+## Prior Session (2026-05-09 evening) — PEEKABOO INTEGRATION: AX-FIRST NATIVE AUTOMATION + ISSUE 380 (THREE IDIOMS)
 
 ### Headline
 Wired Peekaboo (https://github.com/openclaw/Peekaboo) into kbot end-to-end across three layers in a single sprint via parallel-agent swarm: provider-agnostic adapter, six registered `peekaboo_*` tools, additive AX-first fallback in the existing `mouse_click` / `keyboard_type` flow, and the editorial that names what just changed. Six agents dispatched; all returned green.

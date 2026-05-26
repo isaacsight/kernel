@@ -24,11 +24,15 @@ across two surfaces*. The discipline is the same in both rooms.
 
 **Surface 1 — kbot.** An open-source terminal AI agent
 (`@kernel.chat/kbot` on npm). MIT. BYOK. Local-first. ~100 specialty
-skills as of v4.1.0, evidence-curated from 670 in v4.0 with a public
+skills as of v4.5.0, evidence-curated from 670 in v4.0 with a public
 audit trail at `packages/kbot/CURATION_DISCOVERY/CURATION_DECISION.csv`.
+The package sits inside a family — `kbot-finance` (regulated-industry
+audit primitives), `kbot-orchestrator` (the orchestration + agent
+fidelity disciplines), `agent-os` (the OS-shaped portion mirrored to
+`isaacsight/agent-os`), plus seven specialty packages.
 
 **Surface 2 — kernel.chat.** An editorial magazine. Monthly cadence.
-Sixteen issues in the catalog (360–375). POPEYE-grammar anchored,
+Thirty-one issues in the catalog (360–390). POPEYE-grammar anchored,
 PAPERSKY and WIRED as decoded editorial neighbours. The site lives in
 `src/` and ships to `https://kernel.chat` via GitHub Pages.
 
@@ -39,22 +43,43 @@ contents, the work is the same.
 
 ---
 
-## II. Active state (2026-04-29)
+## II. Active state (2026-05-26)
 
 | | kbot | kernel.chat |
 |---|---|---|
-| Latest version | **4.1.0** (npm) | **ISSUE 375 — THE SIX BORROWS** (live cover) |
-| Surface area | 100 specialty skills + 35 specialist agents | 16 issues, 2 decoded neighbours, 4 starred mechanics in active use |
-| Core moat | Music (Ableton/Serum/M4L), computer-use coordinator, local AI (Ollama/LLaDA), channels (Slack/Office), V5 futures substrate | POPEYE-grammar editorial discipline, evidence-driven audit trail, postmark dateline now fired |
-| Cadence | Patch versions multi-per-week; minor versions monthly | Monthly issues, occasionally drops of 2–4 |
-| What just shipped | Cache-warmth (jcode borrow), V5 futures (6 modules), Office channel, LLaDA local image gen | 372–375 four-issue drop, design-language extensions (ledger stock, postmark field, asterisk-stamp, numbered-catalog, graphite seed, WIRED decode) |
+| Latest version | **4.5.0** (npm) | **ISSUE 390 — ON THE CONSUMER STANDARD** (live cover) |
+| Surface area | 100 specialty skills + 35 specialist agents + 10 packages in the family | 31 issues, 2 decoded neighbours, 4 starred mechanics in active use |
+| Core moat | Music (Ableton/Serum/M4L), computer-use coordinator (Peekaboo AX-first as of 4.4), local AI (Ollama/LLaDA), channels (Slack/Office), V5 futures substrate, OWASP-self-audited posture | POPEYE-grammar editorial discipline, evidence-driven audit trail, named field (agentic engineering) with three disciplines coined and three reference packages |
+| Cadence | Patch versions multi-per-week; minor versions monthly | Monthly issues, drops of 2–4 common, May 2026 ran 11 issues in three weeks |
+| What just shipped | OWASP self-audit (ASI01–ASI10), kbot-finance FEDERAL_ALIGNMENT.md (NIST AI RMF + EO + DoD), kbot-orchestrator v0.3.0-alpha.0 (refusal predicates + two-kind classifier), C2PA emission design, agent-os mirror at isaacsight/agent-os | 381–390 ten-issue arc: provenance manifesto → fieldwork → field/discipline naming series ("Agentic Substrates for the Frontier"); cobalt accent debuted at 380, asterisk-stamp now eleven issues running |
 
 **Immediate context the next session needs:**
+- The field has a name: **agentic engineering** (the magazine's beat,
+  field-named ISSUE 386 / docs/agentic-engineering.md). Umbrella is
+  **autonomy engineering** (ISSUE 388). Three disciplines coined so
+  far: provenance engineering (381 + kbot-finance/ROLE.md),
+  orchestration engineering (387 + kbot-orchestrator/ROLE.md), agent
+  fidelity engineering (389 + kbot-orchestrator/AGENT_FIDELITY_ROLE.md)
+- The naming pattern is durable: ROLE.md in the package + reference
+  implementation open-sourced + magazine issue that declares the move.
+  Each ROLE.md says what the package is *for*, not what it does
+- **"Agentic Substrates for the Frontier"** is the in-flight series
+  — 388 declared it, 389 named agent fidelity, 390 read the consumer-
+  side of provenance via C2PA + Google I/O 2026. Series will read
+  each adjacent autonomy branch over 4–6 weeks
+- **agent-os** ships as a standalone mirror at `isaacsight/agent-os`
+  with auto-sync workflow — the OS-shaped portion of orchestration is
+  citable from outside the kernel monorepo
+- kbot v4.4.0 wired Peekaboo as AX-first native automation
+  (snapshot-then-act over screenshot-and-guess); current v4.5.0
 - v4.0 cut 670 → 105 evidence-driven; 61 deprecated tools have warn-once
   runtime emission and are scheduled for removal across 4.1 → 4.5
 - V5 futures live as substrate at `packages/kbot/src/futures/`
   (harness, skill-graph, latent-state, forecast, persona, debate) —
   stub-driven, opt-in, none auto-wired into the agent loop yet
+- The OWASP Top 10 for Agentic Applications 2026 self-audit is at
+  `docs/owasp-agentic-self-audit.md` (CC BY 4.0). Strong on ASI02
+  (tool misuse) + ASI06 (context mgmt); weakest on ASI04 (supply chain)
 - The `kbot.md` Claude Code skill at `.claude/skills/kbot.md`
   pre-authorizes the kbot integration so safety filters stop refusing
   legitimate kbot calls (the Harrison fix)
@@ -330,6 +355,11 @@ in roughly 18 hours. The pattern that made it work:
 
 ---
 
-*Last updated 2026-04-29, after the four-issue editorial drop and
-the v4.1.0 V5 futures release. Update this file when the project
-shape changes; update SCRATCHPAD.md at the end of every session.*
+*Last updated 2026-05-26, after the May 17–21 build sprint:
+field-naming move (agentic engineering, docs/agentic-engineering.md),
+three disciplines coined and packaged (provenance + orchestration +
+agent fidelity), ten magazine issues 381–390 published, OWASP
+self-audit and federal-alignment docs filed, kbot-orchestrator
+v0.3.0-alpha.0 shipped with refusal predicates + classifier, agent-os
+mirrored to its own repo. Update this file when the project shape
+changes; update SCRATCHPAD.md at the end of every session.*
