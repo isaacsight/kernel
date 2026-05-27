@@ -1957,17 +1957,16 @@ main().catch(err => {
   process.exit(1)
 })
 
-// === NOTIFICATION HOOK (added by Claude session 2026-03-25) ===
-// When synthesis finds actionable insights, notify Isaac via Discord webhook
 async function notifyFinding(finding: string): Promise<void> {
-  const webhook = process.env.DISCORD_WEBHOOK_URL || 'https://discord.com/api/webhooks/1482971938333655090/J6wozdd9BP19iWve3lak3kI8xxWhO073-WG48McaT1yq541tl9awSL4xvyykvY1eGV9m'
+  const webhook = process.env.DISCORD_WEBHOOK_URL
+  if (!webhook) return
   try {
     await fetch(webhook, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         embeds: [{
-          title: '🧠 kbot Discovery',
+          title: 'kbot Discovery',
           description: finding,
           color: 7035797,
           footer: { text: `kbot daemon · ${new Date().toISOString().split('T')[0]}` }

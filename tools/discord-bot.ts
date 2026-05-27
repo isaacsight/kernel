@@ -444,22 +444,51 @@ async function getLinkedUserId(discordId: string): Promise<string | null> {
   return data?.user_id || null
 }
 
-async function linkDiscordUser(discordId: string, discordUsername: string, supabaseUserId: string): Promise<boolean> {
-  const { data: user } = await supabase.auth.admin.getUserById(supabaseUserId)
-  if (!user?.user) return false
+type LinkResult =
+  | { ok: true }
+  | { ok: false; reason: 'invalid_code' | 'expired' | 'user_missing' | 'db_error' }
 
-  const { error } = await supabase.from('discord_user_links').upsert({
+// Link flow:
+//   1. User generates a code in kernel.chat settings — web app writes
+//      { token, user_id, expires_at } into `discord_link_tokens`.
+//   2. User runs `/link code:<token>` here.
+//   3. We look up the token, verify it's unexpired, link, delete it.
+// Without a matching token row, linking is rejected. This is the security
+// boundary: a stranger cannot guess a user_id to hijack an account because
+// they need a fresh server-issued token tied to that user_id.
+async function linkDiscordUserByToken(
+  discordId: string,
+  discordUsername: string,
+  code: string,
+): Promise<LinkResult> {
+  const { data: tokenRow, error: tokenErr } = await supabase
+    .from('discord_link_tokens')
+    .select('user_id, expires_at')
+    .eq('token', code)
+    .maybeSingle()
+
+  if (tokenErr || !tokenRow) return { ok: false, reason: 'invalid_code' }
+  if (tokenRow.expires_at && new Date(tokenRow.expires_at) < new Date()) {
+    return { ok: false, reason: 'expired' }
+  }
+
+  const { data: user } = await supabase.auth.admin.getUserById(tokenRow.user_id)
+  if (!user?.user) return { ok: false, reason: 'user_missing' }
+
+  const { error: linkErr } = await supabase.from('discord_user_links').upsert({
     discord_id: discordId,
-    user_id: supabaseUserId,
+    user_id: tokenRow.user_id,
     discord_username: discordUsername,
     linked_at: new Date().toISOString(),
   })
 
-  if (error) {
-    console.error('[Link] Error linking Discord user:', error.message)
-    return false
+  if (linkErr) {
+    console.error('[Link] Error linking Discord user:', linkErr.message)
+    return { ok: false, reason: 'db_error' }
   }
-  return true
+
+  await supabase.from('discord_link_tokens').delete().eq('token', code)
+  return { ok: true }
 }
 
 // ─── Conversation management ─────────────────────────────────
@@ -1488,9 +1517,11 @@ async function executeCodeTool(name: string, input: Record<string, string>): Pro
       }
 
       case 'search_code': {
+        if (!input.pattern || input.pattern.length > 256) return 'Error: pattern must be 1-256 chars'
+        if (input.include && input.include.length > 64) return 'Error: include must be ≤64 chars'
         const includeArg = input.include ? `--include=${shellEscape(input.include)}` : ''
         const cmd = `grep -rn --color=never --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist ${includeArg} -- ${shellEscape(input.pattern)} . 2>/dev/null | head -100`
-        const { stdout } = await execAsync(cmd, { cwd: PROJECT_ROOT, timeout: 15000 }).catch(e => ({ stdout: (e as any).stdout || '' }))
+        const { stdout } = await execAsync(cmd, { cwd: PROJECT_ROOT, timeout: 5000 }).catch(e => ({ stdout: (e as any).stdout || '' }))
         return stdout.trim() || 'No matches found'
       }
 
@@ -1636,14 +1667,11 @@ async function runCodeAgent(
 }
 
 function isAdmin(discordUserId: string, guildMember?: any): boolean {
-  // Explicit admin list takes priority
-  if (ADMIN_DISCORD_IDS.length > 0) {
-    return ADMIN_DISCORD_IDS.includes(discordUserId)
-  }
-  // Fall back to guild admin permissions
-  if (guildMember?.permissions?.has?.('Administrator')) return true
-  // In DMs with no admin list set, allow (assumes operator)
-  return true
+  // Fail-closed: an empty admin list means no one is admin.
+  // Without this, any DM user could drive the code agent — file edits, git push, deploys.
+  if (ADMIN_DISCORD_IDS.length === 0) return false
+  if (ADMIN_DISCORD_IDS.includes(discordUserId)) return true
+  return Boolean(guildMember?.permissions?.has?.('Administrator'))
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1689,7 +1717,7 @@ const slashCommands = [
   new SlashCommandBuilder()
     .setName('link')
     .setDescription('Link your kernel.chat account')
-    .addStringOption(opt => opt.setName('user_id').setDescription('Your kernel.chat user ID').setRequired(true)),
+    .addStringOption(opt => opt.setName('code').setDescription('One-time code from kernel.chat settings').setRequired(true)),
 
   new SlashCommandBuilder()
     .setName('unlink')
@@ -2109,20 +2137,26 @@ async function handleSlashCommand(interaction: ChatInputCommandInteraction) {
 
   // ── /link ──
   if (commandName === 'link') {
-    const userId = interaction.options.getString('user_id', true)
-    if (userId.length < 10) {
-      await interaction.reply({ content: 'That doesn\'t look like a valid user ID. Find yours in kernel.chat settings.', ephemeral: true })
+    const code = interaction.options.getString('code', true).trim()
+    if (code.length < 6 || code.length > 128) {
+      await interaction.reply({ content: 'That doesn\'t look like a valid code. Generate one in kernel.chat settings.', ephemeral: true })
       return
     }
 
-    const linked = await linkDiscordUser(discordUserId, interaction.user.tag, userId)
-    if (linked) {
+    const result = await linkDiscordUserByToken(discordUserId, interaction.user.tag, code)
+    if (result.ok) {
       await interaction.reply({ embeds: [makeEmbed({
         description: 'Linked! Your Discord conversations will now sync to the web app.',
         color: COLORS.kernel,
       })] })
     } else {
-      await interaction.reply({ content: 'Link failed — make sure your user ID is correct.', ephemeral: true })
+      const messages: Record<typeof result.reason, string> = {
+        invalid_code: 'Invalid code. Generate a fresh one in kernel.chat settings.',
+        expired: 'That code has expired. Generate a new one in kernel.chat settings.',
+        user_missing: 'The linked account no longer exists.',
+        db_error: 'Link failed — please try again in a moment.',
+      }
+      await interaction.reply({ content: messages[result.reason], ephemeral: true })
     }
     return
   }
