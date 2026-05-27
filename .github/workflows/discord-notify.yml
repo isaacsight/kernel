@@ -1,5 +1,10 @@
 name: Discord Notifications
 
+# All user-controlled fields (issue/PR titles, release names, etc.) flow
+# through env vars and `jq -n --arg` so they never reach the shell
+# interpolator. Direct ${{ ... }} interpolation inside a `run:` block
+# allows command injection via crafted titles.
+
 on:
   release:
     types: [published]
@@ -16,21 +21,23 @@ jobs:
       - name: Notify Discord
         env:
           WEBHOOK_URL: ${{ secrets.DISCORD_RELEASES_WEBHOOK }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_NAME: ${{ github.event.release.name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
         run: |
-          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
-            -d "{
-              \"embeds\": [{
-                \"title\": \"🚀 ${{ github.event.release.tag_name }} Released\",
-                \"description\": \"${{ github.event.release.name }}\",
-                \"url\": \"${{ github.event.release.html_url }}\",
-                \"color\": 4437377,
-                \"fields\": [
-                  {\"name\": \"Install\", \"value\": \"\`npm install -g @kernel.chat/kbot\`\", \"inline\": true},
-                  {\"name\": \"Changelog\", \"value\": \"[View on GitHub](${{ github.event.release.html_url }})\", \"inline\": true}
-                ],
-                \"footer\": {\"text\": \"K:BOT by kernel.chat\"}
-              }]
-            }"
+          if [ -z "$WEBHOOK_URL" ]; then echo "DISCORD_RELEASES_WEBHOOK not set"; exit 0; fi
+          payload=$(jq -n \
+            --arg title "🚀 ${RELEASE_TAG} Released" \
+            --arg desc "$RELEASE_NAME" \
+            --arg url "$RELEASE_URL" \
+            '{embeds: [{title: $title, description: $desc, url: $url, color: 4437377,
+              fields: [
+                {name: "Install", value: "`npm install -g @kernel.chat/kbot`", inline: true},
+                {name: "Changelog", value: ("[View on GitHub](" + $url + ")"), inline: true}
+              ],
+              footer: {text: "K:BOT by kernel.chat"}
+            }]}')
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" -d "$payload"
 
   notify-issue:
     if: github.event_name == 'issues'
@@ -39,19 +46,24 @@ jobs:
       - name: Notify Discord
         env:
           WEBHOOK_URL: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ', ') }}
         run: |
-          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
-            -d "{
-              \"embeds\": [{
-                \"title\": \"📋 New Issue: ${{ github.event.issue.title }}\",
-                \"url\": \"${{ github.event.issue.html_url }}\",
-                \"color\": 16744448,
-                \"fields\": [
-                  {\"name\": \"Author\", \"value\": \"${{ github.event.issue.user.login }}\", \"inline\": true},
-                  {\"name\": \"Labels\", \"value\": \"${{ join(github.event.issue.labels.*.name, ', ') }}\", \"inline\": true}
-                ]
-              }]
-            }"
+          if [ -z "$WEBHOOK_URL" ]; then echo "DISCORD_GITHUB_WEBHOOK not set"; exit 0; fi
+          payload=$(jq -n \
+            --arg title "📋 New Issue: ${ISSUE_TITLE}" \
+            --arg url "$ISSUE_URL" \
+            --arg author "$ISSUE_AUTHOR" \
+            --arg labels "$ISSUE_LABELS" \
+            '{embeds: [{title: $title, url: $url, color: 16744448,
+              fields: [
+                {name: "Author", value: $author, inline: true},
+                {name: "Labels", value: $labels, inline: true}
+              ]
+            }]}')
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" -d "$payload"
 
   notify-pr:
     if: github.event_name == 'pull_request'
@@ -60,16 +72,21 @@ jobs:
       - name: Notify Discord
         env:
           WEBHOOK_URL: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_ACTION: ${{ github.event.action }}
         run: |
-          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" \
-            -d "{
-              \"embeds\": [{
-                \"title\": \"🔀 PR: ${{ github.event.pull_request.title }}\",
-                \"url\": \"${{ github.event.pull_request.html_url }}\",
-                \"color\": 5025616,
-                \"fields\": [
-                  {\"name\": \"Author\", \"value\": \"${{ github.event.pull_request.user.login }}\", \"inline\": true},
-                  {\"name\": \"Status\", \"value\": \"${{ github.event.action }}\", \"inline\": true}
-                ]
-              }]
-            }"
+          if [ -z "$WEBHOOK_URL" ]; then echo "DISCORD_GITHUB_WEBHOOK not set"; exit 0; fi
+          payload=$(jq -n \
+            --arg title "🔀 PR: ${PR_TITLE}" \
+            --arg url "$PR_URL" \
+            --arg author "$PR_AUTHOR" \
+            --arg status "$PR_ACTION" \
+            '{embeds: [{title: $title, url: $url, color: 5025616,
+              fields: [
+                {name: "Author", value: $author, inline: true},
+                {name: "Status", value: $status, inline: true}
+              ]
+            }]}')
+          curl -H "Content-Type: application/json" -X POST "$WEBHOOK_URL" -d "$payload"

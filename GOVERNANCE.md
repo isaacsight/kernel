@@ -48,5 +48,5 @@ All participants must follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 ## Contact
 
 - **GitHub Issues**: [isaacsight/kernel/issues](https://github.com/isaacsight/kernel/issues)
-- **Discord**: [Join the community](https://discord.gg/kernel-chat) *(coming soon)*
+- **Discord**: [Join the community](https://discord.gg/kdMauM9abG)
 - **Email**: hello@kernel.chat

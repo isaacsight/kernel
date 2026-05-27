@@ -73,7 +73,7 @@ npx supabase functions deploy <name> --project-ref eoxxpyixdieprsxlpwcs
 ### Critical — Fix First
 1. HN session cookie in `.kbot-discovery/hn-cookies.json` — committed to git, rotate + gitignore
 2. Python code injection in `math_eval` (`packages/kbot/src/tools/containers.ts:276`)
-3. Script injection in `.github/workflows/discord-notify.yml` (PR titles in shell)
+3. ~~Script injection in `.github/workflows/discord-notify.yml` (PR titles in shell)~~ — fixed in discord review (env vars + `jq -n --arg`)
 4. Test suite broken: 12/24 files use vitest but script runs `tsx --test`
 5. WCAG AA contrast failures: `#6B5B95` on dark bg, `#888` secondary text, `#22C55E` success green
 6. No message list virtualization in EnginePage (perf issue on mobile)
