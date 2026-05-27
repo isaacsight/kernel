@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { User } from '@supabase/supabase-js'
 import { useAccountSettings, type ResetScope } from '../hooks/useAccountSettings'
 import { useIdentityRecovery } from '../hooks/useIdentityRecovery'
+import { useDiscordLink } from '../hooks/useDiscordLink'
 import { useAuthContext } from '../providers/AuthProvider'
 import {
   IconUser, IconShield, IconLogOut, IconTrash, IconCheck, IconAlertCircle,
@@ -53,6 +54,8 @@ export default function AccountSettingsPanel({
   // ─── Identity Governance ──────────────────────────
   const identity = useIdentityRecovery()
   const [verificationCode, setVerificationCode] = useState('')
+
+  const discord = useDiscordLink(user.id)
 
   const isVerified = identity.request?.state === 'verified' || identity.request?.state === 'executed'
   const isChallenged = identity.request?.state === 'challenged'
@@ -435,6 +438,78 @@ export default function AccountSettingsPanel({
             <span className="ka-settings-kbot-sep">·</span>
             <span className="ka-settings-kbot-local">BYOK — or run free with local models</span>
           </div>
+        </div>
+      </div>
+
+      {/* ═══ Discord ═══ */}
+      <div className="ka-settings-section">
+        <h3 className="ka-settings-section-header">{t('discord.heading', 'Discord')}</h3>
+        <div className="ka-settings-section-body">
+          {discord.link ? (
+            <>
+              <p className="ka-settings-section-desc">
+                {t('discord.linkedAs', 'Linked as')}{' '}
+                <strong>{discord.link.discord_username || discord.link.discord_id}</strong>
+              </p>
+              <button
+                className="ka-settings-text-btn"
+                onClick={async () => {
+                  await discord.unlink()
+                  onToast(t('discord.unlinked', 'Discord account unlinked'))
+                }}
+                disabled={discord.loading}
+              >
+                {t('discord.unlink', 'Unlink Discord')}
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="ka-settings-section-desc">
+                {t('discord.description', 'Link your kernel.chat account to Discord so conversations sync between the bot and the web app.')}
+              </p>
+              {discord.code ? (
+                <>
+                  <div className="ka-settings-kbot-install">
+                    <code className="ka-settings-kbot-cmd">/link code:{discord.code}</code>
+                    <button
+                      className="ka-settings-kbot-copy"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`/link code:${discord.code}`)
+                        onToast(t('discord.copied', 'Copied — paste in Discord'))
+                      }}
+                    >
+                      {t('discord.copy', 'Copy')}
+                    </button>
+                  </div>
+                  <div className="ka-settings-kbot-steps">
+                    <span className="ka-settings-kbot-step">
+                      {t('discord.expiresIn', 'Code expires in 15 minutes. Run it in any Discord channel where Kernel is present, or in a DM.')}
+                    </span>
+                  </div>
+                  <button
+                    className="ka-settings-text-btn"
+                    onClick={discord.clearCode}
+                    style={{ marginTop: 8 }}
+                  >
+                    {t('discord.newCode', 'Generate a new code')}
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="ka-gate-submit"
+                  onClick={discord.generateCode}
+                  disabled={discord.loading}
+                >
+                  {discord.loading ? '...' : t('discord.generate', 'Generate link code')}
+                </button>
+              )}
+            </>
+          )}
+          {discord.error && (
+            <p className="ka-gate-error">
+              <IconAlertCircle size={14} /> {discord.error}
+            </p>
+          )}
         </div>
       </div>
 

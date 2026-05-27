@@ -72,6 +72,18 @@
     "upgradeMonthly": "Pro — $15/mo",
     "manage": "Manage subscription"
   },
+  "discord": {
+    "heading": "Discord",
+    "description": "Link your kernel.chat account to Discord so conversations sync between the bot and the web app.",
+    "generate": "Generate link code",
+    "copy": "Copy",
+    "copied": "Copied — paste in Discord",
+    "expiresIn": "Code expires in 15 minutes. Run it in any Discord channel where Kernel is present, or in a DM.",
+    "newCode": "Generate a new code",
+    "linkedAs": "Linked as",
+    "unlink": "Unlink Discord",
+    "unlinked": "Discord account unlinked"
+  },
   "exportData": {
     "heading": "Export data",
     "description": "Download a complete copy of all your data in JSON format.",
