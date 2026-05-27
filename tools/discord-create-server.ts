@@ -9,7 +9,7 @@
 import * as dotenv from 'dotenv'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import * as fs from 'fs'
+import { discordApi, appendEnvIfMissing } from './discord-rest.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const envPath = resolve(__dirname, '..', '.env')
@@ -22,24 +22,8 @@ if (!TOKEN) {
   process.exit(1)
 }
 
-const API = 'https://discord.com/api/v10'
-const headers = {
-  Authorization: `Bot ${TOKEN}`,
-  'Content-Type': 'application/json',
-}
-
-async function api(path: string, method = 'GET', body?: unknown) {
-  const res = await fetch(`${API}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`Discord API ${method} ${path}: ${res.status} ${text}`)
-  }
-  return res.json()
-}
+const api = (path: string, method = 'GET', body?: unknown) =>
+  discordApi(path, { token: TOKEN }, method, body)
 
 async function createServer() {
   console.log('🤖 K:BOT Discord Server Creator')
@@ -80,10 +64,7 @@ async function createServer() {
   console.log(`  Name: ${server.name}`)
   console.log(`  ID: ${guildId}`)
 
-  // Save to .env
-  const envContent = fs.readFileSync(envPath, 'utf-8')
-  if (!envContent.includes('DISCORD_GUILD_ID')) {
-    fs.appendFileSync(envPath, `\nDISCORD_GUILD_ID=${guildId}\n`)
+  if (appendEnvIfMissing(envPath, 'DISCORD_GUILD_ID', guildId)) {
     console.log(`  Saved DISCORD_GUILD_ID to .env`)
   }
 
@@ -100,10 +81,7 @@ async function createServer() {
       console.log(`\n🔗 Invite link: https://discord.gg/${invite.code}`)
       console.log(`   (Never expires, unlimited uses)`)
 
-      // Save invite to .env
-      if (!envContent.includes('DISCORD_INVITE_URL')) {
-        fs.appendFileSync(envPath, `DISCORD_INVITE_URL=https://discord.gg/${invite.code}\n`)
-      }
+      appendEnvIfMissing(envPath, 'DISCORD_INVITE_URL', `https://discord.gg/${invite.code}`)
     }
   } catch (e: any) {
     console.log(`\n⚠ Could not create invite: ${e.message}`)

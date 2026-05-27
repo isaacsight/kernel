@@ -17,6 +17,7 @@ import { fileURLToPath } from 'url'
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs'
 import { createHash } from 'crypto'
 import { execSync } from 'child_process'
+import { discordApi } from './discord-rest.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: resolve(__dirname, '..', '.env') })
@@ -30,32 +31,8 @@ if (!TOKEN || !GUILD_ID) {
   process.exit(1)
 }
 
-// ─── Discord API ────────────────────────────────────────────
-
-const API = 'https://discord.com/api/v10'
-const headers = {
-  Authorization: `Bot ${TOKEN}`,
-  'Content-Type': 'application/json',
-}
-
-async function api(path: string, method = 'GET', body?: unknown): Promise<any> {
-  const res = await fetch(`${API}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  if (res.status === 429) {
-    const retryAfter = Number(res.headers.get('Retry-After') || 5)
-    console.log(`  ⏳ Rate limited, waiting ${retryAfter}s...`)
-    await new Promise(r => setTimeout(r, retryAfter * 1000))
-    return api(path, method, body)
-  }
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`Discord ${method} ${path}: ${res.status} ${text}`)
-  }
-  return res.json()
-}
+const api = (path: string, method = 'GET', body?: unknown): Promise<any> =>
+  discordApi(path, { token: TOKEN }, method, body)
 
 let channelCache: Record<string, string> | null = null
 

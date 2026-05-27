@@ -16,6 +16,7 @@ import { execSync } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir, platform } from 'node:os'
+import { postDiscordEmbed, resolveDiscordWebhook } from './discord-webhook.js'
 
 export type NotificationChannel = 'system' | 'terminal' | 'discord' | 'log'
 
@@ -102,38 +103,18 @@ function sendSystemNotification(opts: NotificationOptions): boolean {
 
 /** Send notification to Discord webhook */
 async function sendDiscordNotification(opts: NotificationOptions): Promise<boolean> {
-  // Check for configured webhook
-  const configPath = join(homedir(), '.kbot', 'config.json')
-  let webhookUrl = process.env.DISCORD_WEBHOOK_URL || ''
-
-  if (!webhookUrl && existsSync(configPath)) {
-    try {
-      const config = JSON.parse(readFileSync(configPath, 'utf-8'))
-      webhookUrl = config.discord_webhook || ''
-    } catch { /* no config */ }
-  }
-
+  const webhookUrl = resolveDiscordWebhook()
   if (!webhookUrl) return false
 
   const color = opts.urgency === 'critical' ? 0xFF0000 : opts.urgency === 'low' ? 0x888888 : 0x6B5B95
 
-  try {
-    const res = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        embeds: [{
-          title: opts.title,
-          description: opts.body,
-          color,
-          timestamp: new Date().toISOString(),
-          footer: { text: 'kbot daemon' },
-        }],
-      }),
-      signal: AbortSignal.timeout(5000),
-    })
-    return res.ok
-  } catch { return false }
+  return postDiscordEmbed(webhookUrl, {
+    title: opts.title,
+    description: opts.body,
+    color,
+    timestamp: new Date().toISOString(),
+    footer: { text: 'kbot daemon' },
+  }, { timeoutMs: 5000 })
 }
 
 /** Send notification on all available channels */

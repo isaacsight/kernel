@@ -24,6 +24,7 @@ import { homedir } from 'node:os'
 import { execSync } from 'node:child_process'
 import { createConnection, type Socket } from 'node:net'
 import { createHash } from 'node:crypto'
+import { postDiscordEmbed } from './discord-webhook.js'
 
 // ── Constants ──
 
@@ -1260,28 +1261,16 @@ export function scheduleSecurityScan(intervalHours: number, discordWebhookUrl?: 
 
       // Alert on critical findings
       if (report.criticalCount > 0 && discordWebhookUrl) {
-        try {
-          const alertBody = {
-            content: null,
-            embeds: [{
-              title: 'kbot Security Alert',
-              description: `**${report.criticalCount} critical finding(s)** detected during scheduled scan.\n\nScore: ${report.score}/100\n\n${report.findings
-                .filter(f => f.severity === 'critical')
-                .map(f => `- **${f.title}**: ${f.description}`)
-                .join('\n')}`,
-              color: 0xFF0000, // Red
-              timestamp: report.timestamp,
-            }],
-          }
-
-          await fetch(discordWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(alertBody),
-            signal: AbortSignal.timeout(10_000),
-          })
-        } catch {
-          // Cannot send alert — log locally
+        const sent = await postDiscordEmbed(discordWebhookUrl, {
+          title: 'kbot Security Alert',
+          description: `**${report.criticalCount} critical finding(s)** detected during scheduled scan.\n\nScore: ${report.score}/100\n\n${report.findings
+            .filter(f => f.severity === 'critical')
+            .map(f => `- **${f.title}**: ${f.description}`)
+            .join('\n')}`,
+          color: 0xFF0000,
+          timestamp: report.timestamp,
+        })
+        if (!sent) {
           try {
             appendFileSync(
               join(SECURITY_DIR, 'alert-failures.log'),

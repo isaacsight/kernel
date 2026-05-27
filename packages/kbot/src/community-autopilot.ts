@@ -19,6 +19,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync } fr
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { execSync } from 'node:child_process'
+import { postDiscordContent as postToDiscord } from './discord-webhook.js'
 
 // ── Types ──
 
@@ -237,26 +238,6 @@ function ghCliPRComment(repo: string, prNumber: number, body: string): boolean {
       { timeout: 15000, stdio: 'pipe' },
     )
     return true
-  } catch {
-    return false
-  }
-}
-
-// ── Discord ──
-
-async function postToDiscord(webhookUrl: string, content: string): Promise<boolean> {
-  try {
-    const truncated = content.length > 1900
-      ? content.slice(0, 1900) + '\n\n... (truncated)'
-      : content
-
-    const res = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: truncated }),
-      signal: AbortSignal.timeout(10000),
-    })
-    return res.ok
   } catch {
     return false
   }

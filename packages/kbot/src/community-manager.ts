@@ -14,6 +14,9 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync } fr
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { execSync } from 'node:child_process'
+import { postDiscordContent } from './discord-webhook.js'
+
+const postToDiscord = postDiscordContent
 
 // ── Types ──
 
@@ -406,27 +409,6 @@ export async function generateDigest(repo?: string): Promise<string> {
   log(`Digest generated: ${newIssues.length} issues, ${newPRs.length} PRs, ${mergedPRs.length} merged, ${newContributors.length} new contributors`)
 
   return markdown
-}
-
-// ── Discord webhook ──
-
-async function postToDiscord(webhookUrl: string, content: string): Promise<boolean> {
-  try {
-    // Discord has a 2000 char limit per message — truncate if needed
-    const truncated = content.length > 1900
-      ? content.slice(0, 1900) + '\n\n... (truncated)'
-      : content
-
-    const res = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: truncated }),
-      signal: AbortSignal.timeout(10000),
-    })
-    return res.ok
-  } catch {
-    return false
-  }
 }
 
 // ── Main orchestrator ──

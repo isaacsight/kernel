@@ -18,6 +18,7 @@
 import * as dotenv from 'dotenv'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { discordApi } from './discord-rest.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: resolve(__dirname, '..', '.env') })
@@ -30,24 +31,8 @@ if (!TOKEN || !GUILD_ID) {
   process.exit(1)
 }
 
-const API = 'https://discord.com/api/v10'
-const headers = {
-  Authorization: `Bot ${TOKEN}`,
-  'Content-Type': 'application/json',
-}
-
-async function api(path: string, method = 'GET', body?: unknown) {
-  const res = await fetch(`${API}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`Discord API ${method} ${path}: ${res.status} ${text}`)
-  }
-  return res.json()
-}
+const api = (path: string, method = 'GET', body?: unknown) =>
+  discordApi(path, { token: TOKEN }, method, body)
 
 // ─── Roles ───────────────────────────────────────────────────
 
