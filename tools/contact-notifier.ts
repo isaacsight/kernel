@@ -105,6 +105,6 @@ async function checkMessages() {
 // --- Main loop ---
 loadEnv()
 console.log('Contact notifier started. Polling every 30s...')
-console.log('Emails to support@kernel.chat → macOS notification + Discord')
+console.log('Emails to support@kernel.chat → macOS notification (Discord fan-out handled upstream in receive-email edge function)')
 checkMessages()
 setInterval(checkMessages, POLL_INTERVAL)

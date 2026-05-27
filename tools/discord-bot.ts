@@ -492,7 +492,17 @@ async function linkDiscordUserByToken(
 }
 
 // ─── Conversation management ─────────────────────────────────
+// LRU bound so the cache doesn't grow without limit in long-running daemons.
+const CHANNEL_CACHE_MAX = 1000
 const channelConversations = new Map<string, string>()
+
+function rememberChannel(discordChannelId: string, channelId: string) {
+  if (channelConversations.size >= CHANNEL_CACHE_MAX) {
+    const oldest = channelConversations.keys().next().value
+    if (oldest) channelConversations.delete(oldest)
+  }
+  channelConversations.set(discordChannelId, channelId)
+}
 
 async function getOrCreateConversation(
   discordChannelId: string,
@@ -513,22 +523,24 @@ async function getOrCreateConversation(
     .maybeSingle()
 
   if (recentMsg) {
-    channelConversations.set(discordChannelId, channelId)
+    rememberChannel(discordChannelId, channelId)
     return channelId
   }
 
+  // Always create the conversation row so messages don't orphan the FK.
+  // For unlinked users we use a sentinel user_id; the row gets reassigned
+  // when /link runs (TODO: hook /link to update existing discord_ channel rows).
   if (linkedUserId) {
-    const convId = `discord_${discordChannelId}`
     const title = firstMessage.slice(0, 80) || 'Discord conversation'
     await supabase.from('conversations').upsert({
-      id: convId,
+      id: channelId,
       user_id: linkedUserId,
       title: `[Discord] ${title}`,
       updated_at: new Date().toISOString(),
     })
   }
 
-  channelConversations.set(discordChannelId, channelId)
+  rememberChannel(discordChannelId, channelId)
   return channelId
 }
 
@@ -556,8 +568,14 @@ Respond with ONLY valid JSON:
 
 const userMsgCounts = new Map<string, number>()
 const MEMORY_EXTRACT_INTERVAL = 3
+// Guard against concurrent extractions stomping on each other — two near-
+// simultaneous messages both reading existingRow then both writing would
+// last-write-wins the merge.
+const memoryExtractInFlight = new Set<string>()
 
 async function extractAndSaveMemory(discordUserId: string, channelId: string) {
+  if (memoryExtractInFlight.has(discordUserId)) return
+  memoryExtractInFlight.add(discordUserId)
   try {
     const { data: recentMsgs } = await supabase
       .from('messages')
@@ -609,17 +627,25 @@ async function extractAndSaveMemory(discordUserId: string, channelId: string) {
       } catch { /* keep new */ }
     }
 
-    const msgCount = (existingRow?.message_count || 0) + MEMORY_EXTRACT_INTERVAL
+    // Reflect actual messages stored for this channel, not a per-restart counter.
+    const { count: totalMessages } = await supabase
+      .from('messages')
+      .select('*', { count: 'exact', head: true })
+      .eq('channel_id', channelId)
+      .eq('agent_id', 'user')
+
     await supabase.from('discord_user_memory').upsert({
       discord_id: discordUserId,
       profile: finalProfile,
-      message_count: msgCount,
+      message_count: totalMessages ?? (existingRow?.message_count || 0),
       updated_at: new Date().toISOString(),
     })
 
     console.log(`[Memory] Updated profile for ${discordUserId}`)
   } catch (err) {
     console.warn('[Memory] Extraction failed:', err)
+  } finally {
+    memoryExtractInFlight.delete(discordUserId)
   }
 }
 
@@ -662,7 +688,7 @@ async function extractAndSaveKG(linkedUserId: string, channelId: string) {
         .from('knowledge_graph_entities')
         .select('id, mention_count, confidence')
         .eq('user_id', linkedUserId)
-        .ilike('name', entity.name)
+        .eq('name', entity.name)
         .maybeSingle()
 
       if (existing) {
@@ -693,14 +719,14 @@ async function extractAndSaveKG(linkedUserId: string, channelId: string) {
         .from('knowledge_graph_entities')
         .select('id')
         .eq('user_id', linkedUserId)
-        .ilike('name', rel.source)
+        .eq('name', rel.source)
         .maybeSingle()
 
       const { data: tgtEntity } = await supabase
         .from('knowledge_graph_entities')
         .select('id')
         .eq('user_id', linkedUserId)
-        .ilike('name', rel.target)
+        .eq('name', rel.target)
         .maybeSingle()
 
       if (srcEntity && tgtEntity) {
@@ -2108,7 +2134,7 @@ async function handleSlashCommand(interaction: ChatInputCommandInteraction) {
       return
     }
 
-    const shareId = `share_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`
+    const shareId = `share_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
     const messages = recentMsgs.map(m => ({
       role: m.agent_id === 'user' ? 'user' : 'kernel',
       content: m.content,
@@ -2324,16 +2350,27 @@ client.once('clientReady', async () => {
     status: 'online',
   })
 
-  // Set nickname to "kernel.chat" in all servers
+  // Set nickname to "kernel.chat" in all servers. Sequential with a small
+  // delay to avoid bursting through Discord's per-route rate limit.
   for (const [, guild] of client.guilds.cache) {
     try {
       const me = guild.members.cache.get(client.user!.id) || await guild.members.fetchMe()
       if (me.displayName !== 'kernel.chat') {
         await me.setNickname('kernel.chat')
         console.log(`  Nickname set to "kernel.chat" in ${guild.name}`)
+        await new Promise(r => setTimeout(r, 250))
       }
-    } catch (err) {
-      console.warn(`  Could not set nickname in ${guild.name}:`, err)
+    } catch (err: any) {
+      if (err?.code === 50013) {
+        // Missing Permissions — not worth retrying
+        console.warn(`  No permission to set nickname in ${guild.name}`)
+      } else if (err?.status === 429) {
+        const retryMs = (err?.retry_after ?? 1) * 1000
+        console.warn(`  Rate limited setting nickname in ${guild.name}; backing off ${retryMs}ms`)
+        await new Promise(r => setTimeout(r, retryMs))
+      } else {
+        console.warn(`  Could not set nickname in ${guild.name}:`, err?.message || err)
+      }
     }
   }
 
@@ -2488,7 +2525,7 @@ client.on('messageCreate', async (msg: Message) => {
     }
 
     // Save user message
-    const userMsgId = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`
+    const userMsgId = `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
     await saveMessage({
       id: userMsgId,
       channel_id: channelId,
@@ -2572,7 +2609,7 @@ client.on('messageCreate', async (msg: Message) => {
     }
 
     // Save response
-    const kernelMsgId = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`
+    const kernelMsgId = `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
     await saveMessage({
       id: kernelMsgId,
       channel_id: channelId,
