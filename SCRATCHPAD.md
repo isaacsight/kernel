@@ -24,6 +24,18 @@ Closed two gaps surfaced while auditing ISSUE 391:
   (never silently rewrites), preserves house phrases (残る希少,
   街のコーダーたちへ), escalates blocking errors. Protocol + output table.
 
+- **`.claude/agents/designer.md` — Image Layer / Claude Design Brief
+  Protocol added.** Operationalizes using Claude Design (Anthropic Labs)
+  for the deliberately-deferred Images layer: scope (back-cover versos
+  primary; filmstrip stills; ornament/layout *exploration* only —
+  re-implement system visuals as vectors), a fixed back-cover brief
+  template (constant setup, rotate subject, one spot color, no text),
+  acceptance bar (on-grammar or reject, same spirit as isPopeyeSafe),
+  drop path `public/back-covers/<N>-<slug>.jpg`, honest colophon credit,
+  and the boundary: code is truth / never voice-JP-curation / out-of-band
+  asset step (Claude Design is hosted, not a BYOK API — brief + ingest,
+  not in-loop).
+
 Agent files here are plain markdown (no YAML frontmatter); Claude Code
 auto-discovers `.claude/agents/*.md` — no manifest to update.
 Committed to `claude/ai-news-updates-2u3wb`. No PR opened (not asked).
