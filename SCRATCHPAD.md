@@ -82,9 +82,26 @@ everything "passed" — the audits were never independent. Fix:
   tool/number), taste/judgment findings flagged as non-independent on the
   author's model unless run on a different model or staged for a human.
 
-Roster-wide TODO (not done): add the `Independence source` header to the
-rest of `.claude/agents/*.md`; any honest `NONE` gets relabeled assistant,
-not check. Committed to `claude/ai-news-updates-2u3wb`. No PR (not asked).
+ROLLOUT DONE: `Independence source` header now on **53/53** agents
+(classified mechanical/mixed/judgment/authoring; insertion scripted before
+each file's first `##`). Sources: tool (mechanical ops/test agents),
+adversarial (security/hacker/immune), evidence (docs/intel/sync),
+judgment (taste/strategy/creative — must use a different model or human),
+authoring (magazine-editor). Zero unclassified.
+
+PROOF RUN (the first genuinely independent check this session):
+re-ran 391's Japanese through GPT-OSS-20B via text.pollinations.ai (a
+different provider/weights, keyless). It caught FIVE strings my own
+self-review passed (ジェミニ動くことを覚える, 回答の中の広告→内の,
+工具屋→メーカー, 残る希少→希少性, plus the two I'd flagged). Autocorrelation
+was real — same-model self-review shared the author's blind spots. It ALSO
+false-flagged 残る希少 (an intentional house phrase from 368), proving the
+other half: a decorrelated model surfaces candidates but a NATIVE HUMAN is
+the final authority. 391's JP NOT changed — candidates staged for Isaac to
+adjudicate. Pollinations text/image (keyless) is a usable BYOK-free path
+for independent review + asset gen from this container.
+
+Committed to `claude/ai-news-updates-2u3wb`. No PR (not asked).
 
 ## Current Session (2026-05-28, cont.) — EDITORIAL AGENT LAYER BUILD-OUT
 
