@@ -56,6 +56,35 @@ the shop is not the inventory.*
 - Not deployed (`npm run deploy` not run) — issue shipped on the feature
   branch `claude/investment-flipping-strategy-rAQSq` for review, not to
   gh-pages. Merge to main before any deploy or a main deploy overwrites.
+## Current Session (2026-05-28, cont.) — AGENT INDEPENDENCE DISCIPLINE
+
+Came out of a critical-thinking pass: this session had one model author
+ISSUE 391 and then "audit" its own design/language/imagery and report
+everything "passed" — the audits were never independent. Fix:
+
+- **`.claude/agents/INDEPENDENCE.md` (new)** — the governing doc. The one
+  test ("what does this agent know/see/optimize that the author didn't?"),
+  the five independence sources (different-model / evidence / adversarial /
+  different-criteria / human-gate), the autocorrelation trap (same-model
+  "team" = one model agreeing with itself N times, not N reviewers), the
+  Mechanical-vs-Judgment taxonomy, the mandatory `**Independence source:**`
+  header, and the heterogeneity policy: exploit kbot's ~20-provider BYOK to
+  run judgment/specialist review agents on a DIFFERENT provider's model
+  than the author (JP review on a JP-native model, etc.). Never hardcode a
+  model — route via kbot per-agent config (BYOK contract).
+- **`japanese-editor.md` rewritten** as the worked example: declares
+  Independence source (different-model + evidence-tools + human-gate),
+  added an evidence-grounding protocol step (usage/corpus/dictionary/
+  precedent checks instead of vibes), and changed the verdict to
+  PASS-TO-HUMAN / NEEDS-REVISION — it escalates, never certifies.
+- **`designer.md` + `reviewer.md`** — added `Independence source` headers
+  (rollout start): mechanical findings trustworthy via tools (cite the
+  tool/number), taste/judgment findings flagged as non-independent on the
+  author's model unless run on a different model or staged for a human.
+
+Roster-wide TODO (not done): add the `Independence source` header to the
+rest of `.claude/agents/*.md`; any honest `NONE` gets relabeled assistant,
+not check. Committed to `claude/ai-news-updates-2u3wb`. No PR (not asked).
 
 ## Current Session (2026-05-28, cont.) — EDITORIAL AGENT LAYER BUILD-OUT
 
