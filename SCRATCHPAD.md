@@ -2,6 +2,32 @@
 
 > This file persists context between Claude Code sessions.
 
+## Current Session (2026-05-28, cont.) — EDITORIAL AGENT LAYER BUILD-OUT
+
+Closed two gaps surfaced while auditing ISSUE 391:
+- **`.claude/agents/magazine-editor.md` refreshed** — was stale (claimed
+  "7 issues", catalog frozen at 360–366, only essay/interview/forecast
+  tools, fixed "reserved accents", a single "unhedged" voice rule).
+  Now: canon-pointer header (KERNEL.md→PUBLISHING.md→design-language→
+  index.ts as source of truth), the Ink Cabinet adaptive-accent system,
+  full cover-identity field set (ornament/seal/postmark/accent/backCover/
+  series + ledger stock + ledger-rule/numbered-catalog layouts), the
+  `dispatch` + `review` tools added to the editorial-tools table, catalog
+  section replaced with "read LATEST_ISSUE from index.ts" + the
+  agentic-engineering/series turn, a matured voice guide ("unhedged on
+  stance, honest about uncertainty — hedge unverified claims, date
+  dispatches"; name-the-seam; WIRED register), a per-issue Protocol, and
+  a JP-handoff section.
+- **`.claude/agents/japanese-editor.md` created** — native-JP reviewer,
+  the missing downstream check for the JP the magazine-editor authors.
+  Reviews every JP field, grades on naturalness/register/fidelity, flags
+  (never silently rewrites), preserves house phrases (残る希少,
+  街のコーダーたちへ), escalates blocking errors. Protocol + output table.
+
+Agent files here are plain markdown (no YAML frontmatter); Claude Code
+auto-discovers `.claude/agents/*.md` — no manifest to update.
+Committed to `claude/ai-news-updates-2u3wb`. No PR opened (not asked).
+
 ## Current Session (2026-05-28) — ISSUE 391: THE WEEK THE ASSISTANT BECAME AN ACTOR
 
 ### Headline
