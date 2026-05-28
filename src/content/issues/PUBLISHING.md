@@ -186,7 +186,7 @@ register is expressed by SWITCHING the accent, not adding one.
 
 Create `src/content/issues/<N>.ts` following the shape of the most
 recent same-format issue (`371.ts` for essay-as-profile,
-`369.ts` for essay-as-field-piece, `368.ts` for dispatch,
+`369.ts` for essay-as-field-piece, `391.ts` for dispatch,
 `370.ts` for forecast, `365.ts` for interview). Every issue needs:
 
 - A leading block comment explaining the identity decisions
@@ -390,4 +390,4 @@ Typecheck → build → commit on the current branch with the format in §VIII �
 
 ---
 
-_Last updated: ISSUE 371 · APR 2026._
+_Last updated: ISSUE 391 · MAY 2026._

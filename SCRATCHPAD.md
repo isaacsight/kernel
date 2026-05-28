@@ -2,6 +2,43 @@
 
 > This file persists context between Claude Code sessions.
 
+## Current Session (2026-05-28) — ISSUE 391: THE WEEK THE ASSISTANT BECAME AN ACTOR
+
+### Headline
+Filed ISSUE 391 — a wire **dispatch** distilling a single late-May 2026
+week of AI news into seven stakes. Second dispatch ever (368 was the
+first). Steps out of the "Agentic Substrates" series (388–390) for a
+reactive, dated week-in-review; bridges back to 390.
+
+### What shipped (magazine)
+- `src/content/issues/391.ts` — dispatch spread. Identity: ivory stock +
+  asymmetric-left + ink-spread ornament (dispatch-exclusive; deliberately
+  breaks the 374–390 asterisk-stamp run) + brick accent (dispatch default)
+  + FILED·WIRE seal + THE WIRE DESK postmark. Seven propositions: (01) an
+  OpenAI model autonomously disproving an ~80-yr geometry conjecture,
+  (02) GPT-5.5 Instant as new ChatGPT default + the release stack,
+  (03) Gemini reframed to *act* at Google I/O + Copilot Studio computer-use
+  GA, (04) ads moving inside the answer (OpenAI Ads Manager, Google AI
+  Search ads), (05) Anthropic acquiring Stainless + the $200M Gates
+  partnership, (06) regulators getting pre-release early access,
+  (07) taste/discernment as what stays scarce. Bulletin + AP terminator.
+- Registered in `index.ts` (import + ALL_ISSUES). LATEST_ISSUE → 391.
+- PUBLISHING.md hygiene: §IV dispatch template ref 368 → 391; last-updated
+  bumped to ISSUE 391.
+
+### State / caveats
+- Source: web search, late May 2026. Fast filing — some claims (esp. the
+  math result) await public verification; the issue says so in-prose.
+- `391.ts` + `index.ts` typecheck clean. **Pre-existing build break:**
+  `tsconfig.json` deprecation errors (TS5107/TS5101 — esModuleInterop,
+  moduleResolution=node10, baseUrl) fail `tsc` on a fresh container with
+  newer TypeScript. Present on clean HEAD, NOT from this issue. Blocks
+  `npm run build` / `npm run deploy` until tsconfig adds
+  `"ignoreDeprecations": "6.0"` (or options are migrated). Did not touch
+  it — out of scope for the news task. Flag to user before any deploy.
+- Committed + pushed to `claude/ai-news-updates-2u3wb`. NOT deployed to
+  gh-pages (would make it live on kernel.chat) — held pending user OK.
+
 ## Current Session (2026-05-09 evening) — PEEKABOO INTEGRATION: AX-FIRST NATIVE AUTOMATION + ISSUE 380 (THREE IDIOMS)
 
 ### Headline
