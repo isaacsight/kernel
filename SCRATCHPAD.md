@@ -2,6 +2,31 @@
 
 > This file persists context between Claude Code sessions.
 
+## Current Session (2026-06-03, cont.) — ISSUE 393: OWN THE STACK
+
+Companion to 392, shipped same session. Thread continued: "editorial
+tech" → the most underrated *fixture* in the shop (392's frame). Thesis:
+editorial tech you rent is inventory and depreciates; the tech you own
+that encodes your discipline is a fixture and compounds.
+
+- **`src/content/issues/393.ts`** — `forecast` (numbered manifesto, 7
+  stakes; template 370). Deliberately distinct from 392 on all five
+  PUBLISHING.md §III axes: **forecast** (vs essay) / **ink** stock (vs
+  ivory) / **asymmetric-left** (vs classic) / **cobalt** accent (vs
+  amethyst; cobalt-on-ink is the proven 371 pairing) / **coverSeal**
+  FORECAST·STACK (vs asterisk-stamp). Stakes drawn from how the magazine
+  is actually built: content-as-code, schema-as-copy-editor, derived
+  design (Ink Cabinet), audit-as-infrastructure, agent-layer-as-version-
+  controlled-staff, cadence-over-platform.
+- **`index.ts`** — `ISSUE_393` imported + pushed; now `LATEST_ISSUE`.
+- **`PUBLISHING.md`** — footer bumped to ISSUE 393.
+- 392 (NEVER SELL THE FIXTURES) was merged to main (PR #47, squash
+  8df3bba) and deployed to gh-pages earlier this session — it is LIVE.
+- Branch note: PR #47 squash-merged, so the designated feature branch
+  `claude/investment-flipping-strategy-rAQSq` was reset onto main and
+  393 stacked on top (clean single-issue PR; force-push expected since
+  the old branch ref was the pre-squash 392 commit).
+
 ## Current Session (2026-06-03) — ISSUE 392: NEVER SELL THE FIXTURES
 
 Shipped one magazine issue. Started as a reader question — "what
