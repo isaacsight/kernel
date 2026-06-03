@@ -2,6 +2,36 @@
 
 > This file persists context between Claude Code sessions.
 
+## Current Session (2026-06-03) — ISSUE 392: NEVER SELL THE FIXTURES
+
+Shipped one magazine issue. Started as a reader question — "what
+investments are worth flipping?" — narrowed through agencies → coffee
+vendors → kernel.chat itself, and the thread resolved into an editorial
+thesis worth printing: *the things worth flipping are made in the shop;
+the shop is not the inventory.*
+
+- **`src/content/issues/392.ts`** — `essay`, full WIRED data-grounded
+  kit (dossier THE REGISTER / dataBlock THE FIGURES / numbered FURTHER
+  reading). Identity: `ivory` stock + `classic` layout + `asterisk-stamp`
+  ornament + **`amethyst`** accent (the cabinet seed reserved for issues
+  about kernel.chat itself — the §05 turn lands the lens on the project's
+  own BYOK/MIT/manuscripts-in-the-drawer covenant). Figures sourced to
+  real literature (Built to Sell, Buy Then Build, E-Myth, IBBA/BizBuySell
+  multiples, SBA 7(a), IRS short-term cap-gains). No invented precision —
+  ranges where the honest number is a range.
+- **`index.ts`** — imported + pushed `ISSUE_392`; it is now `LATEST_ISSUE`.
+- **`PUBLISHING.md`** — footer bumped to ISSUE 392 · JUNE 2026.
+- Gate: `npm run build` (tsc && vite build) green, exit 0. Note: a bare
+  `npx tsc` pulls a *newer* transient TypeScript that emits 3 tsconfig
+  deprecation errors (esModuleInterop/moduleResolution/baseUrl) —
+  pre-existing, environment-only, not from issue files. Use `npm run
+  build` for the real gate; the repo's pinned tsc is clean.
+- Container had **no node_modules** on a fresh clone — ran `npm install`
+  (952 packages) before the build gate would run.
+- Not deployed (`npm run deploy` not run) — issue shipped on the feature
+  branch `claude/investment-flipping-strategy-rAQSq` for review, not to
+  gh-pages. Merge to main before any deploy or a main deploy overwrites.
+
 ## Current Session (2026-05-28, cont.) — EDITORIAL AGENT LAYER BUILD-OUT
 
 Closed two gaps surfaced while auditing ISSUE 391:
