@@ -15,6 +15,7 @@
         "test:e2e": "playwright test",
         "test:e2e:update": "playwright test --update-snapshots",
         "deploy": "cd dist && git init && git add -A && git commit -m deploy && git push -f $(git -C .. remote get-url origin) HEAD:gh-pages && rm -rf .git",
+        "print": "npx tsx tools/print-issue.ts",
         "monitor": "npx tsx tools/kernel-monitor.ts",
         "discord": "npx tsx tools/discord-bot.ts",
         "cap:sync": "npx cap sync",

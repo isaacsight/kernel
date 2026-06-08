@@ -56,6 +56,46 @@ the shop is not the inventory.*
 - Not deployed (`npm run deploy` not run) — issue shipped on the feature
   branch `claude/investment-flipping-strategy-rAQSq` for review, not to
   gh-pages. Merge to main before any deploy or a main deploy overwrites.
+## Current Session (2026-05-30) — PRINT EDITION: GIVING THE MAGAZINE A BODY
+
+First move to put kernel.chat on physical paper. The publication was
+print-native from the start (POPEYE spine, stock/monument/colophon/
+postmark vocabulary, one tomato spot color) but had never existed as
+an object. This session built the plan + the tooling to render it.
+
+- **`docs/print-edition.md`** — the print-edition plan. Debut object:
+  ISSUE 375 (cream anchor stock, monument-hero number as cover art,
+  the credit-page issue — the right statement piece for issue #1).
+  Why risograph is the uncanny match (the whole brand IS one spot
+  color on warm uncoated stock = riso's native cheapest mode; tomato ≈
+  Riso Bright Red/Fluoro Orange). A5 saddle-stitch, 16pp, EB Garamond +
+  Courier Prime + Noto Serif JP (all OFL). Full 16pp page plan for 375,
+  production path, named riso/newsprint printers, Big Cartel/Gumroad
+  sell plan + budget math, 8-week timeline.
+- **Print route + tooling shipped:**
+  - `src/pages/PrintIssuePage.tsx` — `#/issues/:number/print`. Reuses
+    IssueCover/Contents/Feature/Credits/Colophon minus all web chrome
+    (no archive nav). Named export, explicit types.
+  - `src/pages/PrintIssuePage.css` — A5 `@page` geometry, page breaks
+    between blocks, `print-color-adjust: exact` so stock + tomato spot
+    actually render on press, plus a screen preview mode showing page
+    boundaries.
+  - `tools/print-issue.ts` — `npm run print 375` → `print/375.pdf`.
+    Spawns vite preview, renders the print route in headless Chromium
+    (Playwright), emits A5 PDF with backgrounds. Reusable per issue.
+  - `package.json` — added `"print"` script.
+- **Verification:** my files type-clean. `npx tsc --noEmit` shows ONLY
+  pre-existing tsconfig deprecation errors (esModuleInterop/
+  moduleResolution/baseUrl) from a newer TS in the container —
+  tsconfig.json untouched. Could not run the PDF render here (no
+  Chromium binary); it runs locally where Playwright's browser exists.
+- **Next:** visual pass on the print CSS against a rendered proof
+  (screen sections are viewport-sized, not 148mm pages — the page model
+  is in place but geometry needs tuning); then pre-flight (font
+  embedding, spot separation, 3mm bleed) and a printer quote.
+- Context: this session also covered job-search strategy (portfolio
+  from the repos; FDE/agent-infra targets) and pivoted to the print
+  object as the "one physical tangible thing" to make + sell.
 
 ## Current Session (2026-05-28, cont.) — EDITORIAL AGENT LAYER BUILD-OUT
 

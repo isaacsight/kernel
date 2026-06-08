@@ -1,0 +1,76 @@
+/* PrintIssuePage.css — page geometry for the print edition.
+ *
+ * Targets A5 portrait (148 x 210 mm), the debut trim documented in
+ * docs/print-edition.md. The screen components keep their own warm
+ * stock backgrounds and tomato spot color; this stylesheet only owns
+ * the paper: page size, breaks between major blocks, and the
+ * print-color-adjust flag that forces backgrounds + spot color to
+ * actually render on press (browsers strip them by default).
+ *
+ * Geometry here will need a visual pass against a rendered proof —
+ * screen sections are sized for the viewport, not for a 148mm page —
+ * but this establishes the page model the proof iterates from.
+ */
+
+@page {
+  size: 148mm 210mm; /* A5 portrait. Switch to 257mm 182mm for B5/offset. */
+  margin: 0;
+}
+
+/* Force every block to print its background + the tomato spot. */
+.pop-print,
+.pop-print * {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.pop-print {
+  width: 148mm;
+  margin: 0 auto;
+  background: var(--color-paper, #faf9f6);
+}
+
+/* Each top-level block (cover, contents, feature, credits, colophon)
+   starts on a fresh leaf. break-after on every child but the last. */
+.pop-print > * {
+  break-after: page;
+  break-inside: avoid;
+  width: 148mm;
+  min-height: 210mm;
+  box-sizing: border-box;
+  /* neutralize any 100vh screen sizing so a block is one A5 page */
+  max-height: none;
+}
+
+.pop-print > *:last-child {
+  break-after: auto;
+}
+
+/* The cover is the front leaf — let it fill the trim edge to edge. */
+.pop-print .pop-cover,
+.pop-print [class*='cover'] {
+  margin: 0;
+}
+
+/* Hide any web-only affordances that slipped through (scroll cues,
+   sticky nav, share buttons). Print never wants interactive chrome. */
+.ka-print-page .ka-archive-nav,
+.ka-print-page nav,
+.ka-print-page button,
+.ka-print-page .ka-scroll-cue {
+  display: none !important;
+}
+
+/* Screen preview of the print route (when opened in a normal tab):
+   show page boundaries so the layout is legible before rendering. */
+@media screen {
+  body.ka-print-page {
+    background: #4a4a4a;
+    padding: 24px 0;
+  }
+  .pop-print > * {
+    background: var(--color-paper, #faf9f6);
+    box-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+    margin: 0 auto 24px;
+  }
+}
