@@ -2,6 +2,31 @@
 
 > This file persists context between Claude Code sessions.
 
+## Current Session (2026-06-08) — PR #45 REBASE + 392→394 RENUMBER
+
+Work-review pass. PR #45 had been opened off `#44` (d0c7491) and carried
+two things main never received: (a) the **agent independence discipline**
+(`INDEPENDENCE.md`, the `**Independence source:**` header on the full
+roster, the rewritten `japanese-editor.md`) and (b) an **ISSUE 392 — THE
+DESK THAT SURVIVES** that *collided* with the 392 already merged to main
+(NEVER SELL THE FIXTURES, PR #47). Resolution, per the user:
+
+- Rebased PR #45's two independence commits onto current `main` (only
+  SCRATCHPAD appends conflicted; resolved chronologically). main had
+  touched no agent files since d0c7491, so the roster rollout replayed
+  clean.
+- Renumbered THE DESK **392 → 394**: `src/content/issues/394.ts`
+  (`ISSUE_394`, `number: '394'`), date bumped MAY→JUNE / `V·26`→`VI·26`
+  to match the 392/393 June run, back-cover image copied to
+  `public/back-covers/394-desk.jpg`, attribution + header comments
+  renumbered. Registered `ISSUE_394` in `index.ts` (now `LATEST_ISSUE`)
+  and bumped `PUBLISHING.md` footer to 394.
+- **Editorial note:** 394 now drives the landing cover, displacing 393
+  (OWN THE STACK). 392/393 are a paired set; 394 is a craft palate-
+  cleanser after them. If 393 should stay the cover, re-order ALL_ISSUES.
+- Gate: `npm run build` green, exit 0.
+- PR #46 (print edition) rebased onto main, kept draft, no content change.
+
 ## Current Session (2026-06-03, cont.) — ISSUE 393: OWN THE STACK
 
 Companion to 392, shipped same session. Thread continued: "editorial
@@ -56,6 +81,52 @@ the shop is not the inventory.*
 - Not deployed (`npm run deploy` not run) — issue shipped on the feature
   branch `claude/investment-flipping-strategy-rAQSq` for review, not to
   gh-pages. Merge to main before any deploy or a main deploy overwrites.
+## Current Session (2026-05-28, cont.) — AGENT INDEPENDENCE DISCIPLINE
+
+Came out of a critical-thinking pass: this session had one model author
+ISSUE 391 and then "audit" its own design/language/imagery and report
+everything "passed" — the audits were never independent. Fix:
+
+- **`.claude/agents/INDEPENDENCE.md` (new)** — the governing doc. The one
+  test ("what does this agent know/see/optimize that the author didn't?"),
+  the five independence sources (different-model / evidence / adversarial /
+  different-criteria / human-gate), the autocorrelation trap (same-model
+  "team" = one model agreeing with itself N times, not N reviewers), the
+  Mechanical-vs-Judgment taxonomy, the mandatory `**Independence source:**`
+  header, and the heterogeneity policy: exploit kbot's ~20-provider BYOK to
+  run judgment/specialist review agents on a DIFFERENT provider's model
+  than the author (JP review on a JP-native model, etc.). Never hardcode a
+  model — route via kbot per-agent config (BYOK contract).
+- **`japanese-editor.md` rewritten** as the worked example: declares
+  Independence source (different-model + evidence-tools + human-gate),
+  added an evidence-grounding protocol step (usage/corpus/dictionary/
+  precedent checks instead of vibes), and changed the verdict to
+  PASS-TO-HUMAN / NEEDS-REVISION — it escalates, never certifies.
+- **`designer.md` + `reviewer.md`** — added `Independence source` headers
+  (rollout start): mechanical findings trustworthy via tools (cite the
+  tool/number), taste/judgment findings flagged as non-independent on the
+  author's model unless run on a different model or staged for a human.
+
+ROLLOUT DONE: `Independence source` header now on **53/53** agents
+(classified mechanical/mixed/judgment/authoring; insertion scripted before
+each file's first `##`). Sources: tool (mechanical ops/test agents),
+adversarial (security/hacker/immune), evidence (docs/intel/sync),
+judgment (taste/strategy/creative — must use a different model or human),
+authoring (magazine-editor). Zero unclassified.
+
+PROOF RUN (the first genuinely independent check this session):
+re-ran 391's Japanese through GPT-OSS-20B via text.pollinations.ai (a
+different provider/weights, keyless). It caught FIVE strings my own
+self-review passed (ジェミニ動くことを覚える, 回答の中の広告→内の,
+工具屋→メーカー, 残る希少→希少性, plus the two I'd flagged). Autocorrelation
+was real — same-model self-review shared the author's blind spots. It ALSO
+false-flagged 残る希少 (an intentional house phrase from 368), proving the
+other half: a decorrelated model surfaces candidates but a NATIVE HUMAN is
+the final authority. 391's JP NOT changed — candidates staged for Isaac to
+adjudicate. Pollinations text/image (keyless) is a usable BYOK-free path
+for independent review + asset gen from this container.
+
+Committed to `claude/ai-news-updates-2u3wb`. No PR (not asked).
 
 ## Current Session (2026-05-28, cont.) — EDITORIAL AGENT LAYER BUILD-OUT
 

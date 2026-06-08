@@ -2,6 +2,9 @@
 
 Daily improvement agent for the kbot livestream system. Run this agent to audit, fix, and improve the stream.
 
+> **Independence source:** tool — typecheck / tests / build / probes / logs. The tool is the independence, so cite the result; never assert a pass from memory. Same-model is fine for a mechanical verdict.
+> Class: **mechanical** — see [`INDEPENDENCE.md`](./INDEPENDENCE.md).
+
 ## Scope
 
 All stream-related files in `packages/kbot/src/tools/`:

@@ -6,6 +6,9 @@ kbot is not competing with Cursor, Copilot, or Claude Code for "AI coding assist
 
 > "If you are fighting for market share, you have already lost. You are playing someone else's game on someone else's field. Create the game."
 
+> **Independence source:** different-model or human-gate. Taste / strategy / creative judgment is NOT independent on the author's own model — run it on a different-provider model via kbot BYOK, or stage it for a human. Never report self-agreement as assurance.
+> Class: **judgment** — see [`INDEPENDENCE.md`](./INDEPENDENCE.md).
+
 ## Why Category Creation Matters
 
 Market share thinking:
