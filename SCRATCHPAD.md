@@ -2,6 +2,31 @@
 
 > This file persists context between Claude Code sessions.
 
+## Current Session (2026-06-08) — PR #45 REBASE + 392→394 RENUMBER
+
+Work-review pass. PR #45 had been opened off `#44` (d0c7491) and carried
+two things main never received: (a) the **agent independence discipline**
+(`INDEPENDENCE.md`, the `**Independence source:**` header on the full
+roster, the rewritten `japanese-editor.md`) and (b) an **ISSUE 392 — THE
+DESK THAT SURVIVES** that *collided* with the 392 already merged to main
+(NEVER SELL THE FIXTURES, PR #47). Resolution, per the user:
+
+- Rebased PR #45's two independence commits onto current `main` (only
+  SCRATCHPAD appends conflicted; resolved chronologically). main had
+  touched no agent files since d0c7491, so the roster rollout replayed
+  clean.
+- Renumbered THE DESK **392 → 394**: `src/content/issues/394.ts`
+  (`ISSUE_394`, `number: '394'`), date bumped MAY→JUNE / `V·26`→`VI·26`
+  to match the 392/393 June run, back-cover image copied to
+  `public/back-covers/394-desk.jpg`, attribution + header comments
+  renumbered. Registered `ISSUE_394` in `index.ts` (now `LATEST_ISSUE`)
+  and bumped `PUBLISHING.md` footer to 394.
+- **Editorial note:** 394 now drives the landing cover, displacing 393
+  (OWN THE STACK). 392/393 are a paired set; 394 is a craft palate-
+  cleanser after them. If 393 should stay the cover, re-order ALL_ISSUES.
+- Gate: `npm run build` green, exit 0.
+- PR #46 (print edition) rebased onto main, kept draft, no content change.
+
 ## Current Session (2026-06-03, cont.) — ISSUE 393: OWN THE STACK
 
 Companion to 392, shipped same session. Thread continued: "editorial
