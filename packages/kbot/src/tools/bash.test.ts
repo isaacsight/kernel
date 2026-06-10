@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
 import { executeTool, getTool } from './index.js'
-import { registerBashTools } from './bash.js'
+import { registerBashTools, translatePosixForWindows } from './bash.js'
 
 // Many bash-tool tests invoke POSIX shell commands (echo with shell-quoted
 // strings, wc, cat, rm, sleep, $VAR expansion). On Windows the user shell
@@ -324,5 +324,107 @@ describe('Bash Working Directory', () => {
     })
     expect(result.error).toBeUndefined()
     expect(result.result).toMatch(/^\//)
+  })
+})
+
+// ─────────────────────────────────────────────────────────────────────
+// 7. Windows POSIX polyfill — pure translation function
+//
+// On Windows the tool translates simple POSIX commands to PowerShell
+// before executing (models habitually emit ls/cat/pwd, which cmd.exe
+// rejects). translatePosixForWindows is a pure function, so these
+// tests run on every platform.
+// ─────────────────────────────────────────────────────────────────────
+
+describe('Windows POSIX Polyfill - translations', () => {
+  it('translates pwd', () => {
+    expect(translatePosixForWindows('pwd')).toBe('(Get-Location).Path')
+  })
+
+  it('translates bare ls', () => {
+    expect(translatePosixForWindows('ls')).toBe('Get-ChildItem')
+  })
+
+  it('translates ls -la with a path', () => {
+    expect(translatePosixForWindows('ls -la src')).toBe("Get-ChildItem -Force 'src'")
+  })
+
+  it('translates cat with multiple files', () => {
+    expect(translatePosixForWindows('cat a.txt b.txt')).toBe("Get-Content 'a.txt','b.txt'")
+  })
+
+  it('translates head and tail with counts', () => {
+    expect(translatePosixForWindows('head -n 5 log.txt')).toBe("Get-Content 'log.txt' -TotalCount 5")
+    expect(translatePosixForWindows('head -5 log.txt')).toBe("Get-Content 'log.txt' -TotalCount 5")
+    expect(translatePosixForWindows('tail -20 log.txt')).toBe("Get-Content 'log.txt' -Tail 20")
+    expect(translatePosixForWindows('tail log.txt')).toBe("Get-Content 'log.txt' -Tail 10")
+  })
+
+  it('translates rm -rf on a normal directory', () => {
+    expect(translatePosixForWindows('rm -rf build')).toBe("Remove-Item -Recurse -Force 'build'")
+  })
+
+  it('translates cp -r and mv', () => {
+    expect(translatePosixForWindows('cp -r src dest')).toBe("Copy-Item -Recurse 'src' -Destination 'dest'")
+    expect(translatePosixForWindows('mv old.txt new.txt')).toBe("Move-Item 'old.txt' -Destination 'new.txt'")
+  })
+
+  it('translates mkdir -p', () => {
+    expect(translatePosixForWindows('mkdir -p a/b/c')).toBe(
+      "New-Item -ItemType Directory -Force -Path 'a/b/c' | Out-Null"
+    )
+  })
+
+  it('translates touch without truncating existing files', () => {
+    const result = translatePosixForWindows('touch notes.md')
+    expect(result).toContain("if (Test-Path 'notes.md')")
+    expect(result).toContain('LastWriteTime = Get-Date')
+    expect(result).toContain('New-Item -ItemType File')
+  })
+
+  it('translates which', () => {
+    expect(translatePosixForWindows('which node')).toBe("(Get-Command 'node').Source")
+  })
+
+  it('translates grep, case-sensitive by default', () => {
+    expect(translatePosixForWindows('grep TODO src.ts')).toBe(
+      "Select-String -CaseSensitive -Pattern 'TODO' -Path 'src.ts' | ForEach-Object { $_.Line }"
+    )
+    expect(translatePosixForWindows('grep -i todo src.ts')).toBe(
+      "Select-String -Pattern 'todo' -Path 'src.ts' | ForEach-Object { $_.Line }"
+    )
+  })
+
+  it('respects quoted arguments and escapes for PowerShell', () => {
+    expect(translatePosixForWindows('cat "my file.txt"')).toBe("Get-Content 'my file.txt'")
+    expect(translatePosixForWindows('cat "it\'s.txt"')).toBe("Get-Content 'it''s.txt'")
+  })
+})
+
+describe('Windows POSIX Polyfill - passthrough (returns null)', () => {
+  it('passes through pipelines and operators', () => {
+    expect(translatePosixForWindows('ls | head -5')).toBeNull()
+    expect(translatePosixForWindows('cat a.txt && echo done')).toBeNull()
+    expect(translatePosixForWindows('echo $HOME')).toBeNull()
+    expect(translatePosixForWindows('ls > out.txt')).toBeNull()
+    expect(translatePosixForWindows('cd src; ls')).toBeNull()
+  })
+
+  it('passes through commands outside the table', () => {
+    expect(translatePosixForWindows('git status')).toBeNull()
+    expect(translatePosixForWindows('npm install')).toBeNull()
+    expect(translatePosixForWindows('dir')).toBeNull()
+  })
+
+  it('passes through flags it cannot map faithfully', () => {
+    expect(translatePosixForWindows('ls -t')).toBeNull() // sort order
+    expect(translatePosixForWindows('tail -f log.txt')).toBeNull() // follow
+    expect(translatePosixForWindows('grep -r TODO src')).toBeNull() // recursive
+    expect(translatePosixForWindows('rm --recursive build')).toBeNull() // long flags
+  })
+
+  it('passes through unbalanced quotes and empty input', () => {
+    expect(translatePosixForWindows('cat "unclosed')).toBeNull()
+    expect(translatePosixForWindows('   ')).toBeNull()
   })
 })

@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   # ── Web companion (kernel.chat) ──
@@ -25,9 +26,18 @@ jobs:
           VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
 
   # ── kbot CLI ──
+  # Cross-platform matrix: kbot is npm-distributed with no platform
+  # gate, so every OS a user can `npm install` on is an OS we test on.
+  # Windows coverage exists because 46/1370 tests failed the first time
+  # the suite ran on a real Windows machine (2026-05-13) — Unix-first
+  # assumptions don't surface without a Windows runner in the loop.
   kbot:
-    name: kbot — Build & Test
-    runs-on: ubuntu-latest
+    name: kbot — Build & Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
