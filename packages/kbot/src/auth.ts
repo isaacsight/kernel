@@ -68,12 +68,12 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     name: 'Anthropic (Claude)',
     apiUrl: 'https://api.anthropic.com/v1/messages',
     apiStyle: 'anthropic',
-    defaultModel: 'claude-sonnet-4-6',
+    defaultModel: 'claude-sonnet-4-6',        // cost-aware default; Fable 5 is in the catalog, opt in via --model fable
     fastModel: 'claude-haiku-4-5-20251001',
     inputCost: 3.0,
     outputCost: 15.0,
     authHeader: 'x-api-key',
-    models: ['claude-mythos-1', 'claude-opus-4-7', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+    models: ['claude-fable-5', 'claude-mythos-1', 'claude-opus-4-7', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
   },
   openai: {
     name: 'OpenAI',
@@ -227,7 +227,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,   // varies by model — this is Claude Sonnet pricing
     outputCost: 15.0,
     authHeader: 'bearer',
-    models: ['anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
+    models: ['anthropic/claude-fable-5', 'anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
   },
   lmstudio: {
     name: 'LM Studio (Local)',
@@ -1055,6 +1055,45 @@ export function routeModelForTask(
     case 'reasoning':
       return { model: p.defaultModel, reason: `${complexity} task → default model` }
   }
+}
+
+/**
+ * Whether an Anthropic model uses adaptive thinking instead of the legacy
+ * budgeted form. Fable 5, Opus 4.7, and Opus 4.8 reject
+ * `thinking: {type: "enabled", budget_tokens: N}` with a 400 — they require
+ * `thinking: {type: "adaptive"}`. Older Claude models still accept the budgeted
+ * form. Match is substring-based so date-suffixed IDs resolve correctly.
+ */
+export function usesAdaptiveThinking(model: string): boolean {
+  return /claude-fable-5|claude-opus-4-[78]/.test(model)
+}
+
+/**
+ * Build the Anthropic `thinking` request field for a given model. Adaptive-only
+ * models get `{type: "adaptive", display: "summarized"}` so the reasoning trace
+ * still streams (the API default is `"omitted"`, which would render as empty
+ * thinking text); older models get the legacy budgeted form.
+ */
+export function anthropicThinkingConfig(
+  model: string,
+  budgetTokens = 10000,
+): Record<string, unknown> {
+  return usesAdaptiveThinking(model)
+    ? { type: 'adaptive', display: 'summarized' }
+    : { type: 'enabled', budget_tokens: budgetTokens }
+}
+
+/**
+ * Resolve a short flagship alias to the provider's full model ID. Lets users
+ * pass `--model fable` the way they already pass `claude-fable-5`. Returns the
+ * input unchanged when it isn't a known alias or the provider doesn't carry it.
+ */
+export function resolveModelAlias(provider: ByokProvider, model: string): string {
+  if (model === 'fable') {
+    if (provider === 'anthropic') return 'claude-fable-5'
+    if (provider === 'openrouter') return 'anthropic/claude-fable-5'
+  }
+  return model
 }
 
 export { KBOT_DIR, CONFIG_PATH, ENV_KEYS }

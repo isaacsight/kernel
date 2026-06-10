@@ -19,17 +19,18 @@ const LMSTUDIO_HOST = process.env.LMSTUDIO_HOST || 'http://localhost:1234';
 const JAN_HOST = process.env.JAN_HOST || 'http://localhost:1337';
 const KBOT_LOCAL_HOST = process.env.KBOT_LOCAL_HOST || 'http://127.0.0.1:18789';
 const LLADA_HOST = process.env.KBOT_LLADA_URL || 'http://localhost:8000';
+const HERMES_HOST = process.env.HERMES_HOST || 'http://localhost:8000';
 export const PROVIDERS = {
     anthropic: {
         name: 'Anthropic (Claude)',
         apiUrl: 'https://api.anthropic.com/v1/messages',
         apiStyle: 'anthropic',
-        defaultModel: 'claude-sonnet-4-6',
+        defaultModel: 'claude-sonnet-4-6', // cost-aware default; Fable 5 is in the catalog, opt in via --model fable
         fastModel: 'claude-haiku-4-5-20251001',
         inputCost: 3.0,
         outputCost: 15.0,
         authHeader: 'x-api-key',
-        models: ['claude-mythos-1', 'claude-opus-4-7', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+        models: ['claude-fable-5', 'claude-mythos-1', 'claude-opus-4-7', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
     },
     openai: {
         name: 'OpenAI',
@@ -183,7 +184,7 @@ export const PROVIDERS = {
         inputCost: 3.0, // varies by model — this is Claude Sonnet pricing
         outputCost: 15.0,
         authHeader: 'bearer',
-        models: ['anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
+        models: ['anthropic/claude-fable-5', 'anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
     },
     lmstudio: {
         name: 'LM Studio (Local)',
@@ -241,6 +242,24 @@ export const PROVIDERS = {
         inputCost: 0,
         outputCost: 0,
         authHeader: 'bearer',
+    },
+    hermes: {
+        // Hermes Agent (NousResearch) — self-improving open-source agent with
+        // skills, FTS5 cross-session memory, dream-style consolidation, and an
+        // OpenAI-compatible HTTP API server (see hermes-agent.nousresearch.com).
+        // kbot uses Hermes as a delegate: kbot orchestrates; Hermes executes
+        // long-form research and skill-heavy workflows where its mature skill
+        // system is the better fit. Run locally via `hermes gateway` (default
+        // port 8000) or override via HERMES_HOST env var.
+        name: 'Hermes Agent (Local)',
+        apiUrl: `${HERMES_HOST}/v1/chat/completions`,
+        apiStyle: 'openai',
+        defaultModel: 'hermes', // Hermes routes internally to whichever model the user configured
+        fastModel: 'hermes',
+        inputCost: 0, // Hermes is local; the user pays for whatever upstream provider Hermes itself uses
+        outputCost: 0,
+        authHeader: 'bearer', // Hermes' API server accepts any bearer; OpenAI-compatible convention
+        models: ['hermes'],
     },
     llada: {
         // LLaDA2.0-Uni — Inclusion AI unified discrete-diffusion multimodal LLM.
@@ -396,14 +415,15 @@ const ENV_KEYS = [
     { env: 'OPENROUTER_API_KEY', provider: 'openrouter' },
     { env: 'OLLAMA_API_KEY', provider: 'ollama' },
     { env: 'KBOT_LOCAL_API_KEY', provider: 'kbot-local' },
+    { env: 'HERMES_API_KEY', provider: 'hermes' },
 ];
 /** Check if a provider is local (runs on this machine, may still need a token) */
 export function isLocalProvider(provider) {
-    return provider === 'ollama' || provider === 'kbot-local' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded' || provider === 'llada';
+    return provider === 'ollama' || provider === 'kbot-local' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded' || provider === 'llada' || provider === 'hermes';
 }
 /** Check if a provider needs no API key at all */
 export function isKeylessProvider(provider) {
-    return provider === 'ollama' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded' || provider === 'llada';
+    return provider === 'ollama' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded' || provider === 'llada' || provider === 'hermes';
 }
 /** Check if BYOK mode is enabled (via env var or config) */
 export function isByokEnabled() {
@@ -937,6 +957,41 @@ export function routeModelForTask(provider, message) {
         case 'reasoning':
             return { model: p.defaultModel, reason: `${complexity} task → default model` };
     }
+}
+/**
+ * Whether an Anthropic model uses adaptive thinking instead of the legacy
+ * budgeted form. Fable 5, Opus 4.7, and Opus 4.8 reject
+ * `thinking: {type: "enabled", budget_tokens: N}` with a 400 — they require
+ * `thinking: {type: "adaptive"}`. Older Claude models still accept the budgeted
+ * form. Match is substring-based so date-suffixed IDs resolve correctly.
+ */
+export function usesAdaptiveThinking(model) {
+    return /claude-fable-5|claude-opus-4-[78]/.test(model);
+}
+/**
+ * Build the Anthropic `thinking` request field for a given model. Adaptive-only
+ * models get `{type: "adaptive", display: "summarized"}` so the reasoning trace
+ * still streams (the API default is `"omitted"`, which would render as empty
+ * thinking text); older models get the legacy budgeted form.
+ */
+export function anthropicThinkingConfig(model, budgetTokens = 10000) {
+    return usesAdaptiveThinking(model)
+        ? { type: 'adaptive', display: 'summarized' }
+        : { type: 'enabled', budget_tokens: budgetTokens };
+}
+/**
+ * Resolve a short flagship alias to the provider's full model ID. Lets users
+ * pass `--model fable` the way they already pass `claude-fable-5`. Returns the
+ * input unchanged when it isn't a known alias or the provider doesn't carry it.
+ */
+export function resolveModelAlias(provider, model) {
+    if (model === 'fable') {
+        if (provider === 'anthropic')
+            return 'claude-fable-5';
+        if (provider === 'openrouter')
+            return 'anthropic/claude-fable-5';
+    }
+    return model;
 }
 export { KBOT_DIR, CONFIG_PATH, ENV_KEYS };
 //# sourceMappingURL=auth.js.map

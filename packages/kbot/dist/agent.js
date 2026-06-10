@@ -9,7 +9,7 @@
 // 5. Auto-research: if you don't know how, search GitHub/web FIRST, then execute
 // 6. Verify: always confirm the output exists and is correct
 // 7. Learn: extract knowledge from every interaction for future use
-import { getByokKey, getByokProvider, getProviderModel, getProvider, estimateCost, isLocalProvider, warmOllamaModelCache, routeModelForTask, } from './auth.js';
+import { getByokKey, getByokProvider, getProviderModel, getProvider, estimateCost, isLocalProvider, warmOllamaModelCache, routeModelForTask, anthropicThinkingConfig, resolveModelAlias, } from './auth.js';
 import { executeTool, getTool, getToolDefinitionsForApi, ensureLazyToolsLoaded, } from './tools/index.js';
 import { createDefaultPipeline, DEFAULT_FALLBACK_RULES, } from './tool-pipeline.js';
 import { formatContextForPrompt } from './context.js';
@@ -240,7 +240,7 @@ async function callAnthropic(apiKey, apiUrl, model, systemContext, messages, too
     if (tools && tools.length > 0)
         body.tools = tools;
     if (options?.thinking) {
-        body.thinking = { type: 'enabled', budget_tokens: options.thinkingBudget || 10000 };
+        body.thinking = anthropicThinkingConfig(model, options.thinkingBudget);
     }
     const res = await fetch(apiUrl, {
         method: 'POST',
@@ -1373,11 +1373,14 @@ Always quote file paths that contain spaces. Never reference internal system nam
             catch { /* privacy router is non-critical */ }
             // ── BYOK: Call provider directly with tool-use support ──
             // If user passed an explicit model name (not a speed alias), use it directly
-            const isExplicitModel = options.model && !['auto', 'haiku', 'fast', 'sonnet', 'default'].includes(options.model);
+            // Resolve short flagship aliases (e.g. `fable`) to the provider's full ID
+            // before deciding whether the model is an explicit override or a speed hint.
+            const requestedModel = options.model ? resolveModelAlias(provider, options.model) : options.model;
+            const isExplicitModel = requestedModel && !['auto', 'haiku', 'fast', 'sonnet', 'default'].includes(requestedModel);
             const speed = options.model === 'haiku' || options.model === 'fast' ? 'fast' : 'default';
             let model;
             if (isExplicitModel) {
-                model = options.model;
+                model = requestedModel;
             }
             else if (!options.model || options.model === 'auto') {
                 // Cost-aware routing: classify complexity and pick the right model

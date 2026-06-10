@@ -1,6 +1,6 @@
 declare const KBOT_DIR: string;
 declare const CONFIG_PATH: string;
-export type ByokProvider = 'anthropic' | 'openai' | 'google' | 'mistral' | 'xai' | 'deepseek' | 'groq' | 'together' | 'fireworks' | 'perplexity' | 'cohere' | 'nvidia' | 'sambanova' | 'cerebras' | 'openrouter' | 'lmstudio' | 'jan' | 'ollama' | 'kbot-local' | 'llada' | 'embedded';
+export type ByokProvider = 'anthropic' | 'openai' | 'google' | 'mistral' | 'xai' | 'deepseek' | 'groq' | 'together' | 'fireworks' | 'perplexity' | 'cohere' | 'nvidia' | 'sambanova' | 'cerebras' | 'openrouter' | 'lmstudio' | 'jan' | 'ollama' | 'kbot-local' | 'llada' | 'embedded' | 'hermes';
 export interface ProviderConfig {
     name: string;
     apiUrl: string;
@@ -92,5 +92,26 @@ export declare function routeModelForTask(provider: ByokProvider, message: strin
     model: string;
     reason: string;
 };
+/**
+ * Whether an Anthropic model uses adaptive thinking instead of the legacy
+ * budgeted form. Fable 5, Opus 4.7, and Opus 4.8 reject
+ * `thinking: {type: "enabled", budget_tokens: N}` with a 400 — they require
+ * `thinking: {type: "adaptive"}`. Older Claude models still accept the budgeted
+ * form. Match is substring-based so date-suffixed IDs resolve correctly.
+ */
+export declare function usesAdaptiveThinking(model: string): boolean;
+/**
+ * Build the Anthropic `thinking` request field for a given model. Adaptive-only
+ * models get `{type: "adaptive", display: "summarized"}` so the reasoning trace
+ * still streams (the API default is `"omitted"`, which would render as empty
+ * thinking text); older models get the legacy budgeted form.
+ */
+export declare function anthropicThinkingConfig(model: string, budgetTokens?: number): Record<string, unknown>;
+/**
+ * Resolve a short flagship alias to the provider's full model ID. Lets users
+ * pass `--model fable` the way they already pass `claude-fable-5`. Returns the
+ * input unchanged when it isn't a known alias or the provider doesn't carry it.
+ */
+export declare function resolveModelAlias(provider: ByokProvider, model: string): string;
 export { KBOT_DIR, CONFIG_PATH, ENV_KEYS };
 //# sourceMappingURL=auth.d.ts.map

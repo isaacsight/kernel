@@ -7,6 +7,7 @@
 // The thinking display shows the AI's reasoning process in real-time,
 // then the final response renders normally.
 import chalk from 'chalk';
+import { anthropicThinkingConfig } from './auth.js';
 const ACCENT_DIM = typeof chalk.hex === 'function' ? chalk.hex('#7C6CB0') : chalk.dim;
 const THINKING_COLOR = chalk.dim.italic;
 /** Max accumulated content size during streaming (5MB) to prevent OOM */
@@ -58,12 +59,10 @@ export async function streamAnthropicResponse(apiKey, apiUrl, model, system, mes
         messages,
         stream: true,
     };
-    // Enable extended thinking if requested
+    // Enable extended thinking if requested. Fable 5 / Opus 4.7 / 4.8 require
+    // adaptive thinking (the legacy budget_tokens form 400s on those models).
     if (options?.thinking) {
-        body.thinking = {
-            type: 'enabled',
-            budget_tokens: options.thinkingBudget || 10000,
-        };
+        body.thinking = anthropicThinkingConfig(model, options.thinkingBudget);
     }
     if (tools && tools.length > 0)
         body.tools = tools;
@@ -73,7 +72,7 @@ export async function streamAnthropicResponse(apiKey, apiUrl, model, system, mes
         try {
             const { hashPrompt, checkCacheWarmth, recordCacheCall } = await import('./cache-warmth.js');
             const promptHash = hashPrompt(system);
-            const inputCostPerMTok = model.includes('opus') ? 15 : model.includes('haiku') ? 0.8 : 3;
+            const inputCostPerMTok = model.includes('fable') ? 10 : model.includes('opus') ? 15 : model.includes('haiku') ? 0.8 : 3;
             const promptTokenEstimate = Math.ceil(system.length / 4);
             const check = checkCacheWarmth(model, promptHash, inputCostPerMTok, promptTokenEstimate);
             if (!check.warm && check.message) {
