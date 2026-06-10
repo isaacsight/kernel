@@ -6,4 +6,6 @@ twice. One line per file: `filename — YYYY-MM-DD — where it landed`.
 
 | Raw file | Processed | Landed in |
 |---|---|---|
-| _(none yet)_ | | |
+| `agentic-ai-market-adoption-2026.md` | 2026-06-10 | `wiki/agentic-ai.md`, `wiki/index.md` |
+| `agentic-ai-technical-stack-2026.md` | 2026-06-10 | `wiki/agentic-ai.md`, `wiki/index.md` |
+| `agentic-ai-risks-governance-2026.md` | 2026-06-10 | `wiki/agentic-ai.md`, `wiki/index.md` |
