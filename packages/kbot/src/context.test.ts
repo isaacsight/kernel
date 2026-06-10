@@ -25,6 +25,10 @@ const mockExistsSync = vi.mocked(existsSync)
 const mockReadFileSync = vi.mocked(readFileSync)
 const mockReaddirSync = vi.mocked(readdirSync)
 
+// fs mocks receive source-joined paths (backslashes on Windows);
+// normalize before comparing against POSIX literals like '/project/…'
+const norm = (p: unknown) => String(p).replace(/\\/g, '/')
+
 beforeEach(() => {
   vi.clearAllMocks()
 })
@@ -102,13 +106,13 @@ describe('gatherContext', () => {
     })
 
     mockExistsSync.mockImplementation((p: unknown) => {
-      const path = String(p)
+      const path = norm(p)
       if (path === '/project/package.json') return true
       return false
     })
 
     mockReadFileSync.mockImplementation((p: unknown) => {
-      const path = String(p)
+      const path = norm(p)
       if (path === '/project/package.json') {
         return JSON.stringify({
           dependencies: { react: '^19.0.0', 'react-dom': '^19.0.0' },
@@ -199,7 +203,7 @@ describe('gatherContext', () => {
         return ''
       })
       mockExistsSync.mockImplementation((p: unknown) => {
-        const path = String(p)
+        const path = norm(p)
         if (path === '/project/package.json') return true
         if (path === `/project/${file}`) return true
         return false
@@ -218,7 +222,7 @@ describe('gatherContext', () => {
       return ''
     })
     mockExistsSync.mockImplementation((p: unknown) => {
-      if (String(p) === '/project/package.json') return true
+      if (norm(p) === '/project/package.json') return true
       return false
     })
     mockReadFileSync.mockReturnValue(JSON.stringify({ dependencies: {} }))
@@ -270,11 +274,11 @@ describe('gatherContext', () => {
       return ''
     })
     mockExistsSync.mockImplementation((p: unknown) => {
-      if (String(p) === '/project/.kbot.md') return true
+      if (norm(p) === '/project/.kbot.md') return true
       return false
     })
     mockReadFileSync.mockImplementation((p: unknown) => {
-      if (String(p) === '/project/.kbot.md') return '# My Project\nDo things correctly.'
+      if (norm(p) === '/project/.kbot.md') return '# My Project\nDo things correctly.'
       return ''
     })
     mockReaddirSync.mockReturnValue([])
@@ -290,11 +294,11 @@ describe('gatherContext', () => {
       return ''
     })
     mockExistsSync.mockImplementation((p: unknown) => {
-      if (String(p) === '/project/.kbot.md') return true
+      if (norm(p) === '/project/.kbot.md') return true
       return false
     })
     mockReadFileSync.mockImplementation((p: unknown) => {
-      if (String(p) === '/project/.kbot.md') return longContent
+      if (norm(p) === '/project/.kbot.md') return longContent
       return ''
     })
     mockReaddirSync.mockReturnValue([])
@@ -309,13 +313,13 @@ describe('gatherContext', () => {
       return ''
     })
     mockExistsSync.mockImplementation((p: unknown) => {
-      const path = String(p)
+      const path = norm(p)
       if (path === '/project/.kbot.md') return false
       if (path === '/project/KBOT.md') return true
       return false
     })
     mockReadFileSync.mockImplementation((p: unknown) => {
-      if (String(p) === '/project/KBOT.md') return 'Fallback instructions'
+      if (norm(p) === '/project/KBOT.md') return 'Fallback instructions'
       return ''
     })
     mockReaddirSync.mockReturnValue([])
@@ -330,14 +334,14 @@ describe('gatherContext', () => {
       return ''
     })
     mockExistsSync.mockImplementation((p: unknown) => {
-      const path = String(p)
+      const path = norm(p)
       if (path === '/project/.kbot.md') return false
       if (path === '/project/KBOT.md') return false
       if (path === '/project/.kbot/instructions.md') return true
       return false
     })
     mockReadFileSync.mockImplementation((p: unknown) => {
-      if (String(p) === '/project/.kbot/instructions.md') return 'Nested instructions'
+      if (norm(p) === '/project/.kbot/instructions.md') return 'Nested instructions'
       return ''
     })
     mockReaddirSync.mockReturnValue([])
@@ -366,7 +370,7 @@ describe('gatherContext', () => {
 
     // Root directory entries
     mockReaddirSync.mockImplementation((dir: unknown) => {
-      const d = String(dir)
+      const d = norm(dir)
       if (d === '/project') {
         return [
           { name: 'src', isDirectory: () => true, isFile: () => false },
@@ -400,7 +404,7 @@ describe('gatherContext', () => {
     mockExistsSync.mockReturnValue(false)
 
     mockReaddirSync.mockImplementation((dir: unknown) => {
-      if (String(dir) === '/project') {
+      if (norm(dir) === '/project') {
         return [
           { name: '.git', isDirectory: () => true, isFile: () => false },
           { name: '.hidden', isDirectory: () => true, isFile: () => false },

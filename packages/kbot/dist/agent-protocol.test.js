@@ -1,6 +1,7 @@
 // Tests for kbot Agent Collaboration Protocol
 // Covers: Handoff, Blackboard, Negotiation, Trust Delegation
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { join } from 'node:path';
 // Mock external dependencies before importing module under test
 vi.mock('fs', () => ({
     readFileSync: vi.fn(),
@@ -568,8 +569,9 @@ describe('updateTrust', () => {
     });
     it('persists trust to file via writeFileSync', () => {
         updateTrust('persist-agent', 'coding', true);
-        expect(mockedMkdirSync).toHaveBeenCalledWith('/mock-home/.kbot', { recursive: true });
-        expect(mockedWriteFileSync).toHaveBeenCalledWith('/mock-home/.kbot/trust.json', expect.any(String));
+        // join() so expectations match path.join output on Windows too
+        expect(mockedMkdirSync).toHaveBeenCalledWith(join('/mock-home', '.kbot'), { recursive: true });
+        expect(mockedWriteFileSync).toHaveBeenCalledWith(join('/mock-home', '.kbot', 'trust.json'), expect.any(String));
     });
     it('records history entries', () => {
         // We can verify indirectly by checking the report
