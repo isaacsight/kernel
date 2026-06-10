@@ -4,7 +4,15 @@ import { mkdirSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { executeTool, getTool } from './index.js';
-import { registerBashTools } from './bash.js';
+import { registerBashTools, translatePosixForWindows } from './bash.js';
+// Many bash-tool tests invoke POSIX shell commands (echo with shell-quoted
+// strings, wc, cat, rm, sleep, $VAR expansion). On Windows the user shell
+// is cmd.exe, which lacks these commands by design. The bash *tool* itself
+// is platform-correct (it forwards whatever command the user passes to the
+// system shell); these tests verify Unix-shell behaviour and are skipped
+// on Windows. Windows test coverage of the bash tool would require a
+// separate set of tests using cmd.exe-native commands.
+const itUnix = it.skipIf(process.platform === 'win32');
 // Register once
 registerBashTools();
 // Temp directory for tests
@@ -31,7 +39,7 @@ describe('Bash Tool Registration', () => {
 // 2. Basic execution
 // ─────────────────────────────────────────────────────────────────────
 describe('Bash Execution', () => {
-    it('executes a simple command', async () => {
+    itUnix('executes a simple command', async () => {
         const result = await executeTool({
             id: 'b-1',
             name: 'bash',
@@ -40,7 +48,7 @@ describe('Bash Execution', () => {
         expect(result.error).toBeUndefined();
         expect(result.result).toBe('hello kbot');
     });
-    it('returns stdout from piped commands', async () => {
+    itUnix('returns stdout from piped commands', async () => {
         const result = await executeTool({
             id: 'b-2',
             name: 'bash',
@@ -49,7 +57,7 @@ describe('Bash Execution', () => {
         expect(result.error).toBeUndefined();
         expect(result.result.trim()).toBe('3');
     });
-    it('returns "(no output)" for silent commands', async () => {
+    itUnix('returns "(no output)" for silent commands', async () => {
         const result = await executeTool({
             id: 'b-3',
             name: 'bash',
@@ -83,7 +91,7 @@ describe('Bash Execution', () => {
         // Should fail with timeout or exit code
         expect(result.result).toContain('Exit code');
     });
-    it('caps timeout at 600000ms', async () => {
+    itUnix('caps timeout at 600000ms', async () => {
         // Passing a huge timeout should be capped
         const tool = getTool('bash');
         expect(tool).toBeTruthy();
@@ -215,7 +223,7 @@ describe('Bash Safety - Substitution Patterns', () => {
 // 5. Safe commands should pass
 // ─────────────────────────────────────────────────────────────────────
 describe('Bash Safety - Allowed Commands', () => {
-    it('allows rm on normal files (not root/home)', async () => {
+    itUnix('allows rm on normal files (not root/home)', async () => {
         const filePath = join(TEST_DIR, 'deleteme.txt');
         writeFileSync(filePath, 'temp');
         const result = await executeTool({
@@ -245,7 +253,7 @@ describe('Bash Safety - Allowed Commands', () => {
         expect(result.error).toBeUndefined();
         expect(result.result).toBe('4');
     });
-    it('allows cat and standard file operations', async () => {
+    itUnix('allows cat and standard file operations', async () => {
         const filePath = join(TEST_DIR, 'cattest.txt');
         writeFileSync(filePath, 'cat content');
         const result = await executeTool({
@@ -261,7 +269,7 @@ describe('Bash Safety - Allowed Commands', () => {
 // 6. Working directory behavior
 // ─────────────────────────────────────────────────────────────────────
 describe('Bash Working Directory', () => {
-    it('executes commands in a working directory', async () => {
+    itUnix('executes commands in a working directory', async () => {
         const result = await executeTool({
             id: 'wd-1',
             name: 'bash',
@@ -271,7 +279,7 @@ describe('Bash Working Directory', () => {
         // Should return some valid path
         expect(result.result).toMatch(/^\//);
     });
-    it('handles environment variables', async () => {
+    itUnix('handles environment variables', async () => {
         const result = await executeTool({
             id: 'wd-2',
             name: 'bash',
@@ -279,6 +287,85 @@ describe('Bash Working Directory', () => {
         });
         expect(result.error).toBeUndefined();
         expect(result.result).toMatch(/^\//);
+    });
+});
+// ─────────────────────────────────────────────────────────────────────
+// 7. Windows POSIX polyfill — pure translation function
+//
+// On Windows the tool translates simple POSIX commands to PowerShell
+// before executing (models habitually emit ls/cat/pwd, which cmd.exe
+// rejects). translatePosixForWindows is a pure function, so these
+// tests run on every platform.
+// ─────────────────────────────────────────────────────────────────────
+describe('Windows POSIX Polyfill - translations', () => {
+    it('translates pwd', () => {
+        expect(translatePosixForWindows('pwd')).toBe('(Get-Location).Path');
+    });
+    it('translates bare ls', () => {
+        expect(translatePosixForWindows('ls')).toBe('Get-ChildItem');
+    });
+    it('translates ls -la with a path', () => {
+        expect(translatePosixForWindows('ls -la src')).toBe("Get-ChildItem -Force 'src'");
+    });
+    it('translates cat with multiple files', () => {
+        expect(translatePosixForWindows('cat a.txt b.txt')).toBe("Get-Content 'a.txt','b.txt'");
+    });
+    it('translates head and tail with counts', () => {
+        expect(translatePosixForWindows('head -n 5 log.txt')).toBe("Get-Content 'log.txt' -TotalCount 5");
+        expect(translatePosixForWindows('head -5 log.txt')).toBe("Get-Content 'log.txt' -TotalCount 5");
+        expect(translatePosixForWindows('tail -20 log.txt')).toBe("Get-Content 'log.txt' -Tail 20");
+        expect(translatePosixForWindows('tail log.txt')).toBe("Get-Content 'log.txt' -Tail 10");
+    });
+    it('translates rm -rf on a normal directory', () => {
+        expect(translatePosixForWindows('rm -rf build')).toBe("Remove-Item -Recurse -Force 'build'");
+    });
+    it('translates cp -r and mv', () => {
+        expect(translatePosixForWindows('cp -r src dest')).toBe("Copy-Item -Recurse 'src' -Destination 'dest'");
+        expect(translatePosixForWindows('mv old.txt new.txt')).toBe("Move-Item 'old.txt' -Destination 'new.txt'");
+    });
+    it('translates mkdir -p', () => {
+        expect(translatePosixForWindows('mkdir -p a/b/c')).toBe("New-Item -ItemType Directory -Force -Path 'a/b/c' | Out-Null");
+    });
+    it('translates touch without truncating existing files', () => {
+        const result = translatePosixForWindows('touch notes.md');
+        expect(result).toContain("if (Test-Path 'notes.md')");
+        expect(result).toContain('LastWriteTime = Get-Date');
+        expect(result).toContain('New-Item -ItemType File');
+    });
+    it('translates which', () => {
+        expect(translatePosixForWindows('which node')).toBe("(Get-Command 'node').Source");
+    });
+    it('translates grep, case-sensitive by default', () => {
+        expect(translatePosixForWindows('grep TODO src.ts')).toBe("Select-String -CaseSensitive -Pattern 'TODO' -Path 'src.ts' | ForEach-Object { $_.Line }");
+        expect(translatePosixForWindows('grep -i todo src.ts')).toBe("Select-String -Pattern 'todo' -Path 'src.ts' | ForEach-Object { $_.Line }");
+    });
+    it('respects quoted arguments and escapes for PowerShell', () => {
+        expect(translatePosixForWindows('cat "my file.txt"')).toBe("Get-Content 'my file.txt'");
+        expect(translatePosixForWindows('cat "it\'s.txt"')).toBe("Get-Content 'it''s.txt'");
+    });
+});
+describe('Windows POSIX Polyfill - passthrough (returns null)', () => {
+    it('passes through pipelines and operators', () => {
+        expect(translatePosixForWindows('ls | head -5')).toBeNull();
+        expect(translatePosixForWindows('cat a.txt && echo done')).toBeNull();
+        expect(translatePosixForWindows('echo $HOME')).toBeNull();
+        expect(translatePosixForWindows('ls > out.txt')).toBeNull();
+        expect(translatePosixForWindows('cd src; ls')).toBeNull();
+    });
+    it('passes through commands outside the table', () => {
+        expect(translatePosixForWindows('git status')).toBeNull();
+        expect(translatePosixForWindows('npm install')).toBeNull();
+        expect(translatePosixForWindows('dir')).toBeNull();
+    });
+    it('passes through flags it cannot map faithfully', () => {
+        expect(translatePosixForWindows('ls -t')).toBeNull(); // sort order
+        expect(translatePosixForWindows('tail -f log.txt')).toBeNull(); // follow
+        expect(translatePosixForWindows('grep -r TODO src')).toBeNull(); // recursive
+        expect(translatePosixForWindows('rm --recursive build')).toBeNull(); // long flags
+    });
+    it('passes through unbalanced quotes and empty input', () => {
+        expect(translatePosixForWindows('cat "unclosed')).toBeNull();
+        expect(translatePosixForWindows('   ')).toBeNull();
     });
 });
 //# sourceMappingURL=bash.test.js.map

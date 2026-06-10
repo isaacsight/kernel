@@ -7,7 +7,7 @@
 // Stack detection is pure filesystem (no shell needed).
 import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join, basename } from 'node:path';
+import { join, basename, relative, sep } from 'node:path';
 /** Run a shell command with a tight timeout — returns empty string on failure */
 function quickExec(cmd, timeoutMs = 2000) {
     try {
@@ -43,7 +43,11 @@ function getFileTree(root) {
                 if (skipDirs.has(entry.name))
                     continue;
                 const fullPath = join(dir, entry.name);
-                const relPath = fullPath.replace(root + '/', '');
+                // relative() instead of string-replace: join() emits backslashes
+                // on Windows while git's root uses forward slashes, so the old
+                // replace(root + '/') silently kept absolute paths there. Tree
+                // always displays POSIX-style regardless of platform.
+                const relPath = relative(root, fullPath).split(sep).join('/');
                 if (entry.isDirectory()) {
                     walk(fullPath, depth + 1);
                 }

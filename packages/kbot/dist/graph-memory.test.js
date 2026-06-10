@@ -1,5 +1,6 @@
 // Tests for kbot Graph Memory — knowledge graph for entity-relationship reasoning
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { join } from 'node:path';
 // Mock node:fs before importing the module under test
 vi.mock('node:fs', () => ({
     existsSync: vi.fn(),
@@ -30,8 +31,13 @@ const mockedReadFileSync = vi.mocked(readFileSync);
 const mockedWriteFileSync = vi.mocked(writeFileSync);
 const mockedMkdirSync = vi.mocked(mkdirSync);
 const mockedReaddirSync = vi.mocked(readdirSync);
-const KBOT_DIR = '/mock-home/.kbot';
-const GRAPH_FILE = '/mock-home/.kbot/graph.json';
+// join() so expectations match the source's path.join output on
+// every platform (backslashes on Windows)
+const KBOT_DIR = join('/mock-home', '.kbot');
+const GRAPH_FILE = join(KBOT_DIR, 'graph.json');
+// fs mocks receive source-joined paths (backslashes on Windows);
+// normalize before comparing against POSIX literals
+const norm = (p) => String(p).replace(/\\/g, '/');
 beforeEach(() => {
     vi.clearAllMocks();
     idCounter = 0;
@@ -796,7 +802,7 @@ describe('importFromMemory', () => {
     });
     it('imports JSON files from category directories', () => {
         mockedExistsSync.mockImplementation((p) => {
-            const path = String(p);
+            const path = norm(p);
             if (path === '/mock-home/.kbot/memory')
                 return true;
             if (path === '/mock-home/.kbot/memory/fact')
@@ -816,7 +822,7 @@ describe('importFromMemory', () => {
     });
     it('skips malformed JSON files without throwing', () => {
         mockedExistsSync.mockImplementation((p) => {
-            const path = String(p);
+            const path = norm(p);
             if (path === '/mock-home/.kbot/memory')
                 return true;
             if (path === '/mock-home/.kbot/memory/fact')
@@ -833,7 +839,7 @@ describe('importFromMemory', () => {
     });
     it('imports sections from context.md as concept nodes', () => {
         mockedExistsSync.mockImplementation((p) => {
-            const path = String(p);
+            const path = norm(p);
             if (path === '/mock-home/.kbot/memory')
                 return true;
             if (path === '/mock-home/.kbot/memory/context.md')

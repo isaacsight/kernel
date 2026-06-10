@@ -1,5 +1,6 @@
 // Tests for kbot Memory — persistent memory + session history
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { join } from 'node:path';
 // Mock node:fs before importing the module under test
 vi.mock('node:fs', () => ({
     existsSync: vi.fn(),
@@ -18,8 +19,10 @@ const mockedReadFileSync = vi.mocked(readFileSync);
 const mockedWriteFileSync = vi.mocked(writeFileSync);
 const mockedMkdirSync = vi.mocked(mkdirSync);
 const mockedAppendFileSync = vi.mocked(appendFileSync);
-const MEMORY_DIR = '/mock-home/.kbot/memory';
-const CONTEXT_FILE = '/mock-home/.kbot/memory/context.md';
+// join() so expectations match the source's path.join output on
+// every platform (backslashes on Windows)
+const MEMORY_DIR = join('/mock-home', '.kbot', 'memory');
+const CONTEXT_FILE = join(MEMORY_DIR, 'context.md');
 beforeEach(() => {
     vi.clearAllMocks();
     clearHistory();

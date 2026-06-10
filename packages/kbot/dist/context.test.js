@@ -18,6 +18,9 @@ const mockExecSync = vi.mocked(execSync);
 const mockExistsSync = vi.mocked(existsSync);
 const mockReadFileSync = vi.mocked(readFileSync);
 const mockReaddirSync = vi.mocked(readdirSync);
+// fs mocks receive source-joined paths (backslashes on Windows);
+// normalize before comparing against POSIX literals like '/project/…'
+const norm = (p) => String(p).replace(/\\/g, '/');
 beforeEach(() => {
     vi.clearAllMocks();
 });
@@ -89,13 +92,13 @@ describe('gatherContext', () => {
             return '';
         });
         mockExistsSync.mockImplementation((p) => {
-            const path = String(p);
+            const path = norm(p);
             if (path === '/project/package.json')
                 return true;
             return false;
         });
         mockReadFileSync.mockImplementation((p) => {
-            const path = String(p);
+            const path = norm(p);
             if (path === '/project/package.json') {
                 return JSON.stringify({
                     dependencies: { react: '^19.0.0', 'react-dom': '^19.0.0' },
@@ -176,7 +179,7 @@ describe('gatherContext', () => {
                 return '';
             });
             mockExistsSync.mockImplementation((p) => {
-                const path = String(p);
+                const path = norm(p);
                 if (path === '/project/package.json')
                     return true;
                 if (path === `/project/${file}`)
@@ -196,7 +199,7 @@ describe('gatherContext', () => {
             return '';
         });
         mockExistsSync.mockImplementation((p) => {
-            if (String(p) === '/project/package.json')
+            if (norm(p) === '/project/package.json')
                 return true;
             return false;
         });
@@ -245,12 +248,12 @@ describe('gatherContext', () => {
             return '';
         });
         mockExistsSync.mockImplementation((p) => {
-            if (String(p) === '/project/.kbot.md')
+            if (norm(p) === '/project/.kbot.md')
                 return true;
             return false;
         });
         mockReadFileSync.mockImplementation((p) => {
-            if (String(p) === '/project/.kbot.md')
+            if (norm(p) === '/project/.kbot.md')
                 return '# My Project\nDo things correctly.';
             return '';
         });
@@ -266,12 +269,12 @@ describe('gatherContext', () => {
             return '';
         });
         mockExistsSync.mockImplementation((p) => {
-            if (String(p) === '/project/.kbot.md')
+            if (norm(p) === '/project/.kbot.md')
                 return true;
             return false;
         });
         mockReadFileSync.mockImplementation((p) => {
-            if (String(p) === '/project/.kbot.md')
+            if (norm(p) === '/project/.kbot.md')
                 return longContent;
             return '';
         });
@@ -286,7 +289,7 @@ describe('gatherContext', () => {
             return '';
         });
         mockExistsSync.mockImplementation((p) => {
-            const path = String(p);
+            const path = norm(p);
             if (path === '/project/.kbot.md')
                 return false;
             if (path === '/project/KBOT.md')
@@ -294,7 +297,7 @@ describe('gatherContext', () => {
             return false;
         });
         mockReadFileSync.mockImplementation((p) => {
-            if (String(p) === '/project/KBOT.md')
+            if (norm(p) === '/project/KBOT.md')
                 return 'Fallback instructions';
             return '';
         });
@@ -309,7 +312,7 @@ describe('gatherContext', () => {
             return '';
         });
         mockExistsSync.mockImplementation((p) => {
-            const path = String(p);
+            const path = norm(p);
             if (path === '/project/.kbot.md')
                 return false;
             if (path === '/project/KBOT.md')
@@ -319,7 +322,7 @@ describe('gatherContext', () => {
             return false;
         });
         mockReadFileSync.mockImplementation((p) => {
-            if (String(p) === '/project/.kbot/instructions.md')
+            if (norm(p) === '/project/.kbot/instructions.md')
                 return 'Nested instructions';
             return '';
         });
@@ -344,7 +347,7 @@ describe('gatherContext', () => {
         mockExistsSync.mockReturnValue(false);
         // Root directory entries
         mockReaddirSync.mockImplementation((dir) => {
-            const d = String(dir);
+            const d = norm(dir);
             if (d === '/project') {
                 return [
                     { name: 'src', isDirectory: () => true, isFile: () => false },
@@ -375,7 +378,7 @@ describe('gatherContext', () => {
         });
         mockExistsSync.mockReturnValue(false);
         mockReaddirSync.mockImplementation((dir) => {
-            if (String(dir) === '/project') {
+            if (norm(dir) === '/project') {
                 return [
                     { name: '.git', isDirectory: () => true, isFile: () => false },
                     { name: '.hidden', isDirectory: () => true, isFile: () => false },

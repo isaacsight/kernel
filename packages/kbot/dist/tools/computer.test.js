@@ -11,8 +11,12 @@ import { execSync } from 'node:child_process';
 // On Linux, computer_check shells out to xdotool to inspect the active
 // window before returning coordinator status. CI runners don't have xdotool,
 // so the early-error short-circuits the coordinator output the test checks
-// for. Skip on Linux-without-xdotool; macOS uses AppleScript (always present).
-const hasXdotool = (() => {
+// for. Skip on Linux-without-xdotool; macOS uses AppleScript (always
+// present). On Windows, computer use isn't supported at all (computer.ts
+// errors before reaching coordinator output) — skip there too.
+const hasComputerDeps = (() => {
+    if (process.platform === 'win32')
+        return false;
     if (process.platform !== 'linux')
         return true;
     try {
@@ -23,7 +27,7 @@ const hasXdotool = (() => {
         return false;
     }
 })();
-const itDeps = it.skipIf(!hasXdotool);
+const itDeps = it.skipIf(!hasComputerDeps);
 // These env vars MUST be set before importing computer.ts so the module-scoped
 // coordinator + agent id pick them up.
 const TEST_ROOT = mkdtempSync(join(tmpdir(), 'kbot-computer-test-'));

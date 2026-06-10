@@ -36,12 +36,15 @@
     }
   },
   "scripts": {
-    "build": "tsc && chmod +x dist/cli.js",
+    "build": "tsc && node -e \"if(process.platform!=='win32')require('fs').chmodSync('dist/cli.js',0o755)\"",
     "dev": "tsx src/cli.ts",
     "start": "node dist/cli.js",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "eval": "tsx eval/run.ts"
+    "eval": "tsx eval/run.ts",
+    "bounty": "tsx src/bounty/cli.ts",
+    "bounty:poll": "tsx src/bounty/cli.ts poll",
+    "bounty:watch": "tsx src/bounty/cli.ts watch"
   },
   "keywords": [
     "ai-agent",
