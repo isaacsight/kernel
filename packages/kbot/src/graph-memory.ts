@@ -9,6 +9,7 @@
 
 import { homedir } from 'node:os'
 import { join } from 'node:path'
+import { baseName } from './util/paths.js'
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs'
 import { randomBytes } from 'node:crypto'
 import { registerTool } from './tools/index.js'
@@ -566,7 +567,7 @@ export function extractEntities(
     filePaths.add(match[0])
   }
   for (const fp of Array.from(filePaths)) {
-    const name = fp.split('/').pop() || fp
+    const name = baseName(fp) || fp
     const node = addNode('file', name, { path: fp })
     newNodes.push(node)
   }

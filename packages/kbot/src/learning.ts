@@ -17,6 +17,7 @@
 
 import { homedir } from 'node:os'
 import { join } from 'node:path'
+import { baseName } from './util/paths.js'
 import { existsSync, readFileSync, writeFileSync, writeFile, mkdirSync } from 'node:fs'
 import { getSkillRatingSystem } from './skill-rating.js'
 
@@ -789,7 +790,7 @@ export function updateProjectMemory(cwd: string, data: {
   if (!project) {
     project = {
       path: cwd,
-      name: data.name || cwd.split('/').pop() || 'unknown',
+      name: data.name || baseName(cwd) || 'unknown',
       stack: [],
       frequentFiles: {},
       notes: [],

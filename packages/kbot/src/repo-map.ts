@@ -6,6 +6,7 @@
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs'
 import { join, relative, basename, extname } from 'node:path'
+import { toPosix } from './util/paths.js'
 import { execSync } from 'node:child_process'
 
 const MAX_OUTPUT_CHARS = 8000
@@ -170,7 +171,9 @@ function walkDir(
     if (entries.length >= maxFiles) break
 
     const fullPath = join(dir, name)
-    const relPath = relative(rootDir, fullPath)
+    // relative() yields OS-native separators (backslashes on Windows); the
+    // tree formatter below splits on '/', so normalize to POSIX at the source.
+    const relPath = toPosix(relative(rootDir, fullPath))
 
     let stats
     try { stats = statSync(fullPath) } catch { continue }

@@ -16,6 +16,7 @@
 
 import { homedir } from 'node:os'
 import { join } from 'node:path'
+import { baseName } from './util/paths.js'
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import type { CachedPattern, CachedSolution, UserProfile, KnowledgeEntry, Correction, ProjectMemory } from './learning.js'
 
@@ -416,7 +417,7 @@ export function synthesizeMemory(): MemorySynthesis {
     for (const p of projects) {
       for (const [file, count] of Object.entries(p.frequentFiles)) {
         // Use just the filename, not full path, for cross-project matching
-        const basename = file.split('/').pop() || file
+        const basename = baseName(file) || file
         globalFiles[basename] = (globalFiles[basename] || 0) + count
       }
     }
