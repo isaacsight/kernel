@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080"
+     viewBox="0 0 1080 1080" font-kerning="normal">
+  <!-- ground -->
+  <rect width="1080" height="1080" fill="#F3E9D2"/>
+  <!-- printed-page keyline -->
+  <rect x="40" y="40" width="1000" height="1000"
+        fill="none" stroke="#1F1E1D" stroke-opacity="0.16" stroke-width="1"/>
+
+  <!-- ===== masthead strip ===== -->
+  <text x="84" y="98" font-family="Courier Prime, WenQuanYi Zen Hei, DejaVu Sans Mono, monospace" font-size="25" font-weight="700"
+        fill="#1F1E1D" letter-spacing="0.5">kernel.chat</text>
+  <line x1="748.0" y1="83.0" x2="748.0" y2="97.0" stroke="#E24E1B" stroke-width="2.2" stroke-linecap="round"/><line x1="741.9" y1="86.5" x2="754.1" y2="93.5" stroke="#E24E1B" stroke-width="2.2" stroke-linecap="round"/><line x1="741.9" y1="93.5" x2="754.1" y2="86.5" stroke="#E24E1B" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="996" y="96" text-anchor="end" font-family="Courier Prime, WenQuanYi Zen Hei, DejaVu Sans Mono, monospace" font-size="16.5"
+        fill="#1F1E1D" letter-spacing="1.8">ISSUE 375 &#183; JUN 2026</text>
+  <line x1="84" y1="122" x2="996" y2="122" stroke="#1F1E1D" stroke-opacity="0.22" stroke-width="1"/>
+
+  <!-- ===== bracketed bilingual kicker ===== -->
+  <text x="84" y="240" font-family="Courier Prime, WenQuanYi Zen Hei, DejaVu Sans Mono, monospace" font-size="26" font-weight="700"
+        fill="#E24E1B" letter-spacing="3.5">[ DESIGN &#183; <tspan font-family="WenQuanYi Zen Hei, Courier Prime, sans-serif">&#35373;&#35336;</tspan> ]</text>
+  <rect x="84" y="262" width="72" height="4" fill="#E24E1B"/>
+
+  <!-- ===== feature monument ===== -->
+  <text x="78" y="430" font-family="EB Garamond, Liberation Serif, serif" font-size="132" font-weight="600"
+        fill="#1F1E1D" letter-spacing="-1">Every release</text>
+  <text x="78" y="560" font-family="EB Garamond, Liberation Serif, serif" font-size="132" font-weight="600"
+        fill="#1F1E1D" letter-spacing="-1">is an <tspan font-style="italic" font-weight="500"
+        fill="#E24E1B">issue.</tspan></text>
+
+  <!-- ===== deck (swash) ===== -->
+  <text x="84" y="650" font-family="EB Garamond, Liberation Serif, serif" font-size="37" font-style="italic"
+        fill="#6B4E3D">Sixteen issues of evidence-cited editorial design &#8212;</text>
+  <text x="84" y="698" font-family="EB Garamond, Liberation Serif, serif" font-size="37" font-style="italic"
+        fill="#6B4E3D">warm paper, one spot color, a single recurring mark.</text>
+
+  <!-- ===== JP subtitle ===== -->
+  <text x="84" y="772" font-family="WenQuanYi Zen Hei, Courier Prime, sans-serif" font-size="27" fill="#6B4E3D"
+        letter-spacing="2">&#27598;&#21495;&#12364;&#12289;&#12402;&#12392;&#12388;&#12398;&#21495;&#12290;</text>
+
+  <!-- ===== footer ===== -->
+  <line x1="84" y1="876" x2="996" y2="876" stroke="#1F1E1D" stroke-opacity="0.22" stroke-width="1"/>
+
+  <text x="84" y="928" font-family="Courier Prime, WenQuanYi Zen Hei, DejaVu Sans Mono, monospace" font-size="20" font-weight="700"
+        fill="#1F1E1D" letter-spacing="2">DESIGNED IN PUBLIC &#183; <tspan font-family="WenQuanYi Zen Hei, Courier Prime, sans-serif">&#20844;&#38283;&#35373;&#35336;</tspan></text>
+  <text x="84" y="972" font-family="Courier Prime, WenQuanYi Zen Hei, DejaVu Sans Mono, monospace" font-size="19" fill="#6B4E3D"
+        letter-spacing="1">#editorialdesign  #typography  #designsystem</text>
+
+  <!-- bottom-right issue monument -->
+  <text x="996" y="912" text-anchor="end" font-family="Courier Prime, WenQuanYi Zen Hei, DejaVu Sans Mono, monospace" font-size="19"
+        font-weight="700" fill="#E24E1B" letter-spacing="4">ISSUE</text>
+  <text x="996" y="990" text-anchor="end" font-family="EB Garamond, Liberation Serif, serif" font-size="94"
+        font-weight="700" fill="#1F1E1D">375</text>
+  <text x="996" y="1016" text-anchor="end" font-family="Courier Prime, WenQuanYi Zen Hei, DejaVu Sans Mono, monospace" font-size="16"
+        fill="#6B4E3D" letter-spacing="2.5">THE SIX BORROWS</text>
+</svg>
