@@ -14,6 +14,8 @@ const IssueDetailPage = lazyRetry(() => import('./pages/IssueDetailPage').then(m
 const IssueBackCoverPage = lazyRetry(() => import('./pages/IssueBackCoverPage').then(m => ({ default: m.IssueBackCoverPage })))
 const BackCoversPage = lazyRetry(() => import('./pages/BackCoversPage').then(m => ({ default: m.BackCoversPage })))
 const RefusalsPage = lazyRetry(() => import('./pages/RefusalsPage').then(m => ({ default: m.RefusalsPage })))
+const PortfolioPage = lazyRetry(() => import('./pages/PortfolioPage').then(m => ({ default: m.PortfolioPage })))
+const PressroomPage = lazyRetry(() => import('./pages/PressroomPage').then(m => ({ default: m.PressroomPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -68,6 +70,16 @@ export const router = createHashRouter([
       { path: 'refusals', element: withErrorBoundary(
         <Suspense fallback={<div className="ka-page-loading">Loading the refusals...</div>}>
           <RefusalsPage />
+        </Suspense>
+      ) },
+      { path: 'portfolio', element: withErrorBoundary(
+        <Suspense fallback={<div className="ka-page-loading">Loading portfolio...</div>}>
+          <PortfolioPage />
+        </Suspense>
+      ) },
+      { path: 'pressroom', element: withErrorBoundary(
+        <Suspense fallback={<div className="ka-page-loading">Loading the pressroom...</div>}>
+          <PressroomPage />
         </Suspense>
       ) },
       { path: 'privacy', element: withErrorBoundary(

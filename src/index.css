@@ -29501,6 +29501,14 @@ h4 {
     text-shadow: none !important;
   }
 
+  /* Single-spot discipline — THE PRESS EDITION pass.
+     Tomato is the only colour the press mixes. Any per-issue accent
+     ink (cobalt, brick, graphite, olive, …) collapses to key black on
+     separation, so a coloured issue can't smuggle a second spot onto
+     press. Tomato is reasserted by the rule above. */
+  .pop-landing,
+  .pop-frame { --issue-accent-base: #111111 !important; }
+
   /* Hide interactive chrome */
   .pop-cta-row,
   .pop-cover-install,
