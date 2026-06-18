@@ -390,4 +390,4 @@ Typecheck → build → commit on the current branch with the format in §VIII �
 
 ---
 
-_Last updated: ISSUE 371 · APR 2026._
+_Last updated: ISSUE 391 · JUN 2026._
