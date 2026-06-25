@@ -235,6 +235,60 @@ working register: PAPERSKY for the quiet-field, WIRED for the
 data-grounded. Most issues need neither set fully exercised;
 the catalog is for when an issue's subject calls for them.
 
+### Korean lifestyle — Magazine B & AROUND
+
+POPEYE and PAPERSKY are the Japanese spine. The third register is
+**Korean** — and it is a *neighbour, not a costume*. We do not add
+hanbok motifs or a Korean "theme"; we borrow a small set of mechanics
+the way we did from PAPERSKY, for issues whose subject is Seoul, slow
+living, craft, or the Asia work the masthead is actually doing.
+
+Two magazines decoded:
+
+- **매거진 B (Magazine B)** — Seoul, single-brand documentary
+  monthly. Globally respected for *documentary minimalism*: one
+  subject, exhaustively, in restrained type and generous white. The
+  transferable move is **subject-as-spine** — closer to WIRED's rigor
+  than POPEYE's catalog density, but warmer.
+- **어라운드 (AROUND)** — Seoul slow-living magazine. Warm, essayistic,
+  hangul-forward, muted-natural palette. The transferable move is
+  **여백 (yeobaek) — negative space as the primary tool.** Where
+  PAPERSKY banks restraint on the cover, AROUND runs it through the
+  whole spread: slower rhythm, more air, fewer marks per page.
+
+The Korean kit (use only when the subject calls for it):
+
+1. **여백 (yeobaek) — negative space.** ★ The Korean cousin of
+   PAPERSKY's restraint, but applied to the *interior*, not just the
+   cover. A yeobaek spread runs at lower density — wider margins,
+   more line-leading, longer pauses between sections. The aesthetic
+   of the **달항아리 (moon jar)**: value in what is left empty.
+2. **Celadon accent — 청자 / 비색.** The Goryeo celadon glaze, a muted
+   grey-jade, is in the cabinet as the `celadon` ink seed
+   (`accents.ts`). The Korean neighbour to tomato: never loud, the
+   colour of restraint itself.
+3. **Hanji paper register.** 한지 (mulberry paper) is warm, fibrous,
+   natural — the Korean cousin of the `cream`/`kraft` stocks. Reserved
+   as a planned stock (`hanji`); until built, `cream` carries the
+   register.
+4. **A hangul subtitle layer.** POPEYE-grammar runs JP subtitles
+   (`featureJp`, the `街のコーダーたちへ` signoff). A Korean-subject
+   issue can carry the **hangul** parallel — e.g. the signoff
+   `거리의 코더들에게` ("to the city coders"). Planned as a `featureKr`
+   field; the bilingual layer becomes trilingual only when earned.
+
+What we explicitly do **not** do: add a third Latin display face for
+hangul (the two-face rule holds — hangul renders in the CJK fallback,
+as JP already does, and would be upgraded with a single shared CJK
+webfont like Pretendard if ever declared), or theme an issue "Korean"
+as decoration. The register is earned by subject, the way PAPERSKY's
+place-grammar is.
+
+> Why this is in the file at all: the masthead's real work is moving
+> into Asia (Seoul). The grammar should be able to speak in that room
+> without abandoning POPEYE — the room is different, the job is the
+> same.
+
 ---
 
 ## Issue identity catalog
@@ -662,6 +716,15 @@ layout decision:
 ---
 
 ## Ambient motion — the two accents
+
+> **Scope:** this contract governs the **editorial surface** — the
+> magazine itself (issues, spreads, covers, pressroom, colophon).
+> The AI-engine surface (`EnginePage`, chat, panels) is genuinely
+> interactive and uses the `motion/react` token system in
+> `src/constants/motion.ts` instead; that boundary is defined in
+> `.claude/rules/components.md` § "Motion — two surfaces, two
+> instruments." The "no Framer Motion" line below is the editorial
+> rule, not a codebase-wide ban.
 
 A print-inspired magazine is mostly still on the web. A book
 doesn't animate itself. But two very small ambient moves keep

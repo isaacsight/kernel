@@ -1,0 +1,66 @@
+/* LaunchPage — per-issue launch poster.
+ *
+ * Editorial surface: token-pure (no raw hex — colours come from
+ * design-system tokens), CSS-only. Scoped under .pop-launch so it
+ * composes with the shared cover/contents grammar from LandingPage.css
+ * without overriding it. Spec: docs/issue-launch-microsite.md. */
+
+.pop-launch {
+  --pop-launch-measure: 46rem;
+}
+
+/* ─── Pull quote ────────────────────────────────────────────── */
+.pop-launch__quote {
+  max-width: var(--pop-launch-measure);
+  margin: var(--space-2xl) auto;
+  padding: 0 var(--space-lg);
+  text-align: center;
+}
+
+.pop-launch__quote-text {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-xl);
+  line-height: var(--line-height-normal);
+  color: var(--pop-tomato);
+}
+
+.pop-launch__quote-cite {
+  display: block;
+  margin-top: var(--space-md);
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-ink);
+  opacity: 0.6;
+}
+
+/* ─── CTA ───────────────────────────────────────────────────── */
+.pop-launch__cta-wrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-lg) var(--space-lg) var(--space-3xl);
+}
+
+.pop-launch__cta {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-ink);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid var(--pop-tomato);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.pop-launch__cta:hover {
+  opacity: 0.7;
+}
+
+.pop-launch__cta-arrow {
+  color: var(--pop-tomato);
+}

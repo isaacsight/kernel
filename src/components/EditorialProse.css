@@ -1,0 +1,46 @@
+/* EditorialProse.css — shared print-grade typesetting for every
+   feature format (essay · dispatch · interview · forecast · review).
+ *
+ * Lifted out of EssayFeature.css so the craft is systemic, not
+ * per-format: improve it here once and all five formats inherit it.
+ * Token-pure — font properties only, no colours. Loaded once via
+ * IssueFeature.tsx (the format router every feature passes through).
+ *
+ * Two tiers, matching how editorial type actually works:
+ *   1. Container craft — kerning, ligatures, legibility, hanging
+ *      punctuation. Always safe; never changes layout.
+ *   2. Running-prose craft — justified + hyphenated measure and
+ *      oldstyle figures. Scoped to prose paragraphs so data blocks
+ *      and folios keep their lining/tabular figures. */
+
+/* ── 1. Container craft ─────────────────────────────────────── */
+.pop-essay-body,
+.pop-dispatch-intro,
+.pop-dispatch-item-body,
+.pop-interview-intro,
+.pop-interview-body,
+.pop-forecast-intro,
+.pop-forecast-item-body,
+.pop-review-intro {
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures contextual;
+  text-rendering: optimizeLegibility;
+  /* Progressive (Safari today); harmless where unsupported. */
+  hanging-punctuation: first allow-end last;
+}
+
+/* ── 2. Running-prose craft ─────────────────────────────────── */
+.pop-essay-para,
+.pop-dispatch-intro,
+.pop-dispatch-item-para,
+.pop-interview-intro,
+.pop-interview-body p,
+.pop-forecast-intro,
+.pop-forecast-item-para,
+.pop-review-intro {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  text-wrap: pretty;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+}

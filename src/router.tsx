@@ -12,6 +12,7 @@ const TermsPage = lazyRetry(() => import('./pages/TermsPage').then(m => ({ defau
 const IssuesPage = lazyRetry(() => import('./pages/IssuesPage').then(m => ({ default: m.IssuesPage })))
 const IssueDetailPage = lazyRetry(() => import('./pages/IssueDetailPage').then(m => ({ default: m.IssueDetailPage })))
 const IssueBackCoverPage = lazyRetry(() => import('./pages/IssueBackCoverPage').then(m => ({ default: m.IssueBackCoverPage })))
+const LaunchPage = lazyRetry(() => import('./pages/LaunchPage').then(m => ({ default: m.LaunchPage })))
 const RefusalsPage = lazyRetry(() => import('./pages/RefusalsPage').then(m => ({ default: m.RefusalsPage })))
 const PressroomPage = lazyRetry(() => import('./pages/PressroomPage').then(m => ({ default: m.PressroomPage })))
 
@@ -58,6 +59,11 @@ export const router = createHashRouter([
       { path: 'issues/:number/back', element: withErrorBoundary(
         <Suspense fallback={<div className="ka-page-loading">Loading verso...</div>}>
           <IssueBackCoverPage />
+        </Suspense>
+      ) },
+      { path: 'launch/:number', element: withErrorBoundary(
+        <Suspense fallback={<div className="ka-page-loading">Loading the launch...</div>}>
+          <LaunchPage />
         </Suspense>
       ) },
       { path: 'refusals', element: withErrorBoundary(

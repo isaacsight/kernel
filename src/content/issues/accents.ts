@@ -104,6 +104,12 @@ export const INK_SEEDS = {
     family: 'green',
     fit: 'Fatigue-olive — field work, labor, cartography, maps.',
   },
+  celadon: {
+    name: 'Celadon',
+    hex: '#6F968A',
+    family: 'green',
+    fit: 'Goryeo celadon glaze (청자/비색) — the muted grey-jade. Korean lifestyle features: Seoul, slow living, hanji-paper warmth, craft. The 여백 (negative-space) register; sits beside the JP grammar as a Korean editorial neighbor (see design-language.md). Distinct from olive (warmer, yellow-green) and pool (brighter teal).',
+  },
 
   // ── deep / purples ──────────────────────────────────────────
   amethyst: {

@@ -22,9 +22,65 @@ paths:
 
 - All components MUST be TypeScript with explicit prop types
 - Use named exports, not default exports
-- Use Framer Motion for animations (already installed)
+- Animation is CSS-only — see Motion below
 - Touch-first design — minimum tap target 44px
 - Generous whitespace — let content breathe
+
+## Motion — two surfaces, two instruments
+
+kernel.chat is one codebase with two surfaces, and **the surface
+decides the motion instrument.** This is a deliberate boundary, not
+unpaid debt. Decide which surface a component serves before you
+animate it.
+
+### Editorial surface (the magazine) — CSS-only
+
+The reading experience: issues, spreads, covers, pressroom, the
+colophon — everything that *is the publication*. A book doesn't
+animate itself. Per `docs/design-language.md` § "Ambient motion —
+the two accents" (Rules for new ambient motion), all motion here
+MUST:
+
+1. Be imperceptibly small — amplitudes ≤ 8% opacity or ≤ 4px translate
+2. Respect `prefers-reduced-motion` (the site-wide override in
+   `src/index.css` collapses `animation-duration` to 0.01ms)
+3. Be CSS-only — **no JS animation libraries, no Framer Motion, no
+   `requestAnimationFrame`**
+4. Not trigger layout/repaint hotspots — animate only `opacity` and
+   `transform`
+
+Do NOT add `framer-motion` / `motion/react` to an editorial
+component. The page is mostly still by design.
+
+### Engine surface (the AI app) — `motion/react`, governed
+
+The interactive application underneath the magazine: `EnginePage`,
+the chat stream, panels, bottom-sheets, and their app-specific
+controls. This surface is genuinely interactive (drag, exit
+transitions, layout reflow) and `motion/react` (`motion@^12.34.5`)
+is the **sanctioned** instrument — ~58 `src/components/*` files use
+it today. It is not a free-for-all: engine motion is governed by the
+token system in `src/constants/motion.ts` (`SPRING` / `DURATION` /
+`EASE` / `TRANSITION`) the way editorial motion is governed by the
+CSS contract. Use those tokens; do not hand-roll magic numbers.
+
+**Effort tiers — pick the cheapest that does the job:**
+
+| Tier | Examples | Verdict |
+|---|---|---|
+| Trivial | fade, simple slide | CSS could do it — prefer CSS even on the engine surface |
+| Effort | mount/unmount (`AnimatePresence`) | `motion/react` earns its place |
+| Irreplaceable | `drag`, `layout` reflow, scroll-linked | only `motion/react` can — use it |
+
+### Deciding the boundary
+
+If a component renders *the publication*, it's editorial → CSS-only.
+If it renders *the app around the publication*, it's engine →
+`motion/react` tokens. A shared component used by both defaults to
+the editorial (CSS-only) contract — the stricter surface wins.
+
+See `docs/figma-motion.md` for how Figma Motion (the authoring tool)
+feeds **both** surfaces as a spec, and why only its CSS export ships.
 
 ## State
 

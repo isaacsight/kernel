@@ -1,4 +1,7 @@
 import type { IssueRecord } from '../content/issues'
+// Shared print-grade typesetting for every format — loaded here, at
+// the router all features pass through, so the craft is systemic.
+import './EditorialProse.css'
 import { EssayFeature } from './EssayFeature'
 import { InterviewFeature } from './InterviewFeature'
 import { ForecastFeature } from './ForecastFeature'
