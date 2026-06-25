@@ -44,9 +44,24 @@ OPEN BACKLOG (real, documented, none blocking):
 - /leaderboard + /play engine pages: many raw hexes (non-editorial).
 - 199 engine-component hexes (AdaptivePanel etc.) — original finding.
 - Billing zombie edge functions — confirm deployment + undeploy.
-- import-conversation/mcp-proxy SSRF: import-conversation still uses
-  redirect:'follow' (allowlist-mitigated; left intentionally).
-- 391 fork resolution + whether to merge PR #53 (brings 392/393).
+- import-conversation SSRF still uses redirect:'follow' (allowlist-
+  mitigated + g.co is a redirector so it's required; left intentionally).
+  mcp-proxy + url-fetch SSRF: FIXED.
+
+### Post-gate work (all DEPLOYED to production + browser-verified live)
+- **391 fork RESOLVED:** kept House Style as 391; landed PR #53's 392
+  "Never Sell the Fixtures" + 393 "Own the Stack" as-is; renumbered PR's
+  colliding 391 dispatch → **395** (back-cover asset renamed too). Catalog
+  now contiguous 390–395. PR #53 itself now superseded — can be closed.
+- **Deployed repeatedly to gh-pages** (npm build → `git -C dist push -f`),
+  CNAME=kernel.chat preserved each time. Verified via raw-CDN poll + live
+  browser render (394 celadon, 395 brick, full catalog).
+- **Mobile fixes (deployed):** prose ragged-right below 640px (justify made
+  rivers on phone measure); launch CTA → 44px tap target (Fitts). Catalog
+  rows already whole-row tappable; base type system (kern/liga/onum +
+  optimizeLegibility) already site-wide via body (index.css:203).
+- **Branch IS production source** (gh-pages deploy from it); merging
+  feat/design-system-and-issue-391 → main to make default match live.
 
 ## Session 2026-06-21 — Styled Rhythm Generator: tests + parity + AI Pattern Drop
 
