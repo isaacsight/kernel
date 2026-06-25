@@ -96,6 +96,11 @@ serve(async (req: Request) => {
                 'Accept': 'application/json'
             },
             body: JSON.stringify(mcpPayload),
+            // Don't follow redirects: checkSSRF only vetted the initial
+            // server URL, so a 302 to an internal address would bypass it.
+            // A real MCP JSON-RPC endpoint never redirects; the !ok check
+            // below treats a 3xx as an upstream error.
+            redirect: 'manual',
             // 10 second timeout for external MCP calls
             signal: AbortSignal.timeout(10000)
         });

@@ -18,6 +18,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Design adherence — no raw hex in the editorial design-system layer
+        run: npm run lint:adherence
       - run: npx tsc --noEmit
       - run: npm run build
         env:

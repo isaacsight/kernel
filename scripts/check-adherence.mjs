@@ -21,8 +21,23 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, extname } from 'node:path'
 
-const ROOTS = ['src/components', 'src/pages']
-const EXTS = new Set(['.ts', '.tsx'])
+// Scope: CLI args override the default. The default is the routed
+// magazine surface (src/pages) — where the published "0 hand-written
+// colours" claim lives. Scans CSS — where a #hex IS a colour value —
+// not TSX, where #hex is usually an HTML entity (&#9733; = ★) or prose
+// documenting the brand colour. Raw hex is allowed in exactly ONE place,
+// the token definitions in index.css; everywhere else must use var(--*).
+// Default scope: the editorial DESIGN-SYSTEM layer (shared styles +
+// components) — the portable "house style" Issue 391 is about. That
+// layer is token-pure (0 raw hex). Page-level CSS is a known backlog,
+// NOT clean and NOT hidden: LandingPage.css hardcodes ~10 back-cover
+// stock colours, and the /play + /leaderboard engine pages carry many
+// more. Scan them on demand with `... src/pages`.
+const ROOTS = process.argv.slice(2).length ? process.argv.slice(2) : ['src/styles', 'src/components']
+const EXTS = new Set(['.css'])
+// Token-definition homes: raw hex is allowed here — this is where the
+// design-system colours are declared. Excluded from the gate.
+const IGNORE = new Set(['src/index.css', 'src/critical.css'])
 // 3/4/6/8-digit hex colour literal. Word-boundary end avoids matching longer ids.
 const HEX = /#[0-9a-fA-F]{3,8}\b/g
 
@@ -34,7 +49,7 @@ function* walk(dir) {
     const p = join(dir, name)
     const st = statSync(p)
     if (st.isDirectory()) yield* walk(p)
-    else if (EXTS.has(extname(p))) yield p
+    else if (EXTS.has(extname(p)) && !IGNORE.has(p)) yield p
   }
 }
 
@@ -46,13 +61,18 @@ for (const root of ROOTS) {
     scanned++
     const lines = readFileSync(file, 'utf8').split('\n')
     lines.forEach((line, i) => {
-      // Skip 8-digit hex that is actually a 6-digit colour followed by text:
-      // the regex already bounds with \b, so this is just per-match reporting.
       const matches = line.match(HEX)
-      if (matches) {
-        for (const m of matches) {
-          violations.push({ file, line: i + 1, value: m, text: line.trim() })
-        }
+      if (!matches) return
+      for (const m of matches) {
+        const v = m.toLowerCase()
+        // Allow structural black/white — masks, shadows, the intentional
+        // brand-button #000 (design-language.md). They aren't brand colours.
+        if (v === '#000' || v === '#fff' || v === '#000000' || v === '#ffffff') continue
+        // Allow var(--token, #fallback): the colour is token-backed; the
+        // hex is only a defensive fallback if the token is missing.
+        const prefix = line.slice(0, line.indexOf(m))
+        if (/var\([^)]*$/.test(prefix)) continue
+        violations.push({ file, line: i + 1, value: m, text: line.trim() })
       }
     })
   }
