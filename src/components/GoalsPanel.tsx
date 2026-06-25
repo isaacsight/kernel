@@ -172,7 +172,11 @@ export function GoalsPanel({ userId, onClose, onToast, readOnly, onUpgrade }: Go
                   <div className="ka-goal-details">
                     {goal.description && (
                       <p className="ka-goal-desc" dangerouslySetInnerHTML={{
+                        // Escape HTML FIRST so user-authored goal text can't
+                        // inject markup (stored XSS), then apply the safe
+                        // markdown subset. Order matters: escape before tags.
                         __html: goal.description
+                          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
                           .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
                           .replace(/\*(.+?)\*/g, '<em>$1</em>')
                           .replace(/`(.+?)`/g, '<code>$1</code>')

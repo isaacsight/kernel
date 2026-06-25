@@ -184,13 +184,35 @@ serve(async (req: Request) => {
     }
 
     // ── Generic fetch (fallback) ──────────────────────
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; KernelBot/1.0)',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      },
-      redirect: 'follow',
-    })
+    // Follow redirects MANUALLY, re-validating each hop against SSRF.
+    // checkSSRF(url) above only vetted the initial URL; with
+    // redirect:'follow' a public URL could 302 to an internal address
+    // (cloud metadata, localhost, link-local) and bypass the guard.
+    const MAX_REDIRECTS = 5
+    let currentUrl = url
+    let response: Response
+    for (let hop = 0; ; hop++) {
+      response = await fetch(currentUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; KernelBot/1.0)',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        },
+        redirect: 'manual',
+      })
+      if (response.status < 300 || response.status >= 400) break
+      const location = response.headers.get('location')
+      if (!location) break
+      if (hop >= MAX_REDIRECTS) {
+        return new Response(
+          JSON.stringify({ error: 'Too many redirects', text: '' }),
+          { headers: { 'Content-Type': 'application/json', ...CORS_HEADERS } }
+        )
+      }
+      const nextUrl = new URL(location, currentUrl).toString()
+      const hopErr = checkSSRF(nextUrl)
+      if (hopErr) return hopErr(CORS_HEADERS)
+      currentUrl = nextUrl
+    }
 
     if (!response.ok) {
       return new Response(
