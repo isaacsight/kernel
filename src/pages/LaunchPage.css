@@ -46,14 +46,23 @@
 }
 
 .pop-launch__cta {
+  /* Fitts's Law: ≥44px tap target. inline-flex + min-height gives the
+     touch area; the tomato underline rides the text via text-decoration
+     (tight to the glyphs) rather than a box border that the padding
+     would push away. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-sm);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   letter-spacing: var(--letter-spacing-caps);
   text-transform: uppercase;
   color: var(--pop-ink);
-  text-decoration: none;
-  padding-bottom: 2px;
-  border-bottom: 2px solid var(--pop-tomato);
+  text-decoration: underline;
+  text-decoration-color: var(--pop-tomato);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
