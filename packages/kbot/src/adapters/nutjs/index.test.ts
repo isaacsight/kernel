@@ -1,8 +1,11 @@
 // nut.js adapter tests.
-// The pure mapping helpers are exhaustively tested. The nut-backed primitives
-// are tested for their not-installed fallback — which is the actual state on
-// the CI/dev hosts (macOS/Linux), where @nut-tree-fork/nut-js is absent, so
-// these assertions exercise the real degradation path, not a mock.
+// The pure mapping helpers are exhaustively tested and host-independent.
+// The nut-backed primitives are availability-gated: @nut-tree-fork/nut-js is an
+// OPTIONAL dependency, so it may or may not be installed depending on whether a
+// given host's `npm install` resolved it. We therefore test the not-installed
+// degradation path ONLY when nut.js is genuinely absent, and we never invoke the
+// action primitives when it is present — nutClick/nutType/nutKey perform real
+// input on the host, which a test must not do.
 import { describe, it, expect } from 'vitest'
 import {
   resolveKeyName,
@@ -82,12 +85,21 @@ describe('resolveButtonName', () => {
   })
 })
 
-describe('not-installed fallback (no nut.js on this host)', () => {
-  it('reports unavailable', async () => {
-    expect(await nutAvailable()).toBe(false)
+describe('nut.js availability + not-installed fallback', () => {
+  it('reports availability as a stable boolean', async () => {
+    const a = await nutAvailable()
+    expect(typeof a).toBe('boolean')
+    expect(await nutAvailable()).toBe(a) // consistent across calls
   })
 
-  it('primitives return a helpful install hint instead of throwing', async () => {
+  it('when nut.js is absent, primitives degrade with an install hint instead of throwing', async () => {
+    if (await nutAvailable()) {
+      // nut.js IS installed on this host — the action primitives perform real
+      // mouse/keyboard input and screen capture, so we deliberately skip the
+      // side-effecting calls. The not-installed degradation path is what this
+      // case asserts, and it only exists when nut.js is absent.
+      return
+    }
     for (const r of [
       await nutScreenshot(),
       await nutClick(10, 10, 'left'),
