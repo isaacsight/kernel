@@ -170,4 +170,13 @@ export const ISSUE_394: IssueRecord = {
     japanese: 'kernel.chat editorial',
     production: 'kernel.chat group',
   },
+
+  // THE AUDIT — only true rows (read/cut awaits real word-count
+  // instrumentation; not fabricated).
+  audit: {
+    drafted: 'magazine-editor · japanese-editor',
+    verified: 'critic — sources cited inline; the sepsis failure named',
+    adherence: '0 raw hex · design-system layer',
+    pressed: 'VI·26 · build 3b3598a',
+  },
 }

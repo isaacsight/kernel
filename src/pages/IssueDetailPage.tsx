@@ -4,6 +4,7 @@ import { ALL_ISSUES, findIssue, LATEST_ISSUE } from '../content/issues'
 import { IssueCover } from '../components/IssueCover'
 import { IssueContents } from '../components/IssueContents'
 import { IssueFeature } from '../components/IssueFeature'
+import { ColophonMonument } from '../components/ColophonMonument'
 import { IssueCredits } from '../components/IssueCredits'
 import { IssueColophon } from '../components/IssueColophon'
 import { IssueArchiveNav } from '../components/IssueArchiveNav'
@@ -53,6 +54,8 @@ export function IssueDetailPage() {
       <IssueContents issue={issue} />
 
       {issue.spread && <IssueFeature issue={issue} />}
+
+      <ColophonMonument issue={issue} />
 
       {issue.credits && <IssueCredits issue={issue} />}
 

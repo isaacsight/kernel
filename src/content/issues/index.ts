@@ -674,6 +674,26 @@ export interface IssueRecord {
    *  Introduced in ISSUE 388 to anchor the "Agentic Substrates for the
    *  Frontier" series. */
   series?: IssueSeries
+  /** Optional provenance audit — the "audit as monument" colophon
+   *  (THE AUDIT). When present, the issue renders a ColophonMonument
+   *  at its foot: the production receipt, staged as the showpiece. */
+  audit?: IssueAudit
+}
+
+/** The provenance audit staged as a designed artifact. Every row is a
+ *  true claim about how the issue was made — render only the rows
+ *  provided; never fabricate. An honest magazine's audit must be true. */
+export interface IssueAudit {
+  /** Who/what drafted it, e.g. 'magazine-editor · japanese-editor'. */
+  drafted?: string
+  /** What was verified, e.g. 'critic — 7 claims, 7 cited'. */
+  verified?: string
+  /** Design-grammar adherence, e.g. '0 raw hex · design-system layer'. */
+  adherence?: string
+  /** Words kept vs cut, e.g. '2,400 kept · 900 cut'. */
+  readCut?: string
+  /** When it was pressed, e.g. 'V·26 · build 3b3598a'. */
+  pressed?: string
 }
 
 export interface IssueSeries {

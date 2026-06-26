@@ -1,0 +1,90 @@
+/* ColophonMonument — "THE AUDIT".
+ *
+ * The provenance receipt as showpiece. Mono-ledger grammar, hairline-
+ * ruled, the lone asterisk. Token-pure — every colour a design-system
+ * token (this file is in the adherence gate's scope; no raw hex). */
+
+.pop-audit {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-3xl) var(--space-lg) var(--space-4xl);
+}
+
+.pop-audit-inner {
+  width: 100%;
+  max-width: 34rem;
+}
+
+.pop-audit-kicker {
+  margin: 0 0 var(--space-md);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-tomato);
+}
+
+.pop-audit-rule {
+  border: 0;
+  border-top: 1px solid var(--pop-hairline);
+  margin: 0;
+}
+
+.pop-audit-ledger {
+  margin: 0;
+  padding: var(--space-sm) 0;
+}
+
+.pop-audit-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+}
+
+.pop-audit-row + .pop-audit-row {
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-audit-label {
+  flex: 0 0 9rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-ink);
+}
+
+.pop-audit-label-jp {
+  opacity: 0.5;
+}
+
+.pop-audit-value {
+  flex: 1;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--line-height-normal);
+  color: var(--pop-ink);
+}
+
+.pop-audit-sign {
+  margin: var(--space-md) 0 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-ink);
+  opacity: 0.78;
+}
+
+.pop-audit-star {
+  color: var(--pop-tomato);
+  margin-right: var(--space-xs);
+}
+
+@media (max-width: 640px) {
+  .pop-audit-label { flex-basis: 6.5rem; }
+}
