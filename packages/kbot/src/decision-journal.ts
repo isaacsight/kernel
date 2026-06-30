@@ -38,6 +38,7 @@ export type DecisionType =
   | 'learning-extraction'// Why a fact was stored or rejected
   | 'pattern-match'      // Why a cached pattern was applied
   | 'confidence-override'// Why the agent deferred or escalated
+  | 'engineering-loop'   // Why the engineering loop chose/applied/stopped
 
 export interface Decision {
   /** When the decision was made */
@@ -262,4 +263,21 @@ export function formatDecisions(decisions: Decision[]): string {
   }
 
   return lines.join('\n')
+}
+
+/**
+ * Render engineering-loop decisions as a human-readable running log.
+ * Non-loop decisions are filtered out. Pure — does no IO.
+ */
+export function narrateLoop(decisions: Decision[]): string {
+  const loop = decisions.filter((d) => d.type === 'engineering-loop')
+  if (loop.length === 0) return '(no engineering-loop decisions)'
+  return loop
+    .map((d) => {
+      const iteration = (d.evidence?.iteration as number | undefined) ?? '?'
+      const phase = (d.evidence?.phase as string | undefined) ?? 'step'
+      const why = d.reasoning.length > 0 ? ` (because ${d.reasoning[0]})` : ''
+      return `#${iteration} ${phase} → ${d.decision}${why}`
+    })
+    .join('\n')
 }
