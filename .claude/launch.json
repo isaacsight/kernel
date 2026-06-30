@@ -6,6 +6,24 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 5173
+    },
+    {
+      "name": "resume-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8731", "--directory", "/Users/isaachernandez/resume"],
+      "port": 8731
+    },
+    {
+      "name": "design-system",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8732", "--directory", "/Users/isaachernandez/blog design/design-system"],
+      "port": 8732
+    },
+    {
+      "name": "studio-email",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8733", "--directory", "/Users/isaachernandez/blog design"],
+      "port": 8733
     }
   ]
 }

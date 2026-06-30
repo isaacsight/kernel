@@ -1,6 +1,6 @@
 ---
 tags: [kernel, decisions]
-updated: "2026-03-08"
+updated: "2026-06-17"
 ---
 
 # Decision Log
@@ -70,6 +70,15 @@ Key architectural and product decisions, with rationale.
 | Relevance filtering (Jaccard similarity) | Never dump all memory — only inject contextually relevant items |
 | Haiku for extraction, Sonnet for convergence | Cost optimization: extraction is high-volume, convergence is high-quality |
 | Knowledge graph promotion at 0.7+ confidence, 3+ mentions | Prevents noise from single-mention entities |
+
+## Design Studio — KERNEL PRESS (June 17, 2026)
+
+| Decision | Rationale |
+|----------|-----------|
+| **Design team = an AI-native imprint (KERNEL PRESS, 工房)** | Categories like "product studio" or "brand agency" describe pre-AI studios. AI collapses the production floor, so the studio is organised around the scarce inputs: taste, editorial judgment, provenance. It makes *editions*, not interfaces. |
+| **Provenance is the moat — name the agent floor, don't hide it** | "AI-made" becomes a mark of rigour when the production chain is auditable. Same C2PA / provenance thesis ISSUE 390 covers, turned on the studio itself. Ties to the ownership/provenance income thesis. |
+| **Flagship = The Press Edition of ISSUE 360** | Anchor issue (cream / classic / tomato) is the purest single-spot statement, so the "one ink the press mixes" story stays clean when it crosses to paper. |
+| **Artifact = `/pressroom` page that performs the concept** | The page is the imprint's colophon-manifesto: out-of-register hero, KEY + SPOT = №001 separation, registration-mark frame. Shows the single-spot discipline rather than describing it. Commit `da1bb266`. |
 
 ## Design
 

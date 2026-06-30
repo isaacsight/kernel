@@ -549,6 +549,159 @@
 
 ---
 
+## 18. Drum Sampler Techniques You Should Know
+
+**Video:** https://www.youtube.com/watch?v=8dsUgzKZ9dk
+
+### Key Techniques
+- **Break → Drum Sampler pipeline**: Right-click a break (e.g. Amen) → Slice to New MIDI Track (transient slicing) → right-click the resulting Simpler → "Simpler to Drum Sampler" so every slice becomes a Drum Sampler pad
+- **Map to all siblings**: Map one slice's filter frequency to a macro, then right-click → "Map to all siblings" so a single macro drives the filter on every slice at once; repeat for resonance
+- **Per-slice playback effects**: Each slice has FX1/FX2 playback effects (Stretch, Sub oscillator, Pitch, Loop/Decay with automatable offset) -- core of the Drum Sampler's sound
+- **Velocity-as-modulation**: Zero out velocity→volume sensitivity (right-click → "Copy value to siblings"), then repurpose velocity to modulate FX1/FX2 per slice for expressive movement
+- **Choke group surgery**: Remove a slice from the default choke group (Chain list → Inputs/Outputs) so a stretched snare can ring out instead of being cut
+- **MIDI variation**: Live 12 MIDI transform tools (Recombine / Shuffle) to generate slice variations across duplicated bars
+- **Per-note pitch bend**: Use the MPE window (set modulation lane to Pitch Bend) for glides on individual pads
+- **Sequencer combo**: Pair the Drum Sampler with the Rhythmic Steps sequencer (free Sequencers pack) -- per-step chance, velocity, and slide modulation
+- **Phone as XY controller**: Free A0.Gest M4L device + ZigSim iPhone app → map phone accelerometer/XY to any Drum Sampler parameter
+
+### Ableton Workflows
+- Slice to New MIDI Track → Simpler to Drum Sampler
+- Macro mapping with "Map to all siblings" / "Copy value to siblings"
+- Velocity sensitivity repurposed from volume to FX modulation
+- Choke-group editing via Chain list
+- Drum Sampler + Rhythmic Steps for probabilistic sequencing
+
+### Tools & Devices
+- Drum Sampler (Live 12.1+), Simpler
+- Rhythmic Steps (Sequencers pack, free for Suite)
+- A0.Gest (free M4L) + ZigSim app
+- Live 12 MIDI transform tools (Recombine/Shuffle)
+
+### Relevance to Beat Production
+**Very High** -- Break chopping + per-slice modulation is the backbone of jungle/breakcore/melodic-breaks beat making, and maps directly onto kbot's drum-rack tooling.
+
+---
+
+## 19. Programming The Neptunes Style Drums
+
+**Video:** https://www.youtube.com/watch?v=bGsMvDQmRY8
+
+### Key Techniques
+- **"Puzzle drums"**: Lay the core kick + snare framework first, then *fill in between* with percussion/shakers; syncopated off-beat accents create the signature bounce
+- **Hybrid snare**: The Neptunes snare is a blend of rim shot + snare; freely substitute claps or acoustic percussion sounds
+- **Acoustic stomp kicks**: Big, slightly-acoustic kicks (not tight modern sub-kicks) over a classic two-step core pattern
+- **Ghost kicks**: Scatter very low-velocity kicks (a different sample works) for movement between the main hits
+- **Shaker interplay**: Two shakers alternating in between, velocity ridden down (Cmd+drag on Mac / Alt on PC)
+- **Sound Similarity (Live 12)**: Select a drum → Sound Similarity → arrow to swap for a similar hit pulled from *all* visible sample packs -- fast kit reskin from a good starting point
+- **Humanize + velocity randomize**: Randomize velocity with a reduced range, and Humanize percussion (cowbells were played live) for subtle imperfection
+- **Latin/African percussion**: Bongos, congas, cowbell are idiomatic to the style
+- **Envelope release vs choke**: Limit an open-hat's length by pulling the amp envelope release down instead of using choke groups
+
+### Ableton Workflows
+- Build kick/snare core → fill percussion in the gaps (puzzle approach)
+- Sound Similarity for one-click kit substitution
+- Velocity randomize (reduced range) + Humanize for live feel
+- Amp-envelope release to shorten samples without choke groups
+
+### Tools & Devices
+- Drum Rack, Sound Similarity (Live 12)
+- Velocity randomize + Humanize (pitch/time MIDI tools)
+- Korg Triton / Trinity, E-mu Mo'Phatt referenced as period sound sources
+
+### Relevance to Beat Production
+**High** -- Groove/pocket programming and syncopation theory transfer to any hip-hop/R&B beat work.
+
+---
+
+## 20. Boogie Funk Basslines Techniques
+
+**Video:** https://www.youtube.com/watch?v=42nRbcTYaWQ
+
+### Key Techniques
+- **Bass Synth starting point**: The Bass Synth (Creative Extensions, free) default preset is already close to a funk bass; set filter to LP2 (Moog ladder) + resonance; velocity sensitivity drives the filter/envelope for tone-by-touch
+- **Octaves are king**: Funk basslines lean on octave jumps (Shift+Up/Down moves notes by an octave)
+- **Chromatic movement**: Adjacent off-scale/chromatic passing notes are idiomatic for funk even when "wrong" in key
+- **32nd-note grid**: Switch to a 32nd grid for funk detail; toggle **fixed vs adaptive grid with Cmd+5**, then Cmd+1/Cmd+2 to resize
+- **Fast editing shortcuts**: Shift+Left/Right nudges notes; Cmd+drag over a note edits velocity; Cmd+Option+E expands the MIDI clip
+- **Capture for feel**: Play the funk run on a MIDI keyboard and hit **Capture** (not Record) to grab the off-grid performance, then Consolidate
+- **Glide**: Add portamento/glide in the synth for the tapped legato funk sound; Humanize for human timing
+
+### Ableton Workflows
+- Bass Synth + LP2 filter + velocity→filter
+- Fixed grid (Cmd+5) → 32nd notes for funk detail
+- Capture played performance → Consolidate
+- Velocity drag + Humanize for dynamics
+
+### Tools & Devices
+- Bass Synth (Creative Extensions, free for Suite)
+- Capture, Humanize, Consolidate
+- Pitch MIDI effect (octave offset for visual alignment)
+
+### Relevance to Beat Production
+**High** -- Bassline craft (octaves, chromaticism, velocity-driven filter) applies across funk, boogie, house, and hip-hop.
+
+---
+
+## 21. Analog Style Arp Glitches for Chill Electronica
+
+**Video:** https://www.youtube.com/watch?v=b8qqjCoD2_8
+
+### Key Techniques
+- **Binary effects (randomized on/off)**: Split an Audio Effect Rack into two chains -- dry vs effect -- with the chain selector mapped to a macro. Use the **Expression Control** modulator's **Random** source, set to **Remote**, mapped to the chain selector, so each note randomly flips the effect on/off
+- **Bias the randomness**: Apply an exponential output curve to bias toward "off" for sparse, occasional FX
+- **Key-zone the chaos**: Put the randomization in a MIDI Effect Rack and key-zone it so only high notes trigger random FX while low notes/chords stay clean
+- **Signature pluck**: Wavetable sine with sustain down + slight release = the plucky sine-wave sound of the style
+- **Sparkle FX**: Pitch Hack (Creative Extensions) for up/down pitch sparkle; delay/echo as throwable effects
+- **SQ sequencer**: From the free Sequencers pack -- lock to scale, randomize pitch/gate/active-steps, runs without a clip (spacebar)
+- **Capture from a sequencer**: Open a new MIDI track pulling MIDI from the sequencer track, hit Capture, then disable the sequencer to bake the pattern to a clip
+- **Texture/noise**: Crap Cassette M4L for tape wow & pitch drift; "Glitch With Friends" noise samples grouped as a "texture" bus; Live Crusher M4L (Camel Crusher replica) on the master; Echo's "character" noise (caveat: it's constant, even when stopped)
+
+### Ableton Workflows
+- Audio Effect Rack dry/wet chains + Expression Control (Random→Remote) for binary FX
+- MIDI Effect Rack key-zoning to gate the randomization
+- SQ sequencer → Capture → clip
+- Tape/noise layering for lofi texture
+
+### Tools & Devices
+- Expression Control modulator, Audio/MIDI Effect Racks, chain selector
+- SQ sequencer (Sequencers pack), Pitch Hack (Creative Extensions)
+- Crap Cassette (free M4L), Live Crusher (free M4L), Echo
+- "Glitch With Friends" sample pack
+
+### Relevance to Beat Production
+**Medium-High** -- Generative randomization and ear-candy FX add motion and "happy accidents" to otherwise static beats.
+
+---
+
+## 22. Stem Mixing and Re-Drumming Disco Edits
+
+**Video:** https://www.youtube.com/watch?v=wmA98aJWnBA
+
+### Key Techniques
+- **Stem separation**: Right-click a clip → Separate Stems → get a group of bass/drums/vocals/other; route each stem to its own track for full control over a sampled song
+- **Re-drumming via Slice + Sound Similarity**: Slice to New MIDI Track (preserve warp timing) → enable Sound Similarity and arrow through to replace each sliced hit with a library sound. **Crop each slice first** so similarity matches the hit, not the whole file
+- **Extract Groove**: Right-click the song's drums → Extract Groove → added to the Groove Pool. Apply it to your own kick/drum clip and set **global groove amount to 100%**, then **Commit** (right arrow) to bake the timing onto the notes (the Random option adds timing jitter)
+- **Grid hygiene**: Consolidate (Cmd+J); Delete Time (Cmd+Shift+Delete) to remove off-grid gaps; the clip's length readout shows bar count
+- **Manual delay throw**: When the project delay is syncopated (e.g. 3/16), copy a vocal phrase to a new audio track *on time* rather than using a send; band-pass filter the echo copy at 12 dB/oct
+- **Layer your own kit on top**: Add a disco Drum Rack (kick/snare/clap/hats/congas/claves/toms/FX), humanize snare+clap layers, add off-beat open hats
+- **Loop to extend**: Find a 2-8 bar loop in the original and extend it beyond the source song
+
+### Ableton Workflows
+- Separate Stems → per-stem tracks
+- Slice to MIDI + Sound Similarity (crop first) for re-drumming
+- Extract Groove → Groove Pool → 100% groove → Commit
+- Manual delay throws + band-pass for vocal chops
+
+### Tools & Devices
+- Stem Separation (Live 12), Slice to New MIDI Track, Sound Similarity
+- Groove Pool / Extract Groove, Commit
+- Drum Rack, return-track Delay/Echo, Auto Filter (band-pass)
+
+### Relevance to Beat Production
+**Very High** -- Stem separation + groove transfer + re-drumming is a complete sample-flip/remix workflow and overlaps heavily with kbot's sampling and groove tooling.
+
+---
+
 ## Cross-Cutting Themes & Techniques
 
 ### Recurring Ableton Devices Across All Videos
@@ -602,4 +755,11 @@
 8. **Bounce and commit**: Use MIDI Bounce and Paste Bounced Audio (Videos 5, 7) throughout for iterative processing
 
 *Document compiled from Side Brain (Yeuda Ben-Atar) YouTube tutorials and sidebrain.net course descriptions.*
-*Last updated: 2026-03-28*
+*Sections 1-17 last updated 2026-03-28. Sections 18-22 added 2026-06-07 from actual video transcripts pulled via `yt-dlp` (en-orig caption track) -- see method note below.*
+
+> **Transcript method (reusable):** YouTube auto-captions now require a PO token on
+> the default client. Working command:
+> `yt-dlp --skip-download --write-auto-subs --sub-langs "en-orig,en-en,en" --sub-format vtt --extractor-args "youtube:player_client=web,android,ios" -o "%(id)s.%(ext)s" <url>`
+> Then strip VTT timestamps/tags and de-dupe rolling caption lines into prose. The
+> `en-orig` track routes through the translation endpoint and bypasses the token wall.
+> `~155` of the channel's 172 videos remain uncaptured (most are M4L product demos).
