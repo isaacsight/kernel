@@ -2,10 +2,52 @@
 
 > This file persists context between Claude Code sessions.
 
-## Session 2026-06-30 — kbot engineering loop + decision narration (spec)
+## Session 2026-06-30 (later) — Repo cleanup + branch→main reconciliation + deploy
 
-**Approved spec, implementation pending.** Any session on any surface (CLI,
-desktop app, web) MUST read the spec before touching this work:
+Session opened on "I lost progress" — root cause was a stale scratchpad
+(last full entry was 06-25, so most of 06-26→06-30 was never logged).
+Reconstructed state, then did a full cleanup pass. **All pushed + deployed live.**
+
+What happened:
+- **Working tree cleaned** 63 untracked → 0. Personal/business files
+  (Fellows/EV/outreach/Suno/job-search/stereoscope/studio-offerings) +
+  scratch music scripts (`*.mts`, `2027/*.mjs`, tools/boogie, ribbon-in-the-sky)
+  **gitignored, preserved on disk**. Deleted stale `MORNING_BRIEFING.md` (Apr)
+  + already-integrated design zip. Real features committed in 5 logical commits:
+  ableton extension, bounty radar + secure-browser + ai-engineering brain,
+  carried kbot WIP (auth/streaming/stream-overlay), docs+content+og-card.
+- **Branches:** pruned 10 fully-merged `claude/*`. Kept 5 with unmerged work
+  — notably **`claude/great-dijkstra` (116 unique commits)**, worth a look someday.
+- **PR #53 closed** as superseded (the 391 fork it carried was already resolved).
+- **MERGE branch→main** — main and the branch had diverged 6 weeks
+  (merge-base = May OWASP commit; 8 main-only vs 22 branch-only). The conflict
+  was *editorial*: origin/main had merged PR #53's 391 ("THE WEEK THE ASSISTANT
+  BECAME AN ACTOR") while the branch kept "ON THE HOUSE STYLE". Resolved
+  **branch-wins** (`git merge -X ours origin/main`): House Style stays 391,
+  main's teletype back-cover salvaged (agent layer was already byte-identical
+  both sides). Catalog contiguous **360–395**. tsc + vite build green.
+- **Pushed branch + main** (both now `3dec5d241` — divergence closed) and
+  **redeployed** (`npm run deploy` → gh-pages `d59d1be`, CNAME preserved).
+  Live site HTTP 200 over HTTPS, catalog 360–395.
+- **Obsidian synced** — Current Status / Roadmap / Bootstrap System updated to
+  kbot **4.5.0**, catalog 360–395. Billing.md + Pressroom left (still accurate).
+- **E-ink phones research** saved for later → vault note `E-Ink Phones (2026).md`
+  (Boox Palma 2 Pro, Bigme HiBreak Dual, Hisense A9 Pro, Minimal Phone, Mudita
+  Kompakt — specs/prices/trade-offs).
+
+Open / deferred (Isaac's call):
+- **PR #52** (this branch's PR) — work is now on main; can be closed.
+- **Draft PRs #45/#46/#50/#51** — left open, editorial triage pending.
+- **`claude/great-dijkstra`** — 116 unmerged commits, unexamined.
+- kbot WIP (auth/stream-overlay) committed but NOT re-verified against tests/build.
+
+## Session 2026-06-30 — kbot engineering loop + decision narration (SHIPPED to branch)
+
+**IMPLEMENTED** via subagent-driven TDD — 6 commits `7093ed3..adf26e8` on
+`feat/design-system-and-issue-391`, 29/29 tests, tsc clean. NOT pushed/merged.
+Open minors: sameLesson/wallclock test coverage, saveState IO wrapping. Also
+queued: kbot **email extension** (enter user email + problem → kernel.chat-
+branded reply) — own spec next. Any session MUST read the spec before touching:
 `docs/superpowers/specs/2026-06-30-kbot-engineering-loop-design.md` (commit
 `1d0a72201`). Memory pointer: `project_kbot_engineering_loop.md`.
 
