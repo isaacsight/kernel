@@ -138,13 +138,29 @@ describe('applyTypoFix', () => {
   })
 })
 
-import { runEngineeringLoop, type LoopDeps, type VerifyOutcome as VO } from './engineering-loop.js'
+import { runEngineeringLoop, type LoopDeps } from './engineering-loop.js'
 
 function deps(over: Partial<LoopDeps>): Partial<LoopDeps> {
   return { analyze: async () => [], applyFix: async () => null, verify: async () => GREEN, now: () => 0, ...over }
 }
 
 describe('runEngineeringLoop', () => {
+  it('hands back on a critical-severity finding without applying', async () => {
+    const repo = tmpRepo()
+    let applied = false
+    const res = await runEngineeringLoop({
+      repoPath: repo, goal: 'fix', narrateTo: ['journal'],
+      deps: deps({
+        analyze: async () => [finding({ severity: 'critical', file: 'a.ts' })],
+        applyFix: async () => { applied = true; return { file: 'a.ts', summary: 's', iteration: -1 } },
+        verify: async () => ({ ok: false, failingStep: 'tsc', output: 'r' }),
+      }),
+    })
+    expect(applied).toBe(false)
+    expect(res.exit).toBe('handback')
+    expect(res.handbackSummary).toContain('Critical')
+  })
+
   it('exits success when verify is green and no findings remain', async () => {
     const repo = tmpRepo()
     const res = await runEngineeringLoop({
