@@ -137,3 +137,105 @@ describe('applyTypoFix', () => {
     expect(applyTypoFix(repo, finding({ category: 'typo', file: 'src/a.ts', line: 999 }))).toBeNull()
   })
 })
+
+import { runEngineeringLoop, type LoopDeps, type VerifyOutcome as VO } from './engineering-loop.js'
+
+function deps(over: Partial<LoopDeps>): Partial<LoopDeps> {
+  return { analyze: async () => [], applyFix: async () => null, verify: async () => GREEN, now: () => 0, ...over }
+}
+
+describe('runEngineeringLoop', () => {
+  it('exits success when verify is green and no findings remain', async () => {
+    const repo = tmpRepo()
+    const res = await runEngineeringLoop({
+      repoPath: repo, goal: 'clean', narrateTo: ['journal'],
+      deps: deps({ analyze: async () => [], verify: async () => GREEN }),
+    })
+    expect(res.exit).toBe('success')
+  })
+
+  it('exits budget when iterations cap is hit while still red', async () => {
+    const repo = tmpRepo()
+    const f = finding({ severity: 'info', file: 'a.ts' })
+    const res = await runEngineeringLoop({
+      repoPath: repo, goal: 'fix', narrateTo: ['journal'],
+      budget: { maxIterations: 2, maxWallClockMs: 9e9, maxNoProgress: 99 },
+      deps: deps({
+        analyze: async () => [f],
+        applyFix: async () => ({ file: 'a.ts', summary: 's', iteration: -1 }),
+        verify: async () => ({ ok: false, failingStep: 'vitest', output: 'red' }),
+      }),
+    })
+    expect(res.exit).toBe('budget')
+    expect(res.iterations).toBe(2)
+  })
+
+  it('exits handback when stuck on the same failing step', async () => {
+    const repo = tmpRepo()
+    const f = finding({ severity: 'info', file: 'a.ts' })
+    const res = await runEngineeringLoop({
+      repoPath: repo, goal: 'fix', narrateTo: ['journal'],
+      budget: { maxIterations: 20, maxWallClockMs: 9e9, maxNoProgress: 2 },
+      deps: deps({
+        analyze: async () => [f],
+        applyFix: async () => ({ file: 'a.ts', summary: 's', iteration: -1 }),
+        verify: async () => ({ ok: false, failingStep: 'tsc', output: 'same' }),
+      }),
+    })
+    expect(res.exit).toBe('handback')
+    expect(res.handbackSummary).toBeTruthy()
+  })
+
+  it('hands back instead of editing a file outside the repo', async () => {
+    const repo = tmpRepo()
+    const escape = finding({ severity: 'info', file: '../evil.ts' })
+    const res = await runEngineeringLoop({
+      repoPath: repo, goal: 'fix', narrateTo: ['journal'],
+      deps: deps({ analyze: async () => [escape], verify: async () => ({ ok: false, failingStep: 'tsc', output: 'r' }) }),
+    })
+    expect(res.exit).toBe('handback')
+    expect(res.handbackSummary).toContain('outside')
+  })
+
+  it('refuses to start when no verify command is detectable (no injected verify)', async () => {
+    const repo = tmpRepo()
+    const res = await runEngineeringLoop({
+      repoPath: repo, goal: 'fix', narrateTo: ['journal'],
+      deps: { analyze: async () => [], now: () => 0 }, // no verify injected; tmp repo has no package.json/tsconfig
+    })
+    expect(res.exit).toBe('handback')
+    expect(res.finalVerify.failingStep).toBe('verify-detect')
+  })
+
+  it('resumes from a checkpoint', async () => {
+    const repo = tmpRepo()
+    saveState(repo, state({ iteration: 1, noProgress: 2, lastFailingStep: 'tsc' }))
+    const res = await runEngineeringLoop({
+      repoPath: repo, goal: 'fix', narrateTo: ['journal'],
+      budget: { maxIterations: 20, maxWallClockMs: 9e9, maxNoProgress: 2 },
+      deps: deps({
+        analyze: async () => [finding({ file: 'a.ts' })],
+        applyFix: async () => ({ file: 'a.ts', summary: 's', iteration: -1 }),
+        verify: async () => ({ ok: false, failingStep: 'tsc', output: 'r' }),
+      }),
+    })
+    // resumed at iteration 1 with noProgress already 2 → handback on the first new iteration
+    expect(res.exit).toBe('handback')
+  })
+
+  it('propose-only (autoApply false) hands back without editing', async () => {
+    const repo = tmpRepo()
+    let applied = false
+    const res = await runEngineeringLoop({
+      repoPath: repo, goal: 'fix', autoApply: false, narrateTo: ['journal'],
+      deps: deps({
+        analyze: async () => [finding({ file: 'a.ts' })],
+        applyFix: async () => { applied = true; return { file: 'a.ts', summary: 's', iteration: -1 } },
+        verify: async () => ({ ok: false, failingStep: 'tsc', output: 'r' }),
+      }),
+    })
+    expect(applied).toBe(false)
+    expect(res.exit).toBe('handback')
+    expect(res.handbackSummary).toContain('approval')
+  })
+})

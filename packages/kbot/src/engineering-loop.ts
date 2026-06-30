@@ -10,6 +10,8 @@ import {
   type ContributorFinding,
   type FindingSeverity,
 } from './autonomous-contributor.js'
+import { logDecision, narrateLoop, getDecisionsByType } from './decision-journal.js'
+import { generateReflections } from './reflection.js'
 
 export type LoopExit = 'success' | 'budget' | 'handback'
 export type NarrationSink = 'journal' | 'stdout' | 'discord'
@@ -200,4 +202,153 @@ export function defaultApplyFix(repoPath: string, finding: ContributorFinding): 
 export async function defaultAnalyze(repoPath: string): Promise<ContributorFinding[]> {
   const report = await runAutonomousContributor('local', { localPath: repoPath, keepClone: true })
   return report.findings
+}
+
+function logLoopDecision(args: {
+  goal: string
+  phase: 'plan' | 'act' | 'decide'
+  iteration: number
+  decision: string
+  reasoning: string[]
+  file?: string
+  verifyStep?: string | null
+  exit?: LoopExit
+  outcome?: 'success' | 'failure' | 'partial' | 'unknown'
+}): void {
+  logDecision({
+    type: 'engineering-loop',
+    decision: args.decision,
+    reasoning: args.reasoning,
+    alternatives: [],
+    confidence: 0.7,
+    evidence: { phase: args.phase, iteration: args.iteration, file: args.file, verifyStep: args.verifyStep, exit: args.exit },
+    userContext: args.goal.slice(0, 200),
+    outcome: args.outcome,
+  })
+}
+
+function narrate(sinks: NarrationSink[]): void {
+  // 'journal' is already persisted by logDecision. 'discord' is an off-by-default
+  // follow-up (would call kernel_notify). Only 'stdout' renders here.
+  if (sinks.includes('stdout')) {
+    process.stdout.write(narrateLoop(getDecisionsByType('engineering-loop', 200)) + '\n')
+  }
+}
+
+/**
+ * Run the engineering loop. Auto-applies fixes by default, verifies each
+ * iteration, reflects on failure, and exits on success / budget / handback.
+ */
+export async function runEngineeringLoop(opts: LoopOptions): Promise<LoopResult> {
+  const repoPath = resolve(opts.repoPath)
+  const budget: LoopBudget = { ...DEFAULT_BUDGET, ...(opts.budget ?? {}) }
+  const autoApply = opts.autoApply ?? true
+  const sinks = opts.narrateTo ?? ['journal', 'stdout']
+  const now = opts.deps?.now ?? (() => Date.now())
+  const analyze = opts.deps?.analyze ?? defaultAnalyze
+  const applyFix = opts.deps?.applyFix ?? ((rp: string, f: ContributorFinding) => Promise.resolve(defaultApplyFix(rp, f)))
+
+  // Resolve verify: injected wins; else detect; else refuse to start (handback).
+  let verify = opts.deps?.verify
+  if (!verify) {
+    const cmd = detectVerifyCommand(repoPath)
+    if (!cmd) {
+      const summary = `No verify command detected in ${repoPath} (no build/test script, no tsconfig). Cannot observe, so handing back.`
+      logLoopDecision({ goal: opts.goal, phase: 'decide', iteration: 0, decision: 'refuse to start', reasoning: [summary], exit: 'handback', outcome: 'failure' })
+      narrate(sinks)
+      return { exit: 'handback', iterations: 0, applied: [], finalVerify: { ok: false, failingStep: 'verify-detect', output: summary }, handbackSummary: summary }
+    }
+    verify = (rp: string) => Promise.resolve(runVerify(rp, cmd))
+  }
+
+  const state: LoopState = loadState(repoPath) ?? {
+    iteration: 0, applied: [], noProgress: 0, lastFailingStep: null, lastLesson: null, startedAt: now(),
+  }
+  let lastVerify: VerifyOutcome = { ok: false, failingStep: null, output: '' }
+
+  for (;;) {
+    state.iteration += 1
+
+    // plan
+    const ranked = rankFindings(await analyze(repoPath))
+    const slice = ranked[0]
+    logLoopDecision({
+      goal: opts.goal, phase: 'plan', iteration: state.iteration,
+      decision: slice ? `target: ${slice.title} (${slice.file})` : 'no findings; verifying only',
+      reasoning: slice ? [`${slice.severity} severity, ${ranked.length} candidate(s)`] : ['analyzer returned no findings'],
+      file: slice?.file,
+    })
+
+    // risk boundary: refuse edits outside the repo or critical-severity findings
+    if (slice && !isInsideRepo(repoPath, slice.file)) {
+      const summary = `Refused: ${slice.file} resolves outside ${repoPath}. Handing back.`
+      logLoopDecision({ goal: opts.goal, phase: 'decide', iteration: state.iteration, decision: 'handback (path escape)', reasoning: [summary], exit: 'handback', outcome: 'failure' })
+      saveState(repoPath, state); narrate(sinks)
+      return { exit: 'handback', iterations: state.iteration, applied: state.applied, finalVerify: lastVerify, handbackSummary: summary }
+    }
+    if (slice && slice.severity === 'critical') {
+      const summary = `Critical finding "${slice.title}" needs human review; not auto-applying. Handing back.`
+      logLoopDecision({ goal: opts.goal, phase: 'decide', iteration: state.iteration, decision: 'handback (critical)', reasoning: [summary], exit: 'handback', outcome: 'partial' })
+      saveState(repoPath, state); narrate(sinks)
+      return { exit: 'handback', iterations: state.iteration, applied: state.applied, finalVerify: lastVerify, handbackSummary: summary }
+    }
+
+    // act
+    let appliedThisIteration = false
+    if (slice && !autoApply) {
+      const summary = `Proposal pending approval (autoApply off): ${slice.title} in ${slice.file}.`
+      logLoopDecision({ goal: opts.goal, phase: 'act', iteration: state.iteration, decision: 'propose-only (await approval)', reasoning: [summary], file: slice.file })
+      saveState(repoPath, state); narrate(sinks)
+      return { exit: 'handback', iterations: state.iteration, applied: state.applied, finalVerify: lastVerify, handbackSummary: summary }
+    }
+    if (slice && autoApply) {
+      try {
+        const change = await applyFix(repoPath, slice)
+        if (change) {
+          state.applied.push({ ...change, iteration: state.iteration })
+          appliedThisIteration = true
+          logLoopDecision({ goal: opts.goal, phase: 'act', iteration: state.iteration, decision: `applied: ${change.summary}`, reasoning: [`edited ${change.file}`], file: change.file, outcome: 'success' })
+        } else {
+          logLoopDecision({ goal: opts.goal, phase: 'act', iteration: state.iteration, decision: 'skipped (no concrete fix)', reasoning: [`no default applier for ${slice.category}`], file: slice.file, outcome: 'partial' })
+        }
+      } catch (err) {
+        logLoopDecision({ goal: opts.goal, phase: 'act', iteration: state.iteration, decision: 'apply failed', reasoning: [(err as Error).message], file: slice.file, outcome: 'failure' })
+      }
+    }
+
+    // observe
+    lastVerify = await verify(repoPath)
+
+    // reflect (only when red)
+    let lesson: string | null = null
+    if (!lastVerify.ok) {
+      lesson = generateReflections(opts.goal, lastVerify.output.slice(0, 500), 'error_correction').lesson
+    }
+
+    // no-progress accounting (uses prior step/lesson, then updates state)
+    state.noProgress = computeNoProgress(state, lastVerify, lesson)
+    state.lastFailingStep = lastVerify.failingStep
+    state.lastLesson = lesson
+
+    // decide
+    const remainingFindings = lastVerify.ok ? 0 : Math.max(0, ranked.length - (appliedThisIteration ? 1 : 0))
+    const verdict = decideExit({ state, verify: lastVerify, remainingFindings, budget, elapsedMs: now() - state.startedAt })
+    logLoopDecision({
+      goal: opts.goal, phase: 'decide', iteration: state.iteration,
+      decision: verdict.exit ?? 'continue', reasoning: [verdict.reason],
+      verifyStep: lastVerify.failingStep, exit: verdict.exit ?? undefined,
+    })
+    saveState(repoPath, state)
+    narrate(sinks)
+
+    if (verdict.exit) {
+      return {
+        exit: verdict.exit,
+        iterations: state.iteration,
+        applied: state.applied,
+        finalVerify: lastVerify,
+        handbackSummary: verdict.exit === 'handback' ? verdict.reason : undefined,
+      }
+    }
+  }
 }
