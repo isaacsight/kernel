@@ -101,6 +101,16 @@ describe('detectVerifyCommand', () => {
     wf(join(repo, 'package.json'), JSON.stringify({ scripts: { build: 'tsc', test: 'vitest' } }))
     expect(detectVerifyCommand(repo)).toEqual({ label: 'build', argv: ['npm', 'run', 'build'] })
   })
+  it('falls back to test script when build is absent', () => {
+    const repo = tmpRepo()
+    wf(join(repo, 'package.json'), JSON.stringify({ scripts: { test: 'vitest' } }))
+    expect(detectVerifyCommand(repo)).toEqual({ label: 'test', argv: ['npx', 'vitest', 'run'] })
+  })
+  it('falls back to tsc when no package.json but tsconfig.json present', () => {
+    const repo = tmpRepo()
+    wf(join(repo, 'tsconfig.json'), '{}')
+    expect(detectVerifyCommand(repo)).toEqual({ label: 'tsc', argv: ['npx', 'tsc', '--noEmit'] })
+  })
 })
 
 describe('applyTypoFix', () => {
@@ -115,5 +125,15 @@ describe('applyTypoFix', () => {
   it('returns null for a non-typo finding', () => {
     const repo = tmpRepo()
     expect(applyTypoFix(repo, finding({ category: 'dead-code' }))).toBeNull()
+  })
+  it('returns null when file does not exist', () => {
+    const repo = tmpRepo()
+    expect(applyTypoFix(repo, finding({ category: 'typo', file: 'nonexistent.ts', line: 1 }))).toBeNull()
+  })
+  it('returns null when line is out of bounds', () => {
+    const repo = tmpRepo()
+    md(join(repo, 'src'), { recursive: true })
+    wf(join(repo, 'src', 'a.ts'), 'const x = 1\nconst y = 2\n')
+    expect(applyTypoFix(repo, finding({ category: 'typo', file: 'src/a.ts', line: 999 }))).toBeNull()
   })
 })
