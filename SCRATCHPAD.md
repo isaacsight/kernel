@@ -2,6 +2,26 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-06-30 — kbot engineering loop + decision narration (spec)
+
+**Approved spec, implementation pending.** Any session on any surface (CLI,
+desktop app, web) MUST read the spec before touching this work:
+`docs/superpowers/specs/2026-06-30-kbot-engineering-loop-design.md` (commit
+`1d0a72201`). Memory pointer: `project_kbot_engineering_loop.md`.
+
+What it adds — two units, reuse over new organs:
+- **`packages/kbot/src/engineering-loop.ts`** — turns analysis-only
+  `autonomous-contributor.ts` into a plan→act→observe→reflect→decide loop.
+  Auto-applies edits; verifies (build/test/typecheck); exits on **success**,
+  **budget**, or **handback-when-stuck**; checkpoint resume. Explicit control
+  flow, NOT model-driven (avoids colliding with the 2,300-line `agent.ts`).
+- **extend `decision-journal.ts`** — `'engineering-loop'` DecisionType +
+  `narrateLoop()`. Narration default = journal + stdout; Discord opt-in.
+
+Locked: auto-apply ON, handback on stuck (maxNoProgress 2), budget 12 iters /
+20 min. Next: writing-plans → implementation. (Branch unchanged:
+`feat/design-system-and-issue-391`.)
+
 ## Session 2026-06-25 — Figma/Framer → editorial rebuild (in place)
 
 Big design-system + editorial session. **4 commits pushed** to
