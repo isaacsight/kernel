@@ -3,6 +3,13 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join, dirname, resolve, relative, isAbsolute } from 'node:path'
+import { execSync } from 'node:child_process'
+import {
+  runAutonomousContributor,
+  COMMON_TYPOS,
+  type ContributorFinding,
+  type FindingSeverity,
+} from './autonomous-contributor.js'
 
 export type LoopExit = 'success' | 'budget' | 'handback'
 export type NarrationSink = 'journal' | 'stdout' | 'discord'
@@ -122,4 +129,75 @@ export function saveState(repoPath: string, state: LoopState): void {
   const p = checkpointPath(repoPath)
   mkdirSync(dirname(p), { recursive: true })
   writeFileSync(p, JSON.stringify(state, null, 2))
+}
+
+const SEV_ORDER: Record<FindingSeverity, number> = { critical: 0, warn: 1, info: 2 }
+
+/** Severity first (critical→info), then simple fixes before complex ones. */
+export function rankFindings(findings: ContributorFinding[]): ContributorFinding[] {
+  return [...findings].sort(
+    (a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity] || Number(b.isSimpleFix) - Number(a.isSimpleFix),
+  )
+}
+
+/** Detect a verify command: build script → test script → tsc. Null if none. */
+export function detectVerifyCommand(repoPath: string): { label: string; argv: string[] } | null {
+  const pkgPath = join(repoPath, 'package.json')
+  if (existsSync(pkgPath)) {
+    try {
+      const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8')) as { scripts?: Record<string, string> }
+      if (pkg.scripts?.build) return { label: 'build', argv: ['npm', 'run', 'build'] }
+      if (pkg.scripts?.test) return { label: 'test', argv: ['npx', 'vitest', 'run'] }
+    } catch {
+      // fall through to tsc
+    }
+  }
+  if (existsSync(join(repoPath, 'tsconfig.json'))) return { label: 'tsc', argv: ['npx', 'tsc', '--noEmit'] }
+  return null
+}
+
+/** Run a detected verify command. Non-zero exit → not ok, with captured output. */
+export function runVerify(repoPath: string, cmd: { label: string; argv: string[] }): VerifyOutcome {
+  try {
+    execSync(cmd.argv.join(' '), { cwd: repoPath, stdio: 'pipe' })
+    return { ok: true, failingStep: null, output: '' }
+  } catch (err) {
+    const e = err as { stdout?: Buffer; stderr?: Buffer; message?: string }
+    const output = (e.stdout?.toString() ?? '') + (e.stderr?.toString() ?? '') || e.message || 'verify failed'
+    return { ok: false, failingStep: cmd.label, output: output.slice(0, 4000) }
+  }
+}
+
+/** Apply a typo finding deterministically by re-running COMMON_TYPOS on its line. */
+export function applyTypoFix(repoPath: string, finding: ContributorFinding): AppliedChange | null {
+  if (finding.category !== 'typo' || !finding.line) return null
+  const abs = resolve(repoPath, finding.file)
+  if (!existsSync(abs)) return null
+  const lines = readFileSync(abs, 'utf-8').split('\n')
+  const idx = finding.line - 1
+  if (idx < 0 || idx >= lines.length) return null
+  let line = lines[idx]
+  let changed = false
+  for (const [pattern, fix] of COMMON_TYPOS) {
+    if (pattern.test(line)) {
+      line = line.replace(pattern, fix)
+      changed = true
+    }
+    pattern.lastIndex = 0
+  }
+  if (!changed) return null
+  lines[idx] = line
+  writeFileSync(abs, lines.join('\n'))
+  return { file: finding.file, summary: `fixed typo on line ${finding.line}`, iteration: -1 }
+}
+
+/** Default applier: handles typos concretely, skips (returns null) everything else. */
+export function defaultApplyFix(repoPath: string, finding: ContributorFinding): AppliedChange | null {
+  return applyTypoFix(repoPath, finding)
+}
+
+/** Default analyzer: run the contributor against a local path (no clone). */
+export async function defaultAnalyze(repoPath: string): Promise<ContributorFinding[]> {
+  const report = await runAutonomousContributor('local', { localPath: repoPath, keepClone: true })
+  return report.findings
 }

@@ -480,7 +480,7 @@ function scanDuplicates(files: string[], rootDir: string): DuplicatePattern[] {
 // ── Typo Scanner ──
 
 // Common programming typos in identifiers and comments
-const COMMON_TYPOS: Array<[RegExp, string]> = [
+export const COMMON_TYPOS: Array<[RegExp, string]> = [
   [/\brecieve\b/gi, 'receive'],
   [/\boccured\b/gi, 'occurred'],
   [/\bseperatel?y?\b/gi, 'separately'],

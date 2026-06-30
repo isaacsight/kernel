@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import { mkdtempSync, rmSync, existsSync } from 'node:fs'
+import { mkdtempSync, rmSync, existsSync, writeFileSync as wf, mkdirSync as md, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import {
@@ -66,5 +66,54 @@ describe('checkpoint', () => {
     saveState(repo, s)
     expect(existsSync(join(repo, '.kbot', 'engineering-loop.json'))).toBe(true)
     expect(loadState(repo)).toEqual(s)
+  })
+})
+
+import {
+  rankFindings,
+  detectVerifyCommand,
+  applyTypoFix,
+} from './engineering-loop.js'
+import type { ContributorFinding } from './autonomous-contributor.js'
+
+function finding(over: Partial<ContributorFinding>): ContributorFinding {
+  return { category: 'typo', severity: 'info', title: 't', description: 'd', file: 'a.ts', isSimpleFix: true, ...over }
+}
+
+describe('rankFindings', () => {
+  it('orders critical first, then simple fixes', () => {
+    const ranked = rankFindings([
+      finding({ severity: 'info', isSimpleFix: false, title: 'info-complex' }),
+      finding({ severity: 'critical', isSimpleFix: false, title: 'crit' }),
+      finding({ severity: 'info', isSimpleFix: true, title: 'info-simple' }),
+    ])
+    expect(ranked.map((f) => f.title)).toEqual(['crit', 'info-simple', 'info-complex'])
+  })
+})
+
+describe('detectVerifyCommand', () => {
+  it('returns null when nothing is detectable', () => {
+    const repo = tmpRepo()
+    expect(detectVerifyCommand(repo)).toBeNull()
+  })
+  it('prefers a build script', () => {
+    const repo = tmpRepo()
+    wf(join(repo, 'package.json'), JSON.stringify({ scripts: { build: 'tsc', test: 'vitest' } }))
+    expect(detectVerifyCommand(repo)).toEqual({ label: 'build', argv: ['npm', 'run', 'build'] })
+  })
+})
+
+describe('applyTypoFix', () => {
+  it('rewrites the typo on the finding line and returns the change', () => {
+    const repo = tmpRepo()
+    md(join(repo, 'src'), { recursive: true })
+    wf(join(repo, 'src', 'a.ts'), 'const x = 1\n// teh value\nconst y = 2\n')
+    const change = applyTypoFix(repo, finding({ category: 'typo', file: 'src/a.ts', line: 2 }))
+    expect(change).not.toBeNull()
+    expect(readFileSync(join(repo, 'src', 'a.ts'), 'utf-8')).toContain('// the value')
+  })
+  it('returns null for a non-typo finding', () => {
+    const repo = tmpRepo()
+    expect(applyTypoFix(repo, finding({ category: 'dead-code' }))).toBeNull()
   })
 })
