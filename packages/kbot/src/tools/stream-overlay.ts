@@ -18,13 +18,36 @@ const ALERT_EXIT = SEC
 const ALERT_TOTAL = ALERT_ENTER + ALERT_HOLD + ALERT_EXIT
 
 // ─── Palette ───────────────────────────────────────────────────
+// kernel.chat magazine grammar — POPEYE-anchored editorial.
+// Single spot color (tomato). Warm paper ground. Ink + coffee for type.
+// Differentiation between alert types lives in the bilingual kicker copy,
+// NOT in colour — the press only mixes one spot.
 
 const C = {
-  bg: '#0d1117', bgPanel: '#161b22', accent: '#6B5B95',
-  green: '#3fb950', blue: '#58a6ff', orange: '#d29922',
-  red: '#f85149', purple: '#bc8cff', text: '#e6edf3',
-  textDim: '#8b949e', gold: '#ffd700', white: '#ffffff',
+  cream: '#F3E9D2',       // --pop-cream — ground
+  ivory: '#FAF9F6',       // --pop-ivory — soft inner panel
+  ink: '#1F1E1D',         // --pop-ink — primary text
+  coffee: '#6B4E3D',      // --pop-coffee — secondary text / dim
+  tomato: '#E24E1B',      // --pop-tomato — the spot
+  hairlineSoft: 'rgba(31,30,29,0.16)',  // --pop-hairline-soft
+
+  // legacy aliases kept so any caller passing a custom hex still composites;
+  // the system itself never reaches for these.
+  white: '#FAF9F6',
 }
+
+// fonts — JP fallback chain so bilingual kickers render in canvas
+const FONT_SERIF = '"EB Garamond", "Hiragino Mincho ProN", "Yu Mincho", serif'
+const FONT_MONO  = '"Courier Prime", "Hiragino Mincho ProN", "Yu Mincho", monospace'
+
+// system glyph — leads every folio surface. Tomato spot.
+const STAR = '★'
+
+// Live broadcast tagline — the bottom-right anchor on the folio strip.
+// Live transmissions don't carry issue numbers (that bookkeeping is the
+// magazine surface's, not the broadcast's), so the right edge is the
+// publication tagline rather than a dateline monument.
+const LIVE_TAGLINE = 'LIVE TRANSMISSION · 生放送'
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -106,29 +129,26 @@ function spawnN(n: number, cfg: (i: number) => Omit<Particle, 'life' | 'maxLife'
   return out
 }
 
+// Particles read as ink-spatter / newsprint specks, not confetti.
+// Tomato spot only. Counts halved — the magazine voice is restraint.
+// `follow` stays silent; type alone is the celebration.
 function spawnAlertParticles(type: AlertType, cx: number, cy: number): Particle[] {
   if (type === 'raid') {
-    return spawnN(30, () => {
-      const a = Math.random() * Math.PI * 2, sp = rng(2, 8)
-      return { x: cx, y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, minLife: SEC, maxLife: 3 * SEC, color: pick([C.red, C.orange, C.gold, C.white]), size: rng(2, 5) }
+    return spawnN(14, () => {
+      const a = Math.random() * Math.PI * 2, sp = rng(2, 7)
+      return { x: cx, y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, minLife: SEC, maxLife: 2 * SEC, color: C.tomato, size: rng(2, 4) }
     })
   }
-  if (type === 'sub') {
-    return spawnN(25, () => ({
-      x: rng(cx - 200, cx + 200), y: cy - 40, vx: rng(-1, 1), vy: rng(1, 4),
-      minLife: 2 * SEC, maxLife: 4 * SEC, color: pick([C.accent, C.green, C.blue, C.purple, C.gold]), size: rng(3, 6),
-    }))
-  }
-  if (type === 'donation') {
-    return spawnN(20, () => ({
-      x: rng(cx - 150, cx + 150), y: cy - 60, vx: rng(-0.5, 0.5), vy: rng(1, 3),
-      minLife: 2 * SEC, maxLife: 3 * SEC, color: pick([C.gold, C.orange, '#ffed4a']), size: rng(3, 5),
+  if (type === 'sub' || type === 'donation') {
+    return spawnN(12, () => ({
+      x: rng(cx - 160, cx + 160), y: cy - 40, vx: rng(-0.6, 0.6), vy: rng(1, 3),
+      minLife: 2 * SEC, maxLife: 3 * SEC, color: C.tomato, size: rng(2, 4),
     }))
   }
   if (type === 'achievement') {
-    return spawnN(16, (i) => {
-      const a = (i / 16) * Math.PI * 2
-      return { x: cx + Math.cos(a) * 60, y: cy + Math.sin(a) * 25, vx: Math.cos(a) * 0.5, vy: Math.sin(a) * 0.5 - 0.3, minLife: 2 * SEC, maxLife: 3 * SEC, color: C.gold, size: rng(2, 4) }
+    return spawnN(10, (i) => {
+      const a = (i / 10) * Math.PI * 2
+      return { x: cx + Math.cos(a) * 60, y: cy + Math.sin(a) * 25, vx: Math.cos(a) * 0.4, vy: Math.sin(a) * 0.4 - 0.3, minLife: 2 * SEC, maxLife: 3 * SEC, color: C.tomato, size: rng(2, 3) }
     })
   }
   return []
@@ -147,12 +167,14 @@ function drawParticles(ctx: CanvasRenderingContext2D, particles: Particle[]): vo
 
 // ─── Alert Label Maps ──────────────────────────────────────────
 
-const ALERT_TITLES: Record<AlertType, string> = {
-  follow: 'NEW FOLLOWER', raid: 'RAID INCOMING', sub: 'NEW SUBSCRIBER',
-  donation: 'DONATION', achievement: 'ACHIEVEMENT UNLOCKED',
-}
-const ALERT_COLORS: Record<AlertType, string> = {
-  follow: C.green, raid: C.red, sub: C.accent, donation: C.gold, achievement: C.gold,
+// Bracketed bilingual kicker — same grammar as `.pop-kicker` on the site.
+// `[CATEGORY · 日本語]`  Latin small-caps + Japanese mono.
+const ALERT_KICKERS: Record<AlertType, string> = {
+  follow:      '[FOLLOWER · 新規読者]',
+  raid:        '[RAID · 来訪]',
+  sub:         '[SUBSCRIBER · 定期購読]',
+  donation:    '[DONATION · 寄付]',
+  achievement: '[ACHIEVEMENT · 達成]',
 }
 
 function alertBody(a: StreamAlert): string {
@@ -202,7 +224,7 @@ export class StreamOverlay {
   addTicker(text: string): void { this.tickerItems.push({ text, x: -1 }) }
 
   highlightMessage(username: string, message: string, color?: string): void {
-    this.highlight = { username, message, color: color ?? C.accent, frame: 0, totalFrames: 3 * SEC }
+    this.highlight = { username, message, color: color ?? C.tomato, frame: 0, totalFrames: 3 * SEC }
   }
 
   updateInfoBar(info: InfoBarData): void { this.infoBar = { ...info } }
@@ -238,7 +260,6 @@ export class StreamOverlay {
   private renderAlert(ctx: CanvasRenderingContext2D, width: number, _height: number): void {
     if (!this.activeAlert) return
     const a = this.activeAlert, frame = a.frame
-    const color = ALERT_COLORS[a.alert.type] ?? C.blue
 
     let alpha = 1, offsetY = 0
     if (frame <= ALERT_ENTER) {
@@ -247,37 +268,45 @@ export class StreamOverlay {
       const t = easeIn((frame - ALERT_ENTER - ALERT_HOLD) / ALERT_EXIT); alpha = 1 - t; offsetY = lerp(0, -30, t)
     }
 
-    const boxW = 420, boxH = 80
-    const boxX = Math.floor((width - boxW) / 2), boxY = 100 + offsetY
+    // Editorial alert card: cream stock, ink hairline frame,
+    // tomato kicker rule under the bracket label, EB Garamond headline.
+    const boxW = 460, boxH = 96
+    const boxX = Math.floor((width - boxW) / 2), boxY = 80 + offsetY
 
     ctx.save()
     ctx.globalAlpha = alpha
-    ctx.fillStyle = hexToRgba(C.bgPanel, 0.92)
+
+    // Cream paper ground
+    ctx.fillStyle = C.cream
     ctx.fillRect(boxX, boxY, boxW, boxH)
-    ctx.strokeStyle = color; ctx.lineWidth = 2
-    ctx.strokeRect(boxX, boxY, boxW, boxH)
-    ctx.fillStyle = color
-    ctx.fillRect(boxX, boxY, 4, boxH)
 
-    if (a.alert.type === 'achievement' || a.alert.type === 'donation') {
-      ctx.fillStyle = hexToRgba(C.gold, 0.15 + 0.1 * Math.sin(frame * 0.5))
-      ctx.fillRect(boxX - 3, boxY - 3, boxW + 6, boxH + 6)
-    }
+    // Ink hairline frame
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 1
+    ctx.strokeRect(boxX + 0.5, boxY + 0.5, boxW - 1, boxH - 1)
 
-    ctx.fillStyle = color
-    ctx.font = 'bold 14px "Courier Prime", monospace'
+    // Bracketed bilingual kicker — Courier Prime, ink
+    ctx.fillStyle = C.ink
+    ctx.font = `11px ${FONT_MONO}`
     ctx.textAlign = 'center'
-    ctx.fillText(ALERT_TITLES[a.alert.type] ?? 'ALERT', boxX + boxW / 2, boxY + 24)
+    ctx.fillText(ALERT_KICKERS[a.alert.type] ?? '[ALERT]', boxX + boxW / 2, boxY + 22)
 
-    ctx.fillStyle = C.text
-    ctx.font = '16px "Courier Prime", monospace'
-    ctx.fillText(truncate(alertBody(a.alert), 40), boxX + boxW / 2, boxY + 50)
+    // Tomato spot rule under the kicker (the .pop-rule--short equivalent)
+    const ruleW = 56
+    ctx.fillStyle = C.tomato
+    ctx.fillRect(boxX + (boxW - ruleW) / 2, boxY + 28, ruleW, 2)
 
+    // Headline body — EB Garamond, italic, ink with username in tomato
+    ctx.fillStyle = C.ink
+    ctx.font = `italic 22px ${FONT_SERIF}`
+    ctx.fillText(truncate(alertBody(a.alert), 42), boxX + boxW / 2, boxY + 60)
+
+    // Optional sub-message — Courier, coffee
     if (a.alert.message && a.alert.type !== 'achievement') {
-      ctx.fillStyle = C.textDim
-      ctx.font = '12px "Courier Prime", monospace'
-      ctx.fillText(truncate(a.alert.message, 50), boxX + boxW / 2, boxY + 68)
+      ctx.fillStyle = C.coffee
+      ctx.font = `11px ${FONT_MONO}`
+      ctx.fillText(truncate(a.alert.message, 56), boxX + boxW / 2, boxY + 82)
     }
+
     ctx.textAlign = 'left'
     ctx.restore()
     drawParticles(ctx, a.particles)
@@ -294,35 +323,42 @@ export class StreamOverlay {
 
   private renderGoals(ctx: CanvasRenderingContext2D, width: number, height: number): void {
     if (this.goals.size === 0) return
-    const barH = 22, barMargin = 8, barX = 20, barW = width - 40
+    const barH = 22, barMargin = 8, barX = 24, barW = width - 48
     let idx = 0
     for (const [id, goal] of this.goals) {
       const isTop = (goal.position ?? 'top') === 'top'
-      const barY = isTop ? 10 + idx * (barH + barMargin) : height - 60 - idx * (barH + barMargin)
+      const barY = isTop ? 14 + idx * (barH + barMargin) : height - 64 - idx * (barH + barMargin)
       const fill = this.goalAnimations.get(id) ?? 0
 
       ctx.save()
-      ctx.fillStyle = hexToRgba(C.bgPanel, 0.85)
+      // Ivory inner panel on cream — quieter than full ground swap
+      ctx.fillStyle = C.ivory
       ctx.fillRect(barX, barY, barW, barH)
-      ctx.strokeStyle = hexToRgba(C.accent, 0.5); ctx.lineWidth = 1
-      ctx.strokeRect(barX, barY, barW, barH)
+      // Ink hairline frame
+      ctx.strokeStyle = C.ink; ctx.lineWidth = 1
+      ctx.strokeRect(barX + 0.5, barY + 0.5, barW - 1, barH - 1)
 
+      // Tomato fill — single spot
       const fillW = Math.floor(barW * fill)
       if (fillW > 0) {
-        ctx.fillStyle = hexToRgba(goal.color ?? C.green, 0.8)
+        ctx.fillStyle = C.tomato
         ctx.fillRect(barX, barY, fillW, barH)
-        if (fill < 1) { ctx.fillStyle = hexToRgba(C.white, 0.3); ctx.fillRect(barX + fillW - 3, barY, 3, barH) }
       }
+      // Quiet completion glow — tomato breath, not gold
       if (fill >= 0.999) {
-        ctx.fillStyle = hexToRgba(C.gold, 0.15 + 0.05 * Math.sin(Date.now() * 0.005))
-        ctx.fillRect(barX, barY, barW, barH)
+        ctx.fillStyle = hexToRgba(C.tomato, 0.08 + 0.04 * Math.sin(Date.now() * 0.003))
+        ctx.fillRect(barX - 2, barY - 2, barW + 4, barH + 4)
       }
 
-      ctx.fillStyle = C.text; ctx.font = '12px "Courier Prime", monospace'; ctx.textAlign = 'left'
-      ctx.fillText(`${goal.label}: ${goal.current}/${goal.target}`, barX + 6, barY + 15)
+      // Label — Courier Prime, ink (or ivory if it's sitting on tomato fill)
+      ctx.font = `11px ${FONT_MONO}`; ctx.textAlign = 'left'
+      ctx.fillStyle = fillW > 80 ? C.ivory : C.ink
+      ctx.fillText(`${goal.label.toUpperCase()} · ${goal.current}/${goal.target}`, barX + 8, barY + 15)
+      // Percentage — right side
       const pct = Math.min(100, Math.round((goal.current / goal.target) * 100))
-      ctx.textAlign = 'right'; ctx.fillStyle = fill >= 0.999 ? C.gold : C.textDim
-      ctx.fillText(`${pct}%`, barX + barW - 6, barY + 15)
+      ctx.textAlign = 'right'
+      ctx.fillStyle = fillW > barW - 40 ? C.ivory : C.tomato
+      ctx.fillText(`${pct}%`, barX + barW - 8, barY + 15)
       ctx.textAlign = 'left'; ctx.restore()
       idx++
     }
@@ -349,20 +385,26 @@ export class StreamOverlay {
 
   private renderTicker(ctx: CanvasRenderingContext2D, width: number, height: number): void {
     if (this.tickerItems.length === 0) return
-    const tickerH = 24, tickerY = height - 72
+    const tickerH = 26, tickerY = height - 68
     ctx.save()
-    ctx.fillStyle = hexToRgba(C.bg, 0.85)
+    // Cream ground for the ticker strip
+    ctx.fillStyle = C.cream
     ctx.fillRect(0, tickerY, width, tickerH)
-    ctx.strokeStyle = hexToRgba(C.accent, 0.4); ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(0, tickerY); ctx.lineTo(width, tickerY)
-    ctx.moveTo(0, tickerY + tickerH); ctx.lineTo(width, tickerY + tickerH)
-    ctx.stroke()
+    // Ink hairline above, tomato hairline below (the .pop-rule pair)
+    ctx.fillStyle = C.ink
+    ctx.fillRect(0, tickerY, width, 1)
+    ctx.fillStyle = C.tomato
+    ctx.fillRect(0, tickerY + tickerH - 1, width, 1)
+
     ctx.beginPath(); ctx.rect(0, tickerY, width, tickerH); ctx.clip()
-    ctx.font = '12px "Courier Prime", monospace'; ctx.textAlign = 'left'
+    ctx.font = `12px ${FONT_MONO}`; ctx.textAlign = 'left'
     for (const item of this.tickerItems) {
-      ctx.fillStyle = C.accent; ctx.fillRect(Math.round(item.x - 12), tickerY + 10, 4, 4)
-      ctx.fillStyle = C.text; ctx.fillText(item.text, Math.round(item.x), tickerY + 16)
+      // Tomato spot bullet — magazine catalog dot
+      ctx.fillStyle = C.tomato
+      ctx.fillRect(Math.round(item.x - 14), tickerY + 11, 4, 4)
+      // Item text — ink
+      ctx.fillStyle = C.ink
+      ctx.fillText(item.text, Math.round(item.x), tickerY + 18)
     }
     ctx.restore()
   }
@@ -382,71 +424,103 @@ export class StreamOverlay {
     else if (progress > 0.8) alpha = 1 - easeIn((progress - 0.8) / 0.2)
     else alpha = 1
 
-    const boxW = 500, boxH = 70
+    // Highlighted message reads as a pull-quote: tomato-rule top + bottom,
+    // ivory ground, EB Garamond italic body, Courier name.
+    const boxW = 540, boxH = 96
     const boxX = Math.floor((width - boxW) / 2), boxY = Math.floor(height / 2 - boxH / 2)
 
     ctx.save()
     ctx.globalAlpha = alpha
-    ctx.fillStyle = hexToRgba(C.bgPanel, 0.95)
+
+    // Ivory inner panel
+    ctx.fillStyle = C.ivory
     ctx.fillRect(boxX, boxY, boxW, boxH)
-    ctx.strokeStyle = hexToRgba(h.color, 0.9); ctx.lineWidth = 2
-    ctx.strokeRect(boxX, boxY, boxW, boxH)
-    ctx.strokeStyle = hexToRgba(h.color, 0.3); ctx.lineWidth = 1
-    ctx.strokeRect(boxX - 3, boxY - 3, boxW + 6, boxH + 6)
 
-    // Corner accents (4 corners via helper)
-    ctx.strokeStyle = h.color; ctx.lineWidth = 2
-    drawCorner(ctx, boxX, boxY, 1, 1, 12)
-    drawCorner(ctx, boxX + boxW, boxY, -1, 1, 12)
-    drawCorner(ctx, boxX, boxY + boxH, 1, -1, 12)
-    drawCorner(ctx, boxX + boxW, boxY + boxH, -1, -1, 12)
+    // Tomato hairlines top + bottom (pull-quote rules)
+    ctx.fillStyle = C.tomato
+    ctx.fillRect(boxX, boxY, boxW, 2)
+    ctx.fillRect(boxX, boxY + boxH - 2, boxW, 2)
 
-    ctx.fillStyle = h.color
-    ctx.font = 'bold 14px "Courier Prime", monospace'; ctx.textAlign = 'center'
-    ctx.fillText(h.username, boxX + boxW / 2, boxY + 24)
-    ctx.fillStyle = C.text; ctx.font = '16px "Courier Prime", monospace'
-    ctx.fillText(truncate(h.message, 50), boxX + boxW / 2, boxY + 48)
-    ctx.textAlign = 'left'; ctx.restore()
+    // Corner ink ticks — quiet, 8px (replaces the heavy double-frame)
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 1
+    drawCorner(ctx, boxX + 0.5, boxY + 0.5, 1, 1, 8)
+    drawCorner(ctx, boxX + boxW - 0.5, boxY + 0.5, -1, 1, 8)
+    drawCorner(ctx, boxX + 0.5, boxY + boxH - 0.5, 1, -1, 8)
+    drawCorner(ctx, boxX + boxW - 0.5, boxY + boxH - 0.5, -1, -1, 8)
+
+    // Username — Courier Prime, tomato (the cited speaker)
+    ctx.fillStyle = C.tomato
+    ctx.font = `11px ${FONT_MONO}`
+    ctx.textAlign = 'center'
+    ctx.fillText(`— ${h.username.toUpperCase()}`, boxX + boxW / 2, boxY + 24)
+
+    // Message — EB Garamond italic, ink (the quote itself)
+    ctx.fillStyle = C.ink
+    ctx.font = `italic 22px ${FONT_SERIF}`
+    ctx.fillText(truncate(h.message, 56), boxX + boxW / 2, boxY + 64)
+
+    ctx.textAlign = 'left'
+    ctx.restore()
   }
 
   // ── Info Bar ───────────────────────────────────────────────
 
+  /**
+   * The folio strip — magazine masthead translated into broadcast chrome.
+   * Layout (left → right):
+   *   ★  KERNEL.CHAT · LIVE  ·  VIEWERS {n}  ·  UPTIME {t}  ·  CHAT {n}/MIN  ·  BIOME {b}    LIVE TRANSMISSION · 生放送
+   *
+   * Single hairline above. Cream ground. Ink type. Tomato spot on the
+   * leading ★ and the live tagline. Mirrors `.pop-folio` on the site,
+   * minus the issue-number monument — broadcasts don't carry issues.
+   */
   private renderInfoBar(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-    const barH = 28, barY = height - barH
+    const barH = 30, barY = height - barH
     ctx.save()
-    ctx.fillStyle = hexToRgba(C.bg, 0.92)
+
+    // Cream ground
+    ctx.fillStyle = C.cream
     ctx.fillRect(0, barY, width, barH)
-    ctx.strokeStyle = hexToRgba(C.accent, 0.5); ctx.lineWidth = 1
-    ctx.beginPath(); ctx.moveTo(0, barY); ctx.lineTo(width, barY); ctx.stroke()
 
+    // Ink hairline above (the .pop-rule)
+    ctx.fillStyle = C.ink
+    ctx.fillRect(0, barY, width, 1)
+
+    // Leading ★ glyph — tomato spot, the system folio mark
+    ctx.fillStyle = C.tomato
+    ctx.font = `13px ${FONT_MONO}`
+    ctx.textAlign = 'left'
+    ctx.fillText(STAR, 12, barY + 20)
+
+    // Wordmark — Courier Prime, ink, all-caps
+    ctx.fillStyle = C.ink
+    ctx.font = `11px ${FONT_MONO}`
+    ctx.fillText('KERNEL.CHAT · LIVE', 28, barY + 20)
+
+    // Meta items — separated by · in Courier
     const info = this.infoBar
-    const items = [
-      { label: 'VIEWERS', value: String(info.viewers), color: C.green },
-      { label: 'UPTIME', value: info.uptime, color: C.blue },
-      { label: 'BIOME', value: info.biome, color: C.accent },
-      { label: 'CHAT', value: `${info.chatRate}/min`, color: C.orange },
-    ]
-    const sectionW = Math.floor(width / items.length)
-    ctx.font = '11px "Courier Prime", monospace'; ctx.textAlign = 'left'
+    const meta = [
+      `VIEWERS ${info.viewers}`,
+      `UPTIME ${info.uptime}`,
+      `CHAT ${info.chatRate}/MIN`,
+      `BIOME ${info.biome.toUpperCase()}`,
+    ].join('  ·  ')
+    ctx.fillStyle = C.coffee
+    ctx.font = `11px ${FONT_MONO}`
+    ctx.fillText(meta, 168, barY + 20)
 
-    for (let i = 0; i < items.length; i++) {
-      const x = i * sectionW + 12, it = items[i]
-      ctx.fillStyle = C.textDim; ctx.fillText(it.label, x, barY + 12)
-      ctx.fillStyle = it.color; ctx.font = 'bold 12px "Courier Prime", monospace'
-      ctx.fillText(it.value, x + it.label.length * 7 + 8, barY + 12)
-      ctx.font = '11px "Courier Prime", monospace'
-      if (i < items.length - 1) {
-        ctx.fillStyle = hexToRgba(C.accent, 0.3)
-        ctx.fillRect(i * sectionW + sectionW - 1, barY + 4, 1, barH - 8)
-      }
-    }
+    // Live tagline — bottom-right, tomato. Replaces the magazine's issue
+    // monument; broadcasts are transmissions, not issues.
+    ctx.fillStyle = C.tomato
+    ctx.font = `bold 11px ${FONT_MONO}`
+    ctx.textAlign = 'right'
+    ctx.fillText(LIVE_TAGLINE, width - 12, barY + 20)
 
-    ctx.textAlign = 'right'; ctx.fillStyle = hexToRgba(C.accent, 0.6)
-    ctx.font = '10px "Courier Prime", monospace'
-    ctx.fillText('kbot stream', width - 8, barY + 19)
-    ctx.textAlign = 'left'; ctx.restore()
+    ctx.textAlign = 'left'
+    ctx.restore()
   }
 }
+
 
 // ─── Singleton ─────────────────────────────────────────────────
 

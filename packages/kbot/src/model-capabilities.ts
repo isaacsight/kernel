@@ -18,6 +18,7 @@ import type { ByokProvider } from './auth.js'
 const CLOUD_TOOL_CAPABLE = new Set<ByokProvider>([
   'anthropic', 'openai', 'google', 'groq', 'mistral',
   'deepseek', 'cohere', 'xai', 'openrouter', 'together',
+  'zai',
 ])
 
 /**

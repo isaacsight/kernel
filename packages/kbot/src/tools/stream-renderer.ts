@@ -4277,7 +4277,7 @@ export function registerStreamRendererTools(): void {
     name: 'stream_character_go',
     description: 'Launch the animated KBOT character stream with canvas rendering and learning. Streams to Twitch/Rumble/Kick. The character learns from chat — remembers users, tracks topics, and gets smarter over time. Features auto-advancing stream agenda with segments.',
     parameters: {
-      platforms: { type: 'string', description: 'Comma-separated: twitch,rumble,kick or "all"', required: false },
+      platforms: { type: 'string', description: 'Comma-separated: twitch,rumble,kick,youtube,tiktok or "all"', required: false },
     },
     tier: 'free',
     timeout: 600_000,
@@ -4290,10 +4290,17 @@ export function registerStreamRendererTools(): void {
       const twitchKey = process.env.TWITCH_STREAM_KEY
       const rumbleKey = process.env.RUMBLE_STREAM_KEY
       const kickKey = process.env.KICK_STREAM_KEY
+      const youtubeKey = process.env.YOUTUBE_STREAM_KEY
+      // TikTok issues a fresh server URL + key per session via livecenter.tiktok.com/producer.
+      // Both come from the same dashboard, both must be refreshed every stream.
+      const tiktokServer = process.env.TIKTOK_RTMP_SERVER
+      const tiktokKey = process.env.TIKTOK_STREAM_KEY
 
-      if (twitchKey) platformConfigs.push({ name: 'Twitch', key: twitchKey, endpoint: 'rtmp://live.twitch.tv/app' })
-      if (rumbleKey) platformConfigs.push({ name: 'Rumble', key: rumbleKey, endpoint: 'rtmp://rtmp.rumble.com/live' })
-      if (kickKey) platformConfigs.push({ name: 'Kick', key: kickKey, endpoint: 'rtmps://fa723fc1b171.global-contribute.live-video.net/app' })
+      if (twitchKey)  platformConfigs.push({ name: 'Twitch',  key: twitchKey,  endpoint: 'rtmp://live.twitch.tv/app' })
+      if (rumbleKey)  platformConfigs.push({ name: 'Rumble',  key: rumbleKey,  endpoint: 'rtmp://rtmp.rumble.com/live' })
+      if (kickKey)    platformConfigs.push({ name: 'Kick',    key: kickKey,    endpoint: 'rtmps://fa723fc1b171.global-contribute.live-video.net/app' })
+      if (youtubeKey) platformConfigs.push({ name: 'YouTube', key: youtubeKey, endpoint: 'rtmp://a.rtmp.youtube.com/live2' })
+      if (tiktokServer && tiktokKey) platformConfigs.push({ name: 'TikTok', key: tiktokKey, endpoint: tiktokServer })
 
       if (platformConfigs.length === 0) return 'No stream keys configured.'
 

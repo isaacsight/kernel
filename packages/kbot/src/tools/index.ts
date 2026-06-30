@@ -363,6 +363,7 @@ const LAZY_MODULE_IMPORTS: Array<{ path: string; registerFn: string }> = [
   { path: './dream-tools.js',   registerFn: 'registerDreamTools' },
   { path: './one-prompt-producer.js', registerFn: 'registerOnePromptTools' },
   { path: './kbot-browser.js',   registerFn: 'registerKBotBrowserTools' },
+  { path: './kbot-secure-browser.js', registerFn: 'registerSecureBrowserTools' },
   { path: './kbot-terminal.js',  registerFn: 'registerKBotTerminalTools' },
   { path: './audio-engine.js',    registerFn: 'registerAudioEngineTools' },
   { path: './foundation-engines.js', registerFn: 'registerFoundationEngineTools' },

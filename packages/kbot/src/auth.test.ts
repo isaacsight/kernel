@@ -9,6 +9,9 @@ import {
   selectOllamaModel,
   classifyComplexity,
   routeModelForTask,
+  usesAdaptiveThinking,
+  anthropicThinkingConfig,
+  anthropicInputCostPerMTok,
   PROVIDERS,
 } from './auth.js'
 
@@ -184,5 +187,61 @@ describe('routeModelForTask', () => {
       const result = routeModelForTask(provider, 'hello')
       expect(result.model).toBe(PROVIDERS[provider].fastModel)
     }
+  })
+})
+
+describe('Anthropic model capabilities', () => {
+  describe('usesAdaptiveThinking', () => {
+    // Adaptive-only models: the legacy budget_tokens form 400s on these.
+    it.each([
+      'claude-fable-5',
+      'claude-opus-4-7',
+      'claude-opus-4-8',
+    ])('requires adaptive thinking for %s', (model) => {
+      expect(usesAdaptiveThinking(model)).toBe(true)
+    })
+
+    // Legacy-thinking models, including the catalog's older Opus 4.6.
+    it.each([
+      'claude-opus-4-6',
+      'claude-sonnet-4-6',
+      'claude-haiku-4-5-20251001',
+      'claude-mythos-1',
+      'some-unknown-model',
+    ])('uses legacy thinking for %s', (model) => {
+      expect(usesAdaptiveThinking(model)).toBe(false)
+    })
+
+    it('resolves date-suffixed IDs by substring', () => {
+      expect(usesAdaptiveThinking('claude-fable-5-20260101')).toBe(true)
+    })
+  })
+
+  describe('anthropicThinkingConfig', () => {
+    it('emits adaptive+summarized for adaptive-only models', () => {
+      expect(anthropicThinkingConfig('claude-fable-5')).toEqual({ type: 'adaptive', display: 'summarized' })
+    })
+
+    it('emits the legacy budgeted form for older models', () => {
+      expect(anthropicThinkingConfig('claude-sonnet-4-6', 12000)).toEqual({ type: 'enabled', budget_tokens: 12000 })
+    })
+  })
+
+  describe('anthropicInputCostPerMTok', () => {
+    // Behaviour-preserving: same numbers as the old streaming.ts price ternary.
+    it.each([
+      ['claude-fable-5', 10],
+      ['claude-opus-4-8', 15],
+      ['claude-opus-4-6', 15],
+      ['claude-haiku-4-5-20251001', 0.8],
+      ['claude-sonnet-4-6', 3],
+    ])('prices %s at $%d/MTok input', (model, cost) => {
+      expect(anthropicInputCostPerMTok(model)).toBe(cost)
+    })
+
+    it('falls back to Sonnet-class pricing for unknown models', () => {
+      expect(anthropicInputCostPerMTok('claude-mythos-1')).toBe(3)
+      expect(anthropicInputCostPerMTok('totally-unknown')).toBe(3)
+    })
   })
 })

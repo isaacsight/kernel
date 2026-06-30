@@ -8,7 +8,7 @@
 // then the final response renders normally.
 
 import chalk from 'chalk'
-import { anthropicThinkingConfig } from './auth.js'
+import { anthropicThinkingConfig, anthropicInputCostPerMTok } from './auth.js'
 
 const ACCENT_DIM = typeof chalk.hex === 'function' ? chalk.hex('#7C6CB0') : chalk.dim
 const THINKING_COLOR = chalk.dim.italic
@@ -131,7 +131,7 @@ export async function streamAnthropicResponse(
     try {
       const { hashPrompt, checkCacheWarmth, recordCacheCall } = await import('./cache-warmth.js')
       const promptHash = hashPrompt(system)
-      const inputCostPerMTok = model.includes('fable') ? 10 : model.includes('opus') ? 15 : model.includes('haiku') ? 0.8 : 3
+      const inputCostPerMTok = anthropicInputCostPerMTok(model)
       const promptTokenEstimate = Math.ceil(system.length / 4)
       const check = checkCacheWarmth(model, promptHash, inputCostPerMTok, promptTokenEstimate)
       if (!check.warm && check.message) {

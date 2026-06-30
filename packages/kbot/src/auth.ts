@@ -34,6 +34,7 @@ export type ByokProvider =
   | 'mistral'      // Mistral / Codestral
   | 'xai'          // Grok
   | 'deepseek'     // DeepSeek
+  | 'zai'          // Z.ai (Zhipu) — GLM-5.2, 1M context, open-weight coding agent
   | 'groq'         // Groq (fast inference)
   | 'together'     // Together AI (open-source models)
   | 'fireworks'    // Fireworks AI
@@ -129,6 +130,17 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     outputCost: 2.0,
     authHeader: 'bearer',
     models: ['deepseek-v4', 'deepseek-v4-reasoner', 'deepseek-chat', 'deepseek-reasoner'],
+  },
+  zai: {
+    name: 'Z.ai (Zhipu / GLM)',
+    apiUrl: 'https://api.z.ai/api/paas/v4/chat/completions',  // OpenAI-compatible; coding plan uses /api/coding/paas/v4
+    apiStyle: 'openai',
+    defaultModel: 'glm-5.2',             // 753B open-weight (MIT), 1M context, long-horizon coding agent
+    fastModel: 'glm-4.5-air',            // lighter/cheaper GLM for quick turns
+    inputCost: 1.4,                       // ~1/6th GPT-5.5 on long-horizon coding
+    outputCost: 4.4,
+    authHeader: 'bearer',
+    models: ['glm-5.2', 'glm-5.2[1m]', 'glm-4.6', 'glm-4.5', 'glm-4.5-air'],
   },
   groq: {
     name: 'Groq',
@@ -460,6 +472,7 @@ const ENV_KEYS: Array<{ env: string; provider: ByokProvider }> = [
   { env: 'MISTRAL_API_KEY',     provider: 'mistral' },
   { env: 'XAI_API_KEY',         provider: 'xai' },
   { env: 'DEEPSEEK_API_KEY',    provider: 'deepseek' },
+  { env: 'ZAI_API_KEY',         provider: 'zai' },
   { env: 'GROQ_API_KEY',        provider: 'groq' },
   { env: 'TOGETHER_API_KEY',    provider: 'together' },
   { env: 'FIREWORKS_API_KEY',   provider: 'fireworks' },
@@ -1058,14 +1071,69 @@ export function routeModelForTask(
 }
 
 /**
+ * Per-model capability + pricing table for Anthropic Claude models.
+ *
+ * Mirrors the "capability-declared model" pattern from the Claude for
+ * Foundation Models Swift package: each model declares what it accepts and what
+ * it costs, and callers (the thinking-config builder, the cache-warmth cost
+ * heuristic) read this table instead of guessing from the model ID inline.
+ * Adding a new flagship is one row here, not a scattered regex *and* a price
+ * ternary that have to stay in sync by hand.
+ *
+ * Patterns are matched as substrings (first match wins) so date-suffixed IDs
+ * like `claude-haiku-4-5-20251001` resolve. Order matters: list more specific
+ * patterns before broader ones. Models with no row fall through to
+ * ANTHROPIC_MODEL_DEFAULT (Sonnet-class: legacy thinking, $3/MTok input).
+ *
+ * `inputCostPerMTok` is USD per million input tokens — the only per-model price
+ * the code currently consumes (the cache-warmth heuristic). Output pricing lives
+ * at the provider level in PROVIDERS and is intentionally not duplicated here.
+ */
+interface AnthropicModelCapabilities {
+  /** Substring pattern matched against the model ID (first match wins). */
+  match: RegExp
+  /**
+   * Requires `thinking: {type: "adaptive"}`. Fable 5 / Opus 4.7 / 4.8 reject
+   * the legacy `{type: "enabled", budget_tokens: N}` form with a 400.
+   */
+  adaptiveThinking: boolean
+  /** USD per million input tokens. */
+  inputCostPerMTok: number
+}
+
+const ANTHROPIC_MODEL_CAPABILITIES: AnthropicModelCapabilities[] = [
+  { match: /claude-fable-5/,     adaptiveThinking: true,  inputCostPerMTok: 10 },
+  { match: /claude-opus-4-[78]/, adaptiveThinking: true,  inputCostPerMTok: 15 },
+  { match: /claude-opus/,        adaptiveThinking: false, inputCostPerMTok: 15 },
+  { match: /claude-haiku/,       adaptiveThinking: false, inputCostPerMTok: 0.8 },
+  { match: /claude-sonnet/,      adaptiveThinking: false, inputCostPerMTok: 3 },
+]
+
+/** Fallback for models with no explicit row (Sonnet-class pricing + behaviour). */
+const ANTHROPIC_MODEL_DEFAULT = { adaptiveThinking: false, inputCostPerMTok: 3 }
+
+function anthropicModelCapabilities(model: string): { adaptiveThinking: boolean; inputCostPerMTok: number } {
+  return ANTHROPIC_MODEL_CAPABILITIES.find((c) => c.match.test(model)) ?? ANTHROPIC_MODEL_DEFAULT
+}
+
+/**
  * Whether an Anthropic model uses adaptive thinking instead of the legacy
  * budgeted form. Fable 5, Opus 4.7, and Opus 4.8 reject
  * `thinking: {type: "enabled", budget_tokens: N}` with a 400 — they require
  * `thinking: {type: "adaptive"}`. Older Claude models still accept the budgeted
- * form. Match is substring-based so date-suffixed IDs resolve correctly.
+ * form. Backed by ANTHROPIC_MODEL_CAPABILITIES.
  */
 export function usesAdaptiveThinking(model: string): boolean {
-  return /claude-fable-5|claude-opus-4-[78]/.test(model)
+  return anthropicModelCapabilities(model).adaptiveThinking
+}
+
+/**
+ * USD per million input tokens for an Anthropic model. Used by the cache-warmth
+ * heuristic to size the cost of a cold prompt cache. Unknown models fall back to
+ * Sonnet-class pricing ($3/MTok). Backed by ANTHROPIC_MODEL_CAPABILITIES.
+ */
+export function anthropicInputCostPerMTok(model: string): number {
+  return anthropicModelCapabilities(model).inputCostPerMTok
 }
 
 /**

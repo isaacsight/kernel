@@ -4600,6 +4600,7 @@ async function main(): Promise<void> {
       { env: 'MISTRAL_API_KEY', provider: 'mistral' },
       { env: 'XAI_API_KEY', provider: 'xai' },
       { env: 'DEEPSEEK_API_KEY', provider: 'deepseek' },
+      { env: 'ZAI_API_KEY', provider: 'zai' },
       { env: 'GROQ_API_KEY', provider: 'groq' },
       { env: 'TOGETHER_API_KEY', provider: 'together' },
       { env: 'FIREWORKS_API_KEY', provider: 'fireworks' },
@@ -4897,13 +4898,14 @@ async function byokFlow(): Promise<void> {
   printInfo('Use your own LLM API key. You pay the provider directly for tokens.')
   printInfo('Kernel routing + tools + collective intelligence are free.')
   console.log()
-  printInfo('Supported providers (20):')
+  printInfo('Supported providers (21):')
   printInfo('  Anthropic (Claude)    OpenAI (GPT)       Google (Gemini)')
   printInfo('  Mistral AI            xAI (Grok)         DeepSeek')
-  printInfo('  Groq                  Together AI        Fireworks AI')
-  printInfo('  Perplexity            Cohere             NVIDIA NIM')
-  printInfo('  SambaNova             Cerebras           OpenRouter')
-  printInfo('  Ollama (local, free)  LM Studio (local)  Embedded llama.cpp')
+  printInfo('  Z.ai (GLM-5.2)        Groq               Together AI')
+  printInfo('  Fireworks AI          Perplexity         Cohere')
+  printInfo('  NVIDIA NIM            SambaNova          Cerebras')
+  printInfo('  OpenRouter            Ollama (local)     LM Studio (local)')
+  printInfo('  Embedded llama.cpp')
   console.log()
   printInfo('Paste your API key (auto-detected by prefix):')
   console.log()
@@ -5083,6 +5085,7 @@ async function guidedSetup(): Promise<{ local: boolean } | null> {
         { id: 'anthropic', name: 'Anthropic (Claude)' },
         { id: 'mistral', name: 'Mistral AI' },
         { id: 'deepseek', name: 'DeepSeek' },
+        { id: 'zai', name: 'Z.ai (GLM-5.2)' },
         { id: 'groq', name: 'Groq' },
       ]
       for (let i = 0; i < mainProviders.length; i++) {

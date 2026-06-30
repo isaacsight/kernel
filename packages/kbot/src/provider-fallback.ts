@@ -15,7 +15,7 @@ import { getMachineProfile } from './machine.js'
 
 export const TIERS = {
   premium:  ['anthropic', 'openai', 'google', 'xai'] as ByokProvider[],
-  standard: ['mistral', 'deepseek', 'cohere', 'perplexity', 'openrouter'] as ByokProvider[],
+  standard: ['mistral', 'deepseek', 'zai', 'cohere', 'perplexity', 'openrouter'] as ByokProvider[],
   fast:     ['groq', 'together', 'fireworks', 'sambanova', 'cerebras', 'nvidia'] as ByokProvider[],
   local:    ['ollama', 'lmstudio', 'jan', 'kbot-local'] as ByokProvider[],
 } as const
