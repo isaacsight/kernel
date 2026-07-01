@@ -191,6 +191,35 @@ async function main(): Promise<void> {
       printInfo('  kbot ide acp    — IntelliJ, WebStorm, PyCharm, GoLand, Android Studio')
     })
 
+  program
+    .command('loop [repoPath]')
+    .description('Run the autonomous engineering loop over a repo (plan → act → verify → reflect → decide)')
+    .option('-g, --goal <text>', 'Objective for the loop (guides reflexion + narration)', 'improve code health')
+    .option('-i, --max-iterations <n>', 'Max iterations before budget handback', '12')
+    .option('--no-auto-apply', 'Propose the first fix and hand back instead of editing')
+    .option('--json', 'Output the result as JSON')
+    .action(async (repoPath: string | undefined, opts: { goal: string; maxIterations: string; autoApply: boolean; json?: boolean }) => {
+      const jsonMode = opts.json || program.opts().json
+      const { runEngineeringLoop, DEFAULT_BUDGET } = await import('./engineering-loop.js')
+      const res = await runEngineeringLoop({
+        repoPath: repoPath ?? '.',
+        goal: opts.goal,
+        autoApply: opts.autoApply,
+        budget: { ...DEFAULT_BUDGET, maxIterations: Number(opts.maxIterations) || DEFAULT_BUDGET.maxIterations },
+        // journal + stdout narration: the loop speaks its decisions as it runs
+      })
+      if (jsonMode) {
+        console.log(JSON.stringify(res, null, 2))
+        return
+      }
+      const headline = res.exit === 'success' ? printSuccess : res.exit === 'handback' ? printWarn : printInfo
+      headline(`Engineering loop → ${res.exit} after ${res.iterations} iteration(s)`)
+      printInfo(`  Applied: ${res.applied.length} change(s)`)
+      for (const c of res.applied) printInfo(`    · [#${c.iteration}] ${c.file} — ${c.summary}`)
+      printInfo(`  Verify:  ${res.finalVerify.ok ? 'green' : `red (${res.finalVerify.failingStep ?? 'unknown'})`}`)
+      if (res.handbackSummary) printWarn(`  Handback: ${res.handbackSummary}`)
+    })
+
   // ── one-shot editor installers (Harrison-class onboarding) ──────────────
   // Wires kbot's MCP servers into editor settings.json + (Claude Code only)
   // copies the kbot skill into the project. Idempotent. No manual JSON edits.
