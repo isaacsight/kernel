@@ -41,6 +41,10 @@ describe('computeNoProgress', () => {
   it('resets when the failing step changes (progress)', () => {
     expect(computeNoProgress({ noProgress: 1, lastFailingStep: 'tsc', lastLesson: null }, { ok: false, failingStep: 'vitest', output: '' }, null)).toBe(0)
   })
+  it('increments when the lesson repeats even if the step is unchanged-null', () => {
+    // prev step null (no step-based progress signal), same lesson twice → stuck
+    expect(computeNoProgress({ noProgress: 1, lastFailingStep: null, lastLesson: 'boom' }, { ok: false, failingStep: null, output: '' }, 'boom')).toBe(2)
+  })
 })
 
 describe('decideExit', () => {
@@ -52,6 +56,9 @@ describe('decideExit', () => {
   })
   it('budget when iterations exceed the cap', () => {
     expect(decideExit({ state: state({ iteration: 12 }), verify: RED, remainingFindings: 3, budget: DEFAULT_BUDGET, elapsedMs: 0 }).exit).toBe('budget')
+  })
+  it('budget when wall-clock is exceeded (before iteration cap)', () => {
+    expect(decideExit({ state: state({ iteration: 1 }), verify: RED, remainingFindings: 3, budget: { maxIterations: 99, maxWallClockMs: 1000, maxNoProgress: 99 }, elapsedMs: 2000 }).exit).toBe('budget')
   })
   it('continues otherwise', () => {
     expect(decideExit({ state: state({ iteration: 1 }), verify: RED, remainingFindings: 3, budget: DEFAULT_BUDGET, elapsedMs: 0 }).exit).toBeNull()

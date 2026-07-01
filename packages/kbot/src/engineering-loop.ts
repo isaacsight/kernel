@@ -128,9 +128,15 @@ export function loadState(repoPath: string): LoopState | null {
 }
 
 export function saveState(repoPath: string, state: LoopState): void {
-  const p = checkpointPath(repoPath)
-  mkdirSync(dirname(p), { recursive: true })
-  writeFileSync(p, JSON.stringify(state, null, 2))
+  // Checkpointing is best-effort: a failed write (permissions, disk full) must
+  // not crash the loop mid-iteration. Warn and continue.
+  try {
+    const p = checkpointPath(repoPath)
+    mkdirSync(dirname(p), { recursive: true })
+    writeFileSync(p, JSON.stringify(state, null, 2))
+  } catch (err) {
+    process.stderr.write(`engineering-loop: checkpoint write failed: ${(err as Error).message}\n`)
+  }
 }
 
 const SEV_ORDER: Record<FindingSeverity, number> = { critical: 0, warn: 1, info: 2 }
