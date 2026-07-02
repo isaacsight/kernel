@@ -8,7 +8,7 @@
 // then the final response renders normally.
 
 import chalk from 'chalk'
-import { anthropicThinkingConfig, anthropicInputCostPerMTok } from './auth.js'
+import { anthropicThinkingConfig, anthropicInputCostPerMTok, anthropicRefusalFallback, dataRetentionNotice, modelRequiresDataRetention } from './auth.js'
 
 const ACCENT_DIM = typeof chalk.hex === 'function' ? chalk.hex('#7C6CB0') : chalk.dim
 const THINKING_COLOR = chalk.dim.italic
@@ -125,6 +125,20 @@ export async function streamAnthropicResponse(
 
   if (tools && tools.length > 0) body.tools = tools
 
+  // Fable 5 / Mythos 5: opt into the server-side refusal fallback so a safety
+  // classifier decline (HTTP 200, stop_reason "refusal") is re-served by Opus
+  // 4.8 in the same call instead of failing the request. Off for other models.
+  const refusalFallback = anthropicRefusalFallback(model)
+  if (refusalFallback) {
+    body.fallbacks = refusalFallback.fallbacks
+  }
+
+  // One-time 30-day-retention notice for models not available under ZDR.
+  const retentionNotice = dataRetentionNotice(model)
+  if (retentionNotice) {
+    process.stderr.write(`  ${chalk.yellow(retentionNotice)}\n`)
+  }
+
   // Anthropic prompt-cache TTL warning (jcode borrow). Warn once per (model,
   // prompt-hash) cold event when the cache likely expired since last call.
   if (apiUrl.includes('anthropic') && system && process.env.KBOT_CACHE_WARMTH_WARN !== 'off') {
@@ -148,13 +162,16 @@ export async function streamAnthropicResponse(
 
   for (let attempt = 0; attempt <= MAX_STREAM_RETRIES; attempt++) {
     try {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      }
+      if (refusalFallback) headers['anthropic-beta'] = refusalFallback.beta
+
       res = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-        },
+        headers,
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(300_000),
       })
@@ -162,7 +179,13 @@ export async function streamAnthropicResponse(
       if (res.ok) break
 
       const errBody = await res.json().catch(() => ({ error: { message: `HTTP ${res!.status}` } }))
-      lastError = new Error(errBody.error?.message || `Anthropic streaming error: ${res.status}`)
+      let errMessage = errBody.error?.message || `Anthropic streaming error: ${res.status}`
+      // Fable 5 / Mythos 5 under zero data retention 400 on EVERY request,
+      // even with a valid payload — say so instead of letting the user debug.
+      if (res.status === 400 && modelRequiresDataRetention(model)) {
+        errMessage += `\n  Note: ${model} requires 30-day data retention and is not available under zero data retention (ZDR). If your Anthropic org is ZDR, this 400 fires on every request regardless of payload — use claude-opus-4-8 instead.`
+      }
+      lastError = new Error(errMessage)
 
       if (isRetryableError(res.status) && attempt < MAX_STREAM_RETRIES) {
         const retryAfter = res.headers.get('retry-after')
@@ -293,6 +316,20 @@ export async function streamAnthropicResponse(
     }
   } finally {
     if (!streamCancelled) reader.releaseLock()
+  }
+
+  // Refusal surfacing. stop_reason "refusal" on the FINAL response means the
+  // request (and any configured fallback) was declined by safety classifiers —
+  // a content outcome, not an HTTP error. Any partial output is unreliable.
+  if (state.stopReason === 'refusal') {
+    process.stderr.write(`\n  ${chalk.red(`${model} declined this request (safety classifiers${refusalFallback ? '; the configured fallback declined too' : ''}). Partial output above, if any, should be discarded.`)}\n`)
+    if (!refusalFallback && modelRequiresDataRetention(model)) {
+      // A classifier model refused with the fallback disabled — point at the switch.
+      process.stderr.write(`  ${chalk.dim('Refusal fallback is disabled (KBOT_REFUSAL_FALLBACK=off). Unset it to retry declines on claude-opus-4-8 automatically.')}\n`)
+    }
+  } else if (refusalFallback && state.model && state.model !== model && state.model.startsWith(refusalFallback.fallbacks[0].model)) {
+    // The server-side fallback re-served the turn on another model.
+    process.stderr.write(`\n  ${chalk.dim(`served by ${state.model} — ${model} declined this request and the configured fallback answered instead`)}\n`)
   }
 
   // Final newline after streamed content

@@ -1,5 +1,5 @@
 // kbot Auth Tests
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, afterEach } from 'vitest'
 import {
   detectProvider,
   isLocalProvider,
@@ -12,6 +12,10 @@ import {
   usesAdaptiveThinking,
   anthropicThinkingConfig,
   anthropicInputCostPerMTok,
+  anthropicOutputCostPerMTok,
+  anthropicRefusalFallback,
+  modelRequiresDataRetention,
+  dataRetentionNotice,
   PROVIDERS,
 } from './auth.js'
 
@@ -195,18 +199,20 @@ describe('Anthropic model capabilities', () => {
     // Adaptive-only models: the legacy budget_tokens form 400s on these.
     it.each([
       'claude-fable-5',
+      'claude-mythos-5',
       'claude-opus-4-7',
       'claude-opus-4-8',
+      'claude-sonnet-5',
     ])('requires adaptive thinking for %s', (model) => {
       expect(usesAdaptiveThinking(model)).toBe(true)
     })
 
-    // Legacy-thinking models, including the catalog's older Opus 4.6.
+    // Legacy-thinking models. Opus 4.6 stays here deliberately: adaptive is
+    // recommended on it, but our adaptive config sends `display` (4.7+ param).
     it.each([
       'claude-opus-4-6',
       'claude-sonnet-4-6',
       'claude-haiku-4-5-20251001',
-      'claude-mythos-1',
       'some-unknown-model',
     ])('uses legacy thinking for %s', (model) => {
       expect(usesAdaptiveThinking(model)).toBe(false)
@@ -228,20 +234,92 @@ describe('Anthropic model capabilities', () => {
   })
 
   describe('anthropicInputCostPerMTok', () => {
-    // Behaviour-preserving: same numbers as the old streaming.ts price ternary.
+    // Pricing per platform.claude.com (2026-06): Fable/Mythos $10, Opus 4.6+
+    // $5, Sonnet $3, Haiku 4.5 $1. Legacy Opus (pre-4.6) keeps $15.
     it.each([
       ['claude-fable-5', 10],
-      ['claude-opus-4-8', 15],
-      ['claude-opus-4-6', 15],
-      ['claude-haiku-4-5-20251001', 0.8],
+      ['claude-mythos-5', 10],
+      ['claude-opus-4-8', 5],
+      ['claude-opus-4-6', 5],
+      ['claude-opus-4-1', 15],
+      ['claude-haiku-4-5-20251001', 1],
       ['claude-sonnet-4-6', 3],
     ])('prices %s at $%d/MTok input', (model, cost) => {
       expect(anthropicInputCostPerMTok(model)).toBe(cost)
     })
 
     it('falls back to Sonnet-class pricing for unknown models', () => {
-      expect(anthropicInputCostPerMTok('claude-mythos-1')).toBe(3)
       expect(anthropicInputCostPerMTok('totally-unknown')).toBe(3)
+    })
+  })
+
+  describe('estimateCost per-model resolution', () => {
+    it('costs Fable 5 at $10/$50 instead of the provider-level Sonnet rate', () => {
+      // 1M in + 1M out: $60 on Fable 5, $18 at the provider default.
+      expect(estimateCost('anthropic', 1_000_000, 1_000_000, 'claude-fable-5')).toBe(60)
+      expect(estimateCost('anthropic', 1_000_000, 1_000_000)).toBe(18)
+    })
+  })
+
+  describe('anthropicOutputCostPerMTok', () => {
+    it.each([
+      ['claude-fable-5', 50],
+      ['claude-mythos-5', 50],
+      ['claude-opus-4-8', 25],
+      ['claude-sonnet-4-6', 15],
+      ['claude-haiku-4-5-20251001', 5],
+      ['totally-unknown', 15],
+    ])('prices %s at $%d/MTok output', (model, cost) => {
+      expect(anthropicOutputCostPerMTok(model)).toBe(cost)
+    })
+  })
+
+  describe('anthropicRefusalFallback', () => {
+    afterEach(() => { delete process.env.KBOT_REFUSAL_FALLBACK })
+
+    it('opts Fable 5 into the server-side Opus 4.8 fallback by default', () => {
+      expect(anthropicRefusalFallback('claude-fable-5')).toEqual({
+        beta: 'server-side-fallback-2026-06-01',
+        fallbacks: [{ model: 'claude-opus-4-8' }],
+      })
+      expect(anthropicRefusalFallback('claude-mythos-5')).not.toBeNull()
+    })
+
+    it('returns null for models without a refusal classifier', () => {
+      expect(anthropicRefusalFallback('claude-opus-4-8')).toBeNull()
+      expect(anthropicRefusalFallback('claude-sonnet-4-6')).toBeNull()
+      expect(anthropicRefusalFallback('totally-unknown')).toBeNull()
+    })
+
+    it('honours the KBOT_REFUSAL_FALLBACK=off escape hatch', () => {
+      process.env.KBOT_REFUSAL_FALLBACK = 'off'
+      expect(anthropicRefusalFallback('claude-fable-5')).toBeNull()
+    })
+  })
+
+  describe('data retention (Fable 5 / Mythos 5 require 30-day retention)', () => {
+    it('flags only retention-requiring models', () => {
+      expect(modelRequiresDataRetention('claude-fable-5')).toBe(true)
+      expect(modelRequiresDataRetention('claude-mythos-5')).toBe(true)
+      expect(modelRequiresDataRetention('claude-opus-4-8')).toBe(false)
+      expect(modelRequiresDataRetention('claude-sonnet-4-6')).toBe(false)
+    })
+
+    it('emits the retention notice once per process per model', () => {
+      const first = dataRetentionNotice('claude-fable-5')
+      expect(first).toContain('30-day data retention')
+      expect(dataRetentionNotice('claude-fable-5')).toBeNull()
+      expect(dataRetentionNotice('claude-opus-4-8')).toBeNull()
+    })
+  })
+
+  describe('Anthropic catalog', () => {
+    it('carries current-generation IDs and no invented ones', () => {
+      const models = PROVIDERS.anthropic.models ?? []
+      expect(models).toContain('claude-fable-5')
+      expect(models).toContain('claude-mythos-5')
+      expect(models).toContain('claude-opus-4-8')
+      expect(models).not.toContain('claude-mythos-1')
     })
   })
 })

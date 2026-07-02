@@ -14,6 +14,7 @@ import {
   getByokKey, getByokProvider, getProviderModel, getProvider,
   estimateCost, isLocalProvider, warmOllamaModelCache,
   routeModelForTask, anthropicThinkingConfig, resolveModelAlias,
+  anthropicRefusalFallback, dataRetentionNotice, modelRequiresDataRetention,
   type ByokProvider,
 } from './auth.js'
 import {
@@ -350,13 +351,24 @@ async function callAnthropic(
     body.thinking = anthropicThinkingConfig(model, options.thinkingBudget)
   }
 
+  // Fable 5 / Mythos 5: opt into the server-side refusal fallback (decline →
+  // re-served by Opus 4.8 in the same call) and surface the one-time
+  // 30-day-retention notice. No-ops for every other model.
+  const refusalFallback = anthropicRefusalFallback(model)
+  if (refusalFallback) body.fallbacks = refusalFallback.fallbacks
+  const retentionNotice = dataRetentionNotice(model)
+  if (retentionNotice) console.warn(`  ${retentionNotice}`)
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'x-api-key': apiKey,
+    'anthropic-version': '2023-06-01',
+  }
+  if (refusalFallback) headers['anthropic-beta'] = refusalFallback.beta
+
   const res = await fetch(apiUrl, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-    },
+    headers,
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(300_000), // 5 min timeout
   })
@@ -366,10 +378,30 @@ async function callAnthropic(
     let err: { message: string }
     try { err = JSON.parse(errBody).error || { message: `HTTP ${res.status}` } }
     catch { err = { message: `HTTP ${res.status}` } }
-    throw new Error(err.message || `Anthropic error: ${res.status}`)
+    let message = err.message || `Anthropic error: ${res.status}`
+    // ZDR orgs get a 400 on EVERY Fable 5 / Mythos 5 request, valid payload
+    // or not — decorate so the user debugs their retention config, not the body.
+    if (res.status === 400 && modelRequiresDataRetention(model)) {
+      message += ` (note: ${model} requires 30-day data retention — orgs on zero data retention get a 400 on every request; use claude-opus-4-8 instead)`
+    }
+    throw new Error(message)
   }
 
   const data = JSON.parse(await safeReadBody(res))
+
+  // Fable 5 / Mythos 5 safety classifiers decline with HTTP 200 +
+  // stop_reason "refusal" (pre-output: empty content, unbilled). On the final
+  // response this means the fallback (if configured) declined too — fail
+  // loudly instead of returning an empty string that looks like a model bug.
+  if (data.stop_reason === 'refusal') {
+    const category = data.stop_details?.category ? ` (category: ${data.stop_details.category})` : ''
+    throw new Error(
+      `${model} declined this request via safety classifiers${category}.` +
+      (refusalFallback ? ' The configured claude-opus-4-8 fallback declined too.' : '') +
+      ' This is a content decision, not an API failure — rephrase, or run the task on claude-opus-4-8 / a local model.',
+    )
+  }
+
   const contentBlocks = data.content || []
   const text = contentBlocks.filter((b: any) => b.type === 'text').map((b: any) => b.text).join('')
   const thinkingText = contentBlocks.filter((b: any) => b.type === 'thinking').map((b: any) => b.thinking).join('')
@@ -1672,7 +1704,7 @@ Always quote file paths that contain spaces. Never reference internal system nam
       // ── Autopoiesis: report provider success ──
       autopoietic.reportHealth(provider, true)
 
-      const iterationCost = estimateCost(provider, result.usage.input_tokens, result.usage.output_tokens)
+      const iterationCost = estimateCost(provider, result.usage.input_tokens, result.usage.output_tokens, result.model)
       cumulativeCostUsd += iterationCost
 
       telemetry.emit('cost_update', {

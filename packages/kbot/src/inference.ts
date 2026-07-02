@@ -701,7 +701,7 @@ export function detectHardwareTier(): {
       recommendations: [
         'kbot models pull llama3.1-405b  # full Q4 or Q8 quantization',
         'kbot models pull deepseek-v3-70b  # Q8 for best quality',
-        'When available: claude-mythos-1 via Anthropic API (placeholder — not yet shipped)',
+        'Cloud tier: claude-fable-5 via Anthropic API (claude-mythos-5 if the org is in Project Glasswing)',
         'Enable multi-model: smart (405B) + fast (7B) running simultaneously',
       ],
     }

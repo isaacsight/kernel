@@ -74,7 +74,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,
     outputCost: 15.0,
     authHeader: 'x-api-key',
-    models: ['claude-fable-5', 'claude-mythos-1', 'claude-opus-4-7', 'claude-opus-4-6', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+    models: ['claude-fable-5', 'claude-mythos-5', 'claude-opus-4-8', 'claude-opus-4-7', 'claude-opus-4-6', 'claude-sonnet-5', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
   },
   openai: {
     name: 'OpenAI',
@@ -239,7 +239,7 @@ export const PROVIDERS: Record<ByokProvider, ProviderConfig> = {
     inputCost: 3.0,   // varies by model — this is Claude Sonnet pricing
     outputCost: 15.0,
     authHeader: 'bearer',
-    models: ['anthropic/claude-fable-5', 'anthropic/claude-mythos-1', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
+    models: ['anthropic/claude-fable-5', 'anthropic/claude-opus-4-8', 'anthropic/claude-sonnet-4-6', 'anthropic/claude-haiku-4-5-20251001', 'openai/gpt-4.1', 'openai/gpt-4.1-mini', 'google/gemini-2.5-pro', 'meta-llama/llama-3.3-70b-instruct', 'deepseek/deepseek-r1'],
   },
   lmstudio: {
     name: 'LM Studio (Local)',
@@ -644,7 +644,13 @@ export function getProviderUrl(provider: ByokProvider): string {
 }
 
 /** Estimate cost */
-export function estimateCost(provider: ByokProvider, inputTokens: number, outputTokens: number): number {
+export function estimateCost(provider: ByokProvider, inputTokens: number, outputTokens: number, model?: string): number {
+  // Anthropic pricing varies 10x across the catalog (Haiku $1/$5 → Fable 5
+  // $10/$50); resolve per-model when the caller says which model ran so a
+  // Fable session isn't costed at the provider-level Sonnet rate.
+  if (provider === 'anthropic' && model) {
+    return (inputTokens * anthropicInputCostPerMTok(model) / 1_000_000) + (outputTokens * anthropicOutputCostPerMTok(model) / 1_000_000)
+  }
   const p = PROVIDERS[provider]
   return (inputTokens * p.inputCost / 1_000_000) + (outputTokens * p.outputCost / 1_000_000)
 }
@@ -1093,26 +1099,50 @@ interface AnthropicModelCapabilities {
   /** Substring pattern matched against the model ID (first match wins). */
   match: RegExp
   /**
-   * Requires `thinking: {type: "adaptive"}`. Fable 5 / Opus 4.7 / 4.8 reject
-   * the legacy `{type: "enabled", budget_tokens: N}` form with a 400.
+   * Requires `thinking: {type: "adaptive"}`. Fable 5 / Mythos 5 / Opus 4.7 /
+   * 4.8 / Sonnet 5 reject the legacy `{type: "enabled", budget_tokens: N}`
+   * form with a 400.
    */
   adaptiveThinking: boolean
   /** USD per million input tokens. */
   inputCostPerMTok: number
+  /** USD per million output tokens. */
+  outputCostPerMTok: number
+  /**
+   * Safety classifiers may decline a request (HTTP 200 with
+   * `stop_reason: "refusal"`). When set, requests should opt into the
+   * server-side fallback so a decline is transparently re-served by this
+   * model instead of failing the call. Fable 5 / Mythos 5 only.
+   */
+  refusalFallbackModel?: string
+  /**
+   * Requires 30-day data retention on the org. Zero-data-retention orgs get
+   * `400 invalid_request_error` on EVERY request — surface this instead of
+   * letting the user debug a valid payload. Fable 5 / Mythos 5 only.
+   */
+  requiresDataRetention?: boolean
 }
 
+// Pricing per platform.claude.com (cached 2026-06): Fable 5 / Mythos 5
+// $10/$50; Opus 4.6–4.8 $5/$25; Sonnet 4.6 / Sonnet 5 $3/$15; Haiku 4.5
+// $1/$5. Legacy Opus (4.5 and older) keeps the historical $15/$75.
 const ANTHROPIC_MODEL_CAPABILITIES: AnthropicModelCapabilities[] = [
-  { match: /claude-fable-5/,     adaptiveThinking: true,  inputCostPerMTok: 10 },
-  { match: /claude-opus-4-[78]/, adaptiveThinking: true,  inputCostPerMTok: 15 },
-  { match: /claude-opus/,        adaptiveThinking: false, inputCostPerMTok: 15 },
-  { match: /claude-haiku/,       adaptiveThinking: false, inputCostPerMTok: 0.8 },
-  { match: /claude-sonnet/,      adaptiveThinking: false, inputCostPerMTok: 3 },
+  { match: /claude-fable-5/,      adaptiveThinking: true,  inputCostPerMTok: 10, outputCostPerMTok: 50, refusalFallbackModel: 'claude-opus-4-8', requiresDataRetention: true },
+  { match: /claude-mythos-5/,     adaptiveThinking: true,  inputCostPerMTok: 10, outputCostPerMTok: 50, refusalFallbackModel: 'claude-opus-4-8', requiresDataRetention: true },
+  { match: /claude-opus-4-[78]/,  adaptiveThinking: true,  inputCostPerMTok: 5,  outputCostPerMTok: 25 },
+  // Opus 4.6: adaptive is recommended but budget_tokens still works; kept on
+  // the legacy path because our adaptive config sends `display`, a 4.7+ param.
+  { match: /claude-opus-4-6/,     adaptiveThinking: false, inputCostPerMTok: 5,  outputCostPerMTok: 25 },
+  { match: /claude-opus/,         adaptiveThinking: false, inputCostPerMTok: 15, outputCostPerMTok: 75 },
+  { match: /claude-haiku/,        adaptiveThinking: false, inputCostPerMTok: 1,  outputCostPerMTok: 5 },
+  { match: /claude-sonnet-5/,     adaptiveThinking: true,  inputCostPerMTok: 3,  outputCostPerMTok: 15 },
+  { match: /claude-sonnet/,       adaptiveThinking: false, inputCostPerMTok: 3,  outputCostPerMTok: 15 },
 ]
 
 /** Fallback for models with no explicit row (Sonnet-class pricing + behaviour). */
-const ANTHROPIC_MODEL_DEFAULT = { adaptiveThinking: false, inputCostPerMTok: 3 }
+const ANTHROPIC_MODEL_DEFAULT: AnthropicModelCapabilities = { match: /$^/, adaptiveThinking: false, inputCostPerMTok: 3, outputCostPerMTok: 15 }
 
-function anthropicModelCapabilities(model: string): { adaptiveThinking: boolean; inputCostPerMTok: number } {
+function anthropicModelCapabilities(model: string): AnthropicModelCapabilities {
   return ANTHROPIC_MODEL_CAPABILITIES.find((c) => c.match.test(model)) ?? ANTHROPIC_MODEL_DEFAULT
 }
 
@@ -1134,6 +1164,57 @@ export function usesAdaptiveThinking(model: string): boolean {
  */
 export function anthropicInputCostPerMTok(model: string): number {
   return anthropicModelCapabilities(model).inputCostPerMTok
+}
+
+/**
+ * USD per million output tokens for an Anthropic model. Fable 5 / Mythos 5
+ * diverge 2x from Opus-tier ($50 vs $25), so per-model resolution matters for
+ * honest cost display. Backed by ANTHROPIC_MODEL_CAPABILITIES.
+ */
+export function anthropicOutputCostPerMTok(model: string): number {
+  return anthropicModelCapabilities(model).outputCostPerMTok
+}
+
+/**
+ * Server-side refusal-fallback request fields for models whose safety
+ * classifiers can decline a request (HTTP 200, `stop_reason: "refusal"` —
+ * Fable 5 / Mythos 5, targeting research-bio and most cybersecurity, with
+ * documented false positives on benign security tooling). Recovery is opt-in
+ * on the API; kbot opts in by default so a decline is transparently re-served
+ * by Opus 4.8 inside the same call (declines before output aren't billed; the
+ * rescue bills at the fallback model's own rates). Returns null for models
+ * without a refusal classifier. Disable with KBOT_REFUSAL_FALLBACK=off.
+ */
+export function anthropicRefusalFallback(
+  model: string,
+): { beta: string; fallbacks: Array<{ model: string }> } | null {
+  if (process.env.KBOT_REFUSAL_FALLBACK === 'off') return null
+  const fallbackModel = anthropicModelCapabilities(model).refusalFallbackModel
+  return fallbackModel
+    ? { beta: 'server-side-fallback-2026-06-01', fallbacks: [{ model: fallbackModel }] }
+    : null
+}
+
+/**
+ * Whether the model requires 30-day data retention on the Anthropic org
+ * (Fable 5 / Mythos 5 — not available under zero data retention; ZDR orgs get
+ * a 400 on every request). BYOK is the contract: the user's key, the user's
+ * retention posture — kbot's job is to say so out loud before the first call
+ * and to decorate the otherwise-baffling 400.
+ */
+export function modelRequiresDataRetention(model: string): boolean {
+  return anthropicModelCapabilities(model).requiresDataRetention === true
+}
+
+/**
+ * One-time-per-process retention notice for retention-requiring models.
+ * Returns the notice text on first call for a given model, null after.
+ */
+const retentionNoticeShown = new Set<string>()
+export function dataRetentionNotice(model: string): string | null {
+  if (!modelRequiresDataRetention(model) || retentionNoticeShown.has(model)) return null
+  retentionNoticeShown.add(model)
+  return `${model} requires 30-day data retention on your Anthropic org (not available under zero data retention). Prompts sent to this model are retained by Anthropic for 30 days.`
 }
 
 /**
