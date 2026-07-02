@@ -6,7 +6,14 @@
 
 Deep dive into Claude Fable 5 (claude-fable-5: $10/$50, 1M ctx, always-on
 thinking, summaries-only CoT, refusal classifiers, 30-day retention floor).
-Three workstreams, all UNCOMMITTED on `feat/design-system-and-issue-391`:
+**COMMITTED + DEPLOYED.** Three commits on `feat/design-system-and-issue-391`:
+`63bc2ff47` (kbot guardrails+catalog), `3ceebd70f` (ISSUE 396), `6fde271ee`
+(scratchpad). `npm run deploy` → gh-pages `a8e260e` (forced), kernel.chat
+HTTP 200 live with 396. Obsidian vault Current Status.md synced (v4.5.0,
+catalog 360–396). Memory: `reference_tool_outages_2026_07.md` saved.
+**Merge-to-main still PENDING** (branch is 15 ahead — 12 prior unmerged +
+these 3; deploying from the branch means a later main deploy overwrites it).
+Three workstreams:
 
 - **kbot integration** (packages/kbot/src): fixed catalog errors found
   during the dive — `claude-mythos-1` (invented ID) → `claude-mythos-5`,
@@ -30,15 +37,17 @@ Three workstreams, all UNCOMMITTED on `feat/design-system-and-issue-391`:
   ledger cover stock (first since 372), pool accent, RETAINED · 30 DAYS
   cover seal, dossier + dataBlock + pull quote. Registered in index.ts;
   PUBLISHING.md hygiene pass done (§IV examples + last-updated). tsc +
-  vite build clean. NOT deployed, NOT previewed visually yet.
+  vite build clean. Previewed via Playwright (cover + spread, 0 console
+  errors) and DEPLOYED to gh-pages — live at kernel.chat/#/issues/396.
 
 - **Swarm**: kernel_swarm (Supabase claude-proxy) failed twice — "All
   agents failed to respond"; proxy path needs investigation. Fell back to
   local ollama swarm (gemma3:12b analyst/writer, deepseek-r1:14b critic,
   qwen2.5-coder:32b router — $0). Critic caught the estimateCost bug.
 
-Next: commit (evidence-cited, per house style), preview /issues/396,
-merge-to-main + deploy decision is Isaac's.
+Next: **merge-to-main** (only remaining open item — a later deploy from
+main will overwrite the current branch deploy per PUBLISHING.md §VII).
+Also open across sessions: kernel_swarm proxy fix, lumen embed model pull.
 
 ## Session 2026-06-30 (later) — Repo cleanup + branch→main reconciliation + deploy
 
