@@ -83,6 +83,7 @@ Pick the editorial tool that fits the content:
 | `dispatch` | News reactions filed against a deadline | Wire slug marquee, dateline, dossier card, checkbox numbering, mid-spread bulletin, bridge line, `— 30 —` terminator |
 | `review` | Graded surveys — "we tested N things, here's the ranking" | Top-line verdict, numbered rubric, graded subject cards, optional standout award |
 | `colloquy` | A single argument carried by **two co-equal voices** (no host) | Voices legend (two stances), numbered movements of attributed turns, optional terms dossier + pull quote. The two voices are positions, not people — a private conversation is mined, never transcribed (see 398). |
+| `instrument` | A **calibrated control handed to the reader** — the interactive tool | Fixed prompt; N dial stops (roving radiogroup); the same prompt answered at each depth with a meter line. Interaction is React state; motion stays CSS-only; all panels stay in the DOM and print renders them stacked. Meter readings must be honestly labelled when representative (see 399). |
 
 **Profile of a person → essay, not interview**, unless you have the
 subject's actual answers. The magazine never publishes invented
@@ -191,7 +192,8 @@ recent same-format issue (`371.ts` for essay-as-profile,
 `396.ts` for essay-as-argument (dossier + dataBlock),
 `369.ts` for essay-as-field-piece, `397.ts` for dispatch,
 `393.ts` for forecast, `365.ts` for interview,
-`398.ts` for colloquy (two-voice)). Every issue needs:
+`398.ts` for colloquy (two-voice),
+`399.ts` for instrument (interactive dial)). Every issue needs:
 
 - A leading block comment explaining the identity decisions
 - `number`, `month`, `year`, `feature`, `featureJp`, `price`, `tagline`
@@ -394,4 +396,4 @@ Typecheck → build → commit on the current branch with the format in §VIII �
 
 ---
 
-_Last updated: ISSUE 398 · JUL 2026._
+_Last updated: ISSUE 399 · JUL 2026._

@@ -159,6 +159,7 @@ export type IssueAccent = InkSeedName | (string & {})
  *    dispatch  → brick    (wire, archival, printed-today red)
  *    review    → olive    (field work, measured survey)
  *    colloquy  → oxblood  (memory, endings; the two-voice argument)
+ *    instrument→ pool     (systems, terminal; the calibrated control)
  */
 export const DEFAULT_ACCENT_BY_SPREAD: Record<IssueSpread['type'], InkSeedName> = {
   essay: 'tomato',
@@ -167,6 +168,7 @@ export const DEFAULT_ACCENT_BY_SPREAD: Record<IssueSpread['type'], InkSeedName> 
   dispatch: 'brick',
   review: 'olive',
   colloquy: 'oxblood',
+  instrument: 'pool',
 }
 
 /** Pick the default accent for a spread type. */

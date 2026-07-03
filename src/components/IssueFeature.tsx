@@ -8,6 +8,7 @@ import { ForecastFeature } from './ForecastFeature'
 import { DispatchFeature } from './DispatchFeature'
 import { ReviewFeature } from './ReviewFeature'
 import { ColloquyFeature } from './ColloquyFeature'
+import { InstrumentFeature } from './InstrumentFeature'
 
 interface IssueFeatureProps {
   issue: IssueRecord
@@ -43,6 +44,8 @@ export function IssueFeature({ issue }: IssueFeatureProps) {
       return <ReviewFeature spread={spread} issue={issue} />
     case 'colloquy':
       return <ColloquyFeature spread={spread} issue={issue} />
+    case 'instrument':
+      return <InstrumentFeature spread={spread} issue={issue} />
     default: {
       // Exhaustiveness check — adding a new variant without handling
       // it here produces a compile-time error.

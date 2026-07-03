@@ -51,6 +51,7 @@ import { ISSUE_395 } from './395'
 import { ISSUE_396 } from './396'
 import { ISSUE_397 } from './397'
 import { ISSUE_398 } from './398'
+import { ISSUE_399 } from './399'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -525,6 +526,60 @@ export interface ColloquySpread extends SpreadCommon {
   pullQuote?: SpreadPullQuote
 }
 
+/** ─── instrument ──────────────────────────────────────────────
+ *  A calibrated control handed to the reader — the magazine's first
+ *  interactive editorial tool. One fixed prompt; N stops on a dial;
+ *  selecting a stop renders the same prompt answered at that depth,
+ *  with a meter line (tokens · time · price). The form enacts the
+ *  subject: intelligence as a per-request variable, not a property
+ *  of the machine.
+ *
+ *  Introduced ISSUE 399 (HOW HARD TO THINK). Boundary decisions,
+ *  ratified there: interaction (React state + CSS transitions) is
+ *  permitted on the editorial surface; MOTION stays CSS-only within
+ *  ambient amplitudes; all stops remain in the DOM and print media
+ *  renders them stacked, so on paper the instrument becomes a table
+ *  of depths. Meter readings must be labelled honestly when they are
+ *  representative rather than measured — see `meterNote`.
+ *  ────────────────────────────────────────────────────────────── */
+
+/** One stop on the instrument's dial. */
+export interface InstrumentStop {
+  /** Stable id (e.g. 'low', 'max'). Referenced by `defaultStop`. */
+  id: string
+  /** Dial label, uppercase (e.g. 'LOW'). */
+  label: string
+  /** Single-glyph Japanese label under the dial stop (e.g. '低'). */
+  labelJp?: string
+  /** Meter line rendered under the answer at this stop. */
+  reading: { tokens: string; time: string; price: string }
+  /** One-line characterization of this depth (italic, under label). */
+  note?: string
+  /** The same prompt, answered at this stop's depth. */
+  answer: string[]
+}
+
+export interface InstrumentSpread extends SpreadCommon {
+  type: 'instrument'
+  /** Optional spec dossier above the prose (reused essay module). */
+  dossier?: SpreadDossier
+  /** Prose sections before the instrument. */
+  intro?: SpreadSection[]
+  /** The fixed question every stop answers. */
+  prompt: string
+  promptJp?: string
+  /** The dial's stops, in order. */
+  stops: InstrumentStop[]
+  /** id of the initially selected stop. Defaults to the first. */
+  defaultStop?: string
+  /** Honesty note under the meter — e.g. "readings are
+   *  representative of the effort curve, not a benchmark". */
+  meterNote?: string
+  /** Prose sections after the instrument. */
+  outro?: SpreadSection[]
+  pullQuote?: SpreadPullQuote
+}
+
 /** Discriminated union — add new editorial tools here. */
 export type IssueSpread =
   | EssaySpread
@@ -533,6 +588,7 @@ export type IssueSpread =
   | DispatchSpread
   | ReviewSpread
   | ColloquySpread
+  | InstrumentSpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -812,6 +868,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_396,
   ISSUE_397,
   ISSUE_398,
+  ISSUE_399,
 ]
 
 /** The latest published issue — drives the landing cover. */
