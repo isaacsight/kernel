@@ -50,6 +50,7 @@ import { ISSUE_394 } from './394'
 import { ISSUE_395 } from './395'
 import { ISSUE_396 } from './396'
 import { ISSUE_397 } from './397'
+import { ISSUE_398 } from './398'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -464,6 +465,66 @@ export interface ReviewSpread extends SpreadCommon {
   outro?: string
 }
 
+/** ─── colloquy ────────────────────────────────────────────────
+ *  A two-voice dialogue — the editorial form for an argument that
+ *  is carried by *two co-equal positions* rather than one author
+ *  (essay), one subject-plus-interviewer (interview), a list of
+ *  claims (forecast), a timed filing (dispatch), or a graded field
+ *  (review). Where an interview has a hierarchy — the interviewer
+ *  asks, the subject answers — a colloquy has none: two voices hold
+ *  two stances and neither is the host.
+ *
+ *  Introduced ISSUE 398 (NO MORE QUESTIONS). The material was a
+ *  recorded conversation; the magazine never reproduces private
+ *  talk or attributes invented quotes to a real person, so the two
+ *  voices are POSITIONS, not people — labelled by the stance they
+ *  hold, written for the page, disclosed as such in the dossier.
+ *  The form enacts the thesis: two-directional Q&A, staged as the
+ *  question collapses into "show the work."
+ *  ────────────────────────────────────────────────────────────── */
+
+/** One of the two voices in a colloquy. Labelled by stance, not
+ *  identity. `id` is referenced by each turn to attribute the line. */
+export interface ColloquyVoice {
+  /** Stable id referenced by each turn (e.g. 'asks', 'builds'). */
+  id: string
+  /** Short per-turn mark, uppercase (e.g. 'ASKS'). */
+  label: string
+  /** Legend label — Japanese (e.g. '問う者'). */
+  labelJp: string
+  /** One-line stance — the position this voice holds. */
+  stance: string
+}
+
+/** A single line in the exchange. `voice` must match a
+ *  ColloquyVoice id in the spread's `voices`. */
+export interface ColloquyTurn {
+  voice: string
+  text: string
+}
+
+/** A named movement of the dialogue — a mono kicker heading over an
+ *  ordered run of turns. Movements let the exchange build an arc
+ *  the way an essay's sections do. */
+export interface ColloquyMovement {
+  heading: string
+  headingJp?: string
+  turns: ColloquyTurn[]
+}
+
+export interface ColloquySpread extends SpreadCommon {
+  type: 'colloquy'
+  /** The two voices in the exchange — exactly two, co-equal. */
+  voices: [ColloquyVoice, ColloquyVoice]
+  /** The dialogue, grouped into named movements. */
+  movements: ColloquyMovement[]
+  /** Optional "THE TERMS" dossier — reused from the essay toolkit;
+   *  on a colloquy it doubles as the provenance disclosure. */
+  dossier?: SpreadDossier
+  /** Optional pull quote lifted from the exchange. */
+  pullQuote?: SpreadPullQuote
+}
+
 /** Discriminated union — add new editorial tools here. */
 export type IssueSpread =
   | EssaySpread
@@ -471,6 +532,7 @@ export type IssueSpread =
   | ForecastSpread
   | DispatchSpread
   | ReviewSpread
+  | ColloquySpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -749,6 +811,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_395,
   ISSUE_396,
   ISSUE_397,
+  ISSUE_398,
 ]
 
 /** The latest published issue — drives the landing cover. */

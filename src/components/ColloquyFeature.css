@@ -1,0 +1,380 @@
+/* ──────────────────────────────────────────────────────────────
+   ColloquyFeature — two-voice dialogue editorial tool
+   No host, unlike the interview: two co-equal voices hold two
+   stances. A voices legend declares them; the body runs as
+   movements of alternating turns, each attributed by a short mono
+   mark tinted by which side speaks. Introduced ISSUE 398
+   (NO MORE QUESTIONS) — the form is the argument.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-colloquy {
+  padding: 96px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-colloquy-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* Screen-reader-only — carries the speaker name into the a11y tree
+   without printing it twice for sighted readers (the mono mark does
+   that visually). */
+.pop-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.pop-colloquy-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-bottom: 32px;
+}
+
+.pop-colloquy-title {
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: 0.95;
+  margin: 8px 0 0;
+  letter-spacing: -0.03em;
+}
+
+.pop-colloquy-title-jp { margin: 0; }
+
+.pop-colloquy-deck {
+  font-size: clamp(18px, 2.2vw, 24px);
+  max-width: 52ch;
+  margin: 8px 0 0;
+  line-height: 1.35;
+}
+
+.pop-colloquy-byline {
+  margin: 16px 0 0;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+/* ── The terms — provenance dossier ─────────────────────── */
+.pop-colloquy-terms {
+  margin: 32px auto 0;
+  max-width: 560px;
+}
+
+.pop-colloquy-terms-frame {
+  border: 1px solid var(--pop-ink);
+  padding: 24px 28px;
+  background: var(--pop-ivory);
+  position: relative;
+}
+
+.pop-colloquy-terms-badge {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+}
+
+.pop-colloquy-terms-kicker {
+  display: block;
+  margin: 0 0 10px;
+  letter-spacing: 0.16em;
+}
+
+.pop-colloquy-terms-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--pop-coffee);
+  margin: 0 0 14px;
+  text-wrap: pretty;
+}
+
+.pop-colloquy-terms-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pop-colloquy-terms-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  padding: 8px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  align-items: baseline;
+}
+.pop-colloquy-terms-row:first-child { border-top: 0; }
+
+.pop-colloquy-terms-label {
+  margin: 0;
+  letter-spacing: 0.1em;
+  color: var(--pop-coffee);
+}
+
+.pop-colloquy-terms-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--issue-accent);
+  line-height: 1.4;
+}
+
+/* ── Voices legend — the two stances ────────────────────── */
+.pop-colloquy-voices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 36px auto 0;
+  max-width: 640px;
+}
+
+.pop-colloquy-voice {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto auto;
+  column-gap: 10px;
+  row-gap: 2px;
+  padding: 16px 18px;
+  border: 1px solid var(--pop-hairline);
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.pop-colloquy-voice-swatch {
+  grid-row: 1 / 4;
+  width: 6px;
+  align-self: stretch;
+  border-radius: 1px;
+}
+.pop-colloquy-voice--a .pop-colloquy-voice-swatch { background: var(--issue-accent); }
+.pop-colloquy-voice--b .pop-colloquy-voice-swatch { background: var(--pop-coffee); }
+
+.pop-colloquy-voice-label {
+  letter-spacing: 0.14em;
+  font-weight: 700;
+}
+.pop-colloquy-voice--a .pop-colloquy-voice-label { color: var(--issue-accent); }
+.pop-colloquy-voice--b .pop-colloquy-voice-label { color: var(--pop-coffee); }
+
+.pop-colloquy-voice-jp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+.pop-colloquy-voice-stance {
+  grid-column: 2;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--pop-ink);
+  margin-top: 4px;
+  text-wrap: pretty;
+}
+
+.pop-colloquy-rule {
+  margin: 44px auto;
+  max-width: 120px;
+  height: 1px;
+  background: var(--pop-hairline);
+}
+
+/* ── Body — movements & turns ───────────────────────────── */
+.pop-colloquy-body {
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+}
+
+.pop-colloquy-movement { margin-bottom: 44px; }
+
+.pop-colloquy-movement-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-colloquy-movement-n {
+  color: var(--issue-accent);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-colloquy-movement-heading {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: var(--pop-ink);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pop-colloquy-movement-heading-jp {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+}
+
+.pop-colloquy-turn {
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 16px;
+  margin: 0 0 16px;
+  text-wrap: pretty;
+}
+
+.pop-colloquy-turn-mark {
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  padding-top: 5px;
+  font-variant-numeric: tabular-nums;
+}
+.pop-colloquy-turn--a .pop-colloquy-turn-mark { color: var(--issue-accent); }
+.pop-colloquy-turn--b .pop-colloquy-turn-mark { color: var(--pop-coffee); opacity: 0.9; }
+
+/* Voice B is set apart by a hairline rail so a long exchange stays
+   legible as a two-hander even where marks blur past at speed. */
+.pop-colloquy-turn--b .pop-colloquy-turn-text {
+  border-left: 2px solid var(--pop-hairline-soft);
+  padding-left: 14px;
+  margin-left: -16px;
+}
+
+.pop-colloquy-turn--a { color: var(--pop-ink); }
+.pop-colloquy-turn--b { color: var(--pop-ink); }
+
+/* ── Pull quote ─────────────────────────────────────────── */
+.pop-colloquy-pullquote {
+  margin: 48px auto;
+  max-width: 60ch;
+  text-align: center;
+  border: 0;
+}
+
+.pop-colloquy-pullquote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--issue-accent);
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+
+.pop-colloquy-pullquote-cite {
+  display: block;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  color: var(--pop-coffee);
+}
+
+/* ── Sign-off ───────────────────────────────────────────── */
+.pop-colloquy-signoff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 48px;
+  margin-top: 48px;
+}
+
+.pop-colloquy-signoff-text {
+  font-size: clamp(17px, 1.8vw, 22px);
+  margin: 0;
+  color: var(--pop-coffee);
+}
+
+.pop-colloquy-monument {
+  margin-top: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Ink stock — ivory text on near-black ground ────────── */
+.pop-colloquy.pop-stock-ink {
+  background: var(--pop-ink);
+  color: var(--pop-ivory);
+  border-top-color: rgba(250, 249, 246, 0.12);
+  border-bottom-color: rgba(250, 249, 246, 0.12);
+}
+
+.pop-colloquy.pop-stock-ink .pop-colloquy-title { color: var(--pop-ivory); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-deck { color: rgba(250, 249, 246, 0.78); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-byline { color: rgba(250, 249, 246, 0.55); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-rule { background: rgba(250, 249, 246, 0.18); }
+
+.pop-colloquy.pop-stock-ink .pop-colloquy-terms-frame {
+  background: rgba(250, 249, 246, 0.04);
+  border-color: rgba(250, 249, 246, 0.32);
+}
+.pop-colloquy.pop-stock-ink .pop-colloquy-terms-note { color: rgba(250, 249, 246, 0.65); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-terms-row { border-top-color: rgba(250, 249, 246, 0.14); }
+
+.pop-colloquy.pop-stock-ink .pop-colloquy-voice {
+  border-color: rgba(250, 249, 246, 0.22);
+  background: rgba(250, 249, 246, 0.03);
+}
+.pop-colloquy.pop-stock-ink .pop-colloquy-voice-jp { color: rgba(250, 249, 246, 0.55); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-voice-stance { color: rgba(250, 249, 246, 0.82); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-voice--b .pop-colloquy-voice-swatch { background: rgba(250, 249, 246, 0.5); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-voice--b .pop-colloquy-voice-label { color: rgba(250, 249, 246, 0.6); }
+
+.pop-colloquy.pop-stock-ink .pop-colloquy-body { color: var(--pop-ivory); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-movement-head { border-bottom-color: rgba(250, 249, 246, 0.14); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-movement-heading { color: var(--pop-ivory); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-movement-heading-jp { color: rgba(250, 249, 246, 0.55); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-turn--a,
+.pop-colloquy.pop-stock-ink .pop-colloquy-turn--b { color: var(--pop-ivory); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-turn--b .pop-colloquy-turn-mark { color: rgba(250, 249, 246, 0.6); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-turn--b .pop-colloquy-turn-text { border-left-color: rgba(250, 249, 246, 0.16); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-pullquote-cite { color: rgba(250, 249, 246, 0.55); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-signoff-text { color: rgba(250, 249, 246, 0.78); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-monument { color: var(--pop-ivory); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-monument span { color: rgba(250, 249, 246, 0.55); }
+.pop-colloquy.pop-stock-ink .pop-colloquy-monument strong { color: var(--issue-accent); }
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .pop-colloquy { padding: 56px 0; }
+  .pop-colloquy-inner { padding: 0 22px; }
+  .pop-colloquy-title { font-size: clamp(36px, 10vw, 56px); }
+  .pop-colloquy-deck { font-size: clamp(16px, 4.5vw, 20px); }
+  .pop-colloquy-terms { margin-top: 24px; }
+  .pop-colloquy-terms-frame { padding: 18px 20px; }
+  .pop-colloquy-terms-row { grid-template-columns: 84px 1fr; gap: 12px; }
+  .pop-colloquy-voices { grid-template-columns: 1fr; gap: 12px; margin-top: 24px; }
+  .pop-colloquy-body { font-size: 16px; line-height: 1.6; }
+  .pop-colloquy-turn { grid-template-columns: 54px 1fr; gap: 10px; }
+  .pop-colloquy-turn-mark { font-size: 11px; padding-top: 4px; }
+  .pop-colloquy-turn--b .pop-colloquy-turn-text { padding-left: 10px; margin-left: -10px; }
+  .pop-colloquy-signoff { padding-top: 32px; margin-top: 32px; }
+}
