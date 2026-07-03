@@ -2,6 +2,39 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-03 — ISSUES 398 + 399, two new spread types
+
+**Both SHIPPED to main and live.** Session started from a 2h18m FaceTime
+transcript (`~/Meetings/facetime-call-recording/`, Isaac × Angel,
+whisper tdrz) → digest → ISSUE 398.
+
+- **ISSUE 398 — NO MORE QUESTIONS** (`70b6fbed1`): new `colloquy`
+  spread (6th tool, two co-equal voices, no host). Ink/oxblood,
+  asymmetric-left, ON TAPE · NAMES REMOVED seal. Voices are positions,
+  not people — conversation mined, never transcribed (§III.2 ethics).
+  Deployed manually → then discovered **CI also deploys main on push**
+  (gh-pages `f53ec4519 deploy: 70b6fbed…` landed 6 min after mine,
+  different asset hash from CI env). Monitors must compare
+  **provenance (source SHA), not asset hashes** — hash-compare poller
+  false-alarmed.
+- **ISSUE 399 — HOW HARD TO THINK** (`a75dbfdf0`): new `instrument`
+  spread (7th tool, **first interactive**: five-stop effort dial,
+  roving WAI-ARIA radiogroup, same question answered at 5 depths +
+  meter). Ivory/pool, CALIBRATED · FIVE STOPS seal. Boundary ratified:
+  interaction OK on editorial surface, motion stays CSS-only; all
+  panels in DOM, print stacks them. Meter labelled representative
+  (honesty rule). Drafted on Fable 5 (session switched via /model);
+  audit colophon says so. Shipped by the XHIGH prescription: push main,
+  let CI deploy (no manual `npm run deploy`).
+- Specs in `docs/superpowers/specs/2026-07-03-*`. PUBLISHING.md
+  updated to 399. Session model default is now **claude-fable-5**.
+- **Open items:** (1) another session is mid-work on a Slack bot —
+  uncommitted `.env.example` (+SLACK_BOT_TOKEN) and `package.json`
+  (+`slack` script → `tools/slack-bot.ts`); left untouched. (2) Two
+  deployers race (manual script vs CI) — pick one owner; 399's own
+  XHIGH answer is the playbook. (3) 398/399 Japanese not yet
+  human-verified by Isaac.
+
 ## 2026-07-01 — Branch merged to main, deploy now durable
 
 `feat/design-system-and-issue-391` (18 commits: the engineering-loop work
