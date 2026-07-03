@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Autonomous Loop / Architecture Tool -->
+  <!-- Base trajectory circle -->
+  <circle cx="128" cy="128" r="100" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4 4"/>
+  
+  <!-- Iteration Cycle Top-Right to Bottom-Left -->
+  <path d="M128 56 A 72 72 0 1 1 56 128" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round"/>
+  <polyline points="46,118 56,128 66,118" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Reverse track Bottom-Left to Top-Right -->
+  <path d="M128 200 A 72 72 0 0 1 200 128" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round"/>
+  <polyline points="210,138 200,128 190,138" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Sparks in the core nodes -->
+  <circle cx="128" cy="56" r="3" fill="#D4805A"/>
+  <circle cx="200" cy="128" r="3" fill="#D4805A"/>
+  <circle cx="128" cy="200" r="3" fill="#D4805A"/>
+  <circle cx="56" cy="128" r="3" fill="#D4805A"/>
+  
+  <!-- Center asterisk -->
+  <path d="M128 112 Q128 128 144 128 Q128 128 128 144 Q128 128 112 128 Q128 128 128 112" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/>
+</svg>

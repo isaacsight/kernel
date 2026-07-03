@@ -1,0 +1,192 @@
+{
+  "tagline": "Sizi hatırlayan, sizinle düşünen ve zamanla daha iyi olan kişisel bir AI.",
+  "placeholder": "kernel.chat ile konuşun...",
+  "welcomeToPro": "Kernel Pro'ya hoş geldiniz!",
+  "menu": {
+    "shareConversation": "Konuşmayı paylaş",
+    "exportMarkdown": "Markdown olarak dışa aktar",
+    "goals": "Hedefler",
+    "workflows": "İş akışları",
+    "scheduledTasks": "Zamanlanmış görevler",
+    "dailyBriefing": "Günlük brifing",
+    "whatKernelKnows": "Kernel ne biliyor",
+    "yourStats": "İstatistikleriniz",
+    "insights": "İçgörüler",
+    "upgradeToPro": "Pro'ya yükselt",
+    "manageSubscription": "Aboneliği yönet",
+    "signOut": "Çıkış yap",
+    "deleteAccount": "Hesabı sil",
+    "notifications": "Bildirimler",
+    "notifInApp": "Uygulama içi bildirimler",
+    "notifBriefings": "Brifing uyarıları",
+    "notifGoals": "Hedef güncellemeleri",
+    "notifReminders": "Hatırlatıcılar",
+    "notifPush": "Push bildirimleri",
+    "darkMode": "Karanlık mod",
+    "theme": "Tema",
+    "themeLight": "Açık",
+    "themeDark": "Koyu",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Ajan Oluşturucu",
+    "agentLibrary": "Ajan Kütüphanesi",
+    "backgroundAgents": "Arka Plan Ajanları",
+    "myContent": "İçeriklerim",
+    "bookmarks": "Yer İmleri",
+    "architecture": "Mimari",
+    "designSystem": "Tasarım Sistemi",
+    "routingInsights": "Yönlendirme Bilgileri",
+    "system": "Sistem",
+    "communications": "İletişim",
+    "adaptiveSystem": "Uyarlanabilir sistem",
+    "usage": "Kullanım",
+    "mirror": "Ayna",
+    "projectFiles": "Proje dosyaları",
+    "imageGallery": "Resim galerisi",
+    "knowledgeBase": "Bilgi tabanı",
+    "social": "Sosyal medya",
+    "platformEngine": "İçerik hattı",
+    "explore": "Keşfet",
+    "accountSettings": "Hesap ayarları",
+    "notifProactive": "Öngörülü öneriler"
+  },
+  "admin": "Yönetici",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Bugünün brifingi",
+    "read": "Oku",
+    "discuss": "Tartış"
+  },
+  "upgrade": {
+    "title": "{{limit}} ücretsiz mesajınızı kullandınız",
+    "subtitle": "Pro size sınırsız mesajlaşma, sizi tanıyan bir bellek ve tam brifingler sunar.",
+    "resetsAt": "Mesajlarınız {{time}} saatinde yenilenir. Günde 100 mesaj için yükseltin.",
+    "features": {
+      "unlimitedMessages": "Sınırsız mesajlaşma",
+      "deepResearch": "Genişletilmiş düşünme (30/ay)",
+      "multiAgent": "Dosya analizi (10/ay)",
+      "multiStep": "Hedefler, ses ve ajantik iş akışları",
+      "persistentMemory": "Bellek + proaktif brifingler"
+    },
+    "button": "Pro'ya geç — $29/ay",
+    "annualButton": "$290/yıl — $58 tasarruf edin",
+    "buttonLoading": "Ödeme açılıyor...",
+    "maybeLater": "Belki sonra",
+    "learnedTitle": "Kernel sizin hakkınızda neler öğrendi",
+    "learnedCta": "Yarın geri dön ve sohbeti devam ettir.",
+    "maxButton": "Max'e geç - $49/ay",
+    "maxAnnualButton": "$490/yıl - $98 tasarruf"
+  },
+  "deleteConfirm": {
+    "title": "Hesabınızı silin mi?",
+    "subtitle": "Bu, tüm verilerinizi kalıcı olarak siler: konuşmalar, bellek ve tercihler. Bu geri alınamaz.",
+    "subtitleWithSub": " Aboneliğiniz de iptal edilecektir.",
+    "typeDelete": "Onaylamak için DELETE yazın:",
+    "confirm": "Evet, hesabımı sil",
+    "confirming": "Siliniyor..."
+  },
+  "status": {
+    "assemblingAgents": "Ajanlar toplanıyor...",
+    "agentsCollaborating": "Ajanlar işbirliği yapıyor",
+    "synthesizingPerspectives": "Bakış açıları sentezleniyor...",
+    "routingToSpecialist": "Uzmana yönlendiriliyor...",
+    "isWorking": "{{agent}} çalışıyor...",
+    "lowConfidence": "düşük güven"
+  },
+  "feedback": {
+    "save": "Kaydet",
+    "cancel": "İptal"
+  },
+  "messagesRemaining": "{{count}} mesaj kaldı",
+  "lastFreeMessage": "Son ücretsiz mesaj",
+  "menuSection": {
+    "ai": "AI & Ajanlar",
+    "content": "İçerik & Bilgi",
+    "insights": "Öngörüler & Hedefler",
+    "system": "Ayarlar & Sistem"
+  },
+  "usage": {
+    "title": "Kullanım",
+    "loading": "Kullanım verilerini yükleniyor...",
+    "retry": "Tekrar Dene",
+    "last30days": "Son 30 gün",
+    "onPace": "{{projected}} ve {{limit}} mesajı için planlandığı gibi",
+    "overLimit": "{{limit}} mesaj sınırınızı aşmak üzere",
+    "byFeature": "Özelliklere göre",
+    "dailyTrend": "30 günlük eğilim",
+    "recommendation": "Öneri",
+    "upgrade": "Yükselt"
+  },
+  "entity": {
+    "evolved": "{{tier}} seviyesine yükseldi",
+    "streak": "Gün {{count}}",
+    "goalCheckIn": "Kontrol et: {{title}}",
+    "mood": {
+      "happy": "mutlu",
+      "excited": "heyecanlı",
+      "content": "memnun",
+      "sad": "üzgün",
+      "sleepy": "uyku modunda",
+      "lonely": "yalnız",
+      "bored": "canı sıkkın"
+    }
+  },
+  "entityInfo": {
+    "mood": "Duygu",
+    "streak": "Sürekli",
+    "days": "gün",
+    "focus": "Odak"
+  },
+  "nudge": {
+    "insights": "Şimdiye kadar birkaç sohbet ettin - Kernel, konuştuğun şeylerdeki kalıpları buluyor.",
+    "knowledge": "Bilgi grafiğin büyüyor - Kernel'ın konuşmalarından haritaladığı bağlantıları gör.",
+    "stats": "Bir hedefi tamamladın - kullanımının nasıl geliştiğini görmek için istatistiklerine göz at.",
+    "workflows": "Kernel'ı düzenli olarak kullanıyorsun - iş akışları, tekrarlayan görevlerini otomatikleştirmeni sağlayabilir.",
+    "showMe": "Bana göster",
+    "notNow": "Şimdi değil"
+  },
+  "valuePreview": {
+    "message": "Pro üyeleri günlük brifingler, derinlemesine araştırma ve kalıcı hafıza alıyor.",
+    "gotIt": "Anlaşıldı"
+  },
+  "messagesLeft": "{{count}} mesaj kaldı",
+  "agentWhy": {
+    "label": "Neden?"
+  },
+  "thinking": {
+    "label": "Gelişmiş düşünme",
+    "duration": "{{seconds}}s düşündü",
+    "streaming": "Düşünüyor...",
+    "toggle": "Gelişmiş düşünmeyi aç/kapat",
+    "tooltip": "Cevap vermeden önce daha derinlemesine düşünün"
+  },
+  "explain": {
+    "toggle": "Açıklama modunu aç/kapat",
+    "tooltip": "Açıklama modu - adım adım kod"
+  },
+  "document": {
+    "active": "Analiz Ediliyor: {{name}}",
+    "clear": "Belgeyi temizle",
+    "contextHint": "Bu belgeyle ilgili ek sorular sorun"
+  },
+  "proactive": {
+    "noticed": "Kernel fark etti...",
+    "notification": "Kernel'in size bir gözlemi var",
+    "explore": "Bunu inceleyelim"
+  },
+  "tour": {
+    "entity": "Bu, Kernel varlığınızdır. Sohbet ettikçe gelişir — ruh halini, serisini ve büyüme kademesini görmek için dokunun.",
+    "moreMenu": "Kernel'in tüm özelliklerine (ajanlar, bilgi tabanı, içgörüler ve daha fazlası) erişmek için buraya dokunun.",
+    "inputBar": "Buradan bir sohbet başlatın. Dosya ekleyin, açıklama modunu açın veya sadece merhaba deyin.",
+    "gotIt": "Anlaşıldı",
+    "skip": "Turu atla"
+  },
+  "workflow": {
+    "planning": "Adımlar planlanıyor...",
+    "executing": "Çalışıyor: {{step}}",
+    "complete": "İş akışı tamamlandı",
+    "failed": "Adım başarısız oldu: {{step}}",
+    "cancel": "İş akışını iptal et",
+    "cancelled": "İş akışı iptal edildi"
+  }
+}

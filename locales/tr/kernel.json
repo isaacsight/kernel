@@ -1,0 +1,52 @@
+{
+  "observer": {
+    "phasePipeline": "Aşama Hattı",
+    "phases": { "perceiving": "algılıyor", "attending": "ilgileniyor", "deciding": "karar veriyor", "acting": "harekete geçiyor", "reflecting": "düşünüyor" },
+    "perception": "Algı",
+    "intent": "Niyet",
+    "urgency": "Aciliyet",
+    "complexity": "Karmaşıklık",
+    "sentiment": "Duygu",
+    "impliedNeed": "Örtük İhtiyaç",
+    "noActivePerception": "Aktif algı yok",
+    "attention": "Dikkat",
+    "focus": "Odak",
+    "depth": "Derinlik",
+    "noActiveAttention": "Aktif dikkat yok",
+    "conviction": "Kanaat",
+    "trend": { "rising": "yükseliyor", "falling": "düşüyor", "stable": "sabit" },
+    "beliefs": "İnançlar ({{count}})",
+    "noBeliefsFormed": "Henüz inanç oluşmadı",
+    "eventFeed": "Olay Akışı",
+    "noEventsYet": "Henüz olay yok",
+    "lastReflection": "Son Düşünce",
+    "noReflectionsYet": "Henüz düşünce yok"
+  },
+  "controls": {
+    "engine": "Motor",
+    "stop": "Durdur",
+    "reset": "Sıfırla",
+    "agentOverride": "Ajan Geçersiz Kılma",
+    "overrideNext": "Sonrakini Geçersiz Kıl",
+    "conviction": "Kanaat",
+    "beliefs": "İnançlar",
+    "newBeliefPlaceholder": "Yeni inanç...",
+    "challenge": "Meydan Oku",
+    "reflections": "Düşünceler",
+    "pruneLabel": "Bu kalitenin altını kaldır:",
+    "prune": "Budala",
+    "pruneResult": "{{count}} düşünce kaldırıldı",
+    "agentPerformance": "Ajan Performansı",
+    "noPerformanceData": "Henüz performans verisi yok"
+  },
+  "chat": {
+    "emptyTitle": "kernel.chat'e sorun",
+    "emptySubtitle": "Motorun gördüğü her şeyi görür.",
+    "placeholder": "Kernel'e sorun...",
+    "send": "Gönder"
+  },
+  "pill": {
+    "openKernel": "kernel.chat'i aç",
+    "phases": { "idle": "boşta", "perceiving": "algılıyor", "attending": "ilgileniyor", "deciding": "karar veriyor", "acting": "harekete geçiyor", "reflecting": "düşünüyor" }
+  }
+}

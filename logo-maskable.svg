@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Maskable icon: full-bleed ivory bg, content in 80% safe zone -->
+  <rect width="512" height="512" fill="#FAF9F6"/>
+  <circle cx="256" cy="256" r="120" fill="none" stroke="#D4C5A9" stroke-width="3"/>
+  <text x="256" y="296" text-anchor="middle" font-family="EB Garamond, Georgia, serif"
+        font-style="italic" font-size="140" font-weight="400" fill="#6B5B95">K</text>
+  <!-- The "kernel seed" — ink drop -->
+  <circle cx="256" cy="338" r="6" fill="#6B5B95"/>
+</svg>

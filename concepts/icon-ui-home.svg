@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <path d="M40 104 L128 40 L216 104 L216 208 A 8 8 0 0 1 208 216 L48 216 A 8 8 0 0 1 40 208 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="104" y="152" width="48" height="64" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- Delicate technical tracking -->
+  <line x1="128" y1="40" x2="128" y2="104" stroke="currentColor" stroke-width="1" stroke-dasharray="2 4" opacity="0.35"/>
+  <circle cx="128" cy="120" r="3" fill="currentColor" opacity="0.35"/>
+</svg>

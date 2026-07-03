@@ -1,0 +1,121 @@
+{
+  "title": "Account settings",
+  "profile": {
+    "heading": "Profile",
+    "displayName": "Display name",
+    "displayNamePlaceholder": "Your name",
+    "username": "Username",
+    "usernamePlaceholder": "@username",
+    "avatar": "Profile photo",
+    "avatarChange": "Change",
+    "save": "Save profile",
+    "saved": "Profile saved",
+    "resetProfile": "Reset profile",
+    "profileReset": "Profile reset to defaults",
+    "usernameTaken": "This username is already taken",
+    "displayNameTaken": "This display name is already taken",
+    "available": "Available"
+  },
+  "security": {
+    "heading": "Edit credentials",
+    "credentialsHeading": "Email & password",
+    "verifyIdentity": "Verify to make changes",
+    "verifyHint": "A verification code will be sent to your email before editing credentials",
+    "sendCode": "Send verification code",
+    "codePlaceholder": "Enter 6-digit code",
+    "codeRequired": "Enter the verification code from your email",
+    "verificationRequired": "Send a verification code first",
+    "codeSent": "Code sent — check your email",
+    "verify": "Verify code",
+    "verified": "Identity verified — you can now make changes",
+    "resendCode": "Resend code",
+    "resendIn": "Resend in {{seconds}}s",
+    "changeEmail": "Change email",
+    "emailPlaceholder": "New email address",
+    "emailSubmit": "Update email",
+    "emailConfirmationSent": "Confirmation email sent to your new address",
+    "changePassword": "Change password",
+    "setPassword": "Set a password",
+    "newPasswordPlaceholder": "New password",
+    "confirmPasswordPlaceholder": "Confirm password",
+    "passwordSubmit": "Update password",
+    "passwordChanged": "Password updated",
+    "tooShort": "Password must be at least 8 characters",
+    "mismatch": "Passwords do not match",
+    "strength": {
+      "weak": "Weak",
+      "fair": "Fair",
+      "strong": "Strong"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Linked accounts",
+    "connected": "Connected",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "cannotUnlinkLast": "Cannot remove your only sign-in method",
+    "unlinked": "Account disconnected",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "Subscription",
+    "free": "Free plan",
+    "pro": "Pro plan",
+    "max": "Max plan",
+    "admin": "Admin",
+    "upgrade": "Upgrade to Pro",
+    "upgradeMonthly": "Pro — $15/mo",
+    "manage": "Manage subscription"
+  },
+  "exportData": {
+    "heading": "Export data",
+    "description": "Download a complete copy of all your data in JSON format.",
+    "button": "Export my data",
+    "success": "Export downloaded",
+    "rateLimited": "Export available again in {{hours}} hours"
+  },
+  "resetData": {
+    "heading": "Reset data",
+    "description": "Selectively clear your data without deleting your account. This cannot be undone.",
+    "scopes": {
+      "conversations": "Conversations",
+      "memory": "Memory",
+      "knowledge": "Knowledge graph",
+      "goals": "Goals",
+      "preferences": "Preferences",
+      "all": "Everything"
+    },
+    "scopeDesc": {
+      "conversations": "Delete all conversations and messages",
+      "memory": "Clear learned profile and procedures",
+      "knowledge": "Remove all entities and relations",
+      "goals": "Delete all goals and milestones",
+      "preferences": "Reset briefings and metadata",
+      "all": "Clear all data and start fresh"
+    },
+    "confirm": {
+      "conversations": "This will permanently delete all your conversations and messages. Continue?",
+      "memory": "This will erase everything Kernel has learned about you. Continue?",
+      "knowledge": "This will remove all knowledge graph entities and their connections. Continue?",
+      "goals": "This will delete all your goals and progress tracking. Continue?",
+      "preferences": "This will reset your briefings and metadata preferences. Continue?",
+      "all": "This will clear ALL your data — conversations, memory, knowledge, goals, and preferences. Your account and subscription remain intact. Continue?"
+    },
+    "confirmBtn": "Yes, reset",
+    "cancel": "Cancel",
+    "success": "{{scope}} cleared successfully",
+    "done": "Data reset complete"
+  },
+  "danger": {
+    "heading": "Account",
+    "signOut": "Sign out",
+    "signOutDesc": "Sign out of your account on this device",
+    "deleteAccount": "Delete account",
+    "deleteDesc": "Permanently delete your account and all data"
+  }
+}

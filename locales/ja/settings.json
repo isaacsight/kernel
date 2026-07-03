@@ -1,0 +1,124 @@
+{
+  "title": "アカウント設定",
+  "profile": {
+    "heading": "プロフィール",
+    "displayName": "表示名",
+    "displayNamePlaceholder": "あなたの名前",
+    "username": "ユーザー名",
+    "usernamePlaceholder": "@ユーザー名",
+    "avatar": "プロフィール写真",
+    "avatarChange": "変更",
+    "save": "プロフィールの保存",
+    "saved": "プロフィールの保存が完了しました",
+    "resetProfile": "プロフィールのリセット",
+    "profileReset": "プロフィールのデフォルト設定に戻します",
+    "usernameTaken": "このユーザー名は既に使用されています",
+    "displayNameTaken": "この表示名は既に使用されています",
+    "available": "利用可能"
+  },
+  "security": {
+    "heading": "認証情報を編集する",
+    "credentialsHeading": "メールアドレスとパスワード",
+    "verifyIdentity": "変更を加える前に本人確認を行います",
+    "verifyHint": "認証情報を編集する前に、メールアドレスに確認コードを送信します",
+    "sendCode": "確認コードを送信する",
+    "codePlaceholder": "6桁のコードを入力",
+    "codeRequired": "メールから受信した確認コードを入力してください",
+    "verificationRequired": "まず確認コードを送信してください",
+    "codeSent": "コードを送信しました — メールを確認してください",
+    "verify": "コードを確認",
+    "verified": "本人確認済み — 変更を加えることができます",
+    "resendCode": "コードを再送信",
+    "resendIn": "あと {{seconds}} 秒で再送信",
+    "changeEmail": "メールアドレスを変更",
+    "emailPlaceholder": "新しいメールアドレス",
+    "emailSubmit": "メールアドレスの更新",
+    "emailConfirmationSent": "新しいメールアドレスに確認メールを送信しました",
+    "changePassword": "パスワードの変更",
+    "setPassword": "パスワードの設定",
+    "newPasswordPlaceholder": "新しいパスワード",
+    "confirmPasswordPlaceholder": "パスワードの確認",
+    "passwordSubmit": "パスワードの更新",
+    "passwordChanged": "パスワードが更新されました",
+    "tooShort": "パスワードは8文字以上である必要があります",
+    "mismatch": "パスワードが一致しません",
+    "strength": {
+      "weak": "弱い",
+      "fair": "普通",
+      "strong": "強い"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "連携アカウント",
+    "connected": "接続済み",
+    "connect": "接続",
+    "disconnect": "切断",
+    "cannotUnlinkLast": "唯一のサインイン方法を削除できません",
+    "unlinked": "アカウントを切断しました",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "サブスクリプション",
+    "free": "無料プラン",
+    "pro": "プロプラン",
+    "max": "マックスプラン",
+    "admin": "管理者",
+    "upgrade": "Proにアップグレード",
+    "upgradeMonthly": "Pro - $29/月",
+    "upgradeAnnual": "Pro - 年間$290",
+    "upgradeMax": "Max - 月額$49",
+    "upgradeMaxAnnual": "Max - 年間$490",
+    "manage": "サブスクリプションを管理"
+  },
+  "exportData": {
+    "heading": "データのエクスポート",
+    "description": "JSON形式で、すべてのデータの完全なコピーをダウンロードします。",
+    "button": "私のデータをエクスポート",
+    "success": "エクスポートをダウンロードしました",
+    "rateLimited": "エクスポートは{{hours}}時間後に利用可能になります"
+  },
+  "resetData": {
+    "heading": "データの消去",
+    "description": "アカウントを削除せずに、データを個別に消去します。この操作は取り消せません。",
+    "scopes": {
+      "conversations": "会話",
+      "memory": "記憶",
+      "knowledge": "ナレッジグラフ",
+      "goals": "目標",
+      "preferences": "設定",
+      "all": "すべて"
+    },
+    "scopeDesc": {
+      "conversations": "すべての会話とメッセージを削除します",
+      "memory": "学習済みのプロファイルと手順を消去します",
+      "knowledge": "すべてのエンティティと関係を削除します",
+      "goals": "すべての目標とマイルストーンを削除します",
+      "preferences": "ブリーフィングとメタデータをリセットします",
+      "all": "すべてのデータをクリアし、最初から始めます"
+    },
+    "confirm": {
+      "conversations": "これはすべての会話とメッセージを完全に削除します。続行しますか？",
+      "memory": "Kernel があなたについて学習したすべてのものを消去します。続行しますか？",
+      "knowledge": "知識グラフのすべてのエンティティとその接続を削除します。続行しますか？",
+      "goals": "すべての目標と進捗状況の追跡を削除します。続行しますか？",
+      "preferences": "ブリーフィングとメタデータの優先設定をリセットします。続行しますか？",
+      "all": "これはすべてのデータ - 会話、メモリ、知識、目標、および設定をクリアします。アカウントとサブスクリプションはそのままです。続行しますか？"
+    },
+    "confirmBtn": "はい、リセット",
+    "cancel": "キャンセル",
+    "success": "{{scope}} が正常にクリアされました",
+    "done": "データのリセットが完了しました"
+  },
+  "danger": {
+    "heading": "アカウント",
+    "signOut": "サインアウト",
+    "signOutDesc": "このデバイスからアカウントにサインアウトします",
+    "deleteAccount": "アカウントを削除",
+    "deleteDesc": "アカウントとすべてのデータを完全に削除します"
+  }
+}

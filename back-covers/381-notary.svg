@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ISSUE 381 — Back cover
+  Subject: HAND-STAMPED NOTARY MARK ON CREAM PAPER (公証印)
+  Shape: designed vector placeholder (per back-cover-spec.md §XI shape 1.5)
+  Pending: commissioned photograph (shape 4)
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 800 1000"
+     preserveAspectRatio="xMidYMid meet"
+     role="img"
+     aria-label="A hand-stamped notary mark impression on cream paper, designed placeholder.">
+
+  <defs>
+    <!-- Paper grain: fine subtle noise to break the flat fill -->
+    <filter id="paperGrain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="grain"/>
+      <feColorMatrix in="grain" type="matrix" values="
+        0 0 0 0 0
+        0 0 0 0 0
+        0 0 0 0 0
+        0 0 0 0.08 0"/>
+      <feComposite in2="SourceGraphic" operator="in" result="grainOnly"/>
+      <feComposite in="SourceGraphic" in2="grainOnly" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+    </filter>
+
+    <!-- Paper laid texture: subtle horizontal banding suggesting bond paper -->
+    <pattern id="laidTexture" patternUnits="userSpaceOnUse" width="2" height="2">
+      <rect width="2" height="2" fill="transparent"/>
+      <line x1="0" y1="1" x2="2" y2="1" stroke="rgba(0,0,0,0.012)" stroke-width="0.5"/>
+    </pattern>
+
+    <!-- Stamp ink imperfection: turbulence + displacement so circular strokes look hand-pressed -->
+    <filter id="stampInk" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="1" seed="11" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8"/>
+    </filter>
+
+    <!-- Soft paper drop shadow (light from upper-left) -->
+    <filter id="paperShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="6"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.18 0"/>
+    </filter>
+
+    <!-- Vignette: soft falloff at edges of the ledger background -->
+    <radialGradient id="ledgerVignette" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#EBE8DE" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.08"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Ledger-gray worktable background -->
+  <rect width="800" height="1000" fill="#E7E4DA"/>
+  <rect width="800" height="1000" fill="url(#ledgerVignette)"/>
+
+  <!-- Paper sheet, slightly rotated to feel hand-placed -->
+  <g transform="translate(140, 110) rotate(-1.4 280 400)">
+
+    <!-- Soft shadow underneath the paper, offset lower-right -->
+    <rect x="6" y="10" width="520" height="780" rx="2" ry="2"
+          fill="#000000" opacity="0.18" filter="url(#paperShadow)"/>
+
+    <!-- The paper itself: cream cardstock -->
+    <rect x="0" y="0" width="520" height="780" rx="1" ry="1" fill="#F4EFE3"/>
+    <!-- Laid texture overlay -->
+    <rect x="0" y="0" width="520" height="780" fill="url(#laidTexture)"/>
+
+    <!-- Notary stamp impression — off-center, upper-middle of the paper -->
+    <g transform="translate(260, 290)" opacity="0.88">
+      <g filter="url(#stampInk)">
+        <!-- Outer ring -->
+        <circle cx="0" cy="0" r="118" fill="none" stroke="#2A1C36" stroke-width="3.2"/>
+        <!-- Inner ring -->
+        <circle cx="0" cy="0" r="82" fill="none" stroke="#2A1C36" stroke-width="1.4"/>
+
+        <!-- Tick marks between the rings, suggesting an inscription without spelling words.
+             Twelve evenly distributed marks; intentionally not letters. -->
+        <g stroke="#2A1C36" stroke-width="2" stroke-linecap="round">
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(0)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(30)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(60)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(90)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(120)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(150)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(180)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(210)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(240)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(270)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(300)"/>
+          <line x1="0" y1="-100" x2="0" y2="-90" transform="rotate(330)"/>
+        </g>
+
+        <!-- Faint hint of a stylized arc inscription — abstract glyph-shapes, not letters.
+             Renders as a curved sequence of tiny strokes. -->
+        <g stroke="#2A1C36" stroke-width="1" fill="none" opacity="0.7">
+          <path d="M -70,-30 Q -60,-50 -45,-50 Q -30,-50 -22,-30" />
+          <path d="M -15,-55 Q -8,-65 0,-65 Q 8,-65 15,-55" />
+          <path d="M 22,-30 Q 30,-50 45,-50 Q 60,-50 70,-30" />
+        </g>
+
+        <!-- Centre star (the magazine's system glyph, ratified ISSUE 370) -->
+        <text x="0" y="20" text-anchor="middle"
+              font-family="Georgia, 'EB Garamond', serif"
+              font-size="64" font-weight="700"
+              fill="#2A1C36">★</text>
+      </g>
+
+      <!-- Subtle ink-pressure variation: one edge fainter than the other.
+           A faint white-on-stamp overlay on the lower-right quadrant
+           suggests the hand pressed harder on the upper-left. -->
+      <ellipse cx="55" cy="55" rx="80" ry="60" fill="#F4EFE3" opacity="0.15"/>
+    </g>
+
+    <!-- A faint pencil-line guide on the paper — the kind a careful hand
+         drew before pressing the stamp. Almost invisible. Editorial detail. -->
+    <line x1="40" y1="180" x2="480" y2="180" stroke="#8B7E63" stroke-width="0.4" opacity="0.25"/>
+
+    <!-- Bottom-left corner: a small graphite date notation, illegible.
+         The kind of margin annotation a notary's clerk might add. -->
+    <g transform="translate(60, 700)" opacity="0.4">
+      <line x1="0" y1="0" x2="22" y2="0" stroke="#5C5040" stroke-width="0.6"/>
+      <line x1="0" y1="6" x2="32" y2="6" stroke="#5C5040" stroke-width="0.6"/>
+      <line x1="0" y1="12" x2="18" y2="12" stroke="#5C5040" stroke-width="0.6"/>
+    </g>
+
+  </g>
+
+  <!-- Filter the whole paper region for grain (post-composition) -->
+  <rect width="800" height="1000" fill="transparent" filter="url(#paperGrain)" pointer-events="none"/>
+
+</svg>

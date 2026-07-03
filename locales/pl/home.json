@@ -1,0 +1,192 @@
+{
+  "tagline": "Osobisty AI, który Cię pamięta, myśli razem z Tobą i staje się lepszy z czasem.",
+  "placeholder": "Porozmawiaj z kernel.chat...",
+  "welcomeToPro": "Witaj w Kernel Pro!",
+  "menu": {
+    "shareConversation": "Udostępnij rozmowę",
+    "exportMarkdown": "Eksportuj jako Markdown",
+    "goals": "Cele",
+    "workflows": "Przepływy pracy",
+    "scheduledTasks": "Zaplanowane zadania",
+    "dailyBriefing": "Codzienny briefing",
+    "whatKernelKnows": "Co Kernel wie",
+    "yourStats": "Twoje statystyki",
+    "insights": "Spostrzeżenia",
+    "upgradeToPro": "Uaktualnij do Pro",
+    "manageSubscription": "Zarządzaj subskrypcją",
+    "signOut": "Wyloguj się",
+    "deleteAccount": "Usuń konto",
+    "notifications": "Powiadomienia",
+    "notifInApp": "Powiadomienia w aplikacji",
+    "notifBriefings": "Alerty briefingowe",
+    "notifGoals": "Aktualizacje celów",
+    "notifReminders": "Przypomnienia",
+    "notifPush": "Powiadomienia push",
+    "darkMode": "Tryb ciemny",
+    "theme": "Motyw",
+    "themeLight": "Jasny",
+    "themeDark": "Ciemny",
+    "themeEink": "E-Ink",
+    "agentBuilder": "Kreator agentów",
+    "agentLibrary": "Biblioteka agentów",
+    "backgroundAgents": "Agenci w tle",
+    "myContent": "Moje treści",
+    "bookmarks": "Zakładki",
+    "architecture": "Architektura",
+    "designSystem": "System projektowy",
+    "routingInsights": "Informacje o routingu",
+    "system": "System",
+    "communications": "Komunikacja",
+    "adaptiveSystem": "System adaptacyjny",
+    "usage": "Użycie",
+    "mirror": "Lustro",
+    "projectFiles": "Pliki projektu",
+    "imageGallery": "Galeria zdjęć",
+    "knowledgeBase": "Baza wiedzy",
+    "social": "Media społecznościowe",
+    "platformEngine": "Potok treści",
+    "explore": "Odkrywaj",
+    "accountSettings": "Ustawienia konta",
+    "notifProactive": "Proaktywne spostrzeżenia"
+  },
+  "admin": "Admin",
+  "pro": "Pro",
+  "max": "Max",
+  "briefing": {
+    "todaysBriefing": "Dzisiejszy briefing",
+    "read": "Czytaj",
+    "discuss": "Dyskutuj"
+  },
+  "upgrade": {
+    "title": "Wykorzystałeś swoje {{limit}} darmowych wiadomości",
+    "subtitle": "Pro daje ci nieograniczone wiadomości, pamięć która uczy się ciebie i pełne briefingi.",
+    "resetsAt": "Twoje wiadomości odnowią się o {{time}}. Uaktualnij, aby mieć 100 wiadomości dziennie.",
+    "features": {
+      "unlimitedMessages": "Nieograniczone wiadomości",
+      "deepResearch": "Rozszerzone myślenie (30/mies.)",
+      "multiAgent": "Analiza plików (10/mies.)",
+      "multiStep": "Cele, głos i agentyczne przepływy pracy",
+      "persistentMemory": "Pamięć + proaktywne briefingi"
+    },
+    "button": "Przejdź na Pro — $29/mies.",
+    "annualButton": "$290/rok — zaoszczędź $58",
+    "buttonLoading": "Otwieranie płatności...",
+    "maybeLater": "Może później",
+    "learnedTitle": "Czego Kernel dowiedział się o Tobie",
+    "learnedCta": "Wróć jutro i kontynuuj rozmowę.",
+    "maxButton": "Poczuj moc Max — $49/mies.",
+    "maxAnnualButton": "$490/rok — zaoszczędź $98"
+  },
+  "deleteConfirm": {
+    "title": "Usunąć konto?",
+    "subtitle": "To trwale usunie wszystkie Twoje dane: rozmowy, pamięć i preferencje. Tej operacji nie można cofnąć.",
+    "subtitleWithSub": " Twoja subskrypcja również zostanie anulowana.",
+    "typeDelete": "Wpisz DELETE, aby potwierdzić:",
+    "confirm": "Tak, usuń moje konto",
+    "confirming": "Usuwanie..."
+  },
+  "status": {
+    "assemblingAgents": "Zbieranie agentów...",
+    "agentsCollaborating": "Agenci współpracują",
+    "synthesizingPerspectives": "Synteza perspektyw...",
+    "routingToSpecialist": "Przekierowywanie do specjalisty...",
+    "isWorking": "{{agent}} pracuje...",
+    "lowConfidence": "niskie zaufanie"
+  },
+  "feedback": {
+    "save": "Zapisz",
+    "cancel": "Anuluj"
+  },
+  "messagesRemaining": "Pozostało {{count}} wiadomości",
+  "lastFreeMessage": "Ostatnia darmowa wiadomość",
+  "menuSection": {
+    "ai": "AI i Agenci",
+    "content": "Treści i Wiedza",
+    "insights": "Wgląd i Cele",
+    "system": "Ustawienia i System"
+  },
+  "usage": {
+    "title": "Użycie",
+    "loading": "Wczytywanie danych o użyciu...",
+    "retry": "Ponów próbę",
+    "last30days": "Ostatnie 30 dni",
+    "onPace": "Tempo na {{projected}} spośród {{limit}} wiadomości",
+    "overLimit": "Tempo przekroczenia limitu {{limit}} wiadomości",
+    "byFeature": "Według funkcji",
+    "dailyTrend": "Trend za 30 dni",
+    "recommendation": "Rekomendacja",
+    "upgrade": "Uaktualnij"
+  },
+  "entity": {
+    "evolved": "Rozwinął się do poziomu {{tier}}",
+    "streak": "Dzień {{count}}",
+    "goalCheckIn": "Sprawdź: {{title}}",
+    "mood": {
+      "happy": "szczęśliwy",
+      "excited": "podniecony",
+      "content": "zadowolony",
+      "sad": "smutny",
+      "sleepy": "zmęczony",
+      "lonely": "samotny",
+      "bored": "nudy"
+    }
+  },
+  "entityInfo": {
+    "mood": "Nastroj",
+    "streak": "Seria",
+    "days": "dni",
+    "focus": "Koncentracja"
+  },
+  "nudge": {
+    "insights": "Teraz odbyłeś już kilka rozmów — Kernel znajduje wzorce w tematach, o których rozmawiasz.",
+    "knowledge": "Twój graf wiedzy rośnie — zobacz powiązania, które Kernel zmapował z Twoich rozmów.",
+    "stats": "Ukończyłeś cel — sprawdź swoje statystyki, aby zobaczyć, jak rozwijają się Twoje statystyki użycia.",
+    "workflows": "Regularnie używasz Kernela — workflowy mogą automatyzować powtarzające się zadania.",
+    "showMe": "Pokaż mi",
+    "notNow": "Nie teraz"
+  },
+  "valuePreview": {
+    "message": "Użytkownicy Pro otrzymują codzienne briefingi, dogłębne badania i trwałą pamięć.",
+    "gotIt": "Rozumiem"
+  },
+  "messagesLeft": "{{count}} wiadomości zostało",
+  "agentWhy": {
+    "label": "Dlaczego?"
+  },
+  "thinking": {
+    "label": "Rozważania",
+    "duration": "Myślę od {{seconds}}s",
+    "streaming": "Rozważam...",
+    "toggle": "Włącz/Wyłącz Rozważania",
+    "tooltip": "Zastanów się głębiej przed odpowiedzią"
+  },
+  "explain": {
+    "toggle": "Włącz/Wyłącz tryb objaśnień",
+    "tooltip": "Tryb objaśnień — krok po kroku"
+  },
+  "document": {
+    "active": "Analizowanie: {{name}}",
+    "clear": "Wyczyść dokument",
+    "contextHint": "Zadawaj pytania doprecyzowujące dotyczące tego dokumentu"
+  },
+  "proactive": {
+    "noticed": "Kernel zauważył...",
+    "notification": "Kernel ma dla Ciebie spostrzeżenie",
+    "explore": "Przejrzyjmy to"
+  },
+  "tour": {
+    "entity": "To jest Twoja encja Kernel. Rozwija się wraz z rozmową – dotknij jej, aby zobaczyć nastrój, serię i poziom rozwoju.",
+    "moreMenu": "Dotknij tutaj, aby wyświetlić wszystkie funkcje Kernela: agentów, bazę wiedzy, wgląd i więcej.",
+    "inputBar": "Rozpocznij rozmowę tutaj. Dołącz pliki, przełącz tryb objaśnień lub po prostu powiedz cześć.",
+    "gotIt": "Rozumiem",
+    "skip": "Pomiń przewodnik"
+  },
+  "workflow": {
+    "planning": "Planowanie kroków...",
+    "executing": "Wykonanie: {{step}}",
+    "complete": "Workflow zakończony",
+    "failed": "Krok nie powiódł się: {{step}}",
+    "cancel": "Anuluj workflow",
+    "cancelled": "Workflow anulowany"
+  }
+}

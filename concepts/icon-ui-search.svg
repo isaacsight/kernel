@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Search reticle -->
+  <circle cx="112" cy="112" r="64" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="157" y1="157" x2="216" y2="216" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Navigational reticle markers -->
+  <line x1="112" y1="48" x2="112" y2="60" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="112" y1="164" x2="112" y2="176" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="48" y1="112" x2="60" y2="112" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="164" y1="112" x2="176" y2="112" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Scanning origin / focal point -->
+  <circle cx="112" cy="112" r="3" fill="currentColor" opacity="0.4"/>
+</svg>

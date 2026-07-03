@@ -1,0 +1,69 @@
+{
+    "observer": {
+        "phasePipeline": "페이즈 파이프라인",
+        "phases": {
+            "perceiving": "인식 중",
+            "attending": "주의 집중 중",
+            "deciding": "결정 중",
+            "acting": "실행 중",
+            "reflecting": "성찰 중"
+        },
+        "perception": "인식",
+        "intent": "의도",
+        "urgency": "시급성",
+        "complexity": "복잡성",
+        "sentiment": "감성",
+        "impliedNeed": "내포된 요구",
+        "noActivePerception": "활성화된 인식 없음",
+        "attention": "주의",
+        "focus": "집중",
+        "depth": "깊이",
+        "noActiveAttention": "활성화된 주의 없음",
+        "conviction": "신념",
+        "trend": {
+            "rising": "상승 중",
+            "falling": "하락 중",
+            "stable": "안정적"
+        },
+        "beliefs": "신념 ({{count}})",
+        "noBeliefsFormed": "형성된 신념 없음",
+        "eventFeed": "이벤트 피드",
+        "noEventsYet": "아직 이벤트 없음",
+        "lastReflection": "마지막 성찰",
+        "noReflectionsYet": "아직 성찰 없음"
+    },
+    "controls": {
+        "engine": "엔진",
+        "stop": "중지",
+        "reset": "초기화",
+        "agentOverride": "에이전트 오버라이드",
+        "overrideNext": "다음 오버라이드",
+        "conviction": "신념",
+        "beliefs": "신념",
+        "newBeliefPlaceholder": "새로운 신념...",
+        "challenge": "이의 제기",
+        "reflections": "성찰",
+        "pruneLabel": "품질 미달 제거:",
+        "prune": "제거",
+        "pruneResult": "{{count}}개의 성찰이 제거됨",
+        "agentPerformance": "에이전트 성능",
+        "noPerformanceData": "아직 성능 데이터 없음"
+    },
+    "chat": {
+        "emptyTitle": "kernel.chat에 물어보세요",
+        "emptySubtitle": "엔진이 보는 모든 것을 봅니다.",
+        "placeholder": "Kernel에게 묻기...",
+        "send": "보내기"
+    },
+    "pill": {
+        "openKernel": "kernel.chat 열기",
+        "phases": {
+            "idle": "대기 중",
+            "perceiving": "인식 중",
+            "attending": "주의 집중 중",
+            "deciding": "결정 중",
+            "acting": "실행 중",
+            "reflecting": "성찰 중"
+        }
+    }
+}

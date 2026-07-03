@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <!-- OG Card Background — 1200x630 for social link previews -->
+  <defs>
+    <filter id="og-grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="3" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+      <feBlend in="SourceGraphic" in2="gray" mode="multiply"/>
+    </filter>
+  </defs>
+
+  <!-- Ivory base -->
+  <rect width="1200" height="630" fill="#FAF9F6"/>
+
+  <!-- Subtle paper grain -->
+  <rect width="1200" height="630" fill="#F0EBE0" opacity="0.2" filter="url(#og-grain)"/>
+
+  <!-- Large faint K watermark — right-aligned -->
+  <text x="820" y="520" text-anchor="middle" font-family="Georgia, serif" font-style="italic"
+        font-size="600" fill="#D4C5A9" opacity="0.12">K</text>
+
+  <!-- Thin sepia border inset -->
+  <rect x="24" y="24" width="1152" height="582" rx="4" stroke="#D4C5A9" stroke-width="1" fill="none" opacity="0.3"/>
+
+  <!-- Corner ornaments — printer's marks -->
+  <!-- Top left -->
+  <line x1="24" y1="60" x2="60" y2="60" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="60" y1="24" x2="60" y2="60" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <!-- Top right -->
+  <line x1="1140" y1="60" x2="1176" y2="60" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="1140" y1="24" x2="1140" y2="60" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <!-- Bottom left -->
+  <line x1="24" y1="570" x2="60" y2="570" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="60" y1="570" x2="60" y2="606" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <!-- Bottom right -->
+  <line x1="1140" y1="570" x2="1176" y2="570" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+  <line x1="1140" y1="570" x2="1140" y2="606" stroke="#D4C5A9" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Text overlay zone — left side, where title/description would go -->
+  <!-- Placeholder line positions (actual text added by the app) -->
+  <line x1="80" y1="280" x2="500" y2="280" stroke="#D4C5A9" stroke-width="0.3" opacity="0.1"/>
+  <line x1="80" y1="320" x2="440" y2="320" stroke="#D4C5A9" stroke-width="0.3" opacity="0.1"/>
+</svg>

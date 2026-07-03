@@ -1,0 +1,52 @@
+{
+  "observer": {
+    "phasePipeline": "Vaihepipeline",
+    "phases": { "perceiving": "havaitsee", "attending": "käsittelee", "deciding": "päättää", "acting": "toimii", "reflecting": "reflektoi" },
+    "perception": "Havainto",
+    "intent": "Tarkoitus",
+    "urgency": "Kiireellisyys",
+    "complexity": "Monimutkaisuus",
+    "sentiment": "Tunnetila",
+    "impliedNeed": "Epäsuora tarve",
+    "noActivePerception": "Ei aktiivista havaintoa",
+    "attention": "Tarkkaavaisuus",
+    "focus": "Fokus",
+    "depth": "Syvyys",
+    "noActiveAttention": "Ei aktiivista tarkkaavaisuutta",
+    "conviction": "Vakaumus",
+    "trend": { "rising": "nouseva", "falling": "laskeva", "stable": "vakaa" },
+    "beliefs": "Vakaumukset ({{count}})",
+    "noBeliefsFormed": "Vakaumuksia ei ole muodostunut",
+    "eventFeed": "Tapahtumavirta",
+    "noEventsYet": "Ei tapahtumia vielä",
+    "lastReflection": "Viimeisin reflektio",
+    "noReflectionsYet": "Ei reflektioita vielä"
+  },
+  "controls": {
+    "engine": "Moottori",
+    "stop": "Pysäytä",
+    "reset": "Nollaa",
+    "agentOverride": "Agentin ohitus",
+    "overrideNext": "Ohita seuraava",
+    "conviction": "Vakaumus",
+    "beliefs": "Vakaumukset",
+    "newBeliefPlaceholder": "Uusi vakaumus...",
+    "challenge": "Haasta",
+    "reflections": "Reflektiot",
+    "pruneLabel": "Poista laadun alle:",
+    "prune": "Karsi",
+    "pruneResult": "Poistettiin {{count}} reflektio(ta)",
+    "agentPerformance": "Agenttien suorituskyky",
+    "noPerformanceData": "Ei suorituskykytietoja vielä"
+  },
+  "chat": {
+    "emptyTitle": "Kysy kernel.chatilta",
+    "emptySubtitle": "Se näkee kaiken minkä moottori näkee.",
+    "placeholder": "Kysy Kernelilta...",
+    "send": "Lähetä"
+  },
+  "pill": {
+    "openKernel": "Avaa kernel.chat",
+    "phases": { "idle": "odottaa", "perceiving": "havaitsee", "attending": "käsittelee", "deciding": "päättää", "acting": "toimii", "reflecting": "reflektoi" }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "greeting": "Hey. I'm Kernel.",
+  "greetingUser": "Hey, {{name}}. I'm Kernel.",
+  "tagline": "Ask me anything. I'll figure out the rest.",
+  "placeholder": "What are you working on?",
+  "skipIntro": "Skip"
+}

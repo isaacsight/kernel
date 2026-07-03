@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Claude Code — Main Emblem -->
+  <!-- Bounding compass circle standard in Kernel -->
+  <circle cx="128" cy="128" r="120" stroke="#D4C5A9" stroke-width="1" stroke-dasharray="4 4"/>
+  
+  <!-- Outer Technical Bounds for Code environment -->
+  <rect x="72" y="72" width="112" height="112" rx="12" stroke="#D4805A" stroke-width="1.5" stroke-dasharray="2 4" opacity="0.6"/>
+
+  <!-- Anthropic-style Asterism (4-pointed curved spark) -->
+  <path d="M128 88 Q128 128 168 128 Q128 128 128 168 Q128 128 88 128 Q128 128 128 88" stroke="#D4805A" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Center Core -->
+  <circle cx="128" cy="128" r="3" fill="#D4805A"/>
+  
+  <!-- CLI Corner brackets reflecting code editing -->
+  <polyline points="80,96 80,80 96,80" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round"/>
+  <polyline points="176,160 176,176 160,176" stroke="#D4805A" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,69 @@
+{
+  "observer": {
+    "phasePipeline": "Pipeline de Phases",
+    "phases": {
+      "perceiving": "perception",
+      "attending": "attention",
+      "deciding": "décision",
+      "acting": "action",
+      "reflecting": "réflexion"
+    },
+    "perception": "Perception",
+    "intent": "Intention",
+    "urgency": "Urgence",
+    "complexity": "Complexité",
+    "sentiment": "Sentiment",
+    "impliedNeed": "Besoin Implicite",
+    "noActivePerception": "Aucune perception active",
+    "attention": "Attention",
+    "focus": "Focus",
+    "depth": "Profondeur",
+    "noActiveAttention": "Aucune attention active",
+    "conviction": "Conviction",
+    "trend": {
+      "rising": "en hausse",
+      "falling": "en baisse",
+      "stable": "stable"
+    },
+    "beliefs": "Croyances ({{count}})",
+    "noBeliefsFormed": "Aucune croyance formée",
+    "eventFeed": "Flux d'Événements",
+    "noEventsYet": "Aucun événement pour le moment",
+    "lastReflection": "Dernière Réflexion",
+    "noReflectionsYet": "Aucune réflexion pour le moment"
+  },
+  "controls": {
+    "engine": "Moteur",
+    "stop": "Arrêter",
+    "reset": "Réinitialiser",
+    "agentOverride": "Substitution d'Agent",
+    "overrideNext": "Substituer le Suivant",
+    "conviction": "Conviction",
+    "beliefs": "Croyances",
+    "newBeliefPlaceholder": "Nouvelle croyance...",
+    "challenge": "Contester",
+    "reflections": "Réflexions",
+    "pruneLabel": "Élaguer en dessous de la qualité :",
+    "prune": "Élaguer",
+    "pruneResult": "{{count}} réflexion(s) supprimée(s)",
+    "agentPerformance": "Performance des Agents",
+    "noPerformanceData": "Aucune donnée de performance pour le moment"
+  },
+  "chat": {
+    "emptyTitle": "Demandez à kernel.chat",
+    "emptySubtitle": "Il voit tout ce que le moteur voit.",
+    "placeholder": "Demandez au Kernel...",
+    "send": "Envoyer"
+  },
+  "pill": {
+    "openKernel": "Ouvrir kernel.chat",
+    "phases": {
+      "idle": "inactif",
+      "perceiving": "perception",
+      "attending": "attention",
+      "deciding": "décision",
+      "acting": "action",
+      "reflecting": "réflexion"
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "title": "سروشت حساب",
+  "profile": {
+    "heading": "پروفایل",
+    "displayName": "ناوەک نمایش",
+    "displayNamePlaceholder": "{{Your name}}",
+    "username": "کاربەرناوە",
+    "usernamePlaceholder": "{{@username}}",
+    "avatar": "وێنەی پروفایل",
+    "avatarChange": "گۆرین",
+    "save": "پاراستن پروفایل",
+    "saved": "پروفایل پارێزرا",
+    "resetProfile": "سڕینەوەی پروفایل",
+    "profileReset": "پروفایل گەڕایەوە ڕێکخستنە سەرەتاییەکان",
+    "usernameTaken": "ئەم کاربەرناوە پێشتر هەیە",
+    "displayNameTaken": "ئەم ناوەک نمایش پێشتر هەیە",
+    "available": "بەدەست"
+  },
+  "security": {
+    "heading": "گۆرینەوەی پێکهاتەکان",
+    "credentialsHeading": "ئیمەیڵ و تێگەزە",
+    "verifyIdentity": "بۆ گۆرینەوە پێویستە ئەمرۆکیت",
+    "verifyHint": "کۆدی دەربازکردن دەبێتە ئەیمەیڵی تۆ پێش گۆرینەوەی پێکهاتەکان",
+    "sendCode": "ناردنی کۆدی دەربازکردن",
+    "codePlaceholder": "نوسینی کۆدی ٦-ڕقم",
+    "codeRequired": "کۆدی دەربازکردن لە ئەیمەیڵی خۆت بنووس",
+    "verificationRequired": "بەڵێ، پێشتر کۆدی دەربازکردن نێرە",
+    "codeSent": "کۆد نێرایەوە — چاڵەکەت ببینە",
+    "verify": "ئەمرۆکە کۆد",
+    "verified": "ئەمڕۆکیت ئەمرۆکە — ئێستا دەتوانی گۆرینەوە بکەیت",
+    "resendCode": "دوبارە ناردنی کۆد",
+    "resendIn": "دوبارە نێرایەوە لە {{seconds}} چرکە",
+    "changeEmail": "گۆرینەوەی ئەیمەیڵ",
+    "emailPlaceholder": "ئیمەیڵی نوێ",
+    "emailSubmit": "نûvekirina e-maîl",
+    "emailConfirmationSent": "E-maîla pejwekirê ji adresê nû ya we şand",
+    "changePassword": "Guherîna şîfre",
+    "setPassword": "Şîfre danîn",
+    "newPasswordPlaceholder": "Şîfreya nû",
+    "confirmPasswordPlaceholder": "Hesibîna şîfre",
+    "passwordSubmit": "Nûvekirina şîfre",
+    "passwordChanged": "Şîfre nûvekirin",
+    "tooShort": "Şîfre divê herî kêm 8 caran be",
+    "mismatch": "Şîfrekan ne hevberin",
+    "strength": {
+      "weak": "Laş",
+      "fair": "Sağlam",
+      "strong": "Zirav"
+    }
+  },
+  "linkedAccounts": {
+    "heading": "Hesabên girêdidin",
+    "connected": "Girêdayî",
+    "connect": "بەستنەوە",
+    "disconnect": "بەر کردنەوە",
+    "cannotUnlinkLast": "نەتوانی دەستوخۆڵەکەت ئەڵێنەوە، ئەوە تەنها ڕێگە بۆ ئەوەیە کە تۆ ئەوەڵێنیتەوە.",
+    "unlinked": "حساب بەر کراوە",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub",
+      "twitter": "X (Twitter)",
+      "apple": "Apple"
+    }
+  },
+  "subscription": {
+    "heading": "بەرنامەی ئەندامبوون",
+    "free": "بەرنامەی ئازاد",
+    "pro": "بەرنامەی پیشەگەری",
+    "max": "بەرنامەی Max",
+    "admin": "ئیدارە",
+    "upgrade": "لەگەڵ پیشەگەری دەستپێشخستن",
+    "upgradeMonthly": "پیشەگەری — 29 دۆلار/مانگ",
+    "upgradeAnnual": "ئەگەر بگەیەنەوە بۆ ساڵانە: Pro — 290 دۆلار/ساڵ",
+    "upgradeMax": "Max — 49 دۆلار/مانگ",
+    "upgradeMaxAnnual": "Max — 490 دۆلار/ساڵ",
+    "manage": "پارێزگارى لە ئەندامبونى خۆت بکە"
+  },
+  "exportData": {
+    "heading": "هەناردنى داتا",
+    "description": "دانه‌وه‌رى كۆپیى تەواوى هەموو داتات به‌ شێوازى JSON.",
+    "button": "هەناردنى داتام",
+    "success": "هەناردن سه‌رکه‌وتوو بوو",
+    "rateLimited": "هەناردن له‌ {{hours}} کاتى داهاتوو پێشێوه‌ دەبێت"
+  },
+  "resetData": {
+    "heading": "سه‌رده‌كردنەوەى داتا",
+    "description": "لەناچنى هەندێك داتات بێ ئەوەى حسابەکەت فیشار بکەیت. ئەمە گه‌زیره‌ نه‌بووه‌.",
+    "scopes": {
+      "conversations": "شێوانه‌کان",
+      "memory": "خۆمراوه‌",
+      "knowledge": "گرافى زانست",
+      "goals": "ئامانجدان",
+      "preferences": "خۆشه‌وه‌ڵات",
+      "all": "هه‌موو شت"
+    },
+    "scopeDesc": {
+      "conversations": "هه‌موو کۆدیال و پێغه‌کان سڕێنه‌وه‌",
+      "memory": "پڕۆفایلی فێربووه‌و و ڕێوشوێنه‌کان پاك بكه‌",
+      "knowledge": "هه‌موو بواره‌ و به‌سته‌ره‌كان له‌لاي ده‌ستنه‌وه‌",
+      "goals": "هه‌موو ئامانجه‌ و خه‌ڵه‌ته‌كان سڕێنه‌وه‌",
+      "preferences": "خۆگه‌یران و داده‌نه‌ری سه‌پاندن",
+      "all": "هه‌موو داده‌نه‌ری پاك ده‌كه‌ و سه‌ره‌كیه‌وه‌ ده‌ست ده‌كه‌"
+    },
+    "confirm": {
+      "conversations": "ئه‌مه‌ هه‌موو كۆدیال و پێغه‌كانی تۆ به‌شێوه‌نه‌یه‌ك سڕێنه‌وه‌. به‌پێشێوه‌ ده‌ست بكه‌؟",
+      "memory": "ئه‌مه‌ هه‌موو شتی Kernel فێربووه‌ته‌ له‌سه‌ر تۆ پاك ده‌كات. به‌پێشێوه‌ ده‌ست بكه‌؟",
+      "knowledge": "ئه‌مه‌ هه‌موو بواره‌كانی خشته‌كانی زانست و به‌سته‌ره‌كانیان ده‌ستنه‌وه‌. به‌پێشێوه‌ ده‌ست بكه‌؟",
+      "goals": "ئه‌مه‌ هه‌موو ئامانجه‌كانی تۆ و ڕاستنێوه‌كردنی پێشكه‌ش ده‌كات. به‌پێشێوه‌ ده‌ست بكه‌؟",
+      "preferences": "ئه‌مه‌ خۆگه‌یران و داده‌نه‌ری سه‌پاندنی تۆ سه‌پاند ده‌كات. به‌پێشێوه‌ ده‌ست بكه‌؟",
+      "all": "ئه‌مه‌ هه‌موو داده‌نه‌ری تۆ – كۆدیال، به‌ره‌وه‌، زانست، ئامانجه‌ و خۆشه‌وه‌ڵات پاك ده‌كات. به‌شداره‌كاری و كه‌رتوكردنت هه‌ڵناچن. به‌پێشێوه‌ ده‌ست بكه‌؟"
+    },
+    "confirmBtn": "بله‌، سه‌پێنه‌",
+    "cancel": "رافساکار",
+    "success": "{{scope}} سەرکەوتووییەک پاک دەکرێتەوە",
+    "done": "گەڕانەوەی داتای تەواو بوو"
+  },
+  "danger": {
+    "heading": "حساب",
+    "signOut": "لە دەرخستن",
+    "signOutDesc": "لە حسابەکەت دەربخستە لەم ڕێژەیەدا",
+    "deleteAccount": "حسابەکەت فیشارە",
+    "deleteDesc": "حسابەکەت و هەموو داتاکەت بە شێوەیەکی دائمی فیشارە"
+  }
+}
