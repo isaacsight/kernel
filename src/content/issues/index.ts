@@ -61,6 +61,7 @@ import { ISSUE_405 } from './405'
 import { ISSUE_406 } from './406'
 import { ISSUE_407 } from './407'
 import { ISSUE_408 } from './408'
+import { ISSUE_409 } from './409'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -1010,6 +1011,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_406,
   ISSUE_407,
   ISSUE_408,
+  ISSUE_409,
 ]
 
 /** The latest published issue — drives the landing cover. */
