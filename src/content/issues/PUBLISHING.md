@@ -85,6 +85,7 @@ Pick the editorial tool that fits the content:
 | `colloquy` | A single argument carried by **two co-equal voices** (no host) | Voices legend (two stances), numbered movements of attributed turns, optional terms dossier + pull quote. The two voices are positions, not people — a private conversation is mined, never transcribed (see 398). |
 | `instrument` | A **calibrated control handed to the reader** — the interactive tool | Fixed prompt; N dial stops (roving radiogroup); the same prompt answered at each depth with a meter line. Interaction is React state; motion stays CSS-only; all panels stay in the DOM and print renders them stacked. Meter readings must be honestly labelled when representative, or genuinely measured (see 399, 405). |
 | `compare` | A **binary switch between two irreducible lenses** on one fact set — not depths, positions with no medium between them | Two-lens switch (ARIA `role="switch"`, not radiogroup); a shared fact list, each fact read differently under each lens; optional verdict, left undefined when the piece declines to resolve (see 406). |
+| `sequence` | A **real ordered process in discrete, complete stages** — each stage's account depends on the one before it, not a spectrum or a binary | Numbered rail (ARIA `role="tablist"`/`tab`/`tabpanel`, standard Tabs keyboard behaviour, no forward-lock); a panel per stage with an optional artifact line; the final stage may attach the process's real terminal outcomes. All stages stay in the DOM and print renders them stacked, in order (see 408). |
 
 **Profile of a person → essay, not interview**, unless you have the
 subject's actual answers. The magazine never publishes invented
@@ -196,7 +197,8 @@ recent same-format issue (`371.ts` for essay-as-profile,
 `404.ts` for review (graded survey),
 `398.ts` for colloquy (two-voice),
 `405.ts` for instrument (interactive dial, second instance, measured meter),
-`406.ts` for compare (interactive binary switch — first instance)). Every issue needs:
+`406.ts` for compare (interactive binary switch — first instance),
+`408.ts` for sequence (interactive ordered stages — first instance)). Every issue needs:
 
 - A leading block comment explaining the identity decisions
 - `number`, `month`, `year`, `feature`, `featureJp`, `price`, `tagline`

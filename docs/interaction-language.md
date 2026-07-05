@@ -6,13 +6,15 @@
 > The issue persuades; this document enforces. When they disagree,
 > fix the disagreement before shipping anything.
 >
-> **The cabinet, as of ISSUE 406:** two shapes built — Dial
+> **The cabinet, as of ISSUE 408:** three shapes built — Dial
 > (`instrument`, ARIA radiogroup, N ordered positions on one
-> variable) and Compare (`compare`, ARIA switch, two irreducible
-> lenses with no position between them). Two shapes reserved,
-> unbuilt: Sequence (an ordered argument in discrete, complete
-> stages — ARIA disclosure/tablist) and any future shape a real
-> story demands. See rule 7 for how a reservation becomes a build.
+> variable), Compare (`compare`, ARIA switch, two irreducible
+> lenses with no position between them), and Sequence (`sequence`,
+> ARIA tablist, an ordered process in discrete, complete stages
+> where each stage's account depends on the one before it). Any
+> further shape waits, unbuilt, for a real story that needs it —
+> see rule 7 for how a reservation becomes a build, and for why
+> ISSUE 407 refused to manufacture one.
 
 Status: **LAW** — reviewed each time a new interactive spread is
 proposed. Two documents govern the visual grammar and this one
@@ -124,6 +126,30 @@ native Enter/Space activation) rather than a two-stop `radiogroup`,
 because the interaction model is genuinely different, not just
 smaller. **Compare is now itself at instance one** — its own shared
 machinery waits for a second switch-shaped story before anything
+gets extracted.
+
+**How the third shape got born (worked example: Sequence, ISSUE
+408), and the reservation that nearly wasn't refused.** ISSUE 407 —
+a retrospective auditing 399/403/405/406 — was drafted with the
+instinct to reach for a new interactive mechanic simply because two
+existed; that instinct was named and refused in the piece itself,
+and 407 shipped as a plain essay. The real story arrived separately:
+kbot's engineering loop (`packages/kbot/src/engineering-loop.ts`,
+29 passing tests) runs five ordered phases — plan, act, observe,
+reflect, decide — where each phase's account depends on what the
+one before it produced, and the final phase forks to one of three
+real, mutually exclusive exits (`success` / `budget` / `handback`).
+Neither built shape fit: it is not a spectrum with a "medium"
+between plan and decide (ruling out Dial), and it is not two
+readings of one fact set (ruling out Compare) — it is a real
+process with an actual order, which is exactly what Sequence was
+reserved for. It shipped as ARIA `tablist`/`tab`/`tabpanel` — the
+established Tabs pattern, standard keyboard behaviour, no
+forward-lock invented on top of it, because a reader here is
+reviewing a *finished* run's journal, not driving a live one, so
+jumping straight to `decide` is a legitimate way to read it.
+**Sequence is now itself at instance one** — its own shared
+machinery waits for a second stage-shaped story before anything
 gets extracted.
 
 ---

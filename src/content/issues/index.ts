@@ -60,6 +60,7 @@ import { ISSUE_404 } from './404'
 import { ISSUE_405 } from './405'
 import { ISSUE_406 } from './406'
 import { ISSUE_407 } from './407'
+import { ISSUE_408 } from './408'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -657,6 +658,58 @@ export interface CompareSpread extends SpreadCommon {
   pullQuote?: SpreadPullQuote
 }
 
+/** ─── sequence ──────────────────────────────────────────────────
+ *  An ordered argument in discrete, complete stages — the reader
+ *  advances through a real process rather than positions on one
+ *  variable (Dial) or between two lenses (Switch). ARIA tablist:
+ *  standard Tabs keyboard behaviour, any stage reachable any time
+ *  (a reader inspecting a finished run may jump straight to the
+ *  end) — the magazine does not invent a forward-locked variant of
+ *  an established pattern. Introduced ISSUE 408; see
+ *  docs/interaction-language.md for the full rule-by-rule case. */
+export interface SequenceStage {
+  /** Stable id, e.g. 'plan'. */
+  id: string
+  label: string
+  labelJp?: string
+  /** One-line standfirst for this stage, shown on the tab itself. */
+  summary: string
+  /** The fuller account — one paragraph per array entry. */
+  detail: string[]
+  /** A concrete, verifiable fact anchoring this stage — a real
+   *  function name, file, test count, commit. Never invented for
+   *  symmetry (interaction-language.md rule 6, applied to prose
+   *  rather than a meter). */
+  artifact?: string
+}
+
+/** One of the process's real, mutually exclusive terminal outcomes —
+ *  rendered attached to the final stage, not reader-selectable
+ *  (rule 4: every reachable state stays on the page; these are the
+ *  process's own branches, not additional interaction). */
+export interface SequenceOutcome {
+  id: string
+  label: string
+  labelJp?: string
+  condition: string
+  result: string
+}
+
+export interface SequenceSpread extends SpreadCommon {
+  type: 'sequence'
+  dossier?: SpreadDossier
+  intro?: SpreadSection[]
+  /** The stages, in the order the real process runs them. */
+  stages: SequenceStage[]
+  /** id of the initially selected stage. Defaults to the first. */
+  defaultStage?: string
+  /** The process's real terminal branches, shown with the final
+   *  stage's panel. Optional — not every sequence forks. */
+  outcomes?: SequenceOutcome[]
+  outro?: SpreadSection[]
+  pullQuote?: SpreadPullQuote
+}
+
 /** Discriminated union — add new editorial tools here. */
 export type IssueSpread =
   | EssaySpread
@@ -667,6 +720,7 @@ export type IssueSpread =
   | ColloquySpread
   | InstrumentSpread
   | CompareSpread
+  | SequenceSpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -955,6 +1009,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_405,
   ISSUE_406,
   ISSUE_407,
+  ISSUE_408,
 ]
 
 /** The latest published issue — drives the landing cover. */

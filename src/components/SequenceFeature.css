@@ -1,0 +1,469 @@
+/* ──────────────────────────────────────────────────────────────
+   SequenceFeature — the ordered-stages editorial tool
+   The magazine's third interactive spread (ISSUE 408) and the
+   shape reserved, unbuilt, since interaction-language.md's first
+   draft: a numbered rail of stages, standard ARIA Tabs behaviour.
+   Interaction is React state; MOTION stays inside the editorial
+   contract — small opacity fades and a transform-only rail fill,
+   collapsed by the site-wide prefers-reduced-motion override.
+   Print reveals every stage stacked, in order: the sequence
+   becomes a numbered table of the whole process on paper.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-sequence {
+  padding: 96px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-sequence-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.pop-sequence-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-bottom: 32px;
+}
+
+.pop-sequence-title {
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: 0.95;
+  margin: 8px 0 0;
+  letter-spacing: -0.03em;
+}
+
+.pop-sequence-title-jp { margin: 0; }
+
+.pop-sequence-deck {
+  font-size: clamp(18px, 2.2vw, 24px);
+  max-width: 52ch;
+  margin: 8px 0 0;
+  line-height: 1.35;
+}
+
+.pop-sequence-byline {
+  margin: 16px 0 0;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+/* ── The spec dossier ───────────────────────────────────── */
+.pop-sequence-spec {
+  margin: 32px auto 0;
+  max-width: 560px;
+}
+
+.pop-sequence-spec-frame {
+  border: 1px solid var(--pop-ink);
+  padding: 24px 28px;
+  background: var(--pop-ivory);
+  position: relative;
+}
+
+.pop-sequence-spec-badge {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+}
+
+.pop-sequence-spec-kicker {
+  display: block;
+  margin: 0 0 10px;
+  letter-spacing: 0.16em;
+}
+
+.pop-sequence-spec-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--pop-coffee);
+  margin: 0 0 14px;
+  text-wrap: pretty;
+}
+
+.pop-sequence-spec-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pop-sequence-spec-row {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 16px;
+  padding: 8px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  align-items: baseline;
+}
+.pop-sequence-spec-row:first-child { border-top: 0; }
+
+.pop-sequence-spec-label {
+  margin: 0;
+  letter-spacing: 0.1em;
+  color: var(--pop-coffee);
+}
+
+.pop-sequence-spec-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--issue-accent);
+  line-height: 1.4;
+}
+
+/* ── Prose (intro / outro) ──────────────────────────────── */
+.pop-sequence-prose {
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+  margin-top: 40px;
+}
+
+.pop-sequence-section { margin-bottom: 32px; }
+.pop-sequence-section:last-child { margin-bottom: 0; }
+
+.pop-sequence-section-heading {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 14px;
+  color: var(--pop-ink);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pop-sequence-section-heading-jp {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+}
+
+.pop-sequence-paragraph {
+  margin: 0 0 16px;
+  text-wrap: pretty;
+}
+.pop-sequence-paragraph:last-child { margin-bottom: 0; }
+
+.pop-sequence-rule {
+  margin: 44px auto;
+  max-width: 120px;
+  height: 1px;
+  background: var(--pop-hairline);
+}
+
+/* ── The apparatus ──────────────────────────────────────── */
+.pop-sequence-apparatus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pop-sequence-progress {
+  letter-spacing: 0.14em;
+  color: var(--pop-coffee);
+  margin: 0 0 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The rail — an ordered tablist, numbered left to right. A filled
+   segment (transform-only, layout-safe) marks progress through the
+   stages without implying the reader can't jump ahead. */
+.pop-sequence-rail {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 620px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 8px 0;
+}
+
+.pop-sequence-rail-track {
+  position: absolute;
+  top: 25px;
+  left: 28px;
+  right: 28px;
+  height: 2px;
+  background: var(--pop-hairline);
+}
+
+.pop-sequence-rail-fill {
+  position: absolute;
+  top: 25px;
+  left: 28px;
+  right: 28px;
+  height: 2px;
+  background: var(--issue-accent);
+  transform-origin: left center;
+  transition: transform 200ms ease;
+}
+
+.pop-sequence-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 4px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.pop-sequence-stage-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--pop-ink);
+  background: var(--pop-ivory);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--pop-coffee);
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.pop-sequence-stage--past .pop-sequence-stage-num {
+  background: var(--pop-hairline);
+  border-color: var(--pop-hairline);
+  color: var(--pop-ink);
+}
+
+.pop-sequence-stage--active .pop-sequence-stage-num {
+  background: var(--issue-accent);
+  border-color: var(--issue-accent);
+  color: var(--pop-ivory);
+  transform: scale(1.15);
+}
+
+.pop-sequence-stage:focus-visible {
+  outline: 2px solid var(--issue-accent);
+  outline-offset: 2px;
+}
+
+.pop-sequence-stage-label {
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--pop-coffee);
+  font-size: 11px;
+}
+.pop-sequence-stage--active .pop-sequence-stage-label { color: var(--issue-accent); }
+
+.pop-sequence-stage-jp {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--pop-coffee);
+  opacity: 0.7;
+}
+.pop-sequence-stage--active .pop-sequence-stage-jp { opacity: 1; color: var(--issue-accent); }
+
+.pop-sequence-rail-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  text-align: center;
+  color: var(--pop-coffee);
+  margin: 18px 0 0;
+  max-width: 46ch;
+}
+
+/* Panels — all in the DOM; screen shows only the active stage. */
+.pop-sequence-panels { margin-top: 32px; width: 100%; }
+
+.pop-sequence-panel {
+  display: none;
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+  border: 1px solid var(--pop-hairline);
+  padding: 28px 32px 22px;
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.pop-sequence-panel--active {
+  display: block;
+  /* Editorial ambient motion: small opacity fade only. The
+     site-wide prefers-reduced-motion override collapses it. */
+  animation: pop-sequence-fade 180ms ease;
+}
+
+@keyframes pop-sequence-fade {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+
+.pop-sequence-panel-head {
+  display: block;
+  margin: 0 0 14px;
+  letter-spacing: 0.14em;
+  color: var(--issue-accent);
+  font-weight: 700;
+}
+
+.pop-sequence-artifact {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--pop-coffee);
+  margin: 18px 0 0 !important;
+  padding-top: 12px;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+/* The process's real terminal branches, attached to the final
+   stage's panel. */
+.pop-sequence-outcomes {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--pop-hairline-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pop-sequence-outcomes-kicker {
+  letter-spacing: 0.16em;
+  color: var(--pop-coffee);
+}
+
+.pop-sequence-outcome {
+  border-left: 2px solid var(--issue-accent);
+  padding-left: 16px;
+}
+
+.pop-sequence-outcome-label {
+  margin: 0 0 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--issue-accent);
+  text-transform: uppercase;
+}
+
+.pop-sequence-outcome-jp {
+  font-weight: 400;
+  color: var(--pop-coffee);
+}
+
+.pop-sequence-outcome-condition {
+  margin: 0 0 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--pop-coffee);
+  line-height: 1.5;
+}
+
+.pop-sequence-outcome-result {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--pop-ink);
+}
+
+/* ── Pull quote ─────────────────────────────────────────── */
+.pop-sequence-pullquote {
+  margin: 48px auto;
+  max-width: 60ch;
+  text-align: center;
+  border: 0;
+}
+
+.pop-sequence-pullquote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--issue-accent);
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+
+.pop-sequence-pullquote-cite {
+  display: block;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  color: var(--pop-coffee);
+}
+
+/* ── Sign-off ───────────────────────────────────────────── */
+.pop-sequence-signoff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 48px;
+  margin-top: 48px;
+}
+
+.pop-sequence-signoff-text {
+  font-size: clamp(17px, 1.8vw, 22px);
+  margin: 0;
+  color: var(--pop-coffee);
+}
+
+.pop-sequence-monument {
+  margin-top: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Print — the sequence becomes a numbered table ──────── */
+@media print {
+  .pop-sequence-panel {
+    display: block !important;
+    animation: none !important;
+    margin-bottom: 16px;
+    break-inside: avoid;
+  }
+  .pop-sequence-rail,
+  .pop-sequence-rail-note,
+  .pop-sequence-progress { display: none; }
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .pop-sequence { padding: 56px 0; }
+  .pop-sequence-inner { padding: 0 22px; }
+  .pop-sequence-title { font-size: clamp(36px, 10vw, 56px); }
+  .pop-sequence-deck { font-size: clamp(16px, 4.5vw, 20px); }
+  .pop-sequence-spec { margin-top: 24px; }
+  .pop-sequence-spec-frame { padding: 18px 20px; }
+  .pop-sequence-spec-row { grid-template-columns: 92px 1fr; gap: 12px; }
+  .pop-sequence-prose { font-size: 16px; line-height: 1.6; }
+  .pop-sequence-rail { max-width: 100%; padding: 10px 0 0; }
+  .pop-sequence-rail-track,
+  .pop-sequence-rail-fill { left: 18px; right: 18px; }
+  .pop-sequence-stage { padding: 0 2px; }
+  .pop-sequence-stage-label { font-size: 8px; letter-spacing: 0.04em; }
+  .pop-sequence-stage-jp { display: none; }
+  .pop-sequence-panel { padding: 20px 18px 16px; font-size: 16px; line-height: 1.6; }
+  .pop-sequence-signoff { padding-top: 32px; margin-top: 32px; }
+}
