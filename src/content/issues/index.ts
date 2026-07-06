@@ -64,6 +64,7 @@ import { ISSUE_408 } from './408'
 import { ISSUE_409 } from './409'
 import { ISSUE_410 } from './410'
 import { ISSUE_411 } from './411'
+import { ISSUE_412 } from './412'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -819,6 +820,44 @@ export interface TutorSpread extends SpreadCommon {
   pullQuote?: SpreadPullQuote
 }
 
+/** ─── margin ────────────────────────────────────────────────────
+ *  A text with a writable margin — the fifth interaction primitive
+ *  (ISSUE 412), and the first where the reader CONTRIBUTES content
+ *  rather than choosing among author-provided states. Each passage
+ *  carries an adjacent margin field; the reader annotates in their
+ *  own words. Control: a native <textarea> per passage — the most
+ *  established input pattern that exists (rule 5 by definition).
+ *  The reader's notes are session-state only: nothing recorded,
+ *  nothing sent, and — the new honesty duty this shape adds — the
+ *  page must SAY PLAINLY that notes vanish on reload, so no reader
+ *  mistakes an honest margin for a saving one (`marginNote` is
+ *  mandatory equipment). Print keeps the reader's notes: you print
+ *  your own annotated copy; empty margins print as ruled space a
+ *  pencil can use. */
+export interface MarginPassage {
+  /** Stable id, e.g. 'm1'. */
+  id: string
+  /** The passage the margin sits beside. */
+  text: string
+}
+
+export interface MarginSpread extends SpreadCommon {
+  type: 'margin'
+  dossier?: SpreadDossier
+  intro?: SpreadSection[]
+  /** Mono label above the annotated text, e.g. 'THE MARGIN · 余白'. */
+  marginKicker?: string
+  /** The passages, each with a writable margin beside it. */
+  passages: MarginPassage[]
+  /** Honesty note under the tally — mandatory (rule 6, extended):
+   *  states what the tally counts, that notes are unrecorded and
+   *  session-only, and that reloading erases them — copy out what
+   *  you want to keep. */
+  marginNote: string
+  outro?: SpreadSection[]
+  pullQuote?: SpreadPullQuote
+}
+
 /** Discriminated union — add new editorial tools here. */
 export type IssueSpread =
   | EssaySpread
@@ -832,6 +871,7 @@ export type IssueSpread =
   | SequenceSpread
   | GalleySpread
   | TutorSpread
+  | MarginSpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -1124,6 +1164,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_409,
   ISSUE_410,
   ISSUE_411,
+  ISSUE_412,
 ]
 
 /** The latest published issue — drives the landing cover. */

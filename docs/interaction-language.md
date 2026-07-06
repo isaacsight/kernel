@@ -6,21 +6,23 @@
 > The issue persuades; this document enforces. When they disagree,
 > fix the disagreement before shipping anything.
 >
-> **The cabinet, as of ISSUE 411:** four shapes built — Dial
+> **The cabinet, as of ISSUE 412:** five primitives built — Dial
 > (`instrument`, ARIA radiogroup, N ordered positions on one
 > variable), Compare (`compare`, ARIA switch, two irreducible
 > lenses with no position between them), Sequence (`sequence`,
 > ARIA tablist, an ordered process in discrete, complete stages
-> where each stage's account depends on the one before it), and
-> Galley (`galley`, per-passage ARIA toggle buttons, N independent
+> where each stage's account depends on the one before it), Galley
+> (`galley`, per-passage ARIA toggle buttons, N independent
 > strike/stet marks applied to the prose itself — the reader
-> performs an editorial act on the text) — plus the Tutor
-> (`tutor`, ISSUE 411), a COMPOSITE that teaches the other four by
-> having the reader operate a stakes-free version of each; not a
-> fifth primitive but the manual for the four. Any further
-> primitive waits, unbuilt, for a real story that needs it — see
-> rule 7 for how a reservation becomes a build, and for why ISSUE
-> 407 refused to manufacture one.
+> performs an editorial act on the text), and Margin (`margin`,
+> per-passage native text fields — the first CONTRIBUTION control:
+> the reader writes their own words into ruled margin space,
+> counted but never read, kept by no one) — plus the Tutor
+> (`tutor`, ISSUE 411), a COMPOSITE that teaches the primitives by
+> having the reader operate a stakes-free version of each. Any
+> further primitive waits, unbuilt, for a real story that needs it
+> — see rule 7 for how a reservation becomes a build, and for why
+> ISSUE 407 refused to manufacture one.
 
 Status: **LAW** — reviewed each time a new interactive spread is
 proposed. Two documents govern the visual grammar and this one
@@ -203,6 +205,30 @@ inside the meter rule. It refuses anyway. Nothing in a tutor is ever
 the rules would permit, because grading the reader turns a magazine
 into a test, is the strongest form of the calm-by-default principle:
 the page never watches you to decide whether to reward you.
+
+**How the fifth primitive got born (worked example: Margin, ISSUE
+412), and the honesty duty it adds to rule 6.** Every prior shape
+offers SELECTION among author-provided states — stops, lenses,
+stages, strikes. 412's story (marginalia: when machines set the
+text, the reader's note is the last unautomatable writing on the
+page) required CONTRIBUTION — the reader adds content that did not
+exist before their hand. That is a categorically different
+interaction model, so it earned a new primitive rather than a
+variant. It shipped as one native labelled `<textarea>` per
+passage — the most established input pattern on the web, rule 5
+satisfied by definition — with the reader's words rendered in the
+house mono against the machine-set serif (two voices, two faces,
+inside the two-face rule). The rule-6 extension it codifies: **an
+input control implies keeping, so an honest one must state plainly
+that it keeps nothing.** Notes are session-state only — no storage,
+no network — the tally counts notes and words without reading them,
+reload erases everything, and the page says so in print and teaches
+the four-century-old remedy (copy out what you keep — the
+commonplace-book move). The honesty rule now runs in both
+directions: never fake a meter, and never let the reader believe
+you keep what you don't. **Margin is now itself at instance one** —
+its own shared machinery waits for a second contribution-shaped
+story before anything gets extracted.
 
 ---
 

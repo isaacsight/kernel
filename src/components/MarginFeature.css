@@ -1,0 +1,362 @@
+/* ──────────────────────────────────────────────────────────────
+   MarginFeature — the writable-margin editorial tool
+   The magazine's fifth interaction primitive (ISSUE 412) and its
+   first contribution control: each passage carries an adjacent
+   ruled margin the reader writes into. The passage is machine-set
+   serif; the reader's notes render in the house mono — two voices,
+   two faces, within the two-face rule. Interaction is React state;
+   NO added motion (a text field needs none); the site-wide
+   prefers-reduced-motion override governs the ambient accents as
+   everywhere. Print keeps whatever the reader wrote — you print
+   your own annotated copy — and empty margins print as ruled
+   space a pencil can use.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-margin {
+  padding: 96px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-margin-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.pop-margin-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-bottom: 32px;
+}
+
+.pop-margin-title {
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: 0.95;
+  margin: 8px 0 0;
+  letter-spacing: -0.03em;
+}
+
+.pop-margin-title-jp { margin: 0; }
+
+.pop-margin-deck {
+  font-size: clamp(18px, 2.2vw, 24px);
+  max-width: 52ch;
+  margin: 8px 0 0;
+  line-height: 1.35;
+}
+
+.pop-margin-byline {
+  margin: 16px 0 0;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+/* ── The spec dossier ───────────────────────────────────── */
+.pop-margin-spec {
+  margin: 32px auto 0;
+  max-width: 560px;
+}
+
+.pop-margin-spec-frame {
+  border: 1px solid var(--pop-ink);
+  padding: 24px 28px;
+  background: var(--pop-ivory);
+  position: relative;
+}
+
+.pop-margin-spec-badge {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+}
+
+.pop-margin-spec-kicker {
+  display: block;
+  margin: 0 0 10px;
+  letter-spacing: 0.16em;
+}
+
+.pop-margin-spec-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--pop-coffee);
+  margin: 0 0 14px;
+  text-wrap: pretty;
+}
+
+.pop-margin-spec-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pop-margin-spec-row {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 16px;
+  padding: 8px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  align-items: baseline;
+}
+.pop-margin-spec-row:first-child { border-top: 0; }
+
+.pop-margin-spec-label {
+  margin: 0;
+  letter-spacing: 0.1em;
+  color: var(--pop-coffee);
+}
+
+.pop-margin-spec-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--issue-accent);
+  line-height: 1.4;
+}
+
+/* ── Prose (intro / outro) ──────────────────────────────── */
+.pop-margin-prose {
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+  margin-top: 40px;
+}
+
+.pop-margin-section { margin-bottom: 32px; }
+.pop-margin-section:last-child { margin-bottom: 0; }
+
+.pop-margin-section-heading {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 14px;
+  color: var(--pop-ink);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pop-margin-section-heading-jp {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+}
+
+.pop-margin-paragraph {
+  margin: 0 0 16px;
+  text-wrap: pretty;
+}
+.pop-margin-paragraph:last-child { margin-bottom: 0; }
+
+.pop-margin-rule {
+  margin: 44px auto;
+  max-width: 120px;
+  height: 1px;
+  background: var(--pop-hairline);
+}
+
+/* ── The apparatus — the annotated text ─────────────────── */
+.pop-margin-apparatus {
+  display: flex;
+  flex-direction: column;
+}
+
+.pop-margin-apparatus-kicker {
+  letter-spacing: 0.16em;
+  color: var(--pop-coffee);
+  text-align: center;
+  margin: 0 0 28px;
+}
+
+.pop-margin-passages {
+  display: flex;
+  flex-direction: column;
+}
+
+/* One row: passage + its margin. The hairline between them is the
+   gutter — the seam where the printed page ends and the reader's
+   space begins. */
+.pop-margin-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 0 28px;
+  padding: 20px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  align-items: start;
+}
+.pop-margin-row:first-child { border-top: 0; }
+
+.pop-margin-passage-text {
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* The margin field — ruled space, reader's voice in mono. The
+   ruling is a repeating hairline gradient sized to the line
+   height, so the field reads as blank ruled paper. */
+.pop-margin-field-wrap {
+  border-left: 1px solid var(--pop-hairline);
+  padding-left: 20px;
+  height: 100%;
+}
+
+.pop-margin-field {
+  display: block;
+  width: 100%;
+  min-height: 84px;
+  border: 0;
+  resize: none;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 27px,
+      var(--pop-hairline-soft) 27px,
+      var(--pop-hairline-soft) 28px
+    );
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 28px;
+  letter-spacing: 0.01em;
+  color: var(--issue-accent);
+  padding: 0;
+}
+
+.pop-margin-field:focus-visible {
+  outline: 2px solid var(--issue-accent);
+  outline-offset: 4px;
+}
+
+/* The tally — a real count of the reader's writing. */
+.pop-margin-tally {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 32px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--pop-hairline-soft);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-margin-tally-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+  text-align: center;
+  margin: 14px auto 0;
+  max-width: 52ch;
+}
+
+/* ── Pull quote ─────────────────────────────────────────── */
+.pop-margin-pullquote {
+  margin: 48px auto;
+  max-width: 60ch;
+  text-align: center;
+  border: 0;
+}
+
+.pop-margin-pullquote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--issue-accent);
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+
+.pop-margin-pullquote-cite {
+  display: block;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  color: var(--pop-coffee);
+}
+
+/* ── Sign-off ───────────────────────────────────────────── */
+.pop-margin-signoff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 48px;
+  margin-top: 48px;
+}
+
+.pop-margin-signoff-text {
+  font-size: clamp(17px, 1.8vw, 22px);
+  margin: 0;
+  color: var(--pop-coffee);
+}
+
+.pop-margin-monument {
+  margin-top: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Print — you print your own annotated copy ──────────── */
+@media print {
+  /* The reader's notes survive to paper; an empty field prints
+     as ruled space a pencil can use. */
+  .pop-margin-field {
+    overflow: visible;
+    color: var(--pop-ink);
+  }
+  .pop-margin-tally { display: none; }
+  .pop-margin-row { break-inside: avoid; }
+}
+
+/* ── Mobile — margin stacks beneath its passage ─────────── */
+@media (max-width: 640px) {
+  .pop-margin { padding: 56px 0; }
+  .pop-margin-inner { padding: 0 22px; }
+  .pop-margin-title { font-size: clamp(36px, 10vw, 56px); }
+  .pop-margin-deck { font-size: clamp(16px, 4.5vw, 20px); }
+  .pop-margin-spec { margin-top: 24px; }
+  .pop-margin-spec-frame { padding: 18px 20px; }
+  .pop-margin-spec-row { grid-template-columns: 100px 1fr; gap: 12px; }
+  .pop-margin-prose { font-size: 16px; line-height: 1.6; }
+  .pop-margin-row {
+    grid-template-columns: 1fr;
+    gap: 14px 0;
+  }
+  .pop-margin-passage-text { font-size: 16px; line-height: 1.6; }
+  .pop-margin-field-wrap {
+    border-left: 0;
+    border-top: 1px dashed var(--pop-hairline);
+    padding-left: 0;
+    padding-top: 12px;
+  }
+  .pop-margin-field { min-height: 56px; }
+  .pop-margin-signoff { padding-top: 32px; margin-top: 32px; }
+}
