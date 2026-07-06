@@ -2,6 +2,91 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-05/06 — ISSUES 407–414: the interaction language built out to six primitives
+
+**Shipped 8 issues in two days, all deployed and provenance-verified.** Arc:
+407 audited the 399→406 interactivity run and pointedly refused to invent a
+needless shape (rule 7 in action); 408 built **Sequence** (`sequence`, ARIA
+tablist) on kbot's real engineering-loop code as content; 409 shipped a
+**second colloquy** with deliberately **zero interaction**, arguing the one
+open question the law hadn't settled (can a control carry feeling honestly);
+410 answered it by building **Galley** (`galley`) — reader strikes/stets
+prose, tally counts marks only, feeling as side-effect never a measured
+target; 411 built **Tutor** (`tutor`), a composite teaching all four shapes
+by consequence, never by grade; 412 built **Margin** (`margin`) — first
+*contribution* control (reader writes into a ruled margin, session-only,
+vanishes on reload — the honesty rule now runs both directions: never fake
+a meter, never imply you keep what you don't); 413 built **Press**
+(`press`) — first *artifact* control, reader composes a real cover from the
+live stock/ink cabinet and prints it, law travels with the instruments
+(off-grammar covers impossible by construction); 414 is a `dispatch` on an
+external convergence — a recorded talk (Peter Steinberger) independently
+landing on kernel.chat's own "receipts over ratings" doctrine, bridged to
+401.
+
+- **The ladder, named explicitly across these issues:** watch (essay) →
+  choose (dial/switch) → walk (sequence) → cut (galley) → learn (tutor) →
+  write (margin) → compose (press). Six interaction primitives + one
+  composite, governed by `docs/interaction-language.md` (now documents all
+  seven rules plus a worked "how this shape got born" case for each).
+- **Catalog is now contiguous 360–414 (55 issues).** Every issue this
+  session was verified in a real browser (Playwright) before shipping —
+  ARIA roles, keyboard nav, print-media behavior, 390px mobile, zero
+  console errors — not just tsc/build.
+- **Deploy discipline confirmed working end-to-end:** `git push origin
+  main` → CI (`deploy.yml`) → verified by matching gh-pages' `deploy:
+  <SHA>` message to the pushed commit, not by asset hash. All 8 pushes
+  this session landed clean on first try.
+- **Obsidian vault synced 2026-07-06** (see `obsidian-sync` skill run):
+  `Current Status.md`, `Roadmap.md`, `Billing.md` were 17 issues stale
+  (still said ISSUE 397/395/366); corrected. Vault's actual folder
+  structure is flat (no `API/`/`Architecture/`/`Backlog/` subdirs the
+  agent doc describes) — the agent protocol doc is itself stale re:
+  vault layout; worth fixing next time someone's in there.
+- **Session model rotated:** Sonnet 5 (405–408), Fable 5 (409–413),
+  Sonnet 5 (414) — each issue's audit colophon states which, per the
+  house's audit-in-public habit.
+- **Open items:** (1) deploy-policy doc edits from earlier in the week
+  (`KBOT.md`/`KERNEL.md`/Collaborator Onboarding/`discord-bot.ts` —
+  `npm run deploy` → `git push` retirement) are STILL uncommitted in the
+  working tree — pick these up next session. (2) No 7th interaction shape
+  should get built without a real story per rule 7 — resist the temptation
+  the run itself named in 407 and 412's worked examples.
+
+## Session 2026-07-05 — First outbound to miladograph; Gmail send path mapped
+
+**Task:** email a brand-new contact (miladograph@gmail.com) "with
+hospitality." No code shipped — this was comms + a hard-won lesson about
+the outbound email stack.
+
+- **What went out:** two emails, both kernel.chat e-ink branded (Courier
+  Prime headers, EB Garamond body, ivory/amethyst, table layout).
+  1. "A first hello" — sent via kernel-comms `send_email`, delivered but
+     from **`noreply@kernel.chat`** → **not reply-able (dead end).**
+  2. "Hello from kernel.chat — reply anytime" — reply-able follow-up,
+     **sent from kernel.chat@gmail.com** (Isaac clicked Send). Replies now
+     thread into that inbox. This is the live channel.
+- **The lesson (saved to memory):** the **claude.ai Gmail connector
+  (`mcp__claude_ai_Gmail__*`) has NO send action** — only
+  create_draft/list_drafts/labels/read. So I can stage a perfect draft but
+  cannot send it. Sending requires: manual click / the **Claude Chrome
+  extension** ("Take actions on Gmail", drives the live session), or
+  kernel-comms `send_email` (noreply, not reply-able). Verify a send via
+  empty `list_drafts`. Dead ends confirmed this session: peekaboo GUI
+  automation (sees Chrome's window frame, not Gmail's page DOM — can't click
+  Send); chrome-devtools-mcp (spawns its OWN logged-out Chrome).
+- **Connector account switch:** Isaac repointed the claude.ai Gmail connector
+  isaacsight@gmail.com → **kernel.chat@gmail.com** mid-session (verified by
+  draft-list delta). `mcp__claude_ai_Gmail__*` now acts on kernel.chat@gmail.com.
+- **Memory written:** `reference_contact_miladograph.md` (live channel +
+  history), `reference_gmail_connector_no_send.md` (the send-path map), both
+  indexed in MEMORY.md.
+- **Open items:** (1) two orphaned drafts still in isaacsight@gmail.com from
+  before the connector switch — manual delete when convenient. (2) miladograph
+  backstory still unknown (how they connected, real name) — fill in when Isaac
+  shares. (3) if miladograph replies to the noreply first email, it won't reach
+  anyone; the reply-able follow-up supersedes it.
+
 ## Session 2026-07-03 — ISSUES 398 + 399, two new spread types
 
 **Both SHIPPED to main and live.** Session started from a 2h18m FaceTime
