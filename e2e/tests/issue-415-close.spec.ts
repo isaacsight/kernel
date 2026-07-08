@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('ISSUE 415 — close primitive', () => {
   test('reader can show more items, then stop, and gets a receipt', async ({ page }) => {
-    await page.goto('/issues/415')
+    await page.goto('/#/issues/415')
     await expect(page.getByRole('button', { name: 'Show me one more' })).toBeVisible()
     await expect(page.getByRole('button', { name: "I'll stop here" })).toBeVisible()
 
@@ -21,7 +21,7 @@ test.describe('ISSUE 415 — close primitive', () => {
 
   test('mobile viewport renders both controls at equal size', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/issues/415')
+    await page.goto('/#/issues/415')
     const more = page.getByRole('button', { name: 'Show me one more' })
     const stop = page.getByRole('button', { name: "I'll stop here" })
     await expect(more).toBeVisible()
@@ -36,7 +36,7 @@ test.describe('ISSUE 415 — close primitive', () => {
     page.on('console', (msg) => {
       if (msg.type() === 'error') errors.push(msg.text())
     })
-    await page.goto('/issues/415')
+    await page.goto('/#/issues/415')
     await page.getByRole('button', { name: 'Show me one more' }).click()
     await page.getByRole('button', { name: "I'll stop here" }).click()
     expect(errors).toEqual([])
