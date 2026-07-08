@@ -1437,7 +1437,7 @@ const CODE_AGENT_TOOLS = [
 ]
 
 const ALLOWED_CMD_PREFIXES = [
-  'npm run build', 'npm run deploy', 'npm run dev',
+  'npm run build', 'npm run dev',
   'npx tsc', 'npx vitest', 'npx supabase functions deploy',
   'git status', 'git diff', 'git add', 'git commit', 'git push', 'git log', 'git stash', 'git checkout',
   'ls ', 'cat ', 'head ', 'tail ', 'wc ',
@@ -1570,7 +1570,7 @@ DESIGN SYSTEM (Rubin):
 RULES:
 - Be surgical — only change what's needed to fix the issue
 - After making edits, ALWAYS run "npm run build" to verify no type/build errors
-- If the build passes, commit with a clear message and deploy with "npm run deploy"
+- If the build passes, commit with a clear message and push to main — CI deploys (never run "npm run deploy"; it is retired)
 - For git commits, stage specific files (not git add -A)
 - If you break something, fix it before finishing
 - Never edit .env files
