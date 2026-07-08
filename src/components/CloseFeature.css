@@ -1,0 +1,371 @@
+/* ──────────────────────────────────────────────────────────────
+   CloseFeature — the close primitive
+   The magazine's seventh interaction primitive (ISSUE 415): a feed
+   with no natural end, until the reader gives it one. "Show me one
+   more" and "I'll stop here" share ONE class — .pop-close-control —
+   deliberately: the law is that neither is ever de-emphasized
+   relative to the other, at any item count. Interaction is React
+   state; NO added motion library — the counter is a data readout,
+   not choreography. Print always renders the outcome (a receipt or
+   an honest in-progress snapshot), never the live controls.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-close {
+  padding: 96px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-close-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.pop-close-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-bottom: 32px;
+}
+
+.pop-close-title {
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: 0.95;
+  margin: 8px 0 0;
+  letter-spacing: -0.03em;
+}
+
+.pop-close-title-jp { margin: 0; }
+
+.pop-close-deck {
+  font-size: clamp(18px, 2.2vw, 24px);
+  max-width: 52ch;
+  margin: 8px 0 0;
+  line-height: 1.35;
+}
+
+.pop-close-byline {
+  margin: 16px 0 0;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+}
+
+.pop-close-spec {
+  margin: 32px auto 0;
+  max-width: 560px;
+}
+
+.pop-close-spec-frame {
+  border: 1px solid var(--pop-ink);
+  padding: 24px 28px;
+  background: var(--pop-ivory);
+  position: relative;
+}
+
+.pop-close-spec-badge {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+}
+
+.pop-close-spec-kicker {
+  display: block;
+  margin: 0 0 10px;
+  letter-spacing: 0.16em;
+}
+
+.pop-close-spec-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--pop-coffee);
+  margin: 0 0 14px;
+  text-wrap: pretty;
+}
+
+.pop-close-spec-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pop-close-spec-row {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 16px;
+  padding: 8px 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+  align-items: baseline;
+}
+.pop-close-spec-row:first-child { border-top: 0; }
+
+.pop-close-spec-label {
+  margin: 0;
+  letter-spacing: 0.1em;
+  color: var(--pop-coffee);
+}
+
+.pop-close-spec-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--issue-accent);
+  line-height: 1.4;
+}
+
+.pop-close-prose {
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+  font-size: clamp(17px, 1.3vw, 19px);
+  line-height: 1.65;
+  margin-top: 40px;
+}
+
+.pop-close-section { margin-bottom: 32px; }
+.pop-close-section:last-child { margin-bottom: 0; }
+
+.pop-close-section-heading {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 14px;
+  color: var(--pop-ink);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pop-close-section-heading-jp {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+}
+
+.pop-close-paragraph {
+  margin: 0 0 16px;
+  text-wrap: pretty;
+}
+.pop-close-paragraph:last-child { margin-bottom: 0; }
+
+.pop-close-rule {
+  margin: 44px auto;
+  max-width: 120px;
+  height: 1px;
+  background: var(--pop-hairline);
+}
+
+.pop-close-apparatus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pop-close-apparatus-kicker {
+  letter-spacing: 0.16em;
+  color: var(--pop-coffee);
+  text-align: center;
+  margin: 0 0 28px;
+}
+
+/* The simulated feed — deliberately flat, uniform rows. No card
+   styling, no imagery, no escalating visual weight: the demo must
+   not itself become compelling. */
+.pop-close-feed {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--pop-hairline-soft);
+  border: 1px solid var(--pop-hairline-soft);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.pop-close-feed-item {
+  background: var(--pop-ivory);
+  padding: 14px 18px;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--pop-ink);
+}
+
+/* The readout — plain text, NOT aria-live (a per-second
+   announcement would be hostile to screen readers). */
+.pop-close-readout {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 0 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--pop-coffee);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The two controls — ONE shared class. This is the law: neither
+   button may be styled differently based on item count. */
+.pop-close-controls {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pop-close-control {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pop-ink);
+  background: var(--pop-ivory);
+  border: 1px solid var(--pop-ink);
+  cursor: pointer;
+}
+
+.pop-close-control:hover {
+  background: var(--issue-accent);
+  color: var(--pop-ivory);
+}
+
+.pop-close-control:focus-visible {
+  outline: 2px solid var(--issue-accent);
+  outline-offset: 3px;
+}
+
+.pop-close-receipt {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.pop-close-receipt-line {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--issue-accent);
+  margin: 0 0 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-close-receipt-reason {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--pop-coffee);
+  max-width: 48ch;
+  margin: 0 auto;
+  text-wrap: pretty;
+}
+
+.pop-close-print-snapshot { display: none; }
+
+.pop-close-tally-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--pop-coffee);
+  opacity: 0.85;
+  text-align: center;
+  margin: 14px auto 0;
+  max-width: 52ch;
+}
+
+.pop-close-pullquote {
+  margin: 48px auto;
+  max-width: 60ch;
+  text-align: center;
+  border: 0;
+}
+
+.pop-close-pullquote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--issue-accent);
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+
+.pop-close-pullquote-cite {
+  display: block;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  color: var(--pop-coffee);
+}
+
+.pop-close-signoff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-top: 48px;
+  margin-top: 48px;
+}
+
+.pop-close-signoff-text {
+  font-size: clamp(17px, 1.8vw, 22px);
+  margin: 0;
+  color: var(--pop-coffee);
+}
+
+.pop-close-monument {
+  margin-top: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+@media print {
+  .pop-close-feed,
+  .pop-close-readout,
+  .pop-close-controls {
+    display: none;
+  }
+  .pop-close-print-snapshot {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--pop-ink);
+    text-align: center;
+    margin: 0 0 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pop-close { padding: 56px 0; }
+  .pop-close-inner { padding: 0 22px; }
+  .pop-close-title { font-size: clamp(36px, 10vw, 56px); }
+  .pop-close-deck { font-size: clamp(16px, 4.5vw, 20px); }
+  .pop-close-spec { margin-top: 24px; }
+  .pop-close-spec-frame { padding: 18px 20px; }
+  .pop-close-spec-row { grid-template-columns: 100px 1fr; gap: 12px; }
+  .pop-close-prose { font-size: 16px; line-height: 1.6; }
+  .pop-close-feed { max-width: 100%; }
+  .pop-close-controls { flex-direction: column; width: 100%; }
+  .pop-close-control { width: 100%; }
+  .pop-close-signoff { padding-top: 32px; margin-top: 32px; }
+}
