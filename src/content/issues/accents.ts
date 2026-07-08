@@ -171,6 +171,8 @@ export type IssueAccent = InkSeedName | (string & {})
  *                          craft done at a desk with a pencil)
  *    press     → amethyst (the magazine handing over its own press —
  *                          about kernel.chat itself, definitionally)
+ *    close     → oxblood (endings — the fit note is literally "endings";
+ *                          shared register with colloquy and galley)
  */
 export const DEFAULT_ACCENT_BY_SPREAD: Record<IssueSpread['type'], InkSeedName> = {
   essay: 'tomato',
@@ -186,6 +188,7 @@ export const DEFAULT_ACCENT_BY_SPREAD: Record<IssueSpread['type'], InkSeedName> 
   tutor: 'amethyst',
   margin: 'coffee',
   press: 'amethyst',
+  close: 'oxblood',
 }
 
 /** Pick the default accent for a spread type. */

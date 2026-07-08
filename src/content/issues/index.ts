@@ -67,6 +67,7 @@ import { ISSUE_411 } from './411'
 import { ISSUE_412 } from './412'
 import { ISSUE_413 } from './413'
 import { ISSUE_414 } from './414'
+import { ISSUE_415 } from './415'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -911,6 +912,38 @@ export interface PressSpread extends SpreadCommon {
 }
 
 /** Discriminated union — add new editorial tools here. */
+
+/** ─── close ─────────────────────────────────────────────────────
+ *  A feed with no natural end — the seventh interaction primitive
+ *  (ISSUE 415). Demonstrates the social-media "removed stopping
+ *  cue" mechanic: "Show me one more" and "I'll stop here" render as
+ *  siblings at IDENTICAL visual weight from the very first item.
+ *  The law: the stop is never demoted, hidden, shrunk, or delayed
+ *  relative to "more," at any item count — enforced in the
+ *  component via one shared CSS class, not just in copy, and
+ *  covered by a regression test (see CloseFeature.test.tsx).
+ *
+ *  Each press of "more" appends the next line from `filler`
+ *  (cycling) — deliberately flat and non-escalating so the demo
+ *  cannot itself become compelling. A soft `cap` ends the demo
+ *  automatically if the reader never presses stop; hitting the cap
+ *  is part of the argument, not a hidden implementation limit. */
+export interface CloseSpread extends SpreadCommon {
+  type: 'close'
+  dossier?: SpreadDossier
+  intro?: SpreadSection[]
+  closeKicker?: string
+  /** Cycles on each "show me one more" press — deliberately flat,
+   *  non-escalating, non-personalized. */
+  filler: string[]
+  /** Soft cap on items shown. Default 40 if omitted. */
+  cap?: number
+  /** Mandatory honesty note — states nothing is measured/stored,
+   *  reload resets everything. */
+  closeNote: string
+  outro?: SpreadSection[]
+  pullQuote?: SpreadPullQuote
+}
 export type IssueSpread =
   | EssaySpread
   | InterviewSpread
@@ -925,6 +958,7 @@ export type IssueSpread =
   | TutorSpread
   | MarginSpread
   | PressSpread
+  | CloseSpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -1011,6 +1045,11 @@ export type IssueCoverOrnament =
    *  metaphor: the asterisk that should have shipped with the
    *  headline number. Introduced 374: AGAINST VIRAL BENCHMARKS. */
   | 'asterisk-stamp'
+  /** 'full-stop' — a single heavy period, bleeding off the bottom
+   *  edge of the cover. The most literal possible image for what
+   *  ISSUE 415 (the close primitive) hands the reader: an ending.
+   *  Renders under .pop-cover--ornament-full-stop. Introduced 415. */
+  | 'full-stop'
 
 /** Optional press-preview wax seal rendered in the top-right
  *  corner of the cover. Reads as a rubber stamp or embargo seal;
@@ -1220,6 +1259,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_412,
   ISSUE_413,
   ISSUE_414,
+  ISSUE_415,
 ]
 
 /** The latest published issue — drives the landing cover. */

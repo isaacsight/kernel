@@ -1015,6 +1015,66 @@
   }
 }
 
+/* ── full-stop — a single heavy period bleeding off the bottom
+      edge of the cover. NOT sized like warty-spots/flash-burn:
+      those share the cover's 420×560 viewBox sliced against a
+      full inset:0 box, which only works because .pop-cover's
+      rendered aspect ratio happens to cooperate (warty-spots by
+      dispersing marks across the whole grid so any crop still
+      shows some; flash-burn by anchoring a small corner box rather
+      than a full-cover one). full-stop is a single mark, full-
+      cover-sized — the two escapes above don't apply — so slicing
+      the 420:560 (0.75) viewBox against `.pop-cover`'s actual box
+      broke down: `.pop-cover` is an unconstrained-width,
+      min-height:100vh section with NO fixed aspect ratio, and on
+      any viewport wider than ~1.615 (nearly every desktop/laptop
+      width — 1440×900=1.6, 1920×1080=1.78, 1366×768=1.78),
+      xMidYMid-slice's vertically-centered crop removed the circle
+      from view entirely.
+
+      Fix: give the mark its own small, self-contained square box.
+      `aspect-ratio: 1` forces this element's rendered shape to
+      always be a square, computed only from `width` (a % of the
+      cover's width) — it never depends on the cover's height or
+      aspect ratio. The SVG's viewBox (0 0 300 300, see
+      IssueCover.tsx) is also square, so the box and the viewBox
+      always have the same shape, on every viewport — `xMidYMid
+      meet` therefore never needs to crop anything. The "bleeding
+      off the trim" read now comes entirely from the circle's own
+      position inside its own 300×300 viewBox, not from depending
+      on where the cover's edge happens to fall. ISSUE 415 pairs
+      full-stop with ink stock, so — following the flash-burn
+      convention — the unqualified rule is tuned for that case
+      first: a flat accent circle composited normally reads clearly
+      on dark paper without a blend mode washing it out. */
+.pop-cover-ornament--full-stop {
+  left: 50%;
+  bottom: 0;
+  width: 16%;
+  height: auto;
+  aspect-ratio: 1;
+  transform: translate(-50%, 8%);
+  opacity: 0.9;
+  mix-blend-mode: normal;
+}
+
+/* On lighter stocks a hard flat circle reads as a sticker —
+   multiply fuses it into the paper the way ink-spread and
+   warty-spots do on their default (non-ink) stocks. */
+.pop-cover:not(.pop-stock-ink) .pop-cover-ornament--full-stop {
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+}
+
+@media (max-width: 640px) {
+  .pop-cover-ornament--full-stop {
+    width: 22%;
+    bottom: 0;
+    transform: translate(-50%, 6%);
+    opacity: 0.8;
+  }
+}
+
 
 /* ──────────────────────────────────────────────────────────────
    Cover seal — press-preview rubber stamp in the top-right

@@ -53,6 +53,7 @@ export function IssueCover({ issue, footer }: IssueCoverProps) {
       {ornament === 'ink-spread' && <InkSpreadOrnament />}
       {ornament === 'warty-spots' && <WartySpotsOrnament />}
       {ornament === 'flash-burn' && <FlashBurnOrnament />}
+      {ornament === 'full-stop' && <FullStopOrnament />}
       {seal && <CoverSeal label={seal.label} date={seal.date} />}
       <div className="pop-cover-inner">
 
@@ -352,6 +353,45 @@ function FlashBurnOrnament() {
         height="560"
         fill="url(#pop-flash-burn-gradient)"
       />
+    </svg>
+  )
+}
+
+/**
+ * FullStopOrnament — a single heavy period, bleeding off the bottom
+ * edge of the cover. The most literal possible image for what
+ * ISSUE 415 (the close primitive) hands the reader: an ending. The
+ * mark renders in the issue's own accent color so it reads as part
+ * of the same system as everything else on the cover, not a fixed
+ * decoration.
+ *
+ * Unlike its full-cover siblings (warty-spots, flash-burn), this
+ * ornament does NOT share the cover's 420×560 viewBox sliced against
+ * a full inset:0 box. `.pop-cover` is an unconstrained-width,
+ * min-height:100vh section with no fixed aspect ratio, so a
+ * slice-crop against it hides the mark on most desktop viewports
+ * (see the .pop-cover-ornament--full-stop CSS comment for the full
+ * geometry argument). Instead, full-stop owns a small, self-
+ * contained SQUARE coordinate system — the viewBox is 300×300, and
+ * the CSS box is forced to `aspect-ratio: 1` — so the SVG's own box
+ * always matches its own viewBox shape, independent of the cover's
+ * shape. `xMidYMid meet` is used (not `slice`) because a square
+ * box against a square viewBox never needs to crop. The circle's
+ * center sits on the viewBox's own bottom edge (cy = 300) so the
+ * "bleeding off the edge" effect happens inside the mark's own
+ * geometry, not by depending on where the cover happens to end.
+ * Introduced for ISSUE 415.
+ */
+function FullStopOrnament() {
+  return (
+    <svg
+      className="pop-cover-ornament pop-cover-ornament--full-stop"
+      viewBox="0 0 300 300"
+      preserveAspectRatio="xMidYMid meet"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="150" cy="300" r="140" fill="currentColor" />
     </svg>
   )
 }
