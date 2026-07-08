@@ -374,7 +374,7 @@ function FullStopOrnament() {
       aria-hidden="true"
       focusable="false"
     >
-      <circle cx="210" cy="620" r="150" fill="var(--issue-accent-base)" />
+      <circle cx="210" cy="560" r="150" fill="currentColor" />
     </svg>
   )
 }

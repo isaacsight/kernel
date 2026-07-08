@@ -1015,6 +1015,37 @@
   }
 }
 
+/* ── full-stop — a single heavy period bleeding off the bottom
+      edge of the cover. Full-cover sized (like warty-spots) so
+      the xMidYMid-slice viewBox has a real box to crop against;
+      the circle's center sits below the trim so only its upper
+      cap shows. ISSUE 415 pairs full-stop with ink stock, so —
+      following the flash-burn convention — the unqualified rule
+      is tuned for that case first: a flat accent circle composited
+      normally reads clearly on dark paper without a blend mode
+      washing it out. */
+.pop-cover-ornament--full-stop {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  mix-blend-mode: normal;
+}
+
+/* On lighter stocks a hard flat circle reads as a sticker —
+   multiply fuses it into the paper the way ink-spread and
+   warty-spots do on their default (non-ink) stocks. */
+.pop-cover:not(.pop-stock-ink) .pop-cover-ornament--full-stop {
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+}
+
+@media (max-width: 640px) {
+  .pop-cover-ornament--full-stop {
+    opacity: 0.8;
+  }
+}
+
 
 /* ──────────────────────────────────────────────────────────────
    Cover seal — press-preview rubber stamp in the top-right
