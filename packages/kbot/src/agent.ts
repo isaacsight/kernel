@@ -15,6 +15,7 @@ import {
   estimateCost, isLocalProvider, warmOllamaModelCache,
   routeModelForTask, anthropicThinkingConfig, resolveModelAlias,
   anthropicRefusalFallback, dataRetentionNotice, modelRequiresDataRetention,
+  isProviderConfigured, isProviderReachable, getProviderKey,
   type ByokProvider,
 } from './auth.js'
 import {
@@ -33,6 +34,7 @@ import {
 } from './tool-pipeline.js'
 import { formatContextForPrompt, type ProjectContext } from './context.js'
 import { getMatrixSystemPrompt, listAgents, createAgent, type MatrixAgent } from './matrix.js'
+import { getPreferredProvider } from './agents/specialists.js'
 import {
   buildLearningContext, buildFullLearningContext, findPattern, recordPattern, recordPatternFailure,
   cacheSolution, updateProfile, classifyTask, extractKeywords,
@@ -1173,6 +1175,17 @@ export async function runAgent(
     }
   }
 
+  // Step 1.75: Specialist preferred provider routing (NousResearch/Hermes Agent Integration, Phase 2)
+  if (options.agent) {
+    const preferred = getPreferredProvider(options.agent)
+    if (preferred && isProviderConfigured(preferred) && await isProviderReachable(preferred)) {
+      byokProvider = preferred
+      apiKey = getProviderKey(preferred)
+      isLocal = isLocalProvider(preferred)
+      ui.onInfo(`[routing] specialist ${options.agent} routed to preferred provider: ${preferred}`)
+    }
+  }
+
   const tier = options.tier || 'free'
 
   // Ensure lazy tools are loaded before building the tool list for the API.
@@ -1196,7 +1209,7 @@ export async function runAgent(
   }
 
   // OpenAI-compatible APIs cap at 128 tools per request
-  const providerConfig = getProvider(getByokProvider())
+  const providerConfig = getProvider(byokProvider)
   if (providerConfig.apiStyle === 'openai' && tools.length > 128) {
     // Prioritize core tools, then fill remaining slots
     const core = tools.filter(t => CORE_TOOLS.has(t.name))

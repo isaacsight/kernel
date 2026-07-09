@@ -1,4 +1,3 @@
-// kbot Auth Tests
 import { describe, it, expect, afterEach } from 'vitest'
 import {
   detectProvider,
@@ -16,6 +15,9 @@ import {
   anthropicRefusalFallback,
   modelRequiresDataRetention,
   dataRetentionNotice,
+  isProviderConfigured,
+  isProviderReachable,
+  getProviderKey,
   PROVIDERS,
 } from './auth.js'
 
@@ -320,6 +322,23 @@ describe('Anthropic model capabilities', () => {
       expect(models).toContain('claude-mythos-5')
       expect(models).toContain('claude-opus-4-8')
       expect(models).not.toContain('claude-mythos-1')
+    })
+  })
+
+  describe('Provider Configuration and Reachability', () => {
+    it('detects keyless providers as configured', () => {
+      expect(isProviderConfigured('ollama')).toBe(true)
+      expect(isProviderConfigured('hermes')).toBe(true)
+    })
+
+    it('returns local API keys correctly', () => {
+      expect(getProviderKey('ollama')).toBe('local')
+      expect(getProviderKey('hermes')).toBe('local')
+    })
+
+    it('identifies non-local cloud providers as reachable by default', async () => {
+      const reachable = await isProviderReachable('openai')
+      expect(reachable).toBe(true)
     })
   })
 })

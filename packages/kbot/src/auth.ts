@@ -497,6 +497,51 @@ export function isKeylessProvider(provider: ByokProvider): boolean {
   return provider === 'ollama' || provider === 'lmstudio' || provider === 'jan' || provider === 'embedded' || provider === 'llada' || provider === 'hermes'
 }
 
+/** Check if a provider is configured (either keyless, or has an API key/token available) */
+export function isProviderConfigured(provider: ByokProvider): boolean {
+  if (isKeylessProvider(provider)) return true
+  const config = loadConfig()
+  if (config?.byok_provider === provider && config?.byok_key) return true
+  const envKey = ENV_KEYS.find(k => k.provider === provider)?.env
+  if (envKey && process.env[envKey]) return true
+  return false
+}
+
+/** Check if a provider is reachable (local servers only; cloud is assumed true) */
+export async function isProviderReachable(provider: ByokProvider): Promise<boolean> {
+  if (!isLocalProvider(provider)) return true
+  const p = PROVIDERS[provider]
+  try {
+    const url = new URL(p.apiUrl)
+    const res = await fetch(`${url.protocol}//${url.host}`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(500),
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+/** Get the API key/token for a specific provider */
+export function getProviderKey(provider: ByokProvider): string | null {
+  if (isKeylessProvider(provider)) return 'local'
+  const config = loadConfig()
+  if (config?.byok_provider === provider && config?.byok_key) {
+    return config.byok_key
+  }
+  const envKey = ENV_KEYS.find(k => k.provider === provider)?.env
+  if (envKey) {
+    const val = process.env[envKey]
+    if (val) return val
+  }
+  // Fallback: if the global key matches the requested provider style, reuse it
+  if (config?.byok_key && detectProvider(config.byok_key) === provider) {
+    return config.byok_key
+  }
+  return null
+}
+
 /** Check if BYOK mode is enabled (via env var or config) */
 export function isByokEnabled(): boolean {
   // Local providers always work without keys
