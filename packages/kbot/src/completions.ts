@@ -197,7 +197,7 @@ _kbot_completions() {
       return
       ;;
     --model|-m)
-      COMPREPLY=( $(compgen -W "auto fable sonnet haiku opus gpt-4o gpt-4o-mini gemini-pro" -- "\${cur}") )
+      COMPREPLY=( $(compgen -W "auto fable sonnet haiku opus" -- "\${cur}") )
       return
       ;;
     --resume)
@@ -292,7 +292,7 @@ _kbot() {
 
   global_opts=(
     '(-a --agent)'{-a,--agent}'[Force a specific agent]:agent:(${AGENT_NAMES.join(' ')})'
-    '(-m --model)'{-m,--model}'[Override AI model]:model:(auto fable sonnet haiku opus gpt-4o gpt-4o-mini gemini-pro)'
+    '(-m --model)'{-m,--model}'[Override AI model]:model:(auto fable sonnet haiku opus)'
     '(-s --stream)'{-s,--stream}'[Stream the response]'
     '(-p --pipe)'{-p,--pipe}'[Pipe mode for scripting]'
     '--json[JSON output for scripting]'
@@ -468,7 +468,7 @@ function generateFish(): string {
 
   lines.push('')
   lines.push('# Model names for --model')
-  const models = ['auto', 'fable', 'sonnet', 'haiku', 'opus', 'gpt-4o', 'gpt-4o-mini', 'gemini-pro']
+  const models = ['auto', 'fable', 'sonnet', 'haiku', 'opus']
   for (const model of models) {
     lines.push(`complete -c kbot -n '__fish_seen_argument -l model -s m' -a '${model}'`)
   }

@@ -18,6 +18,7 @@ import {
   isProviderConfigured,
   isProviderReachable,
   getProviderKey,
+  resolveModelAlias,
   PROVIDERS,
 } from './auth.js'
 
@@ -340,5 +341,37 @@ describe('Anthropic model capabilities', () => {
       const reachable = await isProviderReachable('openai')
       expect(reachable).toBe(true)
     })
+  })
+})
+
+describe('resolveModelAlias', () => {
+  it.each([
+    ['anthropic', 'fable', 'claude-fable-5'],
+    ['anthropic', 'opus', 'claude-opus-4-8'],
+    ['openrouter', 'fable', 'anthropic/claude-fable-5'],
+    ['openrouter', 'opus', 'anthropic/claude-opus-4-8'],
+  ] as const)('resolves %s alias %s', (provider, alias, expected) => {
+    expect(resolveModelAlias(provider, alias)).toBe(expected)
+  })
+
+  // A resolved alias that isn't in the provider's catalog would 404 at call time.
+  it.each(['fable', 'opus'] as const)('resolves %s to a model the provider carries', (alias) => {
+    for (const provider of ['anthropic', 'openrouter'] as const) {
+      expect(PROVIDERS[provider].models).toContain(resolveModelAlias(provider, alias))
+    }
+  })
+
+  it('passes through full model IDs unchanged', () => {
+    expect(resolveModelAlias('anthropic', 'claude-opus-4-8')).toBe('claude-opus-4-8')
+  })
+
+  it('passes through aliases the provider does not carry', () => {
+    expect(resolveModelAlias('ollama', 'opus')).toBe('opus')
+  })
+
+  // agent.ts consumes these as speed hints; resolving them here would promote
+  // them to explicit overrides and bypass cost-aware routing.
+  it.each(['sonnet', 'haiku', 'auto', 'fast', 'default'])('leaves the speed hint %s alone', (hint) => {
+    expect(resolveModelAlias('anthropic', hint)).toBe(hint)
   })
 })

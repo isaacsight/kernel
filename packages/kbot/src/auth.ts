@@ -1279,17 +1279,21 @@ export function anthropicThinkingConfig(
     : { type: 'enabled', budget_tokens: budgetTokens }
 }
 
+// `sonnet` and `haiku` are deliberately absent: agent.ts treats them as speed
+// hints and resolves them through getProviderModel(). Adding them here would
+// promote them to explicit-model overrides and bypass cost-aware routing.
+const FLAGSHIP_ALIASES: Record<string, Partial<Record<ByokProvider, string>>> = {
+  fable: { anthropic: 'claude-fable-5', openrouter: 'anthropic/claude-fable-5' },
+  opus: { anthropic: 'claude-opus-4-8', openrouter: 'anthropic/claude-opus-4-8' },
+}
+
 /**
  * Resolve a short flagship alias to the provider's full model ID. Lets users
  * pass `--model fable` the way they already pass `claude-fable-5`. Returns the
  * input unchanged when it isn't a known alias or the provider doesn't carry it.
  */
 export function resolveModelAlias(provider: ByokProvider, model: string): string {
-  if (model === 'fable') {
-    if (provider === 'anthropic') return 'claude-fable-5'
-    if (provider === 'openrouter') return 'anthropic/claude-fable-5'
-  }
-  return model
+  return FLAGSHIP_ALIASES[model]?.[provider] ?? model
 }
 
 export { KBOT_DIR, CONFIG_PATH, ENV_KEYS }

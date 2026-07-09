@@ -66,7 +66,7 @@ async function main(): Promise<void> {
     .description('kbot — Open-source terminal AI agent. Bring your own key, pick your model, run locally.')
     .version(VERSION)
     .option('-a, --agent <agent>', 'Force a specific agent (run kbot agents to see all 35)')
-    .option('-m, --model <model>', 'Override AI model (auto, sonnet, haiku)')
+    .option('-m, --model <model>', 'Override AI model (auto, fable, opus, sonnet, haiku, or a full model ID)')
     .option('-s, --stream', 'Stream the response')
     .option('-p, --pipe', 'Pipe mode — raw text output for scripting')
     .option('--json', 'JSON output for scripting')
