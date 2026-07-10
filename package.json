@@ -60,7 +60,8 @@
     "overrides": {
         "undici": "^7.24.6",
         "serialize-javascript": "^7.0.5",
-        "xml2js": "^0.6.2"
+        "xml2js": "^0.6.2",
+        "protobufjs": "^7.6.5"
     },
     "devDependencies": {
         "@modelcontextprotocol/sdk": "^1.27.1",
