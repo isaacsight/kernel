@@ -499,12 +499,25 @@ export function PlateFeature({ spread, issue }: PlateFeatureProps) {
     <section className={`pop-plate ${stockClass}`} style={accentStyle} aria-labelledby="pop-plate-title">
       <div className="pop-plate-inner">
 
-        <header className="pop-plate-header">
+        <header className={`pop-plate-header ${spread.titleLines ? 'pop-plate-header--galley' : ''}`}>
           <span className="pop-kicker pop-kicker--tomato">{spread.kicker}</span>
           <hr className="pop-rule pop-rule--short pop-rule--tomato" />
-          <h2 id="pop-plate-title" className="pop-display pop-plate-title">
-            {spread.title}
-          </h2>
+          {spread.titleLines ? (
+            <h2 id="pop-plate-title" className="pop-plate-title pop-plate-title--monument">
+              {spread.titleLines.map((line, i) => (
+                <span
+                  key={i}
+                  className={`pop-plate-title-line ${i === spread.titleLines!.length - 1 ? 'pop-plate-title-line--accent' : ''}`}
+                >
+                  {line}
+                </span>
+              ))}
+            </h2>
+          ) : (
+            <h2 id="pop-plate-title" className="pop-display pop-plate-title">
+              {spread.title}
+            </h2>
+          )}
           <p className="pop-feature-jp pop-plate-title-jp">{spread.titleJp}</p>
           <p className="pop-swash pop-plate-deck">{spread.deck}</p>
           <p className="pop-folio pop-plate-byline">{spread.byline}</p>
@@ -652,10 +665,44 @@ export function PlateFeature({ spread, issue }: PlateFeatureProps) {
           <p className="pop-plate-note">{spread.plateNote}</p>
         </div>
 
+        {spread.ticker && (
+          <div className="pop-plate-ticker-wrap" aria-label={spread.tickerLabel ?? 'The stockroom'}>
+            <div className="pop-plate-ticker">
+              {[...spread.ticker, ...spread.ticker].map((model, i) => (
+                <span key={i} className="pop-plate-ticker-item" aria-hidden={i >= spread.ticker!.length}>
+                  {model}
+                  <span className="pop-plate-ticker-star" aria-hidden="true"> ★ </span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+        {spread.tickerLabel && (
+          <p className="pop-folio pop-plate-ticker-label">{spread.tickerLabel}</p>
+        )}
+
+        {spread.catalog && (
+          <section className="pop-plate-catalog">
+            {spread.catalogKicker && (
+              <p className="pop-folio pop-plate-catalog-kicker">{spread.catalogKicker}</p>
+            )}
+            {spread.catalog.map((row) => (
+              <div key={row.n} className="pop-plate-catalog-row">
+                <span className="pop-plate-catalog-no">{row.n}</span>
+                <div className="pop-plate-catalog-head">
+                  <h3 className="pop-plate-catalog-title">{row.en}</h3>
+                  {row.jp && <span className="pop-plate-catalog-jp">{row.jp}</span>}
+                </div>
+                <p className="pop-plate-catalog-body">{row.body}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
         <hr className="pop-rule pop-plate-rule" />
 
         {spread.outro && (
-          <article className="pop-plate-prose">{renderSections(spread.outro)}</article>
+          <article className="pop-plate-prose pop-plate-prose--note">{renderSections(spread.outro)}</article>
         )}
 
         {spread.pullQuote && (

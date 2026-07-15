@@ -45,6 +45,35 @@
   color: var(--pop-coffee);
 }
 
+/* The galley register: left-aligned, monument-scale headline —
+   the artifact edition's composition carried onto the spread. */
+.pop-plate-header--galley {
+  text-align: left;
+}
+
+.pop-plate-header--galley .pop-plate-deck {
+  margin: 1.5rem 0 1rem;
+  max-width: 38rem;
+}
+
+.pop-plate-title--monument {
+  margin: 1rem 0 0.5rem;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(3.25rem, 9vw, 7rem);
+  line-height: 0.94;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+
+.pop-plate-title-line {
+  display: block;
+}
+
+.pop-plate-title-line--accent {
+  color: var(--issue-accent-base);
+}
+
 /* ─── dossier ────────────────────────────────────────────────── */
 
 .pop-plate-spec {
@@ -387,6 +416,127 @@
   margin: 0 0 1rem;
 }
 
+/* ─── the stockroom ticker — CSS weather; reduced-motion and
+       print still it ─────────────────────────────────────────── */
+
+.pop-plate-ticker-wrap {
+  margin: 3.5rem 0 0;
+  border-top: 1px solid var(--pop-ink);
+  border-bottom: 1px solid var(--pop-ink);
+  overflow: hidden;
+  padding: 0.6rem 0;
+}
+
+.pop-plate-ticker {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  animation: pop-plate-ticker-drift 48s linear infinite;
+}
+
+.pop-plate-ticker-item {
+  padding-left: 0.9rem;
+}
+
+.pop-plate-ticker-star {
+  color: var(--issue-accent-base);
+}
+
+@keyframes pop-plate-ticker-drift {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop-plate-ticker {
+    animation: none;
+  }
+}
+
+.pop-plate-ticker-label {
+  color: var(--pop-coffee);
+  text-align: right;
+  margin: 0.4rem 0 0;
+}
+
+/* ─── the catalog — numbered entries, the artifact register ──── */
+
+.pop-plate-catalog {
+  margin: 3.5rem 0 0;
+}
+
+.pop-plate-catalog-kicker {
+  color: var(--pop-coffee);
+  margin: 0 0 0.4rem;
+}
+
+.pop-plate-catalog-row {
+  display: grid;
+  grid-template-columns: 4rem 14rem 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  padding: 1.6rem 0.15rem;
+  border-top: 1px solid var(--pop-ink);
+}
+
+.pop-plate-catalog-row:last-child {
+  border-bottom: 1px solid var(--pop-ink);
+}
+
+.pop-plate-catalog-no {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--issue-accent-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-plate-catalog-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.pop-plate-catalog-jp {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.34em;
+  color: var(--pop-coffee);
+  margin-top: 0.4rem;
+}
+
+.pop-plate-catalog-body {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 40rem;
+}
+
+@media (max-width: 45rem) {
+  .pop-plate-catalog-row {
+    grid-template-columns: 3rem 1fr;
+  }
+  .pop-plate-catalog-body {
+    grid-column: 2;
+  }
+}
+
+/* The pressroom note — the artifact's accent-ruled aside. */
+.pop-plate-prose--note {
+  border-left: 3px solid var(--issue-accent-base);
+  padding-left: 1.4rem;
+  max-width: 42rem;
+}
+
 /* ─── references ─────────────────────────────────────────────── */
 
 .pop-plate-references {
@@ -489,5 +639,11 @@
   }
   .pop-plate-print-snapshot {
     display: block;
+  }
+  .pop-plate-ticker {
+    animation: none;
+  }
+  .pop-plate-catalog-row {
+    break-inside: avoid;
   }
 }

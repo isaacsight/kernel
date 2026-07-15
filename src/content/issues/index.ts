@@ -1103,10 +1103,30 @@ export interface PlateWire {
   to: string
 }
 
+/** A numbered catalog row in the galley register — the artifact
+ *  composition's entries (01 THE SHEET · 紙面 · body …). */
+export interface PlateCatalogEntry {
+  n: string
+  en: string
+  jp?: string
+  body: string
+}
+
 export interface PlateSpread extends SpreadCommon {
   type: 'plate'
   dossier?: SpreadDossier
   intro?: SpreadSection[]
+  /** Monument headline, stacked — the galley register's header.
+   *  When set, replaces the plain title rendering; the last line
+   *  takes the issue accent. */
+  titleLines?: string[]
+  /** The stockroom strip — model names drifting in a CSS-only
+   *  ticker (weather; reduced-motion and print still it). */
+  ticker?: string[]
+  tickerLabel?: string
+  /** Numbered catalog rows, rendered after the plate. */
+  catalog?: PlateCatalogEntry[]
+  catalogKicker?: string
   /** Mono label above the plate, e.g. 'PLATE No.1 — WORKING MODEL · 作動模型'. */
   plateKicker?: string
   /** Operating hint printed under the kicker. */
