@@ -1,0 +1,493 @@
+/* ──────────────────────────────────────────────────────────────
+   PlateFeature — ISSUE 419 · THE INTELLIGENT CANVAS ·
+   the tenth interaction shape: the WORKING MODEL.
+
+   Motion contract, as amended by 419 (the working-model
+   exception, docs/interaction-language.md rule 3): script may
+   move the model's own signal INSIDE .pop-plate-frame only —
+   timer-robust, reduced-motion collapsed. Everything in this
+   file outside the frame follows the standard editorial
+   contract: CSS transitions only, weather amplitude.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-plate {
+  padding: 4.5rem 1.5rem 5rem;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-plate-inner {
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+/* ─── header ─────────────────────────────────────────────────── */
+
+.pop-plate-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pop-plate-title {
+  margin: 0.75rem 0 0.25rem;
+}
+
+.pop-plate-title-jp {
+  margin: 0 0 1rem;
+}
+
+.pop-plate-deck {
+  max-width: 34rem;
+  margin: 0 auto 1rem;
+}
+
+.pop-plate-byline {
+  color: var(--pop-coffee);
+}
+
+/* ─── dossier ────────────────────────────────────────────────── */
+
+.pop-plate-spec {
+  margin: 0 0 3rem;
+}
+
+.pop-plate-spec-frame {
+  position: relative;
+  border: 1px solid var(--pop-ink);
+  padding: 1.5rem 1.5rem 1.25rem;
+  background: var(--pop-ivory);
+}
+
+.pop-plate-spec-badge {
+  position: absolute;
+  top: -0.6rem;
+  right: 1.25rem;
+}
+
+.pop-plate-spec-kicker {
+  color: var(--pop-coffee);
+}
+
+.pop-plate-spec-note {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin: 0.75rem 0 1rem;
+}
+
+.pop-plate-spec-list {
+  margin: 0;
+}
+
+.pop-plate-spec-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-plate-spec-label {
+  flex: 0 0 9rem;
+  color: var(--pop-coffee);
+}
+
+.pop-plate-spec-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+/* ─── prose ──────────────────────────────────────────────────── */
+
+.pop-plate-prose {
+  margin: 0 0 1rem;
+}
+
+.pop-plate-section {
+  margin-bottom: 2rem;
+}
+
+.pop-plate-section-heading {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 0.75rem;
+}
+
+.pop-plate-section-heading-jp {
+  margin-left: 0.75rem;
+  color: var(--pop-coffee);
+  letter-spacing: 0.3em;
+}
+
+.pop-plate-paragraph {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  margin: 0 0 1rem;
+  max-width: 44rem;
+}
+
+.pop-plate-rule {
+  margin: 2.5rem 0;
+}
+
+/* ─── the plate ──────────────────────────────────────────────── */
+
+.pop-plate-kicker-line {
+  margin: 0 0 0.35rem;
+}
+
+.pop-plate-hint {
+  color: var(--pop-coffee);
+  margin: 0 0 0.75rem;
+}
+
+.pop-plate-scroll {
+  overflow-x: auto;
+}
+
+.pop-plate-frame {
+  position: relative;
+  min-width: 46rem;
+  border: 1px solid var(--pop-ink);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 31px, var(--pop-hairline-soft) 31px 32px),
+    repeating-linear-gradient(90deg, transparent 0 31px, var(--pop-hairline-soft) 31px 32px);
+}
+
+/* Registration ticks at the frame corners — the plate is a
+   printed object; the ticks say so. */
+.pop-plate-tick {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  color: var(--issue-accent-base);
+  pointer-events: none;
+}
+
+.pop-plate-tick::before,
+.pop-plate-tick::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+}
+
+.pop-plate-tick::before { left: 6px; top: 0; width: 1px; height: 13px; }
+.pop-plate-tick::after  { left: 0; top: 6px; width: 13px; height: 1px; }
+.pop-plate-tick--tl { top: -7px; left: -7px; }
+.pop-plate-tick--tr { top: -7px; right: -7px; }
+.pop-plate-tick--bl { bottom: -7px; left: -7px; }
+.pop-plate-tick--br { bottom: -7px; right: -7px; }
+
+.pop-plate-stage {
+  position: relative;
+  height: 33rem;
+}
+
+.pop-plate-wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.pop-plate-wire {
+  fill: none;
+  stroke: var(--pop-ink);
+  stroke-width: 1.25;
+  transition: stroke 0.3s ease;
+}
+
+.pop-plate-wire--lit {
+  stroke: var(--issue-accent-base);
+  stroke-width: 1.75;
+}
+
+.pop-plate-pulse {
+  fill: var(--issue-accent-base);
+}
+
+/* ─── blocks ─────────────────────────────────────────────────── */
+
+.pop-plate-block {
+  position: absolute;
+  width: 13rem;
+  background: var(--pop-ivory);
+  border: 1px solid var(--pop-ink);
+  box-shadow: 4px 4px 0 var(--pop-ink);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.pop-plate-block:active {
+  cursor: grabbing;
+}
+
+.pop-plate-block:focus-visible {
+  outline: 2px solid var(--issue-accent-base);
+  outline-offset: 3px;
+}
+
+.pop-plate-block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem 0.4rem;
+  border-bottom: 1px solid var(--pop-ink);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pop-plate-block-jp {
+  color: var(--pop-coffee);
+  letter-spacing: 0.28em;
+}
+
+.pop-plate-block-body {
+  padding: 0.65rem;
+}
+
+.pop-plate-prompt {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.pop-plate-proof-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--pop-hairline-soft);
+  background: transparent;
+  cursor: pointer;
+}
+
+.pop-plate-proof-button:focus-visible {
+  outline: 2px solid var(--issue-accent-base);
+  outline-offset: 2px;
+}
+
+.pop-plate-proof-button:disabled {
+  cursor: wait;
+}
+
+.pop-plate-proof-button canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pop-plate-block-status {
+  padding: 0.4rem 0.65rem 0.45rem;
+  border-top: 1px solid var(--pop-hairline-soft);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pop-plate-block-status--done {
+  color: var(--issue-accent-base);
+}
+
+/* ─── controls + ledger ──────────────────────────────────────── */
+
+.pop-plate-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  border-top: 1px solid var(--pop-ink);
+  padding: 0.85rem 1rem;
+  background: var(--pop-ivory);
+}
+
+.pop-plate-run {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pop-ivory);
+  background: var(--issue-accent-base);
+  border: 1px solid var(--pop-ink);
+  box-shadow: 3px 3px 0 var(--pop-ink);
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pop-plate-run:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--pop-ink);
+}
+
+.pop-plate-run:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--pop-ink);
+}
+
+.pop-plate-run:focus-visible {
+  outline: 2px solid var(--issue-accent-base);
+  outline-offset: 3px;
+}
+
+.pop-plate-run:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.pop-plate-ledger {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-plate-caption {
+  color: var(--pop-coffee);
+  margin: 0.75rem 0 0;
+}
+
+/* ─── the note (rule 6) ──────────────────────────────────────── */
+
+.pop-plate-note-block {
+  margin: 2rem 0 0;
+}
+
+.pop-plate-note {
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  font-style: italic;
+  color: var(--pop-ink);
+  border-left: 3px solid var(--issue-accent-base);
+  padding-left: 1.25rem;
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.pop-plate-print-snapshot {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  margin: 0 0 1rem;
+}
+
+/* ─── references ─────────────────────────────────────────────── */
+
+.pop-plate-references {
+  margin: 2.5rem 0 0;
+  border-top: 1px solid var(--pop-hairline);
+  padding-top: 1.5rem;
+}
+
+.pop-plate-references-kicker {
+  color: var(--pop-coffee);
+}
+
+.pop-plate-references-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  margin: 0.6rem 0 1rem;
+}
+
+.pop-plate-references-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pop-plate-reference {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ─── pull quote + signoff ───────────────────────────────────── */
+
+.pop-plate-pullquote {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.pop-plate-pullquote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: var(--issue-accent-base);
+  margin: 0 0 0.75rem;
+}
+
+.pop-plate-pullquote-cite {
+  font-style: normal;
+  color: var(--pop-coffee);
+}
+
+.pop-plate-signoff {
+  text-align: center;
+  margin-top: 3.5rem;
+}
+
+.pop-plate-signoff-text {
+  margin: 1rem 0 2rem;
+}
+
+.pop-plate-monument {
+  justify-content: center;
+}
+
+/* ─── print — the proofs and their addresses, stacked ────────── */
+
+@media print {
+  .pop-plate-scroll {
+    overflow: visible;
+  }
+  .pop-plate-frame {
+    min-width: 0;
+  }
+  .pop-plate-stage {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .pop-plate-wires {
+    display: none;
+  }
+  .pop-plate-block {
+    position: static;
+    box-shadow: none;
+    break-inside: avoid;
+    width: 20rem;
+  }
+  .pop-plate-controls,
+  .pop-plate-hint {
+    display: none;
+  }
+  .pop-plate-proof-button {
+    border: none;
+  }
+  .pop-plate-print-snapshot {
+    display: block;
+  }
+}

@@ -6,7 +6,7 @@
 > The issue persuades; this document enforces. When they disagree,
 > fix the disagreement before shipping anything.
 >
-> **The cabinet, as of ISSUE 413:** six shapes built — Dial
+> **The cabinet, as of ISSUE 419:** ten shapes built — Dial
 > (`instrument`, ARIA radiogroup, N ordered positions on one
 > variable), Compare (`compare`, ARIA switch, two irreducible
 > lenses with no position between them), Sequence (`sequence`,
@@ -21,11 +21,19 @@
 > ISSUE 413 — the first ARTIFACT control: the reader operates the
 > real production grammar and composes a printable cover of their
 > own; selection and contribution composing toward a thing, not a
-> reading) — plus the Tutor (`tutor`, ISSUE 411), a COMPOSITE that
-> teaches the primitives by having the reader operate a stakes-free
-> version of each. Any further shape waits, unbuilt, for a real
-> story that needs it — see rule 7 for how a reservation becomes a
-> build, and for why ISSUE 407 refused to manufacture one.
+> reading), Close (`close`, ISSUE 415 — a feed with no natural end,
+> "one more" and "stop" as siblings at identical weight), Proof
+> (`proof`, ISSUE 417 — a machine-completed draft the reader
+> adjudicates line by line), Day (`day`, ISSUE 418 — time lived as
+> the axis: an authored metropolitan day marked moment by moment),
+> and Plate (`plate`, ISSUE 419 — the WORKING MODEL: an operable
+> in-house miniature of an external mechanism, ratifying the rule-3
+> and rule-4 amendments below) — plus the Tutor (`tutor`, ISSUE
+> 411), a COMPOSITE that teaches the primitives by having the
+> reader operate a stakes-free version of each. Any further shape
+> waits, unbuilt, for a real story that needs it — see rule 7 for
+> how a reservation becomes a build, and for why ISSUE 407 refused
+> to manufacture one.
 
 Status: **LAW** — reviewed each time a new interactive spread is
 proposed. Two documents govern the visual grammar and this one
@@ -72,7 +80,34 @@ hand did not grow the motion budget:
   motion system was withdrawn) and survives it.
 
 **Enforcement:** no JS animation libraries on editorial surfaces.
-No `requestAnimationFrame` choreography in a `*Feature.tsx`.
+No `requestAnimationFrame` choreography in a `*Feature.tsx` —
+except inside a working model's plate frame, under the amendment
+below.
+
+**AMENDED — ISSUE 419, the working-model exception.** When a
+spread's subject is a *mechanism* and the page carries a working
+model of it (the `plate` shape), script may move the model's own
+signal — a pulse walking a wire, a frame drawing its proof —
+because that motion **is the subject under review**, not
+decoration. The exception is narrow and travels with four
+constraints, all mandatory:
+
+1. **Confined to the plate frame.** Script-driven motion lives
+   inside the framed working model only; everything outside the
+   frame keeps the CSS-only contract at weather amplitude.
+2. **Timer-robust.** Every animation step must advance on a timer
+   as well as a frame callback (race `requestAnimationFrame`
+   against `setTimeout`, first past wins). A model sequenced on
+   rAF alone provably stalls in throttled and background tabs —
+   419's own galley stalled in an embedded pane where rAF never
+   fires. A model that can hang mid-pull is a broken instrument,
+   and a broken instrument is a false meter (rule 6).
+3. **Reduced-motion collapses it.** Under
+   `prefers-reduced-motion`, the pulse is skipped and states
+   change instantly. The model still works; it just doesn't move.
+4. **Ambient inside the frame too.** Even the model's own motion
+   keeps paper-room amplitude — a swaying video frame stays ≤4px.
+   The exception admits script, not spectacle.
 
 ### 4. Everything stays on the page
 
@@ -88,6 +123,26 @@ No `requestAnimationFrame` choreography in a `*Feature.tsx`.
 **Enforcement:** print-preview every interactive spread before
 shipping (§VI of PUBLISHING.md). If a state matters enough to
 build, it matters enough to print.
+
+**AMENDED — ISSUE 419, the seed is the state's address.** A
+working model with generative frames cannot hold every reachable
+state in the DOM — the states are combinatorial. The rule's
+purpose (the archive holds everything the reader ever saw) is
+preserved by **reproducibility** instead, under three mandatory
+conditions:
+
+1. **Deterministic drawing.** Every generated frame is drawn by a
+   deterministic algorithm from a seed. Same seed, same proof, on
+   any copy of the issue, forever.
+2. **The seed prints on the artwork.** Every frame carries its
+   seed number on its own face (No.###) — a printed seed is a
+   state the archive can re-draw. Print renders the current
+   frames with their seeds, plus a snapshot line listing them.
+3. **The resting state is fixed.** The page opens on a completed
+   pull whose seeds derive from the issue number, so an untouched
+   copy is complete (rule 1) and identical to every other
+   untouched copy — the frozen-object promise kept exactly where
+   randomness could have broken it.
 
 ### 5. The hand arrives by every door
 
@@ -280,6 +335,35 @@ instance one** — no machinery extracted from Galley/Press.
 
 ---
 
+**The tenth shape — Plate (`plate`, ISSUE 419), and the two
+amendments it ratifies.** Every prior shape hands the reader a
+text, a process, a comparison, an artifact, or a day. The Plate
+hands them a MECHANISM: a working model of an external system
+(419's subject: FLORA's node canvas — blocks carry models, wires
+carry intent), built in-house, framed like a plate in a natural
+history volume, and operable — arrange the blocks, pull the
+proof, redraw a frame. The shape test that earned it: a review of
+a process-product cannot be made in prose alone (rule 2 — the
+claim IS the operating of it), and no existing shape holds a live
+mechanism. Controls are plain buttons (run + per-frame redraw);
+block arrangement is material, not a control — no reading depends
+on it — but still arrives by every door (focusable, arrow-key
+movable, `aria-roledescription`). What it amends, argued in its
+header and ratified here in the same commit per this file's
+amendment clause: rule 3 gains the **working-model exception**
+(script may move the model's own signal, confined to the frame,
+timer-robust, reduced-motion collapsed, ambient amplitude) and
+rule 4 gains **seeded reproducibility** (deterministic drawing,
+the seed printed on the artwork, a fixed issue-number-seeded
+resting state). And rule 6 doubles again, after 417's precedent:
+when the page models an external product, the mandatory
+`plateNote` discloses the simulation — drawn in-house, nothing
+generated, the ledger counting only the reader's own pulls.
+**Plate is at instance one** — its machinery waits for a second
+mechanism-shaped story before anything is extracted.
+
+---
+
 **The ninth shape — Day (`day`, ISSUE 418), and the axis it adds.**
 Every prior shape gave the reader's hand a variable (Dial), a
 comparison (Compare), a process (Sequence), a text (Galley, Margin),
@@ -322,4 +406,5 @@ time-lived story before anything is extracted.
 *Ratified VII·26 — ISSUE 399 built the first instrument; ISSUE 403
 declared the law; this file enforces it. Amend by shipping an issue
 that argues the amendment, then editing this file in the same
-commit.*
+commit. First exercised in anger by ISSUE 419, which amended rules
+3 and 4 to admit the working model.*

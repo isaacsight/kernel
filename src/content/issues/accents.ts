@@ -195,6 +195,7 @@ export const DEFAULT_ACCENT_BY_SPREAD: Record<IssueSpread['type'], InkSeedName> 
   close: 'oxblood',
   proof: 'pool',
   day: 'cobalt',
+  plate: 'ivy',
 }
 
 /** Pick the default accent for a spread type. */
