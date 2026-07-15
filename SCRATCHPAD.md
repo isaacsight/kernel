@@ -1868,3 +1868,226 @@ See git history.
   OFL fonts, source). Three parallel systems now: flat, icon, engraved.
 - Also: original calligraphic chasen (chasen_gen.py → chasen_fable_vector.svg, 5 critique
   iterations) + chasen_design_research.md w/ Takayama anatomy sources.
+
+## 2026-07-11 (afternoon) — Figma Spec Page Addition
+- Created a new static spec page about Figma at `src/pages/FigmaPage.tsx` and its stylesheet at `src/pages/FigmaPage.css`.
+- Registered the `/figma` route in `src/router.tsx` using lazy loading.
+- Linked the page in `RunningHead.tsx` (header) and `IssueColophon.tsx` (footer).
+- Details include: the "drafting table vs. press" relationship, variable mirroring specifications (colors, spacing, radii, type styles), what is excluded (OKLCH derived accent tones, motion variables), and the Motion Contract hand-finish checklist.
+- Verified clean build (`npm run build`) and typecheck (`npx tsc --noEmit`).
+
+## Session 2026-07-12 — ISSUE 418 · ONE DAY (day shape) — on branch `feat/issue-417-proof-of-hand`
+
+Brainstormed with Isaac: behavioral science of 2026 + interactive
+animation expressing the metropolitan lifestyle → ISSUE 418 — ONE DAY
+(街の一日). Reader-as-subject: nine authored delegation moments
+(06:10–00:40), LET IT RIDE / STEP IN per moment, midnight ledger
+metering only real reader actions (marks / changes of mind / session
+clock — 415 precedent). Committed b7c9e1fba (9 files, additive only;
+417's uncommitted WIP untouched).
+
+- New shape `day` (eighth) — DaySpread/DayMoment in index.ts,
+  DayFeature.{tsx,css,test.tsx}, router case, accents.ts default
+  cobalt, interaction-language.md amended same commit.
+- Identity: butter / classic / cobalt (declared) / seal READER AS
+  SUBJECT · VII·26. References real: Bainbridge 83, Parasuraman-
+  Riley 97, Skitka 99, Lee-See 04.
+- Vignettes: CSS-only weather (steam/train/crosswalk/desk/market/
+  window), ≤4px/≤8% amplitudes, day tint via --day-depth color-mix.
+- tsc clean, DayFeature tests 4/4. NOT deployed. 418 registered in
+  ALL_ISSUES with comment: 417 (PROOF OF HAND) inserts BEFORE it when
+  built — ship order 417 → 418.
+- TODO next session: build 417; visual QA of 418 in browser (print
+  preview per checklist §4); then deploy both in order.
+
+## Session 2026-07-12 (cont.) — ISSUE 417 · PROOF OF HAND built + both issues verified
+
+Built 417 from its committed spec (767b6da26, 12 files). Real gemma3
+run: 6 lines, 80 tok, 7.9s, raw JSON in session scratchpad
+(resp_417_proof.json), verbatim in 417.ts. ProofFeature: roving-
+tabindex radiogroups ×6, three fates, live resolved screen +
+provenance ledger; tests 5/5.
+
+Catalog renumber: proof = EIGHTH shape (ships first), day = NINTH
+(418, built first, ships second) — fixed across 418.ts, DayFeature,
+index.ts, interaction-language.md. Backfilled design-language rows
+415/416, added 417/418; PUBLISHING.md table +close/proof/day, footer
+→ 418.
+
+Verified: tsc clean, 14/14 tests (close/proof/day), npm run build ok,
+dev-server screenshots of /issues/417 + /issues/418 both render
+on-grammar (418's --day-depth tint visibly darkens down the page).
+NOT deployed; deploy = merge to main per /ship. Open items: JP
+editorial confirmation (417 手による校正 flagged in spec §8; 418 JP
+same status); print-preview + keyboard/SR pass still unticked from
+417 spec §8 checklist.
+
+## Session 2026-07-12 (cont. 2) — SHIPPED 417 + 418 via 6-gate /ship
+
+All gates PASS. ff-merge feat/issue-417-proof-of-hand → main (767b6da26),
+pushed; NOTE npm run deploy is RETIRED — CI deploy.yml ran 1m12s, live.
+Security: June npm-critical carried-FAIL now RESOLVED (0 critical prod;
+3 high remain in Node-only tools deps — P2). QA 507/507. Perf: main JS
+204.8KB gz (budget 300), CSS ~99KB gz (budget 150) — memory's "93/37"
+was stale. Live checks: 418 cover on landing, 417 proof radios verified
+calm-default on forced-fresh load; earlier snapshot showed ORGANIC marks
+= someone operating the visible Playwright Chrome (not a bug). Discord
+notified. Figma WIP stash popped back onto branch, untouched.
+
+## Session 2026-07-15 — FLORA artifact (next-issue galley) — on branch `feat/issue-417-proof-of-hand`
+
+Built an interactive animation Artifact about FLORA (flora.ai — "AI-powered
+canvas for designers, brand teams, and agencies") as a galley proof for the
+next issue. NOT registered as an issue yet; it is a standalone study published
+to claude.ai artifacts: https://claude.ai/code/artifact/1046cacf-ee04-4790-beb2-e2bfde1957b7
+Local source copy lives only in the session scratchpad
+(flora-intelligent-canvas.html) — copy into repo if it becomes issue content.
+
+Shape: "THE INTELLIGENT CANVAS" — house grammar (ivory/kraft stocks, ink
+hairlines, tomato spot, Garamond monument + Courier meta, bilingual JP,
+★ glyph, PLATE No.1 with corner ticks, numbered catalog, colophon).
+PLATE No.1 is a live node canvas: draggable blocks PROMPT → IMAGE ×2 → VIDEO,
+bezier wires, "PULL THE PROOF" sends a tomato pulse and each block draws a
+seeded botanical engraving on <canvas> (nothing generated — disclosed in the
+colophon). Ledger counts runs/models; ticker of 15 model names; facts from
+flora.ai read 2026-07-15 ($42M raised, 50+ models, Pentagram/Lionsgate/Nike,
+"one subscription to rule them all", agent copy "thinks with you…").
+
+Gotchas learned:
+- Artifact CSP blocks font CDNs → EB Garamond/Courier Prime declared with
+  fallback stacks (Iowan Old Style/Palatino/Georgia; Courier New).
+- Claude browser pane never fires requestAnimationFrame (paints on demand) —
+  animation sequencing must use a rAF+setTimeout hybrid tick or it stalls;
+  same protects real backgrounded tabs.
+- file:// and plain localhost navigate are blocked in the pane; use
+  preview_start({url}) to open localhost.
+- python http.server serves no charset → mojibake; keep <meta charset="utf-8">.
+
+User correction mid-task: subject is FLORA itself, not its pricing page.
+
+## Session 2026-07-15 (cont.) — ISSUE 419 SHIPPED · THE INTELLIGENT CANVAS (plate)
+
+Promoted the FLORA artifact into the magazine as ISSUE 419 — the tenth
+interaction shape, `plate` (the WORKING MODEL): PlateFeature.{tsx,css},
+types + registration in issues/index.ts, accents map got plate→ivy
+(first ivy issue), router case in IssueFeature.tsx. Identity: kraft /
+asymmetric-left / ivy / seal WORKING MODEL. Committed 91ffdd5b6 and
+pushed to main (CI deploys; poll for "deploy: 91ffdd5b6" on gh-pages).
+
+RULES AMENDED in the same commit (interaction-language.md's own
+amendment clause, first time exercised):
+- Rule 3 + working-model exception: script may move the model's own
+  signal INSIDE the plate frame only — timer-robust (rAF raced against
+  setTimeout; rAF alone stalls in throttled tabs/embedded panes),
+  reduced-motion collapsed, ≤4px amplitude even in-frame. Mirrored in
+  .claude/rules/components.md (its "no rAF" rule now carries the one
+  ratified exception).
+- Rule 4 + seeded reproducibility: generative frames can't hold all
+  states in the DOM; instead every proof is deterministic from the seed
+  printed on its face, resting state seeded from the issue number
+  (standing proof identical on every copy), print snapshots the seeds.
+- Rule 6 doubled again: mandatory `plateNote` — simulation drawn
+  in-house, nothing generated, ledger counts reader actions only.
+PUBLISHING.md: plate row in §III.2, 419.ts in §IV templates, last-
+updated line. design-language.md: 419 identity-register row.
+
+Verified before push: tsc + build clean; standing proof at rest
+(PULLS 00 · seeds No.165/905/645); live pull completed in the rAF-less
+browser pane (statuses → RECRAFT V3/IDEOGRAM 3/PIKA 2.2, PULLS 01,
+MODELS DRAWN 05); mobile 375px no page overflow. NOTE: the pane's
+screenshots go blank at deep scroll offsets until a resize_window
+forces a recomposite — DOM assertions are the reliable check there.
+
+Only the 10 issue files were committed; the ~53 unrelated dirty files
+(canvas WIP, router.tsx, MagazineFrame.tsx etc.) remain uncommitted on
+feat/issue-417-proof-of-hand, which now == main.
+
+## Session 2026-07-15 (cont. 2) — THE ARTIFACT LANGUAGE ratified (abf66b587, pushed to main)
+
+Isaac's direction: every issue also ships as an interactive animated
+ARTIFACT, and that register leads — he preferred the original FLORA
+galley to its site reduction. Ratified as docs/artifact-language.md
+(third law doc; precedence: artifact-language for artifacts,
+interaction-language for spreads). PUBLISHING.md gained §V.5 (artifact
+edition mandatory from 419, draft artifact-first) + recipe step.
+419's galley filed as the first artifact edition at
+artifacts/419-the-intelligent-canvas.html; cited in 419's audit block.
+ISSUE 419 deploy confirmed earlier: gh-pages "deploy: 91ffdd5b6".
+Memory saved: feedback_artifact_first_editorial.md.
+
+## Session 2026-07-15 (cont. 3) — 419 spread rebuilt in the galley register (aff7b0f4a)
+
+Isaac: "what you made originally was superior." Ruling absorbed: the
+spread now CARRIES the artifact's composition instead of reducing it.
+PlateSpread gained optional titleLines (stacked monument, last line in
+accent), ticker/tickerLabel (CSS-only drift, stilled by reduced-motion
++ print), catalog/catalogKicker (numbered entries). 419.ts: essay
+intro cut; monument THE/INTELLIGENT/CANVAS; 15-model stockroom ticker;
+four catalog entries (Sheet/Stock/Hand/Ledger); pressroom note gets
+the accent border. Verified live on dev, pushed to main.
+Memory updated: feedback_artifact_first_editorial.md — "reduction"
+means only what the site's law forces, never a quieter layout.
+
+## Session 2026-07-15 (cont. 4) — CORE SAMPLE No.1 · THE DESCENT OF A PROMPT
+
+Second artifact edition, built to the "go deep" brief: an interactive
+animated descent through six strata of one prompt (416's real
+question). Published: https://claude.ai/code/artifact/2c25d1b0-2ae3-4d21-ad67-aee288c1d513
+Source: scratchpad/descent-of-a-prompt.html (session dir) — NOT in
+repo yet; becomes artifacts/420-*.html if promoted to ISSUE 420.
+Shape candidate: a DEPTH control (probe/winch on a gauge rail) —
+distinct from plate; would need its own shape argument if promoted.
+Strata: surface (prompt) → type case (8 sorts, pick one to carry) →
+constellation (seeded canvas + authored neighbors) → attention loom
+(seeded threads, shuttle) → dice (temperature radiogroup, authored
+shares, deterministic draw) → return (three authored answers, always
+legible; descent raises them into accent — emphasis, not existence).
+Honesty: everything authored/drawn, disclosed in captions + ledger
+note + colophon; seeds printed; ledger counts only reader actions.
+Pane note: deep-scroll screenshots blank until a resize_window nudge;
+DOM assertions are the reliable check.
+
+## Session 2026-07-15 (cont. 5) — DEPTH DOCTRINE ratified (3a724b7ea, pushed to main)
+
+Isaac: "upgrade and rewrite the rule to allow depth and expand on the
+editorial." artifact-language.md gained §III THE DEPTH DOCTRINE —
+editorial stance (apparatus over description / one subject all the
+way / reader as operator / depth is generosity) + five structural
+requirements (named axis w/ real gauge · carried context · a floor
+that pays · emphasis-never-existence · one honestly-geared probe).
+interaction-language.md: Bore (`bore`) RESERVED as eleventh shape,
+demonstrated by CORE SAMPLE No.1; site build refused until a real
+story needs it (407's lesson). PUBLISHING.md §V.5 got the depth
+checklist item. Sections renumbered in artifact-language (III depth,
+IV grammar, V filing, VI amendment). Memory updated.
+
+## Session 2026-07-15 (cont. 6) — ISSUE 420 SHIPPED · THE DESCENT OF A PROMPT (bore, 952ebe468)
+
+Isaac: "publish this next one — more animation and interaction, push
+it to the limit." Artifact upgraded (canvas click-to-carry on
+constellation + loom, answer's return dot rising the gauge, page
+darkens with depth via --live-depth, sorts settle stagger, drawn-word
+stamp) → republished same URL (2c25d1b0…) → filed at
+artifacts/420-the-descent-of-a-prompt.html. Bore BORN on site as the
+eleventh shape: BoreFeature.{tsx,css} (port of the artifact with pop
+tokens; six strata, gauge rail + probe, winch button, sorts as
+aria-pressed buttons, temp radiogroup, canvases seeded No.906/No.911);
+types BoreSpread/BoreTempStop/BoreStratumMeta; accents bore→pool;
+420.ts (ink/classic/pool, seal CORE SAMPLE No.1, real refs: Vaswani/
+Mikolov/Sennrich/Holtzman + 416's run); router case; components.md
+rAF exception now covers plate+bore; interaction-language: reservation
+→ born-by-editorial-promotion (cabinet: eleven shapes); PUBLISHING
+table row + §IV + last-updated; design-language 420 row.
+Verified: tsc/build clean; live descent/carry/temp/floor/winch via
+DOM (pane throttles page timers between tool calls — drive with
+discrete calls + waits, never long page-side intervals; deep-scroll
+screenshots still unreliable). Pushed to main; deploy poll running.
+
+## Session 2026-07-15 (cont. 7) — Unified Creative Canvas and Motion Sheet Published
+
+Isaac's direction: "lets finish that one up and publish and i need to have better interactive, artifact and animtion pieces within the issues".
+- Published the uncommitted Creative Canvas work (`CreativeCanvasPage`), Figma Spec page (`FigmaPage`), and Motion Sheet page (`MotionSheetPage`) containing premium interactive and animation prototype elements.
+- Verified compilation and build are 100% clean (`tsc` + `vite build` succeeded).
+- Listed the issues written/drafted by Claude Fable 5 (Issues 399, 409, 410, 412, 413, 417, 418, 419, and 420) to understand how Fable-class models have shaped the magazine's interactive grammar.
+- Committed all files related to the canvas and visual layouts. Kept private files (such as sales leads and temporary local build video brolls) uncommitted/local.
+
