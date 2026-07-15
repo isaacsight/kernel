@@ -45,13 +45,15 @@ MUST:
 2. Respect `prefers-reduced-motion` (the site-wide override in
    `src/index.css` collapses `animation-duration` to 0.01ms)
 3. Be CSS-only — **no JS animation libraries, no Framer Motion, no
-   `requestAnimationFrame`** — with ONE ratified exception: the
-   working-model plate (ISSUE 419, `PlateFeature`). Inside a
-   `plate` spread's frame, script may move the model's own signal,
-   under the four constraints in `docs/interaction-language.md`
-   rule 3 as amended: confined to the frame; timer-robust (every
-   step advances via a rAF-vs-setTimeout race, never rAF alone —
-   rAF provably stalls in throttled/background tabs and embedded
+   `requestAnimationFrame`** — with ONE ratified exception, the
+   working-model exception (ISSUE 419), which covers the `plate`
+   (`PlateFeature`) and `bore` (`BoreFeature`, ISSUE 420) shapes.
+   Inside those spreads' frames, script may move the model's own
+   signal (a pulse, a probe, a plate drawing itself), under the
+   four constraints in `docs/interaction-language.md` rule 3 as
+   amended: confined to the frame; timer-robust (every step
+   advances via a rAF-vs-setTimeout race, never rAF alone — rAF
+   provably stalls in throttled/background tabs and embedded
    panes); collapsed by reduced-motion; ambient amplitude even
    inside the frame (≤4px)
 4. Not trigger layout/repaint hotspots — animate only `opacity` and

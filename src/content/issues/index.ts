@@ -72,6 +72,7 @@ import { ISSUE_416 } from './416'
 import { ISSUE_417 } from './417'
 import { ISSUE_418 } from './418'
 import { ISSUE_419 } from './419'
+import { ISSUE_420 } from './420'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -1147,6 +1148,80 @@ export interface PlateSpread extends SpreadCommon {
   references?: SpreadReferences
 }
 
+/** ─── bore ─────────────────────────────────────────────────────
+ *  The eleventh interaction shape (ISSUE 420) — the DEPTH control:
+ *  a probe lowered stratum by stratum through a mechanism's
+ *  interior on a gauge rail. Born from its reservation when the
+ *  editor promoted CORE SAMPLE No.1 (the artifact that
+ *  demonstrated it) to the issue of record. Complies with the
+ *  depth doctrine (docs/artifact-language.md §III): a named axis
+ *  with a real gauge; CARRIED CONTEXT (the picked-up sort re-inks
+ *  the strata below); a floor that resolves; emphasis-never-
+ *  existence (every stratum and all three answers legible at
+ *  rest — the probe raises into the accent, never conjures); one
+ *  honestly-geared traversal control (a button on a winch).
+ *  Inherits the plate's rule-3 working-model exception: script
+ *  moves the probe and paints the plates inside the bore frame
+ *  only, timer-robust, reduced-motion collapsed. */
+export interface BoreStratumMeta {
+  /** Gauge stop label, e.g. '0m' or '−3'. */
+  gauge: string
+  /** Gauge stop JP gloss, e.g. '表層'. */
+  gaugeJp?: string
+  /** Stratum head label, e.g. 'STRATUM −1 · THE TYPE CASE'. */
+  label: string
+  labelJp?: string
+  /** FIG. caption under the stratum. */
+  caption: string
+}
+
+/** One temperature stop of the sampling stratum. */
+export interface BoreTempStop {
+  id: string
+  /** Control label, e.g. 'WARM · 温'. */
+  label: string
+  /** Candidate continuations with authored shares (disclosed
+   *  representative — never measured). Exactly one is drawn. */
+  candidates: { word: string; share: number; drawn?: boolean }[]
+  /** The authored answer that surfaces at this temperature. */
+  answer: string
+}
+
+export interface BoreSpread extends SpreadCommon {
+  type: 'bore'
+  /** Monument headline lines (galley register), last line accented. */
+  titleLines?: string[]
+  dossier?: SpreadDossier
+  intro?: SpreadSection[]
+  boreKicker?: string
+  boreHint?: string
+  /** The surface question, verbatim. */
+  prompt: string
+  /** The prompt broken into sorts, in order. */
+  sorts: string[]
+  /** Which sort is carried at rest. */
+  defaultCarried: string
+  /** Authored companions per sort, drawn near it in the
+   *  constellation stratum (disclosed representative). */
+  neighbors: Record<string, string[]>
+  /** The sampling stratum's temperature stops. */
+  tempStops: BoreTempStop[]
+  defaultTemp: string
+  /** Exactly six strata: surface, type case, constellation,
+   *  loom, dice, return. */
+  strata: BoreStratumMeta[]
+  runLabel: string
+  winchLabel: string
+  /** On-surface disclosure for the candidates (rule 6). */
+  candidatesNote: string
+  /** Mandatory honesty note: what the ledger counts, that the
+   *  strata are drawn (nothing run), seeds printed. */
+  boreNote: string
+  outro?: SpreadSection[]
+  pullQuote?: SpreadPullQuote
+  references?: SpreadReferences
+}
+
 export type IssueSpread =
   | EssaySpread
   | InterviewSpread
@@ -1165,6 +1240,7 @@ export type IssueSpread =
   | ProofSpread
   | DaySpread
   | PlateSpread
+  | BoreSpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -1470,6 +1546,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_417,
   ISSUE_418,
   ISSUE_419,
+  ISSUE_420,
 ]
 
 /** The latest published issue — drives the landing cover. */

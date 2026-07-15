@@ -1,0 +1,562 @@
+/* ──────────────────────────────────────────────────────────────
+   BoreFeature — ISSUE 420 · THE DESCENT OF A PROMPT ·
+   the eleventh interaction shape: the DEPTH control.
+
+   Motion contract: inherits the 419 working-model exception —
+   script moves the probe and paints the plates INSIDE
+   .pop-bore-rig only, timer-robust, reduced-motion collapsed.
+   Everything else here is CSS transitions at weather amplitude.
+   The stratum ground and the section ground both darken with
+   depth (--depth per stratum, --live-depth for the reader's
+   position) — the page descends with the probe.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-bore {
+  padding: 4.5rem 1.5rem 5rem;
+  border-top: 1px solid var(--pop-hairline-soft);
+  border-bottom: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-bore-inner {
+  max-width: 58rem;
+  margin: 0 auto;
+}
+
+/* ─── header (galley register) ───────────────────────────────── */
+
+.pop-bore-header {
+  text-align: left;
+  margin-bottom: 3rem;
+}
+
+.pop-bore-title--monument {
+  margin: 1rem 0 0.5rem;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(3rem, 8.5vw, 6.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+
+.pop-bore-title-line { display: block; }
+.pop-bore-title-line--accent { color: var(--issue-accent-base); }
+
+.pop-bore-title-jp { margin: 0 0 1rem; }
+
+.pop-bore-deck {
+  max-width: 40rem;
+  margin: 1.25rem 0 1rem;
+}
+
+.pop-bore-byline { color: var(--pop-coffee); }
+
+/* ─── dossier ────────────────────────────────────────────────── */
+
+.pop-bore-spec { margin: 0 0 3rem; }
+
+.pop-bore-spec-frame {
+  position: relative;
+  border: 1px solid var(--pop-ink);
+  padding: 1.5rem 1.5rem 1.25rem;
+  background: var(--pop-ivory);
+}
+
+.pop-bore-spec-badge {
+  position: absolute;
+  top: -0.6rem;
+  right: 1.25rem;
+}
+
+.pop-bore-spec-kicker { color: var(--pop-coffee); }
+
+.pop-bore-spec-note {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin: 0.75rem 0 1rem;
+}
+
+.pop-bore-spec-list { margin: 0; }
+
+.pop-bore-spec-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-bore-spec-label { flex: 0 0 11rem; color: var(--pop-coffee); }
+
+.pop-bore-spec-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+/* ─── prose ──────────────────────────────────────────────────── */
+
+.pop-bore-prose { margin: 0 0 1rem; }
+.pop-bore-section { margin-bottom: 2rem; }
+
+.pop-bore-section-heading {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 0.75rem;
+}
+
+.pop-bore-section-heading-jp {
+  margin-left: 0.75rem;
+  color: var(--pop-coffee);
+  letter-spacing: 0.3em;
+}
+
+.pop-bore-paragraph {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  margin: 0 0 1rem;
+  max-width: 44rem;
+}
+
+.pop-bore-prose--note {
+  border-left: 3px solid var(--issue-accent-base);
+  padding-left: 1.4rem;
+  max-width: 44rem;
+}
+
+.pop-bore-rule { margin: 2.5rem 0; }
+
+/* ─── the rig: gauge + strata ────────────────────────────────── */
+
+.pop-bore-kicker-line { margin: 2rem 0 0.35rem; }
+.pop-bore-hint { color: var(--pop-coffee); margin: 0 0 1rem; }
+
+.pop-bore-rig {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 0 1.5rem;
+  position: relative;
+}
+
+@media (max-width: 45rem) {
+  .pop-bore-rig { grid-template-columns: 2.75rem 1fr; gap: 0 0.75rem; }
+}
+
+.pop-bore-gauge { position: relative; }
+
+.pop-bore-gauge-line {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--pop-hairline-soft);
+}
+
+.pop-bore-probe {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--issue-accent-base);
+  transform: translate(-50%, -4px);
+}
+
+.pop-bore-return-dot {
+  position: absolute;
+  left: 50%;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--issue-accent-base);
+  background: var(--pop-ivory);
+  transform: translate(-50%, -4px);
+}
+
+.pop-bore-stop {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: var(--pop-coffee);
+  transform: translateY(-50%);
+}
+
+.pop-bore-stop::before {
+  content: '';
+  display: block;
+  width: 7px; height: 7px;
+  margin: 0 auto 4px;
+  border: 1px solid var(--pop-coffee);
+  border-radius: 50%;
+  background: var(--pop-ivory);
+}
+
+.pop-bore-stop--lit { color: var(--issue-accent-base); }
+.pop-bore-stop--lit::before {
+  border-color: var(--issue-accent-base);
+  background: var(--issue-accent-base);
+}
+
+.pop-bore-strata { min-width: 0; }
+
+/* ─── strata ─────────────────────────────────────────────────── */
+
+.pop-bore-stratum {
+  --depth: 0;
+  border: 1px solid var(--pop-ink);
+  background: color-mix(in oklab, var(--pop-ivory), var(--pop-ink) calc(var(--depth) * 7%));
+  margin-bottom: 1.9rem;
+  transition: box-shadow 0.35s ease;
+}
+
+.pop-bore-stratum--active { box-shadow: 5px 5px 0 var(--issue-accent-base); }
+
+.pop-bore-stratum-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.35rem 1.1rem;
+  padding: 0.65rem 0.9rem 0.6rem;
+  border-bottom: 1px solid var(--pop-ink);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pop-bore-stratum-jp { color: var(--pop-coffee); letter-spacing: 0.3em; }
+.pop-bore-stratum-status { color: var(--pop-coffee); margin-left: auto; }
+.pop-bore-stratum--reached .pop-bore-stratum-status { color: var(--issue-accent-base); }
+
+.pop-bore-stratum-body { padding: 1rem; }
+
+.pop-bore-stratum-caption {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  padding: 0.6rem 0.9rem 0.65rem;
+  border-top: 1px solid var(--pop-hairline-soft);
+  margin: 0;
+}
+
+.pop-bore-stratum canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--pop-hairline-soft);
+  background: color-mix(in oklab, var(--pop-ivory), var(--pop-ink) calc(var(--depth) * 6%));
+  cursor: pointer;
+}
+
+/* ─── S0 surface ─────────────────────────────────────────────── */
+
+.pop-bore-prompt {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+  line-height: 1.4;
+  margin: 0.25rem 0.1rem 0.9rem;
+}
+
+.pop-bore-caret {
+  display: inline-block;
+  width: 2px; height: 1em;
+  background: var(--issue-accent-base);
+  vertical-align: -0.15em;
+  margin-left: 2px;
+  animation: pop-bore-caret 1.1s steps(1) infinite;
+}
+
+@keyframes pop-bore-caret { 50% { opacity: 0; } }
+
+.pop-bore-run {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pop-ivory);
+  background: var(--issue-accent-base);
+  border: 1px solid var(--pop-ink);
+  box-shadow: 3px 3px 0 var(--pop-ink);
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pop-bore-run:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--pop-ink); }
+.pop-bore-run:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--pop-ink); }
+.pop-bore-run:focus-visible { outline: 2px solid var(--issue-accent-base); outline-offset: 3px; }
+.pop-bore-run:disabled { opacity: 0.55; cursor: wait; }
+
+/* ─── S1 sorts ───────────────────────────────────────────────── */
+
+.pop-bore-sorts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0.15rem;
+}
+
+.pop-bore-sort {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  padding: 0.45rem 0.7rem 0.4rem;
+  border: 1px solid var(--pop-ink);
+  background: var(--pop-ivory);
+  box-shadow: 2px 2px 0 var(--pop-ink);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+}
+
+.pop-bore-sort:focus-visible { outline: 2px solid var(--issue-accent-base); outline-offset: 2px; }
+
+.pop-bore-sort[aria-pressed='true'] {
+  background: var(--issue-accent-base);
+  color: var(--pop-ivory);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--pop-ink);
+}
+
+/* sorts hover above the stick until the probe reaches them */
+.pop-bore-sorts:not(.pop-bore-sorts--landed) .pop-bore-sort {
+  transform: translateY(-5px);
+  opacity: 0.72;
+}
+.pop-bore-sorts--landed .pop-bore-sort { transform: none; opacity: 1; }
+.pop-bore-sorts--landed .pop-bore-sort:nth-child(2) { transition-delay: 0.05s; }
+.pop-bore-sorts--landed .pop-bore-sort:nth-child(3) { transition-delay: 0.1s; }
+.pop-bore-sorts--landed .pop-bore-sort:nth-child(4) { transition-delay: 0.15s; }
+.pop-bore-sorts--landed .pop-bore-sort:nth-child(5) { transition-delay: 0.2s; }
+.pop-bore-sorts--landed .pop-bore-sort:nth-child(6) { transition-delay: 0.25s; }
+.pop-bore-sorts--landed .pop-bore-sort:nth-child(7) { transition-delay: 0.3s; }
+.pop-bore-sorts--landed .pop-bore-sort:nth-child(8) { transition-delay: 0.35s; }
+.pop-bore-sorts--landed .pop-bore-sort[aria-pressed='true'] { transform: translate(1px, 1px); }
+
+.pop-bore-sort-note {
+  color: var(--pop-coffee);
+  margin: 0.85rem 0.1rem 0;
+}
+.pop-bore-sort-note b { color: var(--issue-accent-base); font-weight: 400; }
+
+/* ─── S4 dice ────────────────────────────────────────────────── */
+
+.pop-bore-temp-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.15rem 0 1rem;
+}
+
+.pop-bore-temp-label { color: var(--pop-coffee); margin-right: 0.4rem; }
+
+.pop-bore-temp {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--pop-ink);
+  background: var(--pop-ivory);
+  box-shadow: 2px 2px 0 var(--pop-ink);
+  cursor: pointer;
+}
+
+.pop-bore-temp:focus-visible { outline: 2px solid var(--issue-accent-base); outline-offset: 2px; }
+
+.pop-bore-temp[aria-checked='true'] {
+  background: var(--issue-accent-base);
+  color: var(--pop-ivory);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--pop-ink);
+}
+
+.pop-bore-candidates { display: grid; gap: 0.5rem; }
+
+.pop-bore-cand {
+  display: grid;
+  grid-template-columns: 10rem 1fr 3.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 45rem) {
+  .pop-bore-cand { grid-template-columns: 8rem 1fr 3rem; }
+}
+
+.pop-bore-cand-word { text-transform: lowercase; }
+
+.pop-bore-cand-track {
+  height: 12px;
+  border: 1px solid var(--pop-hairline-soft);
+  background: var(--pop-ivory);
+}
+
+.pop-bore-cand-bar {
+  display: block;
+  height: 100%;
+  background: var(--pop-coffee);
+  transition: width 0.7s ease, background 0.3s ease;
+}
+
+@keyframes pop-bore-stamp {
+  from { transform: scale(0.9); opacity: 0.4; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.pop-bore-cand--drawn .pop-bore-cand-word {
+  display: inline-block;
+  color: var(--issue-accent-base);
+  animation: pop-bore-stamp 0.35s ease-out;
+}
+
+.pop-bore-cand--drawn .pop-bore-cand-bar { background: var(--issue-accent-base); }
+
+.pop-bore-cand-pct {
+  text-align: right;
+  color: var(--pop-coffee);
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-bore-cand-note { color: var(--pop-coffee); margin: 0.9rem 0.1rem 0; }
+
+/* ─── S5 return ──────────────────────────────────────────────── */
+
+.pop-bore-answer {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  line-height: 1.5;
+  min-height: 4.5em;
+  margin: 0.25rem 0.1rem 0.4rem;
+}
+
+.pop-bore-answer-risen { color: var(--issue-accent-base); }
+.pop-bore-answer-waiting { color: var(--pop-coffee); }
+
+.pop-bore-answer-note {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  margin-top: 0.7rem;
+}
+
+/* ─── ledger ─────────────────────────────────────────────────── */
+
+.pop-bore-ledger-block {
+  border: 1px solid var(--pop-ink);
+  background: var(--pop-ivory);
+  padding: 0.9rem 1rem;
+}
+
+.pop-bore-ledger-kicker { color: var(--pop-coffee); margin: 0 0 0.5rem; }
+
+.pop-bore-ledger {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.pop-bore-print-snapshot {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  margin: 0.75rem 0 0;
+}
+
+.pop-bore-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  border-left: 3px solid var(--issue-accent-base);
+  padding-left: 0.9rem;
+  margin: 0.9rem 0 0;
+  max-width: 46rem;
+}
+
+/* ─── references / pull quote / signoff ──────────────────────── */
+
+.pop-bore-references {
+  margin: 2.5rem 0 0;
+  border-top: 1px solid var(--pop-hairline);
+  padding-top: 1.5rem;
+}
+
+.pop-bore-references-kicker { color: var(--pop-coffee); }
+
+.pop-bore-references-note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  margin: 0.6rem 0 1rem;
+}
+
+.pop-bore-references-list { list-style: none; margin: 0; padding: 0; }
+
+.pop-bore-reference {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pop-bore-pullquote { margin: 3rem 0; text-align: center; }
+
+.pop-bore-pullquote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: var(--issue-accent-base);
+  margin: 0 0 0.75rem;
+}
+
+.pop-bore-pullquote-cite { font-style: normal; color: var(--pop-coffee); }
+
+.pop-bore-signoff { text-align: center; margin-top: 3.5rem; }
+.pop-bore-signoff-text { margin: 1rem 0 2rem; }
+.pop-bore-monument { justify-content: center; }
+
+/* ─── reduced motion ─────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .pop-bore-caret { animation: none; }
+  .pop-bore-cand--drawn .pop-bore-cand-word { animation: none; }
+  .pop-bore-sorts:not(.pop-bore-sorts--landed) .pop-bore-sort { transform: none; opacity: 1; }
+}
+
+/* ─── print — the strata stacked, top to floor ───────────────── */
+
+@media print {
+  .pop-bore-rig { grid-template-columns: 1fr; }
+  .pop-bore-gauge { display: none; }
+  .pop-bore-stratum { break-inside: avoid; box-shadow: none; }
+  .pop-bore-run,
+  .pop-bore-hint { display: none; }
+  .pop-bore-print-snapshot { display: block; }
+  .pop-bore-answer-note { display: block; }
+}

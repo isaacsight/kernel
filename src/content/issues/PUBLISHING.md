@@ -94,6 +94,7 @@ Pick the editorial tool that fits the content:
 | `proof` | An **adjudicated machine draft** — the correction pass: a machine completed the screen before the reader arrived; per line the reader assigns KEEP MACHINE / TAKE THE HAND / STRIKE | One roving-tabindex radiogroup per line (three fates); all three versions of every line stay in the DOM — selection is emphasis, never presence; a live resolved screen plus a provenance ledger (N machine · N hand · N struck); mandatory `ledgerNote` (marks session-only, unrecorded) AND `machineNote` (machine lines are real model output, never hand-edited, raw run filed in the audit). Print stacks every version plus the ledger (see 417). |
 | `day` | An **authored day the reader marks** — time lived as the axis: metropolitan delegation moments, dawn to after-midnight, each marked LET IT RIDE / STEP IN | One radiogroup per moment (two marks, none preselected); both authored consequences always printed — the mark selects, it never reveals or hides; ambient CSS-only city vignettes at weather amplitude; a midnight ledger counting ONLY the reader's marks, changes of mind, and the session clock; mandatory `ledgerNote` (session-only, unrecorded; moments and attention costs disclosed as authored representative composites). Print stacks the day and snapshots the ledger (see 418). |
 | `plate` | A **working model the reader operates** — an in-house miniature of an external mechanism (a review-by-instrument: build the subject's grammar small, frame it, hand over the lever) | Framed plate with registration ticks; movable blocks wired with bezier hairlines (arrangement is material, not a control — focusable + arrow-key movable anyway); run + per-frame redraw as plain buttons; script moves the model's signal inside the frame ONLY, timer-robust, reduced-motion collapsed (rule 3 as amended by 419); every drawn proof is deterministic from a seed printed on its face, resting state seeded from the issue number (rule 4 as amended); mandatory `plateNote` — simulation drawn in-house, nothing generated, ledger counts only the reader's pulls/redraws, session-only. Print stacks the blocks with their seeds (see 419). |
+| `bore` | A **descent the reader performs** — the depth control: a probe lowered stratum by stratum through a mechanism's interior, with carried context and a floor that resolves | Gauge rail + probe (single winch button); six strata always legible (emphasis-never-existence — the probe raises into the accent, never conjures); carried context: an upper-stratum choice (aria-pressed sort buttons; clicking a plate word is a pointer shortcut to the same act) re-inks the plates below; temperature radiogroup before the draw; inherits 419's working-model exception (timer-robust script inside the bore frame only) and seeded plates; mandatory `boreNote` + `candidatesNote` — strata drawn, shares authored, ledger counts only depth/drops/carries/temperature, session-only. Complies with the depth doctrine (artifact-language §III). Print stacks the strata with the ledger snapshot (see 420). |
 
 **Profile of a person → essay, not interview**, unless you have the
 subject's actual answers. The magazine never publishes invented
@@ -213,7 +214,8 @@ model run three ways; adds the optional `dialLabel` field),
 `411.ts` for tutor (interactive manual teaching all four shapes — first instance),
 `412.ts` for margin (interactive writable margin — first contribution control),
 `413.ts` for press (interactive composing instrument — first artifact control),
-`419.ts` for plate (interactive working model — first mechanism control)). Every issue needs:
+`419.ts` for plate (interactive working model — first mechanism control),
+`420.ts` for bore (interactive descent — first depth control, artifact-first)). Every issue needs:
 
 - A leading block comment explaining the identity decisions
 - `number`, `month`, `year`, `feature`, `featureJp`, `price`, `tagline`
@@ -469,13 +471,15 @@ branch — only main publishes.
 
 ---
 
-_Last updated: ISSUE 419 · JUL 2026 (THE INTELLIGENT CANVAS — the
-tenth interaction shape, `plate`: a working model of FLORA's node
-canvas the reader operates — drag or arrow-key the blocks, pull the
-proof, redraw a frame; every proof deterministic from a seed printed
-on its face. First issue to exercise interaction-language.md's
-amendment clause: rule 3 gains the working-model exception
-(script-driven signal inside the plate frame, timer-robust,
-reduced-motion collapsed) and rule 4 gains seeded reproducibility
-(the seed is the state's address). First `ivy` accent. Prior: 418
-ONE DAY (`day`) and 417 PROOF OF HAND (`proof`).)_
+_Last updated: ISSUE 420 · JUL 2026 (THE DESCENT OF A PROMPT — the
+eleventh interaction shape, `bore`: the depth control, born from
+its reservation by editorial promotion of CORE SAMPLE No.1. A probe
+lowered through six strata of one prompt (416's real question) with
+carried context (the picked-up sort re-inks the constellation and
+loom), a temperature radiogroup before the draw, and the answer
+winched back up. First issue drafted artifact-first under
+docs/artifact-language.md, and the first to comply with its §III
+depth doctrine (named axis + gauge · carried context · a floor
+that pays · emphasis-never-existence · one honest probe). Prior:
+419 THE INTELLIGENT CANVAS (`plate`, first ivy) and 418 ONE DAY
+(`day`).)_

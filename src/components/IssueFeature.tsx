@@ -19,6 +19,7 @@ import { CloseFeature } from './CloseFeature'
 import { DayFeature } from './DayFeature'
 import { ProofFeature } from './ProofFeature'
 import { PlateFeature } from './PlateFeature'
+import { BoreFeature } from './BoreFeature'
 
 interface IssueFeatureProps {
   issue: IssueRecord
@@ -76,6 +77,8 @@ export function IssueFeature({ issue }: IssueFeatureProps) {
       return <DayFeature spread={spread} issue={issue} />
     case 'plate':
       return <PlateFeature spread={spread} issue={issue} />
+    case 'bore':
+      return <BoreFeature spread={spread} issue={issue} />
     default: {
       // Exhaustiveness check — adding a new variant without handling
       // it here produces a compile-time error.
