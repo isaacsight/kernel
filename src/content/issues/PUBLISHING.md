@@ -309,6 +309,12 @@ The short version:
    keyboard, honesty core intact (timer-robust animation,
    reduced-motion, honest meters, disclosed simulations,
    printed seeds).
+2.5. **It goes deep** (artifact-language §III, the depth
+   doctrine): a named depth axis with a real gauge, carried
+   context (an upper-stratum choice re-inks lower strata), a
+   floor that resolves the descent, everything legible at rest
+   (the probe raises, never conjures), one honestly-geared
+   traversal control.
 3. **File it at `artifacts/<N>-<slug>.html`** in the ship
    commit; cite it in the issue's `audit` block.
 4. Publish via the Artifact surface (claude.ai) — private by

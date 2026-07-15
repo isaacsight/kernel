@@ -63,7 +63,8 @@ Three species of motion, in descending order of entitlement:
    even in artifacts.
 
 **The honesty core never relaxes** — these travel into every
-artifact exactly as they bind the site:
+artifact exactly as they bind the site (see §III for the depth
+doctrine's own additions):
 
 - **Timer-robust**: no animation step may depend on
   `requestAnimationFrame` alone — race it against a timer. rAF
@@ -88,7 +89,65 @@ artifact exactly as they bind the site:
 
 ---
 
-## III. The artifact grammar
+## III. The depth doctrine · 深度
+
+Ratified 2026-07-15, demonstrated by CORE SAMPLE No.1 (THE DESCENT
+OF A PROMPT). The editor's second directive: the artifacts must
+**go deep**. Depth is the artifact's native dimension — where the
+site spread argues across a page, the artifact edition follows one
+subject *down*. An artifact that surveys is a brochure; an
+artifact that descends is an apparatus.
+
+**The editorial stance this expands:**
+
+- **Apparatus over description.** Do not explain the mechanism —
+  build a working miniature of it and hand the reader the lever.
+  The FLORA plate reviewed a canvas by being one; the Core Sample
+  reviewed inference by boring through it. The description is
+  what the reader writes in their own head on the way down.
+- **One subject, followed all the way.** A deep single beats
+  three summaries. Pick the one question the issue actually has
+  and spend every stratum on it.
+- **The reader is an operator, not an audience.** Every stratum
+  offers a hand-hold: something to pick up, set, carry, or pull.
+  A stratum the reader can only look at is a paragraph wearing a
+  frame — merge it or give it a control.
+- **Depth is generosity, not gatekeeping.** The descent structure
+  exists to reward attention, never to ration content. Hence the
+  emphasis law below.
+
+**Structural requirements** — a deep artifact has all five:
+
+1. **A named axis with a gauge.** The depth axis is explicit —
+   strata, layers, magnifications, hours — each stop named
+   (bilingual where it fits), with a gauge rail the reader can
+   read their own position on at a glance. The gauge is a real
+   meter: it shows actual state, counted from the reader's
+   actions.
+2. **Carried context.** At least one choice made in an upper
+   stratum visibly re-inks the strata below it (the Core Sample's
+   carried sort re-draws the constellation and the loom). The
+   descent must remember the reader's hands — that memory is what
+   makes it a journey instead of a slideshow.
+3. **A floor that pays.** The deepest stratum resolves the
+   descent — the answer, the outcome, the return. A bore with no
+   floor is scroll bait.
+4. **Emphasis, never existence.** Every stratum and every outcome
+   is legible at rest, top to floor. The probe RAISES content
+   into the accent; it never conjures it. A reader who touches
+   nothing misses emphasis only — this is the site's rule 1 and
+   rule 4 speaking in the artifact register, and it was corrected
+   into Core Sample No.1 in the field: the answer now waits
+   legible below the line instead of hiding behind the winch.
+5. **One probe, honestly geared.** The traversal control is a
+   single established control (a button on a winch, not an
+   invented gesture); its motion is operational (the probe is the
+   subject's own signal) and timer-robust like all artifact
+   motion; position state is real and printed in the ledger.
+
+---
+
+## IV. The artifact grammar
 
 What makes an object an artifact *edition* rather than a demo:
 
@@ -120,7 +179,7 @@ What makes an object an artifact *edition* rather than a demo:
 
 ---
 
-## IV. Filing and publishing
+## V. Filing and publishing
 
 - **File it in the repo**: `artifacts/<N>-<slug>.html`, committed
   in (or alongside) the issue's ship commit. The artifact is part
@@ -137,15 +196,22 @@ What makes an object an artifact *edition* rather than a demo:
 
 ---
 
-## V. Amendment
+## VI. Amendment
 
 Like interaction-language.md: amend by shipping an issue whose
 artifact argues the amendment, then editing this file in the same
-commit.
+commit. (The depth doctrine, §III, entered this way in reverse —
+demonstrated by a pressroom core sample first, ratified on the
+editor's directive; when the Core Sample promotes to an issue, its
+header argues the doctrine it already obeys.)
 
 ---
 
 *Ratified VII·26 — ISSUE 419's galley proof was the first artifact
 edition (filed at `artifacts/419-the-intelligent-canvas.html`);
 the editor's direction of 2026-07-15 made the register standing
-law: every issue ships as an artifact, and the artifact leads.*
+law: every issue ships as an artifact, and the artifact leads.
+Amended the same day with §III, the depth doctrine — the artifacts
+go deep — demonstrated by CORE SAMPLE No.1 (THE DESCENT OF A
+PROMPT), which also reserves the Bore shape in
+interaction-language.md.*

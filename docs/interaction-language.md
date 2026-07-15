@@ -30,7 +30,11 @@
 > in-house miniature of an external mechanism, ratifying the rule-3
 > and rule-4 amendments below) — plus the Tutor (`tutor`, ISSUE
 > 411), a COMPOSITE that teaches the primitives by having the
-> reader operate a stakes-free version of each. Any further shape
+> reader operate a stakes-free version of each, and one shape
+> RESERVED: the Bore (`bore`, the depth control), demonstrated in
+> the artifact register by CORE SAMPLE No.1 and waiting for the
+> story that needs a descent on the spread itself — see the
+> reservation below. Any further shape
 > waits, unbuilt, for a real story that needs it — see rule 7 for
 > how a reservation becomes a build, and for why ISSUE 407 refused
 > to manufacture one.
@@ -366,6 +370,33 @@ when the page models an external product, the mandatory
 generated, the ledger counting only the reader's own pulls.
 **Plate is at instance one** — its machinery waits for a second
 mechanism-shaped story before anything is extracted.
+
+---
+
+**The eleventh shape — RESERVED: Bore (`bore`), the depth control.**
+Demonstrated 2026-07-15 in the artifact register by CORE SAMPLE
+No.1 (THE DESCENT OF A PROMPT): a probe lowered stratum by stratum
+through a mechanism's interior on a gauge rail, with CARRIED
+CONTEXT — a choice made in an upper stratum (the picked-up sort)
+re-inking every stratum below it — and a floor where the descent
+resolves (the answer, winched back up). The axis it would add is
+DEPTH: the reader's position inside a vertical traversal. The
+shape test that distinguishes it: not a Sequence (a finished
+process reviewed in any order — the bore is a traversal the reader
+*performs*, with position state and memory of their hands), not a
+Dial (positions on a variable the page answers — depth is a place
+the reader is, not a setting the page reads), not a Plate (the
+working model runs where you stand — the bore moves you through
+it). Per rule 7 it stays RESERVED: the artifact register carries
+the depth work under artifact-language.md §III (the depth
+doctrine) until a story arrives that needs the reader's descent on
+the spread itself; when it does, the bore ships as a single-button
+winch (established control), all strata legible at rest, the probe
+raising into the accent — emphasis, never existence, the
+correction Core Sample No.1 took in the field. This is 407's
+lesson honored in advance: the demonstration exists, so the
+temptation to manufacture a site story for it is named here and
+refused until one is real.
 
 ---
 
