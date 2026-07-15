@@ -247,7 +247,7 @@ export const ISSUE_419: IssueRecord = {
 
   audit: {
     drafted: 'field-reviewed and built in-session · claude-fable-5, VII·26',
-    verified: 'product facts read from flora.ai 2026-07-15, quoted where marked; the plate discloses itself as simulation in dossier, plateNote, and caption',
+    verified: 'product facts read from flora.ai 2026-07-15, quoted where marked; the plate discloses itself as simulation in dossier, plateNote, and caption; artifact edition (the original galley proof) filed at artifacts/419-the-intelligent-canvas.html — the first, per docs/artifact-language.md',
     adherence: 'tenth shape `plate` — rules 2/5/6 argued, rules 3/4 AMENDED in docs/interaction-language.md in this commit per its amendment clause; seeds make every proof reproducible',
     readCut: 'four catalog entries kept from the galley’s standalone study; the ticker cut — the stockroom reads better as a claim than a marquee',
     pressed: 'VII·26 · 2026-07-15',

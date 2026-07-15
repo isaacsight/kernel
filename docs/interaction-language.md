@@ -36,9 +36,14 @@
 > to manufacture one.
 
 Status: **LAW** — reviewed each time a new interactive spread is
-proposed. Two documents govern the visual grammar and this one
-governs the hand; see `docs/design-language.md` for color, type,
-stock, and motion vocabulary.
+proposed. Three documents now govern the publication: this one
+governs the hand on the SITE spread; `docs/design-language.md`
+governs color, type, and stock on both surfaces; and
+`docs/artifact-language.md` (ratified after 419) governs the
+ARTIFACT EDITION — the standalone interactive animated rendering
+every issue now also ships, where the expressive register leads.
+When the two laws disagree about an artifact, artifact-language
+wins; about a spread, this file wins.
 
 ---
 

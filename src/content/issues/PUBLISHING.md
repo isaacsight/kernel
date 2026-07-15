@@ -288,6 +288,35 @@ only, honest meters, two instances before a pattern).
 
 ---
 
+## V.5. The artifact edition (MANDATORY from 419)
+
+Every issue ships twice: the site spread AND an **artifact
+edition** — a single self-contained, full-bleed, animated,
+operable HTML object. Governing law:
+[`docs/artifact-language.md`](../../../docs/artifact-language.md).
+The direction, ratified 2026-07-15: the editorial's language and
+expression lead with the interactive animated artifact.
+
+The short version:
+
+1. **Draft the artifact FIRST.** The spread is the artifact
+   reduced to the site's law — not the artifact inflated from
+   the spread. File what the reduction gives up in the issue's
+   header comment.
+2. One self-contained HTML file, strict-CSP safe (no CDN
+   anything, `<meta charset="utf-8">`, font stacks with
+   fallbacks), house grammar whole, both themes, operable by
+   keyboard, honesty core intact (timer-robust animation,
+   reduced-motion, honest meters, disclosed simulations,
+   printed seeds).
+3. **File it at `artifacts/<N>-<slug>.html`** in the ship
+   commit; cite it in the issue's `audit` block.
+4. Publish via the Artifact surface (claude.ai) — private by
+   default, the editor shares at their discretion; the public
+   site never links claude.ai proofs.
+
+---
+
 ## VI. Verifying before shipping
 
 Always run all three:
@@ -412,9 +441,11 @@ Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 
 1. Read X (WebFetch if it's a URL, otherwise ask for source material)
 2. Decide identity per §III — pick format, stock, layout, signature move
-3. Create `<N>.ts` using the most relevant existing issue as a template
-4. Register in `index.ts`
-5. Typecheck → build → preview → deploy
+3. **Draft the artifact edition first** (§V.5 — the interactive
+   animated register leads; the spread is its lawful reduction)
+4. Create `<N>.ts` using the most relevant existing issue as a template
+5. Register in `index.ts`; file the artifact at `artifacts/<N>-<slug>.html`
+6. Typecheck → build → preview → deploy
 
 ### "Give this issue more character"
 
