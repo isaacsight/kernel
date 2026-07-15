@@ -1,0 +1,166 @@
+/* ──────────────────────────────────────────────────────────────
+   /figma — Figma spec page styles.
+   Extends the editorial typography system with clear specs for
+   tables, code blocks, and layout elements.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-figma-page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding-bottom: 48px;
+}
+
+.pop-figma-section {
+  margin-bottom: 40px;
+}
+
+.pop-figma-page h2 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--pop-ink);
+  margin: 48px 0 16px;
+}
+
+.pop-figma-page h2:first-child {
+  margin-top: 8px;
+}
+
+.pop-figma-page h3 {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  margin: 32px 0 12px;
+}
+
+.pop-figma-page p {
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 2.2vw, 20px);
+  line-height: 1.6;
+  color: var(--pop-ink);
+  margin: 0 0 16px;
+}
+
+.pop-figma-page a {
+  color: var(--pop-tomato);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(226, 78, 27, 0.3);
+}
+
+.pop-figma-page a:hover {
+  border-bottom-color: var(--pop-tomato);
+}
+
+.pop-figma-page ul,
+.pop-figma-page ol {
+  margin: 0 0 24px;
+  padding-left: 24px;
+}
+
+.pop-figma-page li {
+  font-family: var(--font-serif);
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.6;
+  color: var(--pop-ink);
+  margin: 0 0 12px;
+}
+
+/* Callout Card */
+.pop-figma-callout {
+  background-color: var(--pop-tomato-soft, rgba(226, 78, 27, 0.08));
+  border-left: 3px solid var(--pop-tomato);
+  padding: 16px 20px;
+  margin: 24px 0;
+}
+
+.pop-figma-callout p {
+  font-size: clamp(16px, 2vw, 18px);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Tables */
+.pop-figma-table-wrapper {
+  margin: 20px 0 32px;
+  overflow-x: auto;
+  border: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-figma-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.pop-figma-table th {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--pop-coffee);
+  padding: 12px 16px;
+  background-color: var(--rubin-ivory-med, #F0EEE6);
+  border-bottom: 1px solid var(--pop-hairline);
+}
+
+.pop-figma-table td {
+  font-family: var(--font-serif);
+  font-size: clamp(15px, 1.8vw, 18px);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--pop-hairline-soft);
+  color: var(--pop-ink);
+}
+
+.pop-figma-table tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Code Blocks */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background-color: var(--rubin-ivory-med, #F0EEE6);
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: var(--pop-coffee);
+}
+
+.pop-figma-code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: var(--rubin-ivory-med, #F0EEE6);
+  padding: 18px;
+  border-radius: 2px;
+  overflow-x: auto;
+  margin: 20px 0;
+  border: 1px solid var(--pop-hairline-soft);
+  color: var(--pop-ink);
+  white-space: pre;
+}
+
+/* Monument alignment */
+.pop-figma-monument-row {
+  margin: 48px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Footer folios */
+.pop-figma-page-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-figma-page-foot a {
+  border-bottom: 0;
+}

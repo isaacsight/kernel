@@ -1,0 +1,69 @@
+{
+  "nodes": [
+    {
+      "id": "n-input",
+      "type": "input",
+      "x": 50,
+      "y": 150,
+      "data": {
+        "value": "Research the history of risk in agentic systems."
+      },
+      "isActive": false
+    },
+    {
+      "id": "n-researcher",
+      "type": "specialist",
+      "x": 350,
+      "y": 50,
+      "data": {
+        "agentId": "researcher",
+        "value": "Find key automation papers"
+      },
+      "isActive": false
+    },
+    {
+      "id": "n-coder",
+      "type": "specialist",
+      "x": 350,
+      "y": 250,
+      "data": {
+        "agentId": "coder",
+        "value": "Write verification rules"
+      },
+      "isActive": false
+    },
+    {
+      "id": "n-output",
+      "type": "output",
+      "x": 700,
+      "y": 150,
+      "data": {
+        "output": ""
+      },
+      "isActive": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-n-input-n-researcher",
+      "fromNode": "n-input",
+      "toNode": "n-researcher"
+    },
+    {
+      "id": "e-n-input-n-coder",
+      "fromNode": "n-input",
+      "toNode": "n-coder"
+    },
+    {
+      "id": "e-n-researcher-n-output",
+      "fromNode": "n-researcher",
+      "toNode": "n-output"
+    },
+    {
+      "id": "e-n-coder-n-output",
+      "fromNode": "n-coder",
+      "toNode": "n-output"
+    }
+  ],
+  "updatedAt": "2026-07-15T16:53:00.000Z"
+}

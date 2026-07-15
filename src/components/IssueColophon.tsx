@@ -39,6 +39,7 @@ export function IssueColophon({ issue }: IssueColophonProps) {
         <div className="pop-colophon-links">
           <a href="#/about">About</a>
           <a href="#/issues">Back Issues</a>
+          <a href="#/figma">Figma Spec</a>
           <a href="#/refusals">The Refusals</a>
           <a href="#/privacy">Privacy</a>
           <a href="#/terms">Terms</a>

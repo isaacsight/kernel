@@ -721,6 +721,99 @@ server.tool(
     }
 )
 
+// ─── Tool: kernel_canvas_state ───────────────────────────────
+server.tool(
+    'kernel_canvas_state',
+    'Inspect, modify, run, or reset the unified creative workflow canvas at public/canvas-state.json. The browser accepts both legacy Antigravity nodes (input, specialist, model, output) and unified nodes (prompt, agent, model, image, video, output, note).',
+    {
+        action: z.enum(['get', 'set', 'reset', 'run', 'loop']).describe('Action to perform. "get" reads the state. "set" writes new state. "reset" clears it. "run" asks the open canvas to execute the graph. "loop" asks its bounded autonomous controller to complete a goal.'),
+        nodes: z.string().optional().describe('JSON array of nodes. Legacy: {id,type,x,y,data}. Unified: {id,kind,x,y,title,content,model,imageUrl?,result?,status?}.'),
+        edges: z.string().optional().describe('JSON array of connections. Legacy {id,fromNode,toNode} and unified {id,from,to} are both supported.'),
+        goal: z.string().optional().describe('Concrete desired outcome. Required when action is "loop".'),
+        maxIterations: z.number().int().min(1).max(4).optional().describe('Bounded autonomous passes for "loop". Defaults to 3.'),
+    },
+    async ({ action, nodes, edges, goal, maxIterations }) => {
+        const statePath = join(PROJECT_ROOT, 'public', 'canvas-state.json')
+
+        try {
+            if (action === 'get') {
+                if (!existsSync(statePath)) {
+                    return { content: [{ type: 'text' as const, text: 'No canvas state file exists yet. Canvas is empty or using local defaults.' }] }
+                }
+                const data = readFileSync(statePath, 'utf-8')
+                return { content: [{ type: 'text' as const, text: data }] }
+            }
+
+            if (action === 'set') {
+                if (!nodes || !edges) {
+                    return { content: [{ type: 'text' as const, text: 'Both nodes and edges arguments are required for "set" action.' }], isError: true }
+                }
+                // Verify valid JSON
+                let parsedNodes, parsedEdges
+                try {
+                    parsedNodes = JSON.parse(nodes)
+                    parsedEdges = JSON.parse(edges)
+                } catch (e) {
+                    return { content: [{ type: 'text' as const, text: `Invalid JSON format: ${(e as Error).message}` }], isError: true }
+                }
+
+                const newState = {
+                    nodes: parsedNodes,
+                    edges: parsedEdges,
+                    updatedAt: new Date().toISOString(),
+                }
+
+                writeFileSync(statePath, JSON.stringify(newState, null, 2))
+                return { content: [{ type: 'text' as const, text: `✅ Successfully wrote visual canvas state to ${statePath}` }] }
+            }
+
+            if (action === 'reset') {
+                writeFileSync(statePath, JSON.stringify({ nodes: [], edges: [], updatedAt: new Date().toISOString() }, null, 2))
+                return { content: [{ type: 'text' as const, text: '✅ Successfully cleared the visual canvas state.' }] }
+            }
+
+            if (action === 'run') {
+                const existing = existsSync(statePath)
+                    ? JSON.parse(readFileSync(statePath, 'utf-8'))
+                    : { nodes: [], edges: [] }
+                const requestedAt = new Date().toISOString()
+                writeFileSync(statePath, JSON.stringify({
+                    ...existing,
+                    updatedAt: requestedAt,
+                    runRequestedAt: requestedAt,
+                }, null, 2))
+                return { content: [{ type: 'text' as const, text: `✅ Requested execution of the visual canvas graph at ${requestedAt}` }] }
+            }
+
+            if (action === 'loop') {
+                if (!goal?.trim()) {
+                    return { content: [{ type: 'text' as const, text: 'A concrete goal is required for the "loop" action.' }], isError: true }
+                }
+                const existing = existsSync(statePath)
+                    ? JSON.parse(readFileSync(statePath, 'utf-8'))
+                    : { nodes: [], edges: [] }
+                const requestedAt = new Date().toISOString()
+                writeFileSync(statePath, JSON.stringify({
+                    ...existing,
+                    updatedAt: requestedAt,
+                    loopRequestedAt: requestedAt,
+                    loopGoal: goal.trim(),
+                    loopMaxIterations: maxIterations ?? 3,
+                }, null, 2))
+                return { content: [{ type: 'text' as const, text: `✅ Requested a bounded canvas agent loop at ${requestedAt}. Keep /#/canvas open so GALLEY can execute it.` }] }
+            }
+
+            return { content: [{ type: 'text' as const, text: 'Unknown action' }], isError: true }
+        } catch (err) {
+            return {
+                content: [{ type: 'text' as const, text: `Canvas state error: ${sanitizeError(err)}` }],
+                isError: true,
+            }
+        }
+    }
+)
+
+
 // ── Global error handling ────────────────────────────────────
 process.on('uncaughtException', (err) => {
     console.error('[kernel-tools] Uncaught exception:', err.message)

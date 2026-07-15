@@ -21,7 +21,7 @@ interface MagazineFrameProps {
   /** Optional deck / standfirst paragraph */
   deck?: string
   /** Paper stock for the masthead strip */
-  stock?: 'ivory' | 'cream' | 'butter' | 'kraft' | 'ink'
+  stock?: 'ivory' | 'cream' | 'butter' | 'kraft' | 'ink' | 'ledger'
   /** Render on ink ground (for dark inner pages) */
   dark?: boolean
   /**

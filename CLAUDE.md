@@ -32,6 +32,7 @@ the drawer. The room is different, the job is the same.
 | **Project shape, current state, directory map, ship flow** | [`KERNEL.md`](./KERNEL.md) |
 | **Magazine publishing workflow** | [`src/content/issues/PUBLISHING.md`](src/content/issues/PUBLISHING.md) |
 | **Magazine visual grammar** | [`docs/design-language.md`](docs/design-language.md) |
+| **Unified creative canvas handoff and agent-control contracts** | [`docs/creative-canvas-handoff.md`](docs/creative-canvas-handoff.md) |
 | **kbot v5 futures substrate** | [`packages/kbot/V5_FUTURES_PLAN.md`](packages/kbot/V5_FUTURES_PLAN.md) |
 | **Why the 4.0 cut went the way it did** | [`packages/kbot/RELEASE_NOTES_4_0.md`](packages/kbot/RELEASE_NOTES_4_0.md) |
 | **Per-session working memory** | [`SCRATCHPAD.md`](./SCRATCHPAD.md) |
