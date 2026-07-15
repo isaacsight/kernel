@@ -73,6 +73,7 @@ import { ISSUE_417 } from './417'
 import { ISSUE_418 } from './418'
 import { ISSUE_419 } from './419'
 import { ISSUE_420 } from './420'
+import { ISSUE_421 } from './421'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -1222,6 +1223,22 @@ export interface BoreSpread extends SpreadCommon {
   references?: SpreadReferences
 }
 
+export interface FourierSpread extends SpreadCommon {
+  type: 'fourier'
+  titleLines?: string[]
+  dossier: SpreadDossier
+  intro?: SpreadSection[]
+  fourierKicker?: string
+  fourierHint?: string
+  defaultWaveform: 'sine' | 'sawtooth' | 'square' | 'triangle'
+  defaultHarmonicsCount: number
+  defaultInharmonicity: number
+  fourierNote: string
+  outro?: SpreadSection[]
+  pullQuote?: SpreadPullQuote
+  references?: SpreadReferences
+}
+
 export type IssueSpread =
   | EssaySpread
   | InterviewSpread
@@ -1241,6 +1258,7 @@ export type IssueSpread =
   | DaySpread
   | PlateSpread
   | BoreSpread
+  | FourierSpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -1547,6 +1565,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_418,
   ISSUE_419,
   ISSUE_420,
+  ISSUE_421,
 ]
 
 /** The latest published issue — drives the landing cover. */

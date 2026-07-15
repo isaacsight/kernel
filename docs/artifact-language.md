@@ -147,7 +147,37 @@ artifact that descends is an apparatus.
 
 ---
 
-## IV. The artifact grammar
+## IV. The profound animation & interaction contract · 深奥
+
+Ratified 2026-07-15, responding to the need for deeper interactive animation specimens. The editor's third directive: artifact editions must support interactive animation at a profound level. A profound animation is not a video loop or a simple state transition; it is a physical material that reacts to the reader's hand, carrying meaning and structure across space and time.
+
+**The five pillars of profound interaction:**
+
+1. **Tactile Physics & Interruptibility (触感)**:
+   - Animations must never lock the reader out. Any state change or timeline translation must be interruptible (a user can tap, drag, or click at any point during motion, and the transition resolves smoothly from that frame rather than snapping).
+   - Dynamic states (such as drag and translation) should utilize physical constraints—inertia, spring resistance, friction, and magnetic attraction—over linear, time-bound bezier easings.
+2. **Cohesive Choreography (舞台)**:
+   - When interaction triggers multiple changes, they must move in a coordinated, staggered sequence (choreography) rather than executing simultaneously or in isolation.
+   - Staggers and offsets must reflect physical depth and hierarchy (e.g., card stacks shuffle with individual delays; cursor spotlights lag with custom inertia).
+3. **Meaning-First Intent (意図)**:
+   - Motion is never decoration. Every animate/interactive loop must trace the argument of the issue, map a state's address, or visualize a mechanism's signal. If an animation is cut and no truth is lost, it must be stilled.
+4. **Adaptive Physics & Integrity (整合性)**:
+   - Interactive boundaries and physics constants must adapt dynamically to the viewport and input method (mouse, keyboard, touch).
+   - Under `prefers-reduced-motion`, all spring systems and drag transforms collapse instantly to their target resting states.
+5. **The Specimen Registry (標本)**:
+   The publication formally registers the eight specimens from the [Motion Sheet](file:///Users/isaachernandez/blog%20design/src/pages/MotionSheetPage.tsx) as the approved vocabulary for interactive animation artifacts:
+   - **Magnetic Dispatch** (tactile target attraction): Spring-geared cursor attraction to invite engagement without locking focus.
+   - **Movable Proof** (inertia drag): Friction-bound card dragging with angular rotation, simulating physical paper handling.
+   - **Word Scrub** (continuous timeline range): Direct range-controlled scrubbers for text state progression.
+   - **Darkroom Spotlight** (proximity mask): Mouse-position-bound local spotlighting to focus reader attention.
+   - **Stamped State** (micro-animated toggle): Multi-state controls with distinct offset stamps denoting permanent registry.
+   - **Issue Shuffle** (stacked kinetic card decks): Layered translation/rotation shuffles to navigate serial issues.
+   - **Reading Rail** (scrolled progress tracking): Scroll-bound layout meters to map traversal progress.
+   - **Type Echo** (latency feedback): Text inputs with delayed visual echoes to expose feedback loops.
+
+---
+
+## V. The artifact grammar
 
 What makes an object an artifact *edition* rather than a demo:
 
@@ -179,7 +209,7 @@ What makes an object an artifact *edition* rather than a demo:
 
 ---
 
-## V. Filing and publishing
+## VI. Filing and publishing
 
 - **File it in the repo**: `artifacts/<N>-<slug>.html`, committed
   in (or alongside) the issue's ship commit. The artifact is part
@@ -196,7 +226,7 @@ What makes an object an artifact *edition* rather than a demo:
 
 ---
 
-## VI. Amendment
+## VII. Amendment
 
 Like interaction-language.md: amend by shipping an issue whose
 artifact argues the amendment, then editing this file in the same
@@ -212,6 +242,5 @@ edition (filed at `artifacts/419-the-intelligent-canvas.html`);
 the editor's direction of 2026-07-15 made the register standing
 law: every issue ships as an artifact, and the artifact leads.
 Amended the same day with §III, the depth doctrine — the artifacts
-go deep — demonstrated by CORE SAMPLE No.1 (THE DESCENT OF A
-PROMPT), which also reserves the Bore shape in
-interaction-language.md.*
+go deep — and §IV, the profound animation & interaction contract,
+enforcing tactile physics and registering the eight specimens.*

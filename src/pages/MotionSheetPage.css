@@ -114,3 +114,46 @@
 @media (max-width:760px){
   .motion-sheet{padding-right:0;padding-bottom:46px}.motion-rail{top:auto;bottom:0;left:0;right:0;width:100%;height:46px;border-left:0;border-top:1px solid var(--rule);grid-template-columns:46px 1fr 46px;grid-template-rows:1fr}.motion-mark{border-bottom:0!important;border-right:1px solid var(--rule)!important}.motion-rail nav{flex-direction:row}.motion-rail nav button{width:12.5%;height:45px}.motion-rail nav button::before{left:50%;top:0;width:1px;height:0;transition:height 180ms var(--ease-out)}.motion-rail nav button.active::before{width:1px;height:9px}.motion-toggle{border-top:0!important;border-left:1px solid var(--rule)!important}.page-progress{top:0;left:0;right:0;bottom:auto;width:100%;height:2px}.page-progress span{transform-origin:left}.motion-topline{grid-template-columns:1fr 1fr}.motion-topline span:nth-child(2){display:none}.motion-title-row{grid-template-columns:1fr;min-height:auto;padding-top:70px}.motion-title-row h1{font-size:21vw}.motion-intro{min-height:220px;border-left:0;border-top:1px solid var(--rule);padding:22px 0 0;flex-direction:row;gap:30px}.hero-folio{margin-top:32px}.artifact-grid{grid-template-columns:1fr}.motion-artifact,.motion-artifact:nth-child(even){border-right:0}.motion-artifact.wide{grid-column:auto}.motion-artifact{min-height:520px}.artifact-head{grid-template-columns:48px 1fr auto}.artifact-head p{font-size:7px}.magnetic-dispatch{width:84vw;height:150px}.dispatch-copy{font-size:12vw}.issue-card{inset:70px 18% 90px}.motion-footer{grid-template-columns:1fr;align-content:center}.motion-footer>div{justify-self:start;align-items:flex-start}.motion-footer p{font-size:22px}.spotlight-note{padding:10vw 7vw}.spotlight-note strong{font-size:12vw}}
 @media (prefers-reduced-motion:reduce){.motion-stamp,.ticker div,.artifact-head p i{animation:none!important}.proof-card,.stamp-copy,.issue-card,.magnetic-dispatch{transition:opacity 120ms ease,color 120ms ease,background 120ms ease!important}.magnetic-dispatch{transform:none!important}.darkroom-spot{display:none}}
+
+/* Fourier Specimen Styling */
+.fourier-specimen {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.fourier-specimen canvas {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--paper-light);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+}
+.fourier-specimen-controls {
+  display: flex;
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  overflow: hidden;
+  width: 100%;
+}
+.fourier-specimen-controls button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font: 700 8px/1 "Courier Prime", monospace;
+  letter-spacing: 0.12em;
+  padding: 8px 0;
+  cursor: pointer;
+  color: rgba(31,30,29,0.6);
+  transition: background 180ms var(--ease-out), color 180ms var(--ease-out);
+}
+.fourier-specimen-controls button:not(:last-child) {
+  border-right: 1px solid var(--ink);
+}
+.fourier-specimen-controls button.active {
+  background: var(--red);
+  color: var(--paper-light);
+}
+

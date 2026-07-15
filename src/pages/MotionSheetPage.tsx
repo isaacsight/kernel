@@ -212,6 +212,135 @@ function TypeSignal() {
   )
 }
 
+function FourierConstellationSpecimen() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [type, setType] = useState<'sine' | 'sawtooth' | 'square' | 'triangle'>('sawtooth')
+  const timeRef = useRef(0)
+  const animRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    const draw = () => {
+      const canvas = canvasRef.current
+      if (!canvas) return
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+
+      const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (!isReduced) {
+        timeRef.current += 0.02
+      }
+
+      const dpr = window.devicePixelRatio || 1
+      const size = canvas.clientWidth * dpr
+      if (canvas.width !== size || canvas.height !== size) {
+        canvas.width = size
+        canvas.height = size
+      }
+      ctx.scale(dpr, dpr)
+
+      const w = canvas.clientWidth
+      const h = canvas.clientHeight
+      ctx.clearRect(0, 0, w, h)
+
+      const style = getComputedStyle(canvas)
+      const accent = style.getPropertyValue('--issue-accent-base').trim() || '#E24E1B'
+      const ink = style.getPropertyValue('--rubin-slate').trim() || '#3F3D3A'
+      const mute = style.getPropertyValue('--rubin-border').trim() || '#d8d4cf'
+
+      const cx = w / 2
+      const cy = h / 2
+      const baseScale = Math.min(w, h) * 0.35
+
+      const getWeight = (n: number) => {
+        if (type === 'sine') return n === 1 ? 1 : 0
+        if (type === 'sawtooth') return 1 / n
+        if (type === 'square') return n % 2 !== 0 ? 1 / n : 0
+        if (type === 'triangle') return n % 2 !== 0 ? (Math.pow(-1, (n - 1) / 2) / (n * n)) : 0
+        return 0
+      }
+
+      // Draw trail
+      const orbitPoints: [number, number][] = []
+      const steps = 120
+      for (let s = 0; s <= steps; s++) {
+        const t = timeRef.current + (s / steps) * Math.PI * 2
+        let tx = cx
+        let ty = cy
+        for (let i = 1; i <= 8; i++) {
+          const wt = getWeight(i)
+          if (wt === 0) continue
+          const angle = i * t
+          tx += wt * Math.sin(angle) * baseScale * 0.8
+          ty += wt * Math.cos(angle) * baseScale * 0.8
+        }
+        orbitPoints.push([tx, ty])
+      }
+
+      ctx.beginPath()
+      ctx.strokeStyle = accent
+      ctx.lineWidth = 1.5
+      orbitPoints.forEach(([x, y], idx) => {
+        if (idx === 0) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      })
+      ctx.stroke()
+
+      // Draw vectors
+      let px = cx
+      let py = cy
+      ctx.lineWidth = 0.75
+      for (let i = 1; i <= 8; i++) {
+        const wt = getWeight(i)
+        if (wt === 0) continue
+        const angle = i * timeRef.current
+        const r = wt * baseScale * 0.8
+
+        ctx.beginPath()
+        ctx.strokeStyle = mute
+        ctx.arc(px, py, r, 0, Math.PI * 2)
+        ctx.stroke()
+
+        const nx = px + r * Math.sin(angle)
+        const ny = py + r * Math.cos(angle)
+
+        ctx.beginPath()
+        ctx.strokeStyle = ink
+        ctx.moveTo(px, py)
+        ctx.lineTo(nx, ny)
+        ctx.stroke()
+
+        px = nx
+        py = ny
+      }
+
+      ctx.fillStyle = accent
+      ctx.beginPath()
+      ctx.arc(px, py, 2.5, 0, Math.PI * 2)
+      ctx.fill()
+
+      animRef.current = requestAnimationFrame(draw)
+    }
+
+    draw()
+    return () => {
+      if (animRef.current) cancelAnimationFrame(animRef.current)
+    }
+  }, [type])
+
+  return (
+    <div className="fourier-specimen">
+      <canvas ref={canvasRef} aria-label="Animated fourier orbital vector orbits" />
+      <div className="fourier-specimen-controls">
+        {(['sine', 'sawtooth', 'square', 'triangle'] as const).map(w => (
+          <button key={w} className={type === w ? 'active' : ''} onClick={() => setType(w)}>
+            {w.toUpperCase()}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function MotionSheetPage() {
   const [activeArtifact, setActiveArtifact] = useState('01')
   const [motionEnabled, setMotionEnabled] = useState(true)
@@ -262,7 +391,7 @@ export function MotionSheetPage() {
       <aside className="motion-rail" aria-label="Specimen index">
         <button className="motion-mark" onClick={() => window.scrollTo(0, 0)} aria-label="Back to top">K</button>
         <nav>
-          {['01','02','03','04','05','06','07','08'].map(number => (
+          {['01','02','03','04','05','06','07','08','09'].map(number => (
             <button key={number} className={activeArtifact === number ? 'active' : ''} aria-current={activeArtifact === number ? 'true' : undefined} onClick={() => jumpTo(number)}>{number}</button>
           ))}
         </nav>
@@ -304,6 +433,7 @@ export function MotionSheetPage() {
         <Artifact number="06" title="BACK-ISSUE DECK" cue="CLICK TO SHUFFLE"><IssueShuffle /></Artifact>
         <Artifact number="07" title="READING RAIL" cue="SCROLL THE EXCERPT"><ReadingRail /></Artifact>
         <Artifact number="08" title="TYPE SIGNAL" cue="ENTER A TRANSMISSION" className="wide"><TypeSignal /></Artifact>
+        <Artifact number="09" title="FOURIER SUM" cue="CHOOSE WAVEFORM" className="wide"><FourierConstellationSpecimen /></Artifact>
       </section>
 
       <footer className="motion-footer">

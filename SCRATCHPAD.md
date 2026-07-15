@@ -2091,3 +2091,25 @@ Isaac's direction: "lets finish that one up and publish and i need to have bette
 - Listed the issues written/drafted by Claude Fable 5 (Issues 399, 409, 410, 412, 413, 417, 418, 419, and 420) to understand how Fable-class models have shaped the magazine's interactive grammar.
 - Committed all files related to the canvas and visual layouts. Kept private files (such as sales leads and temporary local build video brolls) uncommitted/local.
 
+
+## Session 2026-07-15 (cont. 8) — ISSUE 421 rig fixed (fourier, three root causes)
+
+Isaac: "lets fix the last issue." ISSUE 421 (THE HARMONIC SERIES,
+twelfth shape `fourier`) was drafted uncommitted with a broken rig.
+Systematic debugging found three root causes in FourierFeature.tsx:
+1. cc.scale(dpr,dpr) ran EVERY frame — canvas transform persists, so
+   scale compounded 2→32+ on Retina (confirmed live: getTransform().a
+   was 32). Fix: setTransform(dpr,0,0,dpr,0,0), idempotent.
+2. Bare rAF loop — violates rule 3 as amended (timer-robust race).
+   Fix: ported BoreFeature's tick() (rAF vs 42ms setTimeout race);
+   reduced-motion now draws once and rests.
+3. CRASH: triangle weights are signed ((-1)^((n-1)/2)/n²) and were
+   passed to cc.arc() as radius → IndexSizeError → ErrorBoundary ate
+   the whole feature on TRIANGLE click (reproduced, then fixed:
+   abs() for circle radius + hit-test, signed amp for vector arm).
+Verified live: all 4 waveforms + max partials/inharmonicity + phase
+drag + play/mute survive, scale stays 2, zero console errors; tsc +
+build clean. components.md working-model exception extended to
+fourier (interaction/artifact-language docs were already amended).
+NOT yet committed; PUBLISHING.md + design-language.md 421 rows still
+pending before ship.

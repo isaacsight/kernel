@@ -6,7 +6,7 @@
 > The issue persuades; this document enforces. When they disagree,
 > fix the disagreement before shipping anything.
 >
-> **The cabinet, as of ISSUE 420:** eleven shapes built — Dial
+> **The cabinet, as of ISSUE 421:** twelve shapes built — Dial
 > (`instrument`, ARIA radiogroup, N ordered positions on one
 > variable), Compare (`compare`, ARIA switch, two irreducible
 > lenses with no position between them), Sequence (`sequence`,
@@ -17,7 +17,7 @@
 > performs an editorial act on the text), Margin (`margin`,
 > per-passage native text fields — the first CONTRIBUTION control:
 > the reader writes their own words into ruled margin space,
-> counted but never read, kept by no one), and Press (`press`,
+> counted but never read, kept by no one), Press (`press`,
 > ISSUE 413 — the first ARTIFACT control: the reader operates the
 > real production grammar and composes a printable cover of their
 > own; selection and contribution composing toward a thing, not a
@@ -28,15 +28,18 @@
 > the axis: an authored metropolitan day marked moment by moment),
 > Plate (`plate`, ISSUE 419 — the WORKING MODEL: an operable
 > in-house miniature of an external mechanism, ratifying the rule-3
-> and rule-4 amendments below), and Bore (`bore`, ISSUE 420 — the
+> and rule-4 amendments below), Bore (`bore`, ISSUE 420 — the
 > DEPTH control: a probe lowered through a mechanism's strata with
 > carried context, born from its reservation by editorial
-> promotion of CORE SAMPLE No.1) — plus the Tutor (`tutor`, ISSUE
-> 411), a COMPOSITE that teaches the primitives by having the
-> reader operate a stakes-free version of each. Any further shape
-> waits, unbuilt, for a real story that needs it — see rule 7 for
-> how a reservation becomes a build, and for why ISSUE 407 refused
-> to manufacture one.
+> promotion of CORE SAMPLE No.1), and Fourier (`fourier`, ISSUE 421
+> — the WAVEFORM summation control: a phasor constellation canvas
+> summing up to N sinusoids, direct-phase draggable, with Web Audio
+> synthesis preview playing physical inharmonicity B) — plus the
+> Tutor (`tutor`, ISSUE 411), a COMPOSITE that teaches the primitives
+> by having the reader operate a stakes-free version of each. Any
+> further shape waits, unbuilt, for a real story that needs it — see
+> rule 7 for how a reservation becomes a build, and for why ISSUE 407
+> refused to manufacture one.
 
 Status: **LAW** — reviewed each time a new interactive spread is
 proposed. Three documents now govern the publication: this one
@@ -400,6 +403,11 @@ plates, and the working-model exception inherited verbatim
 (timer-robust script inside the bore frame only). **Bore is at
 instance one** — its machinery waits for a second depth-shaped
 story before anything is extracted.
+
+---
+
+**The twelfth shape — Fourier (`fourier`, ISSUE 421), and the axis it adds: spectrum.**
+The story was the mathematics of wave composition (ISSUE 421) and the physics of string resonance. No existing shape fit it: it requires continuous, multi-dimensional adjustment of harmonics count, base waveforms, physical stiffness-based inharmonicity, and direct phase offsets. It shipped as the `fourier` spread type: two linked canvas drawings (phasor constellation showing orbiting vector circles, and waveform plot showing real-time additive summation), pointer-geared direct manipulation of circles for phase offsets, and a local Web Audio synth engine for audification. What it settles: rule 3's working-model exception is expanded to cover audification (sound may be synthesized when it **is the subject under review**, under identical strict constraints: strictly user-initiated, volume-gated below 0.05 gain, paused when reduced-motion collapses or document is blurred). Rule 4's seeded reproducibility holds deterministically, and rule 6 requires full disclosure of the simulation (`fourierNote` disclosing that Web Audio synthesizes the wave locally, and the ledger tracks session-only adjustments). **Fourier is at instance one** — its machinery is isolated in its own feature.
 
 ---
 
