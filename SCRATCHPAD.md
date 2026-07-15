@@ -2113,3 +2113,19 @@ build clean. components.md working-model exception extended to
 fourier (interaction/artifact-language docs were already amended).
 NOT yet committed; PUBLISHING.md + design-language.md 421 rows still
 pending before ship.
+
+## Session 2026-07-15 (cont. 9) — ISSUE 421 SHIPPED (18f9558e6, all 6 gates)
+
+Isaac: "yes ship it." Filed the pending law rows (PUBLISHING fourier
+shape row + first-instance list + last-updated; design-language 421
+catalog row — celadon corrected to SECOND celadon after 394), then
+ran the 6-gate /ship. Gate 3 caught and fixed three PHANTOM tokens
+in FourierFeature.css (--rubin-secondary/--rubin-bg/--rubin-bg-muted
+were undefined; the #fff fallback was LIVE) → remapped to
+--pop-coffee/--pop-ivory/--pop-ledger + 44px tap targets. Gates:
+security PASS · QA PASS (tsc 0, 507/507) · design PASS · perf PASS
+(JS 218.6KB gz 73%, CSS ~99KB gz 66%) · deploy PASS (push-to-main
+CI run 29457269857, kernel.chat 200) · product PASS (live TRIANGLE
+crash regression + mobile 375px verified, 0 console errors).
+Discord notified. Local-only files still uncommitted by design:
+docs/sales/*, output/, tmp/, videos/, skills-lock.json.
