@@ -99,6 +99,7 @@ function drawProof(
   ink: string,
   accent: string,
   faint: string,
+  style: PlateSpread['proofStyle'] = 'botanical',
   sway?: number,
 ) {
   const ctx = canvas.getContext('2d')
@@ -107,6 +108,29 @@ function drawProof(
   const h = canvas.height
   const rnd = mulberry32(seed)
   ctx.clearRect(0, 0, w, h)
+
+  if (style === 'routing') {
+    const active = new Set<number>()
+    while (active.size < 16) active.add(Math.floor(rnd() * 896))
+    const cols = 32
+    const rows = 28
+    const gap = 2
+    const cellW = (w - gap * (cols - 1)) / cols
+    const cellH = (h - 24 - gap * (rows - 1)) / rows
+    for (let i = 0; i < 896; i++) {
+      const x = (i % cols) * (cellW + gap)
+      const y = Math.floor(i / cols) * (cellH + gap)
+      ctx.fillStyle = active.has(i) ? accent : faint
+      ctx.fillRect(x, y, cellW, cellH)
+    }
+    ctx.fillStyle = ink
+    ctx.globalAlpha = 0.7
+    ctx.font = '9px "Courier Prime", Courier, monospace'
+    ctx.fillText('16 / 896 ACTIVE', 0, h - 7)
+    ctx.fillText(`No.${String(seed % 1000).padStart(3, '0')}`, w - 44, h - 7)
+    ctx.globalAlpha = 1
+    return
+  }
 
   ctx.strokeStyle = faint
   ctx.lineWidth = 0.5
@@ -283,10 +307,10 @@ export function PlateFeature({ spread, issue }: PlateFeatureProps) {
     outputBlocks.forEach((b) => {
       const canvas = canvasRefs.current[b.id]
       const proof = proofs[b.id]
-      if (canvas && proof) drawProof(canvas, proof.seed, c.ink, c.accent, c.faint)
+      if (canvas && proof) drawProof(canvas, proof.seed, c.ink, c.accent, c.faint, spread.proofStyle)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proofs, tokens])
+  }, [proofs, spread.proofStyle, tokens])
 
   useEffect(() => {
     paintAll()
@@ -310,13 +334,13 @@ export function PlateFeature({ spread, issue }: PlateFeatureProps) {
         const canvas = canvasRefs.current[b.id]
         const proof = proofs[b.id]
         if (canvas && proof && !proof.rendering) {
-          drawProof(canvas, proof.seed, c.ink, c.accent, c.faint, performance.now())
+          drawProof(canvas, proof.seed, c.ink, c.accent, c.faint, spread.proofStyle, performance.now())
         }
       })
     }, 90)
     return () => window.clearInterval(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proofs, reducedMotion, tokens])
+  }, [proofs, reducedMotion, spread.proofStyle, tokens])
 
   /* ── block movement: pointer drag + arrow keys ── */
   const dragState = useRef<{ id: string; px: number; py: number; x: number; y: number } | null>(null)

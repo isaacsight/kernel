@@ -85,13 +85,15 @@ How the magazine writes — editorial, bilingual, catalog-led.
   ledger = audit, butter = summer/reading).
 
 ### Type
-- **Exactly two faces. No system fonts, no sans-serif, ever.**
+- **Two Latin faces and one Japanese companion. No generic UI sans-serif.**
   - **EB Garamond** → all display + prose. 800 for the wordmark, 700 headlines,
     400 body. Tight tracking (−0.06 to −0.025em) on display; +0.02em on body.
     Old-style figures (`onum`) on. Italic carries emphasis (→ tomato in display).
-  - **Courier Prime** → all meta: kickers, folios, banners, JP subtitles,
+  - **Courier Prime** → Latin meta: kickers, folios, banners,
     catalog numbers, code, terminal. Uppercase, +0.14em tracking (caps), tabular
     figures.
+  - **Noto Serif JP** → Japanese subtitles and parallel text, with restrained
+    tracking. It is the bilingual companion, not a third Latin register.
 - **Scale** is a Major Third (1.25); body = **20px** (the magazine reads like
   print). See `tokens/typography.css`.
 
@@ -256,7 +258,8 @@ Logos, marks, PWA icons, and warm retro-terminal illustrations
 2. **Never hardcode colour or font.** Go through `--pop-*` / `--rubin-*`,
    `--font-serif` / `--font-mono`.
 3. **Tomato is the only spot colour.**
-4. **Two faces only.** EB Garamond + Courier Prime. No system fonts, no sans.
+4. **Two Latin faces + one Japanese companion.** EB Garamond, Courier Prime,
+   and Noto Serif JP. No generic UI sans-serif.
 5. **Bilingual everywhere it fits** (`.pop-bilingual`, `Kicker jp=…`).
 6. **One system glyph** (★). No emoji.
 7. **Every release is an issue.** Bump the issue number like a real magazine.

@@ -80,9 +80,9 @@
 }
 
 .pop-frame-title-jp {
-  font-family: var(--font-mono);
+  font-family: var(--font-jp);
   font-size: var(--text-sm);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
   color: var(--pop-coffee);
   margin: 0;
 }

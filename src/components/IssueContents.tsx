@@ -29,7 +29,7 @@ export function IssueContents({ issue }: IssueContentsProps) {
               <span className="pop-catalog-num">{item.n}.</span>
               <span className="pop-row-label">
                 {item.en}
-                <span className="pop-row-sub">{item.jp}</span>
+                <span className="pop-row-sub" lang="ja">{item.jp}</span>
               </span>
               <span className="pop-banner pop-banner--kraft">{item.tag}</span>
             </li>

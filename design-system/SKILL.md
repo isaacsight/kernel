@@ -30,7 +30,7 @@ in designing with this brand.
 ## Hard rules
 1. Never name the design inspiration on any user-visible surface.
 2. Tomato is the only spot colour. (Purple `#6B5B95` is the logo mark only.)
-3. EB Garamond + Courier Prime only — no system fonts, no sans-serif.
+3. EB Garamond + Courier Prime for Latin; Noto Serif JP for Japanese.
 4. Never pure `#ffffff` — use warm ivory/cream/butter/kraft/ledger stocks.
 5. Bilingual everywhere it fits. One system glyph (★). No emoji.
 6. Every release is an "ISSUE N · MONTH YEAR".

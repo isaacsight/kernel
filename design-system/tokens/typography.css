@@ -1,13 +1,14 @@
 /* ──────────────────────────────────────────────────────────────
    kernel.chat — Typography
-   Grammar over typeface. Two faces do everything:
+   Grammar over typeface. Two Latin faces and one Japanese companion:
 
    • EB Garamond  → display headlines + prose body. Italic carries
      emphasis (and turns tomato in editorial display). Set large,
      tight, with old-style figures.
-   • Courier Prime → all meta: kickers, folios, banners, code,
-     terminal, catalog numbers, Japanese subtitles. Uppercase +
+   • Courier Prime → all Latin meta: kickers, folios, banners, code,
+     terminal and catalog numbers. Uppercase +
      wide tracking is the editorial register.
+   • Noto Serif JP → Japanese subtitles and parallel text.
 
    Scale is a Major Third (1.25). Body is 20px — the magazine reads
    like print, not like a web app.
@@ -17,6 +18,7 @@
     /* Families */
     --font-serif: "EB Garamond", Georgia, serif;
     --font-mono:  "Courier Prime", "Courier New", monospace;
+    --font-jp:    "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
     /* Semantic aliases — use these in components */
     --font-prose: var(--font-serif);   /* display + body copy */
     --font-meta:  var(--font-mono);    /* kickers, folios, code, JP */

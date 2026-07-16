@@ -3,6 +3,16 @@ import { MagazineFrame } from '../components/MagazineFrame'
 import { ALL_ISSUES } from '../content/issues'
 import './IssuesPage.css'
 
+const MONTH_LABELS: Record<string, string> = {
+  JAN: 'January', FEB: 'February', MAR: 'March', APR: 'April',
+  MAY: 'May', JUN: 'June', JUL: 'July', AUG: 'August',
+  SEP: 'September', OCT: 'October', NOV: 'November', DEC: 'December',
+}
+
+function monthKey(month: string) {
+  return month.trim().slice(0, 3).toUpperCase()
+}
+
 /**
  * Back catalog — the archive index. Every issue ever published,
  * listed magazine-style: monument number + month/year + feature,
@@ -15,6 +25,19 @@ export function IssuesPage() {
   }, [])
 
   const issuesNewestFirst = [...ALL_ISSUES].reverse()
+  const [latestIssue, ...archiveIssues] = issuesNewestFirst
+  const volumes = archiveIssues.reduce((groups, issue) => {
+    const month = monthKey(issue.month)
+    const key = `${issue.year}-${month}`
+    const existing = groups.get(key)
+    if (existing) existing.issues.push(issue)
+    else groups.set(key, {
+      key,
+      label: `${MONTH_LABELS[month] ?? issue.month} ${issue.year}`,
+      issues: [issue],
+    })
+    return groups
+  }, new Map<string, { key: string; label: string; issues: typeof archiveIssues }>())
 
   return (
     <MagazineFrame
@@ -27,31 +50,68 @@ export function IssuesPage() {
     >
       <div className="pop-issues">
 
-        <ol className="pop-issues-list">
-          {issuesNewestFirst.map((issue) => (
-            <li key={issue.number} className="pop-issues-row">
-              <a href={`#/issues/${issue.number}`} className="pop-issues-link">
-                <div className="pop-monument pop-issues-monument">
-                  <span>ISSUE</span>
-                  <strong>{issue.number}</strong>
-                  <span>{issue.month} {issue.year}</span>
-                </div>
-                <div className="pop-issues-feature">
-                  <span className="pop-kicker pop-kicker--tomato">FEATURE · {issue.number}</span>
-                  <h2 className="pop-display pop-issues-feature-title">
-                    {issue.headline.prefix}{' '}
-                    <em>{issue.headline.emphasis}</em>{' '}
-                    {issue.headline.suffix}
+        {latestIssue && (
+          <article className="pop-issues-current">
+            <a
+              href={`#/issues/${latestIssue.number}`}
+              className="pop-issues-current-link"
+              aria-label={`Read issue ${latestIssue.number}: ${latestIssue.feature}`}
+            >
+              <div className="pop-issues-current-meta">
+                <span className="pop-kicker pop-kicker--tomato">ON STANDS NOW · 最新号</span>
+                <span className="pop-folio">{latestIssue.month} {latestIssue.year}</span>
+              </div>
+              <div className="pop-issues-current-lockup">
+                <span className="pop-issues-current-number" aria-hidden="true">{latestIssue.number}</span>
+                <div>
+                  <h2 className="pop-display pop-issues-current-title">
+                    {latestIssue.headline.prefix}{' '}
+                    <em>{latestIssue.headline.emphasis}</em>{' '}
+                    {latestIssue.headline.suffix}
                   </h2>
-                  <p className="pop-feature-jp pop-issues-feature-jp">{issue.featureJp}</p>
+                  <p className="pop-issues-current-jp" lang="ja">{latestIssue.featureJp}</p>
+                  <p className="pop-swash pop-issues-current-deck">
+                    {latestIssue.coverDeck ?? latestIssue.headline.swash}
+                  </p>
                 </div>
-                <div className="pop-issues-arrow">
-                  <span className="pop-folio">READ →</span>
-                </div>
-              </a>
-            </li>
+              </div>
+              <span className="pop-folio pop-issues-current-cta">READ THE CURRENT ISSUE <span aria-hidden="true">→</span></span>
+            </a>
+          </article>
+        )}
+
+        <div className="pop-issues-volumes">
+          {[...volumes.values()].map((volume) => (
+            <section key={volume.key} className="pop-issues-volume">
+              <header className="pop-issues-volume-head">
+                <h2>{volume.label}</h2>
+                <span className="pop-folio">{volume.issues.length} {volume.issues.length === 1 ? 'ISSUE' : 'ISSUES'}</span>
+              </header>
+              <ol className="pop-issues-list">
+                {volume.issues.map((issue) => (
+                  <li key={issue.number} className="pop-issues-row">
+                    <a
+                      href={`#/issues/${issue.number}`}
+                      className="pop-issues-link"
+                      aria-label={`Read issue ${issue.number}: ${issue.feature}`}
+                    >
+                      <span className="pop-issues-number">{issue.number}</span>
+                      <div className="pop-issues-feature">
+                        <h3 className="pop-display pop-issues-feature-title">
+                          {issue.headline.prefix}{' '}
+                          <em>{issue.headline.emphasis}</em>{' '}
+                          {issue.headline.suffix}
+                        </h3>
+                        <p className="pop-issues-feature-jp" lang="ja">{issue.featureJp}</p>
+                      </div>
+                      <span className="pop-issues-arrow" aria-hidden="true">→</span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </section>
           ))}
-        </ol>
+        </div>
 
         <p className="pop-issues-note">
           <span className="pop-kicker">PUBLISHING NOTE · 編集後記</span>

@@ -98,7 +98,7 @@ export function MagazineFrame({
             <div className="pop-frame-head">
               <span className="pop-kicker pop-kicker--tomato">{kicker} · 目次</span>
               <h1 className="pop-display pop-frame-title">{title}</h1>
-              {titleJp && <p className="pop-frame-title-jp">{titleJp}</p>}
+              {titleJp && <p className="pop-frame-title-jp" lang="ja">{titleJp}</p>}
               {deck && <p className="pop-swash pop-frame-deck">{deck}</p>}
             </div>
           )}

@@ -6,7 +6,7 @@
 > The issue persuades; this document enforces. When they disagree,
 > fix the disagreement before shipping anything.
 >
-> **The cabinet, as of ISSUE 422:** thirteen shapes built — Dial
+> **The cabinet, as of ISSUE 423:** thirteen shapes built — Dial
 > (`instrument`, ARIA radiogroup, N ordered positions on one
 > variable), Compare (`compare`, ARIA switch, two irreducible
 > lenses with no position between them), Sequence (`sequence`,
@@ -396,8 +396,12 @@ resting state). And rule 6 doubles again, after 417's precedent:
 when the page models an external product, the mandatory
 `plateNote` discloses the simulation — drawn in-house, nothing
 generated, the ledger counting only the reader's own pulls.
-**Plate is at instance one** — its machinery waits for a second
-mechanism-shaped story before anything is extracted.
+**Plate is now at instance two.** ISSUE 423 reuses the same framed
+blocks, wires, run control, deterministic seed, disclosure, and
+session ledger for Kimi K3 routing. The proof renderer varies from
+botanical engraving to an expert field, but no interaction machinery
+is extracted or added. The two-instance gate is met: Plate is a
+repeatable pattern, not a one-off effect.
 
 ---
 

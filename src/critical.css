@@ -12,6 +12,7 @@
     --rubin-sepia: #D4C5A9;
     --rubin-ink: #2C2A28;
     --font-serif: "EB Garamond", serif;
+    --font-jp: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
     --font-prose: var(--font-serif);
     --line-height-normal: 1.6;
     --letter-spacing-normal: 0.02em;

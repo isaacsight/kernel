@@ -101,9 +101,9 @@ export function IssueCover({ issue, footer }: IssueCoverProps) {
             {issue.headline.suffix}
           </h2>
           <p className="pop-swash pop-feature-swash">
-            {issue.headline.swash}
+            {issue.coverDeck ?? issue.headline.swash}
           </p>
-          <p className="pop-feature-jp">
+          <p className="pop-feature-jp" lang="ja">
             {issue.featureJp}
           </p>
         </div>

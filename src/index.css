@@ -47,6 +47,7 @@
     /* Fonts */
     --font-serif: "EB Garamond", Georgia, serif;
     --font-mono: "Courier Prime", "Courier New", monospace;
+    --font-jp: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
     /* Semantic aliases — use these in components */
     --font-prose: var(--font-serif);
     --font-meta: var(--font-mono);
@@ -29493,5 +29494,4 @@ h4 {
     scroll-behavior: auto !important;
   }
 }
-
 

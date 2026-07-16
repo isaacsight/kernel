@@ -59,6 +59,7 @@ export const ISSUE_422: IssueRecord = {
     suffix: '.',
     swash: 'In 1971, long before the feed, Herbert A. Simon named the trade nobody had priced: information is paid for out of the attention of whoever receives it. This issue is a treasury. Your attention is the only currency in it — wade the wealth, ink the claim, seal a budget, face a machine geared to your own declaration, and reconcile what you said against what you did. Measured in front of you. Kept by no one.',
   },
+  coverDeck: 'Information is paid for with attention. This issue makes the exchange visible — a treasury measured in front of you and kept by no one.',
 
   contents: [
     { n: '001', en: 'Information consumes its recipients', jp: '情報は受け手を消費する', tag: 'THESIS' },

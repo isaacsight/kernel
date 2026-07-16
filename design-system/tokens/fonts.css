@@ -1,12 +1,12 @@
 /* ──────────────────────────────────────────────────────────────
    kernel.chat — Webfonts
-   Two faces, nothing else. EB Garamond carries every display and
-   prose surface; Courier Prime carries all meta, code, kickers and
-   folios. No system fonts, no sans-serif anywhere in the system.
+   EB Garamond carries display and prose; Courier Prime carries meta,
+   code, kickers and folios; Noto Serif JP gives the bilingual layer
+   an intentional voice instead of relying on an operating-system fallback.
 
    Shipped to consumers via Google Fonts. If you self-host, swap
    these @import lines for local @font-face rules pointing at the
    binaries — the --font-serif / --font-mono tokens stay the same.
    ────────────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif+JP:wght@400;600&display=swap');

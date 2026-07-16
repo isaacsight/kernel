@@ -123,9 +123,9 @@
 }
 
 .pop-feature-jp {
-  font-family: var(--font-mono);
+  font-family: var(--font-jp);
   font-size: var(--text-sm);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
   color: var(--pop-coffee);
   margin: 0;
 }
@@ -642,8 +642,8 @@
   .pop-masthead-meta .pop-banner { padding: 3px 9px; }
   .pop-feature { padding: 16px 0 24px; gap: 10px; }
   .pop-feature-title { font-size: clamp(40px, 12vw, 72px); }
-  .pop-feature-swash { font-size: clamp(17px, 4.5vw, 22px); }
-  .pop-feature-jp { font-size: 11px; letter-spacing: 0.08em; }
+  .pop-feature-swash { max-width: 31ch; margin-inline: auto; font-size: clamp(17px, 4.5vw, 21px); line-height: 1.48; }
+  .pop-feature-jp { font-size: 12px; letter-spacing: 0.03em; }
 
   /* Monument — keep print-object feel at small size */
   .pop-monument { font-size: 10px; letter-spacing: 0.14em; }
@@ -1641,4 +1641,3 @@
   margin-left: auto;
   margin-right: auto;
 }
-

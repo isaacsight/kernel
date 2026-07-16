@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'motion/react'
-import { TRANSITION } from '../constants/motion'
 import { findIssue } from '../content/issues'
 
 const BASE_TITLE = 'kernel.chat — Magazine for City Coders'
@@ -48,18 +46,9 @@ export function Layout() {
 
   return (
     <div className="site-wrapper">
-      <AnimatePresence mode="wait">
-        <motion.main
-          key={location.pathname}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={TRANSITION.MESSAGE}
-          className="site-main"
-        >
-          <Outlet />
-        </motion.main>
-      </AnimatePresence>
+      <main className="site-main">
+        <Outlet />
+      </main>
     </div>
   )
 }
