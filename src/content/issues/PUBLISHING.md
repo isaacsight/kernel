@@ -96,6 +96,7 @@ Pick the editorial tool that fits the content:
 | `plate` | A **working model the reader operates** — an in-house miniature of an external mechanism (a review-by-instrument: build the subject's grammar small, frame it, hand over the lever) | Framed plate with registration ticks; movable blocks wired with bezier hairlines (arrangement is material, not a control — focusable + arrow-key movable anyway); run + per-frame redraw as plain buttons; script moves the model's signal inside the frame ONLY, timer-robust, reduced-motion collapsed (rule 3 as amended by 419); every drawn proof is deterministic from a seed printed on its face, resting state seeded from the issue number (rule 4 as amended); mandatory `plateNote` — simulation drawn in-house, nothing generated, ledger counts only the reader's pulls/redraws, session-only. Print stacks the blocks with their seeds (see 419). |
 | `bore` | A **descent the reader performs** — the depth control: a probe lowered stratum by stratum through a mechanism's interior, with carried context and a floor that resolves | Gauge rail + probe (single winch button); six strata always legible (emphasis-never-existence — the probe raises into the accent, never conjures); carried context: an upper-stratum choice (aria-pressed sort buttons; clicking a plate word is a pointer shortcut to the same act) re-inks the plates below; temperature radiogroup before the draw; inherits 419's working-model exception (timer-robust script inside the bore frame only) and seeded plates; mandatory `boreNote` + `candidatesNote` — strata drawn, shares authored, ledger counts only depth/drops/carries/temperature, session-only. Complies with the depth doctrine (artifact-language §III). Print stacks the strata with the ledger snapshot (see 420). |
 | `fourier` | A **wave the reader sums** — the waveform summation control: additive synthesis operated live; the reader selects the base shape, dials the partial count and inharmonicity, drags phases on a phasor constellation, and may hear the sum | Waveform radiogroup (4 base shapes, `role="radio"`); partials slider (1–24) + inharmonicity slider (f_n = n·f₀·√(1+B·n²)) as native labelled ranges; two canvases — phasor constellation (pointer-draggable phases; circle radius is the coefficient's magnitude, sign folds into the arm) and the synthesized time-domain plot; audio is USER-INITIATED only via one button, Web Audio oscillator bank hard-capped at 0.05 master gain; inherits the working-model exception (timer-robust rAF-vs-setTimeout race inside the rig frame only, reduced-motion draws once and rests); mandatory `fourierNote` — all math computed in-house in real time, nothing generated, ledger counts only the reader's adjustments/scrubs/plays, session-only. Print renders the resting plots and hides the controls (see 421). |
+| `audit` | A **session the page meters in front of its reader** — the SESSION control: the reader's own attention is the axis; a treasury of strata where every meter counts the reader's hands and dwell, and the floor reconciles what they declared against what they revealed | First issue shipped under the merger ruling (artifact-language §I as amended): the apparatus carries whole, NO reduction — beam (proximity-mask spotlight with spring inertia; dimmed prose stays legible, the beam raises emphasis only), movable-proof card drag, word-scrub press, stamped seals, magnetic dispatch geared to the reader's own declaration (carried context), a live treasury rail (gauge: named strata, dwell bars, session clock). Stop-as-sibling law (415) travels into the zone. All motion timer-robust; reduced-motion and touch-only collapse to full ink and stilled springs; mandatory `auditNote` — dwell and marks measured in this window, session-only, unrecorded, reload erases, print to keep. Print renders the receipt and hides the machine (see 422). |
 
 **Profile of a person → essay, not interview**, unless you have the
 subject's actual answers. The magazine never publishes invented
@@ -217,7 +218,8 @@ model run three ways; adds the optional `dialLabel` field),
 `413.ts` for press (interactive composing instrument — first artifact control),
 `419.ts` for plate (interactive working model — first mechanism control),
 `420.ts` for bore (interactive descent — first depth control, artifact-first),
-`421.ts` for fourier (interactive waveform summation — first audible control)). Every issue needs:
+`421.ts` for fourier (interactive waveform summation — first audible control),
+`422.ts` for audit (the session control — first merger issue, apparatus whole)). Every issue needs:
 
 - A leading block comment explaining the identity decisions
 - `number`, `month`, `year`, `feature`, `featureJp`, `price`, `tagline`
@@ -473,14 +475,16 @@ branch — only main publishes.
 
 ---
 
-_Last updated: ISSUE 421 · AUG 2026 (THE HARMONIC SERIES — the
-twelfth interaction shape, `fourier`: the waveform summation
-control, and the first audible one. The reader operates additive
-synthesis live — base shape, partial count, inharmonicity B, and
-direct phase-dragging on a phasor constellation — and may press one
-button to hear the sum through a gain-capped Web Audio bank. All
-math computed in-house in real time; the ledger counts only the
-reader's hands. Inherits the working-model exception (timer-robust
-script inside the rig frame only). Prior: 420 THE DESCENT OF A
-PROMPT (`bore`, first depth control, first artifact-first issue)
-and 419 THE INTELLIGENT CANVAS (`plate`, first ivy).)_
+_Last updated: ISSUE 422 · SEP 2026 (THE POVERTY OF ATTENTION —
+the thirteenth interaction shape, `audit`: the SESSION control,
+and the first issue shipped under the MERGER RULING. The editor
+ruled against reduction ("I want this to set new rules that merge
+with editorial"), so the apparatus carries onto the site whole:
+the beam, the treasury rail, the movable feed, the sealed budget,
+the zone machine geared to the reader's own declaration, and the
+reconciliation floor — declared against revealed, measured in
+front of the reader, kept by no one. Ratifies artifact-language
+§I's merger clause and interaction-language rule 3's apparatus
+register. Prior: 421 THE HARMONIC SERIES (`fourier`, first
+audible control) and 420 THE DESCENT OF A PROMPT (`bore`, first
+depth control).)_

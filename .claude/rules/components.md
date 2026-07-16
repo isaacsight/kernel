@@ -48,7 +48,11 @@ MUST:
    `requestAnimationFrame`** — with ONE ratified exception, the
    working-model exception (ISSUE 419), which covers the `plate`
    (`PlateFeature`), `bore` (`BoreFeature`, ISSUE 420), and
-   `fourier` (`FourierFeature`, ISSUE 421) shapes.
+   `fourier` (`FourierFeature`, ISSUE 421) shapes — and, as
+   amended by ISSUE 422 (the APPARATUS REGISTER, merger ruling),
+   the `audit` (`AuditFeature`) shape, whose whole feature carries
+   the full artifact contract on-site (springs, proximity masks,
+   magnetic dispatch) confined to that feature and meaning-first.
    Inside those spreads' frames, script may move the model's own
    signal (a pulse, a probe, a plate drawing itself), under the
    four constraints in `docs/interaction-language.md` rule 3 as

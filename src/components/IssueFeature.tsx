@@ -21,6 +21,7 @@ import { ProofFeature } from './ProofFeature'
 import { PlateFeature } from './PlateFeature'
 import { BoreFeature } from './BoreFeature'
 import { FourierFeature } from './FourierFeature'
+import { AuditFeature } from './AuditFeature'
 
 interface IssueFeatureProps {
   issue: IssueRecord
@@ -82,6 +83,8 @@ export function IssueFeature({ issue }: IssueFeatureProps) {
       return <BoreFeature spread={spread} issue={issue} />
     case 'fourier':
       return <FourierFeature spread={spread} issue={issue} />
+    case 'audit':
+      return <AuditFeature spread={spread} issue={issue} />
     default: {
       // Exhaustiveness check — adding a new variant without handling
       // it here produces a compile-time error.

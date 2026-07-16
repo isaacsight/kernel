@@ -42,6 +42,45 @@ it) and makes the reduction a deliberate editorial act: what the
 spread gives up relative to its artifact is a decision, filed in
 the issue's header comment.
 
+**AMENDED — ISSUE 422, the merger.** Reduction is a decision, and
+the editor may decide against it. When an issue is born as an
+artifact and the ruling is *no reduction*, the issue ships as ONE
+rendering: the apparatus itself, carried whole onto the site as
+its spread — full amplitude, beam, springs, choreography and all.
+The site's law absorbs the artifact's contract for that issue's
+feature (see interaction-language rule 3, the apparatus register)
+instead of the artifact bending to the site's. Two conditions,
+both mandatory: the honesty core travels undiminished (timer-
+robust, reduced-motion collapse, truthful meters, disclosure,
+emphasis-never-existence), and the amplitude stays confined to
+the issue's own feature — the chrome, the covers, and every other
+page keep the CSS-only weather contract. The filed artifact
+edition remains the pressroom original of record; the site build
+is its co-equal setting, not its summary. The editor's ruling,
+filed 2026-07-15: "I don't want a reduction of this — I want this
+to set new rules that merge with editorial."
+
+**THE TEXTURE CLAUSE — same day, second ruling.** "Allow change
+to happen and not be in absolutes to the rules — the issues are
+lacking in texture and character. What you made originally was
+really good and seeing it go away sucks." Absorbed as law:
+
+1. **Floors, not ceilings.** This document's absolutes govern
+   honesty only — measurement, disclosure, reduced-motion, the
+   truthful meter. Everything aesthetic in these pages is
+   precedent, not prison. A rule whose letter would flatten an
+   edition's texture bends; the character ships.
+2. **Texture is part of the merger.** Carrying an apparatus
+   on-site means carrying its ATMOSPHERE — the monument scale,
+   the running head, the choreography, the generosity of its
+   spacing — not just its mechanics. A port that keeps the levers
+   and loses the room has performed the reduction it was ordered
+   not to perform. (Learned twice now: 419's galley, 422's first
+   port.)
+3. **Change is presumed.** Each issue is allowed to exceed the
+   grammar that described its predecessors; when it does, the
+   grammar is amended to follow the issue — never the reverse.
+
 ---
 
 ## II. The animation vocabulary

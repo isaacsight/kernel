@@ -6,7 +6,7 @@
 > The issue persuades; this document enforces. When they disagree,
 > fix the disagreement before shipping anything.
 >
-> **The cabinet, as of ISSUE 421:** twelve shapes built — Dial
+> **The cabinet, as of ISSUE 422:** thirteen shapes built — Dial
 > (`instrument`, ARIA radiogroup, N ordered positions on one
 > variable), Compare (`compare`, ARIA switch, two irreducible
 > lenses with no position between them), Sequence (`sequence`,
@@ -31,10 +31,15 @@
 > and rule-4 amendments below), Bore (`bore`, ISSUE 420 — the
 > DEPTH control: a probe lowered through a mechanism's strata with
 > carried context, born from its reservation by editorial
-> promotion of CORE SAMPLE No.1), and Fourier (`fourier`, ISSUE 421
+> promotion of CORE SAMPLE No.1), Fourier (`fourier`, ISSUE 421
 > — the WAVEFORM summation control: a phasor constellation canvas
 > summing up to N sinusoids, direct-phase draggable, with Web Audio
-> synthesis preview playing physical inharmonicity B) — plus the
+> synthesis preview playing physical inharmonicity B), and Audit
+> (`audit`, ISSUE 422 — the SESSION control: the reader's own
+> attention is the axis; a treasury that meters its reader in
+> front of them, reconciles declared against revealed, and keeps
+> nothing; first issue shipped under the merger ruling, apparatus
+> whole, no reduction) — plus the
 > Tutor (`tutor`, ISSUE 411), a COMPOSITE that teaches the primitives
 > by having the reader operate a stakes-free version of each. Any
 > further shape waits, unbuilt, for a real story that needs it — see
@@ -119,6 +124,27 @@ constraints, all mandatory:
 4. **Ambient inside the frame too.** Even the model's own motion
    keeps paper-room amplitude — a swaying video frame stays ≤4px.
    The exception admits script, not spectacle.
+
+**AMENDED — ISSUE 422, the apparatus register.** The working-model
+exception admitted script inside a plate frame; the merger ruling
+(artifact-language §I as amended) admits an entire *apparatus*.
+When an issue is born as an artifact edition and the editor rules
+against reduction, that issue's feature carries the full artifact
+contract on-site: spring physics, proximity masks, magnetic
+dispatch, staged choreography — the registered specimens of
+artifact-language §IV, at full amplitude. This is a REGISTER, not
+a repeal; it binds per-issue and travels with every constraint the
+working-model exception carries (timer-robust; reduced-motion and
+touch-only hands collapse to full ink and stilled springs;
+truthful session-only meters; disclosure on the face) plus two of
+its own: the amplitude is confined to the issue's own feature —
+everything outside it, on every page, keeps the CSS-only weather
+contract — and every specimen deployed must be meaning-first
+(artifact-language §IV.3): a spring that could be cut with no
+truth lost must be stilled before shipping. Demonstrated at
+instance one by `audit` (ISSUE 422), whose beam, magnetism, and
+treasury rail are not decoration on the argument — they are the
+argument.
 
 ### 4. Everything stays on the page
 

@@ -1,0 +1,646 @@
+/* ──────────────────────────────────────────────────────────────
+   AuditFeature — ISSUE 422 · THE POVERTY OF ATTENTION
+   The thirteenth shape (`audit`, the SESSION control) and the
+   FIRST MERGER ISSUE: the apparatus carries whole, no reduction
+   (artifact-language §I as amended; interaction-language rule 3,
+   the apparatus register). Full amplitude is confined to this
+   feature; everything outside keeps the CSS-only weather contract.
+   ────────────────────────────────────────────────────────────── */
+
+.pop-audit {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-xl) var(--space-lg);
+  font-family: var(--font-serif);
+  color: var(--pop-ink);
+}
+
+.pop-audit-inner {
+  max-width: var(--layout-width-content, 1080px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+/* ── running head: the pressroom strip travels with the merger ── */
+.pop-audit-runhead {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--pop-hairline);
+}
+
+@media (min-width: 900px) {
+  .pop-audit-inner {
+    grid-template-columns: 200px 1fr;
+    align-items: start;
+  }
+}
+
+/* ── the treasury rail (gauge: strata, dwell, session clock) ── */
+.pop-audit-rail {
+  position: sticky;
+  top: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-right: 1px solid var(--pop-hairline-soft);
+  padding-right: var(--space-md);
+  z-index: 2;
+  background: inherit;
+}
+
+.pop-audit-rail-clock {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  margin: var(--space-2xs) 0 var(--space-sm);
+}
+
+.pop-audit-rail-stop {
+  padding: var(--space-xs) 0 var(--space-sm);
+  border-top: 1px solid var(--pop-hairline-soft);
+  /* the minting: the treasury assembles itself on arrival —
+     the one choreographed moment (artifact-language §II.2);
+     stilled site-wide under reduced motion */
+  opacity: 0;
+  transform: translateY(6px);
+  animation: pop-audit-mint 0.5s ease forwards;
+}
+
+@keyframes pop-audit-mint {
+  to { opacity: 1; transform: none; }
+}
+
+.pop-audit-rail-stop .pop-audit-stop-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.pop-audit-rail-stop .pop-audit-stop-jp {
+  font-size: 11px;
+  color: var(--pop-coffee);
+  margin-left: 6px;
+}
+
+.pop-audit-rail-stop.is-here .pop-audit-stop-name {
+  color: var(--issue-accent-base);
+}
+
+.pop-audit-rail-stop.is-here .pop-audit-stop-name::before {
+  content: '★ ';
+}
+
+.pop-audit-dwell-bar {
+  height: 3px;
+  margin-top: 6px;
+  background: var(--pop-hairline-soft);
+  position: relative;
+}
+
+.pop-audit-dwell-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background: var(--issue-accent-base);
+  transition: width 0.4s ease;
+}
+
+.pop-audit-dwell-pct {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--pop-coffee);
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-audit-rail-note {
+  margin-top: var(--space-md);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (max-width: 899px) {
+  .pop-audit-rail {
+    top: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-sm);
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--pop-hairline-soft);
+    padding: var(--space-xs) 0;
+  }
+  .pop-audit-rail-clock { margin: 0; font-size: 14px; }
+  .pop-audit-rail-note, .pop-audit-dwell-pct { display: none; }
+  .pop-audit-rail-stop { border-top: 0; padding: 0 var(--space-2xs); flex: 0 0 auto; }
+  .pop-audit-dwell-bar { width: 56px; }
+}
+
+/* ── the descending column ────────────────────────────────── */
+.pop-audit-column { min-width: 0; }
+
+.pop-audit-stratum {
+  border-top: 1px solid var(--pop-hairline);
+  padding: 44px 0 56px;
+}
+
+.pop-audit-stratum:first-child { border-top: 0; padding-top: 0; }
+
+.pop-audit-kicker { display: block; margin-bottom: var(--space-md); }
+.pop-audit-kicker::before { content: '[ '; color: var(--issue-accent-base); }
+.pop-audit-kicker::after { content: ' ]'; color: var(--issue-accent-base); }
+
+.pop-audit-title {
+  margin: var(--space-sm) 0 var(--space-xs);
+  /* monument scale — the original's register, carried whole
+     (the texture clause: keeping the levers while losing the
+     room is the forbidden reduction) */
+  font-size: clamp(2.875rem, 8vw, 5.75rem);
+  line-height: 0.96;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.pop-audit-title .pop-audit-title-accent {
+  color: var(--issue-accent-base);
+  font-style: italic;
+}
+
+.pop-audit-h {
+  font-size: clamp(1.625rem, 4vw, 2.375rem);
+  font-weight: 500;
+  margin: 0 0 var(--space-2xs);
+  text-wrap: balance;
+}
+
+.pop-audit-jp {
+  color: var(--pop-coffee);
+  font-size: var(--text-sm);
+  margin: 0 0 var(--space-md);
+}
+
+.pop-audit-deck {
+  font-size: 21px;
+  line-height: 1.5;
+  font-style: italic;
+  max-width: 60ch;
+}
+
+.pop-audit p { max-width: 65ch; }
+
+/* ── the beam: dimmed prose stays legible; the beam raises it.
+   EMPHASIS, NEVER EXISTENCE. flow-root contains paragraph margins
+   so the absolutely positioned ink layer aligns glyph-for-glyph. */
+.pop-audit-beam {
+  position: relative;
+  display: flow-root;
+  color: color-mix(in oklab, var(--pop-ink) 55%, var(--pop-ivory));
+}
+
+.pop-audit-beam .pop-audit-ink {
+  position: absolute;
+  inset: 0;
+  color: var(--pop-ink);
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle 200px at var(--mx, -999px) var(--my, -999px), #000 35%, transparent 78%);
+          mask-image: radial-gradient(circle 200px at var(--mx, -999px) var(--my, -999px), #000 35%, transparent 78%);
+}
+
+.pop-audit.no-beam .pop-audit-beam { color: var(--pop-ink); }
+.pop-audit.no-beam .pop-audit-beam .pop-audit-ink { display: none; }
+
+/* ── the dossier: the treasury's spec card, framed ─────────── */
+.pop-audit-dossier {
+  border: 1px solid var(--pop-hairline);
+  background: var(--pop-ledger);
+  padding: var(--space-md);
+  margin-top: var(--space-xl);
+  position: relative;
+  max-width: 620px;
+}
+
+.pop-audit-dossier-note {
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  margin: var(--space-xs) 0 var(--space-md);
+  color: var(--pop-coffee);
+}
+
+.pop-audit-dossier-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.pop-audit-dossier-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  border-bottom: 1px dashed var(--pop-hairline-soft);
+  padding-bottom: var(--space-2xs);
+  font-size: var(--text-xs);
+}
+
+.pop-audit-dossier-row:last-child { border-bottom: 0; }
+
+.pop-audit-dossier-label {
+  color: var(--pop-coffee);
+  font-family: var(--font-mono);
+  flex: 0 0 auto;
+}
+
+.pop-audit-dossier-value {
+  margin: 0;
+  font-weight: 500;
+  text-align: right;
+}
+
+.pop-audit-dossier-badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+}
+
+/* ── stratum I: the wealth (movable proof) ────────────────── */
+.pop-audit-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+
+.pop-audit-card {
+  position: relative;
+  background: var(--pop-ledger);
+  border: 1px solid var(--pop-hairline-soft);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  gap: var(--space-md);
+  align-items: baseline;
+  touch-action: pan-y;
+  will-change: transform;
+}
+
+.pop-audit-card.is-dragging { z-index: 3; }
+.pop-audit-card.is-gone { display: none; }
+
+.pop-audit-card .pop-audit-card-n {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--pop-coffee);
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-audit-card .pop-audit-card-txt { flex: 1; font-size: var(--text-base); }
+
+.pop-audit-aside-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--pop-hairline-soft);
+  color: var(--pop-coffee);
+  padding: var(--space-2xs) var(--space-xs);
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.pop-audit-aside-btn:hover {
+  border-color: var(--issue-accent-base);
+  color: var(--issue-accent-base);
+}
+
+/* ── stratum II: the scarcity (word scrub) ────────────────── */
+.pop-audit-claim {
+  font-size: clamp(1.5rem, 3.6vw, 2.125rem);
+  line-height: 1.35;
+  margin: var(--space-lg) 0 var(--space-2xs);
+  max-width: 24em;
+}
+
+.pop-audit-claim .pop-audit-w {
+  color: color-mix(in oklab, var(--pop-ink) 22%, var(--pop-ivory));
+  transition: color 0.25s ease;
+}
+
+.pop-audit-claim .pop-audit-w.is-inked { color: var(--pop-ink); }
+.pop-audit-claim .pop-audit-w.is-quote.is-inked {
+  color: var(--issue-accent-base);
+  font-style: italic;
+}
+
+.pop-audit-scrub {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  max-width: 560px;
+  margin-top: var(--space-md);
+}
+
+.pop-audit-scrub input[type='range'] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: var(--pop-hairline-soft);
+  outline: none;
+}
+
+.pop-audit-scrub input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--issue-accent-base);
+  border: 1px solid var(--pop-ink);
+  cursor: grab;
+}
+
+.pop-audit-scrub input[type='range']::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--issue-accent-base);
+  border: 1px solid var(--pop-ink);
+}
+
+/* ── stratum III: the allocation ──────────────────────────── */
+.pop-audit-budget {
+  border: 1px solid var(--pop-hairline);
+  background: var(--pop-ledger);
+  padding: var(--space-md);
+  margin: var(--space-lg) 0 var(--space-sm);
+  position: relative;
+}
+
+.pop-audit-tick {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--pop-hairline);
+  border-style: solid;
+  border-width: 0;
+}
+.pop-audit-tick.tl { top: 5px; left: 5px; border-top-width: 1px; border-left-width: 1px; }
+.pop-audit-tick.tr { top: 5px; right: 5px; border-top-width: 1px; border-right-width: 1px; }
+.pop-audit-tick.bl { bottom: 5px; left: 5px; border-bottom-width: 1px; border-left-width: 1px; }
+.pop-audit-tick.br { bottom: 5px; right: 5px; border-bottom-width: 1px; border-right-width: 1px; }
+
+.pop-audit-chan {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-xs) 0;
+  border-bottom: 1px dashed var(--pop-hairline-soft);
+}
+
+.pop-audit-chan:last-of-type { border-bottom: 0; }
+
+.pop-audit-chan-name {
+  flex: 0 0 10.5em;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.pop-audit-chan-name .pop-audit-chan-jp {
+  color: var(--pop-coffee);
+  margin-left: 6px;
+  letter-spacing: 0;
+}
+
+.pop-audit-chan-val {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  width: 3ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-audit-chan-bar { flex: 1; height: 4px; background: var(--pop-hairline-soft); position: relative; }
+.pop-audit-chan-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--issue-accent-base);
+  transition: width 0.3s ease;
+}
+
+.pop-audit-step {
+  width: 44px;
+  height: 44px;
+  font-size: 15px;
+  font-family: var(--font-mono);
+  background: var(--pop-ivory);
+  border: 1px solid var(--pop-hairline);
+  color: var(--pop-ink);
+  cursor: pointer;
+}
+
+.pop-audit-step:disabled { opacity: 0.3; cursor: default; }
+
+.pop-audit-pool-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+}
+
+.pop-audit-seal-btn {
+  border: 1px solid var(--issue-accent-base);
+  background: none;
+  color: var(--issue-accent-base);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--space-sm) var(--space-lg);
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.pop-audit-seal-btn:disabled {
+  border-color: var(--pop-hairline-soft);
+  color: var(--pop-coffee);
+  cursor: default;
+}
+
+.pop-audit-budget.is-sealed .pop-audit-step,
+.pop-audit-budget.is-sealed .pop-audit-seal-btn { display: none; }
+
+.pop-audit-stamp {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--issue-accent-base);
+  border: 2px solid var(--issue-accent-base);
+  padding: var(--space-2xs) var(--space-xs);
+  transform: rotate(-4deg);
+  animation: pop-audit-stamp-in 0.28s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+@keyframes pop-audit-stamp-in {
+  from { transform: rotate(-14deg) scale(1.7); opacity: 0; }
+}
+
+/* ── stratum IV: the zone ─────────────────────────────────── */
+.pop-audit-machine {
+  border: 1px solid var(--pop-hairline);
+  background: var(--pop-ledger);
+  padding: var(--space-lg) var(--space-md);
+  margin: var(--space-lg) 0 var(--space-sm);
+  position: relative;
+}
+
+.pop-audit-machine.is-closed { opacity: 0.75; }
+
+.pop-audit-zone-btns {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin: var(--space-md) 0 var(--space-2xs);
+}
+
+/* THE 415 LAW: one shared class — the stop is never demoted. */
+.pop-audit-zone-btn {
+  flex: 1 1 200px;
+  border: 1px solid var(--pop-ink);
+  background: var(--pop-ivory);
+  color: var(--pop-ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--space-md) var(--space-md);
+  min-height: 52px;
+  cursor: pointer;
+  will-change: transform;
+}
+
+.pop-audit-zone-btn[aria-disabled='true'] { opacity: 0.35; cursor: default; }
+
+.pop-audit-tray { margin-top: var(--space-md); display: flex; flex-direction: column; gap: var(--space-xs); }
+
+.pop-audit-pull-item {
+  font-size: var(--text-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px dashed var(--pop-hairline-soft);
+  animation: pop-audit-deal 0.35s ease;
+}
+
+@keyframes pop-audit-deal {
+  from { opacity: 0; transform: translateY(-8px); }
+}
+
+.pop-audit-zone-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+}
+
+/* ── the floor: reconciliation receipt ────────────────────── */
+.pop-audit-receipt {
+  border: 1px solid var(--pop-hairline);
+  background: var(--pop-ledger);
+  padding: var(--space-md);
+  margin: var(--space-lg) 0 var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  position: relative;
+}
+
+.pop-audit-receipt table { width: 100%; border-collapse: collapse; }
+.pop-audit-receipt td { padding: var(--space-2xs) 4px; border-bottom: 1px dashed var(--pop-hairline-soft); }
+.pop-audit-receipt td:last-child { text-align: right; }
+
+.pop-audit-rbar {
+  display: inline-block;
+  height: 6px;
+  background: var(--issue-accent-base);
+  vertical-align: middle;
+  margin-right: var(--space-xs);
+  transition: width 0.4s ease;
+}
+
+.pop-audit-verdict {
+  font-size: 1.375rem;
+  font-style: italic;
+  margin: var(--space-md) 0 var(--space-2xs);
+  max-width: 30em;
+}
+
+.pop-audit-verdict b { color: var(--issue-accent-base); font-weight: 500; }
+
+/* ── pull quote + references ──────────────────────────────── */
+.pop-audit-pullquote {
+  border-left: 2px solid var(--issue-accent-base);
+  margin: var(--space-xl) 0;
+  padding: var(--space-sm) 0 var(--space-sm) var(--space-lg);
+  font-style: italic;
+}
+
+.pop-audit-pullquote-text {
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  margin: 0 0 var(--space-xs);
+  color: var(--issue-accent-base);
+}
+
+.pop-audit-references {
+  border-top: 1px solid var(--pop-hairline-soft);
+  padding-top: var(--space-md);
+  margin-top: var(--space-xl);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.pop-audit-references-list {
+  margin: var(--space-xs) 0 0;
+  padding-left: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  color: var(--pop-coffee);
+}
+
+.pop-audit-reference-item em { color: var(--pop-ink); }
+
+.pop-audit-note {
+  margin: var(--space-md) 0 0;
+  color: var(--pop-coffee);
+  font-style: italic;
+  font-size: var(--text-sm);
+}
+
+/* ── print: the receipt is the keepsake ───────────────────── */
+@media print {
+  .pop-audit { background: #fff !important; color: #000 !important; }
+  .pop-audit-rail,
+  .pop-audit-aside-btn,
+  .pop-audit-scrub,
+  .pop-audit-step,
+  .pop-audit-seal-btn,
+  .pop-audit-zone-btns { display: none !important; }
+  .pop-audit-inner { grid-template-columns: 1fr; }
+  .pop-audit-beam { color: #000 !important; }
+  .pop-audit-beam .pop-audit-ink { display: none; }
+  .pop-audit-stratum { border-color: #000; }
+  .pop-audit-receipt,
+  .pop-audit-budget,
+  .pop-audit-machine { background: none !important; border: 2px solid #000 !important; }
+}

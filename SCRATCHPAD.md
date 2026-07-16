@@ -2129,3 +2129,79 @@ CI run 29457269857, kernel.chat 200) · product PASS (live TRIANGLE
 crash regression + mobile 375px verified, 0 console errors).
 Discord notified. Local-only files still uncommitted by design:
 docs/sales/*, output/, tmp/, videos/, skills-lock.json.
+
+## Session 2026-07-15 (cont. 10) — ATTENTION AUDIT No.1 · THE POVERTY OF ATTENTION (pressroom proof)
+
+Isaac: "lets draft a new editorial piece with new artifacts
+interactions and animations." Drafted artifact-FIRST per law:
+https://claude.ai/code/artifact/2c746bb5-1771-4229-be45-efa6dc67c0d5
+Source: scratchpad/the-poverty-of-attention.html (session dir) +
+mirror at tmp/ (untracked, local serving only) — NOT in repo;
+becomes artifacts/422-*.html if promoted to ISSUE 422.
+Subject: Simon 1971 as an operable treasury. Five strata: Wealth
+(flat authored feed, movable-proof drag) → Scarcity (word-scrub the
+claim; ONE 9-word quote, attributed) → Allocation (100 units, seal
+stamp; CARRIED: feed grant gears the zone's magnetism) → Zone
+(Schüll's machine declawed; stop-as-sibling per 415) → Floor
+(reconciliation: declared vs revealed feed share, measured dwell).
+Gauge: treasury rail w/ live dwell bars + session clock. Specimens
+spent: Spotlight/MovableProof/WordScrub/StampedState/Magnetic/Rail.
+Refs real: Simon 71 · Goldhaber 97 · Schüll 12 · Wu 16 · Williams 18.
+Fixed in the galley: ink-layer misalignment (p margin collapses out
+of the wrapper in flow but not in the abspos clone → display:
+flow-root on .beam). Verified E2E on localhost:8733 (file:// blocked
+in pane): scrub/seal/gearing/zone/stop-law/dwell/receipt all live,
+0 console errors; Isaac operated the visible pane mid-check (pull +
+stop observed). Next: his read → promote to ISSUE 422 (spread
+reduction + shape argument — candidate name for the shape if
+promoted: `audit` or fold into bore family? needs its own argument).
+
+## Session 2026-07-15 (cont. 11) — ISSUE 422 BUILT UNDER THE MERGER RULING (not yet shipped)
+
+Isaac: "i dont want a reduction of this i want this to set new
+rules that merge with editorial." Ratified as LAW:
+- artifact-language §I AMENDED (the merger): editor may rule
+  against reduction; the apparatus carries onto the site whole as
+  the issue's spread; honesty core travels undiminished; amplitude
+  confined to the issue's feature. His ruling quoted in the law.
+- interaction-language rule 3 AMENDED (the apparatus register):
+  full artifact contract (springs/masks/magnetism/choreography,
+  §IV specimens) on-site per-issue, meaning-first, everything
+  outside the feature keeps CSS-only weather. Cabinet → THIRTEEN
+  shapes: `audit` (ISSUE 422, the SESSION control — the reader's
+  own attention is the axis).
+- components.md exception extended; PUBLISHING shape row +
+  first-instance + last-updated; design-language 422 row.
+Built: AuditFeature.{tsx,css} — full-amplitude port (beam w/
+flow-root-aligned ink layers, movable-proof drag, word scrub,
+stamped seals, magnetic ONE MORE geared to the reader's sealed
+feed grant, treasury rail w/ live dwell + clock, reconciliation
+receipt + verdict); 422.ts (`audit`, ivory/classic/tomato, seal
+ATTENTION AUDIT No.1 · IX·26); AuditSpread type; router case;
+accents audit→tomato; artifact FILED at
+artifacts/422-the-poverty-of-attention.html (published proof:
+claude.ai/code/artifact/2c746bb5-1771-4229-be45-efa6dc67c0d5).
+Verified E2E on dev: descent, carried gearing (30→30), 415 stop
+law, beam alignment, dwell accrual, mobile 375 no-overflow, 0
+console errors; tsc clean, build clean, vitest 507/507.
+NOT committed/shipped — awaiting the editor's word.
+
+## Session 2026-07-15 (cont. 12) — THE TEXTURE CLAUSE ratified; 422's room restored
+
+Isaac: "allow change to happen and not be in absolutes to the
+rules… the issues are lacking in texture and character… what you
+made originally was really good and see it go away sucks."
+Absorbed as LAW (artifact-language §I, the TEXTURE CLAUSE, his
+words quoted): (1) absolutes govern honesty only — aesthetics are
+precedent, not prison; (2) the merger carries ATMOSPHERE, not just
+mechanics — keeping the levers while losing the room IS the
+forbidden reduction (taught twice now: 419, 422's first port);
+(3) change is presumed — issues exceed the grammar, the grammar
+follows. Memory updated (feedback_artifact_first_editorial).
+AuditFeature restored to the original's register: monument title
+(clamp→5.75rem, balanced), 21px italic deck, 44/56px strata,
+claim at scale, runhead strip (PRESSROOM ORIGINAL · seal · IX·26),
+minting choreography (staggered rail stops, reduced-motion-safe),
+dossier in its own framed card. Verified live: runhead + mint
+delays + framed dossier + monument rendering; tsc clean, 507/507.
+Still uncommitted — awaiting the editor's word to ship.

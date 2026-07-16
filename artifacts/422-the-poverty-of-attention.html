@@ -1,0 +1,885 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE POVERTY OF ATTENTION · ATTENTION AUDIT No.1</title>
+<style>
+/* ────────────────────────────────────────────────────────────────
+   ATTENTION AUDIT No.1 — THE POVERTY OF ATTENTION · 注意の貧困
+   kernel.chat pressroom proof · candidate ISSUE 422
+   One subject, followed all the way down: where does your
+   attention actually go, versus where you say it goes?
+   ──────────────────────────────────────────────────────────── */
+:root {
+  --ground:   #FAF9F6;
+  --plate:    #F2EFE2;
+  --ink:      #1F1E1D;
+  --coffee:   #6B4E3D;
+  --accent:   #E24E1B;
+  --hairline: rgba(31,30,29,.85);
+  --hairsoft: rgba(31,30,29,.16);
+  --dim:      55%;   /* base legibility of un-beamed prose */
+  --serif: "EB Garamond", "Iowan Old Style", Palatino, Georgia, serif;
+  --mono:  "Courier Prime", "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground:   #1B1918;
+    --plate:    #232120;
+    --ink:      #E7E1D6;
+    --coffee:   #B79A87;
+    --accent:   #F0602C;
+    --hairline: rgba(231,225,214,.8);
+    --hairsoft: rgba(231,225,214,.16);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:   #1B1918;
+  --plate:    #232120;
+  --ink:      #E7E1D6;
+  --coffee:   #B79A87;
+  --accent:   #F0602C;
+  --hairline: rgba(231,225,214,.8);
+  --hairsoft: rgba(231,225,214,.16);
+}
+:root[data-theme="light"] {
+  --ground:   #FAF9F6;
+  --plate:    #F2EFE2;
+  --ink:      #1F1E1D;
+  --coffee:   #6B4E3D;
+  --accent:   #E24E1B;
+  --hairline: rgba(31,30,29,.85);
+  --hairsoft: rgba(31,30,29,.16);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--ground); }
+
+button { font-family: var(--mono); cursor: pointer; }
+button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.folio {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--coffee);
+}
+.folio b { color: var(--accent); font-weight: 700; }
+
+/* ── running head ─────────────────────────────────────────── */
+.runhead {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* ── treasury rail (the gauge) ────────────────────────────── */
+.rail {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: 200px;
+  padding: 64px 16px 16px;
+  border-right: 1px solid var(--hairsoft);
+  display: flex; flex-direction: column; gap: 4px;
+  background: var(--ground);
+  z-index: 5;
+}
+.rail-title { margin-bottom: 10px; }
+.rail-clock {
+  font-family: var(--mono); font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 14px;
+}
+.rail-stop {
+  padding: 8px 0 10px;
+  border-top: 1px solid var(--hairsoft);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: mint .5s ease forwards;
+}
+.rail-stop:nth-child(4) { animation-delay: .05s }
+.rail-stop:nth-child(5) { animation-delay: .15s }
+.rail-stop:nth-child(6) { animation-delay: .25s }
+.rail-stop:nth-child(7) { animation-delay: .35s }
+.rail-stop:nth-child(8) { animation-delay: .45s }
+@keyframes mint { to { opacity: 1; transform: none } }
+.rail-stop .name { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; }
+.rail-stop .jp { font-size: 11px; color: var(--coffee); margin-left: 6px; }
+.rail-stop.here .name { color: var(--accent); }
+.rail-stop.here .name::before { content: "★ "; }
+.dwell-bar {
+  height: 3px; margin-top: 6px;
+  background: var(--hairsoft);
+  position: relative;
+}
+.dwell-bar i {
+  position: absolute; inset: 0 auto 0 0; width: 0%;
+  background: var(--accent);
+  transition: width .4s ease;
+}
+.dwell-pct {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--coffee);
+  font-variant-numeric: tabular-nums;
+}
+.rail-note { margin-top: auto; font-size: 10px; line-height: 1.5; }
+
+/* ── main column ──────────────────────────────────────────── */
+.column {
+  margin-left: 200px;
+  padding: 0 40px 80px;
+  max-width: 760px;
+}
+.stratum {
+  border-top: 1px solid var(--hairline);
+  padding: 44px 0 56px;
+}
+.kicker { display: block; margin-bottom: 18px; }
+.kicker::before { content: "[ "; color: var(--accent); }
+.kicker::after  { content: " ]"; color: var(--accent); }
+
+h1 {
+  font-size: clamp(46px, 8vw, 92px);
+  line-height: .96;
+  font-weight: 500;
+  letter-spacing: -.02em;
+  margin: .2em 0 .1em;
+  text-wrap: balance;
+}
+h1 .accent { color: var(--accent); font-style: italic; }
+h2 {
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 500;
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+.jp-lockup { color: var(--coffee); font-size: 15px; margin: 0 0 22px; }
+.deck { font-size: 21px; line-height: 1.5; font-style: italic; max-width: 60ch; }
+p { max-width: 65ch; }
+
+/* the beam: base prose is dimmed but always legible; a duplicate
+   ink layer, masked at the beam position, raises it to full ink.
+   EMPHASIS, NEVER EXISTENCE — a reader who never moves the beam
+   misses warmth only. */
+.beam {
+  position: relative;
+  /* flow-root contains the paragraph margins, so the absolutely
+     positioned ink layer aligns glyph-for-glyph with the base */
+  display: flow-root;
+  color: color-mix(in oklab, var(--ink) var(--dim), var(--ground));
+}
+.beam .ink-layer {
+  position: absolute; inset: 0;
+  color: var(--ink);
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle 200px at var(--mx,-999px) var(--my,-999px), #000 35%, transparent 78%);
+          mask-image: radial-gradient(circle 200px at var(--mx,-999px) var(--my,-999px), #000 35%, transparent 78%);
+}
+body.no-beam .beam { color: var(--ink); }
+body.no-beam .beam .ink-layer { display: none; }
+
+/* ── stratum I: the wealth (feed) ─────────────────────────── */
+.feed { display: flex; flex-direction: column; gap: 12px; margin: 26px 0 10px; }
+.card {
+  position: relative;
+  background: var(--plate);
+  border: 1px solid var(--hairsoft);
+  padding: 14px 16px;
+  display: flex; gap: 14px; align-items: baseline;
+  touch-action: pan-y;
+  will-change: transform;
+}
+.card.dragging { z-index: 3; }
+.card .n { font-family: var(--mono); font-size: 11px; color: var(--coffee); font-variant-numeric: tabular-nums; }
+.card .txt { flex: 1; font-size: 16.5px; }
+.card .aside {
+  font-size: 10px; letter-spacing: .1em;
+  background: none; border: 1px solid var(--hairsoft);
+  color: var(--coffee);
+  padding: 6px 10px; min-height: 32px;
+  text-transform: uppercase;
+}
+.card .aside:hover { border-color: var(--accent); color: var(--accent); }
+.card.gone { display: none; }
+.feed-meter { margin-top: 14px; }
+
+/* ── stratum II: the scarcity (word scrub) ────────────────── */
+.claim {
+  font-size: clamp(24px, 3.6vw, 34px);
+  line-height: 1.35;
+  margin: 30px 0 8px;
+  max-width: 24em;
+}
+.claim .w { color: color-mix(in oklab, var(--ink) 22%, var(--ground)); transition: color .25s ease; }
+.claim .w.inked { color: var(--ink); }
+.claim .w.q.inked { color: var(--accent); font-style: italic; }
+.claim-cite { margin: 2px 0 26px; }
+.scrub { display: flex; align-items: center; gap: 14px; max-width: 560px; }
+.scrub input[type="range"] {
+  flex: 1; appearance: none; -webkit-appearance: none;
+  height: 2px; background: var(--hairsoft); outline: none;
+}
+.scrub input[type="range"]::-webkit-slider-thumb {
+  appearance: none; -webkit-appearance: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--accent); border: 1px solid var(--ink);
+  cursor: grab;
+}
+.scrub input[type="range"]::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--accent); border: 1px solid var(--ink);
+}
+
+/* ── stratum III: the allocation ──────────────────────────── */
+.budget {
+  border: 1px solid var(--hairline);
+  background: var(--plate);
+  padding: 22px;
+  margin: 26px 0 12px;
+  position: relative;
+}
+.tick { position: absolute; width: 10px; height: 10px; border-color: var(--hairline); border-style: solid; border-width: 0; }
+.tick.tl { top: 5px; left: 5px; border-top-width: 1px; border-left-width: 1px; }
+.tick.tr { top: 5px; right: 5px; border-top-width: 1px; border-right-width: 1px; }
+.tick.bl { bottom: 5px; left: 5px; border-bottom-width: 1px; border-left-width: 1px; }
+.tick.br { bottom: 5px; right: 5px; border-bottom-width: 1px; border-right-width: 1px; }
+.chan { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px dashed var(--hairsoft); }
+.chan:last-of-type { border-bottom: 0; }
+.chan .cname { flex: 0 0 11.5em; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; }
+.chan .cname .jp { color: var(--coffee); margin-left: 6px; letter-spacing: 0; }
+.chan .val { font-family: var(--mono); font-size: 16px; width: 3ch; text-align: right; font-variant-numeric: tabular-nums; }
+.chan .cbar { flex: 1; height: 4px; background: var(--hairsoft); position: relative; }
+.chan .cbar i { position: absolute; inset: 0 auto 0 0; background: var(--accent); width: 20%; transition: width .3s ease; }
+.step {
+  width: 34px; height: 34px; font-size: 15px;
+  background: var(--ground); border: 1px solid var(--hairline); color: var(--ink);
+}
+.step:disabled { opacity: .3; cursor: default; }
+.pool-line { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+.seal-btn {
+  border: 1px solid var(--accent); background: none; color: var(--accent);
+  font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  padding: 12px 22px; min-height: 44px;
+}
+.seal-btn:disabled { border-color: var(--hairsoft); color: var(--coffee); cursor: default; }
+.budget.sealed .step, .budget.sealed .seal-btn { display: none; }
+.stamp {
+  display: inline-block;
+  font-family: var(--mono); font-size: 12px; letter-spacing: .18em;
+  color: var(--accent); border: 2px solid var(--accent);
+  padding: 6px 12px;
+  transform: rotate(-4deg);
+  animation: stamp-in .28s cubic-bezier(.2, 1.6, .4, 1);
+}
+@keyframes stamp-in { from { transform: rotate(-14deg) scale(1.7); opacity: 0 } }
+.gear-note { margin-top: 14px; }
+
+/* ── stratum IV: the zone ─────────────────────────────────── */
+.machine {
+  border: 1px solid var(--hairline);
+  background: var(--plate);
+  padding: 26px 22px;
+  margin: 26px 0 12px;
+  position: relative;
+}
+.machine.closed { opacity: .75; }
+.zone-btns { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0 6px; }
+/* THE 415 LAW: one shared class — the stop is never demoted */
+.zone-btn {
+  flex: 1 1 200px;
+  border: 1px solid var(--ink); background: var(--ground); color: var(--ink);
+  font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+  padding: 16px 18px; min-height: 52px;
+  will-change: transform;
+}
+.zone-btn[aria-disabled="true"] { opacity: .35; cursor: default; }
+.tray { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+.tray .pull-item {
+  font-size: 15.5px; padding: 10px 12px;
+  border: 1px dashed var(--hairsoft);
+  animation: deal .35s ease;
+}
+@keyframes deal { from { opacity: 0; transform: translateY(-8px) } }
+.zone-meta { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 14px; }
+
+/* ── the floor: reconciliation ────────────────────────────── */
+.receipt {
+  border: 1px solid var(--hairline);
+  background: var(--plate);
+  padding: 24px 22px;
+  margin: 26px 0 14px;
+  font-family: var(--mono); font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  position: relative;
+}
+.receipt table { width: 100%; border-collapse: collapse; }
+.receipt td { padding: 6px 4px; border-bottom: 1px dashed var(--hairsoft); }
+.receipt td:last-child { text-align: right; }
+.receipt .rbar { display: inline-block; height: 6px; background: var(--accent); vertical-align: middle; margin-right: 8px; transition: width .4s ease; }
+.verdict { font-family: var(--serif); font-size: 22px; font-style: italic; margin: 18px 0 4px; max-width: 30em; }
+.verdict b { color: var(--accent); font-weight: 500; }
+
+/* ── references + colophon ────────────────────────────────── */
+.refs { font-size: 14.5px; line-height: 1.6; }
+.refs ol { padding-left: 1.4em; margin: 12px 0 0; max-width: 62ch; }
+.refs li { margin-bottom: 6px; }
+.colophon {
+  border-top: 1px solid var(--hairline);
+  padding: 26px 0 10px;
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.7;
+  color: var(--coffee); max-width: 70ch;
+}
+
+/* ── responsive ───────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .rail {
+    position: sticky; top: 0; bottom: auto; width: auto; height: auto;
+    flex-direction: row; align-items: center; gap: 12px;
+    padding: 8px 14px; overflow-x: auto;
+    border-right: 0; border-bottom: 1px solid var(--hairsoft);
+  }
+  .rail-title, .rail-note, .dwell-pct { display: none; }
+  .rail-clock { margin: 0; font-size: 14px; }
+  .rail-stop { border-top: 0; padding: 0 6px; flex: 0 0 auto; animation: none; opacity: 1; transform: none; }
+  .dwell-bar { width: 64px; }
+  .column { margin-left: 0; padding: 0 18px 60px; }
+}
+
+/* ── reduced motion: everything still works, nothing moves ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ── print: the receipt is the keepsake ───────────────────── */
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  .rail, .aside, .scrub, .step, .seal-btn, .zone-btns { display: none !important; }
+  .beam { color: #000 !important; }
+  .beam .ink-layer { display: none; }
+  .stratum { border-color: #000; }
+  .receipt, .budget, .machine { background: none !important; border: 2px solid #000 !important; }
+}
+</style>
+
+<header class="runhead">
+  <span class="folio">KERNEL.CHAT · PRESSROOM PROOF · 校正刷</span>
+  <span class="folio"><b>ATTENTION AUDIT No.1</b> · VIII·26</span>
+</header>
+
+<nav class="rail" aria-label="Treasury rail — your position and your spend">
+  <span class="folio rail-title">THE TREASURY · 出納局</span>
+  <div class="rail-clock" id="clock" aria-label="session clock">00:00</div>
+  <span class="folio" style="font-size:9px">SESSION · UNRECORDED</span>
+  <div class="rail-stop" data-s="wealth"><span class="name">I · THE WEALTH</span><span class="jp">富</span><div class="dwell-bar"><i></i></div><span class="dwell-pct">0%</span></div>
+  <div class="rail-stop" data-s="scarcity"><span class="name">II · THE SCARCITY</span><span class="jp">稀少</span><div class="dwell-bar"><i></i></div><span class="dwell-pct">0%</span></div>
+  <div class="rail-stop" data-s="allocation"><span class="name">III · THE ALLOCATION</span><span class="jp">配分</span><div class="dwell-bar"><i></i></div><span class="dwell-pct">0%</span></div>
+  <div class="rail-stop" data-s="zone"><span class="name">IV · THE ZONE</span><span class="jp">ゾーン</span><div class="dwell-bar"><i></i></div><span class="dwell-pct">0%</span></div>
+  <div class="rail-stop" data-s="floor"><span class="name">V · THE FLOOR</span><span class="jp">決算</span><div class="dwell-bar"><i></i></div><span class="dwell-pct">0%</span></div>
+  <p class="rail-note folio">Dwell is measured from which stratum holds the middle of your window. Counted here, kept by no one.</p>
+</nav>
+
+<main class="column">
+
+  <section class="stratum" style="border-top:0" data-stratum="cover">
+    <span class="folio kicker">ATTENTION AUDIT No.1 · 出納検査 — A PRESSROOM PROOF</span>
+    <h1>THE POVERTY<br>OF <span class="accent">ATTENTION</span>.</h1>
+    <p class="jp-lockup">注意の貧困 — 富める情報、貧しい注意</p>
+    <div class="beam"><p class="deck">In 1971, long before the feed, the economist Herbert A. Simon named
+    the trade nobody had priced: information does not come free — it is paid for out of the
+    attention of whoever receives it. This proof is a treasury. Your attention is the only
+    currency in it, the rail on the left is the audit, and every meter counts your own hands
+    in front of you. Descend.</p></div>
+    <p class="folio" style="margin-top:18px">BY THE EDITORS · KERNEL.CHAT — READING TIME: YOURS TO SPEND</p>
+  </section>
+
+  <section class="stratum" data-stratum="wealth">
+    <span class="folio kicker">STRATUM I — THE WEALTH · 富</span>
+    <h2>First, the wealth.</h2>
+    <p class="jp-lockup">情報の富 — 平坦であることが正直である</p>
+    <div class="beam"><p>Below is a feed. Its items are authored and deliberately flat — no
+    escalation, no hook sharpening as you go — because this treasury refuses to spend
+    craft on capturing you. Wade as long as you like. Set items aside by hand — drag
+    a card away, or press its button. The treasury meters the wading either way.</p></div>
+    <div class="feed" id="feed" aria-label="An authored feed of deliberately flat items"></div>
+    <p class="feed-meter folio">SET ASIDE BY YOUR HAND: <b id="passed">00</b> — REMAINING: <b id="remaining">12</b></p>
+  </section>
+
+  <section class="stratum" data-stratum="scarcity">
+    <span class="folio kicker">STRATUM II — THE SCARCITY · 稀少</span>
+    <h2>Then, the price.</h2>
+    <p class="jp-lockup">稀少性 — 情報が消費するもの</p>
+    <div class="beam"><p>Simon's argument, set plainly: what information consumes is the attention
+    of its recipients. The sentence below is the claim this whole audit stands on. It is not
+    handed to you inked — pull it through the press yourself.</p></div>
+    <p class="claim" id="claim" aria-label="The claim, inked word by word by the scrubber below"></p>
+    <p class="folio claim-cite">— HERBERT A. SIMON, 1971 · <span id="scrub-state">00 / 00 WORDS INKED</span> <span id="scrub-stamp"></span></p>
+    <div class="scrub">
+      <span class="folio">PRESS</span>
+      <input type="range" id="scrubber" min="0" max="100" value="0" step="1"
+        aria-label="Ink the claim word by word">
+      <span class="folio">FULL</span>
+    </div>
+  </section>
+
+  <section class="stratum" data-stratum="allocation">
+    <span class="folio kicker">STRATUM III — THE ALLOCATION · 配分</span>
+    <h2>Now allocate it.</h2>
+    <p class="jp-lockup">百単位の予算 — 意図の申告</p>
+    <div class="beam"><p>A scarce resource demands a budget. Here are one hundred units — a
+    declared day of attention. Divide them among five channels, then seal the ledger.
+    Your declaration is carried down: the machine in the next stratum is geared to
+    exactly what you grant the feed. Nothing here is graded; the treasury only writes
+    down what you said.</p></div>
+    <div class="budget" id="budget">
+      <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+      <div class="chan" data-c="feed"><span class="cname">THE FEED<span class="jp">フィード</span></span>
+        <button class="step" data-d="-5" aria-label="Take five units from the feed">−</button>
+        <span class="val">20</span>
+        <button class="step" data-d="5" aria-label="Grant five units to the feed">+</button>
+        <div class="cbar"><i></i></div></div>
+      <div class="chan" data-c="work"><span class="cname">THE WORK<span class="jp">仕事</span></span>
+        <button class="step" data-d="-5" aria-label="Take five units from the work">−</button>
+        <span class="val">20</span>
+        <button class="step" data-d="5" aria-label="Grant five units to the work">+</button>
+        <div class="cbar"><i></i></div></div>
+      <div class="chan" data-c="room"><span class="cname">THE ROOM<span class="jp">同席の人</span></span>
+        <button class="step" data-d="-5" aria-label="Take five units from the room">−</button>
+        <span class="val">20</span>
+        <button class="step" data-d="5" aria-label="Grant five units to the room">+</button>
+        <div class="cbar"><i></i></div></div>
+      <div class="chan" data-c="craft"><span class="cname">THE CRAFT<span class="jp">手仕事</span></span>
+        <button class="step" data-d="-5" aria-label="Take five units from the craft">−</button>
+        <span class="val">20</span>
+        <button class="step" data-d="5" aria-label="Grant five units to the craft">+</button>
+        <div class="cbar"><i></i></div></div>
+      <div class="chan" data-c="rest"><span class="cname">THE REST<span class="jp">休み</span></span>
+        <button class="step" data-d="-5" aria-label="Take five units from the rest">−</button>
+        <span class="val">20</span>
+        <button class="step" data-d="5" aria-label="Grant five units to the rest">+</button>
+        <div class="cbar"><i></i></div></div>
+      <div class="pool-line">
+        <span class="folio">POOL REMAINING: <b id="pool">0</b> / 100 UNITS</span>
+        <button class="seal-btn" id="seal">SEAL THE BUDGET · 封印</button>
+        <span id="seal-stamp"></span>
+      </div>
+    </div>
+    <p class="gear-note folio" id="gear-note">UNSEALED — THE MACHINE BELOW IDLES AT DEFAULT GEARING (20/100).</p>
+  </section>
+
+  <section class="stratum" data-stratum="zone">
+    <span class="folio kicker">STRATUM IV — THE ZONE · ゾーン</span>
+    <h2>Meet the machine.</h2>
+    <p class="jp-lockup">機械のギア比はあなたの申告 — 引くか、止まるか</p>
+    <div class="beam"><p>The anthropologist Natasha Dow Schüll spent years watching machine
+    gamblers disappear into what the industry itself calls the zone — a state engineered
+    by the loop, not chosen by the player. Here is a zone machine, declawed and disclosed:
+    its magnetic pull on your cursor is geared to the units <em>you</em> granted the feed
+    one stratum up. It deals from the same flat deck. And per this publication's own law,
+    its stop is a sibling of its lever — same size, same ink, from the first pull.</p></div>
+    <div class="machine" id="machine">
+      <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+      <span class="folio">ZONE MACHINE · GEARING <b id="gearing">20</b>/100 — MAGNETIC RADIUS <b id="magr">92</b>PX</span>
+      <div class="zone-btns">
+        <button class="zone-btn" id="one-more">ONE MORE · もう一つ</button>
+        <button class="zone-btn" id="stop-here">I'LL STOP HERE · ここで止める</button>
+      </div>
+      <div class="tray" id="tray" aria-live="polite"></div>
+      <div class="zone-meta">
+        <span class="folio">PULLS: <b id="pulls">00</b></span>
+        <span class="folio" id="zone-state">THE MACHINE IS OPEN.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stratum" data-stratum="floor">
+    <span class="folio kicker">THE FLOOR — THE RECONCILIATION · 決算</span>
+    <h2>Declared, against revealed.</h2>
+    <p class="jp-lockup">申告と実際 — 差額がこの号の答え</p>
+    <div class="beam"><p>Every treasury ends in a reconciliation. The left column is what this
+    session measured of your hands and your dwell — counted in this window, kept by no one,
+    erased on reload. The last line sets your declaration against your behavior. The gap,
+    whatever its size and sign, is the issue.</p></div>
+    <div class="receipt" id="receipt">
+      <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+      <table aria-label="The reconciliation receipt">
+        <tr><td>SESSION CLOCK</td><td id="r-clock">00:00</td></tr>
+        <tr><td>DWELL — I · THE WEALTH</td><td><i class="rbar" data-r="wealth" style="width:0"></i><span data-rp="wealth">0%</span></td></tr>
+        <tr><td>DWELL — II · THE SCARCITY</td><td><i class="rbar" data-r="scarcity" style="width:0"></i><span data-rp="scarcity">0%</span></td></tr>
+        <tr><td>DWELL — III · THE ALLOCATION</td><td><i class="rbar" data-r="allocation" style="width:0"></i><span data-rp="allocation">0%</span></td></tr>
+        <tr><td>DWELL — IV · THE ZONE</td><td><i class="rbar" data-r="zone" style="width:0"></i><span data-rp="zone">0%</span></td></tr>
+        <tr><td>DWELL — V · THE FLOOR</td><td><i class="rbar" data-r="floor" style="width:0"></i><span data-rp="floor">0%</span></td></tr>
+        <tr><td>CARDS SET ASIDE BY HAND</td><td id="r-passed">0</td></tr>
+        <tr><td>WORDS OF THE CLAIM INKED</td><td id="r-inked">0 / 0</td></tr>
+        <tr><td>PULLS TAKEN IN THE ZONE</td><td id="r-pulls">0</td></tr>
+        <tr><td>THE ZONE WAS</td><td id="r-zone">LEFT OPEN</td></tr>
+        <tr><td>DECLARED TO THE FEED</td><td id="r-declared">20 / 100 UNITS (UNSEALED)</td></tr>
+        <tr><td>REVEALED TO THE FEED*</td><td id="r-revealed">0%</td></tr>
+      </table>
+      <p class="folio" style="margin:12px 0 0">*REVEALED = YOUR DWELL IN THE WEALTH + THE ZONE, AS A SHARE OF THIS SESSION. THE ONLY LINE THIS AUDIT DARES RECONCILE.</p>
+    </div>
+    <p class="verdict" id="verdict">The reconciliation writes itself as you read. Scroll back up, spend differently, and watch it re-ink — <b>the ledger holds no grudge and keeps no copy.</b></p>
+    <p class="folio">RELOAD ERASES EVERYTHING. PRINT THIS PAGE TO KEEP YOUR RECEIPT — PAPER IS THE ONLY PERSISTENCE THIS TREASURY OFFERS.</p>
+  </section>
+
+  <section class="stratum refs" data-stratum="floor2">
+    <span class="folio kicker">WORKS CITED · 参考文献 — ALL REAL, ALL CHECKABLE</span>
+    <ol>
+      <li><b>Simon, H. A.</b> (1971). Designing Organizations for an Information-Rich World. In <em>Computers, Communications, and the Public Interest</em>. Johns Hopkins Press.</li>
+      <li><b>Goldhaber, M. H.</b> (1997). The Attention Economy and the Net. <em>First Monday</em>, 2(4).</li>
+      <li><b>Schüll, N. D.</b> (2012). <em>Addiction by Design: Machine Gambling in Las Vegas</em>. Princeton University Press.</li>
+      <li><b>Wu, T.</b> (2016). <em>The Attention Merchants: The Epic Scramble to Get Inside Our Heads</em>. Knopf.</li>
+      <li><b>Williams, J.</b> (2018). <em>Stand Out of Our Light: Freedom and Resistance in the Attention Economy</em>. Cambridge University Press.</li>
+    </ol>
+    <div class="colophon">
+      COLOPHON — Set in EB Garamond &amp; Courier Prime stacks; no fonts, scripts, or images fetched;
+      this file makes zero network requests. The feed and the zone deal AUTHORED, deliberately flat
+      items — nothing generated, nothing scraped. Every meter on this page counts your own actions
+      and your own dwell, computed in this window, session-only, unrecorded; reload erases; print to
+      keep. The beam is your pointer with spring inertia; under reduced motion or a touch-only
+      hand, the page sets all prose at full ink and stills every spring — emphasis, never existence.
+      One quotation appears, nine words, attributed; all else is paraphrase. Sources read 2026-07-15.
+      ATTENTION AUDIT No.1 · candidate ISSUE 422 · kernel.chat pressroom.
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   THE TREASURY — all meters count the reader's own hands.
+   Timer-robust per house law: every step advances via a
+   rAF-vs-setTimeout race; rAF alone provably stalls in
+   throttled tabs and embedded panes.
+   ════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noHover = window.matchMedia('(hover: none)').matches;
+  if (reduced || noHover) document.body.classList.add('no-beam');
+
+  function tick(fn) {
+    var fired = false;
+    function fire() { if (fired) return; fired = true; fn(performance.now()); }
+    requestAnimationFrame(fire);
+    setTimeout(fire, 42);
+  }
+
+  /* ── authored flat deck (the 415 grammar: no escalation) ── */
+  var DECK = [
+    'A think-piece argues the morning feed is the new commute.',
+    'Somewhere, a dashboard has added a second dashboard.',
+    'A platform announces a quieter notification, louder than before.',
+    'An app you forgot renames itself and asks to be remembered.',
+    'A thread summarizes a book that summarized a study.',
+    'A metric is up. Another metric explains it away.',
+    'A new feed promises the end of feeds. Subscribe below.',
+    'Someone is typing.',
+    'A trailer for a preview of an announcement.',
+    'The algorithm would like to know if you saw the thing.',
+    'A hot take cools. A colder take arrives to warm it.',
+    'This item intentionally resembles the last one.'
+  ];
+
+  /* ── state (session-only, unrecorded) ── */
+  var S = {
+    dwell: { wealth: 0, scarcity: 0, allocation: 0, zone: 0, floor: 0 },
+    total: 0, passed: 0, pulls: 0,
+    inked: 0, words: 0, scrubbed: false,
+    alloc: { feed: 20, work: 20, room: 20, craft: 20, rest: 20 },
+    sealed: false, zoneClosed: false
+  };
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var clock = function (ms) { var s = Math.floor(ms / 1000); return pad(Math.floor(s / 60)) + ':' + pad(s % 60); };
+
+  /* ── STRATUM I: build the feed (movable proof) ───────────── */
+  var feedEl = $('#feed');
+  DECK.forEach(function (txt, i) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('tabindex', '-1');
+    card.innerHTML = '<span class="n">' + pad(i + 1) + '.</span>' +
+      '<span class="txt">' + txt + '</span>' +
+      '<button class="aside">Set aside</button>';
+    feedEl.appendChild(card);
+  });
+
+  var dragCards = []; /* {el,x,vx,dragging,px,pt,gone} */
+  $$('.card', feedEl).forEach(function (el) {
+    var st = { el: el, x: 0, vx: 0, dragging: false, px: 0, pt: 0, gone: false };
+    dragCards.push(st);
+    $('.aside', el).addEventListener('click', function () { dismiss(st, -1); });
+
+    el.addEventListener('pointerdown', function (e) {
+      if (st.gone || e.target.tagName === 'BUTTON') return;
+      st.dragging = true; st.px = e.clientX; st.pt = performance.now(); st.vx = 0;
+      el.classList.add('dragging');
+      el.setPointerCapture(e.pointerId);
+    });
+    el.addEventListener('pointermove', function (e) {
+      if (!st.dragging) return;
+      var now = performance.now(), dt = Math.max(1, now - st.pt);
+      var dx = e.clientX - st.px;
+      st.vx = st.vx * 0.6 + (dx / dt) * 0.4;
+      st.x += dx; st.px = e.clientX; st.pt = now;
+      paint(st);
+    });
+    function release() {
+      if (!st.dragging) return;
+      st.dragging = false;
+      el.classList.remove('dragging');
+      if (Math.abs(st.x) > 110 || Math.abs(st.vx) > 0.9) dismiss(st, st.x >= 0 ? 1 : -1);
+      /* else the main loop springs it home — interruptible: grab it again mid-flight */
+    }
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+  });
+
+  function paint(st) {
+    st.el.style.transform = 'translateX(' + st.x.toFixed(1) + 'px) rotate(' + (st.x * 0.045).toFixed(2) + 'deg)';
+    st.el.style.opacity = Math.max(0, 1 - Math.abs(st.x) / 420);
+  }
+  function dismiss(st, dir) {
+    if (st.gone) return;
+    st.gone = true; st.target = dir * (st.el.offsetWidth + 160);
+    S.passed++;
+    $('#passed').textContent = pad(S.passed);
+    $('#remaining').textContent = pad(DECK.length - S.passed);
+    if (reduced) { st.el.classList.add('gone'); st.settled = true; }
+  }
+
+  /* ── STRATUM II: the word scrub ──────────────────────────── */
+  var CLAIM_LEAD = 'What information consumes is the attention of its recipients — hence'.split(' ');
+  var CLAIM_QUOTE = '"a wealth of information creates a poverty of attention."'.split(' ');
+  var claimEl = $('#claim');
+  CLAIM_LEAD.forEach(function (w) {
+    var s = document.createElement('span'); s.className = 'w'; s.textContent = w + ' '; claimEl.appendChild(s);
+  });
+  CLAIM_QUOTE.forEach(function (w) {
+    var s = document.createElement('span'); s.className = 'w q'; s.textContent = w + ' '; claimEl.appendChild(s);
+  });
+  var wordEls = $$('.w', claimEl);
+  S.words = wordEls.length;
+  var scrubber = $('#scrubber');
+  scrubber.max = S.words;
+  $('#scrub-state').textContent = '00 / ' + pad(S.words) + ' WORDS INKED';
+  scrubber.addEventListener('input', function () {
+    var v = +scrubber.value;
+    wordEls.forEach(function (el, i) { el.classList.toggle('inked', i < v); });
+    S.inked = Math.max(S.inked, v);
+    $('#scrub-state').textContent = pad(v) + ' / ' + pad(S.words) + ' WORDS INKED';
+    if (v === S.words && !S.scrubbed) {
+      S.scrubbed = true;
+      $('#scrub-stamp').innerHTML = '<span class="stamp">READ IN FULL · 完読</span>';
+    }
+  });
+
+  /* ── STRATUM III: the allocation ─────────────────────────── */
+  var budgetEl = $('#budget');
+  function poolLeft() {
+    var sum = 0; for (var k in S.alloc) sum += S.alloc[k];
+    return 100 - sum;
+  }
+  function paintBudget() {
+    $$('.chan', budgetEl).forEach(function (row) {
+      var c = row.getAttribute('data-c');
+      $('.val', row).textContent = S.alloc[c];
+      $('.cbar i', row).style.width = S.alloc[c] + '%';
+    });
+    var left = poolLeft();
+    $('#pool').textContent = left;
+    $('#seal').disabled = left !== 0;
+    $$('.step', budgetEl).forEach(function (b) {
+      var row = b.closest('.chan'), c = row.getAttribute('data-c'), d = +b.getAttribute('data-d');
+      b.disabled = S.sealed || (d > 0 ? left < 5 : S.alloc[c] < 5);
+    });
+  }
+  budgetEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.step');
+    if (!b || b.disabled) return;
+    var c = b.closest('.chan').getAttribute('data-c');
+    S.alloc[c] += +b.getAttribute('data-d');
+    paintBudget();
+  });
+  $('#seal').addEventListener('click', function () {
+    S.sealed = true;
+    budgetEl.classList.add('sealed');
+    $('#seal-stamp').innerHTML = '<span class="stamp">SEALED · 封印済</span>';
+    $('#gear-note').innerHTML = 'SEALED — CARRIED DOWN: THE ZONE MACHINE IS NOW GEARED TO YOUR FEED GRANT (<b>' + S.alloc.feed + '</b>/100).';
+    gearMachine();
+    paintBudget();
+  });
+  paintBudget();
+
+  /* ── STRATUM IV: the zone (magnetic dispatch, 415 stop law) ─ */
+  var oneMore = $('#one-more'), stopHere = $('#stop-here');
+  var mag = { r: 92, k: 0, x: 0, y: 0, tx: 0, ty: 0 };
+  function gearMachine() {
+    var feed = S.alloc.feed;
+    mag.r = 60 + feed * 1.6;
+    mag.k = feed / 100;
+    $('#gearing').textContent = feed;
+    $('#magr').textContent = Math.round(mag.r);
+  }
+  gearMachine();
+
+  var dealt = 0;
+  oneMore.addEventListener('click', function () {
+    if (S.zoneClosed) return;
+    S.pulls++; dealt++;
+    $('#pulls').textContent = pad(S.pulls);
+    var item = document.createElement('div');
+    item.className = 'pull-item';
+    item.textContent = 'PULL ' + pad(S.pulls) + ' — ' + DECK[(dealt + 4) % DECK.length];
+    var tray = $('#tray');
+    tray.appendChild(item);
+    while (tray.children.length > 5) tray.removeChild(tray.firstChild);
+  });
+  stopHere.addEventListener('click', function () {
+    if (S.zoneClosed) return;
+    S.zoneClosed = true;
+    $('#machine').classList.add('closed');
+    oneMore.setAttribute('aria-disabled', 'true');
+    mag.k = 0;
+    $('#zone-state').innerHTML = '<span class="stamp">CLOSED BY THE READER · 読者による閉鎖</span>';
+  });
+
+  /* ── the beam (darkroom spotlight w/ spring inertia) ─────── */
+  var beam = { x: -999, y: -999, tx: -999, ty: -999 };
+  var beamEls = [];
+  if (!document.body.classList.contains('no-beam')) {
+    $$('.beam').forEach(function (el) {
+      var ink = el.cloneNode(true);
+      ink.className = 'ink-layer';
+      ink.setAttribute('aria-hidden', 'true');
+      el.appendChild(ink);
+      beamEls.push(el);
+    });
+    document.addEventListener('pointermove', function (e) { beam.tx = e.clientX; beam.ty = e.clientY; });
+    /* the beam follows the keyboard too */
+    document.addEventListener('focusin', function (e) {
+      var r = e.target.getBoundingClientRect();
+      beam.tx = r.left + r.width / 2; beam.ty = r.top + r.height / 2;
+    });
+  }
+
+  /* ── dwell metering + main loop ──────────────────────────── */
+  var strata = $$('[data-stratum]').filter(function (el) {
+    return S.dwell.hasOwnProperty(el.getAttribute('data-stratum'));
+  });
+  var railStops = {};
+  $$('.rail-stop').forEach(function (el) { railStops[el.getAttribute('data-s')] = el; });
+
+  var last = performance.now(), lastPaint = 0;
+
+  function currentStratum() {
+    var mid = window.innerHeight / 2;
+    for (var i = 0; i < strata.length; i++) {
+      var r = strata[i].getBoundingClientRect();
+      if (r.top <= mid && r.bottom > mid) return strata[i].getAttribute('data-stratum');
+    }
+    return null;
+  }
+
+  function loop(now) {
+    var dt = Math.min(250, now - last); last = now;
+    var f = Math.min(3, dt / 16.7); /* frame-rate-normalized spring step */
+
+    /* dwell */
+    var cur = currentStratum();
+    if (cur) { S.dwell[cur] += dt; S.total += dt; }
+
+    /* beam spring */
+    if (beamEls.length) {
+      beam.x += (beam.tx - beam.x) * 0.16 * f;
+      beam.y += (beam.ty - beam.y) * 0.16 * f;
+      beamEls.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < -60 || r.top > window.innerHeight + 60) return;
+        var ink = el.lastElementChild;
+        ink.style.setProperty('--mx', (beam.x - r.left).toFixed(1) + 'px');
+        ink.style.setProperty('--my', (beam.y - r.top).toFixed(1) + 'px');
+      });
+    }
+
+    /* card springs (interruptible: dragging overrides) */
+    dragCards.forEach(function (st) {
+      if (st.settled || st.dragging) return;
+      if (st.gone) {
+        st.x += (st.target - st.x) * 0.18 * f;
+        paint(st);
+        if (Math.abs(st.target - st.x) < 4) { st.el.classList.add('gone'); st.settled = true; }
+      } else if (Math.abs(st.x) > 0.4 || Math.abs(st.vx) > 0.05) {
+        st.vx = st.vx * Math.pow(0.86, f) - st.x * 0.012 * f;
+        st.x += st.vx * dt * 0.6;
+        if (Math.abs(st.x) < 0.5 && Math.abs(st.vx) < 0.02) { st.x = 0; st.vx = 0; }
+        paint(st);
+      }
+    });
+
+    /* magnetic dispatch on ONE MORE (geared by declared feed units) */
+    if (!reduced && mag.k > 0) {
+      var br = oneMore.getBoundingClientRect();
+      var cx = br.left + br.width / 2, cy = br.top + br.height / 2;
+      var dx = beam.tx - cx, dy = beam.ty - cy;
+      var d = Math.sqrt(dx * dx + dy * dy);
+      var pull = d < mag.r ? (1 - d / mag.r) * 12 * mag.k : 0;
+      mag.tx = d > 0 ? (dx / d) * pull : 0;
+      mag.ty = d > 0 ? (dy / d) * pull : 0;
+      mag.x += (mag.tx - mag.x) * 0.2 * f;
+      mag.y += (mag.ty - mag.y) * 0.2 * f;
+      oneMore.style.transform = 'translate(' + mag.x.toFixed(1) + 'px,' + mag.y.toFixed(1) + 'px)';
+    } else {
+      oneMore.style.transform = '';
+    }
+
+    /* slow meters ~4x/sec */
+    if (now - lastPaint > 260) {
+      lastPaint = now;
+      var t = clock(S.total);
+      $('#clock').textContent = t;
+      $('#r-clock').textContent = t;
+      var k, pct;
+      for (k in S.dwell) {
+        pct = S.total > 0 ? Math.round(100 * S.dwell[k] / S.total) : 0;
+        if (railStops[k]) {
+          $('.dwell-bar i', railStops[k]).style.width = pct + '%';
+          $('.dwell-pct', railStops[k]).textContent = pct + '%';
+          railStops[k].classList.toggle('here', k === cur);
+        }
+        var bar = $('[data-r="' + k + '"]'), lab = $('[data-rp="' + k + '"]');
+        if (bar) { bar.style.width = (pct * 1.4) + 'px'; lab.textContent = pct + '%'; }
+      }
+      $('#r-passed').textContent = S.passed;
+      $('#r-inked').textContent = S.inked + ' / ' + S.words;
+      $('#r-pulls').textContent = S.pulls;
+      $('#r-zone').textContent = S.zoneClosed ? 'CLOSED BY YOU' : 'LEFT OPEN';
+      $('#r-declared').textContent = S.alloc.feed + ' / 100 UNITS' + (S.sealed ? ' (SEALED)' : ' (UNSEALED)');
+      var revealed = S.total > 0 ? Math.round(100 * (S.dwell.wealth + S.dwell.zone) / S.total) : 0;
+      $('#r-revealed').textContent = revealed + '%';
+      if (S.sealed && S.total > 20000) {
+        var gap = revealed - S.alloc.feed;
+        $('#verdict').innerHTML = 'You granted the feed <b>' + S.alloc.feed + ' of 100 units</b>. This session, it took <b>' +
+          revealed + '%</b> of you. The gap is ' + (gap > 0 ? '+' : '') + gap +
+          ' — and the gap, not the feed, is the issue. <b>The ledger holds no grudge and keeps no copy.</b>';
+      }
+    }
+
+    tick(loop);
+  }
+  tick(loop);
+})();
+</script>

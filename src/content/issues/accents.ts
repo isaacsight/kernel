@@ -198,6 +198,7 @@ export const DEFAULT_ACCENT_BY_SPREAD: Record<IssueSpread['type'], InkSeedName> 
   plate: 'ivy',
   bore: 'pool',
   fourier: 'pool',
+  audit: 'tomato',
 }
 
 /** Pick the default accent for a spread type. */

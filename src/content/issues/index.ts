@@ -74,6 +74,7 @@ import { ISSUE_418 } from './418'
 import { ISSUE_419 } from './419'
 import { ISSUE_420 } from './420'
 import { ISSUE_421 } from './421'
+import { ISSUE_422 } from './422'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -1239,6 +1240,37 @@ export interface FourierSpread extends SpreadCommon {
   references?: SpreadReferences
 }
 
+export interface AuditChannel {
+  key: string
+  label: string
+  jp: string
+}
+
+/**
+ * ISSUE 422 — the SESSION control, and the first MERGER issue
+ * (artifact-language §I as amended: apparatus whole, no reduction).
+ * The reader's own attention is the axis: a treasury of strata
+ * where every meter counts the reader's hands and dwell, and the
+ * floor reconciles declared against revealed. Kept by no one.
+ */
+export interface AuditSpread extends SpreadCommon {
+  type: 'audit'
+  titleLines?: string[]
+  dossier: SpreadDossier
+  /** The authored flat deck the Wealth wades and the Zone deals from. */
+  deckItems: string[]
+  /** The claim, word-scrubbed: authored lead, then the attributed quote. */
+  claimLead: string
+  claimQuote: string
+  claimCite: string
+  /** The five channels of the hundred-unit declared budget. */
+  channels: AuditChannel[]
+  /** Mandatory disclosure: session-only, unrecorded, reload erases. */
+  auditNote: string
+  pullQuote?: SpreadPullQuote
+  references?: SpreadReferences
+}
+
 export type IssueSpread =
   | EssaySpread
   | InterviewSpread
@@ -1259,6 +1291,7 @@ export type IssueSpread =
   | PlateSpread
   | BoreSpread
   | FourierSpread
+  | AuditSpread
 
 export interface IssueCredits {
   editorInChief: string
@@ -1566,6 +1599,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_419,
   ISSUE_420,
   ISSUE_421,
+  ISSUE_422,
 ]
 
 /** The latest published issue — drives the landing cover. */
