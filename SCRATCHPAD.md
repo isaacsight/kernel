@@ -2205,3 +2205,20 @@ minting choreography (staggered rail stops, reduced-motion-safe),
 dossier in its own framed card. Verified live: runhead + mint
 delays + framed dossier + monument rendering; tsc clean, 507/507.
 Still uncommitted — awaiting the editor's word to ship.
+
+## Session 2026-07-16 — ISSUE 422 SHIPPED (5d5a9196c, all 6 gates)
+
+Isaac: "the publish." Six gates green: security (client-only, 0
+critical) · QA (tsc 0, build clean, 507/507) · design (all lint
+hits documented false-positive classes; NEW class filed: #000 in
+mask-image gradients is alpha, not color) · perf (JS 215KB gz 72%,
+CSS 118KB gz ALL-chunks 79% — prior entries measured top-3 only) ·
+deploy (run 29462420744, kernel.chat 200) · product (live descent,
+carried gearing 25→25, stop law, dwell clock advancing, 421
+back-catalog intact, mobile 375). Discord notified.
+FIELD LESSONS filed to product memory: issue routes are #/issues/N
+(PLURAL — #/issue/N redirects home and false-passes when the
+tested issue is the landing); pane throttle quantified (rAF 0×/2s,
+setTimeout(42) ~2×/2.4s between tool calls — frozen meters in the
+pane are not prod defects). The merger + texture clause are now
+shipped law; the cabinet stands at THIRTEEN shapes.
