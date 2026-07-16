@@ -24,7 +24,6 @@ export function RunningHead() {
         <nav className="pop-running-head-links" aria-label="Publication">
           <Link to="/issues">Issues</Link>
           <Link to="/about">About</Link>
-          <Link to="/canvas">Canvas</Link>
           <Link to="/figma">Figma Spec</Link>
           <Link to="/refusals">The Refusals</Link>
         </nav>

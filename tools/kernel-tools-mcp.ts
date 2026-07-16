@@ -800,7 +800,7 @@ server.tool(
                     loopGoal: goal.trim(),
                     loopMaxIterations: maxIterations ?? 3,
                 }, null, 2))
-                return { content: [{ type: 'text' as const, text: `✅ Requested a bounded canvas agent loop at ${requestedAt}. Keep /#/canvas open so GALLEY can execute it.` }] }
+                return { content: [{ type: 'text' as const, text: `✅ Requested a bounded canvas agent loop at ${requestedAt}. Keep /#/canvas-creative open so GALLEY can execute it.` }] }
             }
 
             return { content: [{ type: 'text' as const, text: 'Unknown action' }], isError: true }

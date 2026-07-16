@@ -18,7 +18,6 @@ const PressroomPage = lazyRetry(() => import('./pages/PressroomPage').then(m => 
 const AboutPage = lazyRetry(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })))
 const FigmaPage = lazyRetry(() => import('./pages/FigmaPage').then(m => ({ default: m.FigmaPage })))
 const CreativeCanvasPage = lazyRetry(() => import('./pages/CreativeCanvasPage').then(m => ({ default: m.CreativeCanvasPage })))
-const CanvasPage = lazyRetry(() => import('./pages/CanvasPage').then(m => ({ default: m.CanvasPage })))
 const MotionSheetPage = lazyRetry(() => import('./pages/MotionSheetPage').then(m => ({ default: m.MotionSheetPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
@@ -106,11 +105,6 @@ export const router = createHashRouter([
       { path: 'figma', element: withErrorBoundary(
         <Suspense fallback={<div className="ka-page-loading">Loading figma spec...</div>}>
           <FigmaPage />
-        </Suspense>
-      ) },
-      { path: 'canvas', element: withErrorBoundary(
-        <Suspense fallback={<div className="ka-page-loading">Loading visual canvas...</div>}>
-          <CanvasPage />
         </Suspense>
       ) },
       { path: 'privacy', element: withErrorBoundary(

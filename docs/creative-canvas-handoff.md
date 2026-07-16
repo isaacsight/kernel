@@ -21,9 +21,9 @@ Do not build a third canvas. Continue the unified `CreativeCanvasPage` and prese
 |---|---|
 | `/#/canvas-creative` | Unified agent-controlled canvas |
 | `/#/studio` | Redirects to `/#/canvas-creative` |
-| `/#/canvas` | Preserved Antigravity implementation and fallback |
+| `/#/canvas` | Removed from the publication; unknown routes return to the cover |
 
-Both canvas routes require an authenticated session (added 2026-07-14). Unauthenticated visitors see the `LoginGate`, matching `EnginePage`. This is a personal work surface: the engine proxy 401s without a session anyway, so the gate moved to the door. Note the side effects: the `creative_canvas_*` tools register and the `canvas-state.json` polling loop starts only after auth.
+The unified canvas route requires an authenticated session (added 2026-07-14). Unauthenticated visitors see the `LoginGate`, matching `EnginePage`. This is a personal work surface: the engine proxy 401s without a session anyway, so the gate moved to the door. Note the side effects: the `creative_canvas_*` tools register and the `canvas-state.json` polling loop starts only after auth.
 
 ## Authoritative files
 
@@ -31,13 +31,9 @@ Both canvas routes require an authenticated session (added 2026-07-14). Unauthen
 |---|---|
 | `src/pages/CreativeCanvasPage.tsx` | Unified canvas state, rendering, execution, GALLEY, agent tools, legacy-state adapter |
 | `src/pages/CreativeCanvasPage.css` | Unified canvas presentation and responsive behavior |
-| `src/router.tsx` | Canonical, redirect, and classic routes |
+| `src/router.tsx` | Canonical Creative Studio route and `/studio` redirect |
 | `public/canvas-state.json` | Filesystem bridge read by the browser every 2.5 seconds |
 | `tools/kernel-tools-mcp.ts` | External `kernel_canvas_state` MCP tool |
-| `src/components/CanvasWorkflowBuilder.tsx` | Preserved classic canvas and its direct agent tools |
-| `src/pages/CanvasPage.tsx` | Classic route shell |
-| `src/components/CanvasNode.tsx` | Classic node UI |
-| `src/components/CanvasEdge.tsx` | Classic edge UI |
 
 ## Unified node contract
 
@@ -218,9 +214,9 @@ The repository contains unrelated and pre-existing uncommitted work. Do not rese
 ```text
 Continue the unified Creative Canvas in this repository.
 
-First read CLAUDE.md, KERNEL.md, and docs/creative-canvas-handoff.md completely. The unified agent-controlled route is /#/canvas-creative and the preserved Antigravity route is /#/canvas. Do not create another canvas or replace the current architecture. Preserve compatibility with Antigravity's legacy canvas-state.json node/edge schema and the kernel_canvas_state MCP tool.
+First read CLAUDE.md, KERNEL.md, and docs/creative-canvas-handoff.md completely. The unified agent-controlled route is /#/canvas-creative; the former /#/canvas publication route has been removed. Do not create another canvas or replace the current architecture. Preserve compatibility with Antigravity's legacy canvas-state.json node/edge schema and the kernel_canvas_state MCP tool.
 
-Before editing, inspect the current working tree and preserve unrelated changes. Run npm run build after implementation. Keep /#/canvas as a regression fallback.
+Before editing, inspect the current working tree and preserve unrelated changes. Run npm run build after implementation. Do not restore /#/canvas as a publication fallback.
 
 Current priorities, in order:
 1. Add browser-to-filesystem result persistence without creating update loops.
