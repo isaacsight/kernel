@@ -17,6 +17,7 @@ const RefusalsPage = lazyRetry(() => import('./pages/RefusalsPage').then(m => ({
 const PressroomPage = lazyRetry(() => import('./pages/PressroomPage').then(m => ({ default: m.PressroomPage })))
 const AboutPage = lazyRetry(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })))
 const FigmaPage = lazyRetry(() => import('./pages/FigmaPage').then(m => ({ default: m.FigmaPage })))
+const PrototypePage = lazyRetry(() => import('./pages/PrototypePage').then(m => ({ default: m.PrototypePage })))
 const CreativeCanvasPage = lazyRetry(() => import('./pages/CreativeCanvasPage').then(m => ({ default: m.CreativeCanvasPage })))
 const MotionSheetPage = lazyRetry(() => import('./pages/MotionSheetPage').then(m => ({ default: m.MotionSheetPage })))
 
@@ -105,6 +106,11 @@ export const router = createHashRouter([
       { path: 'figma', element: withErrorBoundary(
         <Suspense fallback={<div className="ka-page-loading">Loading figma spec...</div>}>
           <FigmaPage />
+        </Suspense>
+      ) },
+      { path: 'prototype', element: withErrorBoundary(
+        <Suspense fallback={<div className="ka-page-loading">Loading prototype workspace...</div>}>
+          <PrototypePage />
         </Suspense>
       ) },
       { path: 'privacy', element: withErrorBoundary(
