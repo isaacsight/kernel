@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, parsePricingText, mapCatalogItem } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, parsePricingText, mapCatalogItem, estimateSpeechUsd, extractAudioUrl, TTS_ENDPOINT } from './video-models.mjs'
 
 describe('video model registry', () => {
   it('every model has the required fields', () => {
@@ -112,5 +112,24 @@ describe('extractVideoUrl', () => {
     expect(extractVideoUrl({ data: { video: { url: 'https://y/v.mp4' } } })).toBe('https://y/v.mp4')
     expect(extractVideoUrl({ videos: [{ url: 'https://z/v.mp4' }] })).toBe('https://z/v.mp4')
     expect(extractVideoUrl({})).toBeNull()
+  })
+})
+
+describe('speech (ElevenLabs via fal)', () => {
+  it('exposes the verified TTS endpoint slug', () => {
+    expect(TTS_ENDPOINT).toBe('fal-ai/elevenlabs/tts/turbo-v2.5')
+  })
+  it('prices speech at the listed rate per 1000 characters', () => {
+    expect(estimateSpeechUsd('a'.repeat(1000))).toBe(0.05)
+    expect(estimateSpeechUsd('a'.repeat(950))).toBeCloseTo(0.0475, 4)
+  })
+  it('returns null for empty or non-string text (never fabricates a price)', () => {
+    expect(estimateSpeechUsd('')).toBeNull()
+    expect(estimateSpeechUsd(undefined)).toBeNull()
+  })
+  it('finds the audio url in fal result shapes', () => {
+    expect(extractAudioUrl({ audio: { url: 'https://x/a.mp3' } })).toBe('https://x/a.mp3')
+    expect(extractAudioUrl({ data: { audio: { url: 'https://y/a.mp3' } } })).toBe('https://y/a.mp3')
+    expect(extractAudioUrl({})).toBeNull()
   })
 })

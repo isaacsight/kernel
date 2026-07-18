@@ -117,3 +117,18 @@ export function extractVideoUrl(payload) {
   if (!payload || typeof payload !== 'object') return null
   return payload.video?.url ?? payload.data?.video?.url ?? payload.videos?.[0]?.url ?? null
 }
+
+// Voiceover: ElevenLabs Turbo v2.5 served through fal — $0.05 per 1000
+// characters as listed on the model page (re-verify when bumping).
+export const TTS_ENDPOINT = 'fal-ai/elevenlabs/tts/turbo-v2.5'
+export const TTS_USD_PER_1K_CHARS = 0.05
+
+export function estimateSpeechUsd(text) {
+  if (typeof text !== 'string' || text.length === 0) return null
+  return Math.round((text.length / 1000) * TTS_USD_PER_1K_CHARS * 10000) / 10000
+}
+
+export function extractAudioUrl(payload) {
+  if (!payload || typeof payload !== 'object') return null
+  return payload.audio?.url ?? payload.data?.audio?.url ?? null
+}

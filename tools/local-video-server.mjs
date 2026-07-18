@@ -9,15 +9,21 @@
 import { createServer } from 'node:http'
 import { writeFile, mkdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, mapCatalogItem } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, mapCatalogItem, TTS_ENDPOINT, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
 
 const PORT = Number(process.env.VIDEO_SERVER_PORT || 5412)
 const FAL_KEY = process.env.FAL_KEY || ''
 const OUT_DIR = join(process.cwd(), 'output', 'videos')
+const AUDIO_DIR = join(process.cwd(), 'output', 'audio')
 const FAL_QUEUE = 'https://queue.fal.run'
 
-/** jobId -> { statusUrl, responseUrl, status, videoUrl, error } */
+/** jobId -> { kind: 'video'|'audio', statusUrl, responseUrl, status, videoUrl, audioUrl, error } */
 const jobs = new Map()
+
+const JOB_KINDS = {
+  video: { dir: OUT_DIR, ext: 'mp4', route: 'videos', extract: extractVideoUrl },
+  audio: { dir: AUDIO_DIR, ext: 'mp3', route: 'audio', extract: extractAudioUrl },
+}
 
 // fal.ai catalog cache: category -> { at, items }. The catalog endpoint is
 // fal's site API (undocumented) — cache generously and fail soft; the curated
@@ -88,14 +94,20 @@ async function submitJob({ prompt, model, endpoint: rawEndpoint, durationSeconds
   const input = rawEndpoint
     ? { prompt, ...(imageUrl ? { image_url: imageUrl } : {}) }
     : buildInput(model, prompt, durationSeconds, imageUrl)
+  return queueJob('video', endpoint, input)
+}
+
+async function queueJob(kind, endpoint, input) {
   const submitted = await falFetch(`${FAL_QUEUE}/${endpoint}`, { method: 'POST', body: JSON.stringify(input) })
   const jobId = submitted.request_id
   if (!jobId) throw new Error('fal.ai returned no request_id')
   jobs.set(jobId, {
+    kind,
     statusUrl: submitted.status_url,
     responseUrl: submitted.response_url,
     status: 'queued',
     videoUrl: null,
+    audioUrl: null,
     error: null,
   })
   return jobId
@@ -107,16 +119,19 @@ async function refreshJob(jobId) {
   try {
     const status = await falFetch(job.statusUrl)
     if (status.status === 'COMPLETED') {
+      const spec = JOB_KINDS[job.kind || 'video']
       const result = await falFetch(job.responseUrl)
-      const remoteUrl = extractVideoUrl(result)
-      if (!remoteUrl) throw new Error('fal.ai result contained no video url')
-      await mkdir(OUT_DIR, { recursive: true })
+      const remoteUrl = spec.extract(result)
+      if (!remoteUrl) throw new Error(`fal.ai result contained no ${job.kind || 'video'} url`)
+      await mkdir(spec.dir, { recursive: true })
       const clip = await fetch(remoteUrl)
       if (!clip.ok) throw new Error(`could not download result (${clip.status})`)
-      await writeFile(join(OUT_DIR, `${jobId}.mp4`), Buffer.from(await clip.arrayBuffer()))
-      job.videoUrl = `http://localhost:${PORT}/videos/${jobId}.mp4`
+      await writeFile(join(spec.dir, `${jobId}.${spec.ext}`), Buffer.from(await clip.arrayBuffer()))
+      const localUrl = `http://localhost:${PORT}/${spec.route}/${jobId}.${spec.ext}`
+      if ((job.kind || 'video') === 'audio') job.audioUrl = localUrl
+      else job.videoUrl = localUrl
       job.status = 'done'
-      console.log(`[video-server] job ${jobId} done -> output/videos/${jobId}.mp4`)
+      console.log(`[video-server] job ${jobId} done -> output/${spec.route}/${jobId}.${spec.ext}`)
     } else if (status.status === 'IN_PROGRESS') {
       job.status = 'running'
     }
@@ -193,11 +208,44 @@ const server = createServer(async (req, res) => {
     }
   }
 
+  if (req.method === 'POST' && url.pathname === '/v1/audio/estimate') {
+    const body = await readBody(req)
+    const text = typeof body?.text === 'string' ? body.text : ''
+    return json(res, 200, { usd: estimateSpeechUsd(text), characters: text.length })
+  }
+
+  if (req.method === 'POST' && url.pathname === '/v1/audio/speech') {
+    if (!FAL_KEY) return json(res, 402, { error: 'FAL_KEY not set — add it to .env and restart: npm run video-server' })
+    const body = await readBody(req)
+    const text = typeof body?.text === 'string' ? body.text.trim() : ''
+    if (!text) return json(res, 400, { error: 'text is required' })
+    try {
+      const input = { text, ...(typeof body.voice === 'string' && body.voice ? { voice: body.voice } : {}) }
+      const jobId = await queueJob('audio', TTS_ENDPOINT, input)
+      console.log(`[video-server] submitted speech job ${jobId}: ${text.slice(0, 60)}`)
+      return json(res, 200, { jobId })
+    } catch (err) {
+      return json(res, 502, { error: err.message })
+    }
+  }
+
   if (req.method === 'GET' && url.pathname.startsWith('/v1/videos/jobs/')) {
     const jobId = url.pathname.split('/').pop()
     if (!jobs.has(jobId)) return json(res, 404, { error: 'unknown job' })
     const job = await refreshJob(jobId)
-    return json(res, 200, { status: job.status, videoUrl: job.videoUrl, error: job.error })
+    return json(res, 200, { status: job.status, videoUrl: job.videoUrl, audioUrl: job.audioUrl, error: job.error })
+  }
+
+  if (req.method === 'GET' && url.pathname.startsWith('/audio/')) {
+    const file = url.pathname.split('/').pop()
+    if (!/^[\w-]+\.mp3$/.test(file)) return json(res, 400, { error: 'bad filename' })
+    try {
+      const data = await readFile(join(AUDIO_DIR, file))
+      res.writeHead(200, { 'Content-Type': 'audio/mpeg', 'Access-Control-Allow-Origin': '*' })
+      return res.end(data)
+    } catch {
+      return json(res, 404, { error: 'not found' })
+    }
   }
 
   if (req.method === 'GET' && url.pathname.startsWith('/videos/')) {
