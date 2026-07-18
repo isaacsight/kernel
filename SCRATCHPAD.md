@@ -32,6 +32,16 @@ plus two Isaac-directed extensions. All committed on the branch, not merged:
 - **Claude + fal pairing:** Refine button on video nodes — Claude (proxy in
   prod, Ollama in dev) rewrites the rough motion direction into a cinematic
   prompt for the node's target model before the priced Run. Verified locally.
+- **FILM SHIPPED 2026-07-18:** `output/what-we-made.mp4` — 58.9s, 1280x720,
+  H.264/AAC. Full pipeline exercised end-to-end with real spend (~$19.50 of the
+  $30 cap): smoke clip $0.20, ElevenLabs VO $0.04 (58.96s), 13 Nano Banana 2
+  keyframes $1.04 (one retake for machine-character consistency), 12 Seedance
+  2.0 720p image-to-video clips $18.20 (2 transient fal errors, clean on
+  retry). Cut in Palmier Pro via MCP (:19789, now registered as `palmier-pro`
+  server): narration transcribed to project frames, scenes cut to line starts
+  with 12-frame lead-ins, 4 long scenes speed-fitted, embedded clip audio
+  muted at volume 0 (NEVER remove_clips on link partners — it deletes the
+  video too), opacity-keyframe fades. Project: ~/Documents/Palmier Pro/what-we-made.palmier.
 - **Deferred:** Task 5 live smoke (one Seedance Lite clip ~$0.20) awaits Isaac's
   explicit spend approval. Gemini backend designed but NOT built — Isaac has a
   Gemini API key; `GEMINI_API_KEY` is not in `.env` yet (he must add it himself;
