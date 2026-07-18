@@ -252,6 +252,13 @@ const videoModelIds: Record<string, string> = {
   'Luma Ray': 'luma-ray',
 }
 
+const engineTiersBrief = `
+ENGINE COST TIERS:
+- image nodes render locally (free) — safe to run in any pass; iterate freely.
+- video nodes are PAID (fal.ai). They never render during graph or loop passes: they park as "Ready — awaiting cost confirmation" and only the human pressing that node's Run opens the paid confirm dialog. You may build, prompt, and stage video nodes, but you cannot spend.
+- Default draft video model is Seedance (Lite), about $0.20 per 5s clip. Reserve Kling (Pro), Veo 3.1 Fast, or catalog picks for hero-quality finals.
+- An image node connected into a video node supplies its frame for image-to-video — prefer image -> video for controlled motion over text-to-video.`
+
 interface ExternalCanvasState {
   nodes?: Array<{
     id: string
@@ -931,6 +938,7 @@ ITERATION: ${iteration} of ${maxIterations}
 
 AVAILABLE MODELS:
 ${JSON.stringify(modelsByKind)}
+${engineTiersBrief}
 
 CURRENT NODES, INCLUDING RUNTIME RESULTS:
 ${JSON.stringify(graphNodes.map(node => ({
@@ -1223,6 +1231,7 @@ ${JSON.stringify(canvasSnapshot.find(node => node.id === selectedId) ?? null)}
 
 AVAILABLE MODELS BY NODE KIND:
 ${JSON.stringify(modelsByKind)}
+${engineTiersBrief}
 
 CURRENT NODES:
 ${JSON.stringify(canvasSnapshot)}

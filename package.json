@@ -31,7 +31,8 @@
     "icons": "npx tsx tools/generate-app-icons.ts",
     "splash": "npx tsx tools/generate-splash.ts",
     "image-server": "node tools/local-image-server.mjs",
-    "video-server": "node --env-file=.env tools/local-video-server.mjs"
+    "video-server": "node --env-file=.env tools/local-video-server.mjs",
+    "engine": "node tools/engine.mjs"
   },
   "homepage": "https://kernel.chat",
   "dependencies": {
