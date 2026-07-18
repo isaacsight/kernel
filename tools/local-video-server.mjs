@@ -97,7 +97,11 @@ async function falFetch(url, init = {}) {
     headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json', ...(init.headers || {}) },
   })
   const payload = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(payload.detail || payload.error || `fal.ai error ${res.status}`)
+  if (!res.ok) {
+    const detail = payload.detail ?? payload.error
+    const message = typeof detail === 'string' ? detail : detail ? JSON.stringify(detail) : `fal.ai error ${res.status}`
+    throw new Error(message)
+  }
   return payload
 }
 
