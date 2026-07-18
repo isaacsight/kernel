@@ -144,6 +144,7 @@ async function refreshJob(jobId) {
       if (!clip.ok) throw new Error(`could not download result (${clip.status})`)
       await writeFile(join(spec.dir, `${jobId}.${spec.ext}`), Buffer.from(await clip.arrayBuffer()))
       const localUrl = `http://localhost:${PORT}/${spec.route}/${jobId}.${spec.ext}`
+      job.sourceUrl = remoteUrl // fal-hosted copy; usable as image_url input for downstream image-to-video
       const kind = job.kind || 'video'
       if (kind === 'audio') job.audioUrl = localUrl
       else if (kind === 'image') job.imageUrl = localUrl
@@ -283,7 +284,7 @@ const server = createServer(async (req, res) => {
     const jobId = url.pathname.split('/').pop()
     if (!jobs.has(jobId)) return json(res, 404, { error: 'unknown job' })
     const job = await refreshJob(jobId)
-    return json(res, 200, { status: job.status, videoUrl: job.videoUrl, audioUrl: job.audioUrl, imageUrl: job.imageUrl ?? null, error: job.error })
+    return json(res, 200, { status: job.status, videoUrl: job.videoUrl, audioUrl: job.audioUrl, imageUrl: job.imageUrl ?? null, sourceUrl: job.sourceUrl ?? null, error: job.error })
   }
 
   if (req.method === 'GET' && url.pathname.startsWith('/audio/')) {
