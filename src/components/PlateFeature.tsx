@@ -109,6 +109,38 @@ function drawProof(
   const rnd = mulberry32(seed)
   ctx.clearRect(0, 0, w, h)
 
+  if (style === 'studio') {
+    ctx.fillStyle = faint
+    ctx.fillRect(0, 0, w, h)
+    const frames = 6
+    const gap = 8
+    const frameW = (w - gap * 4) / 3
+    const frameH = (h - 42 - gap * 3) / 2
+    for (let i = 0; i < frames; i++) {
+      const x = gap + (i % 3) * (frameW + gap)
+      const y = gap + Math.floor(i / 3) * (frameH + gap)
+      const inset = 5 + rnd() * 12
+      ctx.fillStyle = i === seed % frames ? accent : ink
+      ctx.globalAlpha = i === seed % frames ? 0.82 : 0.14 + rnd() * 0.18
+      ctx.fillRect(x, y, frameW, frameH)
+      ctx.globalAlpha = 1
+      ctx.strokeStyle = i === seed % frames ? accent : ink
+      ctx.lineWidth = 1
+      ctx.strokeRect(x + inset, y + inset, frameW - inset * 2, frameH - inset * 2)
+      ctx.beginPath()
+      ctx.moveTo(x + 6, y + frameH - 8 - rnd() * 12)
+      ctx.lineTo(x + frameW - 6, y + 10 + rnd() * 18)
+      ctx.stroke()
+    }
+    ctx.fillStyle = ink
+    ctx.globalAlpha = 0.72
+    ctx.font = '9px "Courier Prime", Courier, monospace'
+    ctx.fillText('LOCAL MEDIA RECEIPT', 0, h - 7)
+    ctx.fillText(`No.${String(seed % 1000).padStart(3, '0')}`, w - 44, h - 7)
+    ctx.globalAlpha = 1
+    return
+  }
+
   if (style === 'routing') {
     const active = new Set<number>()
     while (active.size < 16) active.add(Math.floor(rnd() * 896))

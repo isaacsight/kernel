@@ -2278,3 +2278,22 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
 - Created [PrototypePage.css](file:///Users/isaachernandez/blog%20design/src/pages/PrototypePage.css) applying the magazine's visual system (ivory dot-grid, ledger cards, hairlines, and spot colors).
 - Created default `public/synthesis-state.json` file and wired React polling interval (2.5s) to allow programmatic agent inspection and composer control.
 - Verified the build via `npx tsc` (zero compile errors) and verified that all 507/507 vitest tests pass cleanly.
+## Session 2026-07-18 — ISSUE 424 interactive publication — on branch `feat/galley-video-engine`
+
+- **ISSUE BUILT:** `src/content/issues/424.ts` — THE STUDIO THAT STAYS
+  HOME, a repository-grounded systems review of the GALLEY engine. The
+  site reuses the established `plate` apparatus and adds only a
+  deterministic `studio` proof grammar in `PlateFeature`; no new
+  interaction shape.
+- **ARTIFACT EDITION:** `artifacts/424-the-studio-that-stays-home.html`
+  — self-contained strict-CSP cost instrument with a named BRIEF → MODEL
+  → ESTIMATE → DECISION → RECEIPT depth axis, representative price
+  controls, equal-weight approve/refuse actions, local receipt, session
+  ledger, dark mode, reduced motion, print, and mobile layouts. It never
+  contacts a provider or records actual spend.
+- **EDITORIAL BOUNDARY:** completed engine behavior and the ~$19.50 proof
+  film are labeled as shipped; Palmier VFX (masks, clean plates,
+  compositing, finishing) is labeled proposed. Source issue: GitHub #57.
+- **VERIFIED:** `npx tsc --noEmit`; `npm test` (40 files / 549 tests);
+  `npm run build`; Playwright visual proofs of landing, ISSUE 424 desktop
+  + 390px, canonical prior route `/#/issues/423`, and artifact at 390px.

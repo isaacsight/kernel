@@ -475,12 +475,13 @@ branch — only main publishes.
 
 ---
 
-_Last updated: ISSUE 423 · OCT 2026 (THE SIXTEEN THAT SPEAK —
-the second `plate` instance and the point at which the working-model
-form becomes a pattern. The artifact carries a named routing-depth
-axis and an operating brief through a deterministic 896-cell field;
-the site reuses 419's frame, blocks, wires, seed contract, disclosure,
-and session ledger, varying only the proof grammar. No new interaction
-shape was added. Prior: 422 THE POVERTY OF ATTENTION (`audit`, first
-merger issue) and 421 THE HARMONIC SERIES (`fourier`, first audible
-control).)_
+_Last updated: ISSUE 424 · NOV 2026 (THE STUDIO THAT STAYS HOME —
+the third `plate` instance. The artifact carries a production decision
+down a named BRIEF → MODEL → ESTIMATE → DECISION → RECEIPT axis, with
+approval and refusal given equal standing and actual spend fixed at
+zero. The site reuses 419's frame, blocks, wires, seed contract,
+disclosure, and session ledger, adding only a deterministic studio
+contact-sheet proof grammar. Palmier VFX is labeled proposed, not
+shipped. No new interaction shape was added. Prior: 423 THE SIXTEEN
+THAT SPEAK (`plate`, routing grammar) and 422 THE POVERTY OF ATTENTION
+(`audit`, first merger issue).)_

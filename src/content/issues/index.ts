@@ -76,6 +76,7 @@ import { ISSUE_420 } from './420'
 import { ISSUE_421 } from './421'
 import { ISSUE_422 } from './422'
 import { ISSUE_423 } from './423'
+import { ISSUE_424 } from './424'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -1119,8 +1120,9 @@ export interface PlateCatalogEntry {
 export interface PlateSpread extends SpreadCommon {
   type: 'plate'
   /** Rendering grammar for proof canvases. The default preserves
-   *  419's botanical engravings; routing renders expert fields. */
-  proofStyle?: 'botanical' | 'routing'
+   *  419's botanical engravings; routing renders expert fields;
+   *  studio renders local media receipts and contact sheets. */
+  proofStyle?: 'botanical' | 'routing' | 'studio'
   dossier?: SpreadDossier
   intro?: SpreadSection[]
   /** Monument headline, stacked — the galley register's header.
@@ -1609,6 +1611,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_421,
   ISSUE_422,
   ISSUE_423,
+  ISSUE_424,
 ]
 
 /** The latest published issue — drives the landing cover. */
