@@ -42,11 +42,10 @@ plus two Isaac-directed extensions. All committed on the branch, not merged:
   with 12-frame lead-ins, 4 long scenes speed-fitted, embedded clip audio
   muted at volume 0 (NEVER remove_clips on link partners — it deletes the
   video too), opacity-keyframe fades. Project: ~/Documents/Palmier Pro/what-we-made.palmier.
-- **Deferred:** Task 5 live smoke (one Seedance Lite clip ~$0.20) awaits Isaac's
-  explicit spend approval. Gemini backend designed but NOT built — Isaac has a
-  Gemini API key; `GEMINI_API_KEY` is not in `.env` yet (he must add it himself;
-  Claude never edits .env). Next: Veo-via-Gemini provider + Nano Banana image
-  option behind the same confirm contract.
+- **Task 5 live smoke: DONE** (subsumed by the film's smoke pass). Gemini is
+  OFF the roadmap — Isaac decided all-in on fal 2026-07-18; fal serves Veo and
+  Nano Banana anyway. Next engine work: merge branch to main; optionally add
+  image-to-image + upscaler categories to the catalog drawer.
 
 ## Session 2026-07-11 — ISSUE 416 · GPT 5.6 SOL (instrument) — on branch `fix/site-audit-qa-and-security`
 
