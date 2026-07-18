@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, parsePricingText, mapCatalogItem } from './video-models.mjs'
 
 describe('video model registry', () => {
   it('every model has the required fields', () => {
@@ -64,6 +64,45 @@ describe('buildInput / pickEndpoint', () => {
     expect(input.image_url).toBe('data:image/png;base64,AAAA')
     expect(pickEndpoint(m.id, true)).toBe(m.imageEndpoint)
     expect(pickEndpoint(m.id, false)).toBe(m.textEndpoint)
+  })
+})
+
+describe('parsePricingText', () => {
+  it('parses a plain per-second rate', () => {
+    expect(parsePricingText('Your request will cost $0.25 per second.')).toBe(0.25)
+  })
+  it('takes the highest rate when several resolutions are listed (never understates)', () => {
+    const text = 'For every second of 720p video you will be charged **$0.3034/second** and for 1080p you will be charged **$0.682/second**.'
+    expect(parsePricingText(text)).toBe(0.682)
+  })
+  it('derives a per-second rate from a fixed-length video price', () => {
+    expect(parsePricingText('For 5s video your request will cost $0.35.')).toBe(0.07)
+  })
+  it('returns null when no confident rate is present', () => {
+    expect(parsePricingText('Pricing depends on machine time.')).toBeNull()
+    expect(parsePricingText('')).toBeNull()
+    expect(parsePricingText(undefined)).toBeNull()
+  })
+})
+
+describe('mapCatalogItem', () => {
+  it('maps fal catalog items to the canvas shape with parsed pricing', () => {
+    const mapped = mapCatalogItem({
+      id: 'bytedance/seedance-2.0/text-to-video',
+      title: 'Seedance 2.0 Text to Video API',
+      category: 'text-to-video',
+      thumbnailUrl: 'https://x/t.jpg',
+      pricingInfoOverride: 'You will be charged **$0.30/second**.',
+    })
+    expect(mapped.endpointId).toBe('bytedance/seedance-2.0/text-to-video')
+    expect(mapped.title).toBe('Seedance 2.0 Text to Video API')
+    expect(mapped.usdPerSecond).toBe(0.3)
+    expect(mapped.pricingText).toBe('You will be charged $0.30/second.')
+  })
+  it('leaves usdPerSecond null when pricing is unparseable', () => {
+    const mapped = mapCatalogItem({ id: 'a/b', title: 'B', category: 'text-to-video', thumbnailUrl: '', pricingInfoOverride: 'Contact us.' })
+    expect(mapped.usdPerSecond).toBeNull()
+    expect(mapped.pricingText).toBe('Contact us.')
   })
 })
 

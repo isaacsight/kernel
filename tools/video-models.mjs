@@ -82,6 +82,37 @@ export function buildInput(modelId, prompt, durationSeconds, imageUrl) {
   return input
 }
 
+// Parse fal's human-written pricing copy into a USD-per-second rate.
+// Conservative by design: with several listed rates (resolution tiers) it
+// returns the highest, and returns null rather than guess — the confirm
+// dialog then shows fal's own pricing text instead of a fabricated number.
+export function parsePricingText(text) {
+  if (!text || typeof text !== 'string') return null
+  const plain = text.replace(/\*\*/g, '')
+  const perSecond = [...plain.matchAll(/\$(\d+(?:\.\d+)?)\s*(?:\/|\s*per\s+)\s*(?:output\s+)?second/gi)]
+    .map(m => Number(m[1]))
+  if (perSecond.length) return Math.max(...perSecond)
+  const perVideo = plain.match(/for\s+(?:a\s+)?(\d+)\s*s(?:econd)?s?\s+video[^$]*\$(\d+(?:\.\d+)?)/i)
+  if (perVideo) {
+    const seconds = Number(perVideo[1])
+    const usd = Number(perVideo[2])
+    if (seconds > 0) return Math.round((usd / seconds) * 10000) / 10000
+  }
+  return null
+}
+
+export function mapCatalogItem(item) {
+  const pricingText = (item.pricingInfoOverride || '').replace(/\*\*/g, '').trim()
+  return {
+    endpointId: item.id,
+    title: item.title,
+    category: item.category,
+    thumbnailUrl: item.thumbnailUrl || '',
+    pricingText,
+    usdPerSecond: parsePricingText(item.pricingInfoOverride),
+  }
+}
+
 export function extractVideoUrl(payload) {
   if (!payload || typeof payload !== 'object') return null
   return payload.video?.url ?? payload.data?.video?.url ?? payload.videos?.[0]?.url ?? null

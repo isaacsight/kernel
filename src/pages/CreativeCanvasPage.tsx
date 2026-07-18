@@ -63,23 +63,40 @@ async function canvasImage(prompt: string): Promise<{ imageUrl: string; note: st
 
 interface VideoModelInfo { id: string; label: string; usdPerSecond: number; defaultDurationSeconds: number; maxDurationSeconds: number; supportsImage: boolean }
 
-async function videoEstimate(model: string, durationSeconds: number): Promise<{ usd: number | null; seconds: number }> {
+interface CatalogItem { endpointId: string; title: string; category: string; thumbnailUrl: string; pricingText: string; usdPerSecond: number | null }
+
+type CatalogCategory = 'text-to-video' | 'image-to-video'
+
+async function videoCatalog(category: CatalogCategory): Promise<CatalogItem[]> {
+  let res: Response
+  try {
+    res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/catalog?category=${category}`)
+  } catch {
+    throw new Error('Local video server offline — run: npm run video-server')
+  }
+  const payload = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(payload.error || `Catalog unavailable (${res.status})`)
+  return payload.items as CatalogItem[]
+}
+
+async function videoEstimate(body: { model?: string; endpoint?: string }, durationSeconds: number): Promise<{ usd: number | null; seconds: number; pricingText: string }> {
   try {
     const res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/videos/estimate`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, durationSeconds }),
+      body: JSON.stringify({ ...body, durationSeconds }),
     })
     const payload = await res.json()
     return {
       usd: typeof payload.usd === 'number' ? payload.usd : null,
       seconds: typeof payload.seconds === 'number' ? payload.seconds : durationSeconds,
+      pricingText: typeof payload.pricingText === 'string' ? payload.pricingText : '',
     }
   } catch {
     throw new Error('Local video server offline — run: npm run video-server')
   }
 }
 
-async function videoGenerate(body: { prompt: string; model: string; durationSeconds?: number; imageUrl?: string }): Promise<string> {
+async function videoGenerate(body: { prompt: string; model?: string; endpoint?: string; durationSeconds?: number; imageUrl?: string }): Promise<string> {
   const res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/videos/generations`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
   })
@@ -110,6 +127,7 @@ interface StudioNode {
   title: string
   content: string
   model?: string
+  catalogEndpoint?: string
   imageUrl?: string
   videoUrl?: string
   result?: string
@@ -510,7 +528,13 @@ function CreativeCanvasStudio() {
   const [savedAt, setSavedAt] = useState('Saved')
   const [graphRunning, setGraphRunning] = useState(false)
   const [runProgress, setRunProgress] = useState<{ current: number; total: number } | null>(null)
-  const [videoConfirm, setVideoConfirm] = useState<{ nodeId: string; prompt: string; model: string; imageUrl?: string; usd: number | null; seconds: number } | null>(null)
+  const [videoConfirm, setVideoConfirm] = useState<{ nodeId: string; prompt: string; model: string; endpoint?: string; pricingText?: string; imageUrl?: string; usd: number | null; seconds: number } | null>(null)
+  const [catalogFor, setCatalogFor] = useState<string | null>(null)
+  const [catalogCategory, setCatalogCategory] = useState<CatalogCategory>('text-to-video')
+  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([])
+  const [catalogQuery, setCatalogQuery] = useState('')
+  const [catalogLoading, setCatalogLoading] = useState(false)
+  const [catalogError, setCatalogError] = useState('')
   const [remoteRunRequest, setRemoteRunRequest] = useState('')
   const [remoteLoopRequest, setRemoteLoopRequest] = useState<{ requestedAt: string; goal: string; maxIterations: number } | null>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
@@ -720,6 +744,7 @@ function CreativeCanvasStudio() {
         return
       }
       const modelId = videoModelIds[node.model ?? ''] ?? 'seedance-lite'
+      const catalogEndpoint = node.catalogEndpoint
       const upstreamImage = graphEdges
         .filter(edge => edge.to === id)
         .map(edge => graphNodes.find(item => item.id === edge.from))
@@ -731,9 +756,9 @@ function CreativeCanvasStudio() {
       }
       updateNode(id, { status: 'running', result: 'Fetching cost estimate…' })
       try {
-        const { usd, seconds } = await videoEstimate(modelId, 5)
+        const { usd, seconds, pricingText } = await videoEstimate(catalogEndpoint ? { endpoint: catalogEndpoint } : { model: modelId }, 5)
         updateNode(id, { status: 'idle', result: '' })
-        setVideoConfirm({ nodeId: id, prompt, model: modelId, imageUrl: upstreamImage, usd, seconds })
+        setVideoConfirm({ nodeId: id, prompt, model: catalogEndpoint ? (node.model ?? catalogEndpoint) : modelId, endpoint: catalogEndpoint, pricingText, imageUrl: upstreamImage, usd, seconds })
       } catch (error) {
         updateNode(id, { status: 'error', result: error instanceof Error ? error.message : 'Video server unavailable' })
         showToast(error instanceof Error ? error.message : 'Video server unavailable')
@@ -803,19 +828,42 @@ Complete this step directly. Return the useful work product, not commentary abou
 
   const confirmVideoRun = useCallback(async () => {
     if (!videoConfirm) return
-    const { nodeId, prompt, model, imageUrl } = videoConfirm
+    const { nodeId, prompt, model, endpoint, imageUrl } = videoConfirm
     setVideoConfirm(null)
     updateNode(nodeId, { status: 'running', result: 'Generating — this takes one to six minutes…' })
     try {
-      const jobId = await videoGenerate({ prompt, model, durationSeconds: 5, imageUrl })
+      const jobId = await videoGenerate(endpoint ? { prompt, endpoint, imageUrl } : { prompt, model, durationSeconds: 5, imageUrl })
       const videoUrl = await videoPoll(jobId)
-      updateNode(nodeId, { status: 'done', videoUrl, result: `Rendered via ${model} — saved to output/videos/` })
+      updateNode(nodeId, { status: 'done', videoUrl, result: `Rendered via ${endpoint ?? model} — saved to output/videos/` })
       showToast('Video rendered')
     } catch (error) {
       updateNode(nodeId, { status: 'error', result: error instanceof Error ? error.message : 'Generation failed' })
       showToast('Video generation failed')
     }
   }, [videoConfirm, updateNode, showToast])
+
+  const openCatalog = useCallback(async (nodeId: string, category: CatalogCategory) => {
+    setCatalogFor(nodeId)
+    setCatalogCategory(category)
+    setCatalogQuery('')
+    setCatalogError('')
+    setCatalogLoading(true)
+    try {
+      setCatalogItems(await videoCatalog(category))
+    } catch (error) {
+      setCatalogItems([])
+      setCatalogError(error instanceof Error ? error.message : 'Catalog unavailable')
+    } finally {
+      setCatalogLoading(false)
+    }
+  }, [])
+
+  const pickCatalogModel = useCallback((item: CatalogItem) => {
+    if (!catalogFor) return
+    updateNode(catalogFor, { catalogEndpoint: item.endpointId, model: item.title })
+    setCatalogFor(null)
+    showToast(`Video node set to ${item.title}`)
+  }, [catalogFor, updateNode, showToast])
 
   const runGraph = useCallback(async () => {
     if (graphRunning) return
@@ -1443,15 +1491,23 @@ Rules:
                 <textarea value={node.content} onChange={event => updateNode(node.id, { content: event.target.value })} aria-label={`${node.title} prompt`} />
                 {node.result && <div className="cc-node-result"><span>Result</span><p>{node.result}</p></div>}
                 <div className="cc-node-footer">
-                  <select value={node.model} onChange={event => updateNode(node.id, { model: event.target.value })} aria-label="Generation model">
-                    {modelsByKind[node.kind].map(model => <option key={model}>{model}</option>)}
-                  </select>
+                  {node.kind === 'video' && node.catalogEndpoint ? (
+                    <span className="cc-catalog-chip" title={node.catalogEndpoint}>
+                      {node.model}
+                      <button aria-label="Back to curated models" onClick={() => updateNode(node.id, { catalogEndpoint: undefined, model: modelsByKind.video[0] })}>×</button>
+                    </span>
+                  ) : (
+                    <select value={node.model} onChange={event => updateNode(node.id, { model: event.target.value })} aria-label="Generation model">
+                      {modelsByKind[node.kind].map(model => <option key={model}>{model}</option>)}
+                    </select>
+                  )}
                   <button className={`cc-run ${node.status === 'error' ? 'has-error' : ''}`} disabled={node.status === 'running'} onClick={() => runNode(node.id)}>
                     {node.status === 'running' ? <><i /> Running</> : node.status === 'done' ? '↻ Run again' : 'Run →'}
                   </button>
                 </div>
 
                 {selectedId === node.id && <div className="cc-node-tools">
+                  {node.kind === 'video' && <button onClick={() => openCatalog(node.id, 'text-to-video')}>Catalog</button>}
                   <button onClick={() => addNode('agent', node.id)}>＋ Agent</button>
                   <button onClick={() => addNode('image', node.id)}>＋ Image</button>
                   <button onClick={() => addNode('video', node.id)}>＋ Video</button>
@@ -1525,9 +1581,47 @@ Rules:
             <h3>Paid generation</h3>
             <p className="cc-video-confirm-model">{videoConfirm.model}{videoConfirm.imageUrl ? ' — image to video' : ''} · {videoConfirm.seconds}s</p>
             <p className="cc-video-confirm-price">{videoConfirm.usd !== null ? `Estimated $${videoConfirm.usd.toFixed(2)}` : 'Price unknown — check fal.ai before confirming'}</p>
+            {videoConfirm.endpoint && videoConfirm.pricingText && <p className="cc-video-confirm-listing">fal listing: {videoConfirm.pricingText}</p>}
             <div className="cc-video-confirm-actions">
               <button onClick={() => setVideoConfirm(null)}>Cancel</button>
               <button className="cc-video-confirm-go" onClick={confirmVideoRun}>Generate</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {catalogFor && (
+        <div className="cc-catalog" role="dialog" aria-label="fal.ai model catalog">
+          <div className="cc-catalog-panel">
+            <div className="cc-catalog-head">
+              <h3>Model catalog</h3>
+              <button aria-label="Close catalog" onClick={() => setCatalogFor(null)}>×</button>
+            </div>
+            <div className="cc-catalog-controls">
+              <div className="cc-catalog-tabs">
+                <button className={catalogCategory === 'text-to-video' ? 'is-active' : ''} onClick={() => openCatalog(catalogFor, 'text-to-video')}>Text to video</button>
+                <button className={catalogCategory === 'image-to-video' ? 'is-active' : ''} onClick={() => openCatalog(catalogFor, 'image-to-video')}>Image to video</button>
+              </div>
+              <input value={catalogQuery} onChange={event => setCatalogQuery(event.target.value)} placeholder="Filter models…" aria-label="Filter models" />
+            </div>
+            {catalogLoading && <p className="cc-catalog-note">Loading the fal.ai catalog…</p>}
+            {catalogError && <p className="cc-catalog-note">{catalogError}</p>}
+            <div className="cc-catalog-grid">
+              {catalogItems
+                .filter(item => !catalogQuery || `${item.title} ${item.endpointId}`.toLowerCase().includes(catalogQuery.toLowerCase()))
+                .map(item => (
+                  <div
+                    key={item.endpointId}
+                    className="cc-catalog-card"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => pickCatalogModel(item)}
+                    onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); pickCatalogModel(item) } }}
+                  >
+                    {item.thumbnailUrl ? <img src={item.thumbnailUrl} alt="" loading="lazy" /> : <div className="cc-catalog-card-blank" />}
+                    <strong>{item.title}</strong>
+                    <small>{item.usdPerSecond !== null ? `$${item.usdPerSecond}/s` : 'price on listing'}</small>
+                  </div>
+                ))}
             </div>
           </div>
         </div>

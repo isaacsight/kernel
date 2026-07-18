@@ -9,7 +9,7 @@
 import { createServer } from 'node:http'
 import { writeFile, mkdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, mapCatalogItem } from './video-models.mjs'
 
 const PORT = Number(process.env.VIDEO_SERVER_PORT || 5412)
 const FAL_KEY = process.env.FAL_KEY || ''
@@ -18,6 +18,41 @@ const FAL_QUEUE = 'https://queue.fal.run'
 
 /** jobId -> { statusUrl, responseUrl, status, videoUrl, error } */
 const jobs = new Map()
+
+// fal.ai catalog cache: category -> { at, items }. The catalog endpoint is
+// fal's site API (undocumented) — cache generously and fail soft; the curated
+// MODELS registry keeps working if fal changes the shape.
+const CATALOG_TTL_MS = 60 * 60 * 1000
+const CATALOG_CATEGORIES = new Set(['text-to-video', 'image-to-video'])
+const catalogCache = new Map()
+const ENDPOINT_SLUG = /^[\w.-]+(?:\/[\w.-]+)+$/
+
+async function fetchCatalog(category) {
+  const cached = catalogCache.get(category)
+  if (cached && Date.now() - cached.at < CATALOG_TTL_MS) return cached.items
+  const raw = []
+  for (let page = 1; page <= 5; page++) {
+    const res = await fetch(`https://fal.ai/api/models?categories=${category}&page=${page}&total=40`, {
+      headers: { Accept: 'application/json' },
+    })
+    if (!res.ok) throw new Error(`fal catalog error ${res.status}`)
+    const payload = await res.json()
+    const batch = payload.items || []
+    raw.push(...batch)
+    if (!batch.length || raw.length >= (payload.total || 0)) break
+  }
+  const items = raw.map(mapCatalogItem).filter(item => item.endpointId && item.title)
+  catalogCache.set(category, { at: Date.now(), items })
+  return items
+}
+
+function catalogEntry(endpointId) {
+  for (const { items } of catalogCache.values()) {
+    const hit = items.find(item => item.endpointId === endpointId)
+    if (hit) return hit
+  }
+  return null
+}
 
 function json(res, status, body) {
   res.writeHead(status, {
@@ -45,9 +80,14 @@ async function falFetch(url, init = {}) {
   return payload
 }
 
-async function submitJob({ prompt, model, durationSeconds, imageUrl }) {
-  const endpoint = pickEndpoint(model, Boolean(imageUrl))
-  const input = buildInput(model, prompt, durationSeconds, imageUrl)
+async function submitJob({ prompt, model, endpoint: rawEndpoint, durationSeconds, imageUrl }) {
+  // Catalog passthrough: an explicit endpoint slug wins over the curated
+  // registry. Input schemas vary across the catalog, so passthrough sends
+  // only the universally-accepted fields (prompt, image_url).
+  const endpoint = rawEndpoint || pickEndpoint(model, Boolean(imageUrl))
+  const input = rawEndpoint
+    ? { prompt, ...(imageUrl ? { image_url: imageUrl } : {}) }
+    : buildInput(model, prompt, durationSeconds, imageUrl)
   const submitted = await falFetch(`${FAL_QUEUE}/${endpoint}`, { method: 'POST', body: JSON.stringify(input) })
   const jobId = submitted.request_id
   if (!jobId) throw new Error('fal.ai returned no request_id')
@@ -106,8 +146,27 @@ const server = createServer(async (req, res) => {
     })
   }
 
+  if (req.method === 'GET' && url.pathname === '/v1/catalog') {
+    const category = url.searchParams.get('category') || 'text-to-video'
+    if (!CATALOG_CATEGORIES.has(category)) return json(res, 400, { error: `unknown category: ${category}` })
+    try {
+      return json(res, 200, { items: await fetchCatalog(category) })
+    } catch (err) {
+      return json(res, 502, { error: err.message })
+    }
+  }
+
   if (req.method === 'POST' && url.pathname === '/v1/videos/estimate') {
     const body = await readBody(req)
+    if (body?.endpoint) {
+      const entry = catalogEntry(body.endpoint)
+      const seconds = Number(body.durationSeconds) || 5
+      return json(res, 200, {
+        usd: entry?.usdPerSecond != null ? Math.round(entry.usdPerSecond * seconds * 100) / 100 : null,
+        seconds,
+        pricingText: entry?.pricingText || '',
+      })
+    }
     if (!body?.model) return json(res, 400, { error: 'model is required' })
     return json(res, 200, {
       usd: estimateUsd(body.model, body.durationSeconds),
@@ -120,7 +179,11 @@ const server = createServer(async (req, res) => {
     const body = await readBody(req)
     const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : ''
     if (!prompt) return json(res, 400, { error: 'prompt is required' })
-    if (!getModel(body.model)) return json(res, 400, { error: `unknown model: ${body?.model}` })
+    if (body?.endpoint) {
+      if (!ENDPOINT_SLUG.test(body.endpoint)) return json(res, 400, { error: `bad endpoint slug: ${body.endpoint}` })
+    } else if (!getModel(body.model)) {
+      return json(res, 400, { error: `unknown model: ${body?.model}` })
+    }
     try {
       const jobId = await submitJob(body)
       console.log(`[video-server] submitted ${body.model} job ${jobId}: ${prompt.slice(0, 80)}`)

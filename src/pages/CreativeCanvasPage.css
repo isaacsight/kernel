@@ -156,3 +156,28 @@
 .cc-video-confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
 .cc-video-confirm-actions button { min-height: 44px; padding: 0 18px; cursor: pointer; }
 .cc-video-confirm-go { background: var(--color-tomato, #E24E1B); color: #FAF9F6; border: none; border-radius: 6px; }
+
+.cc-video-confirm-listing { font-family: 'Courier Prime', monospace; font-size: 11px; line-height: 1.5; margin: 0 0 16px; max-height: 96px; overflow-y: auto; opacity: 0.75; }
+.cc-catalog-chip { display: inline-flex; align-items: center; gap: 6px; font-family: 'Courier Prime', monospace; font-size: 12px; padding: 4px 8px; border: 1px solid rgba(250, 249, 246, 0.25); border-radius: 6px; max-width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.cc-catalog-chip button { background: none; border: none; cursor: pointer; color: inherit; font-size: 14px; padding: 0 2px; }
+.cc-catalog { position: fixed; inset: 0; background: rgba(31, 30, 29, 0.55); display: grid; place-items: center; z-index: 60; }
+.cc-catalog-panel { background: var(--color-ivory, #FAF9F6); color: var(--color-ink, #1F1E1D); width: min(880px, 92vw); max-height: 84vh; display: flex; flex-direction: column; border-radius: 10px; padding: 20px 24px; font-family: 'EB Garamond', serif; }
+.cc-catalog-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cc-catalog-head h3 { margin: 0; }
+.cc-catalog-head button { background: none; border: none; font-size: 22px; cursor: pointer; color: inherit; min-height: 44px; min-width: 44px; }
+.cc-catalog-controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.cc-catalog-tabs { display: flex; gap: 6px; }
+.cc-catalog-tabs button { min-height: 44px; padding: 0 14px; cursor: pointer; border: 1px solid rgba(31, 30, 29, 0.25); background: none; border-radius: 6px; font-family: 'Courier Prime', monospace; font-size: 12px; }
+.cc-catalog-tabs button.is-active { background: var(--color-ink, #1F1E1D); color: var(--color-ivory, #FAF9F6); }
+.cc-catalog-controls input { flex: 1; min-width: 180px; min-height: 44px; padding: 0 12px; border: 1px solid rgba(31, 30, 29, 0.25); border-radius: 6px; font-family: 'Courier Prime', monospace; font-size: 13px; background: none; color: inherit; }
+.cc-catalog-note { font-family: 'Courier Prime', monospace; font-size: 13px; }
+/* Fixed row and thumbnail heights: the embedded browser pane's WebKit does not
+   resolve intrinsic card heights from aspect-ratio content, so size explicitly. */
+.cc-catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); grid-auto-rows: 178px; gap: 12px; overflow-y: auto; padding-bottom: 4px; }
+.cc-catalog-card { height: 178px; text-align: left; background: none; border: 1px solid rgba(31, 30, 29, 0.18); border-radius: 8px; padding: 0 0 10px; cursor: pointer; overflow: hidden; display: block; color: inherit; }
+.cc-catalog-card strong { display: block; margin-top: 6px; max-height: 38px; overflow: hidden; }
+.cc-catalog-card small { display: block; margin-top: 2px; }
+.cc-catalog-card:hover { border-color: var(--color-tomato, #E24E1B); }
+.cc-catalog-card img, .cc-catalog-card-blank { width: 100%; height: 104px; object-fit: cover; background: rgba(31, 30, 29, 0.08); display: block; }
+.cc-catalog-card strong { font-size: 14px; line-height: 1.25; padding: 4px 10px 0; }
+.cc-catalog-card small { font-family: 'Courier Prime', monospace; font-size: 11px; padding: 0 10px; opacity: 0.7; }
