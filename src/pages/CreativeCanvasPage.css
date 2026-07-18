@@ -146,3 +146,13 @@
 @media (prefers-reduced-motion: reduce) {
   .cc-studio *, .cc-studio *::before, .cc-studio *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+.cc-video-player { width: 100%; border-radius: 8px; display: block; }
+.cc-video-confirm { position: fixed; inset: 0; background: rgba(31, 30, 29, 0.55); display: grid; place-items: center; z-index: 60; }
+.cc-video-confirm-card { background: var(--color-ivory, #FAF9F6); color: var(--color-ink, #1F1E1D); padding: 24px 28px; border-radius: 10px; max-width: 340px; font-family: 'EB Garamond', serif; }
+.cc-video-confirm-card h3 { margin: 0 0 8px; }
+.cc-video-confirm-model { font-family: 'Courier Prime', monospace; font-size: 13px; margin: 0 0 4px; }
+.cc-video-confirm-price { font-weight: 600; margin: 0 0 16px; }
+.cc-video-confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.cc-video-confirm-actions button { min-height: 44px; padding: 0 18px; cursor: pointer; }
+.cc-video-confirm-go { background: var(--color-tomato, #E24E1B); color: #FAF9F6; border: none; border-radius: 6px; }

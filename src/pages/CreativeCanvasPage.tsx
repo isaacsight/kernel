@@ -31,6 +31,7 @@ function canvasJson<T>(prompt: string, opts: LLMOpts): Promise<T> {
 // Local image generation: mflux behind tools/local-image-server.mjs.
 // Free and login-less; production image nodes keep using the engine proxy.
 const LOCAL_IMAGE_ENDPOINT = 'http://localhost:5411'
+const LOCAL_VIDEO_ENDPOINT = 'http://localhost:5412'
 
 async function canvasImage(prompt: string): Promise<{ imageUrl: string; note: string }> {
   if (!LOCAL_CANVAS) {
@@ -60,6 +61,42 @@ async function canvasImage(prompt: string): Promise<{ imageUrl: string; note: st
   }
 }
 
+interface VideoModelInfo { id: string; label: string; usdPerSecond: number; defaultDurationSeconds: number; maxDurationSeconds: number; supportsImage: boolean }
+
+async function videoEstimate(model: string, durationSeconds: number): Promise<number | null> {
+  try {
+    const res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/videos/estimate`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, durationSeconds }),
+    })
+    const payload = await res.json()
+    return typeof payload.usd === 'number' ? payload.usd : null
+  } catch {
+    throw new Error('Local video server offline — run: npm run video-server')
+  }
+}
+
+async function videoGenerate(body: { prompt: string; model: string; durationSeconds?: number; imageUrl?: string }): Promise<string> {
+  const res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/videos/generations`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+  })
+  const payload = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(payload.error || `Video server error (${res.status})`)
+  return payload.jobId as string
+}
+
+async function videoPoll(jobId: string): Promise<string> {
+  const deadline = Date.now() + 10 * 60 * 1000
+  while (Date.now() < deadline) {
+    const res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/videos/jobs/${jobId}`)
+    const payload = await res.json().catch(() => ({}))
+    if (payload.status === 'done' && payload.videoUrl) return payload.videoUrl as string
+    if (payload.status === 'error') throw new Error(payload.error || 'Generation failed')
+    await new Promise(resolve => setTimeout(resolve, 3000))
+  }
+  throw new Error('Generation timed out after 10 minutes')
+}
+
 type NodeKind = 'prompt' | 'agent' | 'model' | 'image' | 'video' | 'output' | 'note'
 
 interface StudioNode {
@@ -71,6 +108,7 @@ interface StudioNode {
   content: string
   model?: string
   imageUrl?: string
+  videoUrl?: string
   result?: string
   status?: 'idle' | 'running' | 'done' | 'error'
 }
@@ -181,9 +219,16 @@ const modelsByKind: Record<NodeKind, string[]> = {
   agent: ['Researcher Agent', 'Coder Agent', 'Writer Agent', 'Analyst Agent'],
   model: ['Claude 4.5', 'GPT-5', 'Gemini 3 Pro', 'LocateAnything-3B (NVIDIA)', 'Eagle2-9B Multimodal (NVIDIA)'],
   image: ['GPT Image', 'Nano Banana Pro', 'Flux 2 Max', 'Seedream 4.5'],
-  video: ['Veo 3.1', 'Seedance 2.0', 'Kling 3.0', 'Runway Gen-4.5'],
+  video: ['Veo 3.1 Fast', 'Kling (Pro)', 'Seedance (Lite)', 'Luma Ray'],
   output: ['Compiled result'],
   note: ['Manual note'],
+}
+
+const videoModelIds: Record<string, string> = {
+  'Veo 3.1 Fast': 'veo-3-fast',
+  'Kling (Pro)': 'kling-pro',
+  'Seedance (Lite)': 'seedance-lite',
+  'Luma Ray': 'luma-ray',
 }
 
 interface ExternalCanvasState {
@@ -462,6 +507,7 @@ function CreativeCanvasStudio() {
   const [savedAt, setSavedAt] = useState('Saved')
   const [graphRunning, setGraphRunning] = useState(false)
   const [runProgress, setRunProgress] = useState<{ current: number; total: number } | null>(null)
+  const [videoConfirm, setVideoConfirm] = useState<{ nodeId: string; prompt: string; model: string; imageUrl?: string; usd: number | null } | null>(null)
   const [remoteRunRequest, setRemoteRunRequest] = useState('')
   const [remoteLoopRequest, setRemoteLoopRequest] = useState<{ requestedAt: string; goal: string; maxIterations: number } | null>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
@@ -651,7 +697,7 @@ function CreativeCanvasStudio() {
     showToast('Node removed')
   }, [showToast])
 
-  const runNode = useCallback(async (id: string) => {
+  const runNode = useCallback(async (id: string, opts?: { auto?: boolean }) => {
     const graphNodes = nodesRef.current
     const graphEdges = edgesRef.current
     const node = graphNodes.find(item => item.id === id)
@@ -666,11 +712,29 @@ function CreativeCanvasStudio() {
       .join('\n\n')
 
     if (node.kind === 'video') {
-      updateNode(id, { status: 'running' })
-      window.setTimeout(() => {
-        updateNode(id, { status: 'done', result: 'Video workflow prepared. Connect a video-generation endpoint to render the final clip.' })
-        showToast('Video workflow prepared — connect a video provider to render')
-      }, 1100)
+      if (opts?.auto) {
+        updateNode(id, { status: 'idle', result: 'Ready — awaiting cost confirmation. Run this node directly to generate.' })
+        return
+      }
+      const modelId = videoModelIds[node.model ?? ''] ?? 'seedance-lite'
+      const upstreamImage = graphEdges
+        .filter(edge => edge.to === id)
+        .map(edge => graphNodes.find(item => item.id === edge.from))
+        .find(source => source?.kind === 'image' && source.imageUrl)?.imageUrl
+      const prompt = [upstream, node.content].filter(Boolean).join('\n\nMotion direction:\n')
+      if (!prompt.trim()) {
+        updateNode(id, { status: 'error', result: 'Add a motion direction or connect an upstream node first.' })
+        return
+      }
+      updateNode(id, { status: 'running', result: 'Fetching cost estimate…' })
+      try {
+        const usd = await videoEstimate(modelId, 5)
+        updateNode(id, { status: 'idle', result: '' })
+        setVideoConfirm({ nodeId: id, prompt, model: modelId, imageUrl: upstreamImage, usd })
+      } catch (error) {
+        updateNode(id, { status: 'error', result: error instanceof Error ? error.message : 'Video server unavailable' })
+        showToast(error instanceof Error ? error.message : 'Video server unavailable')
+      }
       return
     }
 
@@ -734,6 +798,22 @@ Complete this step directly. Return the useful work product, not commentary abou
     }
   }, [showToast, updateNode])
 
+  const confirmVideoRun = useCallback(async () => {
+    if (!videoConfirm) return
+    const { nodeId, prompt, model, imageUrl } = videoConfirm
+    setVideoConfirm(null)
+    updateNode(nodeId, { status: 'running', result: 'Generating — this takes one to six minutes…' })
+    try {
+      const jobId = await videoGenerate({ prompt, model, durationSeconds: 5, imageUrl })
+      const videoUrl = await videoPoll(jobId)
+      updateNode(nodeId, { status: 'done', videoUrl, result: `Rendered via ${model} — saved to output/videos/` })
+      showToast('Video rendered')
+    } catch (error) {
+      updateNode(nodeId, { status: 'error', result: error instanceof Error ? error.message : 'Generation failed' })
+      showToast('Video generation failed')
+    }
+  }, [videoConfirm, updateNode, showToast])
+
   const runGraph = useCallback(async () => {
     if (graphRunning) return
     setGraphRunning(true)
@@ -752,7 +832,7 @@ Complete this step directly. Return the useful work product, not commentary abou
     try {
       while (queue.length) {
         const id = queue.shift()!
-        await runNode(id)
+        await runNode(id, { auto: true })
         visited++
         setRunProgress({ current: visited, total: graphNodes.length })
         for (const child of children.get(id) ?? []) {
@@ -990,7 +1070,7 @@ Rules:
         const summary = typeof args.summary === 'string' ? args.summary : `Applied ${result.applied} canvas commands.`
         setAgentMessages(current => [...current, { id: makeId('message'), role: 'agent', text: summary }])
         showToast(summary)
-        for (const id of result.runQueue.slice(0, 4)) await runNode(id)
+        for (const id of result.runQueue.slice(0, 4)) await runNode(id, { auto: true })
         return {
           success: true,
           data: {
@@ -1161,7 +1241,7 @@ Rules:
       setAgentMessages(current => [...current, { id: makeId('message'), role: 'agent', text: `${summary} ${breakdown}.${skippedNote}${truncatedNote}` }])
       showToast(summary)
 
-      for (const id of result.runQueue.slice(0, 4)) await runNode(id)
+      for (const id of result.runQueue.slice(0, 4)) await runNode(id, { auto: true })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'The canvas agent could not complete that request.'
       setAgentMessages(current => [...current, { id: makeId('message'), role: 'agent', text: `I couldn't change the canvas: ${message}` }])
@@ -1354,7 +1434,8 @@ Rules:
                 </div>
 
                 {node.imageUrl && <div className="cc-node-image"><img src={node.imageUrl} alt={node.title} /></div>}
-                {node.kind === 'video' && <div className="cc-video-preview"><span>▶</span><small>Preview after render</small></div>}
+                {node.kind === 'video' && !node.videoUrl && <div className="cc-video-preview"><span>Run to render</span><small>Cost shown before anything is charged</small></div>}
+                {node.kind === 'video' && node.videoUrl && <video className="cc-video-player" src={node.videoUrl} controls loop />}
 
                 <textarea value={node.content} onChange={event => updateNode(node.id, { content: event.target.value })} aria-label={`${node.title} prompt`} />
                 {node.result && <div className="cc-node-result"><span>Result</span><p>{node.result}</p></div>}
@@ -1435,6 +1516,19 @@ Rules:
         </aside>
       </div>
 
+      {videoConfirm && (
+        <div className="cc-video-confirm" role="dialog" aria-label="Confirm paid generation">
+          <div className="cc-video-confirm-card">
+            <h3>Paid generation</h3>
+            <p className="cc-video-confirm-model">{videoConfirm.model}{videoConfirm.imageUrl ? ' — image to video' : ''} · 5s</p>
+            <p className="cc-video-confirm-price">{videoConfirm.usd !== null ? `Estimated $${videoConfirm.usd.toFixed(2)}` : 'Price unknown — check fal.ai before confirming'}</p>
+            <div className="cc-video-confirm-actions">
+              <button onClick={() => setVideoConfirm(null)}>Cancel</button>
+              <button className="cc-video-confirm-go" onClick={confirmVideoRun}>Generate</button>
+            </div>
+          </div>
+        </div>
+      )}
       {toast && <div className="cc-toast" role="status" aria-live="polite">{toast}</div>}
     </div>
   )
