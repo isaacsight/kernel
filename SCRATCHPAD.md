@@ -29,6 +29,9 @@ plus two Isaac-directed extensions. All committed on the branch, not merged:
   video (:5412) with linked shutdown (`tools/engine.mjs`). Both GALLEY prompts
   now carry ENGINE COST TIERS (images free / video parks / Seedance Lite ~$0.20
   draft tier / prefer image->video).
+- **Claude + fal pairing:** Refine button on video nodes — Claude (proxy in
+  prod, Ollama in dev) rewrites the rough motion direction into a cinematic
+  prompt for the node's target model before the priced Run. Verified locally.
 - **Deferred:** Task 5 live smoke (one Seedance Lite clip ~$0.20) awaits Isaac's
   explicit spend approval. Gemini backend designed but NOT built — Isaac has a
   Gemini API key; `GEMINI_API_KEY` is not in `.env` yet (he must add it himself;
