@@ -79,6 +79,9 @@ playwright-report/
 test-results/
 test-upload.txt
 
+# GALLEY generations and local engine state (may contain private client media).
+/output/
+
 # Capacitor native projects (generated, not tracked)
 ios/
 android/

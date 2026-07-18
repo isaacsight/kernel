@@ -55,7 +55,9 @@ export function effectiveSeconds(modelId, durationSeconds) {
   const model = getModel(modelId)
   if (!model) return null
   if (!model.durationParam) return model.defaultDurationSeconds
-  return Math.min(Number(durationSeconds) || model.defaultDurationSeconds, model.maxDurationSeconds)
+  const requested = Number(durationSeconds)
+  const seconds = Number.isFinite(requested) && requested > 0 ? requested : model.defaultDurationSeconds
+  return Math.min(seconds, model.maxDurationSeconds)
 }
 
 export function estimateUsd(modelId, durationSeconds) {
@@ -75,7 +77,7 @@ export function buildInput(modelId, prompt, durationSeconds, imageUrl) {
   if (!model) return null
   const input = { prompt }
   if (model.durationParam) {
-    const seconds = Math.min(Number(durationSeconds) || model.defaultDurationSeconds, model.maxDurationSeconds)
+    const seconds = effectiveSeconds(modelId, durationSeconds)
     input[model.durationParam] = String(seconds)
   }
   if (imageUrl && model.imageEndpoint) input.image_url = imageUrl

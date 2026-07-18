@@ -13,7 +13,7 @@ import { spawn } from 'node:child_process'
 
 const SERVERS = [
   { name: 'image', args: ['tools/local-image-server.mjs'] },
-  { name: 'video', args: ['--env-file=.env', 'tools/local-video-server.mjs'] },
+  { name: 'video', args: ['tools/local-video-server.mjs'] },
 ]
 
 const children = []
@@ -48,4 +48,4 @@ function shutdown(code) {
 
 process.on('SIGINT', () => shutdown(0))
 process.on('SIGTERM', () => shutdown(0))
-console.log('[engine] image :5411 + video :5412 — Ctrl+C stops both')
+console.log(`[engine] image :${process.env.IMAGE_SERVER_PORT || 5411} + video :${process.env.VIDEO_SERVER_PORT || 5412} — Ctrl+C stops both`)

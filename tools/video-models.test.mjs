@@ -49,6 +49,11 @@ describe('effectiveSeconds', () => {
   it('returns null for unknown models', () => {
     expect(effectiveSeconds('nope', 5)).toBeNull()
   })
+  it('never returns zero or negative billable time', () => {
+    const m = MODELS.find(x => x.durationParam)
+    expect(effectiveSeconds(m.id, -5)).toBe(m.defaultDurationSeconds)
+    expect(effectiveSeconds(m.id, 0)).toBe(m.defaultDurationSeconds)
+  })
 })
 
 describe('buildInput / pickEndpoint', () => {

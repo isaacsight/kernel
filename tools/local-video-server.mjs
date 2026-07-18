@@ -9,35 +9,67 @@
 import { createServer } from 'node:http'
 import { writeFile, mkdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, mapCatalogItem, parsePerImageUsd, TTS_ENDPOINT, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, mapCatalogItem, TTS_ENDPOINT, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
+import { catalogSeconds, cleanParams, isAllowedOrigin, positiveSeconds } from './engine-safety.mjs'
+import { loadJobs, saveJobs } from './job-store.mjs'
+import { checkAndUpdateSpend } from './spend-tracker.mjs'
 
 const PORT = Number(process.env.VIDEO_SERVER_PORT || 5412)
 const FAL_KEY = process.env.FAL_KEY || ''
 const OUT_DIR = join(process.cwd(), 'output', 'videos')
 const AUDIO_DIR = join(process.cwd(), 'output', 'audio')
 const IMAGE_DIR = join(process.cwd(), 'output', 'images')
+const JOBS_PATH = join(process.cwd(), 'output', 'job-registry.json')
 const FAL_QUEUE = 'https://queue.fal.run'
+const EXTRA_ALLOWED_ORIGINS = process.env.ENGINE_ALLOWED_ORIGINS || ''
 
-/** jobId -> { kind: 'video'|'audio', statusUrl, responseUrl, status, videoUrl, audioUrl, error } */
-const jobs = new Map()
+let spendLock = Promise.resolve()
 
-const JOB_KINDS = {
-  video: { dir: OUT_DIR, ext: 'mp4', route: 'videos', extract: extractVideoUrl },
-  audio: { dir: AUDIO_DIR, ext: 'mp3', route: 'audio', extract: extractAudioUrl },
-  image: { dir: IMAGE_DIR, ext: 'png', route: 'images', extract: extractImageUrl },
+async function checkAndUpdateSpendLocked(estimatedCost, config = {}) {
+  return new Promise((resolve, reject) => {
+    spendLock = spendLock.then(async () => {
+      try {
+        const res = await checkAndUpdateSpend(estimatedCost, config)
+        resolve(res)
+      } catch (err) {
+        reject(err)
+      }
+    })
+  })
 }
 
-// Extra model parameters callers may pass straight through to fal
-// (resolution, duration, seed, aspect_ratio, negative_prompt, ...).
-// Plain JSON scalars only — no nested payload smuggling.
-function cleanParams(params) {
-  if (!params || typeof params !== 'object' || Array.isArray(params)) return {}
-  const out = {}
-  for (const [key, value] of Object.entries(params)) {
-    if (!/^[a-z][a-z0-9_]{0,40}$/i.test(key)) continue
-    if (['string', 'number', 'boolean'].includes(typeof value)) out[key] = value
-  }
-  return out
+
+/** jobId -> persisted fal queue metadata and current local status. */
+const jobs = new Map()
+let jobPersistLock = Promise.resolve()
+
+function persistJobsLocked() {
+  const snapshot = new Map(jobs)
+  jobPersistLock = jobPersistLock.catch(() => {}).then(() => saveJobs(snapshot, JOBS_PATH))
+  return jobPersistLock
+}
+
+const JOB_KINDS = {
+  video: { dir: OUT_DIR, ext: 'mp4', route: 'videos', extract: extractVideoUrl, mime: 'video/mp4' },
+  audio: { dir: AUDIO_DIR, ext: 'mp3', route: 'audio', extract: extractAudioUrl, mime: 'audio/mpeg' },
+  image: { dir: IMAGE_DIR, ext: 'png', route: 'images', extract: extractImageUrl, mime: 'image/png' },
+}
+
+const CONTENT_EXTENSIONS = new Map([
+  ['image/png', ['png', 'image/png']],
+  ['image/jpeg', ['jpg', 'image/jpeg']],
+  ['image/webp', ['webp', 'image/webp']],
+  ['audio/mpeg', ['mp3', 'audio/mpeg']],
+  ['audio/wav', ['wav', 'audio/wav']],
+  ['audio/x-wav', ['wav', 'audio/wav']],
+  ['video/mp4', ['mp4', 'video/mp4']],
+  ['video/quicktime', ['mov', 'video/quicktime']],
+])
+
+function artifactFormat(response, spec) {
+  const contentType = response.headers.get('content-type')?.split(';')[0]?.trim().toLowerCase()
+  const [ext, mime] = CONTENT_EXTENSIONS.get(contentType) || [spec.ext, spec.mime]
+  return { ext, mime }
 }
 
 // fal.ai catalog cache: category -> { at, items }. The catalog endpoint is
@@ -75,13 +107,15 @@ function catalogEntry(endpointId) {
   return null
 }
 
-function json(res, status, body) {
-  res.writeHead(status, {
+function json(res, status, body, origin) {
+  const corsOrigin = origin ?? res.engineOrigin
+  const headers = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-  })
+  }
+  if (corsOrigin && isAllowedOrigin(corsOrigin, EXTRA_ALLOWED_ORIGINS)) headers['Access-Control-Allow-Origin'] = corsOrigin
+  res.writeHead(status, headers)
   res.end(JSON.stringify(body))
 }
 
@@ -121,6 +155,7 @@ async function queueJob(kind, endpoint, input) {
   const submitted = await falFetch(`${FAL_QUEUE}/${endpoint}`, { method: 'POST', body: JSON.stringify(input) })
   const jobId = submitted.request_id
   if (!jobId) throw new Error('fal.ai returned no request_id')
+  if (!submitted.status_url || !submitted.response_url) throw new Error('fal.ai returned incomplete queue metadata')
   jobs.set(jobId, {
     kind,
     statusUrl: submitted.status_url,
@@ -129,6 +164,10 @@ async function queueJob(kind, endpoint, input) {
     videoUrl: null,
     audioUrl: null,
     error: null,
+    pollError: null,
+  })
+  await persistJobsLocked().catch(err => {
+    console.error(`[video-server] could not persist job ${jobId}: ${err.message}`)
   })
   return jobId
 }
@@ -136,6 +175,7 @@ async function queueJob(kind, endpoint, input) {
 async function refreshJob(jobId) {
   const job = jobs.get(jobId)
   if (!job || job.status === 'done' || job.status === 'error') return job
+  let changed = false
   try {
     const status = await falFetch(job.statusUrl)
     if (status.status === 'COMPLETED') {
@@ -146,33 +186,72 @@ async function refreshJob(jobId) {
       await mkdir(spec.dir, { recursive: true })
       const clip = await fetch(remoteUrl)
       if (!clip.ok) throw new Error(`could not download result (${clip.status})`)
-      await writeFile(join(spec.dir, `${jobId}.${spec.ext}`), Buffer.from(await clip.arrayBuffer()))
-      const localUrl = `http://localhost:${PORT}/${spec.route}/${jobId}.${spec.ext}`
+      const format = artifactFormat(clip, spec)
+      await writeFile(join(spec.dir, `${jobId}.${format.ext}`), Buffer.from(await clip.arrayBuffer()))
+      const localUrl = `http://127.0.0.1:${PORT}/${spec.route}/${jobId}.${format.ext}`
       job.sourceUrl = remoteUrl // fal-hosted copy; usable as image_url input for downstream image-to-video
+      job.contentType = format.mime
       const kind = job.kind || 'video'
       if (kind === 'audio') job.audioUrl = localUrl
       else if (kind === 'image') job.imageUrl = localUrl
       else job.videoUrl = localUrl
       job.status = 'done'
-      console.log(`[video-server] job ${jobId} done -> output/${spec.route}/${jobId}.${spec.ext}`)
+      job.pollError = null
+      changed = true
+      console.log(`[video-server] job ${jobId} done -> output/${spec.route}/${jobId}.${format.ext}`)
     } else if (status.status === 'IN_PROGRESS') {
-      job.status = 'running'
+      if (job.status !== 'running') {
+        job.status = 'running'
+        changed = true
+      }
+      if (job.pollError) {
+        job.pollError = null
+        changed = true
+      }
+    } else if (status.status === 'FAILED' || status.status === 'CANCELLED') {
+      const detail = status.error ?? status.detail
+      job.status = 'error'
+      job.error = typeof detail === 'string' ? detail : detail ? JSON.stringify(detail) : `fal.ai job ${status.status.toLowerCase()}`
+      changed = true
     }
   } catch (err) {
-    job.status = 'error'
-    job.error = err.message
-    console.error(`[video-server] job ${jobId} failed: ${err.message}`)
+    // Queue status and artifact downloads are safe to retry. Only fal's
+    // explicit FAILED/CANCELLED states above are terminal.
+    job.pollError = err.message
+    changed = true
+    console.warn(`[video-server] job ${jobId} poll failed (will retry): ${err.message}`)
   }
+  if (changed) await persistJobsLocked().catch(err => {
+    console.error(`[video-server] could not persist job ${jobId}: ${err.message}`)
+  })
   return job
 }
 
 const server = createServer(async (req, res) => {
-  if (req.method === 'OPTIONS') return json(res, 204, {})
+  const origin = req.headers.origin
+  if (!isAllowedOrigin(origin, EXTRA_ALLOWED_ORIGINS)) return json(res, 403, { error: 'origin not allowed' })
+  res.engineOrigin = origin
+  if (req.method === 'OPTIONS') return json(res, 204, {}, origin)
   const url = new URL(req.url, `http://localhost:${PORT}`)
 
   if (req.method === 'GET' && url.pathname === '/health') {
-    return json(res, 200, { ok: true, hasKey: Boolean(FAL_KEY) })
+    try {
+      const { tracker, limit } = await checkAndUpdateSpendLocked(0, { dryRun: true })
+      return json(res, 200, {
+        ok: true,
+        hasKey: Boolean(FAL_KEY),
+        spendLimit: limit === Infinity ? null : limit,
+        spentToday: tracker.spent,
+        jobsTracked: jobs.size,
+      })
+    } catch (err) {
+      return json(res, 200, {
+        ok: false, hasKey: Boolean(FAL_KEY), spendLimit: null, spentToday: null,
+        jobsTracked: jobs.size, spendError: err.message,
+      })
+    }
   }
+
 
   if (req.method === 'GET' && url.pathname === '/v1/models') {
     return json(res, 200, {
@@ -198,7 +277,9 @@ const server = createServer(async (req, res) => {
     const body = await readBody(req)
     if (body?.endpoint) {
       const entry = catalogEntry(body.endpoint)
-      const seconds = Number(body.durationSeconds) || 5
+      const seconds = catalogSeconds(body)
+      if (!ENDPOINT_SLUG.test(body.endpoint)) return json(res, 400, { error: `bad endpoint slug: ${body.endpoint}` })
+      if (seconds == null) return json(res, 400, { error: 'durationSeconds must be a positive number' })
       return json(res, 200, {
         usd: entry?.usdPerSecond != null ? Math.round(entry.usdPerSecond * seconds * 100) / 100 : null,
         seconds,
@@ -206,6 +287,10 @@ const server = createServer(async (req, res) => {
       })
     }
     if (!body?.model) return json(res, 400, { error: 'model is required' })
+    if (!getModel(body.model)) return json(res, 400, { error: `unknown model: ${body.model}` })
+    if (body.durationSeconds !== undefined && positiveSeconds(body.durationSeconds) == null) {
+      return json(res, 400, { error: 'durationSeconds must be a positive number' })
+    }
     return json(res, 200, {
       usd: estimateUsd(body.model, body.durationSeconds),
       seconds: effectiveSeconds(body.model, body.durationSeconds),
@@ -222,13 +307,45 @@ const server = createServer(async (req, res) => {
     } else if (!getModel(body.model)) {
       return json(res, 400, { error: `unknown model: ${body?.model}` })
     }
-    try {
-      const jobId = await submitJob(body)
-      console.log(`[video-server] submitted ${body.model} job ${jobId}: ${prompt.slice(0, 80)}`)
-      return json(res, 200, { jobId })
-    } catch (err) {
-      return json(res, 502, { error: err.message })
+    const requestedSeconds = body?.endpoint ? catalogSeconds(body) : positiveSeconds(body.durationSeconds, getModel(body.model)?.defaultDurationSeconds || 5)
+    if (requestedSeconds == null) return json(res, 400, { error: 'duration must be a positive number' })
+
+    let cost = 0
+    if (body?.endpoint) {
+      const entry = catalogEntry(body.endpoint)
+      cost = entry?.usdPerSecond != null ? Math.round(entry.usdPerSecond * requestedSeconds * 100) / 100 : 0.40 * requestedSeconds
+    } else {
+      cost = estimateUsd(body.model, body.durationSeconds) || 0
     }
+
+    try {
+      const spendInfo = await checkAndUpdateSpendLocked(cost)
+      try {
+        const jobId = await submitJob(body)
+        console.log(`[video-server] submitted ${body.model || body.endpoint} job ${jobId}: ${prompt.slice(0, 80)}`)
+        console.log(`[video-server] Spend cap check: debited $${cost.toFixed(4)}. Daily total: $${spendInfo.newSpent.toFixed(4)} / $${spendInfo.limit === Infinity ? 'Unlimited' : spendInfo.limit.toFixed(2)}`)
+        return json(res, 200, { jobId })
+      } catch (submitErr) {
+        await checkAndUpdateSpendLocked(-cost, { allowRefund: true })
+        throw submitErr
+      }
+    } catch (err) {
+      const status = err.message.includes('limit exceeded') ? 402 : 502
+      return json(res, status, { error: err.message })
+    }
+  }
+
+  if (req.method === 'POST' && url.pathname === '/v1/images/estimate') {
+    const body = await readBody(req)
+    if (!body?.endpoint || !ENDPOINT_SLUG.test(body.endpoint)) {
+      return json(res, 400, { error: `bad endpoint slug: ${body?.endpoint}` })
+    }
+    const entry = catalogEntry(body.endpoint)
+    return json(res, 200, {
+      usd: entry?.usdPerImage ?? null,
+      pricingText: entry?.pricingText || '',
+      unit: 'image',
+    })
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/images/fal') {
@@ -237,26 +354,42 @@ const server = createServer(async (req, res) => {
     const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : ''
     if (!prompt) return json(res, 400, { error: 'prompt is required' })
     if (!body?.endpoint || !ENDPOINT_SLUG.test(body.endpoint)) return json(res, 400, { error: `bad endpoint slug: ${body?.endpoint}` })
+
+    const entry = catalogEntry(body.endpoint)
+    const cost = entry?.usdPerImage ?? 0.15
+
     try {
-      const input = {
-        prompt,
-        ...(typeof body.imageUrl === 'string' && body.imageUrl ? { image_url: body.imageUrl } : {}),
-        ...cleanParams(body.params),
+      const spendInfo = await checkAndUpdateSpendLocked(cost)
+      try {
+        const input = {
+          prompt,
+          ...(typeof body.imageUrl === 'string' && body.imageUrl ? { image_url: body.imageUrl } : {}),
+          ...cleanParams(body.params),
+        }
+        const jobId = await queueJob('image', body.endpoint, input)
+        console.log(`[video-server] submitted image job ${jobId} on ${body.endpoint}: ${prompt.slice(0, 60)}`)
+        console.log(`[video-server] Spend cap check: debited $${cost.toFixed(4)}. Daily total: $${spendInfo.newSpent.toFixed(4)} / $${spendInfo.limit === Infinity ? 'Unlimited' : spendInfo.limit.toFixed(2)}`)
+        return json(res, 200, { jobId })
+      } catch (submitErr) {
+        await checkAndUpdateSpendLocked(-cost, { allowRefund: true })
+        throw submitErr
       }
-      const jobId = await queueJob('image', body.endpoint, input)
-      console.log(`[video-server] submitted image job ${jobId} on ${body.endpoint}: ${prompt.slice(0, 60)}`)
-      return json(res, 200, { jobId })
     } catch (err) {
-      return json(res, 502, { error: err.message })
+      const status = err.message.includes('limit exceeded') ? 402 : 502
+      return json(res, status, { error: err.message })
     }
   }
 
   if (req.method === 'GET' && url.pathname.startsWith('/images/')) {
     const file = url.pathname.split('/').pop()
-    if (!/^[\w-]+\.png$/.test(file)) return json(res, 400, { error: 'bad filename' })
+    if (!/^[\w-]+\.(?:png|jpe?g|webp)$/.test(file)) return json(res, 400, { error: 'bad filename' })
     try {
       const data = await readFile(join(IMAGE_DIR, file))
-      res.writeHead(200, { 'Content-Type': 'image/png', 'Access-Control-Allow-Origin': '*' })
+      const contentType = file.endsWith('.webp') ? 'image/webp' : /\.jpe?g$/.test(file) ? 'image/jpeg' : 'image/png'
+      res.writeHead(200, {
+        'Content-Type': contentType,
+        ...(origin ? { 'Access-Control-Allow-Origin': origin } : {}),
+      })
       return res.end(data)
     } catch {
       return json(res, 404, { error: 'not found' })
@@ -274,13 +407,24 @@ const server = createServer(async (req, res) => {
     const body = await readBody(req)
     const text = typeof body?.text === 'string' ? body.text.trim() : ''
     if (!text) return json(res, 400, { error: 'text is required' })
+
+    const cost = estimateSpeechUsd(text) || 0
+
     try {
-      const input = { text, ...(typeof body.voice === 'string' && body.voice ? { voice: body.voice } : {}) }
-      const jobId = await queueJob('audio', TTS_ENDPOINT, input)
-      console.log(`[video-server] submitted speech job ${jobId}: ${text.slice(0, 60)}`)
-      return json(res, 200, { jobId })
+      const spendInfo = await checkAndUpdateSpendLocked(cost)
+      try {
+        const input = { text, ...(typeof body.voice === 'string' && body.voice ? { voice: body.voice } : {}) }
+        const jobId = await queueJob('audio', TTS_ENDPOINT, input)
+        console.log(`[video-server] submitted speech job ${jobId}: ${text.slice(0, 60)}`)
+        console.log(`[video-server] Spend cap check: debited $${cost.toFixed(4)}. Daily total: $${spendInfo.newSpent.toFixed(4)} / $${spendInfo.limit === Infinity ? 'Unlimited' : spendInfo.limit.toFixed(2)}`)
+        return json(res, 200, { jobId })
+      } catch (submitErr) {
+        await checkAndUpdateSpendLocked(-cost, { allowRefund: true })
+        throw submitErr
+      }
     } catch (err) {
-      return json(res, 502, { error: err.message })
+      const status = err.message.includes('limit exceeded') ? 402 : 502
+      return json(res, status, { error: err.message })
     }
   }
 
@@ -288,15 +432,22 @@ const server = createServer(async (req, res) => {
     const jobId = url.pathname.split('/').pop()
     if (!jobs.has(jobId)) return json(res, 404, { error: 'unknown job' })
     const job = await refreshJob(jobId)
-    return json(res, 200, { status: job.status, videoUrl: job.videoUrl, audioUrl: job.audioUrl, imageUrl: job.imageUrl ?? null, sourceUrl: job.sourceUrl ?? null, error: job.error })
+    return json(res, 200, {
+      status: job.status, videoUrl: job.videoUrl, audioUrl: job.audioUrl,
+      imageUrl: job.imageUrl ?? null, sourceUrl: job.sourceUrl ?? null,
+      error: job.error, pollError: job.pollError ?? null,
+    })
   }
 
   if (req.method === 'GET' && url.pathname.startsWith('/audio/')) {
     const file = url.pathname.split('/').pop()
-    if (!/^[\w-]+\.mp3$/.test(file)) return json(res, 400, { error: 'bad filename' })
+    if (!/^[\w-]+\.(?:mp3|wav)$/.test(file)) return json(res, 400, { error: 'bad filename' })
     try {
       const data = await readFile(join(AUDIO_DIR, file))
-      res.writeHead(200, { 'Content-Type': 'audio/mpeg', 'Access-Control-Allow-Origin': '*' })
+      res.writeHead(200, {
+        'Content-Type': file.endsWith('.wav') ? 'audio/wav' : 'audio/mpeg',
+        ...(origin ? { 'Access-Control-Allow-Origin': origin } : {}),
+      })
       return res.end(data)
     } catch {
       return json(res, 404, { error: 'not found' })
@@ -305,10 +456,13 @@ const server = createServer(async (req, res) => {
 
   if (req.method === 'GET' && url.pathname.startsWith('/videos/')) {
     const file = url.pathname.split('/').pop()
-    if (!/^[\w-]+\.mp4$/.test(file)) return json(res, 400, { error: 'bad filename' })
+    if (!/^[\w-]+\.(?:mp4|mov)$/.test(file)) return json(res, 400, { error: 'bad filename' })
     try {
       const data = await readFile(join(OUT_DIR, file))
-      res.writeHead(200, { 'Content-Type': 'video/mp4', 'Access-Control-Allow-Origin': '*' })
+      res.writeHead(200, {
+        'Content-Type': file.endsWith('.mov') ? 'video/quicktime' : 'video/mp4',
+        ...(origin ? { 'Access-Control-Allow-Origin': origin } : {}),
+      })
       return res.end(data)
     } catch {
       return json(res, 404, { error: 'not found' })
@@ -318,6 +472,19 @@ const server = createServer(async (req, res) => {
   return json(res, 404, { error: 'Not found' })
 })
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.log(`[video-server] listening on http://localhost:${PORT} (key ${FAL_KEY ? 'loaded' : 'MISSING'})`)
+try {
+  const restored = await loadJobs(JOBS_PATH)
+  for (const [jobId, job] of restored) jobs.set(jobId, job)
+  if (jobs.size) console.log(`[video-server] restored ${jobs.size} job${jobs.size === 1 ? '' : 's'} from disk`)
+} catch (err) {
+  console.error(`[video-server] could not restore job registry: ${err.message}`)
+}
+
+server.listen(PORT, '127.0.0.1', async () => {
+  let limitMsg = 'limit $10.00'
+  try {
+    const { limit } = await checkAndUpdateSpendLocked(0, { dryRun: true })
+    limitMsg = limit === Infinity ? 'spend limit: Unlimited' : `spend limit: $${limit.toFixed(2)}/day`
+  } catch {}
+  console.log(`[video-server] listening on http://localhost:${PORT} (key ${FAL_KEY ? 'loaded' : 'MISSING'}, ${limitMsg})`)
 })

@@ -16,22 +16,25 @@ import { spawn } from 'node:child_process'
 import { readFile, mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { isAllowedOrigin } from './engine-safety.mjs'
 
 const PORT = Number(process.env.IMAGE_SERVER_PORT || 5411)
 const GENERATOR = process.env.IMAGE_SERVER_CMD || 'mflux-generate-z-image-turbo'
 const QUANTIZE = process.env.IMAGE_SERVER_QUANTIZE || '4'
 const BACKEND = `mflux/${GENERATOR.replace('mflux-generate-', '') || 'z-image-turbo'}`
+const EXTRA_ALLOWED_ORIGINS = process.env.ENGINE_ALLOWED_ORIGINS || ''
 
 let busy = false
 
 function json(res, status, body) {
   const payload = JSON.stringify(body)
-  res.writeHead(status, {
+  const headers = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-  })
+  }
+  if (res.engineOrigin) headers['Access-Control-Allow-Origin'] = res.engineOrigin
+  res.writeHead(status, headers)
   res.end(payload)
 }
 
@@ -69,6 +72,9 @@ function generate(prompt, width, height) {
 }
 
 const server = createServer(async (req, res) => {
+  const origin = req.headers.origin
+  if (!isAllowedOrigin(origin, EXTRA_ALLOWED_ORIGINS)) return json(res, 403, { error: 'origin not allowed' })
+  res.engineOrigin = origin
   if (req.method === 'OPTIONS') return json(res, 204, {})
   if (req.method === 'GET' && req.url === '/health') return json(res, 200, { ok: true, backend: BACKEND, busy })
   if (req.method !== 'POST' || !req.url?.startsWith('/v1/images/generations')) return json(res, 404, { error: 'Not found' })
@@ -105,7 +111,7 @@ const server = createServer(async (req, res) => {
   }
 })
 
-server.listen(PORT, () => {
+server.listen(PORT, '127.0.0.1', () => {
   console.log(`[image-server] ${BACKEND} listening on http://localhost:${PORT}`)
   console.log('[image-server] first generation downloads model weights (one-time, several GB)')
 })
