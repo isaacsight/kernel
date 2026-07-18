@@ -2,6 +2,39 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-18 — GALLEY video engine shipped — on branch `feat/galley-video-engine`
+
+Executed the 5-task plan (`docs/superpowers/plans/2026-07-17-galley-video-engine.md`)
+plus two Isaac-directed extensions. All committed on the branch, not merged:
+
+- **Tasks 1-4 complete.** Registry (`tools/video-models.mjs`, 18 tests), price
+  sync against fal's live catalog (Veo 3 Fast 0.25 -> **0.40/s** — fal renders
+  audio by default), proxy server (`tools/local-video-server.mjs`, :5412),
+  canvas video node with the paid-confirm dialog. Browser-verified: estimate ->
+  dialog -> Cancel clean; graph runs park video nodes ("Ready — awaiting cost
+  confirmation"). **Standing rule: graph/loop runs never auto-fire video nodes.**
+- **Price-honesty fix:** fixed-duration models (durationParam null) always price
+  their full billed length via `effectiveSeconds()`; estimate returns `seconds`
+  and the dialog shows them (Veo = $3.20 · 8s, never $2.00 · 5s).
+- **Catalog browser (Isaac-requested):** `GET /v1/catalog` proxies fal's site
+  API (125 t2v + 187 i2v, 1h cache); `parsePricingText` takes the HIGHEST listed
+  $/s or returns null — dialog then quotes fal's listing verbatim, never a
+  fabricated number. Canvas Catalog drawer on video nodes; picked models pass
+  through as `endpoint` slugs. Verified: Kling v2.5 -> $0.35 · 5s matches listing.
+  NOTE: fal's catalog API is undocumented site internals — may drift; curated
+  registry is the fallback. Card CSS uses fixed heights (embedded WebKit pane
+  won't resolve intrinsic button/aspect heights — also buttons can't be flex
+  containers there; cards are role="button" divs).
+- **Fast system:** `npm run engine` boots image (:5411, free local mflux) +
+  video (:5412) with linked shutdown (`tools/engine.mjs`). Both GALLEY prompts
+  now carry ENGINE COST TIERS (images free / video parks / Seedance Lite ~$0.20
+  draft tier / prefer image->video).
+- **Deferred:** Task 5 live smoke (one Seedance Lite clip ~$0.20) awaits Isaac's
+  explicit spend approval. Gemini backend designed but NOT built — Isaac has a
+  Gemini API key; `GEMINI_API_KEY` is not in `.env` yet (he must add it himself;
+  Claude never edits .env). Next: Veo-via-Gemini provider + Nano Banana image
+  option behind the same confirm contract.
+
 ## Session 2026-07-11 — ISSUE 416 · GPT 5.6 SOL (instrument) — on branch `fix/site-audit-qa-and-security`
 
 Started from an in-progress bespoke full-bleed page (`src/pages/GptSolPage.{tsx,css}`,
