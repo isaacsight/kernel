@@ -9,12 +9,13 @@
 import { createServer } from 'node:http'
 import { writeFile, mkdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, mapCatalogItem, TTS_ENDPOINT, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, mapCatalogItem, parsePerImageUsd, TTS_ENDPOINT, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
 
 const PORT = Number(process.env.VIDEO_SERVER_PORT || 5412)
 const FAL_KEY = process.env.FAL_KEY || ''
 const OUT_DIR = join(process.cwd(), 'output', 'videos')
 const AUDIO_DIR = join(process.cwd(), 'output', 'audio')
+const IMAGE_DIR = join(process.cwd(), 'output', 'images')
 const FAL_QUEUE = 'https://queue.fal.run'
 
 /** jobId -> { kind: 'video'|'audio', statusUrl, responseUrl, status, videoUrl, audioUrl, error } */
@@ -23,13 +24,27 @@ const jobs = new Map()
 const JOB_KINDS = {
   video: { dir: OUT_DIR, ext: 'mp4', route: 'videos', extract: extractVideoUrl },
   audio: { dir: AUDIO_DIR, ext: 'mp3', route: 'audio', extract: extractAudioUrl },
+  image: { dir: IMAGE_DIR, ext: 'png', route: 'images', extract: extractImageUrl },
+}
+
+// Extra model parameters callers may pass straight through to fal
+// (resolution, duration, seed, aspect_ratio, negative_prompt, ...).
+// Plain JSON scalars only — no nested payload smuggling.
+function cleanParams(params) {
+  if (!params || typeof params !== 'object' || Array.isArray(params)) return {}
+  const out = {}
+  for (const [key, value] of Object.entries(params)) {
+    if (!/^[a-z][a-z0-9_]{0,40}$/i.test(key)) continue
+    if (['string', 'number', 'boolean'].includes(typeof value)) out[key] = value
+  }
+  return out
 }
 
 // fal.ai catalog cache: category -> { at, items }. The catalog endpoint is
 // fal's site API (undocumented) — cache generously and fail soft; the curated
 // MODELS registry keeps working if fal changes the shape.
 const CATALOG_TTL_MS = 60 * 60 * 1000
-const CATALOG_CATEGORIES = new Set(['text-to-video', 'image-to-video'])
+const CATALOG_CATEGORIES = new Set(['text-to-video', 'image-to-video', 'text-to-image', 'image-to-image'])
 const catalogCache = new Map()
 const ENDPOINT_SLUG = /^[\w.-]+(?:\/[\w.-]+)+$/
 
@@ -86,14 +101,15 @@ async function falFetch(url, init = {}) {
   return payload
 }
 
-async function submitJob({ prompt, model, endpoint: rawEndpoint, durationSeconds, imageUrl }) {
+async function submitJob({ prompt, model, endpoint: rawEndpoint, durationSeconds, imageUrl, params }) {
   // Catalog passthrough: an explicit endpoint slug wins over the curated
   // registry. Input schemas vary across the catalog, so passthrough sends
-  // only the universally-accepted fields (prompt, image_url).
+  // the universally-accepted fields plus caller-chosen params (resolution,
+  // seed, aspect_ratio, ...) validated to plain scalars.
   const endpoint = rawEndpoint || pickEndpoint(model, Boolean(imageUrl))
   const input = rawEndpoint
-    ? { prompt, ...(imageUrl ? { image_url: imageUrl } : {}) }
-    : buildInput(model, prompt, durationSeconds, imageUrl)
+    ? { prompt, ...(imageUrl ? { image_url: imageUrl } : {}), ...cleanParams(params) }
+    : { ...buildInput(model, prompt, durationSeconds, imageUrl), ...cleanParams(params) }
   return queueJob('video', endpoint, input)
 }
 
@@ -128,7 +144,9 @@ async function refreshJob(jobId) {
       if (!clip.ok) throw new Error(`could not download result (${clip.status})`)
       await writeFile(join(spec.dir, `${jobId}.${spec.ext}`), Buffer.from(await clip.arrayBuffer()))
       const localUrl = `http://localhost:${PORT}/${spec.route}/${jobId}.${spec.ext}`
-      if ((job.kind || 'video') === 'audio') job.audioUrl = localUrl
+      const kind = job.kind || 'video'
+      if (kind === 'audio') job.audioUrl = localUrl
+      else if (kind === 'image') job.imageUrl = localUrl
       else job.videoUrl = localUrl
       job.status = 'done'
       console.log(`[video-server] job ${jobId} done -> output/${spec.route}/${jobId}.${spec.ext}`)
@@ -208,6 +226,38 @@ const server = createServer(async (req, res) => {
     }
   }
 
+  if (req.method === 'POST' && url.pathname === '/v1/images/fal') {
+    if (!FAL_KEY) return json(res, 402, { error: 'FAL_KEY not set — add it to .env and restart: npm run video-server' })
+    const body = await readBody(req)
+    const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : ''
+    if (!prompt) return json(res, 400, { error: 'prompt is required' })
+    if (!body?.endpoint || !ENDPOINT_SLUG.test(body.endpoint)) return json(res, 400, { error: `bad endpoint slug: ${body?.endpoint}` })
+    try {
+      const input = {
+        prompt,
+        ...(typeof body.imageUrl === 'string' && body.imageUrl ? { image_url: body.imageUrl } : {}),
+        ...cleanParams(body.params),
+      }
+      const jobId = await queueJob('image', body.endpoint, input)
+      console.log(`[video-server] submitted image job ${jobId} on ${body.endpoint}: ${prompt.slice(0, 60)}`)
+      return json(res, 200, { jobId })
+    } catch (err) {
+      return json(res, 502, { error: err.message })
+    }
+  }
+
+  if (req.method === 'GET' && url.pathname.startsWith('/images/')) {
+    const file = url.pathname.split('/').pop()
+    if (!/^[\w-]+\.png$/.test(file)) return json(res, 400, { error: 'bad filename' })
+    try {
+      const data = await readFile(join(IMAGE_DIR, file))
+      res.writeHead(200, { 'Content-Type': 'image/png', 'Access-Control-Allow-Origin': '*' })
+      return res.end(data)
+    } catch {
+      return json(res, 404, { error: 'not found' })
+    }
+  }
+
   if (req.method === 'POST' && url.pathname === '/v1/audio/estimate') {
     const body = await readBody(req)
     const text = typeof body?.text === 'string' ? body.text : ''
@@ -233,7 +283,7 @@ const server = createServer(async (req, res) => {
     const jobId = url.pathname.split('/').pop()
     if (!jobs.has(jobId)) return json(res, 404, { error: 'unknown job' })
     const job = await refreshJob(jobId)
-    return json(res, 200, { status: job.status, videoUrl: job.videoUrl, audioUrl: job.audioUrl, error: job.error })
+    return json(res, 200, { status: job.status, videoUrl: job.videoUrl, audioUrl: job.audioUrl, imageUrl: job.imageUrl ?? null, error: job.error })
   }
 
   if (req.method === 'GET' && url.pathname.startsWith('/audio/')) {

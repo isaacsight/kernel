@@ -110,12 +110,26 @@ export function mapCatalogItem(item) {
     thumbnailUrl: item.thumbnailUrl || '',
     pricingText,
     usdPerSecond: parsePricingText(item.pricingInfoOverride),
+    usdPerImage: parsePerImageUsd(item.pricingInfoOverride),
   }
 }
 
 export function extractVideoUrl(payload) {
   if (!payload || typeof payload !== 'object') return null
   return payload.video?.url ?? payload.data?.video?.url ?? payload.videos?.[0]?.url ?? null
+}
+
+export function extractImageUrl(payload) {
+  if (!payload || typeof payload !== 'object') return null
+  return payload.images?.[0]?.url ?? payload.data?.images?.[0]?.url ?? payload.image?.url ?? null
+}
+
+// Per-image price ("$0.15 per image") for still-image catalog entries —
+// separate from the per-second video rate so neither shape mislabels the other.
+export function parsePerImageUsd(text) {
+  if (!text || typeof text !== 'string') return null
+  const match = text.replace(/\*\*/g, '').match(/\$(\d+(?:\.\d+)?)\s*(?:\/|\s*per\s+)\s*image/i)
+  return match ? Number(match[1]) : null
 }
 
 // Voiceover: ElevenLabs Turbo v2.5 served through fal — $0.05 per 1000

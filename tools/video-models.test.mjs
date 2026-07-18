@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, parsePricingText, mapCatalogItem, estimateSpeechUsd, extractAudioUrl, TTS_ENDPOINT } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, parsePricingText, parsePerImageUsd, mapCatalogItem, estimateSpeechUsd, extractAudioUrl, TTS_ENDPOINT } from './video-models.mjs'
 
 describe('video model registry', () => {
   it('every model has the required fields', () => {
@@ -112,6 +112,24 @@ describe('extractVideoUrl', () => {
     expect(extractVideoUrl({ data: { video: { url: 'https://y/v.mp4' } } })).toBe('https://y/v.mp4')
     expect(extractVideoUrl({ videos: [{ url: 'https://z/v.mp4' }] })).toBe('https://z/v.mp4')
     expect(extractVideoUrl({})).toBeNull()
+  })
+})
+
+describe('extractImageUrl', () => {
+  it('finds the url in fal image result shapes', () => {
+    expect(extractImageUrl({ images: [{ url: 'https://x/i.png' }] })).toBe('https://x/i.png')
+    expect(extractImageUrl({ data: { images: [{ url: 'https://y/i.png' }] } })).toBe('https://y/i.png')
+    expect(extractImageUrl({ image: { url: 'https://z/i.png' } })).toBe('https://z/i.png')
+    expect(extractImageUrl({})).toBeNull()
+  })
+})
+
+describe('parsePricingText per-image rates', () => {
+  it('parses a per-image price into usdPerUnit', () => {
+    expect(parsePricingText('Your request will cost $0.15 per image.')).toBeNull()
+    expect(parsePerImageUsd('Your request will cost $0.15 per image.')).toBe(0.15)
+    expect(parsePerImageUsd('$0.039 per image for 1MP')).toBe(0.039)
+    expect(parsePerImageUsd('machine time only')).toBeNull()
   })
 })
 
