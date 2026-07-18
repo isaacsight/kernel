@@ -8,7 +8,7 @@ export const MODELS = [
     label: 'Veo 3.1 Fast',
     textEndpoint: 'fal-ai/veo3/fast',
     imageEndpoint: 'fal-ai/veo3/fast/image-to-video',
-    usdPerSecond: 0.25,
+    usdPerSecond: 0.4, // audio-on rate; fal generates audio by default ($0.25/s audio off)
     defaultDurationSeconds: 8,
     maxDurationSeconds: 8,
     durationParam: null, // fixed-length model; fal ignores duration
