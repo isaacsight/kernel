@@ -9,7 +9,7 @@
 import { createServer } from 'node:http'
 import { writeFile, mkdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { MODELS, getModel, estimateUsd, buildInput, pickEndpoint, extractVideoUrl } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl } from './video-models.mjs'
 
 const PORT = Number(process.env.VIDEO_SERVER_PORT || 5412)
 const FAL_KEY = process.env.FAL_KEY || ''
@@ -109,7 +109,10 @@ const server = createServer(async (req, res) => {
   if (req.method === 'POST' && url.pathname === '/v1/videos/estimate') {
     const body = await readBody(req)
     if (!body?.model) return json(res, 400, { error: 'model is required' })
-    return json(res, 200, { usd: estimateUsd(body.model, body.durationSeconds) })
+    return json(res, 200, {
+      usd: estimateUsd(body.model, body.durationSeconds),
+      seconds: effectiveSeconds(body.model, body.durationSeconds),
+    })
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/videos/generations') {

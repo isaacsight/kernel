@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { MODELS, getModel, estimateUsd, buildInput, pickEndpoint, extractVideoUrl } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl } from './video-models.mjs'
 
 describe('video model registry', () => {
   it('every model has the required fields', () => {
@@ -20,15 +20,34 @@ describe('video model registry', () => {
 
 describe('estimateUsd', () => {
   it('multiplies per-second price by duration, rounded to cents', () => {
-    const m = MODELS[0]
+    const m = MODELS.find(x => x.durationParam)
     expect(estimateUsd(m.id, 5)).toBeCloseTo(Math.round(m.usdPerSecond * 5 * 100) / 100, 2)
   })
   it('returns null for unknown model (never fabricates a price)', () => {
     expect(estimateUsd('nope', 5)).toBeNull()
   })
   it('clamps duration to the model max', () => {
-    const m = MODELS[0]
+    const m = MODELS.find(x => x.durationParam)
     expect(estimateUsd(m.id, 9999)).toBeCloseTo(Math.round(m.usdPerSecond * m.maxDurationSeconds * 100) / 100, 2)
+  })
+  it('prices the full fixed length for fixed-duration models (fal ignores requested duration)', () => {
+    const m = MODELS.find(x => !x.durationParam)
+    expect(estimateUsd(m.id, 5)).toBeCloseTo(Math.round(m.usdPerSecond * m.defaultDurationSeconds * 100) / 100, 2)
+  })
+})
+
+describe('effectiveSeconds', () => {
+  it('returns the clamped requested duration for variable-length models', () => {
+    const m = MODELS.find(x => x.durationParam)
+    expect(effectiveSeconds(m.id, 5)).toBe(5)
+    expect(effectiveSeconds(m.id, 9999)).toBe(m.maxDurationSeconds)
+  })
+  it('returns the fixed length for fixed-duration models regardless of request', () => {
+    const m = MODELS.find(x => !x.durationParam)
+    expect(effectiveSeconds(m.id, 5)).toBe(m.defaultDurationSeconds)
+  })
+  it('returns null for unknown models', () => {
+    expect(effectiveSeconds('nope', 5)).toBeNull()
   })
 })
 

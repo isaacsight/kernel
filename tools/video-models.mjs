@@ -49,11 +49,19 @@ export function getModel(id) {
   return MODELS.find(m => m.id === id) ?? null
 }
 
+// Seconds fal will actually bill: fixed-length models (durationParam null)
+// always render their full defaultDurationSeconds no matter what is requested.
+export function effectiveSeconds(modelId, durationSeconds) {
+  const model = getModel(modelId)
+  if (!model) return null
+  if (!model.durationParam) return model.defaultDurationSeconds
+  return Math.min(Number(durationSeconds) || model.defaultDurationSeconds, model.maxDurationSeconds)
+}
+
 export function estimateUsd(modelId, durationSeconds) {
   const model = getModel(modelId)
   if (!model) return null
-  const seconds = Math.min(Number(durationSeconds) || model.defaultDurationSeconds, model.maxDurationSeconds)
-  return Math.round(model.usdPerSecond * seconds * 100) / 100
+  return Math.round(model.usdPerSecond * effectiveSeconds(modelId, durationSeconds) * 100) / 100
 }
 
 export function pickEndpoint(modelId, hasImage) {

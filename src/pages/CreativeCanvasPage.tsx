@@ -63,14 +63,17 @@ async function canvasImage(prompt: string): Promise<{ imageUrl: string; note: st
 
 interface VideoModelInfo { id: string; label: string; usdPerSecond: number; defaultDurationSeconds: number; maxDurationSeconds: number; supportsImage: boolean }
 
-async function videoEstimate(model: string, durationSeconds: number): Promise<number | null> {
+async function videoEstimate(model: string, durationSeconds: number): Promise<{ usd: number | null; seconds: number }> {
   try {
     const res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/videos/estimate`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model, durationSeconds }),
     })
     const payload = await res.json()
-    return typeof payload.usd === 'number' ? payload.usd : null
+    return {
+      usd: typeof payload.usd === 'number' ? payload.usd : null,
+      seconds: typeof payload.seconds === 'number' ? payload.seconds : durationSeconds,
+    }
   } catch {
     throw new Error('Local video server offline — run: npm run video-server')
   }
@@ -507,7 +510,7 @@ function CreativeCanvasStudio() {
   const [savedAt, setSavedAt] = useState('Saved')
   const [graphRunning, setGraphRunning] = useState(false)
   const [runProgress, setRunProgress] = useState<{ current: number; total: number } | null>(null)
-  const [videoConfirm, setVideoConfirm] = useState<{ nodeId: string; prompt: string; model: string; imageUrl?: string; usd: number | null } | null>(null)
+  const [videoConfirm, setVideoConfirm] = useState<{ nodeId: string; prompt: string; model: string; imageUrl?: string; usd: number | null; seconds: number } | null>(null)
   const [remoteRunRequest, setRemoteRunRequest] = useState('')
   const [remoteLoopRequest, setRemoteLoopRequest] = useState<{ requestedAt: string; goal: string; maxIterations: number } | null>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
@@ -728,9 +731,9 @@ function CreativeCanvasStudio() {
       }
       updateNode(id, { status: 'running', result: 'Fetching cost estimate…' })
       try {
-        const usd = await videoEstimate(modelId, 5)
+        const { usd, seconds } = await videoEstimate(modelId, 5)
         updateNode(id, { status: 'idle', result: '' })
-        setVideoConfirm({ nodeId: id, prompt, model: modelId, imageUrl: upstreamImage, usd })
+        setVideoConfirm({ nodeId: id, prompt, model: modelId, imageUrl: upstreamImage, usd, seconds })
       } catch (error) {
         updateNode(id, { status: 'error', result: error instanceof Error ? error.message : 'Video server unavailable' })
         showToast(error instanceof Error ? error.message : 'Video server unavailable')
@@ -1520,7 +1523,7 @@ Rules:
         <div className="cc-video-confirm" role="dialog" aria-label="Confirm paid generation">
           <div className="cc-video-confirm-card">
             <h3>Paid generation</h3>
-            <p className="cc-video-confirm-model">{videoConfirm.model}{videoConfirm.imageUrl ? ' — image to video' : ''} · 5s</p>
+            <p className="cc-video-confirm-model">{videoConfirm.model}{videoConfirm.imageUrl ? ' — image to video' : ''} · {videoConfirm.seconds}s</p>
             <p className="cc-video-confirm-price">{videoConfirm.usd !== null ? `Estimated $${videoConfirm.usd.toFixed(2)}` : 'Price unknown — check fal.ai before confirming'}</p>
             <div className="cc-video-confirm-actions">
               <button onClick={() => setVideoConfirm(null)}>Cancel</button>
