@@ -30,7 +30,8 @@
     "search": "npx tsx tools/semantic-search.ts",
     "icons": "npx tsx tools/generate-app-icons.ts",
     "splash": "npx tsx tools/generate-splash.ts",
-    "image-server": "node tools/local-image-server.mjs"
+    "image-server": "node tools/local-image-server.mjs",
+    "video-server": "node --env-file=.env tools/local-video-server.mjs"
   },
   "homepage": "https://kernel.chat",
   "dependencies": {
