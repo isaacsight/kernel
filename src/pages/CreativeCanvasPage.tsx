@@ -849,6 +849,42 @@ Complete this step directly. Return the useful work product, not commentary abou
     }
   }, [videoConfirm, updateNode, showToast])
 
+  const refineVideoPrompt = useCallback(async (id: string) => {
+    const graphNodes = nodesRef.current
+    const graphEdges = edgesRef.current
+    const node = graphNodes.find(item => item.id === id)
+    if (!node || node.status === 'running') return
+    const upstream = graphEdges
+      .filter(edge => edge.to === id)
+      .map(edge => {
+        const source = graphNodes.find(item => item.id === edge.from)
+        return source?.result || source?.content
+      })
+      .filter(Boolean)
+      .join('\n\n')
+    const target = node.catalogEndpoint ? `${node.model} (fal endpoint ${node.catalogEndpoint})` : node.model
+    updateNode(id, { status: 'running', result: 'Refining motion direction…' })
+    try {
+      const refined = await canvasText(`
+You are a film director writing a video-generation prompt for the model ${target}.
+
+Rough direction:
+${node.content || '(none yet)'}
+
+Upstream context:
+${upstream || '(none)'}
+
+Rewrite this as one production-ready video prompt: subject, setting, camera
+movement, framing, lighting, tempo, and style, in flowing prose under 90 words.
+Return only the prompt text.`, { tier: 'fast', max_tokens: 400, feature: 'creative_canvas_video_refine' })
+      updateNode(id, { status: 'idle', content: refined.trim(), result: 'Motion direction refined — press Run to price the shot.' })
+      showToast('Motion direction refined')
+    } catch (error) {
+      updateNode(id, { status: 'error', result: error instanceof Error ? error.message : 'Refine failed' })
+      showToast('Refine failed')
+    }
+  }, [updateNode, showToast])
+
   const openCatalog = useCallback(async (nodeId: string, category: CatalogCategory) => {
     setCatalogFor(nodeId)
     setCatalogCategory(category)
@@ -1516,6 +1552,7 @@ Rules:
                 </div>
 
                 {selectedId === node.id && <div className="cc-node-tools">
+                  {node.kind === 'video' && <button onClick={() => refineVideoPrompt(node.id)}>Refine</button>}
                   {node.kind === 'video' && <button onClick={() => openCatalog(node.id, 'text-to-video')}>Catalog</button>}
                   <button onClick={() => addNode('agent', node.id)}>＋ Agent</button>
                   <button onClick={() => addNode('image', node.id)}>＋ Image</button>
