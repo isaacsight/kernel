@@ -2487,3 +2487,26 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   1732-frame video stream remains 57.733s; the AAC container carries 67ms of
   encoder padding. The pre-master export is preserved as
   `output/what-we-made-v3-pre-loudness.mp4`.
+
+## Session 2026-07-19 — ONE OF ONE refined edit
+
+- **DELIVERABLE:** `output/one-of-one-2027-refined.mp4` — 1080×1920,
+  H.264/AAC, 30 fps, 1260 picture frames, 42.0 seconds. The original
+  `output/one-of-one-2027.mp4` remains preserved.
+- **PALMIER TIMELINES:** the completed `Timeline 1` remains untouched in
+  `/Users/isaachernandez/Documents/Palmier Pro/one-of-one-2027.palmier`;
+  the revised timeline is `Refined Cut` (`F4B390F8`).
+- **EDIT CRITIC / CONTINUITY:** the ten-shot timing, typography, hard-cut
+  grammar, score, and spot effects passed review and were retained. Shot 2
+  received a subtle highlight/contrast/saturation correction; shot 3 was
+  brought closer to the following fabrication shot in luminance, warmth,
+  and saturation. Color inspection confirmed the adjustments removed the
+  measurable crushed/clipped extrema in those inserts.
+- **AUDIO FINISH:** repaired unintended silence dips where split ambience
+  clips met at frames 300, 600, and 1200. Room tone now flows continuously
+  through the interior act, the street bed through the exterior act, and
+  both retain intentional act/final fades.
+- **QC:** all clips remain contiguous with no black gaps; a ten-shot contact
+  sheet and frame-pair checks at the major boundaries passed visually.
+  Loudness measured approximately -16.01 LUFS integrated and -1.43 dBTP.
+  Publishing remains a manual human step.
