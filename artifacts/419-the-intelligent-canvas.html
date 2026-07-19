@@ -1,0 +1,845 @@
+<meta charset="utf-8">
+<title>FLORA — The Intelligent Canvas · kernel.chat galley</title>
+<style>
+  :root {
+    --paper: #FAF9F6;
+    --stock: #F1EDE4;
+    --ink: #1F1E1D;
+    --meta: #6E675F;
+    --line: #D8D2C6;
+    --tomato: #E24E1B;
+    --serif: "EB Garamond", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --mono: "Courier Prime", "Courier New", Courier, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #181715;
+      --stock: #211F1C;
+      --ink: #EDE8DF;
+      --meta: #9A938A;
+      --line: #3A3733;
+      --tomato: #F0602C;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #181715;
+    --stock: #211F1C;
+    --ink: #EDE8DF;
+    --meta: #9A938A;
+    --line: #3A3733;
+    --tomato: #F0602C;
+  }
+  :root[data-theme="light"] {
+    --paper: #FAF9F6;
+    --stock: #F1EDE4;
+    --ink: #1F1E1D;
+    --meta: #6E675F;
+    --line: #D8D2C6;
+    --tomato: #E24E1B;
+  }
+
+  html, body { background: var(--paper); }
+  body {
+    color: var(--ink);
+    font-family: var(--serif);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .sheet {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+  }
+  ::selection { background: var(--tomato); color: var(--paper); }
+
+  /* ---------- running head ---------- */
+  .running-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 14px 2px 10px;
+    border-bottom: 1px solid var(--ink);
+    position: relative;
+  }
+  .running-head::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .running-head .mid { color: var(--meta); }
+  .star { color: var(--tomato); font-style: normal; }
+
+  /* ---------- kicker + monument ---------- */
+  .kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin: 44px 0 0;
+  }
+  .kicker b { color: var(--tomato); font-weight: 400; }
+  h1.monument {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(52px, 9.5vw, 118px);
+    line-height: 0.94;
+    letter-spacing: -0.015em;
+    margin: 14px 0 0;
+    text-wrap: balance;
+    text-transform: uppercase;
+  }
+  h1.monument .accent { color: var(--tomato); }
+  .monument-jp {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.42em;
+    color: var(--meta);
+    margin-top: 10px;
+  }
+  .dek {
+    max-width: 58ch;
+    font-size: clamp(18px, 2.2vw, 22px);
+    line-height: 1.5;
+    margin: 26px 0 0;
+  }
+  .dek em { font-style: italic; }
+
+  /* ---------- plate ---------- */
+  .plate-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px 24px;
+    margin: 56px 0 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .plate-head .lead { color: var(--ink); }
+  .plate-head .hint { color: var(--meta); }
+  .plate-scroll { overflow-x: auto; }
+  .plate {
+    position: relative;
+    min-width: 760px;
+    border: 1px solid var(--ink);
+    background:
+      repeating-linear-gradient(0deg, transparent 0 31px, var(--line) 31px 32px),
+      repeating-linear-gradient(90deg, transparent 0 31px, var(--line) 31px 32px),
+      var(--paper);
+    background-blend-mode: normal;
+  }
+  .tick {
+    position: absolute;
+    width: 13px; height: 13px;
+    pointer-events: none;
+    color: var(--tomato);
+  }
+  .tick::before, .tick::after {
+    content: "";
+    position: absolute;
+    background: currentColor;
+  }
+  .tick::before { left: 6px; top: 0; width: 1px; height: 13px; }
+  .tick::after  { left: 0; top: 6px; width: 13px; height: 1px; }
+  .tick.tl { top: -7px; left: -7px; }
+  .tick.tr { top: -7px; right: -7px; }
+  .tick.bl { bottom: -7px; left: -7px; }
+  .tick.br { bottom: -7px; right: -7px; }
+
+  #stage {
+    position: relative;
+    height: 560px;
+  }
+  #wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  #wires path.wire {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.25;
+  }
+  #wires path.wire.lit { stroke: var(--tomato); stroke-width: 1.75; }
+  #wires circle.pulse { fill: var(--tomato); }
+
+  .node {
+    position: absolute;
+    width: 196px;
+    background: var(--stock);
+    border: 1px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+  .node:active { cursor: grabbing; }
+  .node.hot { box-shadow: 4px 4px 0 var(--tomato); }
+  .node-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    padding: 7px 10px 6px;
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .node-head .jp { color: var(--meta); letter-spacing: 0.28em; }
+  .node-body { padding: 10px; }
+  .node-body canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .node .prompt-text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15.5px;
+    line-height: 1.4;
+    margin: 0;
+  }
+  .node-status {
+    padding: 6px 10px 7px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--meta);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .node-status.done { color: var(--tomato); }
+
+  .plate-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    border-top: 1px solid var(--ink);
+    padding: 12px 14px;
+    background: var(--stock);
+  }
+  #run {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--tomato);
+    border: 1px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 10px 22px;
+    cursor: pointer;
+  }
+  #run:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+  #run:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+  #run:focus-visible { outline: 2px solid var(--tomato); outline-offset: 3px; }
+  #run[disabled] { opacity: 0.55; cursor: wait; transform: none; }
+  #ledger {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--meta);
+    font-variant-numeric: tabular-nums;
+  }
+  .plate-caption {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--meta);
+    margin: 10px 2px 0;
+    text-transform: uppercase;
+  }
+
+  /* ---------- ticker ---------- */
+  .ticker-wrap {
+    margin: 64px 0 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    overflow: hidden;
+    padding: 10px 0;
+  }
+  .ticker {
+    display: flex;
+    width: max-content;
+    gap: 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    animation: ticker 48s linear infinite;
+  }
+  .ticker span { padding: 0 14px; }
+  .ticker .star { padding: 0; }
+  @keyframes ticker { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker { animation: none; }
+  }
+  .ticker-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* ---------- catalog ---------- */
+  .catalog { margin: 72px 0 0; }
+  .catalog-kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin-bottom: 6px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 72px 240px 1fr;
+    gap: 24px;
+    padding: 26px 2px;
+    border-top: 1px solid var(--ink);
+    align-items: start;
+  }
+  .row:last-child { border-bottom: 1px solid var(--ink); }
+  .row .no {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--tomato);
+    font-variant-numeric: tabular-nums;
+  }
+  .row h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.1;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+  .row .jp {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.34em;
+    color: var(--meta);
+    margin-top: 6px;
+  }
+  .row p {
+    margin: 0;
+    max-width: 62ch;
+    font-size: 17px;
+  }
+  .row p q { font-style: italic; }
+  @media (max-width: 720px) {
+    .row { grid-template-columns: 48px 1fr; }
+    .row p { grid-column: 2; }
+  }
+
+  /* ---------- editorial note ---------- */
+  .note {
+    margin: 72px auto 0;
+    max-width: 62ch;
+    border-left: 3px solid var(--tomato);
+    padding-left: 22px;
+  }
+  .note .note-kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin-bottom: 10px;
+  }
+  .note p {
+    font-size: 19px;
+    line-height: 1.6;
+    margin: 0 0 14px;
+  }
+  .note p:last-child { margin-bottom: 0; }
+
+  /* ---------- colophon ---------- */
+  .colophon {
+    margin-top: 84px;
+    border-top: 1px solid var(--ink);
+    padding-top: 14px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--meta);
+    line-height: 2;
+  }
+  .colophon .star { letter-spacing: 0; }
+</style>
+
+<div class="sheet">
+
+  <header class="running-head">
+    <span>KERNEL<span class="star">&nbsp;★&nbsp;</span>CHAT</span>
+    <span class="mid">GALLEY PROOF — NEXT ISSUE · 校正刷</span>
+    <span>JULY 2026</span>
+  </header>
+
+  <p class="kicker">[ FIELD REVIEW · 現場調査 ] <b>SUBJECT: FLORA</b> — AN AI-POWERED CANVAS FOR DESIGNERS, BRAND TEAMS, AND AGENCIES</p>
+
+  <h1 class="monument">THE<br>INTELLIGENT<br><span class="accent">CANVAS</span></h1>
+  <p class="monument-jp">知性のキャンバス — 道具は消え、工程が残る</p>
+
+  <p class="dek">FLORA wires fifty generative models into a single sheet of paper and seats the AI <em>beside</em> you, not in front of you. We set a working model of the idea in type. Drag the blocks. Pull the proof.</p>
+
+  <div class="plate-head">
+    <span class="lead">PLATE No.1 — WORKING MODEL · 作動模型</span>
+    <span class="hint">DRAG A BLOCK TO REROUTE THE WIRES · CLICK A PROOF TO REDRAW IT</span>
+  </div>
+
+  <div class="plate-scroll">
+    <div class="plate">
+      <span class="tick tl"></span><span class="tick tr"></span>
+      <span class="tick bl"></span><span class="tick br"></span>
+
+      <div id="stage">
+        <svg id="wires" aria-hidden="true"></svg>
+
+        <div class="node" id="n-prompt" style="left:4%; top:38%;">
+          <div class="node-head"><span>BLOCK 01 · TEXT</span><span class="jp">言葉</span></div>
+          <div class="node-body">
+            <p class="prompt-text">"a botanical study in vermilion ink, engraved, one flower leaning out of frame"</p>
+          </div>
+          <div class="node-status" data-status>IDLE · 待機</div>
+        </div>
+
+        <div class="node" id="n-img-a" style="left:36%; top:6%;">
+          <div class="node-head"><span>BLOCK 02 · IMAGE</span><span class="jp">図版</span></div>
+          <div class="node-body"><canvas width="352" height="220"></canvas></div>
+          <div class="node-status" data-status>IDLE · 待機</div>
+        </div>
+
+        <div class="node" id="n-img-b" style="left:36%; top:58%;">
+          <div class="node-head"><span>BLOCK 03 · IMAGE</span><span class="jp">図版</span></div>
+          <div class="node-body"><canvas width="352" height="220"></canvas></div>
+          <div class="node-status" data-status>IDLE · 待機</div>
+        </div>
+
+        <div class="node" id="n-video" style="left:70%; top:30%;">
+          <div class="node-head"><span>BLOCK 04 · VIDEO</span><span class="jp">動画</span></div>
+          <div class="node-body"><canvas width="352" height="220"></canvas></div>
+          <div class="node-status" data-status>IDLE · 待機</div>
+        </div>
+      </div>
+
+      <div class="plate-controls">
+        <button id="run" type="button">★ PULL THE PROOF</button>
+        <span id="ledger">RUNS 000 · MODELS DRAWN — · LAST PULL —</span>
+      </div>
+    </div>
+  </div>
+  <p class="plate-caption">FIG. 1 — FLORA'S GRAMMAR, REDUCED: BLOCKS CARRY MODELS, WIRES CARRY INTENT. THE OUTPUTS ABOVE ARE DRAWN IN-HOUSE, NOT GENERATED.</p>
+
+  <div class="ticker-wrap" aria-label="Models available on the FLORA canvas">
+    <div class="ticker" id="ticker"></div>
+  </div>
+  <p class="ticker-label">THE STOCKROOM — 50+ MODELS UNDER ONE SUBSCRIPTION · 在庫一覧</p>
+
+  <section class="catalog">
+    <p class="catalog-kicker">THE CLAIM, IN FOUR ENTRIES · 目録</p>
+
+    <div class="row">
+      <span class="no">01</span>
+      <div><h3>The Sheet</h3><span class="jp">紙面</span></div>
+      <p>An infinite canvas <q>built for flow.</q> Blocks for text, image and video; wires between them. The workflow is the document — you do not export the process, you inhabit it. <q>Every creative AI tool, one unified process.</q></p>
+    </div>
+
+    <div class="row">
+      <span class="no">02</span>
+      <div><h3>The Stock</h3><span class="jp">在庫</span></div>
+      <p>Fifty-plus models racked under one roof — Veo, FLUX, Kling, Pika, Stable Diffusion — <q>one subscription to rule them all.</q> The bet underneath: the model is paper stock, not the press. Stock gets swapped; the press stays.</p>
+    </div>
+
+    <div class="row">
+      <span class="no">03</span>
+      <div><h3>The Hand</h3><span class="jp">手</span></div>
+      <p>An in-house agent that <q>thinks with you, builds with you, and never runs out of directions to try.</q> The vocabulary is deliberate: a hand beside yours on the sheet, not an autopilot over it. <q>Never let a good idea go unexplored.</q></p>
+    </div>
+
+    <div class="row">
+      <span class="no">04</span>
+      <div><h3>The Ledger</h3><span class="jp">台帳</span></div>
+      <p>Forty-two million dollars raised. Pentagram, Lionsgate and Nike on the masthead. Investors saying <q>the next Adobe</q> out loud. Note what the claim is <em>not</em>: a better model. It is the room the models sit in.</p>
+    </div>
+  </section>
+
+  <aside class="note">
+    <p class="note-kicker">THE PRESSROOM READS IT · 編集後記</p>
+    <p>Our discipline says count what gets read and cut what does not. FLORA's wager is the same rule applied to tools: count what gets used. When every model is a block on the same sheet, the model stops being the product — the process is.</p>
+    <p>That is a magazine's kind of claim. The issue was never the ink. It is the imposition.</p>
+  </aside>
+
+  <footer class="colophon">
+    SET IN GARAMOND &amp; COURIER <span class="star">★</span> PLATE No.1 IS A WORKING SIMULATION DRAWN IN-HOUSE — NOTHING WAS GENERATED, EVERYTHING WAS TYPESET <span class="star">★</span> SOURCE: FLORA.AI, READ 15 JULY 2026 <span class="star">★</span> KERNEL.CHAT PRESSROOM
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- tokens (re-read on theme change) ---------- */
+  function tokens() {
+    var s = getComputedStyle(document.documentElement);
+    return {
+      ink: s.getPropertyValue("--ink").trim(),
+      tomato: s.getPropertyValue("--tomato").trim(),
+      meta: s.getPropertyValue("--meta").trim(),
+      line: s.getPropertyValue("--line").trim()
+    };
+  }
+
+  /* ---------- seeded rng ---------- */
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ---------- botanical plate renderer ---------- */
+  function drawPlate(canvas, seed, t) {
+    var ctx = canvas.getContext("2d");
+    var w = canvas.width, h = canvas.height;
+    var rnd = mulberry32(seed);
+    var c = tokens();
+    ctx.clearRect(0, 0, w, h);
+
+    /* faint plate grid */
+    ctx.strokeStyle = c.line;
+    ctx.lineWidth = 0.5;
+    for (var gx = 0.5 + 32; gx < w; gx += 32) {
+      ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+    }
+
+    var stems = 3 + Math.floor(rnd() * 3);
+    for (var i = 0; i < stems; i++) {
+      var baseX = w * (0.14 + ((i + rnd() * 0.8) / stems) * 0.72);
+      var lean = (rnd() - 0.5) * w * 0.3;
+      var sway = t ? Math.sin(t / 900 + i * 1.7) * 7 : 0;
+      var topX = baseX + lean + sway;
+      var topY = h * (0.08 + rnd() * 0.18);
+      var midX = baseX + lean * 0.3 + sway * 0.4;
+      var midY = h * 0.55;
+
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 1.1;
+      ctx.beginPath();
+      ctx.moveTo(baseX, h - 6);
+      ctx.quadraticCurveTo(midX, midY, topX, topY);
+      ctx.stroke();
+
+      /* leaves along the stem */
+      var leaves = 2 + Math.floor(rnd() * 3);
+      for (var l = 0; l < leaves; l++) {
+        var lt = 0.3 + rnd() * 0.5;
+        var lx = baseX + (topX - baseX) * lt;
+        var ly = (h - 6) + (topY - (h - 6)) * lt;
+        var dir = rnd() > 0.5 ? 1 : -1;
+        var len = 12 + rnd() * 18;
+        ctx.beginPath();
+        ctx.moveTo(lx, ly);
+        ctx.quadraticCurveTo(lx + dir * len, ly - len * 0.35, lx + dir * len * 1.25, ly + 3);
+        ctx.quadraticCurveTo(lx + dir * len * 0.5, ly + len * 0.3, lx, ly);
+        ctx.stroke();
+      }
+
+      /* the first stem always blossoms in the spot colour; later ones may */
+      if (i === 0 || rnd() > 0.62) {
+        var petals = 5 + Math.floor(rnd() * 3);
+        var r = 6 + rnd() * 7;
+        ctx.fillStyle = c.tomato;
+        for (var p = 0; p < petals; p++) {
+          var ang = (Math.PI * 2 * p) / petals + (t ? t / 4000 : 0);
+          ctx.beginPath();
+          ctx.ellipse(topX + Math.cos(ang) * r, topY + Math.sin(ang) * r,
+                      r * 0.62, r * 0.36, ang, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.fillStyle = c.ink;
+        ctx.beginPath();
+        ctx.arc(topX, topY, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = c.ink;
+        ctx.beginPath();
+        ctx.arc(topX, topY, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    /* plate number, bottom-right */
+    ctx.fillStyle = c.meta;
+    ctx.font = "9px Courier, monospace";
+    ctx.fillText("No." + String(seed % 1000).padStart(3, "0"), w - 44, h - 8);
+  }
+
+  function drawEmpty(canvas) {
+    var ctx = canvas.getContext("2d");
+    var w = canvas.width, h = canvas.height;
+    var c = tokens();
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = c.line;
+    ctx.setLineDash([4, 5]);
+    ctx.strokeRect(10.5, 10.5, w - 21, h - 21);
+    ctx.setLineDash([]);
+    ctx.fillStyle = c.meta;
+    ctx.font = "11px Courier, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("EMPTY FRAME — 空", w / 2, h / 2 + 4);
+    ctx.textAlign = "start";
+  }
+
+  /* ---------- graph ---------- */
+  var stage = document.getElementById("stage");
+  var svg = document.getElementById("wires");
+  var SVGNS = "http://www.w3.org/2000/svg";
+
+  var IMG_MODELS = ["FLUX.1", "SD 3.5", "IDEOGRAM 3", "RECRAFT V3", "IMAGEN 4"];
+  var VID_MODELS = ["VEO 3", "KLING 2.1", "PIKA 2.2", "RUNWAY GEN-4", "LUMA RAY2"];
+
+  var nodes = {
+    prompt: { el: document.getElementById("n-prompt") },
+    imgA:   { el: document.getElementById("n-img-a"), models: IMG_MODELS, seed: 0 },
+    imgB:   { el: document.getElementById("n-img-b"), models: IMG_MODELS, seed: 0 },
+    video:  { el: document.getElementById("n-video"), models: VID_MODELS, seed: 0, animated: true }
+  };
+  var edges = [
+    { from: "prompt", to: "imgA" },
+    { from: "prompt", to: "imgB" },
+    { from: "imgA", to: "video" },
+    { from: "imgB", to: "video" }
+  ];
+  edges.forEach(function (e) {
+    e.path = document.createElementNS(SVGNS, "path");
+    e.path.setAttribute("class", "wire");
+    svg.appendChild(e.path);
+  });
+
+  function anchor(el, side) {
+    var x = el.offsetLeft, y = el.offsetTop;
+    return {
+      x: side === "out" ? x + el.offsetWidth : x,
+      y: y + el.offsetHeight / 2
+    };
+  }
+  function layout() {
+    edges.forEach(function (e) {
+      var a = anchor(nodes[e.from].el, "out");
+      var b = anchor(nodes[e.to].el, "in");
+      var dx = Math.max(36, (b.x - a.x) * 0.5);
+      e.path.setAttribute("d",
+        "M" + a.x + "," + a.y +
+        " C" + (a.x + dx) + "," + a.y +
+        " " + (b.x - dx) + "," + b.y +
+        " " + b.x + "," + b.y);
+    });
+  }
+
+  /* ---------- dragging ---------- */
+  Object.keys(nodes).forEach(function (key) {
+    var el = nodes[key].el;
+    var start = null;
+    el.addEventListener("pointerdown", function (ev) {
+      if (ev.target.closest("canvas") && nodes[key].seed) return; /* canvas click = reroll */
+      start = { px: ev.clientX, py: ev.clientY, x: el.offsetLeft, y: el.offsetTop };
+      el.setPointerCapture(ev.pointerId);
+    });
+    el.addEventListener("pointermove", function (ev) {
+      if (!start) return;
+      var nx = start.x + (ev.clientX - start.px);
+      var ny = start.y + (ev.clientY - start.py);
+      nx = Math.max(0, Math.min(stage.clientWidth - el.offsetWidth, nx));
+      ny = Math.max(0, Math.min(stage.clientHeight - el.offsetHeight, ny));
+      el.style.left = nx + "px";
+      el.style.top = ny + "px";
+      layout();
+    });
+    ["pointerup", "pointercancel"].forEach(function (t) {
+      el.addEventListener(t, function () { start = null; });
+    });
+  });
+  window.addEventListener("resize", layout);
+
+  /* ---------- animation tick: rAF with a timer fallback, so the
+     sequence never stalls in throttled or background tabs ---------- */
+  function tick(fn) {
+    var fired = false;
+    function fire() {
+      if (fired) return;
+      fired = true;
+      fn(performance.now());
+    }
+    requestAnimationFrame(fire);
+    setTimeout(fire, 42);
+  }
+
+  /* ---------- pulses ---------- */
+  function pulse(edge, done) {
+    if (REDUCED) { done(); return; }
+    var len = edge.path.getTotalLength();
+    var dot = document.createElementNS(SVGNS, "circle");
+    dot.setAttribute("class", "pulse");
+    dot.setAttribute("r", "4");
+    svg.appendChild(dot);
+    edge.path.classList.add("lit");
+    var t0 = performance.now(), DUR = 650;
+    function step(ts) {
+      var k = Math.min(1, (ts - t0) / DUR);
+      var pt = edge.path.getPointAtLength(len * k);
+      dot.setAttribute("cx", pt.x);
+      dot.setAttribute("cy", pt.y);
+      if (k < 1) { tick(step); }
+      else {
+        svg.removeChild(dot);
+        setTimeout(function () { edge.path.classList.remove("lit"); }, 350);
+        done();
+      }
+    }
+    tick(step);
+  }
+
+  /* ---------- render steps ---------- */
+  function setStatus(key, text, done) {
+    var s = nodes[key].el.querySelector("[data-status]");
+    s.textContent = text;
+    s.classList.toggle("done", !!done);
+  }
+  function renderNode(key, cb) {
+    var n = nodes[key];
+    var model = n.models[Math.floor(Math.random() * n.models.length)];
+    n.model = model;
+    n.seed = 1 + Math.floor(Math.random() * 99999);
+    n.el.classList.add("hot");
+    setStatus(key, "RENDER · " + model, false);
+    setTimeout(function () {
+      drawPlate(n.el.querySelector("canvas"), n.seed);
+      setStatus(key, "PROOF ★ " + model, true);
+      n.el.classList.remove("hot");
+      if (cb) cb();
+    }, REDUCED ? 40 : 520);
+  }
+
+  /* video sway loop — timer-driven; sway does not need 60fps */
+  setInterval(function () {
+    var v = nodes.video;
+    if (v.seed && !REDUCED) {
+      drawPlate(v.el.querySelector("canvas"), v.seed, performance.now());
+    }
+  }, 80);
+
+  /* ---------- the run ---------- */
+  var runBtn = document.getElementById("run");
+  var ledger = document.getElementById("ledger");
+  var runs = 0;
+  var modelsDrawn = {};
+
+  function updateLedger() {
+    var stamp = new Date();
+    ledger.textContent =
+      "RUNS " + String(runs).padStart(3, "0") +
+      " · MODELS DRAWN " + String(Object.keys(modelsDrawn).length).padStart(2, "0") +
+      " · LAST PULL " +
+      String(stamp.getHours()).padStart(2, "0") + ":" +
+      String(stamp.getMinutes()).padStart(2, "0") + ":" +
+      String(stamp.getSeconds()).padStart(2, "0");
+  }
+
+  runBtn.addEventListener("click", function () {
+    runBtn.disabled = true;
+    setStatus("prompt", "SENT ★ INTENT ON THE WIRE", true);
+    var pending = 2;
+    function stageTwo() {
+      if (--pending > 0) return;
+      var pv = 2;
+      [2, 3].forEach(function (i) {
+        pulse(edges[i], function () {
+          if (--pv > 0) return;
+          renderNode("video", function () {
+            runs++;
+            [nodes.imgA, nodes.imgB, nodes.video].forEach(function (n) {
+              if (n.model) modelsDrawn[n.model] = true;
+            });
+            updateLedger();
+            setStatus("prompt", "IDLE · 待機", false);
+            runBtn.textContent = "★ PULL AGAIN — 再校";
+            runBtn.disabled = false;
+          });
+        });
+      });
+    }
+    pulse(edges[0], function () { renderNode("imgA", stageTwo); });
+    pulse(edges[1], function () { renderNode("imgB", stageTwo); });
+  });
+
+  /* click a rendered proof to redraw it */
+  ["imgA", "imgB", "video"].forEach(function (key) {
+    nodes[key].el.querySelector("canvas").addEventListener("click", function () {
+      if (!nodes[key].seed || runBtn.disabled) return;
+      renderNode(key, updateLedger);
+    });
+  });
+
+  /* ---------- theme change: re-ink existing proofs ---------- */
+  function reink() {
+    ["imgA", "imgB", "video"].forEach(function (key) {
+      var n = nodes[key];
+      if (n.seed) drawPlate(n.el.querySelector("canvas"), n.seed);
+      else drawEmpty(n.el.querySelector("canvas"));
+    });
+  }
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", reink);
+  new MutationObserver(reink).observe(document.documentElement,
+    { attributes: true, attributeFilter: ["data-theme"] });
+
+  /* ---------- ticker ---------- */
+  var MODELS = ["VEO 3", "FLUX.1", "KLING 2.1", "PIKA 2.2", "STABLE DIFFUSION 3.5",
+    "RUNWAY GEN-4", "IDEOGRAM 3", "LUMA RAY2", "IMAGEN 4", "RECRAFT V3",
+    "MINIMAX HAILUO", "SEEDANCE", "WAN 2.2", "GPT-IMAGE", "HUNYUAN VIDEO"];
+  var ticker = document.getElementById("ticker");
+  var half = "";
+  MODELS.forEach(function (m) {
+    half += "<span>" + m + "</span><span class=\"star\">★</span>";
+  });
+  ticker.innerHTML = half + half; /* duplicate for seamless -50% loop */
+
+  /* ---------- init ---------- */
+  layout();
+  reink();
+})();
+</script>

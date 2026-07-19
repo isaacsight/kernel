@@ -1,0 +1,1068 @@
+<meta charset="utf-8">
+<title>THE DESCENT OF A PROMPT · kernel.chat core sample</title>
+<style>
+  :root {
+    --paper: #FAF9F6;
+    --stock: #F1EDE4;
+    --ink: #1F1E1D;
+    --meta: #6E675F;
+    --line: #D8D2C6;
+    --accent: #1E6E6E;
+    --serif: "EB Garamond", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --mono: "Courier Prime", "Courier New", Courier, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #161514;
+      --stock: #201E1C;
+      --ink: #EDE8DF;
+      --meta: #9A938A;
+      --line: #383531;
+      --accent: #4FB3B3;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #161514;
+    --stock: #201E1C;
+    --ink: #EDE8DF;
+    --meta: #9A938A;
+    --line: #383531;
+    --accent: #4FB3B3;
+  }
+  :root[data-theme="light"] {
+    --paper: #FAF9F6;
+    --stock: #F1EDE4;
+    --ink: #1F1E1D;
+    --meta: #6E675F;
+    --line: #D8D2C6;
+    --accent: #1E6E6E;
+  }
+
+  html, body {
+    /* the page itself darkens as the probe descends */
+    background: color-mix(in oklab, var(--paper), var(--ink) calc(var(--live-depth, 0) * 5%));
+    transition: background 0.8s ease;
+  }
+  body {
+    color: var(--ink);
+    font-family: var(--serif);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: var(--paper); }
+
+  .sheet {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 0 20px 64px;
+  }
+
+  /* ---------- running head ---------- */
+  .running-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 14px 2px 10px;
+    border-bottom: 1px solid var(--ink);
+    position: relative;
+  }
+  .running-head::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .running-head .mid { color: var(--meta); }
+  .star { color: var(--accent); font-style: normal; }
+
+  /* ---------- masthead ---------- */
+  .kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin: 44px 0 0;
+  }
+  .kicker b { color: var(--accent); font-weight: 400; }
+  h1.monument {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(50px, 9vw, 112px);
+    line-height: 0.94;
+    letter-spacing: -0.015em;
+    margin: 14px 0 0;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  h1.monument .accent { color: var(--accent); }
+  .monument-jp {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.42em;
+    color: var(--meta);
+    margin-top: 10px;
+  }
+  .dek {
+    max-width: 58ch;
+    font-size: clamp(17px, 2.1vw, 21px);
+    line-height: 1.5;
+    margin: 24px 0 0;
+  }
+  .dek em { font-style: italic; }
+
+  /* ---------- the bore: gauge rail + strata ---------- */
+  .bore {
+    display: grid;
+    grid-template-columns: 84px 1fr;
+    gap: 0 28px;
+    margin-top: 56px;
+    position: relative;
+  }
+  @media (max-width: 720px) {
+    .bore { grid-template-columns: 44px 1fr; gap: 0 14px; }
+  }
+
+  .gauge {
+    position: relative;
+  }
+  .gauge-line {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: var(--line);
+  }
+  #probe-dot {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translate(-50%, -4px);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 20%, transparent);
+  }
+  .gauge-stop {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--meta);
+    transform: translateY(-50%);
+  }
+  .gauge-stop::before {
+    content: "";
+    display: block;
+    width: 7px; height: 7px;
+    margin: 0 auto 4px;
+    border: 1px solid var(--meta);
+    border-radius: 50%;
+    background: var(--paper);
+  }
+  .gauge-stop.lit { color: var(--accent); }
+  .gauge-stop.lit::before { border-color: var(--accent); background: var(--accent); }
+
+  .strata { min-width: 0; }
+
+  /* each stratum darkens slightly with depth via --depth (0..1) */
+  .stratum {
+    --depth: 0;
+    border: 1px solid var(--ink);
+    background: color-mix(in oklab, var(--stock), var(--ink) calc(var(--depth) * 7%));
+    margin-bottom: 30px;
+    transition: box-shadow 0.35s ease;
+  }
+  .stratum.active { box-shadow: 5px 5px 0 var(--accent); }
+  .stratum-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6px 18px;
+    padding: 10px 14px 9px;
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .stratum-head .jp { color: var(--meta); letter-spacing: 0.3em; }
+  .stratum-status { color: var(--meta); }
+  .stratum.reached .stratum-status { color: var(--accent); }
+  .stratum-body { padding: 16px; }
+  .stratum-caption {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--meta);
+    padding: 9px 14px 10px;
+    border-top: 1px solid var(--line);
+  }
+
+  .stratum canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    background: color-mix(in oklab, var(--paper), var(--ink) calc(var(--depth) * 6%));
+    cursor: pointer;
+  }
+
+  /* sorts hover above the stick until the probe reaches them,
+     then settle in on a stagger */
+  .sorts:not(.landed) .sort {
+    transform: translateY(-5px);
+    opacity: 0.72;
+  }
+  .sorts.landed .sort {
+    transform: none;
+    opacity: 1;
+  }
+  .sorts.landed .sort:nth-child(2) { transition-delay: 0.05s; }
+  .sorts.landed .sort:nth-child(3) { transition-delay: 0.1s; }
+  .sorts.landed .sort:nth-child(4) { transition-delay: 0.15s; }
+  .sorts.landed .sort:nth-child(5) { transition-delay: 0.2s; }
+  .sorts.landed .sort:nth-child(6) { transition-delay: 0.25s; }
+  .sorts.landed .sort:nth-child(7) { transition-delay: 0.3s; }
+  .sorts.landed .sort:nth-child(8) { transition-delay: 0.35s; }
+  .sorts.landed .sort[aria-pressed="true"] { transform: translate(1px, 1px); }
+
+  /* the drawn word stamps in */
+  @keyframes stamp-in {
+    from { transform: scale(0.9); opacity: 0.4; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .cand.drawn .word {
+    display: inline-block;
+    animation: stamp-in 0.35s ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cand.drawn .word { animation: none; }
+    .sorts:not(.landed) .sort { transform: none; opacity: 1; }
+  }
+
+  /* the answer's return: a hollow dot rising the gauge */
+  .return-dot {
+    position: absolute;
+    left: 50%;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--paper);
+    transform: translate(-50%, -4px);
+  }
+
+  /* ---------- S0 surface ---------- */
+  .prompt-line {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.4;
+    margin: 6px 2px 10px;
+  }
+  .caret {
+    display: inline-block;
+    width: 2px; height: 1em;
+    background: var(--accent);
+    vertical-align: -0.15em;
+    margin-left: 2px;
+    animation: caret-blink 1.1s steps(1) infinite;
+  }
+  @keyframes caret-blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
+
+  #drop {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--accent);
+    border: 1px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 10px 22px;
+    cursor: pointer;
+  }
+  #drop:hover:not(:disabled) { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+  #drop:active:not(:disabled) { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+  #drop:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  #drop:disabled { opacity: 0.55; cursor: wait; }
+
+  /* ---------- S1 type ---------- */
+  .sorts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 4px 0 2px;
+  }
+  .sort {
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    padding: 7px 11px 6px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 2px 2px 0 var(--ink);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+  .sort:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sort[aria-pressed="true"] {
+    background: var(--accent);
+    color: var(--paper);
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .sort-note {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin: 12px 2px 0;
+  }
+  .sort-note b { color: var(--accent); font-weight: 400; }
+
+  /* ---------- S4 sampling ---------- */
+  .temp-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 2px 0 14px;
+  }
+  .temp-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin-right: 6px;
+  }
+  .temp {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 2px 2px 0 var(--ink);
+    cursor: pointer;
+  }
+  .temp:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .temp[aria-checked="true"] {
+    background: var(--accent);
+    color: var(--paper);
+    transform: translate(1px,1px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .candidates { display: grid; gap: 8px; }
+  .cand {
+    display: grid;
+    grid-template-columns: 9rem 1fr 3.5rem;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+  }
+  .cand .word { text-transform: lowercase; }
+  .cand .bar-track {
+    height: 12px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .cand .bar {
+    height: 100%;
+    background: var(--meta);
+    width: 0%;
+    transition: width 0.7s ease, background 0.3s ease;
+  }
+  .cand.drawn .word { color: var(--accent); }
+  .cand.drawn .bar { background: var(--accent); }
+  .cand .pct { text-align: right; color: var(--meta); font-variant-numeric: tabular-nums; }
+  .cand-note {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin: 14px 2px 0;
+  }
+
+  /* ---------- S5 return ---------- */
+  .answer {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(19px, 2.6vw, 26px);
+    line-height: 1.5;
+    min-height: 4.5em;
+    margin: 4px 2px 8px;
+  }
+  .answer .risen { color: var(--accent); }
+  .answer .waiting { color: var(--meta); }
+  .answer-wait-note {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin-top: 10px;
+  }
+
+  /* ---------- ledger ---------- */
+  .ledger-block {
+    border: 1px solid var(--ink);
+    background: var(--stock);
+    margin-top: 8px;
+    padding: 14px 16px;
+  }
+  .ledger-kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin: 0 0 8px;
+  }
+  #ledger {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+  }
+  .ledger-note {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    border-left: 3px solid var(--accent);
+    padding-left: 14px;
+    margin: 14px 0 0;
+    max-width: 62ch;
+  }
+
+  /* ---------- colophon ---------- */
+  .colophon {
+    margin-top: 72px;
+    border-top: 1px solid var(--ink);
+    padding-top: 14px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--meta);
+    line-height: 2;
+  }
+</style>
+
+<div class="sheet">
+
+  <header class="running-head">
+    <span>KERNEL<span class="star">&nbsp;★&nbsp;</span>CHAT</span>
+    <span class="mid">CORE SAMPLE No.1 — ARTIFACT EDITION · 試錐標本</span>
+    <span>JULY 2026</span>
+  </header>
+
+  <p class="kicker">[ FIELD APPARATUS · 現場装置 ] <b>ONE QUESTION, FOLLOWED ALL THE WAY DOWN</b> — SIX STRATA, ONE PROBE, YOUR HAND ON THE WINCH</p>
+
+  <h1 class="monument">THE DESCENT<br>OF A <span class="accent">PROMPT</span></h1>
+  <p class="monument-jp">問いの潜行 — 表層から帰還まで</p>
+
+  <p class="dek">ISSUE 416 asked a local model why a city feels different after midnight, and printed what came back. This apparatus follows the same question <em>down</em> — through the type case, the constellation, the loom, and the dice — and winches the answer back up. Lower the probe. Pick up a sort and carry it with you. Set the temperature before the draw.</p>
+
+  <div class="bore">
+    <div class="gauge" aria-hidden="true">
+      <span class="gauge-line"></span>
+      <span id="probe-dot"></span>
+      <span class="gauge-stop" data-stop="0">0m<br>表層</span>
+      <span class="gauge-stop" data-stop="1">−1<br>活字</span>
+      <span class="gauge-stop" data-stop="2">−2<br>空間</span>
+      <span class="gauge-stop" data-stop="3">−3<br>織機</span>
+      <span class="gauge-stop" data-stop="4">−4<br>骰子</span>
+      <span class="gauge-stop" data-stop="5">−5<br>帰還</span>
+    </div>
+
+    <div class="strata">
+
+      <section class="stratum" id="s0" style="--depth:0" aria-label="Stratum 0 — the surface">
+        <div class="stratum-head">
+          <span>STRATUM 0 · THE SURFACE</span><span class="jp">表層</span>
+          <span class="stratum-status" data-status>PROBE HERE · 探針在位</span>
+        </div>
+        <div class="stratum-body">
+          <p class="prompt-line">"why does the city feel different after midnight"<span class="caret" aria-hidden="true"></span></p>
+          <button id="drop" type="button">★ LOWER THE PROBE — 降下</button>
+        </div>
+        <p class="stratum-caption">FIG. 0 — THE QUESTION AS YOU TYPED IT. EVERYTHING BELOW THIS LINE IS WHAT THE MACHINE DOES INSTEAD OF READING.</p>
+      </section>
+
+      <section class="stratum" id="s1" style="--depth:0.2" aria-label="Stratum 1 — the type case">
+        <div class="stratum-head">
+          <span>STRATUM −1 · THE TYPE CASE</span><span class="jp">活字</span>
+          <span class="stratum-status" data-status>UNREACHED · 未達</span>
+        </div>
+        <div class="stratum-body">
+          <div class="sorts" role="group" aria-label="The prompt broken into sorts — pick one to carry down">
+            <!-- sort buttons injected -->
+          </div>
+          <p class="sort-note">THE SENTENCE IS BROKEN FOR THE PRESS — EIGHT SORTS IN THE STICK. PICK ONE UP; THE LOWER STRATA WILL SHOW YOU <b>ITS</b> JOURNEY. CARRYING: <b id="carried-label">MIDNIGHT</b></p>
+        </div>
+        <p class="stratum-caption">FIG. 1 — TOKENIZATION AS TYPESETTING: THE MACHINE'S FIRST ACT IS TO STOP SEEING YOUR SENTENCE AND START SEEING ITS PIECES.</p>
+      </section>
+
+      <section class="stratum" id="s2" style="--depth:0.4" aria-label="Stratum 2 — the constellation">
+        <div class="stratum-head">
+          <span>STRATUM −2 · THE CONSTELLATION</span><span class="jp">空間</span>
+          <span class="stratum-status" data-status>UNREACHED · 未達</span>
+        </div>
+        <div class="stratum-body">
+          <canvas id="cv-space" width="880" height="330"></canvas>
+        </div>
+        <p class="stratum-caption">FIG. 2 — EACH SORT BECOMES A POSITION AMONG ITS NEIGHBORS. CLICK ANY WORD ON THE PLATE TO CARRY IT INSTEAD; THE HALO FOLLOWS. LAYOUT SEEDED, No. PRINTED ON THE PLATE.</p>
+      </section>
+
+      <section class="stratum" id="s3" style="--depth:0.6" aria-label="Stratum 3 — the loom">
+        <div class="stratum-head">
+          <span>STRATUM −3 · THE LOOM</span><span class="jp">織機</span>
+          <span class="stratum-status" data-status>UNREACHED · 未達</span>
+        </div>
+        <div class="stratum-body">
+          <canvas id="cv-loom" width="880" height="330"></canvas>
+        </div>
+        <p class="stratum-caption">FIG. 3 — ATTENTION AS WARP AND WEFT: EVERY SORT PULLS THREADS TO EVERY OTHER. CLICK A COLUMN TO RE-THREAD THE LOOM AROUND IT; WEIGHTS ARE SEEDED, NOT MEASURED.</p>
+      </section>
+
+      <section class="stratum" id="s4" style="--depth:0.8" aria-label="Stratum 4 — the dice">
+        <div class="stratum-head">
+          <span>STRATUM −4 · THE DICE</span><span class="jp">骰子</span>
+          <span class="stratum-status" data-status>UNREACHED · 未達</span>
+        </div>
+        <div class="stratum-body">
+          <div class="temp-row" role="radiogroup" aria-label="Temperature — how loosely the next word is drawn">
+            <span class="temp-label">TEMPERATURE</span>
+            <button type="button" class="temp" role="radio" aria-checked="false" data-temp="cool">COOL · 冷</button>
+            <button type="button" class="temp" role="radio" aria-checked="true" data-temp="warm">WARM · 温</button>
+            <button type="button" class="temp" role="radio" aria-checked="false" data-temp="fever">FEVER · 熱</button>
+          </div>
+          <div class="candidates" id="candidates"><!-- injected --></div>
+          <p class="cand-note">CANDIDATES FOR THE WORD AFTER "MIDNIGHT…" — SHARES ARE AUTHORED, REPRESENTATIVE OF HOW TEMPERATURE RESHAPES A DRAW; NOTHING HERE WAS MEASURED. THE DRAWN WORD IS DETERMINISTIC PER TEMPERATURE.</p>
+        </div>
+        <p class="stratum-caption">FIG. 4 — SAMPLING IS THE ONLY GAMBLE IN THE BUILDING. COOL FLATTENS TO THE LIKELIEST; FEVER LETS THE LONG TAIL SPEAK.</p>
+      </section>
+
+      <section class="stratum" id="s5" style="--depth:1" aria-label="Stratum 5 — the return">
+        <div class="stratum-head">
+          <span>STRATUM −5 · THE RETURN</span><span class="jp">帰還</span>
+          <span class="stratum-status" data-status>UNREACHED · 未達</span>
+        </div>
+        <div class="stratum-body">
+          <p class="answer" id="answer" aria-live="polite"><!-- assembled --></p>
+        </div>
+        <p class="stratum-caption">FIG. 5 — THE ANSWER RISES ASSEMBLED. THREE VERSIONS EXIST, ONE PER TEMPERATURE — ALL THREE AUTHORED BY THIS MAGAZINE, BECAUSE THE DESCENT IS A DRAWING, NOT A RUN.</p>
+      </section>
+
+      <div class="ledger-block">
+        <p class="ledger-kicker">THE WINCH LEDGER · 台帳</p>
+        <p id="ledger">DEPTH 0m · DROPS 00 · SORTS CARRIED 00 · TEMPERATURE WARM</p>
+        <p class="ledger-note">The ledger counts only your own hand: how deep you have lowered the probe, how many times, which sorts you picked up, where you set the temperature. Counted in your browser, kept by no one, gone on reload. The strata themselves are drawn — a working picture of a transformer's descent, authored from the literature's shape; no model was run for this page, and every plate prints the seed that drew it. ISSUE 416 holds the real run this drawing descends from.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="colophon">
+    SET IN GARAMOND &amp; COURIER <span class="star">★</span> CORE SAMPLE No.1 IS A DRAWN MODEL — NOTHING WAS RUN, EVERYTHING WAS TYPESET; SHARES AND ANSWERS AUTHORED, SEEDS PRINTED <span class="star">★</span> SURFACE QUESTION: THE REAL PROMPT OF ISSUE 416 <span class="star">★</span> KERNEL.CHAT PRESSROOM
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* one animation step that cannot stall — rAF raced against a timer
+     (the artifact-language honesty core: timer-robust motion) */
+  function tick(fn) {
+    var fired = false;
+    function fire() { if (fired) return; fired = true; fn(performance.now()); }
+    requestAnimationFrame(fire);
+    setTimeout(fire, 42);
+  }
+
+  function mulberry32(a) {
+    var s = a | 0;
+    return function () {
+      s = (s + 0x6D2B79F5) | 0;
+      var t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function tokens() {
+    var cs = getComputedStyle(document.documentElement);
+    return {
+      ink: cs.getPropertyValue("--ink").trim(),
+      meta: cs.getPropertyValue("--meta").trim(),
+      line: cs.getPropertyValue("--line").trim(),
+      accent: cs.getPropertyValue("--accent").trim()
+    };
+  }
+
+  /* ---------- the material ---------- */
+  var SORTS = ["why", "does", "the", "city", "feel", "different", "after", "midnight"];
+  var NEIGHBORS = {
+    why: ["how", "whether", "what for"],
+    does: ["will", "might", "can"],
+    the: ["a", "this", "that"],
+    city: ["street", "harbor", "crowd"],
+    feel: ["sense", "weigh", "notice"],
+    different: ["changed", "unfamiliar", "new"],
+    after: ["past", "beyond", "since"],
+    midnight: ["lamplight", "last train", "hush"]
+  };
+  var CANDIDATES = {
+    cool:  [["quieter", 62], ["empty", 21], ["still", 9], ["honest", 5], ["yours", 3]],
+    warm:  [["quieter", 34], ["empty", 22], ["honest", 18], ["yours", 14], ["awake", 12]],
+    fever: [["yours", 22], ["awake", 20], ["feral", 16], ["electric", 15], ["quieter", 27]]
+  };
+  var DRAWN = { cool: "quieter", warm: "honest", fever: "yours" };
+  var ANSWERS = {
+    cool: "Because after midnight most of the city's signals have gone home. What remains is infrastructure — and infrastructure is quieter, and honest.",
+    warm: "Because after midnight the city stops performing. The shops close their faces, the streets stop being routes and become rooms, and whoever is still out is out on purpose.",
+    fever: "Because midnight is when the city takes off its uniform — every lit window a confession, every empty platform a stage, and you, still awake, finally yours."
+  };
+  var SEED = 41906; /* fixed: the resting plates are identical on every copy */
+
+  /* ---------- state ---------- */
+  var depth = 0;
+  var drops = 0;
+  var carries = 0;
+  var carried = "midnight";
+  var temp = "warm";
+  var dropping = false;
+
+  /* ---------- gauge geometry ---------- */
+  var gauge = document.querySelector(".gauge");
+  var probeDot = document.getElementById("probe-dot");
+  var stops = Array.prototype.slice.call(document.querySelectorAll(".gauge-stop"));
+  var strata = [0, 1, 2, 3, 4, 5].map(function (i) { return document.getElementById("s" + i); });
+
+  function placeStops() {
+    var gr = gauge.getBoundingClientRect();
+    strata.forEach(function (sec, i) {
+      var r = sec.getBoundingClientRect();
+      var y = r.top + r.height / 2 - gr.top;
+      stops[i].style.top = y + "px";
+      stops[i].dataset.y = String(y);
+    });
+    moveProbe(depth, true);
+  }
+
+  function moveProbe(toDepth, instant) {
+    var y = parseFloat(stops[toDepth].dataset.y || "0");
+    if (instant || REDUCED) {
+      probeDot.style.top = y + "px";
+      return;
+    }
+    var from = parseFloat(probeDot.style.top || "0");
+    var t0 = performance.now(), DUR = 700;
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / DUR);
+      var e = 1 - Math.pow(1 - k, 3);
+      probeDot.style.top = (from + (y - from) * e) + "px";
+      if (k < 1) tick(step);
+    })(t0);
+  }
+
+  /* ---------- strata activation ---------- */
+  function setStatus(i, text, reached) {
+    var sec = strata[i];
+    sec.querySelector("[data-status]").textContent = text;
+    sec.classList.toggle("reached", !!reached);
+  }
+  function activate(i) {
+    strata.forEach(function (sec, j) {
+      sec.classList.toggle("active", j === i);
+    });
+    stops.forEach(function (st, j) { st.classList.toggle("lit", j <= i); });
+    document.documentElement.style.setProperty("--live-depth", String(i / 5));
+    if (i >= 1) sortsWrap.classList.add("landed");
+    if (i === 0) sortsWrap.classList.remove("landed");
+  }
+
+  /* ---------- carrying a sort — from the case OR the plates ---------- */
+  var sortsWrap = document.querySelector(".sorts");
+  var carriedLabel = document.getElementById("carried-label");
+
+  function carrySort(word) {
+    if (word === carried || SORTS.indexOf(word) < 0) return;
+    carried = word;
+    carries++;
+    sortsWrap.querySelectorAll(".sort").forEach(function (s) {
+      s.setAttribute("aria-pressed", s.textContent === carried ? "true" : "false");
+    });
+    carriedLabel.textContent = carried.toUpperCase();
+    paintSpace();
+    paintLoom();
+    updateLedger();
+  }
+
+  SORTS.forEach(function (word) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "sort";
+    b.textContent = word;
+    b.setAttribute("aria-pressed", word === carried ? "true" : "false");
+    b.addEventListener("click", function () { carrySort(word); });
+    sortsWrap.appendChild(b);
+  });
+
+  /* click a word ON the plates to carry it (pointer door; the sort
+     buttons remain the keyboard door to the same act) */
+  function canvasPoint(cv, ev) {
+    var r = cv.getBoundingClientRect();
+    return {
+      x: ((ev.clientX - r.left) / r.width) * cv.width,
+      y: ((ev.clientY - r.top) / r.height) * cv.height
+    };
+  }
+
+  /* ---------- S2 constellation ---------- */
+  var cvSpace = document.getElementById("cv-space");
+  var spacePos = null;
+  function layoutSpace() {
+    var rnd = mulberry32(SEED);
+    spacePos = {};
+    SORTS.forEach(function (w, i) {
+      spacePos[w] = {
+        x: 0.12 + ((i % 4) * 0.22) + rnd() * 0.09,
+        y: 0.2 + (i < 4 ? 0 : 0.42) + rnd() * 0.18
+      };
+    });
+  }
+  function paintSpace(t) {
+    var ctx = cvSpace.getContext("2d");
+    var w = cvSpace.width, h = cvSpace.height;
+    var c = tokens();
+    if (!spacePos) layoutSpace();
+    ctx.clearRect(0, 0, w, h);
+
+    ctx.strokeStyle = c.line;
+    ctx.lineWidth = 0.5;
+    for (var gx = 40.5; gx < w; gx += 40) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke(); }
+    for (var gy = 40.5; gy < h; gy += 40) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke(); }
+
+    SORTS.forEach(function (word, i) {
+      var p = spacePos[word];
+      var x = p.x * w, y = p.y * h;
+      var isCarried = word === carried;
+      var drift = t && isCarried ? Math.sin(t / 1100 + i) * 2.5 : 0;
+
+      if (isCarried) {
+        ctx.strokeStyle = c.accent;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(x, y + drift, 26, 0, Math.PI * 2);
+        ctx.stroke();
+        var rnd2 = mulberry32(SEED + i * 977);
+        NEIGHBORS[word].forEach(function (nb, k) {
+          var ang = (Math.PI * 2 * k) / 3 + rnd2() * 0.9;
+          var d = 58 + rnd2() * 26;
+          var nx = x + Math.cos(ang) * d;
+          var ny = y + drift + Math.sin(ang) * d * 0.6;
+          ctx.strokeStyle = c.meta;
+          ctx.setLineDash([2, 4]);
+          ctx.beginPath(); ctx.moveTo(x, y + drift); ctx.lineTo(nx, ny); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = c.meta;
+          ctx.font = "italic 13px Georgia, serif";
+          ctx.fillText(nb, nx + 5, ny + 4);
+          ctx.beginPath(); ctx.arc(nx, ny, 2, 0, Math.PI * 2); ctx.fill();
+        });
+      }
+
+      ctx.fillStyle = isCarried ? c.accent : c.ink;
+      ctx.beginPath();
+      ctx.arc(x, y + drift, isCarried ? 4.5 : 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = isCarried ? c.accent : c.ink;
+      ctx.font = "12px Courier, monospace";
+      ctx.fillText(word.toUpperCase(), x + 9, y + drift + 4);
+    });
+
+    ctx.fillStyle = c.meta;
+    ctx.font = "9px Courier, monospace";
+    ctx.fillText("No." + String(SEED % 1000).padStart(3, "0"), w - 46, h - 8);
+  }
+
+  cvSpace.addEventListener("click", function (ev) {
+    var p = canvasPoint(cvSpace, ev);
+    if (!spacePos) return;
+    var best = null, bestD = 4200; /* ~65px radius, squared */
+    SORTS.forEach(function (word) {
+      var q = spacePos[word];
+      var dx = q.x * cvSpace.width - p.x, dy = q.y * cvSpace.height - p.y;
+      var d = dx * dx + dy * dy;
+      if (d < bestD) { bestD = d; best = word; }
+    });
+    if (best) carrySort(best);
+  });
+
+  /* ---------- S3 loom ---------- */
+  var cvLoom = document.getElementById("cv-loom");
+  function paintLoom(t) {
+    var ctx = cvLoom.getContext("2d");
+    var w = cvLoom.width, h = cvLoom.height;
+    var c = tokens();
+    ctx.clearRect(0, 0, w, h);
+    var rnd = mulberry32(SEED + 5);
+    var xs = SORTS.map(function (_, i) { return w * (0.08 + (i / (SORTS.length - 1)) * 0.84); });
+    var topY = 34, botY = h - 34;
+
+    /* threads: every top sort to every bottom sort, weight seeded */
+    for (var i = 0; i < SORTS.length; i++) {
+      for (var j = 0; j < SORTS.length; j++) {
+        var weight = rnd();
+        if (weight < 0.55 && SORTS[i] !== carried && SORTS[j] !== carried) continue;
+        var involved = SORTS[i] === carried || SORTS[j] === carried;
+        ctx.strokeStyle = involved ? c.accent : c.line;
+        ctx.lineWidth = involved ? 0.4 + weight * 1.8 : 0.4 + weight * 0.7;
+        ctx.globalAlpha = involved ? 0.85 : 0.5;
+        ctx.beginPath();
+        ctx.moveTo(xs[i], topY + 8);
+        ctx.bezierCurveTo(xs[i], h * 0.45, xs[j], h * 0.55, xs[j], botY - 8);
+        ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    /* the shuttle: one dot walking the carried sort's strongest thread */
+    if (t && !REDUCED) {
+      var k = (t % 2600) / 2600;
+      var ci = SORTS.indexOf(carried);
+      var target = (ci + 3) % SORTS.length;
+      var x0 = xs[ci], x1 = xs[target];
+      var yy = topY + 8 + (botY - topY - 16) * k;
+      var xx = x0 + (x1 - x0) * (k * k * (3 - 2 * k));
+      ctx.fillStyle = c.accent;
+      ctx.beginPath(); ctx.arc(xx, yy, 3.5, 0, Math.PI * 2); ctx.fill();
+    }
+
+    SORTS.forEach(function (word, i) {
+      var isCarried = word === carried;
+      ctx.fillStyle = isCarried ? c.accent : c.ink;
+      ctx.font = "11px Courier, monospace";
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.fillText(word.toUpperCase(), xs[i], topY - 8);
+      ctx.fillText(word.toUpperCase(), xs[i], botY + 18);
+      ctx.restore();
+      ctx.beginPath(); ctx.arc(xs[i], topY + 4, 2.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(xs[i], botY - 4, 2.5, 0, Math.PI * 2); ctx.fill();
+    });
+
+    ctx.fillStyle = c.meta;
+    ctx.font = "9px Courier, monospace";
+    ctx.fillText("No." + String((SEED + 5) % 1000).padStart(3, "0"), w - 46, h - 8);
+  }
+
+  cvLoom.addEventListener("click", function (ev) {
+    var p = canvasPoint(cvLoom, ev);
+    var w = cvLoom.width;
+    var best = null, bestD = 3600; /* ~60px column snap */
+    SORTS.forEach(function (word, i) {
+      var x = w * (0.08 + (i / (SORTS.length - 1)) * 0.84);
+      var d = (x - p.x) * (x - p.x);
+      if (d < bestD) { bestD = d; best = word; }
+    });
+    if (best) carrySort(best);
+  });
+
+  /* ---------- S4 dice ---------- */
+  var candWrap = document.getElementById("candidates");
+  function renderCandidates() {
+    var list = CANDIDATES[temp];
+    candWrap.innerHTML = "";
+    list.forEach(function (pair) {
+      var row = document.createElement("div");
+      row.className = "cand" + (pair[0] === DRAWN[temp] ? " drawn" : "");
+      row.innerHTML =
+        '<span class="word">midnight… ' + pair[0] + "</span>" +
+        '<span class="bar-track"><span class="bar"></span></span>' +
+        '<span class="pct">' + pair[1] + "%</span>";
+      candWrap.appendChild(row);
+    });
+    /* widths set on a beat so the CSS transition draws them */
+    setTimeout(function () {
+      var bars = candWrap.querySelectorAll(".bar");
+      list.forEach(function (pair, i) { bars[i].style.width = pair[1] + "%"; });
+    }, REDUCED ? 0 : 60);
+  }
+
+  document.querySelectorAll(".temp").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var next = b.dataset.temp;
+      if (next === temp) return;
+      temp = next;
+      document.querySelectorAll(".temp").forEach(function (x) {
+        x.setAttribute("aria-checked", x.dataset.temp === temp ? "true" : "false");
+      });
+      renderCandidates();
+      assembleAnswer();
+      updateLedger();
+    });
+  });
+
+  /* ---------- S5 return ---------- */
+  var answerEl = document.getElementById("answer");
+  var assembling = 0;
+  function assembleAnswer() {
+    /* The answer is ALWAYS legible — the descent raises it into the
+       accent, it never conjures it (emphasis, not existence). */
+    var text = ANSWERS[temp];
+    var runId = ++assembling;
+    if (depth < 5) {
+      answerEl.innerHTML =
+        '<span class="waiting">' + text + "</span>" +
+        '<span class="answer-wait-note">— WAITING BELOW THE LINE AT ' + temp.toUpperCase() +
+        " · LOWER THE PROBE TO RAISE IT —</span>";
+      return;
+    }
+    if (REDUCED) {
+      answerEl.innerHTML = '<span class="risen">' + text + "</span>";
+      return;
+    }
+    answerEl.innerHTML = "";
+    var span = document.createElement("span");
+    span.className = "risen";
+    answerEl.appendChild(span);
+    var i = 0;
+    (function step() {
+      if (runId !== assembling) return;
+      span.textContent = text.slice(0, i);
+      i += 2;
+      if (i <= text.length + 1) setTimeout(step, 18);
+      else riseReturn();
+    })();
+  }
+
+  /* the answer's return trip: a hollow dot rises the gauge from
+     the floor to the surface, then fades */
+  function riseReturn() {
+    if (REDUCED) return;
+    var old = gauge.querySelector(".return-dot");
+    if (old) gauge.removeChild(old);
+    var dot = document.createElement("span");
+    dot.className = "return-dot";
+    gauge.appendChild(dot);
+    var y5 = parseFloat(stops[5].dataset.y || "0");
+    var y0 = parseFloat(stops[0].dataset.y || "0");
+    dot.style.top = y5 + "px";
+    var t0 = performance.now(), DUR = 1400;
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / DUR);
+      var e = 1 - Math.pow(1 - k, 2);
+      dot.style.top = (y5 + (y0 - y5) * e) + "px";
+      if (k < 1) { tick(step); }
+      else {
+        dot.style.transition = "opacity 0.8s ease";
+        dot.style.opacity = "0";
+        setTimeout(function () { if (dot.parentNode) dot.parentNode.removeChild(dot); }, 900);
+      }
+    })(t0);
+  }
+
+  /* ---------- the drop ---------- */
+  var dropBtn = document.getElementById("drop");
+  var STATUS_REACHED = ["PASSED · 通過", "REACHED · 到達"];
+  dropBtn.addEventListener("click", function () {
+    if (dropping) return;
+    if (depth >= 5) {
+      /* winch back to the surface — the reader can run it again */
+      depth = 0; drops++;
+      strata.forEach(function (_, i) {
+        setStatus(i, i === 0 ? "PROBE HERE · 探針在位" : "UNREACHED · 未達", i === 0);
+      });
+      activate(0);
+      moveProbe(0);
+      dropBtn.textContent = "★ LOWER THE PROBE — 降下";
+      assembleAnswer();
+      updateLedger();
+      return;
+    }
+    dropping = true;
+    dropBtn.disabled = true;
+    var next = depth + 1;
+    setStatus(depth, STATUS_REACHED[0], true);
+    moveProbe(next);
+    setTimeout(function () {
+      depth = next;
+      setStatus(depth, depth === 5 ? "SURFACED IN REVERSE · 帰還" : STATUS_REACHED[1], true);
+      activate(depth);
+      if (depth === 5) {
+        dropBtn.textContent = "★ WINCH UP — 巻上げ";
+        assembleAnswer();
+      }
+      dropping = false;
+      dropBtn.disabled = false;
+      updateLedger();
+      if (depth === 1) drops++; /* one drop = one full lowering begun */
+    }, REDUCED ? 40 : 760);
+  });
+
+  /* ---------- ledger ---------- */
+  var ledger = document.getElementById("ledger");
+  function updateLedger() {
+    ledger.textContent =
+      "DEPTH " + (depth === 0 ? "0m" : "−" + depth) +
+      " · DROPS " + String(drops).padStart(2, "0") +
+      " · SORTS CARRIED " + String(carries).padStart(2, "0") +
+      " · TEMPERATURE " + temp.toUpperCase();
+  }
+
+  /* ---------- ambient loops (timer-driven; active stratum only) ---------- */
+  setInterval(function () {
+    if (REDUCED) return;
+    if (depth === 2) paintSpace(performance.now());
+    if (depth === 3) paintLoom(performance.now());
+  }, 90);
+
+  /* ---------- theme re-ink ---------- */
+  function repaintAll() { paintSpace(); paintLoom(); }
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", repaintAll);
+  new MutationObserver(repaintAll).observe(document.documentElement,
+    { attributes: true, attributeFilter: ["data-theme"] });
+
+  /* ---------- init: the resting page is complete ---------- */
+  layoutSpace();
+  paintSpace();
+  paintLoom();
+  renderCandidates();
+  assembleAnswer();
+  updateLedger();
+  activate(0);
+  setStatus(0, "PROBE HERE · 探針在位", true);
+  placeStops();
+  window.addEventListener("resize", placeStops);
+  setTimeout(placeStops, 250); /* after fonts settle */
+})();
+</script>
