@@ -53,6 +53,16 @@ plus two Isaac-directed extensions. All committed on the branch, not merged:
   with 12-frame lead-ins, 4 long scenes speed-fitted, embedded clip audio
   muted at volume 0 (NEVER remove_clips on link partners — it deletes the
   video too), opacity-keyframe fades. Project: ~/Documents/Palmier Pro/what-we-made.palmier.
+- **v2 FINAL CUT shipped 2026-07-18 (later session):** rewritten self-aware
+  narration ("This voice. It cost four cents."), story-cut with insert rhythm
+  (scene 8 split on the word "onto"), ivory-matte fades, 3% camera pushes,
+  typographic $0.35 + closing cards + receipt colophon. Three scenes RESHOT to
+  serve the narrative (patient machine w/ consistent cube character, voice
+  found at microphone, true drawer insert) ~$4.80. Film total ~$24.35 of $30.
+  LESSONS: Palmier keyframes are CLIP-RELATIVE; apply_color `temperature` has
+  an undocumented scale (0.1 = deep blue — reset and use documented ranges
+  only); conservative estimates double-book the daily spend cap (books 1080p
+  rate for 720p jobs) — raise FAL_DAILY_SPEND_LIMIT env when batching.
 - **Task 5 live smoke: DONE** (subsumed by the film's smoke pass). Gemini is
   OFF the roadmap — Isaac decided all-in on fal 2026-07-18; fal serves Veo and
   Nano Banana anyway. Next engine work: merge branch to main; optionally add
