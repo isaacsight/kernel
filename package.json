@@ -35,7 +35,8 @@
     "engine": "node --env-file=.env tools/engine.mjs",
     "video:palmier:audit": "node tools/palmier/audit-project.mjs",
     "video:palmier:qc": "node tools/palmier/qc-export.mjs",
-    "video:palmier:master": "node tools/palmier/master-export.mjs"
+    "video:palmier:master": "node tools/palmier/master-export.mjs",
+    "video:palmier:cuts": "node tools/palmier/cut-sheet.mjs"
   },
   "homepage": "https://kernel.chat",
   "dependencies": {

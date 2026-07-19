@@ -36,6 +36,16 @@
   (measured two-pass mastering with video stream copy), and `mcp-client.mjs`.
   Package scripts: `video:palmier:audit`, `video:palmier:qc`, and
   `video:palmier:master`.
+- Final cut-flow pass: reviewed all 11 boundaries at -12/-6/-1/+0/+5/+11
+  frames. Internal visual cuts remain hard because their continuity is strong
+  (especially price tag -> drawer -> handshake and the speaker match cut);
+  chapter boundaries 4/5 and 8/9 retain eight-frame black breaths. Added a
+  matching eight-frame fade-out on scene 11 so the scene-12 finale now resolves
+  through black instead of dropping abruptly. Internal ambience handoffs were
+  tightened from six to three frames; transitions into silence and act breaks
+  retain longer six/eight-frame fades. `cut-sheet.mjs` and the
+  `video:palmier:cuts` script now automate this review for future Palmier edits.
+  Backup before this pass: `output/what-we-made-v3-before-flow-pass.mp4`.
 
 ## Session 2026-07-18 — GALLEY video engine shipped — on branch `feat/galley-video-engine`
 
