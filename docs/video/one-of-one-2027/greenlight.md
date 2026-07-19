@@ -1,6 +1,6 @@
 # Greenlight packet — "One of One" (Spring 2027)
 
-**Status: AWAITING ISAAC'S APPROVAL — no paid generation before sign-off.**
+**Status: APPROVED by Isaac 2026-07-19 (chat). Generation authorized within the $50 cap.**
 Spec: `docs/superpowers/specs/2026-07-19-one-of-one-2027-design.md`
 Plan: `docs/superpowers/plans/2026-07-19-one-of-one-2027.md`
 Routing: `docs/video/one-of-one-2027/routing.md` (prices verified live 2026-07-19)
@@ -91,8 +91,8 @@ signage, no logos, cinematic realism, 35mm look.
 
 | Item | Endpoint | Planned | Actual |
 |---|---|---|---|
-| reference.png (1 + 2 retakes) | nano-banana-pro | $0.45 | |
-| reference-street.png (1 + 3 retakes) | nano-banana-pro | $0.60 | |
+| reference.png (2 takes; take-1 label misspelled) | nano-banana-pro | $0.45 | $0.30 |
+| reference-street.png (1 take) | nano-banana-pro | $0.60 | $0.15 |
 | Shots 2+3 heroes (10s x 3 takes, audio off, 1080p) | veo3.1/reference-to-video | $6.00 | |
 | Shot 8 hero (8s x 3 takes, audio off, 1080p) | veo3.1/image-to-video | $4.80 | |
 | Shot 8 repair (0–2 edits) | gemini-omni-flash/edit | $0–4 | |
@@ -112,4 +112,4 @@ the binding price shown before each spend.
 
 ## Approval
 
-- [ ] Isaac approves prompts and spend. Date: ____
+- [x] Isaac approves prompts and spend. Date: 2026-07-19
