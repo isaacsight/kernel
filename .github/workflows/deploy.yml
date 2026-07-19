@@ -38,6 +38,11 @@ jobs:
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
 
+      - name: Include editorial artifacts
+        run: |
+          mkdir -p dist/artifacts
+          cp artifacts/*.html dist/artifacts/
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

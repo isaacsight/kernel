@@ -2557,3 +2557,17 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   stays at 390px with no overflow/errors, and the artifact progress thread
   advances with scroll. Typecheck, production build, 585 tests, and the
   0-raw-hex adherence scan remain green.
+
+### ISSUE 425 publication
+
+- Published commit `963be7f50` to `main` on 19 July 2026. GitHub Pages
+  workflow run `29702999900` completed successfully in 1m13s; its CI
+  typecheck, build, and Pages deployment all passed.
+- Live verification passed at `https://kernel.chat/#/issues/425`: title,
+  cover identity, five original assets, Next-stage selection/focus,
+  390px overflow, and runtime console. ISSUE 425 is the live latest issue.
+- The first production proof found `artifacts/425-one-of-one.html` missing
+  from `dist` (404) because Vite serves repository-root HTML in development
+  but does not copy it during build. Deployment now explicitly copies all
+  filed `artifacts/*.html` into `dist/artifacts/` before Pages publication;
+  this restores the magazine's artifact editions as first-class live files.
