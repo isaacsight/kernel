@@ -1,5 +1,35 @@
 # WHAT WE MADE v3 — full remake runbook
 
+## Context for a fresh agent (read first)
+
+You are remaking a 60-second film called "WHAT WE MADE" — a paper-craft
+explainer about the local AI video engine that is itself making the film.
+Two earlier versions exist (`output/what-we-made.mp4`, `what-we-made-v2.mp4`);
+watch nothing, they are superseded. Your job is the v3 described below.
+
+Environment:
+- Repo: `/Users/isaachernandez/blog design` (branch `feat/galley-video-engine`)
+- The generation engine is a local HTTP proxy — full API contract with curl
+  examples in `docs/ENGINE.md` (same folder tree; READ IT before any request).
+  Short form: free `estimate` routes return a `quoteToken`; paid routes need
+  the SAME body + that token + header
+  `Authorization: Bearer $(cat ~/.config/kernel/galley-engine-token)`.
+  Never print that token or any key.
+- The video editor is Palmier Pro, driven over MCP at
+  `http://127.0.0.1:19789/mcp` (streamable HTTP JSON-RPC; also registered as
+  the `palmier-pro` MCP server for Claude Code). The app must be open.
+- Narration is ALREADY RECORDED (do not re-record): ElevenLabs "George",
+  57.7s, `output/audio/d15186d9-86da-4495-87ae-749fb7bcb139.mp3`.
+- All generated media lands in `output/videos|images|audio/` — locally owned.
+
+Rules (non-negotiable):
+- Estimate before every paid call; present the batch total to Isaac and get
+  his explicit yes before submitting a paid batch (keyframes and clips are
+  separate batches). He has pre-approved the ~$24-actual budget below, but
+  confirm before each batch anyway.
+- Review all 12 keyframes visually before spending on motion.
+- Log the final ledger in `SCRATCHPAD.md` when done.
+
 Director's concept: **"The Little Machine"** — one continuous story instead of
 twelve vignettes. A miniature nocturnal workshop-world; the cube machine is the
 protagonist; the red circle/glow is the connective motif; scene 12 reframes
