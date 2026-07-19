@@ -2593,3 +2593,24 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
 - UI metadata lives in `agents/openai.yaml`. The official skill validator
   passed in an isolated `uv` environment with PyYAML; both skill files are
   under the 500-line progressive-disclosure ceiling and contain no TODOs.
+
+## Session 2026-07-19 — kernel.chat design-skill expansion
+
+- Audited the available design catalog and kept the existing motion stack
+  (`motion-design`, micro-interaction, GSAP, and animation review skills)
+  instead of creating overlapping replacements.
+- Added `.agents/skills/kernel-chat-art-direction/` for the missing pre-code
+  discipline: editorial sentence, material metaphor, dominant composition,
+  cover system, typography, coherent original-media grammar, responsive
+  recomposition, motion intent, and an explicit anti-generic test.
+- Added `.agents/skills/kernel-chat-design-qa/` for post-code proof. Its
+  Playwright runner captures desktop, mobile, reduced-motion, and print
+  evidence; records structure, overflow, missing media, target sizes, and
+  runtime errors; and writes a machine-readable `audit.json` report.
+- Updated `kernel-chat-web-design` to route work through art direction,
+  implementation, specialist motion, and design QA as distinct phases.
+- All three skills passed the official skill validator. A read-only live
+  forward test against ISSUE 425 returned HTTP 200 at 1440px and 390px,
+  zero horizontal overflow, zero broken images, zero runtime errors, and
+  zero active reduced-motion animations. It also reported the 13px-tall
+  Back to top control as a craft-level target-size warning.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kernel.chat Art Direction"
+  short_description: "Direct distinctive editorial web compositions"
+  default_prompt: "Use $kernel-chat-art-direction to create a distinctive visual direction for this kernel.chat issue."

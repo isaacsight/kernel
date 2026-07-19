@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kernel.chat Design QA"
+  short_description: "Audit responsive craft and production rendering"
+  default_prompt: "Use $kernel-chat-design-qa to audit this kernel.chat page across desktop, mobile, accessibility, and production."

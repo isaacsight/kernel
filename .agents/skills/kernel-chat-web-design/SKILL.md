@@ -9,6 +9,16 @@ description: Guides the design, layout, styling, and interactivity of kernel.cha
 
 This skill encodes the visual grammar, interaction constraints, styling tokens, and publishing guidelines of **kernel.chat**. It serves as the single source of truth for creating editorial magazine issues that honor the POPEYE-inspired warmth while remaining calm, accessible, and scientifically honest.
 
+## Skill Routing
+
+Use this skill as the implementation and publication contract. Pair it with the specialist that matches the phase:
+
+- Use `$kernel-chat-art-direction` before implementation when the visual concept, cover, composition, type hierarchy, asset grammar, or responsive transformation is not yet resolved.
+- Use `$motion-design`, `$micro-interactions`, or the relevant GSAP skill when motion requires detailed choreography beyond the house constraints below.
+- Use `$kernel-chat-design-qa` after implementation for rendered desktop/mobile inspection, accessibility and motion checks, print proof, and live-production verification.
+
+Do not collapse these phases into a single styling pass. Art direction decides the visual argument; this skill implements it in the house system; design QA proves the result.
+
 ---
 
 ## The House Grammar
