@@ -1,5 +1,6 @@
 const PARAM_KEY = /^[a-z][a-z0-9_]{0,40}$/i
 const RESERVED_PARAMS = new Set(['prompt', 'image_url'])
+const MAX_PARAM_STRING = 2_000
 
 export function cleanParams(params) {
   if (!params || typeof params !== 'object' || Array.isArray(params)) return {}
@@ -7,9 +8,31 @@ export function cleanParams(params) {
   for (const [key, value] of Object.entries(params)) {
     if (!PARAM_KEY.test(key) || RESERVED_PARAMS.has(key)) continue
     if (typeof value === 'number' && !Number.isFinite(value)) continue
-    if (['string', 'number', 'boolean'].includes(typeof value)) out[key] = value
+    if (typeof value === 'string' && value.length <= MAX_PARAM_STRING) out[key] = value
+    else if (typeof value === 'number' || typeof value === 'boolean') out[key] = value
   }
   return out
+}
+
+export function isFalQueueUrl(value) {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'https:' && url.hostname === 'queue.fal.run' && !url.username && !url.password
+  } catch {
+    return false
+  }
+}
+
+export function isAllowedArtifactUrl(value, extraHosts = '') {
+  try {
+    const url = new URL(value)
+    if (url.protocol !== 'https:' || url.username || url.password) return false
+    const configured = String(extraHosts).split(',').map(host => host.trim().toLowerCase()).filter(Boolean)
+    const hostname = url.hostname.toLowerCase()
+    return hostname === 'fal.media' || hostname.endsWith('.fal.media') || configured.includes(hostname)
+  } catch {
+    return false
+  }
 }
 
 export function positiveSeconds(value, fallback = 5) {

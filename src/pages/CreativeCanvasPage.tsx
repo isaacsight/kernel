@@ -80,26 +80,29 @@ async function videoCatalog(category: CatalogCategory): Promise<CatalogItem[]> {
   return payload.items as CatalogItem[]
 }
 
-async function videoEstimate(body: { model?: string; endpoint?: string }, durationSeconds: number): Promise<{ usd: number | null; seconds: number; pricingText: string }> {
+async function videoEstimate(body: { prompt: string; model?: string; endpoint?: string; imageUrl?: string }, durationSeconds: number): Promise<{ usd: number | null; seconds: number; pricingText: string; quoteToken: string | null }> {
   try {
     const res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/videos/estimate`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...body, durationSeconds }),
     })
-    const payload = await res.json()
+    const payload = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(payload.error || `Estimate unavailable (${res.status})`)
     return {
       usd: typeof payload.usd === 'number' ? payload.usd : null,
       seconds: typeof payload.seconds === 'number' ? payload.seconds : durationSeconds,
       pricingText: typeof payload.pricingText === 'string' ? payload.pricingText : '',
+      quoteToken: typeof payload.quoteToken === 'string' ? payload.quoteToken : null,
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && !error.message.includes('fetch')) throw error
     throw new Error('Local video server offline — run: npm run video-server')
   }
 }
 
-async function videoGenerate(body: { prompt: string; model?: string; endpoint?: string; durationSeconds?: number; imageUrl?: string }): Promise<string> {
+async function videoGenerate(body: { prompt: string; model?: string; endpoint?: string; durationSeconds: number; imageUrl?: string; quoteToken: string }, engineToken: string): Promise<string> {
   const res = await fetch(`${LOCAL_VIDEO_ENDPOINT}/v1/videos/generations`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+    method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${engineToken}` }, body: JSON.stringify(body),
   })
   const payload = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(payload.error || `Video server error (${res.status})`)
@@ -537,7 +540,8 @@ function CreativeCanvasStudio() {
   const [savedAt, setSavedAt] = useState('Saved')
   const [graphRunning, setGraphRunning] = useState(false)
   const [runProgress, setRunProgress] = useState<{ current: number; total: number } | null>(null)
-  const [videoConfirm, setVideoConfirm] = useState<{ nodeId: string; prompt: string; model: string; endpoint?: string; pricingText?: string; imageUrl?: string; usd: number | null; seconds: number } | null>(null)
+  const [videoConfirm, setVideoConfirm] = useState<{ nodeId: string; prompt: string; model: string; endpoint?: string; pricingText?: string; imageUrl?: string; usd: number | null; seconds: number; quoteToken: string | null } | null>(null)
+  const [engineToken, setEngineToken] = useState(() => window.sessionStorage.getItem('galley-engine-token') ?? '')
   const [catalogFor, setCatalogFor] = useState<string | null>(null)
   const [catalogCategory, setCatalogCategory] = useState<CatalogCategory>('text-to-video')
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([])
@@ -765,9 +769,11 @@ function CreativeCanvasStudio() {
       }
       updateNode(id, { status: 'running', result: 'Fetching cost estimate…' })
       try {
-        const { usd, seconds, pricingText } = await videoEstimate(catalogEndpoint ? { endpoint: catalogEndpoint } : { model: modelId }, 5)
+        const { usd, seconds, pricingText, quoteToken } = await videoEstimate(catalogEndpoint
+          ? { prompt, endpoint: catalogEndpoint, imageUrl: upstreamImage }
+          : { prompt, model: modelId, imageUrl: upstreamImage }, 5)
         updateNode(id, { status: 'idle', result: '' })
-        setVideoConfirm({ nodeId: id, prompt, model: catalogEndpoint ? (node.model ?? catalogEndpoint) : modelId, endpoint: catalogEndpoint, pricingText, imageUrl: upstreamImage, usd, seconds })
+        setVideoConfirm({ nodeId: id, prompt, model: catalogEndpoint ? (node.model ?? catalogEndpoint) : modelId, endpoint: catalogEndpoint, pricingText, imageUrl: upstreamImage, usd, seconds, quoteToken })
       } catch (error) {
         updateNode(id, { status: 'error', result: error instanceof Error ? error.message : 'Video server unavailable' })
         showToast(error instanceof Error ? error.message : 'Video server unavailable')
@@ -837,11 +843,15 @@ Complete this step directly. Return the useful work product, not commentary abou
 
   const confirmVideoRun = useCallback(async () => {
     if (!videoConfirm) return
-    const { nodeId, prompt, model, endpoint, imageUrl } = videoConfirm
+    const { nodeId, prompt, model, endpoint, imageUrl, seconds, quoteToken } = videoConfirm
+    if (!engineToken.trim() || !quoteToken) return
+    window.sessionStorage.setItem('galley-engine-token', engineToken.trim())
     setVideoConfirm(null)
     updateNode(nodeId, { status: 'running', result: 'Generating — this takes one to six minutes…' })
     try {
-      const jobId = await videoGenerate(endpoint ? { prompt, endpoint, imageUrl } : { prompt, model, durationSeconds: 5, imageUrl })
+      const jobId = await videoGenerate(endpoint
+        ? { prompt, endpoint, durationSeconds: seconds, imageUrl, quoteToken }
+        : { prompt, model, durationSeconds: seconds, imageUrl, quoteToken }, engineToken.trim())
       const videoUrl = await videoPoll(jobId)
       updateNode(nodeId, { status: 'done', videoUrl, result: `Rendered via ${endpoint ?? model} — saved to output/videos/` })
       showToast('Video rendered')
@@ -849,7 +859,7 @@ Complete this step directly. Return the useful work product, not commentary abou
       updateNode(nodeId, { status: 'error', result: error instanceof Error ? error.message : 'Generation failed' })
       showToast('Video generation failed')
     }
-  }, [videoConfirm, updateNode, showToast])
+  }, [engineToken, videoConfirm, updateNode, showToast])
 
   const refineVideoPrompt = useCallback(async (id: string) => {
     const graphNodes = nodesRef.current
@@ -1636,9 +1646,14 @@ Rules:
             <p className="cc-video-confirm-model">{videoConfirm.model}{videoConfirm.imageUrl ? ' — image to video' : ''} · {videoConfirm.seconds}s</p>
             <p className="cc-video-confirm-price">{videoConfirm.usd !== null ? `Estimated $${videoConfirm.usd.toFixed(2)}` : 'Price unknown — check fal.ai before confirming'}</p>
             {videoConfirm.endpoint && videoConfirm.pricingText && <p className="cc-video-confirm-listing">fal listing: {videoConfirm.pricingText}</p>}
+            <label className="cc-video-confirm-token">
+              <span>Engine capability token</span>
+              <input type="password" autoComplete="off" value={engineToken} onChange={event => setEngineToken(event.target.value)} placeholder="Paste ~/.config/kernel/galley-engine-token" />
+            </label>
+            {!videoConfirm.quoteToken && <p className="cc-video-confirm-warning">This endpoint has no enforceable price quote and cannot be generated.</p>}
             <div className="cc-video-confirm-actions">
               <button onClick={() => setVideoConfirm(null)}>Cancel</button>
-              <button className="cc-video-confirm-go" onClick={confirmVideoRun}>Generate</button>
+              <button className="cc-video-confirm-go" onClick={confirmVideoRun} disabled={!engineToken.trim() || !videoConfirm.quoteToken}>Generate</button>
             </div>
           </div>
         </div>

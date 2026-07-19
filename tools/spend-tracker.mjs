@@ -53,7 +53,7 @@ export async function checkAndUpdateSpend(estimatedCost, config = {}) {
   if (!config.dryRun) {
     const tempPath = `${trackerPath}.${process.pid}.tmp`
     await mkdir(dirname(trackerPath), { recursive: true })
-    await writeFile(tempPath, JSON.stringify(tracker, null, 2))
+    await writeFile(tempPath, JSON.stringify(tracker, null, 2), { mode: 0o600 })
     await rename(tempPath, trackerPath)
   }
 

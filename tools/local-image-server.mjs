@@ -23,6 +23,8 @@ const GENERATOR = process.env.IMAGE_SERVER_CMD || 'mflux-generate-z-image-turbo'
 const QUANTIZE = process.env.IMAGE_SERVER_QUANTIZE || '4'
 const BACKEND = `mflux/${GENERATOR.replace('mflux-generate-', '') || 'z-image-turbo'}`
 const EXTRA_ALLOWED_ORIGINS = process.env.ENGINE_ALLOWED_ORIGINS || ''
+const MAX_BODY_BYTES = 256 * 1024
+const MAX_PROMPT_CHARS = 20_000
 
 let busy = false
 
@@ -80,7 +82,15 @@ const server = createServer(async (req, res) => {
   if (req.method !== 'POST' || !req.url?.startsWith('/v1/images/generations')) return json(res, 404, { error: 'Not found' })
 
   let body = ''
-  for await (const chunk of req) body += chunk
+  let bytes = 0
+  for await (const chunk of req) {
+    bytes += chunk.length
+    if (bytes > MAX_BODY_BYTES) {
+      req.resume()
+      return json(res, 413, { error: `JSON body exceeds ${MAX_BODY_BYTES} bytes` })
+    }
+    body += chunk
+  }
   let parsed
   try {
     parsed = JSON.parse(body)
@@ -89,6 +99,7 @@ const server = createServer(async (req, res) => {
   }
   const prompt = typeof parsed.prompt === 'string' ? parsed.prompt.trim() : ''
   if (!prompt) return json(res, 400, { error: 'prompt is required' })
+  if (prompt.length > MAX_PROMPT_CHARS) return json(res, 413, { error: `prompt exceeds ${MAX_PROMPT_CHARS} characters` })
   if (busy) return json(res, 429, { error: 'A generation is already running — try again shortly' })
 
   // Z-Image works best at multiples of 64; clamp to sane local sizes.

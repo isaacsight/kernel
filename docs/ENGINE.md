@@ -6,7 +6,8 @@ read `FAL_KEY`, which stays in the video server process.
 
 This file is the contract for agents operating the engine. Read it before
 making requests. Inspecting models, catalogs, health, estimates, and job status
-is free. Generation through port 5412 is paid.
+is free. Generation through port 5412 is paid and requires the local capability
+token from `~/.config/kernel/galley-engine-token`.
 
 ## Start and verify
 
@@ -40,14 +41,22 @@ When spend state cannot be trusted, health reports `ok: false` with
 
 Before every request marked **PAID** below:
 
-1. Fetch the applicable estimate or catalog price.
+1. Fetch the applicable estimate using the exact prompt and request fields.
 2. If the price is unknown, stop; do not infer a price from another model.
 3. Present the per-item price, quantity, and batch total to the human.
 4. Wait for explicit approval of that total.
-5. Submit only the approved work, then report job IDs and final status.
+5. Submit only the approved, unchanged work with its five-minute `quoteToken`
+   and capability token, then report job IDs and final status.
 
-An earlier approval does not authorize a retry or a larger batch. The HTTP
-server cannot verify human approval; the caller is responsible for this gate.
+An earlier approval does not authorize a retry or a larger batch. The server
+cryptographically binds the quoted cost to the exact request, but it cannot
+determine whether a human actually approved it; the caller is responsible for
+that gate. Changed or expired requests must be estimated and approved again.
+
+The engine creates `~/.config/kernel/galley-engine-token` with owner-only permissions on first
+boot. A human operator supplies it to an authorized caller. Do not print it in
+chat, commit it, or place it in browser source. Creative Canvas keeps a pasted
+token only for the current browser tab.
 
 ## fal proxy — `http://127.0.0.1:5412`
 
@@ -58,12 +67,12 @@ All POST bodies are JSON and require `Content-Type: application/json`.
 | `GET /health` | free | Key availability and today's spend-cap state |
 | `GET /v1/models` | free | Curated video models and normalized prices |
 | `GET /v1/catalog?category=CATEGORY` | free | fal endpoints and their published pricing text |
-| `POST /v1/videos/estimate` | free | `{model, durationSeconds}` or `{endpoint, durationSeconds}` → `{usd, seconds, pricingText?}` |
-| `POST /v1/videos/generations` | **PAID** | Curated model or catalog endpoint → `{jobId}` |
-| `POST /v1/images/estimate` | free | `{endpoint}` → `{usd, pricingText, unit}` |
-| `POST /v1/images/fal` | **PAID** | Premium image endpoint → `{jobId}` |
-| `POST /v1/audio/estimate` | free | `{text}` → `{usd, characters}` |
-| `POST /v1/audio/speech` | **PAID** | `{text, voice?}` → `{jobId}` |
+| `POST /v1/videos/estimate` | free | Exact generation body → `{usd, seconds, pricingText?, quoteToken?}` |
+| `POST /v1/videos/generations` | **PAID** | Unchanged body + `quoteToken`, bearer capability → `{jobId}` |
+| `POST /v1/images/estimate` | free | Exact image body → `{usd, pricingText, unit, quoteToken?}` |
+| `POST /v1/images/fal` | **PAID** | Unchanged body + `quoteToken`, bearer capability → `{jobId}` |
+| `POST /v1/audio/estimate` | free | `{text, voice?}` → `{usd, characters, quoteToken?}` |
+| `POST /v1/audio/speech` | **PAID** | Unchanged body + `quoteToken`, bearer capability → `{jobId}` |
 | `GET /v1/videos/jobs/JOB_ID` | free | Poll any video, image, or audio job |
 | `GET /videos/FILE`, `/images/FILE`, `/audio/FILE` | free | Serve completed local artifacts |
 
@@ -72,21 +81,24 @@ Valid catalog categories are `text-to-video`, `image-to-video`,
 
 ### Curated video flow
 
-Use model IDs returned by `/v1/models`. Estimate first:
+Use model IDs returned by `/v1/models`. Include the final prompt so the returned
+quote can be bound to the exact paid request:
 
 ```bash
 curl -sS -X POST http://127.0.0.1:5412/v1/videos/estimate \
   -H 'Content-Type: application/json' \
-  -d '{"model":"seedance-lite","durationSeconds":5}'
+  -d '{"prompt":"A paper boat drifting slowly downstream","model":"seedance-lite","durationSeconds":5}'
 ```
 
-After explicit approval, submit the same model and duration:
+After explicit approval, submit the identical request plus the returned
+`quoteToken` and capability header:
 
 ```bash
 # PAID: do not run without approval of the estimate above.
 curl -sS -X POST http://127.0.0.1:5412/v1/videos/generations \
+  -H 'Authorization: Bearer CAPABILITY_TOKEN' \
   -H 'Content-Type: application/json' \
-  -d '{"prompt":"A paper boat drifting slowly downstream","model":"seedance-lite","durationSeconds":5}'
+  -d '{"prompt":"A paper boat drifting slowly downstream","model":"seedance-lite","durationSeconds":5,"quoteToken":"QUOTE_FROM_ESTIMATE"}'
 ```
 
 For image-to-video, add `"imageUrl":"https://..."`. A curated model without
@@ -103,17 +115,18 @@ one-hour catalog cache. Fetch the relevant category first, select its exact
 curl -sS 'http://127.0.0.1:5412/v1/catalog?category=image-to-video'
 curl -sS -X POST http://127.0.0.1:5412/v1/videos/estimate \
   -H 'Content-Type: application/json' \
-  -d '{"endpoint":"fal-ai/EXACT-ENDPOINT","durationSeconds":5}'
+  -d '{"prompt":"Subtle camera push-in","endpoint":"fal-ai/EXACT-ENDPOINT","imageUrl":"https://...","durationSeconds":5,"params":{"resolution":"720p","duration":5,"seed":42,"aspect_ratio":"16:9"}}'
 ```
 
-If `usd` is `null`, show `pricingText` to the human and stop unless the price
-can be unambiguously calculated from that text. After approval:
+If `usd` or `quoteToken` is `null`, stop. The server refuses paid calls without
+a machine-verifiable catalog price. After approval:
 
 ```bash
 # PAID
 curl -sS -X POST http://127.0.0.1:5412/v1/videos/generations \
+  -H 'Authorization: Bearer CAPABILITY_TOKEN' \
   -H 'Content-Type: application/json' \
-  -d '{"prompt":"Subtle camera push-in","endpoint":"fal-ai/EXACT-ENDPOINT","imageUrl":"https://...","durationSeconds":5,"params":{"resolution":"720p","duration":5,"seed":42,"aspect_ratio":"16:9"}}'
+  -d '{"prompt":"Subtle camera push-in","endpoint":"fal-ai/EXACT-ENDPOINT","imageUrl":"https://...","durationSeconds":5,"params":{"resolution":"720p","duration":5,"seed":42,"aspect_ratio":"16:9"},"quoteToken":"QUOTE_FROM_ESTIMATE"}'
 ```
 
 `endpoint` must be an exact fal slug. `params` accepts only flat JSON strings,
@@ -124,19 +137,20 @@ catalog model rather than assuming the example fits every endpoint.
 ### Premium images and speech
 
 Load `text-to-image` or `image-to-image` first so the endpoint and price are in
-the catalog cache, then request the estimate. Stop if `usd` is null and
-`pricingText` does not yield an unambiguous price.
+the catalog cache, then request the estimate. Stop if `usd` or `quoteToken` is
+null.
 
 ```bash
 curl -sS 'http://127.0.0.1:5412/v1/catalog?category=text-to-image'
 curl -sS -X POST http://127.0.0.1:5412/v1/images/estimate \
   -H 'Content-Type: application/json' \
-  -d '{"endpoint":"fal-ai/EXACT-ENDPOINT"}'
+  -d '{"prompt":"Editorial paper collage of a tiny studio","endpoint":"fal-ai/EXACT-ENDPOINT","params":{"aspect_ratio":"16:9"}}'
 
 # PAID
 curl -sS -X POST http://127.0.0.1:5412/v1/images/fal \
+  -H 'Authorization: Bearer CAPABILITY_TOKEN' \
   -H 'Content-Type: application/json' \
-  -d '{"prompt":"Editorial paper collage of a tiny studio","endpoint":"fal-ai/EXACT-ENDPOINT","params":{"aspect_ratio":"16:9"}}'
+  -d '{"prompt":"Editorial paper collage of a tiny studio","endpoint":"fal-ai/EXACT-ENDPOINT","params":{"aspect_ratio":"16:9"},"quoteToken":"QUOTE_FROM_ESTIMATE"}'
 ```
 
 Estimate speech using the final text, since price is character-based:
@@ -148,8 +162,9 @@ curl -sS -X POST http://127.0.0.1:5412/v1/audio/estimate \
 
 # PAID, after approval
 curl -sS -X POST http://127.0.0.1:5412/v1/audio/speech \
+  -H 'Authorization: Bearer CAPABILITY_TOKEN' \
   -H 'Content-Type: application/json' \
-  -d '{"text":"The final narration goes here."}'
+  -d '{"text":"The final narration goes here.","quoteToken":"QUOTE_FROM_ESTIMATE"}'
 ```
 
 Speech uses ElevenLabs Turbo v2.5 through fal. `voice` is optional.
@@ -203,10 +218,9 @@ HTTP 402 before submission.
 
 The tracker records the engine's estimate at queue submission, not fal's final
 invoice. It refunds a submission that fal rejects immediately, but it does not
-reconcile a job that fails later. For catalog endpoints absent from the cache,
-the cap uses fallback accounting of `$0.40/output-second` for video and `$0.15`
-per image. Those fallbacks are guardrails, not price quotes; callers must still
-obtain an explicit price and approval before submitting.
+reconcile a job that fails later. Catalog endpoints absent from the cache, or
+whose price cannot be normalized, receive no quote token and cannot be
+submitted.
 
 Spend and job state are written atomically. Invalid limit configuration or a
 corrupt spend tracker blocks paid work instead of silently resetting the total.
@@ -217,7 +231,9 @@ Both services reject browser requests whose `Origin` is not localhost or
 `127.0.0.1`; command-line agents without an `Origin` header continue to work.
 To permit another trusted browser origin, add it to the comma-separated
 `ENGINE_ALLOWED_ORIGINS` value in `.env` and restart. This is an origin and
-cross-site-spend boundary, not authentication for hostile local processes.
+cross-site boundary. Paid routes also require the capability token. No software
+token can protect against a process that already has permission to read every
+file owned by the same operating-system user.
 
 Reference build: the 59-second film used `$0.20` smoke test + `$0.04` voice +
 `$1.04` stills + `$18.20` motion (12 × 5-second Seedance 2.0 clips), about
@@ -229,7 +245,10 @@ Reference build: the 59-second film used `$0.20` smoke test + `$0.04` voice +
 |---|---|---|
 | 400 | Invalid JSON fields, model, endpoint, or filename | Correct the request; do not retry unchanged |
 | 403 | Browser origin is outside the local allowlist | Stop or explicitly configure a trusted origin |
+| 401 | Missing or invalid capability token | Ask the human operator for access; never search for or print the token |
 | 402 | Missing `FAL_KEY` or spend cap exceeded | Stop and report the exact error |
+| 409 | Quote missing, expired, or request changed | Estimate the exact request again and obtain fresh approval |
+| 413 | Request or artifact exceeds a safety limit | Reduce the request; do not bypass the limit |
 | 429 | Local image generator is busy | Wait, then retry the free local request |
 | 502 | fal/catalog/submission failure | Report it; a paid retry requires new approval |
 | job `error` | fal status, response, or download failed | Report `error`; a retry requires new approval |

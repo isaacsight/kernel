@@ -11,7 +11,6 @@ dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
 import { createClient, type RealtimeChannel } from '@supabase/supabase-js';
 import blessed from 'blessed';
-import contrib from 'blessed-contrib';
 
 // ─── Supabase (service_role key bypasses RLS for full admin access) ───
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
@@ -61,10 +60,19 @@ const screen = blessed.screen({
   fullUnicode: true,
 });
 
-const grid = new contrib.grid({ rows: 12, cols: 12, screen });
+function gridSet(row: number, col: number, rowSpan: number, colSpan: number, widget: (options: Record<string, unknown>) => any, options: Record<string, unknown>) {
+  return widget({
+    ...options,
+    parent: screen,
+    top: `${(row / 12) * 100}%`,
+    left: `${(col / 12) * 100}%`,
+    height: `${(rowSpan / 12) * 100}%`,
+    width: `${(colSpan / 12) * 100}%`,
+  });
+}
 
 // ─── Title ──────────────────────────────────────────
-const title = grid.set(0, 0, 1, 12, blessed.box, {
+const title = gridSet(0, 0, 1, 12, blessed.box, {
   content: '{center}{bold} KERNEL ENGINE MONITOR {/bold}{/center}',
   tags: true,
   style: {
@@ -76,7 +84,7 @@ const title = grid.set(0, 0, 1, 12, blessed.box, {
 });
 
 // ─── Message Feed (top-left, rows 1-5, cols 0-7) ───
-const messageFeed = grid.set(1, 0, 5, 7, contrib.log, {
+const messageFeed = gridSet(1, 0, 5, 7, blessed.log, {
   label: ' Message Feed ',
   fg: 'green',
   tags: true,
@@ -87,7 +95,7 @@ const messageFeed = grid.set(1, 0, 5, 7, contrib.log, {
 });
 
 // ─── Agent Routing (top-right, rows 1-3, cols 7-12) ─
-const agentChart = grid.set(1, 7, 3, 5, contrib.bar, {
+const agentChart = gridSet(1, 7, 3, 5, blessed.box, {
   label: ' Agent Routing ',
   barWidth: 8,
   barSpacing: 2,
@@ -98,7 +106,7 @@ const agentChart = grid.set(1, 7, 3, 5, contrib.bar, {
 });
 
 // ─── Revenue / MRR (rows 3-5, cols 7-12) ────────────
-const revenueBox = grid.set(3, 7, 2, 5, blessed.box, {
+const revenueBox = gridSet(3, 7, 2, 5, blessed.box, {
   label: ' Revenue / MRR ',
   tags: true,
   border: { type: 'line', fg: 'cyan' },
@@ -110,7 +118,7 @@ const revenueBox = grid.set(3, 7, 2, 5, blessed.box, {
 });
 
 // ─── User Directory (rows 5-8, cols 0-3) ────────────
-const userList = grid.set(5, 0, 3, 3, blessed.list, {
+const userList = gridSet(5, 0, 3, 3, blessed.list, {
   label: ' User Directory ',
   tags: true,
   border: { type: 'line', fg: 'cyan' },
@@ -126,7 +134,7 @@ const userList = grid.set(5, 0, 3, 3, blessed.list, {
 });
 
 // ─── User Memory (rows 5-8, cols 3-8) ───────────────
-const memoryBox = grid.set(5, 3, 3, 5, blessed.box, {
+const memoryBox = gridSet(5, 3, 3, 5, blessed.box, {
   label: ' User Memory ',
   tags: true,
   border: { type: 'line', fg: 'cyan' },
@@ -140,7 +148,7 @@ const memoryBox = grid.set(5, 3, 3, 5, blessed.box, {
 });
 
 // ─── System Stats (middle-right) ────────────────────
-const statsBox = grid.set(5, 8, 3, 4, blessed.box, {
+const statsBox = gridSet(5, 8, 3, 4, blessed.box, {
   label: ' System Stats ',
   tags: true,
   border: { type: 'line', fg: 'cyan' },
@@ -152,7 +160,7 @@ const statsBox = grid.set(5, 8, 3, 4, blessed.box, {
 });
 
 // ─── Collective Insights (bottom-middle) ────────────
-const insightsBox = grid.set(8, 0, 2, 12, blessed.box, {
+const insightsBox = gridSet(8, 0, 2, 12, blessed.box, {
   label: ' Collective Insights ',
   tags: true,
   border: { type: 'line', fg: 'cyan' },
@@ -165,7 +173,7 @@ const insightsBox = grid.set(8, 0, 2, 12, blessed.box, {
 });
 
 // ─── Activity Log (bottom) ──────────────────────────
-const activityLog = grid.set(10, 0, 2, 12, contrib.log, {
+const activityLog = gridSet(10, 0, 2, 12, blessed.log, {
   label: ' Activity Log ',
   fg: 'yellow',
   tags: true,
@@ -201,15 +209,13 @@ function renderStats() {
 
 function renderAgentChart() {
   if (agentCounts.length === 0) {
-    agentChart.setData({
-      titles: ['(no data)'],
-      data: [0],
-    });
+    agentChart.setContent(' (no data)');
   } else {
-    agentChart.setData({
-      titles: agentCounts.map(a => a.agent_id.slice(0, 10)),
-      data: agentCounts.map(a => a.count),
-    });
+    const max = Math.max(...agentCounts.map(agent => agent.count), 1);
+    agentChart.setContent(agentCounts.map(agent => {
+      const bar = '█'.repeat(Math.max(1, Math.round((agent.count / max) * 14)));
+      return ` ${agent.agent_id.slice(0, 10).padEnd(10)} {cyan-fg}${bar}{/} ${agent.count}`;
+    }).join('\n'));
   }
   screen.render();
 }

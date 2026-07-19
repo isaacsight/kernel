@@ -77,11 +77,9 @@ export default defineConfig({
     },
     server: {
         port: 5173,
-        host: true,
-        allowedHosts: [
-            'isaacs-macbook-pro.tailb0afb0.ts.net',
-            'localhost',
-            '127.0.0.1'
-        ]
+        host: '127.0.0.1',
+        fs: {
+            deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/*engine-token*'],
+        },
     }
 })

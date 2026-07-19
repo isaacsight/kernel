@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { catalogSeconds, cleanParams, isAllowedOrigin, positiveSeconds } from './engine-safety.mjs'
+import { catalogSeconds, cleanParams, isAllowedArtifactUrl, isAllowedOrigin, isFalQueueUrl, positiveSeconds } from './engine-safety.mjs'
 
 describe('cleanParams', () => {
   it('keeps flat scalar model parameters', () => {
@@ -13,6 +13,24 @@ describe('cleanParams', () => {
       prompt: 'override', image_url: 'https://attacker.test/x', nested: { a: 1 },
       list: [1], 'bad-key!': 1, valid: 'yes',
     })).toEqual({ valid: 'yes' })
+  })
+
+  it('drops oversized scalar strings', () => {
+    expect(cleanParams({ note: 'x'.repeat(2001), seed: 1 })).toEqual({ seed: 1 })
+  })
+})
+
+describe('provider URL boundary', () => {
+  it('only sends credentials to the fal queue origin', () => {
+    expect(isFalQueueUrl('https://queue.fal.run/fal-ai/model/requests/1/status')).toBe(true)
+    expect(isFalQueueUrl('https://evil.example/status')).toBe(false)
+    expect(isFalQueueUrl('http://queue.fal.run/status')).toBe(false)
+  })
+
+  it('only downloads default fal media hosts or explicit extras', () => {
+    expect(isAllowedArtifactUrl('https://v3.fal.media/files/video.mp4')).toBe(true)
+    expect(isAllowedArtifactUrl('http://127.0.0.1/private')).toBe(false)
+    expect(isAllowedArtifactUrl('https://cdn.example.com/file', 'cdn.example.com')).toBe(true)
   })
 })
 

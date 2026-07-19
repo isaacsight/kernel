@@ -7,10 +7,15 @@
 // Spec: docs/superpowers/specs/2026-07-17-galley-video-engine-design.md
 
 import { createServer } from 'node:http'
-import { writeFile, mkdir, readFile } from 'node:fs/promises'
+import { createWriteStream } from 'node:fs'
+import { mkdir, readFile, rename, rm } from 'node:fs/promises'
 import { join } from 'node:path'
+import { homedir } from 'node:os'
+import { Readable, Transform } from 'node:stream'
+import { pipeline } from 'node:stream/promises'
 import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, mapCatalogItem, TTS_ENDPOINT, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
-import { catalogSeconds, cleanParams, isAllowedOrigin, positiveSeconds } from './engine-safety.mjs'
+import { catalogSeconds, cleanParams, isAllowedArtifactUrl, isAllowedOrigin, isFalQueueUrl, positiveSeconds } from './engine-safety.mjs'
+import { createQuote, isAuthorized, loadOrCreateEngineToken, verifyQuote } from './engine-auth.mjs'
 import { loadJobs, saveJobs } from './job-store.mjs'
 import { checkAndUpdateSpend } from './spend-tracker.mjs'
 
@@ -20,8 +25,16 @@ const OUT_DIR = join(process.cwd(), 'output', 'videos')
 const AUDIO_DIR = join(process.cwd(), 'output', 'audio')
 const IMAGE_DIR = join(process.cwd(), 'output', 'images')
 const JOBS_PATH = join(process.cwd(), 'output', 'job-registry.json')
+const TOKEN_PATH = process.env.ENGINE_TOKEN_PATH || join(homedir(), '.config', 'kernel', 'galley-engine-token')
 const FAL_QUEUE = 'https://queue.fal.run'
 const EXTRA_ALLOWED_ORIGINS = process.env.ENGINE_ALLOWED_ORIGINS || ''
+const EXTRA_ARTIFACT_HOSTS = process.env.ENGINE_ARTIFACT_HOSTS || ''
+const MAX_BODY_BYTES = 1024 * 1024
+const MAX_PROMPT_CHARS = 20_000
+const MAX_SPEECH_CHARS = 100_000
+
+const { token: ENGINE_TOKEN, created: ENGINE_TOKEN_CREATED } = await loadOrCreateEngineToken(TOKEN_PATH)
+const QUOTE_SECRET = ENGINE_TOKEN
 
 let spendLock = Promise.resolve()
 
@@ -50,9 +63,9 @@ function persistJobsLocked() {
 }
 
 const JOB_KINDS = {
-  video: { dir: OUT_DIR, ext: 'mp4', route: 'videos', extract: extractVideoUrl, mime: 'video/mp4' },
-  audio: { dir: AUDIO_DIR, ext: 'mp3', route: 'audio', extract: extractAudioUrl, mime: 'audio/mpeg' },
-  image: { dir: IMAGE_DIR, ext: 'png', route: 'images', extract: extractImageUrl, mime: 'image/png' },
+  video: { dir: OUT_DIR, ext: 'mp4', route: 'videos', extract: extractVideoUrl, mime: 'video/mp4', maxBytes: 750 * 1024 * 1024 },
+  audio: { dir: AUDIO_DIR, ext: 'mp3', route: 'audio', extract: extractAudioUrl, mime: 'audio/mpeg', maxBytes: 100 * 1024 * 1024 },
+  image: { dir: IMAGE_DIR, ext: 'png', route: 'images', extract: extractImageUrl, mime: 'image/png', maxBytes: 100 * 1024 * 1024 },
 }
 
 const CONTENT_EXTENSIONS = new Map([
@@ -111,7 +124,7 @@ function json(res, status, body, origin) {
   const corsOrigin = origin ?? res.engineOrigin
   const headers = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
   }
   if (corsOrigin && isAllowedOrigin(corsOrigin, EXTRA_ALLOWED_ORIGINS)) headers['Access-Control-Allow-Origin'] = corsOrigin
@@ -119,13 +132,26 @@ function json(res, status, body, origin) {
   res.end(JSON.stringify(body))
 }
 
-async function readBody(req) {
+async function readBody(req, res) {
   let body = ''
-  for await (const chunk of req) body += chunk
-  try { return JSON.parse(body) } catch { return null }
+  let bytes = 0
+  for await (const chunk of req) {
+    bytes += chunk.length
+    if (bytes > MAX_BODY_BYTES) {
+      req.resume()
+      json(res, 413, { error: `JSON body exceeds ${MAX_BODY_BYTES} bytes` })
+      return null
+    }
+    body += chunk
+  }
+  try { return JSON.parse(body) } catch {
+    json(res, 400, { error: 'Invalid JSON body' })
+    return null
+  }
 }
 
 async function falFetch(url, init = {}) {
+  if (!isFalQueueUrl(url)) throw new Error('Refusing to send fal credentials outside queue.fal.run')
   const res = await fetch(url, {
     ...init,
     headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json', ...(init.headers || {}) },
@@ -137,6 +163,46 @@ async function falFetch(url, init = {}) {
     throw new Error(message)
   }
   return payload
+}
+
+function paidBody(body) {
+  const { quoteToken: _quoteToken, ...request } = body || {}
+  return request
+}
+
+function requirePaidAuthorization(req, res) {
+  if (isAuthorized(req, ENGINE_TOKEN)) return true
+  json(res, 401, { error: 'Missing or invalid engine capability token' })
+  return false
+}
+
+function quoteFor(route, body, cost) {
+  return Number.isFinite(cost) ? createQuote(QUOTE_SECRET, route, paidBody(body), cost) : null
+}
+
+function quotedCost(route, body) {
+  return verifyQuote(QUOTE_SECRET, body?.quoteToken, route, paidBody(body))
+}
+
+async function downloadArtifact(response, destination, maxBytes) {
+  const declared = Number(response.headers.get('content-length'))
+  if (Number.isFinite(declared) && declared > maxBytes) throw new Error(`artifact exceeds ${maxBytes} bytes`)
+  if (!response.body) throw new Error('artifact response contained no body')
+  const tempPath = `${destination}.${process.pid}.tmp`
+  let received = 0
+  const limiter = new Transform({
+    transform(chunk, _encoding, callback) {
+      received += chunk.length
+      callback(received > maxBytes ? new Error(`artifact exceeds ${maxBytes} bytes`) : null, chunk)
+    },
+  })
+  try {
+    await pipeline(Readable.fromWeb(response.body), limiter, createWriteStream(tempPath, { mode: 0o600 }))
+    await rename(tempPath, destination)
+  } catch (error) {
+    await rm(tempPath, { force: true }).catch(() => {})
+    throw error
+  }
 }
 
 async function submitJob({ prompt, model, endpoint: rawEndpoint, durationSeconds, imageUrl, params }) {
@@ -156,6 +222,9 @@ async function queueJob(kind, endpoint, input) {
   const jobId = submitted.request_id
   if (!jobId) throw new Error('fal.ai returned no request_id')
   if (!submitted.status_url || !submitted.response_url) throw new Error('fal.ai returned incomplete queue metadata')
+  if (!isFalQueueUrl(submitted.status_url) || !isFalQueueUrl(submitted.response_url)) {
+    throw new Error('fal.ai returned queue metadata outside queue.fal.run')
+  }
   jobs.set(jobId, {
     kind,
     statusUrl: submitted.status_url,
@@ -183,11 +252,12 @@ async function refreshJob(jobId) {
       const result = await falFetch(job.responseUrl)
       const remoteUrl = spec.extract(result)
       if (!remoteUrl) throw new Error(`fal.ai result contained no ${job.kind || 'video'} url`)
+      if (!isAllowedArtifactUrl(remoteUrl, EXTRA_ARTIFACT_HOSTS)) throw new Error('fal.ai returned an artifact URL outside the allowed media hosts')
       await mkdir(spec.dir, { recursive: true })
       const clip = await fetch(remoteUrl)
       if (!clip.ok) throw new Error(`could not download result (${clip.status})`)
       const format = artifactFormat(clip, spec)
-      await writeFile(join(spec.dir, `${jobId}.${format.ext}`), Buffer.from(await clip.arrayBuffer()))
+      await downloadArtifact(clip, join(spec.dir, `${jobId}.${format.ext}`), spec.maxBytes)
       const localUrl = `http://127.0.0.1:${PORT}/${spec.route}/${jobId}.${format.ext}`
       job.sourceUrl = remoteUrl // fal-hosted copy; usable as image_url input for downstream image-to-video
       job.contentType = format.mime
@@ -274,16 +344,20 @@ const server = createServer(async (req, res) => {
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/videos/estimate') {
-    const body = await readBody(req)
+    const body = await readBody(req, res)
+    if (!body) return
     if (body?.endpoint) {
       const entry = catalogEntry(body.endpoint)
       const seconds = catalogSeconds(body)
       if (!ENDPOINT_SLUG.test(body.endpoint)) return json(res, 400, { error: `bad endpoint slug: ${body.endpoint}` })
       if (seconds == null) return json(res, 400, { error: 'durationSeconds must be a positive number' })
+      const usd = entry?.usdPerSecond != null ? Math.round(entry.usdPerSecond * seconds * 100) / 100 : null
+      const request = { ...body, durationSeconds: seconds }
       return json(res, 200, {
-        usd: entry?.usdPerSecond != null ? Math.round(entry.usdPerSecond * seconds * 100) / 100 : null,
+        usd,
         seconds,
         pricingText: entry?.pricingText || '',
+        quoteToken: typeof body.prompt === 'string' && body.prompt.trim() && usd != null ? quoteFor('/v1/videos/generations', request, usd) : null,
       })
     }
     if (!body?.model) return json(res, 400, { error: 'model is required' })
@@ -291,17 +365,20 @@ const server = createServer(async (req, res) => {
     if (body.durationSeconds !== undefined && positiveSeconds(body.durationSeconds) == null) {
       return json(res, 400, { error: 'durationSeconds must be a positive number' })
     }
-    return json(res, 200, {
-      usd: estimateUsd(body.model, body.durationSeconds),
-      seconds: effectiveSeconds(body.model, body.durationSeconds),
-    })
+    const usd = estimateUsd(body.model, body.durationSeconds)
+    const seconds = effectiveSeconds(body.model, body.durationSeconds)
+    const request = { ...body, durationSeconds: seconds }
+    return json(res, 200, { usd, seconds, quoteToken: typeof body.prompt === 'string' && body.prompt.trim() ? quoteFor('/v1/videos/generations', request, usd) : null })
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/videos/generations') {
+    if (!requirePaidAuthorization(req, res)) return
     if (!FAL_KEY) return json(res, 402, { error: 'FAL_KEY not set — add it to .env and restart: npm run video-server' })
-    const body = await readBody(req)
+    const body = await readBody(req, res)
+    if (!body) return
     const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : ''
     if (!prompt) return json(res, 400, { error: 'prompt is required' })
+    if (prompt.length > MAX_PROMPT_CHARS) return json(res, 413, { error: `prompt exceeds ${MAX_PROMPT_CHARS} characters` })
     if (body?.endpoint) {
       if (!ENDPOINT_SLUG.test(body.endpoint)) return json(res, 400, { error: `bad endpoint slug: ${body.endpoint}` })
     } else if (!getModel(body.model)) {
@@ -310,18 +387,13 @@ const server = createServer(async (req, res) => {
     const requestedSeconds = body?.endpoint ? catalogSeconds(body) : positiveSeconds(body.durationSeconds, getModel(body.model)?.defaultDurationSeconds || 5)
     if (requestedSeconds == null) return json(res, 400, { error: 'duration must be a positive number' })
 
-    let cost = 0
-    if (body?.endpoint) {
-      const entry = catalogEntry(body.endpoint)
-      cost = entry?.usdPerSecond != null ? Math.round(entry.usdPerSecond * requestedSeconds * 100) / 100 : 0.40 * requestedSeconds
-    } else {
-      cost = estimateUsd(body.model, body.durationSeconds) || 0
-    }
+    let cost
+    try { cost = quotedCost('/v1/videos/generations', body) } catch (error) { return json(res, 409, { error: error.message }) }
 
     try {
       const spendInfo = await checkAndUpdateSpendLocked(cost)
       try {
-        const jobId = await submitJob(body)
+        const jobId = await submitJob(paidBody(body))
         console.log(`[video-server] submitted ${body.model || body.endpoint} job ${jobId}: ${prompt.slice(0, 80)}`)
         console.log(`[video-server] Spend cap check: debited $${cost.toFixed(4)}. Daily total: $${spendInfo.newSpent.toFixed(4)} / $${spendInfo.limit === Infinity ? 'Unlimited' : spendInfo.limit.toFixed(2)}`)
         return json(res, 200, { jobId })
@@ -336,35 +408,42 @@ const server = createServer(async (req, res) => {
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/images/estimate') {
-    const body = await readBody(req)
+    const body = await readBody(req, res)
+    if (!body) return
     if (!body?.endpoint || !ENDPOINT_SLUG.test(body.endpoint)) {
       return json(res, 400, { error: `bad endpoint slug: ${body?.endpoint}` })
     }
     const entry = catalogEntry(body.endpoint)
+    const usd = entry?.usdPerImage ?? null
     return json(res, 200, {
-      usd: entry?.usdPerImage ?? null,
+      usd,
       pricingText: entry?.pricingText || '',
       unit: 'image',
+      quoteToken: typeof body.prompt === 'string' && body.prompt.trim() && usd != null ? quoteFor('/v1/images/fal', body, usd) : null,
     })
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/images/fal') {
+    if (!requirePaidAuthorization(req, res)) return
     if (!FAL_KEY) return json(res, 402, { error: 'FAL_KEY not set — add it to .env and restart: npm run video-server' })
-    const body = await readBody(req)
+    const body = await readBody(req, res)
+    if (!body) return
     const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : ''
     if (!prompt) return json(res, 400, { error: 'prompt is required' })
+    if (prompt.length > MAX_PROMPT_CHARS) return json(res, 413, { error: `prompt exceeds ${MAX_PROMPT_CHARS} characters` })
     if (!body?.endpoint || !ENDPOINT_SLUG.test(body.endpoint)) return json(res, 400, { error: `bad endpoint slug: ${body?.endpoint}` })
 
-    const entry = catalogEntry(body.endpoint)
-    const cost = entry?.usdPerImage ?? 0.15
+    let cost
+    try { cost = quotedCost('/v1/images/fal', body) } catch (error) { return json(res, 409, { error: error.message }) }
 
     try {
       const spendInfo = await checkAndUpdateSpendLocked(cost)
       try {
+        const request = paidBody(body)
         const input = {
           prompt,
-          ...(typeof body.imageUrl === 'string' && body.imageUrl ? { image_url: body.imageUrl } : {}),
-          ...cleanParams(body.params),
+          ...(typeof request.imageUrl === 'string' && request.imageUrl ? { image_url: request.imageUrl } : {}),
+          ...cleanParams(request.params),
         }
         const jobId = await queueJob('image', body.endpoint, input)
         console.log(`[video-server] submitted image job ${jobId} on ${body.endpoint}: ${prompt.slice(0, 60)}`)
@@ -397,18 +476,25 @@ const server = createServer(async (req, res) => {
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/audio/estimate') {
-    const body = await readBody(req)
+    const body = await readBody(req, res)
+    if (!body) return
     const text = typeof body?.text === 'string' ? body.text : ''
-    return json(res, 200, { usd: estimateSpeechUsd(text), characters: text.length })
+    if (text.length > MAX_SPEECH_CHARS) return json(res, 413, { error: `text exceeds ${MAX_SPEECH_CHARS} characters` })
+    const usd = estimateSpeechUsd(text)
+    return json(res, 200, { usd, characters: text.length, quoteToken: text.trim() ? quoteFor('/v1/audio/speech', body, usd) : null })
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/audio/speech') {
+    if (!requirePaidAuthorization(req, res)) return
     if (!FAL_KEY) return json(res, 402, { error: 'FAL_KEY not set — add it to .env and restart: npm run video-server' })
-    const body = await readBody(req)
+    const body = await readBody(req, res)
+    if (!body) return
     const text = typeof body?.text === 'string' ? body.text.trim() : ''
     if (!text) return json(res, 400, { error: 'text is required' })
+    if (text.length > MAX_SPEECH_CHARS) return json(res, 413, { error: `text exceeds ${MAX_SPEECH_CHARS} characters` })
 
-    const cost = estimateSpeechUsd(text) || 0
+    let cost
+    try { cost = quotedCost('/v1/audio/speech', body) } catch (error) { return json(res, 409, { error: error.message }) }
 
     try {
       const spendInfo = await checkAndUpdateSpendLocked(cost)
@@ -487,4 +573,5 @@ server.listen(PORT, '127.0.0.1', async () => {
     limitMsg = limit === Infinity ? 'spend limit: Unlimited' : `spend limit: $${limit.toFixed(2)}/day`
   } catch {}
   console.log(`[video-server] listening on http://localhost:${PORT} (key ${FAL_KEY ? 'loaded' : 'MISSING'}, ${limitMsg})`)
+  console.log(`[video-server] paid routes require the owner-only capability token at ${TOKEN_PATH}${ENGINE_TOKEN_CREATED ? ' (created now)' : ''}`)
 })
