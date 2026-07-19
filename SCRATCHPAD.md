@@ -2318,3 +2318,32 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
 - **VERIFIED:** `npx tsc --noEmit`; `npm test` (40 files / 549 tests);
   `npm run build`; Playwright visual proofs of landing, ISSUE 424 desktop
   + 390px, canonical prior route `/#/issues/423`, and artifact at 390px.
+
+## Session 2026-07-18 — WHAT WE MADE v3 production ledger
+
+- **DELIVERABLE:** `output/what-we-made-v3.mp4` — 1280×720 H.264/AAC,
+  30 fps, 57.733 seconds. Palmier project:
+  `/Users/isaachernandez/Documents/Palmier Pro/what-we-made-v3.palmier`.
+- **PICTURE:** 12 locked paper-noir keyframes; scenes 6, 9, 10, and 11
+  received consistency/text retakes, scene 11 received one additional
+  no-brand retake, and scene 12 received a no-human replacement request.
+- **MOTION:** 10 Seedance 2.0 clips completed and passed 1280×720 / 5.062s
+  midpoint QC. Scene 3 retry `019f78b4-0f69-79e1-ac7a-1b6e3ae6f207`
+  and replacement scene 12 keyframe
+  `019f78b8-d74e-7200-b9e2-32e8e0e964a8` remained remotely queued at
+  export time. Palmier uses graded, faded, 3% camera-move still fallbacks
+  for those two spans, so the delivered timeline is gapless.
+- **EDIT:** George VO `d15186d9-86da-4495-87ae-749fb7bcb139.mp3` at
+  frame 0; transcript-led 12-scene cut; ink `#1F1E1D` matte; paper-noir
+  grade; embedded generated audio muted; hook, price, refusal, closer,
+  and colophon typography added. All 12 scene spans are contiguous from
+  frame 0 through 1732.
+- **ENGINE LEDGER (conservative booked):** keyframes and retakes $1.44;
+  initial 12-clip motion batch $40.92; two motion retries $6.82; v3 total
+  $49.18. Expected fal invoice is approximately $22.67 at 720p before
+  provider reconciliation of failed/queued jobs. Daily engine cap was
+  explicitly approved and raised from $60 to $65; total engine state at
+  the final image submission was $60.8079 including earlier same-day work.
+- **QC:** ffprobe verified one AAC stereo stream and one H.264 1280×720
+  stream at 30 fps; timeline gap scan returned none; five exported frames
+  checked at the hook, price, refusal, delegation, and closer beats.
