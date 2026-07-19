@@ -2,6 +2,71 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-19 — `One of One` completed
+
+- Recovered the interrupted `one-of-one-2027` Palmier production from
+  `docs/video/one-of-one-2027/handoff/HANDOFF.md` and the live project at
+  `~/Documents/Palmier Pro/one-of-one-2027.palmier`.
+- The eight supposedly queued shot-2/3 jobs had all failed; the local tracker
+  preserved stale running/queued labels while exposing provider failures in
+  `pollError`. Four hit likeness policy, two had invalid inputs, and Kling used
+  `start_image_url` where the endpoint required `image_url`.
+- Retried only the two required Kling shots within the approved $50 cap using
+  the already-approved restaged frames and the engine's top-level `imageUrl`
+  field. Accepted `shot-02-kling-v3.mp4` and `shot-03-kling-v3.mp4`, imported
+  them into reserved frames 120–240 and 240–390, and muted their linked native
+  audio. The ten-shot V1 sequence is contiguous from frame 0 through 1260.
+- Exported and mastered `output/one-of-one-2027.mp4`: 1080x1920, 30fps,
+  1260 frames, 42.0s picture / 42.1s container, H.264 + AAC, -16.01 LUFS and
+  -1.43 dBTP. Contact-sheet review confirmed all ten scenes and the key cuts.
+  Delivery copy is at `docs/video/one-of-one-2027/delivery.md`; nothing was
+  posted. Engine-recorded spend ended at $22.66 of the authorized $50 cap.
+
+## Session 2026-07-19 — Palmier Pro workflow suite
+
+- Researched Palmier Pro's live MCP surface at `http://127.0.0.1:19789/mcp`
+  and built a twelve-tool orchestration suite under `tools/palmier/suite/`:
+  Director, Campaign Studio, Shot Lab, Continuity Engine, Product Truth,
+  Recast Studio, Style Director, Transition Designer, Performance Editor,
+  Shorts Factory, Edit Critic, and Finish and Deliver.
+- Added `tools/palmier/suite.mjs` with `list`, `plan`, and `run` commands.
+  Plans compile high-level workflows into inspectable Palmier MCP operations;
+  the runner validates those operations against the app's live advertised
+  schemas before execution. Paid generation requires `--approve-generation`;
+  final exports require `--approve-final`.
+- Added a shared result contract (`summary`, changes, warnings, estimated cost,
+  approval state, undo token, artifacts, and operations), catalog metadata,
+  deterministic planners, a live MCP adapter, and five Node tests. All twelve
+  planners passed live top-level schema validation; `npm run test:palmier`
+  passes 5/5.
+- Added `content-plan.mjs` for launch/demo/social/brand beat plans; generalized
+  `qc-export.mjs` from one hard-coded film to web/social/broadcast profiles.
+  Documentation: `docs/palmier-pro-suite.md` and
+  `docs/palmier-pro-tool-research.md`.
+- Honest limitation: current Palmier MCP has no native identity-replacement
+  mutation. Recast Studio therefore performs consent/reference inspection and
+  returns a review plan instead of claiming to execute a face/character swap.
+- Expanded the suite from 12 to 32 tools after a Premiere/CapCut/Resolve parity
+  audit. Added professional foundation planners (media pipeline, compositing,
+  managed color, audio post, collaboration, recovery/interchange), AI parity
+  (generative extend, media intelligence, localization, avatars, motion graphics,
+  spatial), and agentic/governance systems (production memory, coverage agent,
+  assembly room, timeline compiler, outcome optimizer, provenance, model router,
+  living deliverables). Native gaps return `adapter_required` and list the exact
+  missing engine primitives.
+- Added `suite/adapters.mjs`: 18 native-engine adapters with phases, owners, and
+  deliverables, exposed via `node tools/palmier/suite.mjs adapters`. Added working
+  policy logic in `suite/intelligence.mjs` for model ranking, provenance manifests,
+  rights/consent/expiration checks, and creative outcome ranking. Verification:
+  10/10 tests, 32 planners and 66 baseline operations validated against the live
+  Palmier MCP schemas, and the full production build passes.
+- Added a full React product surface at `#/palmier-suite`
+  (`src/pages/PalmierSuitePage.tsx` + CSS, backed by
+  `src/data/palmierSuite.ts`). It exposes all 32 tools with search, category
+  filters, readiness counts, per-tool inputs/operations, approval gates, native
+  blockers, responsive layouts, and copyable CLI actions for either planning a
+  supported workflow or opening the engine-adapter roadmap.
+
 ## Session 2026-07-18 — Directing Room foundation
 
 - Saved the Creative Director + Director + VFX Supervisor + Editor architecture

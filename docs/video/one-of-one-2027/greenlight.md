@@ -99,7 +99,8 @@ signage, no logos, cinematic realism, 35mm look.
 | Connective 7 shots (~44s incl. retakes, audio off) | veo3.1/fast/(image|reference)-to-video | $4.40 | |
 | SFX x6 + retakes | ElevenLabs direct API (subscription credits) | $0 fal | |
 | Pulse score (1–2 takes) | ElevenLabs direct API (subscription credits) | $0 fal | |
-| **Total (fal dollars)** | | **~$16–20** | |
+| Corrected Kling shots 2+3 from approved restaged frames | kling-video/v3/turbo | $1.15 | $1.15 |
+| **Total (fal dollars)** | | **~$16–20** | **$22.66 engine-recorded** |
 
 Audio routes direct to api.elevenlabs.io via the engine
 (`elevenlabs-sfx-direct` / `elevenlabs-music-direct` providers) — it
