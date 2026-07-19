@@ -65,6 +65,12 @@
   continuity. No black/dim transition frames remain. The all-cuts review reel
   was regenerated from this master. Backup of the last fade version:
   `output/what-we-made-v3-before-hard-cuts.mp4`.
+- Removed the kinetic typography layer entirely: deleted all five text clips
+  (`WHAT WE MADE`, `$0.35`, `SAY NO.`, `YOURS.`, and the receipt colophon), not
+  merely their animation presets. The timeline now has zero text clips; former
+  graphic beats were frame-checked and remain visually legible through the
+  generated objects/actions alone. Backup before removal:
+  `output/what-we-made-v3-before-type-removal.mp4`.
 
 ## Session 2026-07-18 — GALLEY video engine shipped — on branch `feat/galley-video-engine`
 
