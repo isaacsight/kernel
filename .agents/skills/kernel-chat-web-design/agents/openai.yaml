@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kernel.chat Web Design"
+  short_description: "Build immersive pages in the house grammar"
+  default_prompt: "Use $kernel-chat-web-design to design and verify a new kernel.chat issue."

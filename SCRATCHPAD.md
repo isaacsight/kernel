@@ -2571,3 +2571,25 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   but does not copy it during build. Deployment now explicitly copies all
   filed `artifacts/*.html` into `dist/artifacts/` before Pages publication;
   this restores the magazine's artifact editions as first-class live files.
+
+## Session 2026-07-19 — kernel.chat web-design skill
+
+- Added the repo-local `.agents/skills/kernel-chat-web-design/` skill so
+  issue design, interaction, motion, artifact work, responsive review, and
+  publishing trigger one kernel.chat-specific operating contract.
+- The 125-line `SKILL.md` routes agents to the five canonical laws instead
+  of duplicating them, then enforces an editorial-sentence-first workflow,
+  identity differentiation, artifact-first rendering, smallest-truthful-
+  apparatus selection, mobile-first composition, premium-paper motion,
+  clean implementation boundaries, and production proof.
+- Added `references/review-rubric.md`: hard gates for editorial truth,
+  system integrity, ARIA interaction, reduced motion, self-contained
+  artifacts, mobile, and deployment; a 30-point craft score; evidence
+  commands; and regression questions drawn from ISSUE 425's real seams.
+- The skill explicitly catches two recent failure modes: repository-root
+  artifacts that work in Vite development but are absent from `dist`, and
+  artifact HTML that references external assets despite the self-contained
+  filing law. It also distinguishes passing CI from live-route proof.
+- UI metadata lives in `agents/openai.yaml`. The official skill validator
+  passed in an isolated `uv` environment with PyYAML; both skill files are
+  under the 500-line progressive-disclosure ceiling and contain no TODOs.
