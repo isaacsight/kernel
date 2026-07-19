@@ -150,6 +150,10 @@ describe('speech (ElevenLabs via fal)', () => {
     expect(estimateSpeechUsd('')).toBeNull()
     expect(estimateSpeechUsd(undefined)).toBeNull()
   })
+  it('prices per provider and rejects unknown providers', () => {
+    expect(estimateSpeechUsd('a'.repeat(1000), 'minimax-hd')).toBe(0.1)
+    expect(estimateSpeechUsd('a'.repeat(1000), 'nope')).toBeNull()
+  })
   it('finds the audio url in fal result shapes', () => {
     expect(extractAudioUrl({ audio: { url: 'https://x/a.mp3' } })).toBe('https://x/a.mp3')
     expect(extractAudioUrl({ data: { audio: { url: 'https://y/a.mp3' } } })).toBe('https://y/a.mp3')

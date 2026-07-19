@@ -134,14 +134,36 @@ export function parsePerImageUsd(text) {
   return match ? Number(match[1]) : null
 }
 
-// Voiceover: ElevenLabs Turbo v2.5 served through fal — $0.05 per 1000
-// characters as listed on the model page (re-verify when bumping).
-export const TTS_ENDPOINT = 'fal-ai/elevenlabs/tts/turbo-v2.5'
-export const TTS_USD_PER_1K_CHARS = 0.05
+// Voiceover providers served through fal. Prices are USD per 1000 characters
+// as listed on each model page (re-verify when bumping). Each provider builds
+// its own input shape; voice is the caller-facing selector.
+export const TTS_PROVIDERS = {
+  'elevenlabs-turbo': {
+    endpoint: 'fal-ai/elevenlabs/tts/turbo-v2.5',
+    usdPer1kChars: 0.05,
+    buildInput: (text, voice) => ({ text, ...(voice ? { voice } : {}) }),
+  },
+  'minimax-hd': {
+    endpoint: 'fal-ai/minimax/speech-2.8-hd',
+    usdPer1kChars: 0.1,
+    buildInput: (text, voice) => ({ prompt: text, ...(voice ? { voice_setting: { voice_id: voice } } : {}) }),
+  },
+}
+export const DEFAULT_TTS_PROVIDER = 'elevenlabs-turbo'
 
-export function estimateSpeechUsd(text) {
+// Back-compat aliases (older callers/tests)
+export const TTS_ENDPOINT = TTS_PROVIDERS[DEFAULT_TTS_PROVIDER].endpoint
+export const TTS_USD_PER_1K_CHARS = TTS_PROVIDERS[DEFAULT_TTS_PROVIDER].usdPer1kChars
+
+export function getTtsProvider(name) {
+  return TTS_PROVIDERS[name ?? DEFAULT_TTS_PROVIDER] ?? null
+}
+
+export function estimateSpeechUsd(text, provider = DEFAULT_TTS_PROVIDER) {
   if (typeof text !== 'string' || text.length === 0) return null
-  return Math.round((text.length / 1000) * TTS_USD_PER_1K_CHARS * 10000) / 10000
+  const spec = getTtsProvider(provider)
+  if (!spec) return null
+  return Math.round((text.length / 1000) * spec.usdPer1kChars * 10000) / 10000
 }
 
 export function extractAudioUrl(payload) {

@@ -13,7 +13,7 @@ import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { Readable, Transform } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, mapCatalogItem, TTS_ENDPOINT, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, mapCatalogItem, getTtsProvider, DEFAULT_TTS_PROVIDER, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
 import { catalogSeconds, cleanParams, isAllowedArtifactUrl, isAllowedOrigin, isFalQueueUrl, positiveSeconds } from './engine-safety.mjs'
 import { createQuote, isAuthorized, loadOrCreateEngineToken, verifyQuote } from './engine-auth.mjs'
 import { loadJobs, saveJobs } from './job-store.mjs'
@@ -480,8 +480,9 @@ const server = createServer(async (req, res) => {
     if (!body) return
     const text = typeof body?.text === 'string' ? body.text : ''
     if (text.length > MAX_SPEECH_CHARS) return json(res, 413, { error: `text exceeds ${MAX_SPEECH_CHARS} characters` })
-    const usd = estimateSpeechUsd(text)
-    return json(res, 200, { usd, characters: text.length, quoteToken: text.trim() ? quoteFor('/v1/audio/speech', body, usd) : null })
+    if (body?.provider && !getTtsProvider(body.provider)) return json(res, 400, { error: `unknown tts provider: ${body.provider}` })
+    const usd = estimateSpeechUsd(text, body?.provider)
+    return json(res, 200, { usd, characters: text.length, provider: body?.provider ?? DEFAULT_TTS_PROVIDER, quoteToken: text.trim() ? quoteFor('/v1/audio/speech', body, usd) : null })
   }
 
   if (req.method === 'POST' && url.pathname === '/v1/audio/speech') {
@@ -499,8 +500,10 @@ const server = createServer(async (req, res) => {
     try {
       const spendInfo = await checkAndUpdateSpendLocked(cost)
       try {
-        const input = { text, ...(typeof body.voice === 'string' && body.voice ? { voice: body.voice } : {}) }
-        const jobId = await queueJob('audio', TTS_ENDPOINT, input)
+        const provider = getTtsProvider(body.provider)
+        if (!provider) throw new Error(`unknown tts provider: ${body.provider}`)
+        const input = provider.buildInput(text, typeof body.voice === 'string' && body.voice ? body.voice : undefined)
+        const jobId = await queueJob('audio', provider.endpoint, input)
         console.log(`[video-server] submitted speech job ${jobId}: ${text.slice(0, 60)}`)
         console.log(`[video-server] Spend cap check: debited $${cost.toFixed(4)}. Daily total: $${spendInfo.newSpent.toFixed(4)} / $${spendInfo.limit === Infinity ? 'Unlimited' : spendInfo.limit.toFixed(2)}`)
         return json(res, 200, { jobId })
