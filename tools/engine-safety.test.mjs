@@ -65,3 +65,17 @@ describe('browser origin boundary', () => {
     expect(isAllowedOrigin('null')).toBe(false)
   })
 })
+
+describe('cleanParams arrays', () => {
+  it('passes arrays of short strings (reference_image_urls et al)', () => {
+    const urls = ['https://v3b.fal.media/files/a.png', 'https://v3b.fal.media/files/b.png']
+    expect(cleanParams({ reference_image_urls: urls }).reference_image_urls).toEqual(urls)
+  })
+  it('drops arrays containing non-strings or oversized entries', () => {
+    expect(cleanParams({ xs: [1, 'a'] }).xs).toBeUndefined()
+    expect(cleanParams({ xs: ['a'.repeat(5000)] }).xs).toBeUndefined()
+  })
+  it('drops arrays longer than 8 entries', () => {
+    expect(cleanParams({ xs: Array(9).fill('a') }).xs).toBeUndefined()
+  })
+})

@@ -10,6 +10,11 @@ export function cleanParams(params) {
     if (typeof value === 'number' && !Number.isFinite(value)) continue
     if (typeof value === 'string' && value.length <= MAX_PARAM_STRING) out[key] = value
     else if (typeof value === 'number' || typeof value === 'boolean') out[key] = value
+    // Short string arrays serve multi-reference endpoints (reference_image_urls).
+    else if (
+      Array.isArray(value) && value.length > 0 && value.length <= 8 &&
+      value.every(v => typeof v === 'string' && v.length <= MAX_PARAM_STRING)
+    ) out[key] = [...value]
   }
   return out
 }
