@@ -228,7 +228,11 @@
   border: 0;
   cursor: pointer;
   font: inherit;
+  transition: transform 100ms ease-out;
 }
+
+.pop-sequence-stage:hover { transform: translateY(-2px); }
+.pop-sequence-stage:active { transform: translateY(0) scale(0.97); }
 
 .pop-sequence-stage-num {
   display: flex;
@@ -256,6 +260,13 @@
   border-color: var(--issue-accent);
   color: var(--pop-ivory);
   transform: scale(1.15);
+  animation: pop-sequence-mark 420ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes pop-sequence-mark {
+  0% { transform: scale(0.96); }
+  62% { transform: scale(1.18); }
+  100% { transform: scale(1.15); }
 }
 
 .pop-sequence-stage:focus-visible {
@@ -305,14 +316,12 @@
 
 .pop-sequence-panel--active {
   display: block;
-  /* Editorial ambient motion: small opacity fade only. The
-     site-wide prefers-reduced-motion override collapses it. */
-  animation: pop-sequence-fade 180ms ease;
+  animation: pop-sequence-arrive 420ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-@keyframes pop-sequence-fade {
-  from { opacity: 0.35; }
-  to { opacity: 1; }
+@keyframes pop-sequence-arrive {
+  from { opacity: 0.92; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .pop-sequence-panel-head {
@@ -338,6 +347,15 @@
   filter: saturate(0.88) contrast(1.02);
 }
 
+.pop-sequence-panel--active .pop-sequence-plate img {
+  animation: pop-sequence-plate-settle 560ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pop-sequence-plate-settle {
+  from { opacity: 0.94; transform: scale(1.012); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 .pop-sequence-plate-caption {
   margin: 0;
   padding: 10px 14px;
@@ -355,6 +373,51 @@
   margin: 18px 0 0 !important;
   padding-top: 12px;
   border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-sequence-step-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--pop-hairline-soft);
+}
+
+.pop-sequence-step-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--pop-hairline);
+  background: transparent;
+  color: var(--pop-ink);
+  font: 700 10px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 100ms ease-out, border-color 100ms ease-out, color 100ms ease-out;
+}
+
+.pop-sequence-step-button:hover:not(:disabled),
+.pop-sequence-step-button:focus-visible {
+  border-color: var(--issue-accent);
+  color: var(--issue-accent);
+  transform: translateY(-2px);
+}
+
+.pop-sequence-step-button:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+
+.pop-sequence-step-button:focus-visible {
+  outline: 2px solid var(--issue-accent);
+  outline-offset: 2px;
+}
+
+.pop-sequence-step-button:disabled {
+  opacity: 0.32;
+  cursor: default;
 }
 
 /* The process's real terminal branches, attached to the final
@@ -490,5 +553,17 @@
   .pop-sequence-stage-jp { display: none; }
   .pop-sequence-panel { padding: 20px 18px 16px; font-size: 16px; line-height: 1.6; }
   .pop-sequence-plate { margin: -20px -18px 20px; }
+  .pop-sequence-step-button { flex: 1; padding-inline: 8px; }
   .pop-sequence-signoff { padding-top: 32px; margin-top: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop-sequence-panel--active,
+  .pop-sequence-panel--active .pop-sequence-plate img,
+  .pop-sequence-stage--active .pop-sequence-stage-num {
+    animation: none;
+  }
+
+  .pop-sequence-stage,
+  .pop-sequence-step-button { transition: none; }
 }

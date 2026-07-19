@@ -47,6 +47,12 @@ export function SequenceFeature({ spread, issue }: SequenceFeatureProps) {
   const activeStage = spread.stages[activeIndex]
   const railFill = spread.stages.length > 1 ? activeIndex / (spread.stages.length - 1) : 1
 
+  const goToStage = (index: number) => {
+    if (index < 0 || index >= spread.stages.length) return
+    setActiveId(spread.stages[index].id)
+    tabRefs.current[index]?.focus()
+  }
+
   // Standard Tabs keyboard behaviour — arrow keys move both focus
   // and selection; Home/End jump to the ends. No forward-lock: a
   // reader reviewing a finished run may jump anywhere.
@@ -214,6 +220,27 @@ export function SequenceFeature({ spread, issue }: SequenceFeatureProps) {
                 {stage.artifact && (
                   <p className="pop-sequence-artifact">{stage.artifact}</p>
                 )}
+
+                <nav className="pop-sequence-step-nav" aria-label={`Navigate from ${stage.label}`}>
+                  <button
+                    type="button"
+                    className="pop-sequence-step-button"
+                    disabled={i === 0}
+                    onClick={() => goToStage(i - 1)}
+                  >
+                    <span aria-hidden="true">←</span>
+                    Previous stage
+                  </button>
+                  <button
+                    type="button"
+                    className="pop-sequence-step-button"
+                    disabled={i === spread.stages.length - 1}
+                    onClick={() => goToStage(i + 1)}
+                  >
+                    Next stage
+                    <span aria-hidden="true">→</span>
+                  </button>
+                </nav>
 
                 {/* The process's real terminal branches — attached
                     to the final stage, always in the DOM, not a

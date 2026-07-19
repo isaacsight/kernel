@@ -2539,3 +2539,21 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   tests; adherence 32 files / 0 raw hex; Playwright desktop 1440px and
   mobile 390px with all five tabs and plates loaded, no horizontal
   overflow, and zero console/page errors. Publishing was not performed.
+
+### ISSUE 425 motion pass
+
+- Added premium-paper stage choreography to the site issue: panel arrival
+  at 420ms, plate settling at 560ms, active registration-mark response,
+  hover/press feedback, and 44px previous/next controls that move focus to
+  the newly selected ARIA tab. Existing direct tab and arrow-key access
+  remain unchanged; there is no forward lock.
+- Added a fixed oxblood reading thread, scroll-linked plate breathing,
+  copy settling, closing-statement arrival, and responsive anchor feedback
+  to the artifact edition. All artifact movement is CSS-only and progressive
+  enhancement via scroll/view timelines.
+- Reduced-motion verification returned zero active ISSUE 425 animations;
+  standard motion returned the intended 420ms panel and 560ms plate
+  animations. Playwright confirmed Next selects and focuses MEASURE, mobile
+  stays at 390px with no overflow/errors, and the artifact progress thread
+  advances with scroll. Typecheck, production build, 585 tests, and the
+  0-raw-hex adherence scan remain green.

@@ -180,7 +180,7 @@ export const ISSUE_425: IssueRecord = {
   audit: {
     drafted: 'kernel.chat editorial · OpenAI Codex · 19 July 2026',
     verified: 'greenlight, routing, Palmier handoff, delivery master, refined-edit QC, and five new issue-only editorial plates',
-    adherence: 'second Sequence instance; established ARIA tabs reused; optional visual plate module adds no new interaction shape',
+    adherence: 'second Sequence instance; established ARIA tabs plus previous/next shortcuts; premium paper motion is CSS-only and collapses completely under reduced motion; optional visual plates add no new interaction shape',
     readCut: 'film frames and video embed refused; five original mixed-media plates commissioned exclusively for the issue',
     pressed: 'XII·26 · source record read 2026-07-19',
   },
