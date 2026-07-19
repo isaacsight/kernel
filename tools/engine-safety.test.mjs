@@ -79,3 +79,14 @@ describe('cleanParams arrays', () => {
     expect(cleanParams({ xs: Array(9).fill('a') }).xs).toBeUndefined()
   })
 })
+
+describe('catalogSeconds duration-string form', () => {
+  it('parses fal duration enums like "4s" and "8s"', () => {
+    expect(catalogSeconds({ params: { duration: '4s' } })).toBe(4)
+    expect(catalogSeconds({ params: { duration: '8s' } })).toBe(8)
+  })
+  it('still parses plain numbers and rejects garbage', () => {
+    expect(catalogSeconds({ params: { duration: 6 } })).toBe(6)
+    expect(catalogSeconds({ params: { duration: 'fast' } }, 5)).toBeNull()
+  })
+})

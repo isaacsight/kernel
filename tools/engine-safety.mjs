@@ -47,7 +47,11 @@ export function positiveSeconds(value, fallback = 5) {
 }
 
 export function catalogSeconds(body, fallback = 5) {
-  return positiveSeconds(body?.params?.duration ?? body?.durationSeconds, fallback)
+  let duration = body?.params?.duration ?? body?.durationSeconds
+  // Several catalog endpoints (Veo 3.1 among them) take duration as a
+  // string enum like "8s" — quote on its numeric value.
+  if (typeof duration === 'string' && /^\d+(?:\.\d+)?s$/.test(duration)) duration = duration.slice(0, -1)
+  return positiveSeconds(duration, fallback)
 }
 
 export function isAllowedOrigin(origin, extraOrigins = '') {
