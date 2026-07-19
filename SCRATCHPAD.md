@@ -2,6 +2,17 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-18 — Directing Room foundation
+
+- Saved the Creative Director + Director + VFX Supervisor + Editor architecture
+  in `docs/superpowers/specs/2026-07-18-palmier-directing-room.md`, including
+  memory levels, human gates, reversible VFX direction, and the build sequence.
+- Added `src/engine/directingRoom.ts`: a planning-only idea intake blueprint that
+  produces a human greenlight packet and deliberately creates no paid media node.
+- Added the **Directing room** Creative Studio template. It turns a raw idea into
+  a project constitution, treatment and shot plan, VFX breakdown, edit review,
+  disagreements, exceptions, and separate plan/spend decisions.
+
 ## Session 2026-07-18 — GALLEY video engine shipped — on branch `feat/galley-video-engine`
 
 Executed the 5-task plan (`docs/superpowers/plans/2026-07-17-galley-video-engine.md`)

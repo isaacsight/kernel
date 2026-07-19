@@ -1,5 +1,6 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { generateImage, ImageCreditError, ImageGenLimitError } from '../engine/imageGen'
+import { createDirectingRoomBlueprint } from '../engine/directingRoom'
 import { getProvider } from '../engine/providers/registry'
 import type { LLMOpts } from '../engine/providers/registry'
 import { OllamaProvider } from '../engine/providers/ollama'
@@ -233,11 +234,12 @@ const templates = [
   { name: 'Campaign system', detail: 'Brief → key visual → film', accent: '#d7ff64' },
   { name: 'Product variations', detail: 'Reference → 4 directions', accent: '#a88cff' },
   { name: 'Social launch kit', detail: 'Hero → 6 formats → copy', accent: '#ff8b6a' },
+  { name: 'Directing room', detail: 'Idea → constitution → greenlight', accent: '#8f72c9' },
 ]
 
 const modelsByKind: Record<NodeKind, string[]> = {
   prompt: ['Claude 4.5', 'GPT-5', 'Gemini 3 Pro'],
-  agent: ['Researcher Agent', 'Coder Agent', 'Writer Agent', 'Analyst Agent'],
+  agent: ['Creative Director', 'Director', 'VFX Supervisor', 'Editor', 'Researcher Agent', 'Coder Agent', 'Writer Agent', 'Analyst Agent'],
   model: ['Claude 4.5', 'GPT-5', 'Gemini 3 Pro', 'LocateAnything-3B (NVIDIA)', 'Eagle2-9B Multimodal (NVIDIA)'],
   image: ['GPT Image', 'Nano Banana Pro', 'Flux 2 Max', 'Seedream 4.5'],
   video: ['Veo 3.1 Fast', 'Kling (Pro)', 'Seedance (Lite)', 'Luma Ray'],
@@ -1205,6 +1207,12 @@ Rules:
       setNodes(starterNodes)
       setEdges(starterEdges)
       setView({ x: 120, y: 70, zoom: 0.84 })
+    } else if (index === 3) {
+      const room = createDirectingRoomBlueprint()
+      setNodes(room.nodes)
+      setEdges(room.edges)
+      setProjectName(room.projectName)
+      setView(room.view)
     } else {
       const baseY = 130 + index * 36
       const briefId = makeId('prompt')
