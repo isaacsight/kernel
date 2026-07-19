@@ -2327,23 +2327,28 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
 - **PICTURE:** 12 locked paper-noir keyframes; scenes 6, 9, 10, and 11
   received consistency/text retakes, scene 11 received one additional
   no-brand retake, and scene 12 received a no-human replacement request.
-- **MOTION:** 10 Seedance 2.0 clips completed and passed 1280×720 / 5.062s
-  midpoint QC. Scene 3 retry `019f78b4-0f69-79e1-ac7a-1b6e3ae6f207`
-  and replacement scene 12 keyframe
-  `019f78b8-d74e-7200-b9e2-32e8e0e964a8` remained remotely queued at
-  export time. Palmier uses graded, faded, 3% camera-move still fallbacks
-  for those two spans, so the delivered timeline is gapless.
+- **MOTION:** all 12 spans now use generated motion. Ten Seedance 2.0 clips
+  completed and passed 1280×720 / 5.062s midpoint QC. The two stalled
+  spans were finished through Kling 2.5 Turbo Pro: scene 3
+  `019f78d1-765d-7db1-8a33-779fa7023ce0` and scene 12
+  `019f78d3-fd91-77c3-9430-a8d945b1036d`. Scene 12 was rebuilt from a
+  no-human keyframe `019f78d0-606c-7401-a9e0-014d46c75598`; one earlier
+  Kling take was rejected at QC for turning the paper sleeper photoreal.
 - **EDIT:** George VO `d15186d9-86da-4495-87ae-749fb7bcb139.mp3` at
   frame 0; transcript-led 12-scene cut; ink `#1F1E1D` matte; paper-noir
   grade; embedded generated audio muted; hook, price, refusal, closer,
   and colophon typography added. All 12 scene spans are contiguous from
   frame 0 through 1732.
-- **ENGINE LEDGER (conservative booked):** keyframes and retakes $1.44;
-  initial 12-clip motion batch $40.92; two motion retries $6.82; v3 total
-  $49.18. Expected fal invoice is approximately $22.67 at 720p before
-  provider reconciliation of failed/queued jobs. Daily engine cap was
-  explicitly approved and raised from $60 to $65; total engine state at
-  the final image submission was $60.8079 including earlier same-day work.
+- **ENGINE LEDGER (conservative booked):** keyframes and retakes $1.52;
+  initial 12-clip motion batch $40.92; two Seedance motion retries $6.82;
+  four accepted Kling submissions $1.40; v3 total $50.66. Expected fal
+  invoice is approximately $24.15 before provider reconciliation of the
+  failed/stalled jobs. Daily engine cap was explicitly approved and raised
+  from $60 to $65; final engine state was $62.2879 including $11.6279 of
+  earlier same-day work. Provider submissions rejected immediately for
+  exhausted balance were refunded by the engine and are not in this total.
 - **QC:** ffprobe verified one AAC stereo stream and one H.264 1280×720
   stream at 30 fps; timeline gap scan returned none; five exported frames
-  checked at the hook, price, refusal, delegation, and closer beats.
+  checked at the hook, price, refusal, delegation, and closer beats. The
+  final exported MP4 was additionally sampled inside scenes 3 and 12 after
+  their motion replacements; both preserve the paper-craft register.
