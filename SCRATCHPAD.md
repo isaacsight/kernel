@@ -2338,7 +2338,13 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   frame 0; transcript-led 12-scene cut; ink `#1F1E1D` matte; paper-noir
   grade; embedded generated audio muted; hook, price, refusal, closer,
   and colophon typography added. All 12 scene spans are contiguous from
-  frame 0 through 1732.
+  frame 0 through 1732. Final polish replaced the repetitive fade on every
+  cut with decisive intra-act cuts and retained ink breaths only at the two
+  act boundaries; the price/refusal section was rebalanced from frames
+  727–1002 so the lever shot runs at 1.36x instead of 1.495x. `SAY NO.` now
+  uses word-pop treatment in an ink card, and the closer has a larger backed
+  colophon. The previous mastered cut is preserved as
+  `output/what-we-made-v3-before-polish.mp4`.
 - **ENGINE LEDGER (conservative booked):** keyframes and retakes $1.52;
   initial 12-clip motion batch $40.92; two Seedance motion retries $6.82;
   four accepted Kling submissions $1.40; v3 total $50.66. Expected fal
