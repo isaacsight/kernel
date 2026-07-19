@@ -225,6 +225,30 @@ export const SFX_PROVIDERS = {
   },
 }
 
+// Direct-API variants: consume the user's ElevenLabs subscription credits
+// (zero fal spend), mirroring the elevenlabs-v2 TTS pattern. The server
+// routes these around the fal queue to api.elevenlabs.io.
+SFX_PROVIDERS['elevenlabs-sfx-direct'] = {
+  direct: 'elevenlabs',
+  path: '/v1/sound-generation',
+  usdPerGeneration: 0,
+  maxDurationSeconds: 22,
+  buildInput: (text, seconds) => ({
+    text,
+    ...(seconds ? { duration_seconds: Math.min(Number(seconds), 22) } : {}),
+  }),
+}
+SFX_PROVIDERS['elevenlabs-music-direct'] = {
+  direct: 'elevenlabs',
+  path: '/v1/music',
+  usdPerGeneration: 0,
+  maxDurationSeconds: 300,
+  buildInput: (text, seconds) => ({
+    prompt: text,
+    ...(seconds ? { music_length_ms: Math.min(Number(seconds), 300) * 1000 } : {}),
+  }),
+}
+
 export function getSfxProvider(name) {
   return SFX_PROVIDERS[name ?? 'elevenlabs-sfx'] ?? null
 }

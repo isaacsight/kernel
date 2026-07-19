@@ -582,6 +582,37 @@ const server = createServer(async (req, res) => {
     const providerSpec = getSfxProvider(body.provider ?? 'elevenlabs-sfx')
     if (!providerSpec) return json(res, 400, { error: `unknown sfx provider: ${body.provider}` })
 
+    // Direct ElevenLabs runs on subscription credits (zero fal spend),
+    // mirroring the elevenlabs-v2 TTS branch above.
+    if (providerSpec.direct === 'elevenlabs') {
+      const elevenKey = process.env.ELEVENLABS_API_KEY || ''
+      if (!elevenKey) return json(res, 402, { error: 'ELEVENLABS_API_KEY not set in the server environment' })
+      try {
+        const resp = await fetch(`https://api.elevenlabs.io${providerSpec.path}`, {
+          method: 'POST',
+          headers: { 'xi-api-key': elevenKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify(providerSpec.buildInput(text, body.durationSeconds)),
+        })
+        if (!resp.ok) {
+          const detail = await resp.text().catch(() => '')
+          throw new Error(`ElevenLabs error ${resp.status}: ${detail.slice(0, 200)}`)
+        }
+        const jobId = crypto.randomUUID()
+        await mkdir(AUDIO_DIR, { recursive: true })
+        await writeFile(join(AUDIO_DIR, `${jobId}.mp3`), Buffer.from(await resp.arrayBuffer()))
+        jobs.set(jobId, {
+          kind: 'audio', status: 'done', videoUrl: null, imageUrl: null,
+          audioUrl: `http://localhost:${PORT}/audio/${jobId}.mp3`,
+          sourceUrl: null, error: null, statusUrl: null, responseUrl: null,
+        })
+        await persistJobsLocked().catch(() => {})
+        console.log(`[video-server] elevenlabs direct sfx ${jobId}: ${text.slice(0, 60)}`)
+        return json(res, 200, { jobId })
+      } catch (err) {
+        return json(res, 502, { error: err.message })
+      }
+    }
+
     try {
       const spendInfo = await checkAndUpdateSpendLocked(cost)
       try {

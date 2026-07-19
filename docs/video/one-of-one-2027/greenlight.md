@@ -97,9 +97,14 @@ signage, no logos, cinematic realism, 35mm look.
 | Shot 8 hero (8s x 3 takes, audio off, 1080p) | veo3.1/image-to-video | $4.80 | |
 | Shot 8 repair (0–2 edits) | gemini-omni-flash/edit | $0–4 | |
 | Connective 7 shots (~44s incl. retakes, audio off) | veo3.1/fast/(image|reference)-to-video | $4.40 | |
-| SFX x6 + retakes | elevenlabs/sound-effects/v2 | ~$1.00 | |
-| Pulse score (1–2 takes) | elevenlabs/music | $1.60 | |
-| **Total** | | **~$19–23** | |
+| SFX x6 + retakes | ElevenLabs direct API (subscription credits) | $0 fal | |
+| Pulse score (1–2 takes) | ElevenLabs direct API (subscription credits) | $0 fal | |
+| **Total (fal dollars)** | | **~$16–20** | |
+
+Audio routes direct to api.elevenlabs.io via the engine
+(`elevenlabs-sfx-direct` / `elevenlabs-music-direct` providers) — it
+consumes existing ElevenLabs subscription credits, zero fal spend. The
+fal-hosted endpoints remain as fallback if subscription quota runs out.
 
 Cap: $50 (this ledger). Engine backstop: $65/day limit, $0 spent today.
 Every generation goes estimate → signed quote → generate; the quote is

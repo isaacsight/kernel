@@ -191,3 +191,16 @@ describe('sfx and music providers', () => {
     expect(p.buildInput('rain on glass', 99).duration_seconds).toBe(22)
   })
 })
+
+describe('direct elevenlabs sfx/music providers', () => {
+  it('resolves direct sfx provider with zero fal cost', () => {
+    const p = getSfxProvider('elevenlabs-sfx-direct')
+    expect(p.direct).toBe('elevenlabs')
+    expect(estimateSfxUsd(10, 'elevenlabs-sfx-direct')).toBe(0)
+  })
+  it('resolves direct music provider with zero fal cost', () => {
+    const p = getSfxProvider('elevenlabs-music-direct')
+    expect(p.direct).toBe('elevenlabs')
+    expect(estimateSfxUsd(61, 'elevenlabs-music-direct')).toBe(0)
+  })
+})
