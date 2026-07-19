@@ -46,6 +46,19 @@
   retain longer six/eight-frame fades. `cut-sheet.mjs` and the
   `video:palmier:cuts` script now automate this review for future Palmier edits.
   Backup before this pass: `output/what-we-made-v3-before-flow-pass.mp4`.
+- Full playback + sound redesign after the patchwork ambience still felt wrong:
+  exported the native ambience as its own stem and confirmed it was nine
+  unrelated spectral blocks with three silent holes. Across the 11 cuts its
+  250ms pre/post level changed by 4.5-56.0 dB. Muted the reversible native A2/A3
+  tracks and added a single continuous A4 nocturnal-workshop bed at -42 LUFS;
+  every cut now changes only 0.0-0.5 dB in the bed. The bed is deterministic,
+  local, free, and reproducible via `build-room-bed.mjs` /
+  `video:palmier:bed`. No BGM or decorative SFX were added. During the literal
+  QuickTime playback of the all-cuts reel, the two mid-film chapter dips were
+  the remaining drag; shortened each from 8+8 to 5+5 frames while preserving
+  the slower 8+8 finale. Final master remains 1,732 frames and measures -16.08
+  LUFS / -1.47 dBTP. Pre-redesign backup:
+  `output/what-we-made-v3-before-cohesive-sound.mp4`.
 
 ## Session 2026-07-18 — GALLEY video engine shipped — on branch `feat/galley-video-engine`
 
