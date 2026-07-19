@@ -2351,4 +2351,9 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   stream at 30 fps; timeline gap scan returned none; five exported frames
   checked at the hook, price, refusal, delegation, and closer beats. The
   final exported MP4 was additionally sampled inside scenes 3 and 12 after
-  their motion replacements; both preserve the paper-craft register.
+  their motion replacements; both preserve the paper-craft register. Final
+  mastering stream-copied the H.264 picture unchanged and normalized the
+  narration from -21.39 LUFS to -16.08 LUFS / -1.49 dBTP at 44.1 kHz. The
+  1732-frame video stream remains 57.733s; the AAC container carries 67ms of
+  encoder padding. The pre-master export is preserved as
+  `output/what-we-made-v3-pre-loudness.mp4`.
