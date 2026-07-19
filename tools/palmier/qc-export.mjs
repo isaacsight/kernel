@@ -3,6 +3,14 @@ import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 
 const input = resolve(process.argv[2] ?? "output/what-we-made-v3.mp4");
+const profileName = process.argv[3] ?? "web";
+const profiles = {
+  web: { resolutions: ["1280x720", "1920x1080", "2560x1440", "3840x2160"], fps: ["24/1", "25/1", "30/1", "30000/1001", "60/1", "60000/1001"], targetI: -16, tolerance: 1, maxTruePeak: -1 },
+  social: { resolutions: ["1080x1080", "1080x1920"], fps: ["30/1", "30000/1001", "60/1", "60000/1001"], targetI: -14, tolerance: 1, maxTruePeak: -1 },
+  broadcast: { resolutions: ["1920x1080", "3840x2160"], fps: ["24/1", "25/1", "30/1", "30000/1001", "50/1", "60/1", "60000/1001"], targetI: -23, tolerance: 0.5, maxTruePeak: -1 },
+};
+const profile = profiles[profileName];
+if (!profile) throw new Error(`Unknown QC profile "${profileName}". Use: ${Object.keys(profiles).join(", ")}`);
 
 function run(command, args) {
   const result = spawnSync(command, args, { encoding: "utf8" });
@@ -22,7 +30,7 @@ const probe = JSON.parse(run("ffprobe", [
 
 const loudnessOutput = spawnSync("ffmpeg", [
   "-hide_banner", "-nostats", "-i", input,
-  "-af", "loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json",
+  "-af", `loudnorm=I=${profile.targetI}:TP=${profile.maxTruePeak}:LRA=11:print_format=json`,
   "-f", "null", "-",
 ], { encoding: "utf8" });
 if (loudnessOutput.status !== 0) throw new Error(loudnessOutput.stderr);
@@ -33,6 +41,7 @@ const video = probe.streams.find((stream) => stream.codec_type === "video");
 const audio = probe.streams.find((stream) => stream.codec_type === "audio");
 const report = {
   input,
+  profile: profileName,
   video,
   audio,
   format: probe.format,
@@ -40,11 +49,11 @@ const report = {
   checks: {
     hasVideo: Boolean(video),
     hasAudio: Boolean(audio),
-    is720p: video?.width === 1280 && video?.height === 720,
-    is30fps: video?.r_frame_rate === "30/1",
-    is1732Frames: video?.nb_frames === "1732",
-    loudnessNearTarget: loudness ? Math.abs(Number(loudness.input_i) + 16) <= 0.5 : false,
-    truePeakSafe: loudness ? Number(loudness.input_tp) <= -1 : false,
+    approvedDimensions: profile.resolutions.includes(`${video?.width}x${video?.height}`),
+    approvedFrameRate: profile.fps.includes(video?.r_frame_rate),
+    durationReadable: Number(probe.format.duration) > 0,
+    loudnessNearTarget: loudness ? Math.abs(Number(loudness.input_i) - profile.targetI) <= profile.tolerance : false,
+    truePeakSafe: loudness ? Number(loudness.input_tp) <= profile.maxTruePeak : false,
   },
 };
 

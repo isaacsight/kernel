@@ -1,0 +1,38 @@
+export const PALMIER_TOOLS = Object.freeze({
+  director: { title: "Director", promise: "Brief to structured, versioned timeline", category: "create" },
+  campaign: { title: "Campaign Studio", promise: "Product input to multi-format campaign plan", category: "create" },
+  shots: { title: "Shot Lab", promise: "Timeline-aligned coverage and shot variations", category: "create" },
+  continuity: { title: "Continuity Engine", promise: "Detect and prevent visual drift across shots", category: "review" },
+  productTruth: { title: "Product Truth", promise: "Protect product facts, UI, packaging, and claims", category: "review" },
+  recast: { title: "Recast Studio", promise: "Consent-aware, sequence-level subject replacement", category: "create" },
+  style: { title: "Style Director", promise: "Apply and audit one visual constitution", category: "finish" },
+  transitions: { title: "Transition Designer", promise: "Purposeful transitions between selected shots", category: "edit" },
+  performance: { title: "Performance Editor", promise: "Transcript-first talking-head and UGC editing", category: "edit" },
+  shorts: { title: "Shorts Factory", promise: "Approved master to platform-native derivatives", category: "repurpose" },
+  critic: { title: "Edit Critic", promise: "Evidence-based editorial review without mutation", category: "review" },
+  deliver: { title: "Finish and Deliver", promise: "Audio, captions, QC, and export matrix", category: "finish" },
+  mediaPipeline: { title: "Media Pipeline", promise: "Proxy, relink, consolidate, and cache professional media", category: "foundation" },
+  compositor: { title: "Compositor", promise: "Masks, tracking, keying, cleanup, and procedural graphics", category: "foundation" },
+  colorPipeline: { title: "Color Pipeline", promise: "Managed color, scopes, matching, HDR, and delivery transforms", category: "foundation" },
+  audioPost: { title: "Audio Post", promise: "Dialogue, buses, mixing, stems, and loudness delivery", category: "foundation" },
+  collaboration: { title: "Multiplayer Timeline", promise: "Human and agent collaboration with review and permissions", category: "collaborate" },
+  generativeExtend: { title: "Generative Extend", promise: "Create editable head, tail, ambience, and transition handles", category: "generate" },
+  intelligence: { title: "Media Intelligence", promise: "Search, classify, rank, and assemble footage by meaning", category: "understand" },
+  localization: { title: "Localization Studio", promise: "Captions, dubbing, timing, and regional delivery", category: "repurpose" },
+  avatar: { title: "Avatar Studio", promise: "Consent-bound synthetic presenters and performances", category: "generate" },
+  motionGraphics: { title: "Motion Graphics", promise: "Reusable procedural typography and brand animation", category: "create" },
+  productionMemory: { title: "Production Memory", promise: "Durable project facts, rules, references, and decisions", category: "agentic" },
+  coverage: { title: "Coverage Agent", promise: "Find story gaps before searching, generating, or reshooting", category: "agentic" },
+  assembly: { title: "Autonomous Assembly Room", promise: "Specialist agents propose one reviewable production plan", category: "agentic" },
+  compiler: { title: "Generative Timeline Compiler", promise: "Compile intent into editable clips, tracks, prompts, and alternates", category: "agentic" },
+  optimizer: { title: "Outcome Optimizer", promise: "Connect creative decisions to retention and conversion evidence", category: "intelligence" },
+  provenance: { title: "Rights and Provenance Graph", promise: "Trace licenses, consent, models, prompts, and exports", category: "governance" },
+  router: { title: "Model Router", promise: "Choose models by capability, quality, cost, latency, and rights", category: "agentic" },
+  living: { title: "Living Deliverables", promise: "Regenerate governed regional and audience variants", category: "repurpose" },
+  spatial: { title: "Spatial Studio", promise: "Depth-aware, immersive, VR, and spatial-audio production", category: "future" },
+  recovery: { title: "Recovery and Interchange", promise: "Autosave, repair, relink, package, and professional handoff", category: "foundation" },
+});
+
+export function listSuiteTools() {
+  return Object.entries(PALMIER_TOOLS).map(([id, value]) => ({ id, ...value }));
+}
