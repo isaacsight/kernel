@@ -59,6 +59,12 @@
   the slower 8+8 finale. Final master remains 1,732 frames and measures -16.08
   LUFS / -1.47 dBTP. Pre-redesign backup:
   `output/what-we-made-v3-before-cohesive-sound.mp4`.
+- Final transition decision: all scene opacity fades were removed after Isaac
+  called them tacky. The film now uses hard cuts at all 11 boundaries, including
+  the opening and final reveal; the continuous A4 room bed supplies auditory
+  continuity. No black/dim transition frames remain. The all-cuts review reel
+  was regenerated from this master. Backup of the last fade version:
+  `output/what-we-made-v3-before-hard-cuts.mp4`.
 
 ## Session 2026-07-18 — GALLEY video engine shipped — on branch `feat/galley-video-engine`
 
