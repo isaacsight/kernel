@@ -32,7 +32,10 @@
     "splash": "npx tsx tools/generate-splash.ts",
     "image-server": "node --env-file=.env tools/local-image-server.mjs",
     "video-server": "node --env-file=.env tools/local-video-server.mjs",
-    "engine": "node --env-file=.env tools/engine.mjs"
+    "engine": "node --env-file=.env tools/engine.mjs",
+    "video:palmier:audit": "node tools/palmier/audit-project.mjs",
+    "video:palmier:qc": "node tools/palmier/qc-export.mjs",
+    "video:palmier:master": "node tools/palmier/master-export.mjs"
   },
   "homepage": "https://kernel.chat",
   "dependencies": {

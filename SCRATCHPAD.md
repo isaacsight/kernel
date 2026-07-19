@@ -13,6 +13,30 @@
   a project constitution, treatment and shot plan, VFX breakdown, edit review,
   disagreements, exceptions, and separate plan/spend decisions.
 
+## Session 2026-07-18 — `what-we-made-v3` editorial polish
+
+- Final Palmier project: `~/Documents/Palmier Pro/what-we-made-v3.palmier`.
+  Delivery: `output/what-we-made-v3.mp4` — 57.733s / 1,732 frames / 1280x720 /
+  30fps H.264 + AAC. The 12-shot timeline is contiguous with no overlaps or
+  gaps; scene 7's remaining speed outlier was reduced from 1.360x to 1.302x by
+  giving it five frames from scene 6 (scene 6 is now 0.950x).
+- Restored nine speech-free native production-ambience beds beneath the VO.
+  Each is source-level compensated to roughly -40 dB mean and gets a six-frame
+  fade at both ends. Scene 4 stays silent because its legacy linked-audio edit is
+  intentionally offset; scenes 3 and 12 have no source audio. The result keeps
+  the act-break silences while making the generated sets feel physical.
+- Re-exported from Palmier, then two-pass loudness mastered from the measured
+  mix to a -16 LUFS / -1.5 dBTP target. Final QC measured -16.08 LUFS and
+  -1.30 dBTP; video remains exactly 1,732 frames. The pre-pass delivery is saved
+  as `output/what-we-made-v3-before-ambience.mp4`, and Palmier's unmastered mix
+  as `output/what-we-made-v3-raw-ambience.mp4`.
+- Added reusable Palmier command-line tooling under `tools/palmier/`:
+  `audit-project.mjs` (timeline structure, pacing, linked audio, text),
+  `qc-export.mjs` (ffprobe + loudnorm delivery checks), `master-export.mjs`
+  (measured two-pass mastering with video stream copy), and `mcp-client.mjs`.
+  Package scripts: `video:palmier:audit`, `video:palmier:qc`, and
+  `video:palmier:master`.
+
 ## Session 2026-07-18 — GALLEY video engine shipped — on branch `feat/galley-video-engine`
 
 Executed the 5-task plan (`docs/superpowers/plans/2026-07-17-galley-video-engine.md`)
