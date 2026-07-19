@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, parsePricingText, parsePerImageUsd, mapCatalogItem, estimateSpeechUsd, extractAudioUrl, TTS_ENDPOINT } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, parsePricingText, parsePerImageUsd, mapCatalogItem, estimateSpeechUsd, extractAudioUrl, TTS_ENDPOINT, getSfxProvider, estimateSfxUsd } from './video-models.mjs'
 
 describe('video model registry', () => {
   it('every model has the required fields', () => {
@@ -158,5 +158,36 @@ describe('speech (ElevenLabs via fal)', () => {
     expect(extractAudioUrl({ audio: { url: 'https://x/a.mp3' } })).toBe('https://x/a.mp3')
     expect(extractAudioUrl({ data: { audio: { url: 'https://y/a.mp3' } } })).toBe('https://y/a.mp3')
     expect(extractAudioUrl({})).toBeNull()
+  })
+})
+
+describe('sfx and music providers', () => {
+  it('resolves the elevenlabs sound-effects v2 provider', () => {
+    const p = getSfxProvider('elevenlabs-sfx')
+    expect(p.endpoint).toBe('fal-ai/elevenlabs/sound-effects/v2')
+  })
+  it('resolves the elevenlabs music provider', () => {
+    const p = getSfxProvider('elevenlabs-music')
+    expect(p.endpoint).toBe('fal-ai/elevenlabs/music')
+  })
+  it('returns null for unknown providers', () => {
+    expect(getSfxProvider('nope')).toBeNull()
+  })
+  it('prices sfx per generation regardless of duration', () => {
+    expect(estimateSfxUsd(5)).toBe(estimateSfxUsd(20))
+    expect(estimateSfxUsd(5)).toBeGreaterThan(0)
+  })
+  it('prices music per started minute (rounds up)', () => {
+    expect(estimateSfxUsd(61, 'elevenlabs-music')).toBeCloseTo(1.6, 2)
+    expect(estimateSfxUsd(45, 'elevenlabs-music')).toBeCloseTo(0.8, 2)
+  })
+  it('never fabricates a price for bad input', () => {
+    expect(estimateSfxUsd(0, 'elevenlabs-music')).toBeNull()
+    expect(estimateSfxUsd(5, 'nope')).toBeNull()
+  })
+  it('builds sfx input with text and clamped duration', () => {
+    const p = getSfxProvider('elevenlabs-sfx')
+    expect(p.buildInput('rain on glass', 8)).toEqual({ text: 'rain on glass', duration_seconds: 8 })
+    expect(p.buildInput('rain on glass', 99).duration_seconds).toBe(22)
   })
 })

@@ -162,6 +162,15 @@ export const TTS_PROVIDERS = {
       }
     },
   },
+  // ElevenLabs premium tier, called directly (not via fal). Costs no fal
+  // dollars — it consumes the user's ElevenLabs subscription credits —
+  // so usdPer1kChars is 0 and the server routes it around the fal queue.
+  'elevenlabs-v2': {
+    direct: 'elevenlabs',
+    modelId: 'eleven_multilingual_v2',
+    usdPer1kChars: 0,
+    buildInput: (text, voice) => ({ text, voice }),
+  },
   'gemini-tts': {
     endpoint: 'fal-ai/gemini-3.1-flash-tts',
     usdPer1kChars: 0.15,
@@ -190,6 +199,45 @@ export function estimateSpeechUsd(text, provider = DEFAULT_TTS_PROVIDER) {
   const spec = getTtsProvider(provider)
   if (!spec) return null
   return Math.round((text.length / 1000) * spec.usdPer1kChars * 10000) / 10000
+}
+
+// Sound-design providers served through fal. SFX bills per generation;
+// music bills per started output minute (fal rounds up) — the estimate
+// mirrors that so quotes never undershoot the invoice.
+export const SFX_PROVIDERS = {
+  'elevenlabs-sfx': {
+    endpoint: 'fal-ai/elevenlabs/sound-effects/v2',
+    usdPerGeneration: 0.1,
+    maxDurationSeconds: 22,
+    buildInput: (text, seconds) => ({
+      text,
+      ...(seconds ? { duration_seconds: Math.min(Number(seconds), 22) } : {}),
+    }),
+  },
+  'elevenlabs-music': {
+    endpoint: 'fal-ai/elevenlabs/music',
+    usdPerMinute: 0.8,
+    maxDurationSeconds: 300,
+    buildInput: (text, seconds) => ({
+      prompt: text,
+      ...(seconds ? { music_length_ms: Math.min(Number(seconds), 300) * 1000 } : {}),
+    }),
+  },
+}
+
+export function getSfxProvider(name) {
+  return SFX_PROVIDERS[name ?? 'elevenlabs-sfx'] ?? null
+}
+
+export function estimateSfxUsd(seconds, provider = 'elevenlabs-sfx') {
+  const spec = SFX_PROVIDERS[provider] ?? null
+  if (!spec) return null
+  if (spec.usdPerMinute != null) {
+    const s = Number(seconds)
+    if (!Number.isFinite(s) || s <= 0) return null
+    return Math.round(Math.ceil(s / 60) * spec.usdPerMinute * 100) / 100
+  }
+  return spec.usdPerGeneration
 }
 
 export function extractAudioUrl(payload) {

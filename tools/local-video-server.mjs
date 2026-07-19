@@ -8,12 +8,12 @@
 
 import { createServer } from 'node:http'
 import { createWriteStream } from 'node:fs'
-import { mkdir, readFile, rename, rm } from 'node:fs/promises'
+import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { Readable, Transform } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
-import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, mapCatalogItem, getTtsProvider, DEFAULT_TTS_PROVIDER, estimateSpeechUsd, extractAudioUrl } from './video-models.mjs'
+import { MODELS, getModel, estimateUsd, effectiveSeconds, buildInput, pickEndpoint, extractVideoUrl, extractImageUrl, mapCatalogItem, getTtsProvider, DEFAULT_TTS_PROVIDER, estimateSpeechUsd, extractAudioUrl, getSfxProvider, estimateSfxUsd } from './video-models.mjs'
 import { catalogSeconds, cleanParams, isAllowedArtifactUrl, isAllowedOrigin, isFalQueueUrl, positiveSeconds } from './engine-safety.mjs'
 import { createQuote, isAuthorized, loadOrCreateEngineToken, verifyQuote } from './engine-auth.mjs'
 import { loadJobs, saveJobs } from './job-store.mjs'
@@ -497,14 +497,97 @@ const server = createServer(async (req, res) => {
     let cost
     try { cost = quotedCost('/v1/audio/speech', body) } catch (error) { return json(res, 409, { error: error.message }) }
 
+    const providerSpec = getTtsProvider(body.provider)
+    if (!providerSpec) return json(res, 400, { error: `unknown tts provider: ${body.provider}` })
+
+    // ElevenLabs premium runs direct (subscription credits, zero fal spend).
+    if (providerSpec.direct === 'elevenlabs') {
+      const elevenKey = process.env.ELEVENLABS_API_KEY || ''
+      if (!elevenKey) return json(res, 402, { error: 'ELEVENLABS_API_KEY not set in the server environment' })
+      const voiceId = typeof body.voice === 'string' && /^[A-Za-z0-9]{10,40}$/.test(body.voice) ? body.voice : null
+      if (!voiceId) return json(res, 400, { error: 'voice must be an ElevenLabs voice id' })
+      try {
+        const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`, {
+          method: 'POST',
+          headers: { 'xi-api-key': elevenKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text,
+            model_id: providerSpec.modelId,
+            voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.35 },
+          }),
+        })
+        if (!resp.ok) {
+          const detail = await resp.text().catch(() => '')
+          throw new Error(`ElevenLabs error ${resp.status}: ${detail.slice(0, 200)}`)
+        }
+        const jobId = crypto.randomUUID()
+        await mkdir(AUDIO_DIR, { recursive: true })
+        await writeFile(join(AUDIO_DIR, `${jobId}.mp3`), Buffer.from(await resp.arrayBuffer()))
+        jobs.set(jobId, {
+          kind: 'audio', status: 'done', videoUrl: null, imageUrl: null,
+          audioUrl: `http://localhost:${PORT}/audio/${jobId}.mp3`,
+          sourceUrl: null, error: null, statusUrl: null, responseUrl: null,
+        })
+        await persistJobsLocked().catch(() => {})
+        console.log(`[video-server] elevenlabs direct speech ${jobId}: ${text.slice(0, 60)}`)
+        return json(res, 200, { jobId })
+      } catch (err) {
+        return json(res, 502, { error: err.message })
+      }
+    }
+
     try {
       const spendInfo = await checkAndUpdateSpendLocked(cost)
       try {
-        const provider = getTtsProvider(body.provider)
-        if (!provider) throw new Error(`unknown tts provider: ${body.provider}`)
+        const provider = providerSpec
         const input = provider.buildInput(text, typeof body.voice === 'string' && body.voice ? body.voice : undefined)
         const jobId = await queueJob('audio', provider.endpoint, input)
         console.log(`[video-server] submitted speech job ${jobId}: ${text.slice(0, 60)}`)
+        console.log(`[video-server] Spend cap check: debited $${cost.toFixed(4)}. Daily total: $${spendInfo.newSpent.toFixed(4)} / $${spendInfo.limit === Infinity ? 'Unlimited' : spendInfo.limit.toFixed(2)}`)
+        return json(res, 200, { jobId })
+      } catch (submitErr) {
+        await checkAndUpdateSpendLocked(-cost, { allowRefund: true })
+        throw submitErr
+      }
+    } catch (err) {
+      const status = err.message.includes('limit exceeded') ? 402 : 502
+      return json(res, status, { error: err.message })
+    }
+  }
+
+  if (req.method === 'POST' && url.pathname === '/v1/audio/sfx/estimate') {
+    const body = await readBody(req, res)
+    if (!body) return
+    const text = typeof body?.text === 'string' ? body.text : ''
+    if (text.length > MAX_SPEECH_CHARS) return json(res, 413, { error: `text exceeds ${MAX_SPEECH_CHARS} characters` })
+    const provider = body?.provider ?? 'elevenlabs-sfx'
+    if (!getSfxProvider(provider)) return json(res, 400, { error: `unknown sfx provider: ${provider}` })
+    const usd = estimateSfxUsd(body?.durationSeconds, provider)
+    if (usd == null) return json(res, 400, { error: 'durationSeconds must be a positive number' })
+    return json(res, 200, { usd, provider, quoteToken: text.trim() ? quoteFor('/v1/audio/sfx', body, usd) : null })
+  }
+
+  if (req.method === 'POST' && url.pathname === '/v1/audio/sfx') {
+    if (!requirePaidAuthorization(req, res)) return
+    if (!FAL_KEY) return json(res, 402, { error: 'FAL_KEY not set — add it to .env and restart: npm run video-server' })
+    const body = await readBody(req, res)
+    if (!body) return
+    const text = typeof body?.text === 'string' ? body.text.trim() : ''
+    if (!text) return json(res, 400, { error: 'text is required' })
+    if (text.length > MAX_SPEECH_CHARS) return json(res, 413, { error: `text exceeds ${MAX_SPEECH_CHARS} characters` })
+
+    let cost
+    try { cost = quotedCost('/v1/audio/sfx', body) } catch (error) { return json(res, 409, { error: error.message }) }
+
+    const providerSpec = getSfxProvider(body.provider ?? 'elevenlabs-sfx')
+    if (!providerSpec) return json(res, 400, { error: `unknown sfx provider: ${body.provider}` })
+
+    try {
+      const spendInfo = await checkAndUpdateSpendLocked(cost)
+      try {
+        const input = providerSpec.buildInput(text, body.durationSeconds)
+        const jobId = await queueJob('audio', providerSpec.endpoint, input)
+        console.log(`[video-server] submitted sfx job ${jobId}: ${text.slice(0, 60)}`)
         console.log(`[video-server] Spend cap check: debited $${cost.toFixed(4)}. Daily total: $${spendInfo.newSpent.toFixed(4)} / $${spendInfo.limit === Infinity ? 'Unlimited' : spendInfo.limit.toFixed(2)}`)
         return json(res, 200, { jobId })
       } catch (submitErr) {
