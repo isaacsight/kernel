@@ -148,6 +148,32 @@ export const TTS_PROVIDERS = {
     usdPer1kChars: 0.1,
     buildInput: (text, voice) => ({ prompt: text, ...(voice ? { voice_setting: { voice_id: voice } } : {}) }),
   },
+  // Directable: voice preset + natural-language delivery instruction,
+  // passed as "voice|instruction" in the caller-facing voice field.
+  'seed-speech': {
+    endpoint: 'fal-ai/bytedance/seed-speech/tts/v2',
+    usdPer1kChars: 0.03,
+    buildInput: (text, voice) => {
+      const [preset, ...direction] = (voice ?? '').split('|')
+      return {
+        text,
+        ...(preset ? { voice: preset } : {}),
+        ...(direction.length ? { voice_instruction: direction.join('|') } : {}),
+      }
+    },
+  },
+  'gemini-tts': {
+    endpoint: 'fal-ai/gemini-3.1-flash-tts',
+    usdPer1kChars: 0.15,
+    buildInput: (text, voice) => {
+      const [preset, ...direction] = (voice ?? '').split('|')
+      return {
+        prompt: text,
+        ...(preset ? { voice: preset } : {}),
+        ...(direction.length ? { style_instructions: direction.join('|') } : {}),
+      }
+    },
+  },
 }
 export const DEFAULT_TTS_PROVIDER = 'elevenlabs-turbo'
 
