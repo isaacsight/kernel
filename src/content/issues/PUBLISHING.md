@@ -475,13 +475,11 @@ branch — only main publishes.
 
 ---
 
-_Last updated: ISSUE 424 · NOV 2026 (THE STUDIO THAT STAYS HOME —
-the third `plate` instance. The artifact carries a production decision
-down a named BRIEF → MODEL → ESTIMATE → DECISION → RECEIPT axis, with
-approval and refusal given equal standing and actual spend fixed at
-zero. The site reuses 419's frame, blocks, wires, seed contract,
-disclosure, and session ledger, adding only a deterministic studio
-contact-sheet proof grammar. Palmier VFX is labeled proposed, not
-shipped. No new interaction shape was added. Prior: 423 THE SIXTEEN
-THAT SPEAK (`plate`, routing grammar) and 422 THE POVERTY OF ATTENTION
-(`audit`, first merger issue).)_
+_Last updated: ISSUE 425 · DEC 2026 (ONE OF ONE — the second
+`sequence` instance. Five stations carry the fashion short’s real order
+from call through street, with verified production receipts and five
+new issue-only mixed-media plates. The site extends Sequence with an
+optional visual plate but adds no new interaction shape. The artifact
+edition is image-led and full-height; no film frame or video embed is
+reused. Prior: 424 THE STUDIO THAT STAYS HOME (`plate`, studio grammar)
+and 423 THE SIXTEEN THAT SPEAK (`plate`, routing grammar).)_

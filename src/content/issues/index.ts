@@ -77,6 +77,7 @@ import { ISSUE_421 } from './421'
 import { ISSUE_422 } from './422'
 import { ISSUE_423 } from './423'
 import { ISSUE_424 } from './424'
+import { ISSUE_425 } from './425'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
@@ -702,6 +703,11 @@ export interface SequenceStage {
    *  symmetry (interaction-language.md rule 6, applied to prose
    *  rather than a meter). */
   artifact?: string
+  /** Optional original editorial plate carried by this stage. The
+   *  image is evidence or interpretation, never a hidden control. */
+  image?: string
+  imageAlt?: string
+  imageCaption?: string
 }
 
 /** One of the process's real, mutually exclusive terminal outcomes —
@@ -1612,6 +1618,7 @@ export const ALL_ISSUES: IssueRecord[] = [
   ISSUE_422,
   ISSUE_423,
   ISSUE_424,
+  ISSUE_425,
 ]
 
 /** The latest published issue — drives the landing cover. */

@@ -323,6 +323,30 @@
   font-weight: 700;
 }
 
+.pop-sequence-plate {
+  margin: -28px -32px 24px;
+  border-bottom: 1px solid var(--pop-hairline);
+  background: var(--pop-ivory);
+}
+
+.pop-sequence-plate img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.88) contrast(1.02);
+}
+
+.pop-sequence-plate-caption {
+  margin: 0;
+  padding: 10px 14px;
+  border-top: 1px solid var(--pop-hairline-soft);
+  color: var(--pop-coffee);
+  letter-spacing: 0.1em;
+  line-height: 1.45;
+}
+
 .pop-sequence-artifact {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -465,5 +489,6 @@
   .pop-sequence-stage-label { font-size: 8px; letter-spacing: 0.04em; }
   .pop-sequence-stage-jp { display: none; }
   .pop-sequence-panel { padding: 20px 18px 16px; font-size: 16px; line-height: 1.6; }
+  .pop-sequence-plate { margin: -20px -18px 20px; }
   .pop-sequence-signoff { padding-top: 32px; margin-top: 32px; }
 }

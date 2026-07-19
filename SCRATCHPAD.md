@@ -2510,3 +2510,32 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   sheet and frame-pair checks at the major boundaries passed visually.
   Loudness measured approximately -16.01 LUFS integrated and -1.43 dBTP.
   Publishing remains a manual human step.
+
+## Session 2026-07-19 — ISSUE 425 · ONE OF ONE
+
+- **ISSUE BUILT:** `src/content/issues/425.ts` — ONE OF ONE / 一点もの,
+  the second `sequence` issue. Five reader-controlled stations carry the
+  short's argument through CALL → MEASURE → MAKE → FIT → STREET, with
+  verified frame/audio receipts from the completed production record.
+- **ORIGINAL ART ONLY:** five new portrait mixed-media editorial plates
+  were generated expressly for ISSUE 425. The paper/graphite/thread suite
+  uses ivory, soot, sage, and one oxblood register. No frame, character,
+  or composition from the finished film appears in the issue. Rejected
+  temporary film-frame extracts were moved out of `public/` into the
+  ignored `tmp/issue-425-rejected-film-stills/` folder.
+- **IMMERSIVE EDITION:** `artifacts/425-one-of-one.html` is the full-height
+  artifact edition: five alternating paper stations, native anchor
+  navigation, strict CSP, no script, reduced-motion-safe scrolling, and a
+  black closing page. The site spread is its lawful reduction inside the
+  established Sequence ARIA tab pattern.
+- **SYSTEM EXTENSION:** `SequenceStage` now accepts optional `image`,
+  `imageAlt`, and `imageCaption` fields. `SequenceFeature` renders the
+  plate only when supplied, so ISSUE 408 remains unchanged. This is a
+  visual module on an established apparatus, not a new interaction shape.
+- **IDENTITY:** kraft stock · asymmetric-left cover · oxblood accent ·
+  CUT No.1 / HUMAN FINISH seal · THE EDIT ROOM postmark. ISSUE 425 is the
+  new `LATEST_ISSUE`; design-language and publishing ledgers were updated.
+- **VERIFIED:** `npx tsc --noEmit`; production build; Vitest 43 files / 585
+  tests; adherence 32 files / 0 raw hex; Playwright desktop 1440px and
+  mobile 390px with all five tabs and plates loaded, no horizontal
+  overflow, and zero console/page errors. Publishing was not performed.

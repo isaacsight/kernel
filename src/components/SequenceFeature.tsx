@@ -190,6 +190,20 @@ export function SequenceFeature({ spread, issue }: SequenceFeatureProps) {
                 className={`pop-sequence-panel${stage.id === activeId ? ' pop-sequence-panel--active' : ''}`}
                 aria-hidden={stage.id !== activeId}
               >
+                {stage.image && (
+                  <figure className="pop-sequence-plate">
+                    <img
+                      src={stage.image}
+                      alt={stage.imageAlt ?? ''}
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                    {stage.imageCaption && (
+                      <figcaption className="pop-folio pop-sequence-plate-caption">
+                        PLATE {String(i + 1).padStart(2, '0')} · {stage.imageCaption}
+                      </figcaption>
+                    )}
+                  </figure>
+                )}
                 <h4 className="pop-folio pop-sequence-panel-head">
                   {String(i + 1).padStart(2, '0')} · {stage.label}
                   {stage.labelJp ? ` · ${stage.labelJp}` : ''}
