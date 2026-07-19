@@ -204,3 +204,10 @@ describe('direct elevenlabs sfx/music providers', () => {
     expect(estimateSfxUsd(61, 'elevenlabs-music-direct')).toBe(0)
   })
 })
+
+describe('parsePricingText charged-per-second form', () => {
+  it('parses "For every second ... you will be charged $X" taking the highest rate', () => {
+    const text = 'For every second of video you generated, you will be charged $0.112 (audio off) or $0.168 (audio on), if voice control is used while generating audio you will be charged $0.196. For example, a 5s video with audio on and voice control will cost $0.98'
+    expect(parsePricingText(text)).toBe(0.196)
+  })
+})

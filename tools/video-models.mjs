@@ -94,6 +94,16 @@ export function parsePricingText(text) {
   const perSecond = [...plain.matchAll(/\$(\d+(?:\.\d+)?)\s*(?:\/|\s*per\s+)\s*(?:output\s+)?second/gi)]
     .map(m => Number(m[1]))
   if (perSecond.length) return Math.max(...perSecond)
+  // "For every second of video ... you will be charged $0.112 (audio off) or
+  // $0.168 (audio on) ..." — quote the highest listed rate (conservative).
+  const chargedForm = plain.match(/for every second[^.]*?charged\s+\$(\d+(?:\.\d+)?)(?:[^.$]*\$(\d+(?:\.\d+)?))*(?:[^.]*?charged\s+\$(\d+(?:\.\d+)?))?/i)
+  if (chargedForm) {
+    const rates = [...plain.matchAll(/\$(\d+(?:\.\d+)?)/g)].map(m => Number(m[1]))
+    const example = plain.match(/cost\s+\$(\d+(?:\.\d+)?)/i)
+    const exampleUsd = example ? Number(example[1]) : null
+    const perSecondRates = rates.filter(r => r !== exampleUsd && r < 5)
+    if (perSecondRates.length) return Math.max(...perSecondRates)
+  }
   const perVideo = plain.match(/for\s+(?:a\s+)?(\d+)\s*s(?:econd)?s?\s+video[^$]*\$(\d+(?:\.\d+)?)/i)
   if (perVideo) {
     const seconds = Number(perVideo[1])
