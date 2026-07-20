@@ -2614,3 +2614,17 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   zero horizontal overflow, zero broken images, zero runtime errors, and
   zero active reduced-motion animations. It also reported the 13px-tall
   Back to top control as a craft-level target-size warning.
+
+## Session 2026-07-19 — design skills exposed to Claude Code
+
+- The three kernel.chat design skills (art-direction, web-design,
+  design-qa) from commit f6cb701d9 lived only in `.agents/skills/` and
+  were invisible to Claude Code. Symlinked them into `.claude/skills/`
+  (commit 23ac1ce03) — one source of truth, both runtimes; harness
+  confirmed pickup mid-session.
+- Independently verified the parallel session's claims: skills read as
+  described, audit-page.mjs parses and RUNS against live ISSUE 425 —
+  zero overflow / broken media, one real flag: "Back to top" control at
+  98x13px (undersized). Spawned a fix task chip for it.
+- Identified but not built: motion-integration skill (house handoff to
+  gsap-*) and cover-as-OG-asset art direction.
