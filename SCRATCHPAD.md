@@ -2,6 +2,38 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-20 — Editorial-system audit + remediation
+
+- Audited kernel.chat's editorial system (content model, the 20-type
+  spread union, Ink Cabinet, render pipeline, the "laws," enforcement).
+  Type layer + router exhaustiveness are healthy; the gaps were
+  enforcement and doc drift. Remediated across five workstreams:
+- **Docs:** fixed PUBLISHING.md drift (stocks 5→6, layouts 3→5, ink
+  cabinet 9→11 seeds, dir diagram, last-updated→426, commit trailer→
+  Fable 5); refreshed CLAUDE.md + KERNEL.md currency to ISSUE 426 /
+  kbot v4.5.0 (KERNEL numbers-only — left the 2026-04-29 snapshot dates
+  untouched per Isaac); design-language.md "nine seeds"→eleven.
+- **Validators:** `isPopeyeSafe` was dead code with a false "runs in
+  dev" docblock. Wired a new `auditAccents()` (POPEYE-safety on raw-hex
+  accents) from `main.tsx` behind `import.meta.env.DEV`. Did NOT wire an
+  auto contrast gate — it false-positives on house tomato-on-cream
+  (~3.25:1) and lifted ink-stock accents; corrected those docblocks
+  instead. Added `accents.test.ts` (16 tests) — first accent-util tests.
+- **Enforcement:** new `scripts/check-editorial.mjs` (artifact-first
+  presence + no-POPEYE-naming + no-emoji, comment-stripped). Wired into
+  `ci.yml` AND `deploy.yml` — the fast law-checks now GATE the publish
+  (previously ci.yml ran parallel to deploy and didn't block it).
+- **Content:** removed 3 POPEYE leaks from rendered copy (413
+  jargon→GRAMMAR-SAFE; 364 list trim; 379 sentence cut) per Isaac's
+  "fix both"; added 425's missing artifact citation.
+- **Missing artifact:** authored `artifacts/421-the-harmonic-series.html`
+  (fourier issue — the only 419+ gap). Self-contained operable rig,
+  CSP-clean, celadon-on-ivory, honesty core intact, partials = depth
+  axis. Verified in-browser (renders on-grammar, no console errors,
+  ledger counts only real actions). Cited it in 421.ts.
+- Final gate green: adherence · editorial (67 issues) · tsc · 16/16
+  accent tests. Nothing committed (Isaac hasn't asked).
+
 ## Session 2026-07-19 — `One of One` completed
 
 - Recovered the interrupted `one-of-one-2027` Palmier production from
