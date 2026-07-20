@@ -128,7 +128,7 @@ export const ISSUE_413: IssueRecord = {
       note: 'The instruments below are the production system, not a toy of it: the six paper stocks every issue chooses from, the eleven ink seeds the cabinet has verified as grammar-safe, the three principal cover layouts. What you cannot do here, the magazine cannot do either. That symmetry is the point.',
       items: [
         { label: 'STOCKS', value: '6 · THE REAL CABINET — CREAM TO LEDGER' },
-        { label: 'INKS', value: '11 SEEDS · ALL POPEYE-SAFE BY CURATION' },
+        { label: 'INKS', value: '11 SEEDS · ALL GRAMMAR-SAFE BY CURATION' },
         { label: 'LAYOUTS', value: '3 · CLASSIC · MONUMENT · ASYMMETRIC' },
         { label: 'YOUR WORDS', value: 'HEADLINE · SEAL · NUMBER — WRITTEN, NOT PICKED' },
         { label: 'KEPT BY US', value: 'NOTHING · SESSION-ONLY · PRINT TO KEEP' },
