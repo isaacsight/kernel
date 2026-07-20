@@ -31,6 +31,7 @@ function titleForPath(pathname: string): string {
     case 'refusals': return 'Refusals · kernel.chat'
     case 'pressroom': return 'The Pressroom · kernel.chat'
     case 'about': return 'About · kernel.chat'
+    case 'atelier': return 'The Atelier · kernel.chat'
     case 'privacy': return 'Privacy · kernel.chat'
     case 'terms': return 'Terms · kernel.chat'
     default: return BASE_TITLE
