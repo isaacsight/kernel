@@ -105,7 +105,7 @@ export const router = createBrowserRouter([
         </Suspense>
       ) },
       {
-        path: '/archive',
+        path: 'archive',
         element: withErrorBoundary(
           <Suspense fallback={<KernelLoading />}>
             <ArchivePage />
