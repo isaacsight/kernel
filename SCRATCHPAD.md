@@ -14,7 +14,8 @@
   道具 / Floor 編集部 / Room 部屋), the five stages as a sequence
   (Letter → Estimate → Deposit → Build → Handover), and a writable
   commission slip (session-only, unrecorded) that composes the actual
-  mailto letter to hello@kernel.chat. Print stacks all states with
+  mailto letter to kernel.chat@gmail.com (the confirmed intake
+  address). Print stacks all states with
   per-state running labels.
 - Standing terms on the page: fixed estimate before build (no posted
   rate card — "the meter tells the truth"), half on commission /

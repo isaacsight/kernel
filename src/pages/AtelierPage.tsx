@@ -128,7 +128,7 @@ const STAGES: Stage[] = [
   },
 ]
 
-const DESK_ADDRESS = 'hello@kernel.chat'
+const DESK_ADDRESS = 'kernel.chat@gmail.com'
 
 export function AtelierPage() {
   const [kindIndex, setKindIndex] = useState(0)
