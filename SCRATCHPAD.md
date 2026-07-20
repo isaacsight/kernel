@@ -2628,3 +2628,15 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   98x13px (undersized). Spawned a fix task chip for it.
 - Identified but not built: motion-integration skill (house handoff to
   gsap-*) and cover-as-OG-asset art direction.
+
+## Session 2026-07-19 — ISSUE 426 pressed
+
+- ISSUE 426 "THE WEATHER OVER THE QUEUE" drafted artifact-first and
+  committed (a0d501832): operable dispatch board, seeded sky 426-0719,
+  real 37-row July 19 registry as the floor, forecast spread with five
+  propositions, cobalt on ink, back-cover cyanotype plate. design-qa
+  clean; tsc + build green. Artifact filed private (first-press):
+  https://claude.ai/code/artifact/e8f3e8da-bb6e-4005-88f1-1046bfe7cf8a
+- Site deploy NOT pushed: main is 42 commits behind this branch and
+  push-to-main is the deploy; awaiting Isaac's call on shipping the
+  whole branch.
