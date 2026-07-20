@@ -1,0 +1,400 @@
+<style>
+  /* ISSUE 426 — THE WEATHER OVER THE QUEUE · 順番待ちの天気
+     Single-file artifact edition. Tokens mirrored from src/index.css.
+     Accent: cobalt (night seed) with an on-ink lift register.
+     Simulation drawn in-house; archive rows are records. Seed prints. */
+  :root{
+    --ink:#1F1E1D; --ivory:#FAF9F6; --ledger:#F2EFE2;
+    --cobalt:#1D4E89; --cobalt-lift:#7FA8DC; --cobalt-dim:#39567E;
+    --hair:rgba(250,249,246,.16); --hair-strong:rgba(250,249,246,.4);
+    --serif:"EB Garamond","Iowan Old Style",Palatino,Georgia,serif;
+    --mono:"Courier Prime","Courier New",monospace;
+    --jp:"Noto Serif JP","Hiragino Mincho ProN","Yu Mincho",serif;
+  }
+  .wx-root{background:var(--ink);color:var(--ivory);font-family:var(--serif);
+    margin:0;min-height:100svh;position:relative;overflow-x:hidden}
+  .wx-root *{box-sizing:border-box}
+  #wx-sky{position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none}
+  .wx-frame{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 clamp(16px,4vw,44px)}
+
+  .wx-mast{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    padding:20px 0 14px;border-bottom:1px solid var(--hair-strong);
+    font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase}
+  .wx-mast b{color:var(--cobalt-lift);font-weight:400}
+  .wx-seed{opacity:.6}
+
+  .wx-hero{padding:clamp(30px,6vh,64px) 0 8px}
+  .wx-kicker{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:var(--cobalt-lift)}
+  .wx-kicker::before{content:"[ "}.wx-kicker::after{content:" ]"}
+  .wx-hero h1{font-size:clamp(2.4rem,7.4vw,5.4rem);line-height:.98;letter-spacing:-.025em;
+    margin:.32em 0 .12em;font-weight:700;text-wrap:balance}
+  .wx-hero h1 em{font-style:italic;color:var(--cobalt-lift)}
+  .wx-jp{font-family:var(--jp);font-size:clamp(.9rem,2vw,1.15rem);color:var(--cobalt-lift);opacity:.85}
+  .wx-deck{max-width:58ch;font-size:1.06rem;line-height:1.62;opacity:.92;margin:1.2em 0 0}
+
+  .wx-gauge{display:flex;flex-wrap:wrap;gap:10px 26px;align-items:baseline;margin:26px 0 10px;
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+  .wx-gauge span b{color:var(--cobalt-lift);font-weight:400;font-variant-numeric:tabular-nums}
+  .wx-gauge .wx-congestion i{display:inline-block;width:7px;height:11px;margin-right:2px;
+    background:var(--cobalt-dim);vertical-align:-1px;font-style:normal}
+  .wx-gauge .wx-congestion i.on{background:var(--cobalt-lift)}
+
+  .wx-board{border:1px solid var(--hair-strong);background:rgba(31,30,29,.72);margin:6px 0 14px;position:relative}
+  .wx-board .tick{position:absolute;width:9px;height:9px;border:1px solid var(--cobalt-lift)}
+  .tick.tl{top:-1px;left:-1px;border-right:0;border-bottom:0}
+  .tick.tr{top:-1px;right:-1px;border-left:0;border-bottom:0}
+  .tick.bl{bottom:-1px;left:-1px;border-right:0;border-top:0}
+  .tick.br{bottom:-1px;right:-1px;border-left:0;border-top:0}
+  .wx-bhead,.wx-row{display:grid;grid-template-columns:76px 1.3fr .95fr 74px 150px;
+    gap:0 14px;padding:9px 14px;align-items:baseline}
+  .wx-bhead{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--cobalt-lift);border-bottom:1px solid var(--hair)}
+  .wx-row{border-bottom:1px dashed var(--hair);font-family:var(--mono);
+    font-size:.78rem;font-variant-numeric:tabular-nums}
+  .wx-row:last-child{border-bottom:0}
+  .wx-row .fl{display:inline-block;min-width:.62em;text-align:center;white-space:pre}
+  .wx-row .st{letter-spacing:.06em}
+  .wx-row[data-fate="arrived"] .st{color:var(--ivory)}
+  .wx-row[data-fate="hold"] .st,.wx-row[data-fate="queued"] .st{color:var(--cobalt-lift)}
+  .wx-row[data-fate="never"] .st{color:var(--cobalt-dim);text-decoration:line-through .5px}
+  .wx-row.breathe .st{animation:wx-breathe 2.8s ease-in-out infinite}
+  @keyframes wx-breathe{0%,100%{opacity:.55}50%{opacity:1}}
+
+  .wx-probe{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:0 0 30px}
+  #wx-file{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    background:none;border:1px solid var(--cobalt-lift);color:var(--cobalt-lift);
+    padding:15px 24px;min-height:44px;cursor:pointer;transition:transform .14s cubic-bezier(.2,1.6,.4,1),background .14s,color .14s}
+  #wx-file:hover{background:var(--cobalt);color:var(--ivory)}
+  #wx-file:active{transform:scale(.96)}
+  #wx-file:focus-visible{outline:2px solid var(--cobalt-lift);outline-offset:3px}
+  .wx-probe small{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;opacity:.6;max-width:44ch}
+
+  .wx-prose{columns:1;max-width:62ch;font-size:1.02rem;line-height:1.66;margin:34px 0}
+  .wx-prose p{margin:0 0 1em}
+  .wx-prose p:first-child::first-letter{font-size:3.1em;float:left;line-height:.82;
+    padding:.06em .12em 0 0;color:var(--cobalt-lift)}
+
+  .wx-ledger{border-top:1px solid var(--hair-strong);margin-top:6px;padding-top:14px}
+  .wx-ledger h2,.wx-arch h2{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--cobalt-lift);font-weight:400;margin:0 0 10px}
+  .wx-ledger ul{list-style:none;margin:0;padding:0;font-family:var(--mono);font-size:.7rem;line-height:2;
+    font-variant-numeric:tabular-nums}
+  .wx-ledger li{border-bottom:1px dashed var(--hair);display:flex;justify-content:space-between;gap:12px}
+  .wx-ledger .empty{opacity:.5;font-style:italic;border:0}
+
+  .wx-arch{background:var(--ledger);color:var(--ink);margin:52px calc(50% - 50vw) 0;padding:44px 0 30px}
+  .wx-arch .wx-frame{max-width:1060px}
+  .wx-arch h2{color:var(--cobalt)}
+  .wx-arch .note{font-size:.98rem;line-height:1.6;max-width:60ch;margin:0 0 20px}
+  .wx-atable{width:100%;border-collapse:collapse;font-family:var(--mono);
+    font-size:.7rem;font-variant-numeric:tabular-nums}
+  .wx-atable th{font-weight:400;letter-spacing:.14em;text-transform:uppercase;font-size:.58rem;
+    text-align:left;color:var(--cobalt);border-bottom:1px solid rgba(31,30,29,.85);padding:5px 10px 5px 0}
+  .wx-atable td{border-bottom:1px dashed rgba(31,30,29,.28);padding:4px 10px 4px 0;white-space:nowrap}
+  .wx-atable tr[data-f="frozen"] td{color:var(--cobalt)}
+  .wx-atable tr[data-f="never"] td:last-child{text-decoration:line-through .5px}
+  .wx-atable .ann td{border-bottom:1px solid rgba(31,30,29,.85);font-style:italic;
+    font-family:var(--serif);font-size:.86rem;white-space:normal;padding:10px 0 12px;color:var(--ink)}
+  .wx-atable .ann b{color:var(--cobalt);font-weight:400}
+  .wx-arch .wrap{overflow-x:auto}
+
+  .wx-colophon{padding:40px 0 48px;font-family:var(--mono);font-size:.64rem;
+    letter-spacing:.08em;line-height:2;opacity:.78}
+  .wx-colophon b{color:var(--cobalt-lift);font-weight:400}
+  .wx-glyph{color:var(--cobalt-lift)}
+
+  @media (max-width:760px){
+    .wx-bhead{display:none}
+    .wx-row{grid-template-columns:1fr auto;grid-template-areas:"job time" "carrier quote" "status status";padding:10px 12px}
+    .wx-row .c-time{grid-area:time;opacity:.65}.wx-row .c-job{grid-area:job}
+    .wx-row .c-carrier{grid-area:carrier;opacity:.75}.wx-row .c-quote{grid-area:quote}
+    .wx-row .c-status{grid-area:status;padding-top:2px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    #wx-sky{opacity:.3}
+  }
+  @media print{
+    .wx-root{background:#fff;color:#1F1E1D}
+    #wx-sky,.wx-probe{display:none}
+    .wx-mast,.wx-bhead,.wx-row{border-color:rgba(31,30,29,.4)}
+    .wx-board{background:none;border-color:#1F1E1D}
+    .wx-row .st,.wx-kicker,.wx-hero h1 em,.wx-jp{color:#1D4E89}
+    .wx-arch{margin:24px 0 0;background:none}
+  }
+</style>
+
+<div class="wx-root" id="wx-root">
+<canvas id="wx-sky" aria-hidden="true"></canvas>
+<div class="wx-frame">
+
+  <header class="wx-mast">
+    <span>KERNEL.CHAT · ISSUE <b>426</b> · JAN 2027</span>
+    <span class="wx-glyph">★</span>
+    <span class="wx-seed">SEED 426-0719 · PRINTED</span>
+  </header>
+
+  <section class="wx-hero">
+    <p class="wx-kicker">FORECAST · 予報 · THE DISPATCH DESK</p>
+    <h1>The weather <em>over the queue.</em></h1>
+    <p class="wx-jp">順番待ちの天気 — 見えない空の下で作られる</p>
+    <p class="wx-deck">Every generation job is a departure. It is priced to the cent
+    before it leaves, and it arrives whenever the sky over the shared queue permits.
+    The board below is yours to work: file a job, watch the front move in. The floor
+    of this page holds one real day of departures, recorded to the second.</p>
+  </section>
+
+  <div class="wx-gauge" aria-live="polite">
+    <span>BOARD TIME <b id="wx-clock">05:12</b></span>
+    <span>JOBS FILED <b id="wx-count">0</b></span>
+    <span class="wx-congestion">CONGESTION <span id="wx-cong"><i class="on"></i><i></i><i></i><i></i><i></i></span></span>
+  </div>
+
+  <div class="wx-board" role="table" aria-label="Departures board">
+    <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+    <div class="wx-bhead" role="row">
+      <span>FILED</span><span>JOB</span><span>CARRIER</span><span>QUOTE</span><span>STATUS</span>
+    </div>
+    <div id="wx-rows"></div>
+  </div>
+
+  <div class="wx-probe">
+    <button id="wx-file" type="button">File a job</button>
+    <small>The desk's one control. Carrier and fate are decided by the sky,
+    not by you — that is the argument.</small>
+  </div>
+
+  <section class="wx-prose">
+    <p>The studio used to wait on rendering. Now it waits on weather. Somewhere
+    between the quote and the arrival sits a queue shared with every other
+    dispatcher awake tonight, and no dashboard shows its sky. A job that cost
+    one dollar and sixty cents boarded nothing for ninety minutes. Eight
+    duplicates of the same two shots were filed like extra trains, on the theory
+    that one of them would find a gap in the front. Two did. At six minutes to
+    one, both arrived at once.</p>
+    <p>Price behaves like physics here; time behaves like climate. The estimate
+    is exact and the arrival is a season. This page does not explain the
+    contradiction. It hands you the desk and lets the contradiction happen to
+    you — then shows you, on paper below, the day it happened to us.</p>
+  </section>
+
+  <section class="wx-ledger">
+    <h2>Session ledger · 台帳 — this desk only; unrecorded; reload erases it</h2>
+    <ul id="wx-receipts"><li class="empty">No filings yet. The board is pre-dawn empty.</li></ul>
+  </section>
+</div>
+
+  <section class="wx-arch">
+    <div class="wx-frame">
+      <h2>The archive · one real day, recorded — July 19, 2026</h2>
+      <p class="note">These rows are not simulation. They are the engine's own
+      registry of every departure filed while a forty-two second film was made:
+      time to the second, carrier, and the state each row froze in when the
+      presses closed. Seven were still marked running and six still queued at
+      press time. They are printed as found.</p>
+      <div class="wrap"><table class="wx-atable" id="wx-archive">
+        <thead><tr><th>FILED</th><th>KIND</th><th>CARRIER</th><th>STATE AT PRESS</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </section>
+
+<div class="wx-frame">
+  <footer class="wx-colophon">
+    <p>THE WEATHER OVER THE QUEUE · 順番待ちの天気 · KERNEL PRESS <span class="wx-glyph">★</span><br>
+    The board above is a simulation drawn in-house — no imagery generated, no
+    request leaves this page. Its sky is deterministic from seed <b>426-0719</b>,
+    printed at the masthead; at rest it always reads the same. The session
+    ledger is held in memory only and is erased on reload. The archive is a
+    record, reproduced from <b>output/job-registry.json</b>, July 19, 2026.
+    Under reduced motion the board stands still and every fate resolves
+    instantly. Quotes shown are the real per-job prices from that day's
+    routing table.</p>
+  </footer>
+</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var root=document.getElementById('wx-root');
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* deterministic PRNG — seed prints on the masthead */
+  function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  var SEED=4260719, rng=mulberry32(SEED);
+
+  /* ---- the sky: drifting cobalt isobars, congestion-thickened ---- */
+  var sky=document.getElementById('wx-sky'),ctx=sky.getContext('2d');
+  var congestion=1, drift=0;
+  var iso=[];(function(){var r=mulberry32(SEED+1);for(var i=0;i<7;i++)iso.push({y:.08+.13*i,amp:18+r()*30,ph:r()*6.28,sp:.12+r()*.22})})();
+  function paintSky(){
+    var w=sky.width=innerWidth,h=sky.height=innerHeight;
+    ctx.clearRect(0,0,w,h);
+    for(var i=0;i<iso.length;i++){var b=iso[i];
+      ctx.beginPath();ctx.strokeStyle='rgba(127,168,220,'+(0.05+0.035*congestion)+')';
+      ctx.lineWidth=i%3?1:1.6;
+      for(var x=0;x<=w;x+=8){var y=h*b.y+Math.sin(x/220+b.ph+drift*b.sp)*b.amp*(1+congestion*.25);ctx.lineTo(x,y)}
+      ctx.stroke();}
+  }
+  paintSky();addEventListener('resize',paintSky);
+
+  /* ---- board state ---- */
+  var rows=document.getElementById('wx-rows'),receipts=document.getElementById('wx-receipts');
+  var clockEl=document.getElementById('wx-clock'),countEl=document.getElementById('wx-count'),congEl=document.getElementById('wx-cong');
+  var boardMin=5*60+12, filed=0;
+  var CARRIERS=[
+    {n:'KLING V3',q:0.90,rel:.92,jobs:['MIRROR SCAN','STREET PAN','CROWD WIDE']},
+    {n:'OMNI FLASH',q:0.52,rel:.72,jobs:['HUE RIPPLE','DOOR HANDLE','VANITY TURN']},
+    {n:'SEEDANCE 2.0',q:1.21,rel:.55,jobs:['ASSEMBLY MACRO','LABEL CLOSE-UP']},
+    {n:'NANO-BANANA',q:0.15,rel:.96,jobs:['REFERENCE PLATE','NIGHT PROOF','STREET STILL']},
+    {n:'ELEVENLABS',q:0.10,rel:.94,jobs:['PULSE SCORE','ROOM TONE','FABRIC WHISPER']},
+    {n:'VEO 3.1',q:1.60,rel:.18,jobs:['STREET PAN','MIRROR SCAN']}
+  ];
+  var FLAPCH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789·— ';
+
+  function fmtClock(m){var h=Math.floor(m/60)%24,mm=m%60;return (h<10?'0':'')+h+':'+(mm<10?'0':'')+mm}
+  function congTick(){var lit=Math.min(5,Math.ceil(congestion));var is=congEl.children;
+    for(var i=0;i<5;i++)is[i].className=i<lit?'on':''}
+
+  /* split-flap: settle each character through the drum, interruptible */
+  function flapText(el,target){
+    var gen=(el._flapGen=(el._flapGen||0)+1);
+    el.textContent='';var spans=[];
+    for(var i=0;i<target.length;i++){var s=document.createElement('span');s.className='fl';s.textContent=' ';el.appendChild(s);spans.push(s)}
+    if(reduced){for(var j=0;j<target.length;j++)spans[j].textContent=target[j];return}
+    spans.forEach(function(s,idx){
+      var hops=3+Math.floor(rng()*5),k=0;
+      function hop(){
+        if(el._flapGen!==gen)return; /* superseded by a newer flap */
+        if(k++>=hops){s.textContent=target[idx];return}
+        s.textContent=FLAPCH[Math.floor(rng()*FLAPCH.length)];
+        setTimeout(hop,28+idx*9+k*14);
+      }
+      setTimeout(hop,20+idx*9); /* defer past DOM insertion */
+    });
+  }
+
+  function cell(cls,txt,flap){var d=document.createElement('span');d.className=cls;
+    if(flap){flapText(d,txt)}else{d.textContent=txt}return d}
+
+  function addRow(t,job,carrier,quote,status,fate,flap){
+    var r=document.createElement('div');r.className='wx-row';r.setAttribute('role','row');r.dataset.fate=fate;
+    r.appendChild(cell('c-time',t,false));
+    r.appendChild(cell('c-job',job,flap));
+    r.appendChild(cell('c-carrier',carrier,flap));
+    r.appendChild(cell('c-quote',quote,false));
+    var st=cell('c-status st',status,flap);r.appendChild(st);
+    rows.appendChild(r);
+    while(rows.children.length>9)rows.removeChild(rows.firstChild);
+    return r;
+  }
+
+  /* resting board — fixed seed, always identical at rest */
+  addRow('05:02','NIGHT PROOF','NANO-BANANA','$0.15','ARRIVED 05:03','arrived',false);
+  addRow('05:07','ROOM TONE','ELEVENLABS','$0.10','ARRIVED 05:08','arrived',false);
+  addRow('05:11','STREET PAN','VEO 3.1','$1.60','HOLDING · GATE 4','hold',false).classList.add('breathe');
+
+  function receipt(text){
+    var e=receipts.querySelector('.empty');if(e)e.remove();
+    var li=document.createElement('li');
+    li.innerHTML='<span></span><span></span>';
+    li.children[0].textContent=text.a;li.children[1].textContent=text.b;
+    receipts.appendChild(li);
+    while(receipts.children.length>7)receipts.removeChild(receipts.firstChild);
+  }
+
+  /* fate engine: the sky decides; the reader only files */
+  function fate(carrier,row,quoted){
+    var roll=rng(),rel=carrier.rel/(1+ (congestion-1)*.28);
+    var st=row.querySelector('.st');
+    function setStatus(txt,f){row.dataset.fate=f;flapText(st,txt)}
+    if(reduced){ /* resolve instantly, honestly */
+      if(roll<rel){setStatus('ARRIVED '+fmtClock(boardMin+3),'arrived')}
+      else if(roll<rel+.25){setStatus('DELAYED · FRONT','hold')}
+      else{setStatus('NEVER DEPARTED','never')}
+      return;
+    }
+    setStatus('QUEUED','queued');row.classList.add('breathe');
+    var t1=1100+rng()*1600;
+    setTimeout(function(){
+      if(roll>rel+.25){row.classList.remove('breathe');setStatus('NEVER DEPARTED','never');
+        receipt({a:'△ '+carrier.n+' never departed',b:quoted+' spent'});return}
+      setStatus('BOARDING','queued');
+      setTimeout(function(){
+        row.classList.remove('breathe');
+        if(roll<rel){boardMin+=7+Math.floor(rng()*9);clockEl.textContent=fmtClock(boardMin);
+          setStatus('ARRIVED '+fmtClock(boardMin),'arrived');
+          receipt({a:'● arrived via '+carrier.n,b:quoted});}
+        else{setStatus('DELAYED · FRONT','hold');row.classList.add('breathe');
+          receipt({a:'○ delayed on '+carrier.n,b:quoted+' committed'});}
+      },900+rng()*1400);
+    },t1);
+  }
+
+  document.getElementById('wx-file').addEventListener('click',function(){
+    filed++;countEl.textContent=filed;
+    boardMin+=11+Math.floor(rng()*14);clockEl.textContent=fmtClock(boardMin);
+    congestion=Math.min(5,1+filed*.55);congTick();
+    var c=CARRIERS[Math.floor(rng()*CARRIERS.length)];
+    var j=c.jobs[Math.floor(rng()*c.jobs.length)];
+    var q='$'+c.q.toFixed(2);
+    var row=addRow(fmtClock(boardMin),j,c.n,q,'',null,true);
+    fate(c,row,q);
+  });
+
+  /* timer-robust drift loop: rAF raced against a timer (house law) */
+  if(!reduced){
+    var last=0;
+    function step(now){
+      if(now-last>90){drift+=.05;paintSky();last=now}
+      schedule();
+    }
+    var pending=false;
+    function schedule(){
+      if(pending)return;pending=true;
+      var done=false;
+      function run(t){if(done)return;done=true;pending=false;step(t||performance.now())}
+      requestAnimationFrame(run);setTimeout(run,120);
+    }
+    schedule();
+  }
+
+  /* the archive floor — records, printed as found */
+  var ARCHIVE=[
+["11:12:14","image","nano-banana-pro","ARRIVED"],["11:14:41","image","nano-banana-pro","ARRIVED"],
+["11:16:02","image","nano-banana-pro","ARRIVED"],["11:22:31","video","veo3.1","QUEUED AT PRESS"],
+["11:33:47","video","veo3.1","QUEUED AT PRESS"],["ANN","","","At 11:22 a job priced at one dollar sixty boarded nothing. It is still queued in these records. The sky over that carrier never opened."],
+["11:52:09","video","kling-video v3 pro","ARRIVED 11:53"],["11:54:30","video","seedance-2.0","RUNNING AT PRESS"],
+["12:15:04","video","gemini-omni-flash","ARRIVED"],["12:15:04","video","gemini-omni-flash","ARRIVED"],
+["12:15:05","video","gemini-omni-flash","ARRIVED"],["12:15:05","video","gemini-omni-flash","ARRIVED"],
+["12:15:06","video","gemini-omni-flash","ARRIVED"],["12:15:06","video","gemini-omni-flash","ARRIVED"],
+["12:15:07","video","gemini-omni-flash","ARRIVED"],["12:16:44","video","gemini-omni-flash","RUNNING AT PRESS"],
+["12:17:20","video","gemini-omni-flash","ARRIVED"],["ANN","","","Seven connective shots filed in four seconds; all seven arrived inside five minutes. On a clear queue the studio is a weather it likes."],
+["12:19:12","audio","elevenlabs sfx","ARRIVED"],["12:19:31","audio","elevenlabs sfx","ARRIVED"],
+["12:19:48","audio","elevenlabs sfx","ARRIVED"],["12:19:59","audio","elevenlabs sfx","ARRIVED"],
+["12:20:16","audio","elevenlabs sfx","ARRIVED"],["12:20:38","audio","elevenlabs sfx","ARRIVED"],
+["12:20:57","audio","elevenlabs music","ARRIVED"],["12:21:33","video","gemini-omni-flash","RUNNING AT PRESS"],
+["12:30:02","video","seedance-2.0 fast","RUNNING AT PRESS"],["12:30:05","video","seedance-2.0 fast","RUNNING AT PRESS"],
+["12:33:21","video","seedance-2.0 mini","RUNNING AT PRESS"],["12:33:24","video","seedance-2.0 mini","RUNNING AT PRESS"],
+["ANN","","","Between half past twelve and seven to one, eight duplicates of the same two shots were filed like extra trains — the theory that one would find a gap in the front."],
+["12:36:12","image","kling-image o3","ARRIVED"],["12:37:41","image","kling-image o3","ARRIVED"],
+["12:38:20","image","kling-image o3","ARRIVED"],["12:39:07","video","kling-video v3 turbo","QUEUED AT PRESS"],
+["12:39:10","video","kling-video v3 turbo","QUEUED AT PRESS"],["12:52:47","video","kling-video v3 turbo","QUEUED AT PRESS"],
+["12:53:02","video","kling-video v3 turbo","QUEUED AT PRESS"],["12:54:38","video","kling-video v3 turbo","ARRIVED 12:54"],
+["12:55:01","video","kling-video v3 turbo","ARRIVED 12:55"],
+["ANN","","","At six minutes to one, two of the eight found the gap. Both arrived inside twenty-three seconds of each other. The film was finished with the pair; the other six are still on this page, waiting."]
+  ];
+  var tb=document.querySelector('#wx-archive tbody');
+  ARCHIVE.forEach(function(r){
+    var tr=document.createElement('tr');
+    if(r[0]==='ANN'){tr.className='ann';var td=document.createElement('td');td.colSpan=4;
+      td.innerHTML='';td.textContent='';td.appendChild(document.createTextNode(r[3]));tr.appendChild(td);}
+    else{
+      if(/AT PRESS/.test(r[3]))tr.dataset.f='frozen';
+      r.forEach(function(c){var td=document.createElement('td');td.textContent=c;tr.appendChild(td)});
+    }
+    tb.appendChild(tr);
+  });
+})();
+</script>
