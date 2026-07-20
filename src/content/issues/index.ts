@@ -82,7 +82,7 @@ import { ISSUE_426 } from './426'
 
 // Re-export accent types so issue files can import from a single place.
 export type { IssueAccent, InkSeedName, InkSeed } from './accents'
-export { INK_SEEDS, defaultAccentFor, resolveAccentHex, isPopeyeSafe, contrastRatio, STOCK_HEX } from './accents'
+export { INK_SEEDS, defaultAccentFor, resolveAccentHex, isPopeyeSafe, contrastRatio, STOCK_HEX, auditAccents } from './accents'
 
 export interface ContentsItem {
   /** Numbered catalog number, padded (e.g. "001") */
