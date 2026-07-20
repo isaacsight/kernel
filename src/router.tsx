@@ -23,6 +23,7 @@ const CreativeCanvasPage = lazyRetry(() => import('./pages/CreativeCanvasPage').
 const MotionSheetPage = lazyRetry(() => import('./pages/MotionSheetPage').then(m => ({ default: m.MotionSheetPage })))
 const PalmierSuitePage = lazyRetry(() => import('./pages/PalmierSuitePage').then(m => ({ default: m.PalmierSuitePage })))
 const AtelierPage = lazyRetry(() => import('./pages/AtelierPage').then(m => ({ default: m.AtelierPage })))
+const ArchivePage = lazyRetry(() => import('./pages/ArchivePage').then(m => ({ default: m.ArchivePage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -103,6 +104,14 @@ export const router = createBrowserRouter([
           <IssueBackCoverPage />
         </Suspense>
       ) },
+      {
+        path: '/archive',
+        element: withErrorBoundary(
+          <Suspense fallback={<KernelLoading />}>
+            <ArchivePage />
+          </Suspense>
+        ),
+      },
       { path: 'launch/:number', element: withErrorBoundary(
         <Suspense fallback={<div className="ka-page-loading">Loading the launch...</div>}>
           <LaunchPage />
