@@ -2,6 +2,31 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-20 (cont.) — ISSUE 427: THE MOAT IS REALITY
+
+- Pressed ISSUE 427 · FEB 2027 from a reader-supplied transcript of
+  Alex Hormozi on The Diary of a CEO (YouTube HwmwyBgzj8c). Second
+  `interview`-type issue after 365, and the first with a real named
+  subject — nine exchanges trimmed (not paraphrased/invented) from
+  the actual transcript, per PUBLISHING.md §III.2's rule that a real
+  subject's quotes must be genuine. Thread: judgment doesn't delegate
+  to AI, the fastest path to $10M isn't the fastest path to $100M,
+  pricing off what the customer will pay not what you feel you
+  deserve, hiring for "a rhino, a horse, and fireflies" instead of a
+  unicorn, and the note-to-self he wrote after his mother's death.
+- Ivory stock, asymmetric-left layout (same register as 365), coffee
+  accent (interview default, unset explicitly). No separate artifact
+  edition — audited reasoning: a Q&A transcript has no depth axis or
+  apparatus to reduce from, and the interview format's own subject
+  dossier + exchanges grammar already is that reduction.
+- Registered in `index.ts`; PUBLISHING.md hygiene pass done (§IV
+  interview template pointer, §XI last-updated line).
+- Verified: `tsc --noEmit` and `npm run build` clean; Playwright pass
+  confirmed cover + interview spread render with zero page errors,
+  the subject dossier and bilingual lockup are correct, mobile
+  (390px) has zero horizontal overflow, and the issue shows correctly
+  as the new latest-issue hero on `/issues`.
+
 ## Session 2026-07-20 (cont.) — Atelier deposit terms fixed
 
 - After THE ATELIER shipped (PR #59, merged), the user flagged the real

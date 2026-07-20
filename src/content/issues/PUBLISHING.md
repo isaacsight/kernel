@@ -204,7 +204,7 @@ Create `src/content/issues/<N>.ts` following the shape of the most
 recent same-format issue (`371.ts` for essay-as-profile,
 `402.ts` for essay-as-argument (dossier + pull quote),
 `400.ts` for essay-with-dataBlock, `401.ts` for dispatch,
-`403.ts` for forecast, `365.ts` for interview,
+`403.ts` for forecast, `427.ts` for interview (real named subject, quotes trimmed not invented — see also 365.ts for the composite-subject variant),
 `404.ts` for review (graded survey),
 `398.ts` for colloquy (two-voice),
 `405.ts` for instrument (interactive dial, measured meter) or
@@ -475,11 +475,12 @@ branch — only main publishes.
 
 ---
 
-_Last updated: ISSUE 425 · DEC 2026 (ONE OF ONE — the second
-`sequence` instance. Five stations carry the fashion short’s real order
-from call through street, with verified production receipts and five
-new issue-only mixed-media plates. The site extends Sequence with an
-optional visual plate but adds no new interaction shape. The artifact
-edition is image-led and full-height; no film frame or video embed is
-reused. Prior: 424 THE STUDIO THAT STAYS HOME (`plate`, studio grammar)
-and 423 THE SIXTEEN THAT SPEAK (`plate`, routing grammar).)_
+_Last updated: ISSUE 427 · FEB 2027 (THE MOAT IS REALITY — the
+second `interview` instance, and the first with a real named subject
+(Alex Hormozi) rather than a composite. Nine exchanges trimmed, not
+invented, from a reader-supplied transcript of a real broadcast
+interview — no artifact edition, since a Q&A transcript has no depth
+axis to reduce from; the interview format's own dossier-plus-exchanges
+grammar already is that reduction. Prior: 426 THE WEATHER OVER THE
+QUEUE (`forecast`, operable dispatch board) and 425 ONE OF ONE
+(`sequence`, second instance).)_
