@@ -44,6 +44,7 @@ const KINDS: CommissionKind[] = [
       'Spec’d against your work, sourced, assembled or configured, and handed over already running.',
       'Ollama / MLX / llama.cpp stack installed, tuned, and documented — the $0-per-token path.',
       'Nothing phones home. The machine is yours the day it arrives.',
+      'Parts are invoiced at cost before anything is ordered — the build never carries the hardware bill for you.',
     ],
     proof: 'Proof on file: the local stack this publication runs on — Ollama, LLaDA, MLX — wired and shipped in the open.',
   },
@@ -83,6 +84,7 @@ const KINDS: CommissionKind[] = [
       'Music production rigs — Ableton, Serum, Max for Live — wired for the way you actually write.',
       'Production suites for film and media work, from intake to mastered delivery.',
       'Documented so thoroughly you could rebuild the room without me.',
+      'Any hardware in the room is invoiced at cost before it is ordered, the same as a standalone workstation.',
     ],
     proof: 'Proof on file: the thirty-two-tool film production suite and the music stack, both shipped and audited in this repository.',
   },
@@ -112,7 +114,7 @@ const STAGES: Stage[] = [
     key: 'deposit',
     name: 'THE DEPOSIT',
     jp: '内金',
-    body: 'Half on commission. The commission enters the ledger, the bench is booked, and the build begins.',
+    body: 'Two lines on the estimate, not one. Hardware and materials are billed at cost and due before anything is ordered — the build never fronts the parts bill on your behalf. Labor is billed half on commission, half on handover. The commission enters the ledger, the bench is booked, and the build begins once the deposit clears.',
   },
   {
     key: 'build',
@@ -332,7 +334,8 @@ export function AtelierPage() {
             </h2>
             <ul className="pop-atelier-terms">
               <li>The estimate is fixed before the build begins, and does not move after you accept it.</li>
-              <li>Half on commission, the balance on handover.</li>
+              <li>Hardware and materials are billed at cost, due before anything is ordered — the build never fronts the parts bill on your behalf.</li>
+              <li>Labor is billed half on commission, half on handover.</li>
               <li>You own the result — the machine, the code, the keys, the documentation.</li>
               <li>BYOK everywhere. Nothing in the build ties you to a provider, or to me.</li>
               <li>Every handover ships with its audit trail, the same as every release in this repository.</li>
