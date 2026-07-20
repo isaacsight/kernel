@@ -1,0 +1,1219 @@
+<meta charset="utf-8">
+<title>THE HARMONIC SERIES · kernel.chat artifact edition</title>
+<style>
+  :root {
+    --paper: #FAF9F6;   /* ivory stock */
+    --stock: #F1EDE4;
+    --ledger: #F2EFE2;
+    --ink: #1F1E1D;
+    --meta: #6E675F;
+    --coffee: #6B4E3D;
+    --line: #D8D2C6;
+    --accent: #6F968A;  /* celadon — 青磁/비색 */
+    --serif: "EB Garamond", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --mono: "Courier Prime", "Courier New", Courier, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #161514;
+      --stock: #201E1C;
+      --ledger: #1D1B19;
+      --ink: #EDE8DF;
+      --meta: #9A938A;
+      --coffee: #C9A98F;
+      --line: #383531;
+      --accent: #92BDAF;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #161514;
+    --stock: #201E1C;
+    --ledger: #1D1B19;
+    --ink: #EDE8DF;
+    --meta: #9A938A;
+    --coffee: #C9A98F;
+    --line: #383531;
+    --accent: #92BDAF;
+  }
+  :root[data-theme="light"] {
+    --paper: #FAF9F6;
+    --stock: #F1EDE4;
+    --ledger: #F2EFE2;
+    --ink: #1F1E1D;
+    --meta: #6E675F;
+    --coffee: #6B4E3D;
+    --line: #D8D2C6;
+    --accent: #6F968A;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    background: var(--paper);
+    margin: 0;
+    transition: background 0.6s ease, color 0.6s ease;
+  }
+  body {
+    color: var(--ink);
+    font-family: var(--serif);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--accent); color: var(--paper); }
+
+  .sheet {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 20px 64px;
+  }
+
+  /* ---------- running head ---------- */
+  .running-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 14px 2px 10px;
+    border-bottom: 1px solid var(--ink);
+    position: relative;
+  }
+  .running-head::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .running-head .mid { color: var(--meta); }
+  .star { color: var(--accent); font-style: normal; }
+
+  /* ---------- masthead ---------- */
+  .kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin: 44px 0 0;
+  }
+  .kicker b { color: var(--accent); font-weight: 400; }
+
+  .masthead {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px 28px;
+    align-items: end;
+    margin-top: 14px;
+  }
+  @media (max-width: 720px) { .masthead { grid-template-columns: 1fr; } }
+
+  h1.monument {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(46px, 8.4vw, 104px);
+    line-height: 0.94;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  h1.monument .accent { color: var(--accent); }
+  .issue-no {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(56px, 11vw, 128px);
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    text-align: right;
+    align-self: end;
+  }
+  .issue-no small {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    color: var(--meta);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .monument-jp {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.42em;
+    color: var(--meta);
+    margin-top: 12px;
+  }
+  .dek {
+    max-width: 62ch;
+    font-size: clamp(17px, 2.1vw, 21px);
+    line-height: 1.5;
+    margin: 22px 0 0;
+  }
+  .dek em { font-style: italic; }
+
+  /* ---------- the rig register (dossier facts) ---------- */
+  .register {
+    margin: 34px 0 0;
+    border: 1px solid var(--ink);
+    background: var(--ledger);
+  }
+  .register-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .register-head .jp { color: var(--meta); letter-spacing: 0.3em; }
+  .register dl {
+    margin: 0;
+    padding: 6px 14px 12px;
+    display: grid;
+    gap: 2px;
+  }
+  .register .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px dashed var(--line);
+    padding: 6px 0 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .register dt { color: var(--meta); text-transform: uppercase; }
+  .register dd { margin: 0; text-align: right; color: var(--ink); }
+
+  /* ---------- prose ---------- */
+  .prose { margin-top: 48px; }
+  .prose h2 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .prose h2 .jp { font-family: var(--serif); font-weight: 400; color: var(--meta); letter-spacing: 0.02em; }
+  .prose p { max-width: 66ch; margin: 12px 0 0; text-indent: 1.5em; }
+  .prose p:first-of-type { text-indent: 0; }
+  .prose .sect { margin-top: 30px; }
+
+  /* ---------- the bore: gauge rail + strata ---------- */
+  .bore {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 0 28px;
+    margin-top: 56px;
+    position: relative;
+  }
+  @media (max-width: 720px) { .bore { grid-template-columns: 46px 1fr; gap: 0 14px; } }
+
+  .gauge { position: relative; }
+  .gauge-line { position: absolute; top: 8px; bottom: 8px; left: 50%; width: 1px; background: var(--line); }
+  .gauge-cap {
+    position: absolute; left: 0; right: 0; top: -30px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--meta);
+    line-height: 1.4;
+  }
+  #probe-dot {
+    position: absolute;
+    left: 50%; top: 8px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent);
+    transition: top 0.45s cubic-bezier(0.2,0.7,0.2,1);
+    z-index: 2;
+  }
+  #probe-read {
+    position: absolute;
+    left: calc(50% + 12px);
+    transform: translateY(-50%);
+    top: 8px;
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.06em; color: var(--accent);
+    white-space: nowrap;
+    transition: top 0.45s cubic-bezier(0.2,0.7,0.2,1);
+    z-index: 2;
+  }
+  @media (max-width: 720px) { #probe-read { display: none; } }
+  .gauge-stop {
+    position: absolute; left: 0; width: 100%;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 10px; letter-spacing: 0.1em; color: var(--meta);
+    transform: translateY(-50%);
+  }
+  .gauge-stop::before {
+    content: "";
+    display: block;
+    width: 7px; height: 7px;
+    margin: 0 auto 4px;
+    border: 1px solid var(--meta);
+    border-radius: 50%;
+    background: var(--paper);
+  }
+  .gauge-stop .n { display: block; }
+  .gauge-stop .jp { display: block; font-size: 9px; letter-spacing: 0.06em; }
+  .gauge-stop.lit { color: var(--accent); }
+  .gauge-stop.lit::before { border-color: var(--accent); background: var(--accent); }
+
+  .strata { min-width: 0; }
+
+  .stratum {
+    border: 1px solid var(--ink);
+    background: var(--stock);
+    margin-bottom: 30px;
+  }
+  .stratum-head {
+    display: flex; flex-wrap: wrap;
+    justify-content: space-between; align-items: baseline;
+    gap: 6px 18px;
+    padding: 10px 14px 9px;
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .stratum-head .jp { color: var(--meta); letter-spacing: 0.3em; }
+  .stratum-status { color: var(--accent); }
+  .stratum-body { padding: 16px; }
+  .stratum-caption {
+    font-family: var(--mono);
+    font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--meta);
+    padding: 9px 14px 10px;
+    border-top: 1px solid var(--line);
+  }
+  .stratum-caption b { color: var(--accent); font-weight: 400; }
+
+  canvas.plate {
+    display: block;
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+  canvas#cv-spectrum { aspect-ratio: 16 / 6; }
+  canvas#cv-wave { aspect-ratio: 16 / 6; }
+  .const-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  @media (min-width: 760px) { .const-grid { grid-template-columns: 1fr; } }
+  canvas#cv-const {
+    aspect-ratio: 1;
+    max-width: 460px;
+    margin: 0 auto;
+    cursor: crosshair;
+    touch-action: none;
+  }
+  canvas#cv-const:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------- controls ---------- */
+  .ctrl-label {
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--meta);
+    display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+    margin-bottom: 8px;
+  }
+  .ctrl-label strong { color: var(--accent); font-family: var(--mono); font-weight: 700; }
+
+  .waveforms {
+    display: flex;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    overflow: hidden;
+  }
+  .waveforms button {
+    flex: 1;
+    border: none; background: none;
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--meta);
+    min-height: 46px;
+    padding: 10px 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .waveforms button:not(:last-child) { border-right: 1px solid var(--ink); }
+  .waveforms button:hover { background: var(--ledger); color: var(--ink); }
+  .waveforms button[aria-checked="true"] { background: var(--accent); color: var(--paper); }
+  .waveforms button:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+
+  .rangeblock { margin-top: 18px; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%;
+    height: 3px;
+    background: var(--line);
+    outline: none;
+    margin: 10px 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 1px solid var(--ink);
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 1px solid var(--ink);
+    cursor: pointer;
+  }
+  input[type="range"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  input#probe-range { height: 5px; }
+  input#probe-range::-webkit-slider-thumb { width: 20px; height: 20px; box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent); }
+
+  .audio-row {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    margin-top: 6px;
+  }
+  #hear {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--mono);
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+    color: var(--paper);
+    background: var(--accent);
+    border: 1px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 12px 20px;
+    min-height: 46px;
+    cursor: pointer;
+  }
+  #hear:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+  #hear:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+  #hear:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  #hear .glyph { font-style: normal; }
+  .btn-ghost {
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--coffee);
+    background: transparent;
+    border: 1px solid var(--line);
+    min-height: 46px;
+    padding: 10px 16px;
+    cursor: pointer;
+  }
+  .btn-ghost:hover { background: var(--ledger); color: var(--ink); border-color: var(--ink); }
+  .btn-ghost:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .vol {
+    display: flex; align-items: center; gap: 10px;
+    flex: 1; min-width: 180px;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--meta);
+  }
+  .vol input[type="range"] { flex: 1; height: 3px; margin: 0; }
+  .split { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 760px) { .split { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+  /* ---------- ledger ---------- */
+  .ledger-block {
+    border: 1px solid var(--ink);
+    background: var(--ledger);
+    margin-top: 8px;
+    padding: 14px 16px;
+  }
+  .ledger-kicker {
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--meta);
+    margin: 0 0 8px;
+  }
+  #ledger {
+    font-family: var(--mono);
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+    color: var(--meta);
+  }
+  #ledger b { color: var(--ink); }
+  .ledger-note {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14.5px; line-height: 1.6;
+    color: var(--ink);
+    border-left: 3px solid var(--accent);
+    padding-left: 14px;
+    margin: 14px 0 0;
+    max-width: 66ch;
+  }
+  .ledger-note .disclosure {
+    display: block;
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.04em; line-height: 1.7;
+    color: var(--meta);
+    margin-top: 10px;
+  }
+
+  /* ---------- pull quote ---------- */
+  .pullquote {
+    border-left: 2px solid var(--accent);
+    margin: 56px 0;
+    padding: 6px 0 6px 22px;
+  }
+  .pullquote p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.4;
+    color: var(--accent);
+    margin: 0 0 8px;
+    max-width: 24ch;
+  }
+  .pullquote cite {
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--meta);
+  }
+
+  /* ---------- references ---------- */
+  .refs {
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin-top: 48px;
+  }
+  .refs .kicker { margin-top: 0; }
+  .refs ol {
+    margin: 12px 0 0;
+    padding-left: 20px;
+    font-family: var(--mono);
+    font-size: 11.5px; letter-spacing: 0.02em; line-height: 1.7;
+    color: var(--meta);
+    display: grid; gap: 8px;
+  }
+  .refs em { color: var(--ink); font-style: italic; }
+
+  /* ---------- colophon ---------- */
+  .colophon {
+    margin-top: 60px;
+    border-top: 1px solid var(--ink);
+    padding-top: 14px;
+    font-family: var(--mono);
+    font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--meta);
+    line-height: 2;
+  }
+  .signoff {
+    font-family: var(--serif); font-style: italic;
+    font-size: 15px; line-height: 1.6; text-transform: none; letter-spacing: 0;
+    color: var(--ink);
+    margin: 0 0 16px;
+    max-width: 62ch;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #probe-dot, #probe-read { transition: none; }
+    html, body { transition: none; }
+  }
+
+  /* ---------- print: resting plots + ledger, no live controls ---------- */
+  @media print {
+    :root {
+      --paper: #fff; --stock: #fff; --ledger: #fff; --ink: #000;
+      --meta: #333; --coffee: #333; --line: #999; --accent: #000;
+    }
+    html, body { background: #fff; color: #000; }
+    .live { display: none !important; }
+    .stratum, .register, .ledger-block { border-color: #000 !important; background: #fff !important; }
+    canvas.plate { border-color: #000 !important; }
+    #hear, .btn-ghost { display: none !important; }
+  }
+</style>
+
+<div class="sheet">
+
+  <header class="running-head">
+    <span>KERNEL<span class="star">&nbsp;★&nbsp;</span>CHAT</span>
+    <span class="mid">ISSUE 421 — ARTIFACT EDITION · 倍音の秩序</span>
+    <span>AUG 2026</span>
+  </header>
+
+  <p class="kicker">[ HARMONIC OSCILLATOR · 周期振動 ] <b>THE FOURIER DECOMPOSITION</b> — ONE SUM, FOLLOWED PARTIAL BY PARTIAL, YOUR HAND ON THE PROBE</p>
+
+  <div class="masthead">
+    <div>
+      <h1 class="monument">THE HARMONIC<br><span class="accent">SERIES</span></h1>
+      <p class="monument-jp">倍音の秩序 — フーリエ合成</p>
+    </div>
+    <div class="issue-no"><small>ISSUE No.</small>421</div>
+  </div>
+
+  <p class="dek">What makes a sound rich? A single pure frequency is a sine wave — clean, silent, and rare in nature. Every other timbre is a <em>sum</em> of harmonics. Set the base wave, lower the probe to add partials, drift them sharp with string stiffness, and drag the phase constellation to hear and see the math of sound synthesis.</p>
+
+  <section class="register" aria-label="The rig — apparatus specification">
+    <div class="register-head"><span>THE RIG · 装置仕様</span><span class="jp">FOURIER ADDITIVE RIG</span></div>
+    <dl>
+      <div class="row"><dt>Subject</dt><dd>Fourier additive waveform summation</dd></div>
+      <div class="row"><dt>Base frequency</dt><dd>C3 (130.81 Hz) · warm hum</dd></div>
+      <div class="row"><dt>Partial capacity</dt><dd>1 to 24 sine harmonics</dd></div>
+      <div class="row"><dt>Inharmonicity</dt><dd>f_n = n · f_0 · &radic;(1 + B · n&sup2;)</dd></div>
+      <div class="row"><dt>Synth limit</dt><dd>0.05 gain max · user initiated</dd></div>
+    </dl>
+  </section>
+
+  <article class="prose">
+    <section class="sect">
+      <h2><span>I. The Timbre Problem</span><span class="jp">音色の問題</span></h2>
+      <p>A violin string, a trumpet bell, and a sine oscillator playing the exact same frequency sound entirely distinct. Timbre is the fingerprint of a sound. Jean-Baptiste Fourier proved in 1822 that any periodic waveform can be represented as a sum of simple sinusoids. Timbre is therefore not a monolithic quality; it is a mathematical sum of harmonically related partials.</p>
+      <p>In subtractive synthesis, we start with a harmonically rich shape — a sawtooth or a square — and filter frequencies out. In additive synthesis, we build the spectrum from the ground up, placing each sinusoid exactly where the physics of the instrument demands. Timbre is constructed, partial by partial.</p>
+    </section>
+    <section class="sect">
+      <h2><span>II. The Inharmonic Drift</span><span class="jp">非調和のずれ</span></h2>
+      <p>In a theoretically perfect string, every harmonic is an exact integer multiple of the fundamental frequency. But real strings have physical thickness and stiffness. This stiffness acts as a restoring force that pushes higher frequencies slightly sharp.</p>
+      <p>We model this stiffness using the inharmonicity coefficient B. As B increases, higher partials drift sharp, wringing the pure harmonic order out into a metallic, bell-like, or wood-plank resonance. Timbre is stretched, revealing the friction of physical materials.</p>
+    </section>
+  </article>
+
+  <div class="bore">
+    <div class="gauge" aria-hidden="true">
+      <span class="gauge-cap">PARTIALS<br>倍音数</span>
+      <span class="gauge-line"></span>
+      <span id="probe-dot"></span>
+      <span id="probe-read">N = 8</span>
+      <span class="gauge-stop" data-n="1"><span class="n">1</span><span class="jp">単音</span></span>
+      <span class="gauge-stop" data-n="4"><span class="n">4</span></span>
+      <span class="gauge-stop" data-n="8"><span class="n">8</span></span>
+      <span class="gauge-stop" data-n="12"><span class="n">12</span></span>
+      <span class="gauge-stop" data-n="16"><span class="n">16</span></span>
+      <span class="gauge-stop" data-n="20"><span class="n">20</span></span>
+      <span class="gauge-stop" data-n="24"><span class="n">24</span><span class="jp">稠密</span></span>
+    </div>
+
+    <div class="strata">
+
+      <!-- STRATUM 0 · THE PROBE : base waveform + the single depth control -->
+      <section class="stratum" aria-label="Stratum 0 — the probe">
+        <div class="stratum-head">
+          <span>STRATUM 0 · THE PROBE</span><span class="jp">探り</span>
+          <span class="stratum-status">DEPTH AXIS · 深度軸</span>
+        </div>
+        <div class="stratum-body split">
+          <div class="live">
+            <div class="ctrl-label"><span>BASE WAVEFORM · 基本波</span></div>
+            <div class="waveforms" role="radiogroup" aria-label="Select base oscillator shape">
+              <button type="button" role="radio" data-wave="sine" aria-checked="true" tabindex="0">SINE</button>
+              <button type="button" role="radio" data-wave="sawtooth" aria-checked="false" tabindex="-1">SAW</button>
+              <button type="button" role="radio" data-wave="square" aria-checked="false" tabindex="-1">SQUARE</button>
+              <button type="button" role="radio" data-wave="triangle" aria-checked="false" tabindex="-1">TRIANGLE</button>
+            </div>
+          </div>
+          <div class="live rangeblock" style="margin-top:0">
+            <label class="ctrl-label" for="probe-range">
+              <span>PROBE — PARTIALS (N) · 倍音数</span><strong id="probe-val">8</strong>
+            </label>
+            <input id="probe-range" type="range" min="1" max="24" step="1" value="8"
+                   aria-label="Partials — the depth of the harmonic reconstruction, 1 to 24" />
+            <div class="ctrl-label" style="margin:2px 0 0"><span>SHALLOW · 単純</span><span>DEEP · 稠密</span></div>
+          </div>
+        </div>
+        <p class="stratum-caption">FIG. 0 — <b>THE PARTIAL COUNT IS THE DEPTH.</b> N=1 IS A LONE SINE; N=24 IS THE DENSE RECONSTRUCTION. THE BASE WAVE YOU CARRY RE-INKS EVERY STRATUM BELOW.</p>
+      </section>
+
+      <!-- STRATUM 1 · THE SPECTRUM : carried context re-inks it -->
+      <section class="stratum" aria-label="Stratum 1 — the spectrum">
+        <div class="stratum-head">
+          <span>STRATUM −1 · THE SPECTRUM</span><span class="jp">倍音スペクトル</span>
+          <span class="stratum-status" id="spectrum-status">8 / 24 SOUNDING</span>
+        </div>
+        <div class="stratum-body">
+          <canvas id="cv-spectrum" class="plate" width="1040" height="390"
+                  role="img" aria-label="Harmonic weight spectrum: the amplitude of each of the 24 partials for the chosen base waveform."></canvas>
+        </div>
+        <p class="stratum-caption">FIG. 1 — EACH BAR IS A PARTIAL'S WEIGHT IN THE SUM. SORTS WITHIN THE PROBE'S REACH SOUND (ACCENT); THOSE BELOW IT WAIT AS GHOSTS. SINE KEEPS ONLY THE FUNDAMENTAL; SAW KEEPS ALL; SQUARE &amp; TRIANGLE KEEP THE ODD HARMONICS.</p>
+      </section>
+
+      <!-- STRATUM 2 · THE CONSTELLATION : draggable + keyboard phase -->
+      <section class="stratum" aria-label="Stratum 2 — the constellation">
+        <div class="stratum-head">
+          <span>STRATUM −2 · THE CONSTELLATION</span><span class="jp">ベクトル軌道</span>
+          <span class="stratum-status">DRAG · 位相</span>
+        </div>
+        <div class="stratum-body split">
+          <div class="const-grid">
+            <canvas id="cv-const" class="plate" width="900" height="900" tabindex="0"
+                    aria-label="Phasor constellation. Each partial is a rotating vector; its circle radius is the coefficient magnitude. Drag a circle, or focus this plate and use arrow keys: up and down select a partial, left and right rotate its phase."></canvas>
+          </div>
+          <div>
+            <div class="live rangeblock" style="margin-top:0">
+              <label class="ctrl-label" for="inh-range">
+                <span>INHARMONICITY (B) · 非調和</span><strong id="inh-val">0.000</strong>
+              </label>
+              <input id="inh-range" type="range" min="0" max="0.2" step="0.005" value="0"
+                     aria-label="Inharmonicity coefficient B — string stiffness, stretches the higher partials sharp" />
+              <div class="ctrl-label" style="margin:2px 0 0"><span>PURE · 純正</span><span>STIFF · 金属的</span></div>
+            </div>
+            <div class="live" style="margin-top:20px">
+              <button type="button" class="btn-ghost" id="reset-phase">RESET PHASES · 位相リセット</button>
+            </div>
+            <p class="stratum-caption" style="border-top:none;padding:14px 0 0">SELECTED PARTIAL: <b id="sel-read" style="color:var(--accent)">n = 1</b></p>
+          </div>
+        </div>
+        <p class="stratum-caption">FIG. 2 — THE SUM AS A CHAIN OF ORBITS: EACH PARTIAL RIDES THE TIP OF THE ONE ABOVE. A NEGATIVE FOURIER WEIGHT IS A PHASE INVERSION — THE ARM FLIPS, THE CIRCLE'S RADIUS STAYS ITS MAGNITUDE. THE TRACED LOOP IS THE WAVE.</p>
+      </section>
+
+      <!-- STRATUM 3 · THE SUM : the floor that resolves + audio -->
+      <section class="stratum" aria-label="Stratum 3 — the sum">
+        <div class="stratum-head">
+          <span>STRATUM −3 · THE SUM</span><span class="jp">合成波形</span>
+          <span class="stratum-status">THE FLOOR · 帰結</span>
+        </div>
+        <div class="stratum-body">
+          <canvas id="cv-wave" class="plate" width="1040" height="390"
+                  role="img" aria-label="Time-domain plot of the synthesized waveform — the sum of all sounding partials over two cycles."></canvas>
+          <div class="audio-row live" style="margin-top:16px">
+            <button type="button" id="hear" aria-pressed="false">
+              <span id="hear-label">HEAR THE SUM · 音声を聴く</span><span class="glyph" id="hear-glyph" aria-hidden="true">&#9654;</span>
+            </button>
+            <button type="button" class="btn-ghost" id="reset-phase-2">RESET PHASES</button>
+            <label class="vol" for="vol-range">MASTER VOL
+              <input id="vol-range" type="range" min="0.005" max="0.05" step="0.005" value="0.02"
+                     aria-label="Master volume — hard-capped at 0.05 gain" />
+              <span id="vol-read" style="min-width:3.4em">0.020</span>
+            </label>
+          </div>
+        </div>
+        <p class="stratum-caption">FIG. 3 — <b>THE FLOOR RESOLVES HERE.</b> AS N DEEPENS, THE SUM CONVERGES ON ITS TARGET SHAPE — GIBBS RINGING AT THE EDGES AND ALL. AUDIO IS LOCAL, USER-INITIATED; THE MASTER GAIN NEVER EXCEEDS 0.05.</p>
+      </section>
+
+      <div class="ledger-block">
+        <p class="ledger-kicker">SESSION RECORD · 記録簿 (CLIENT STATE ONLY)</p>
+        <p id="ledger">DEPTH N=08 · WAVE ADJUSTMENTS <b>00</b> · SLIDER TANGENTS <b>00</b> · SYNTH PROFILES PULLED <b>00</b> · BASE SINE</p>
+        <p class="ledger-note">Synthesizer sum is played locally via Web Audio API. Partials and volumes are calculated in real time. Volume slider controls master level. Reloading reset all phase offsets to rest state.
+          <span class="disclosure">The ledger counts only your own hand — how deep you lowered the probe, how many waves and sliders you moved, how many times you pulled the synth. Counted in your browser, kept by no one, gone on reload. Every plate is computed live from the harmonic series: nothing here was generated, no audio was recorded — the waveforms are summed sine-by-sine as you move the controls.</span></p>
+      </div>
+
+    </div>
+  </div>
+
+  <blockquote class="pullquote">
+    <p>&ldquo;Timbre is not a quality we hear; it is a mathematical sum we experience.&rdquo;</p>
+    <cite>— John Chowning, 1973</cite>
+  </blockquote>
+
+  <section class="refs">
+    <p class="kicker" style="margin:0">WORKS CITED · 参考文献</p>
+    <ol>
+      <li>Roads, C. (2001). <em>Microsound</em>. MIT Press.</li>
+      <li>Chowning, J. (1973). <em>The Synthesis of Complex Audio Spectra by Means of Frequency Modulation</em>. Journal of the Audio Engineering Society.</li>
+      <li>Zavalishin, V. (2012). <em>The Art of VA Filter Design</em>. Native Instruments.</li>
+    </ol>
+  </section>
+
+  <footer class="colophon">
+    <p class="signoff">街のコーダーたちへ — the sum is always coherent when you hold the phase; build the wave partial by partial.</p>
+    SET IN GARAMOND &amp; COURIER <span class="star">★</span> EVERY WAVEFORM IS SUMMED LIVE — NOTHING GENERATED, EVERY PARTIAL COMPUTED IN YOUR BROWSER <span class="star">★</span> AUDIO IS LOCAL (WEB AUDIO), USER-INITIATED, MASTER GAIN CAPPED AT 0.05 <span class="star">★</span> THE LEDGER COUNTS ONLY YOUR HAND, SESSION-ONLY, KEPT BY NO ONE <span class="star">★</span> KERNEL.CHAT PRESSROOM
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var MAX_HARMONICS = 24;
+  var BASE_FREQ = 130.81; // C3
+
+  /* Timer-robust step (artifact-language honesty core): rAF provably
+     stalls in throttled/background tabs and embedded panes, so every
+     frame advances via a rAF-vs-setTimeout race — never rAF alone. */
+  function tick(fn) {
+    var fired = false;
+    function fire() { if (fired) return; fired = true; fn(); }
+    requestAnimationFrame(fire);
+    setTimeout(fire, 42);
+  }
+
+  function tokens() {
+    var cs = getComputedStyle(document.documentElement);
+    return {
+      ink: cs.getPropertyValue("--ink").trim() || "#1F1E1D",
+      meta: cs.getPropertyValue("--meta").trim() || "#6E675F",
+      line: cs.getPropertyValue("--line").trim() || "#D8D2C6",
+      accent: cs.getPropertyValue("--accent").trim() || "#6F968A",
+      paper: cs.getPropertyValue("--paper").trim() || "#FAF9F6"
+    };
+  }
+
+  /* ---------- state ---------- */
+  var waveform = "sine";       // 421.ts defaultWaveform
+  var N = 8;                   // 421.ts defaultHarmonicsCount
+  var B = 0.0;                 // 421.ts defaultInharmonicity
+  var phases = new Array(MAX_HARMONICS).fill(0);
+  var isPlaying = false;
+  var volume = 0.02;           // safe default (hard cap 0.05)
+  var selected = 1;            // keyboard-selected partial
+  var canvasFocused = false;
+  var tally = { clicks: 0, scrubs: 0, plays: 0 };
+  var timeT = 0;
+
+  /* ---------- mathematical weights (ported verbatim from FourierFeature) ---------- */
+  function getHarmonicWeight(n, type) {
+    switch (type) {
+      case "sine":     return n === 1 ? 1 : 0;
+      case "sawtooth": return 1 / n;
+      case "square":   return n % 2 !== 0 ? 1 / n : 0;
+      case "triangle": return n % 2 !== 0 ? (Math.pow(-1, (n - 1) / 2) / (n * n)) : 0;
+      default:         return 0;
+    }
+  }
+  function getFrequency(n, b) {
+    return n * BASE_FREQ * Math.sqrt(1 + b * n * n);
+  }
+  function activeHarmonics() {
+    var out = [];
+    for (var i = 1; i <= N; i++) { if (getHarmonicWeight(i, waveform) !== 0) out.push(i); }
+    return out;
+  }
+  function soundingCount() { return activeHarmonics().length; }
+
+  /* ---------- Web Audio synthesis (user-initiated only) ---------- */
+  var audioCtx = null, oscBank = [], masterGain = null;
+
+  function initAudio() {
+    if (audioCtx) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AC();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    masterGain.connect(audioCtx.destination);
+    oscBank = [];
+    for (var i = 1; i <= MAX_HARMONICS; i++) {
+      var osc = audioCtx.createOscillator();
+      var g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(getFrequency(i, B), audioCtx.currentTime);
+      g.gain.setValueAtTime(0, audioCtx.currentTime);
+      osc.connect(g); g.connect(masterGain); osc.start();
+      oscBank.push({ osc: osc, gain: g });
+    }
+  }
+
+  function updateAudio() {
+    if (!audioCtx || !masterGain) return;
+    var t = audioCtx.currentTime;
+    var safe = Math.min(volume, 0.05); // hard cap — master gain never exceeds 0.05
+    masterGain.gain.setTargetAtTime(isPlaying ? safe : 0, t, 0.05);
+    oscBank.forEach(function (node, idx) {
+      var n = idx + 1;
+      var active = n <= N;
+      var w = getHarmonicWeight(n, waveform);
+      var target = active ? w * 0.5 : 0; // scale down to avoid clipping (ported)
+      node.osc.frequency.setTargetAtTime(getFrequency(n, B), t, 0.05);
+      node.gain.gain.setTargetAtTime(target, t, 0.05);
+    });
+  }
+
+  /* ---------- canvas sizing ---------- */
+  function fit(cv) {
+    var dpr = window.devicePixelRatio || 1;
+    var w = cv.clientWidth, h = cv.clientHeight;
+    var pw = Math.max(1, Math.round(w * dpr)), ph = Math.max(1, Math.round(h * dpr));
+    if (cv.width !== pw) cv.width = pw;
+    if (cv.height !== ph) cv.height = ph;
+    var ctx = cv.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+
+  /* ---------- STRATUM 1 · spectrum (static; carried context re-inks) ---------- */
+  var cvSpectrum = document.getElementById("cv-spectrum");
+  function drawSpectrum() {
+    var f = fit(cvSpectrum), ctx = f.ctx, w = f.w, h = f.h, c = tokens();
+    ctx.clearRect(0, 0, w, h);
+    var padL = 8, padR = 8, padTop = 14, baseY = h - 26;
+    var usable = baseY - padTop;
+    var span = w - padL - padR;
+    var slot = span / MAX_HARMONICS;
+    var barW = Math.max(2, slot * 0.52);
+
+    // baseline
+    ctx.strokeStyle = c.line; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, baseY + 0.5); ctx.lineTo(w - padR, baseY + 0.5); ctx.stroke();
+
+    for (var n = 1; n <= MAX_HARMONICS; n++) {
+      var w0 = getHarmonicWeight(n, waveform);
+      var mag = Math.abs(w0);
+      var cx = padL + (n - 0.5) * slot;
+      var x = cx - barW / 2;
+      var barH = mag * usable; // linear, honest
+      var reached = n <= N && mag > 0;
+
+      if (mag > 0) {
+        var y = baseY - barH;
+        if (reached) {
+          ctx.fillStyle = c.accent;
+          ctx.fillRect(x, y, barW, barH);
+        } else {
+          // below the probe: a ghost outline (legible at rest, raised by the probe)
+          ctx.strokeStyle = c.line; ctx.lineWidth = 1;
+          ctx.strokeRect(x + 0.5, y + 0.5, barW - 1, Math.max(1, barH - 1));
+        }
+      } else {
+        // zero-weight slot (even partials of square/triangle): a marker on the base
+        ctx.fillStyle = c.line;
+        ctx.beginPath(); ctx.arc(cx, baseY - 2, 1.4, 0, Math.PI * 2); ctx.fill();
+      }
+
+      // partial index labels at a few stops
+      if (n === 1 || n % 4 === 0) {
+        ctx.fillStyle = (n <= N) ? c.meta : c.line;
+        ctx.font = "9px " + monoFont();
+        ctx.textAlign = "center";
+        ctx.fillText(String(n), cx, h - 10);
+      }
+    }
+    // probe line at N
+    var px = padL + N * slot;
+    ctx.strokeStyle = c.accent; ctx.lineWidth = 1; ctx.globalAlpha = 0.55;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath(); ctx.moveTo(px, padTop - 6); ctx.lineTo(px, baseY); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha = 1;
+  }
+
+  function monoFont() { return "Courier, monospace"; }
+
+  /* ---------- STRATUM 2 · constellation + STRATUM 3 · waveform (animated) ---------- */
+  var cvConst = document.getElementById("cv-const");
+  var cvWave = document.getElementById("cv-wave");
+
+  function draw() {
+    if (!REDUCED) timeT += 0.015;
+
+    // -- constellation --
+    var fc = fit(cvConst), cc = fc.ctx, cW = fc.w, cH = fc.h, c = tokens();
+    cc.clearRect(0, 0, cW, cH);
+    var cx = cW / 2, cy = cH / 2;
+    var baseScale = Math.min(cW, cH) * 0.35;
+
+    // traced orbit (the sum path)
+    var steps = 200;
+    cc.beginPath();
+    cc.strokeStyle = c.accent; cc.lineWidth = 1.5;
+    for (var s = 0; s <= steps; s++) {
+      var et = timeT + (s / steps) * Math.PI * 2;
+      var tx = cx, ty = cy;
+      for (var i = 1; i <= N; i++) {
+        var w = getHarmonicWeight(i, waveform);
+        if (w === 0) continue;
+        var stretch = Math.sqrt(1 + B * i * i);
+        var ang = i * stretch * et + phases[i - 1];
+        tx += w * Math.sin(ang) * baseScale * 0.6;
+        ty += w * Math.cos(ang) * baseScale * 0.6;
+      }
+      if (s === 0) cc.moveTo(tx, ty); else cc.lineTo(tx, ty);
+    }
+    cc.stroke();
+
+    // vector circles + arms
+    var px = cx, py = cy;
+    var joints = {};
+    for (var k = 1; k <= N; k++) {
+      var wk = getHarmonicWeight(k, waveform);
+      if (wk === 0) continue;
+      var st = Math.sqrt(1 + B * k * k);
+      var a = k * st * timeT + phases[k - 1];
+      var amp = wk * baseScale * 0.6;   // signed: negative weight folds the arm
+      var r = Math.abs(amp);            // circle radius is the magnitude
+
+      cc.beginPath(); cc.strokeStyle = c.line; cc.lineWidth = 1;
+      cc.arc(px, py, r, 0, Math.PI * 2); cc.stroke();
+
+      var nx = px + amp * Math.sin(a);
+      var ny = py + amp * Math.cos(a);
+      cc.beginPath(); cc.strokeStyle = c.ink; cc.lineWidth = 1;
+      cc.moveTo(px, py); cc.lineTo(nx, ny); cc.stroke();
+
+      cc.fillStyle = c.accent;
+      cc.beginPath(); cc.arc(nx, ny, 2, 0, Math.PI * 2); cc.fill();
+
+      joints[k] = { x: nx, y: ny, r: r, cx: px, cy: py };
+      px = nx; py = ny;
+    }
+
+    // keyboard selection ring
+    if (canvasFocused && joints[selected]) {
+      var j = joints[selected];
+      cc.strokeStyle = c.accent; cc.lineWidth = 2;
+      cc.beginPath(); cc.arc(j.cx, j.cy, j.r, 0, Math.PI * 2); cc.stroke();
+      cc.beginPath(); cc.arc(j.x, j.y, 5, 0, Math.PI * 2); cc.stroke();
+    }
+
+    // -- waveform sum (the floor) --
+    var fw = fit(cvWave), wc = fw.ctx, wW = fw.w, wH = fw.h;
+    wc.clearRect(0, 0, wW, wH);
+    wc.strokeStyle = c.line; wc.lineWidth = 1;
+    wc.beginPath(); wc.moveTo(0, wH / 2); wc.lineTo(wW, wH / 2); wc.stroke();
+
+    wc.beginPath(); wc.strokeStyle = c.accent; wc.lineWidth = 2;
+    for (var x = 0; x < wW; x++) {
+      var t = timeT + (x / wW) * Math.PI * 4; // two cycles
+      var ySum = 0, maxScale = 0;
+      for (var m = 1; m <= N; m++) {
+        var wm = getHarmonicWeight(m, waveform);
+        if (wm === 0) continue;
+        var stm = Math.sqrt(1 + B * m * m);
+        var angm = m * stm * t + phases[m - 1];
+        ySum += wm * Math.sin(angm);
+        maxScale += wm;
+      }
+      var val = maxScale > 0 ? (ySum / maxScale) * (wH * 0.35) : 0;
+      var plotY = wH / 2 - val;
+      if (x === 0) wc.moveTo(x, plotY); else wc.lineTo(x, plotY);
+    }
+    wc.stroke();
+  }
+
+  /* ---------- animation loop (persistent, timer-robust) ---------- */
+  var loopAlive = true;
+  function loop() {
+    if (!loopAlive) return;
+    draw();
+    if (!REDUCED) tick(loop);
+  }
+
+  /* ---------- pointer phase dragging (ported) ---------- */
+  var dragTarget = null;
+  function pointerPolar(ev) {
+    var rect = cvConst.getBoundingClientRect();
+    var x = ev.clientX - rect.left - rect.width / 2;
+    var y = ev.clientY - rect.top - rect.height / 2;
+    return { angle: Math.atan2(x, y), radius: Math.sqrt(x * x + y * y), width: rect.width };
+  }
+  cvConst.addEventListener("pointerdown", function (ev) {
+    var p = pointerPolar(ev);
+    cvConst.setPointerCapture(ev.pointerId);
+    var baseScale = p.width * 0.35;
+    var bestIdx = 0, bestDiff = Infinity, cur = 0;
+    for (var i = 1; i <= N; i++) {
+      var w = getHarmonicWeight(i, waveform);
+      if (w === 0) continue;
+      cur += Math.abs(w) * baseScale * 0.6;
+      var diff = Math.abs(p.radius - cur);
+      if (diff < bestDiff && diff < 30) { bestDiff = diff; bestIdx = i; }
+    }
+    if (bestIdx > 0) {
+      dragTarget = bestIdx;
+      selected = bestIdx; updateSelReadout();
+      tally.scrubs++; updateLedger();
+    }
+  });
+  cvConst.addEventListener("pointermove", function (ev) {
+    if (dragTarget === null) return;
+    var p = pointerPolar(ev);
+    var idx = dragTarget;
+    var st = Math.sqrt(1 + B * idx * idx);
+    phases[idx - 1] = p.angle - idx * st * timeT;
+    if (REDUCED) draw();
+  });
+  function endDrag() { dragTarget = null; }
+  cvConst.addEventListener("pointerup", endDrag);
+  cvConst.addEventListener("pointercancel", endDrag);
+
+  /* ---------- keyboard phase (the second door) ---------- */
+  cvConst.addEventListener("focus", function () { canvasFocused = true; if (REDUCED) draw(); });
+  cvConst.addEventListener("blur", function () { canvasFocused = false; if (REDUCED) draw(); });
+  cvConst.addEventListener("keydown", function (ev) {
+    var act = activeHarmonics();
+    if (act.length === 0) return;
+    if (act.indexOf(selected) < 0) selected = act[0];
+    var pos = act.indexOf(selected);
+    if (ev.key === "ArrowUp") {
+      selected = act[Math.max(0, pos - 1)]; updateSelReadout(); ev.preventDefault();
+    } else if (ev.key === "ArrowDown") {
+      selected = act[Math.min(act.length - 1, pos + 1)]; updateSelReadout(); ev.preventDefault();
+    } else if (ev.key === "ArrowLeft" || ev.key === "ArrowRight") {
+      var step = (ev.key === "ArrowLeft" ? -1 : 1) * (Math.PI / 24);
+      phases[selected - 1] += step;
+      tally.scrubs++; updateLedger();
+      if (REDUCED) draw();
+      ev.preventDefault();
+    } else if (ev.key === "Home") {
+      phases[selected - 1] = 0; tally.scrubs++; updateLedger(); if (REDUCED) draw(); ev.preventDefault();
+    }
+  });
+  function updateSelReadout() {
+    document.getElementById("sel-read").textContent = "n = " + selected;
+  }
+
+  /* ---------- waveform radiogroup (arrow-key roving) ---------- */
+  var waveBtns = Array.prototype.slice.call(document.querySelectorAll(".waveforms button"));
+  function setWaveform(type, focusBtn) {
+    if (type === waveform) { if (focusBtn) focusBtn.focus(); return; }
+    waveform = type;
+    waveBtns.forEach(function (b) {
+      var on = b.dataset.wave === type;
+      b.setAttribute("aria-checked", on ? "true" : "false");
+      b.tabIndex = on ? 0 : -1;
+    });
+    // keep the selected phase-partial valid for the new spectrum
+    var act = activeHarmonics();
+    if (act.length && act.indexOf(selected) < 0) { selected = act[0]; updateSelReadout(); }
+    tally.clicks++;
+    onControlChange();
+    if (focusBtn) focusBtn.focus();
+  }
+  waveBtns.forEach(function (b, i) {
+    b.addEventListener("click", function () { setWaveform(b.dataset.wave, b); });
+    b.addEventListener("keydown", function (ev) {
+      var idx = i, next = null;
+      if (ev.key === "ArrowRight" || ev.key === "ArrowDown") next = (idx + 1) % waveBtns.length;
+      else if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") next = (idx - 1 + waveBtns.length) % waveBtns.length;
+      else if (ev.key === " " || ev.key === "Enter") { setWaveform(b.dataset.wave, b); ev.preventDefault(); return; }
+      if (next !== null) { setWaveform(waveBtns[next].dataset.wave, waveBtns[next]); ev.preventDefault(); }
+    });
+  });
+
+  /* ---------- the probe: partials slider (single traversal control) ---------- */
+  var probeRange = document.getElementById("probe-range");
+  probeRange.addEventListener("input", function () {
+    N = Number(probeRange.value);
+    document.getElementById("probe-val").textContent = String(N);
+    var act = activeHarmonics();
+    if (act.length && act.indexOf(selected) < 0) { selected = act[0]; updateSelReadout(); }
+    tally.scrubs++;
+    onControlChange();
+  });
+
+  /* ---------- inharmonicity slider ---------- */
+  var inhRange = document.getElementById("inh-range");
+  inhRange.addEventListener("input", function () {
+    B = Number(inhRange.value);
+    document.getElementById("inh-val").textContent = B.toFixed(3);
+    tally.scrubs++;
+    onControlChange();
+  });
+
+  /* ---------- reset phases ---------- */
+  function resetPhases() {
+    phases = new Array(MAX_HARMONICS).fill(0);
+    tally.clicks++;
+    updateLedger();
+    if (REDUCED) draw();
+  }
+  document.getElementById("reset-phase").addEventListener("click", resetPhases);
+  document.getElementById("reset-phase-2").addEventListener("click", resetPhases);
+
+  /* ---------- audio button + volume ---------- */
+  var hearBtn = document.getElementById("hear");
+  hearBtn.addEventListener("click", function () {
+    initAudio();
+    isPlaying = !isPlaying;
+    tally.plays++;
+    hearBtn.setAttribute("aria-pressed", isPlaying ? "true" : "false");
+    document.getElementById("hear-label").textContent = isPlaying ? "MUTE · 消音" : "HEAR THE SUM · 音声を聴く";
+    document.getElementById("hear-glyph").innerHTML = isPlaying ? "&#9632;" : "&#9654;";
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    updateAudio();
+    updateLedger();
+  });
+  var volRange = document.getElementById("vol-range");
+  volRange.addEventListener("input", function () {
+    volume = Math.min(Number(volRange.value), 0.05);
+    document.getElementById("vol-read").textContent = volume.toFixed(3);
+    updateAudio();
+  });
+
+  /* ---------- gauge ---------- */
+  var probeDot = document.getElementById("probe-dot");
+  var probeRead = document.getElementById("probe-read");
+  var gaugeStops = Array.prototype.slice.call(document.querySelectorAll(".gauge-stop"));
+  function layoutGauge() {
+    // stops positioned along the rail by their partial number (1..24)
+    gaugeStops.forEach(function (st) {
+      var n = Number(st.dataset.n);
+      st.style.top = (8 + ((n - 1) / (MAX_HARMONICS - 1)) * (gaugeHeight() - 16)) + "px";
+    });
+    updateGauge();
+  }
+  function gaugeHeight() {
+    var g = document.querySelector(".gauge");
+    return g ? g.getBoundingClientRect().height : 400;
+  }
+  function updateGauge() {
+    var top = 8 + ((N - 1) / (MAX_HARMONICS - 1)) * (gaugeHeight() - 16);
+    probeDot.style.top = top + "px";
+    probeRead.style.top = top + "px";
+    probeRead.textContent = "N = " + N;
+    gaugeStops.forEach(function (st) {
+      st.classList.toggle("lit", Number(st.dataset.n) <= N);
+    });
+  }
+
+  /* ---------- ledger ---------- */
+  function pad(v) { return String(v).padStart(2, "0"); }
+  function updateLedger() {
+    document.getElementById("ledger").innerHTML =
+      "DEPTH N=" + pad(N) +
+      " · WAVE ADJUSTMENTS <b>" + pad(tally.clicks) + "</b>" +
+      " · SLIDER TANGENTS <b>" + pad(tally.scrubs) + "</b>" +
+      " · SYNTH PROFILES PULLED <b>" + pad(tally.plays) + "</b>" +
+      " · BASE " + waveform.toUpperCase();
+  }
+
+  /* ---------- status line ---------- */
+  function updateSpectrumStatus() {
+    document.getElementById("spectrum-status").textContent = soundingCount() + " / " + MAX_HARMONICS + " SOUNDING";
+  }
+
+  /* ---------- one control-change handler ---------- */
+  function onControlChange() {
+    updateGauge();
+    updateSpectrumStatus();
+    updateLedger();
+    updateAudio();
+    drawSpectrum();
+    if (REDUCED) draw(); // running loop covers the non-reduced case
+  }
+
+  /* ---------- theme re-ink ---------- */
+  function repaint() {
+    drawSpectrum();
+    draw(); // re-read tokens; harmless mid-loop
+  }
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", repaint);
+  new MutationObserver(repaint).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  /* ---------- resize ---------- */
+  window.addEventListener("resize", function () {
+    layoutGauge();
+    drawSpectrum();
+    if (REDUCED) draw();
+  });
+
+  /* ---------- init: the resting page is complete ---------- */
+  updateSelReadout();
+  updateSpectrumStatus();
+  updateLedger();
+  drawSpectrum();
+  draw();            // resting plots drawn once (reduced-motion rests here)
+  layoutGauge();
+  if (!REDUCED) loop();
+  setTimeout(layoutGauge, 250); // after fonts settle
+})();
+</script>
