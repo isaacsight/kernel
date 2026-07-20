@@ -2640,3 +2640,20 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
 - Site deploy NOT pushed: main is 42 commits behind this branch and
   push-to-main is the deploy; awaiting Isaac's call on shipping the
   whole branch.
+
+## Session 2026-07-19 — ISSUE 426 deployed to kernel.chat
+
+- Merged codex/palmier-directing-room to main (7a38c6cc5) and pushed —
+  gh-pages provenance reads deploy: 7a38c6cc5; site and artifact URL
+  both 200; live front renders ISSUE 426 · JAN 2027.
+- Pre-deploy gates all green: tsc, 585/585 vitest, production build,
+  design-qa audit clean on both viewports (after fixing the artifact's
+  own 37px probe button — same defect class the tool caught on 425).
+- Artifact bugs fixed before pressing: split-flap first-hop died on an
+  isConnected guard before DOM insertion (replaced with a generation
+  token); carriers now carry plausible cargo; status column widened.
+- Forecast spread needs no images (propositions are typographic) — the
+  fal balance was never touched this session; plates 01-04 came from
+  the relay session.
+- test:palmier script pointed at vitest (node --test broke after the
+  runner port).
