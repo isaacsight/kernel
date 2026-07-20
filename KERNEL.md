@@ -24,11 +24,11 @@ across two surfaces*. The discipline is the same in both rooms.
 
 **Surface 1 — kbot.** An open-source terminal AI agent
 (`@kernel.chat/kbot` on npm). MIT. BYOK. Local-first. ~100 specialty
-skills as of v4.1.0, evidence-curated from 670 in v4.0 with a public
+skills as of v4.5.0, evidence-curated from 670 in v4.0 with a public
 audit trail at `packages/kbot/CURATION_DISCOVERY/CURATION_DECISION.csv`.
 
 **Surface 2 — kernel.chat.** An editorial magazine. Monthly cadence.
-Sixteen issues in the catalog (360–375). POPEYE-grammar anchored,
+Sixty-seven issues in the catalog (360–426). POPEYE-grammar anchored,
 PAPERSKY and WIRED as decoded editorial neighbours. The site lives in
 `src/` and ships to `https://kernel.chat` via GitHub Pages.
 
@@ -43,8 +43,8 @@ contents, the work is the same.
 
 | | kbot | kernel.chat |
 |---|---|---|
-| Latest version | **4.1.0** (npm) | **ISSUE 375 — THE SIX BORROWS** (live cover) |
-| Surface area | 100 specialty skills + 35 specialist agents | 16 issues, 2 decoded neighbours, 4 starred mechanics in active use |
+| Latest version | **4.5.0** (npm) | **ISSUE 426 — THE WEATHER OVER THE QUEUE** (live cover) |
+| Surface area | 100 specialty skills + 35 specialist agents | 67 issues, 2 decoded neighbours, 4 starred mechanics in active use |
 | Core moat | Music (Ableton/Serum/M4L), computer-use coordinator, local AI (Ollama/LLaDA), channels (Slack/Office), V5 futures substrate | POPEYE-grammar editorial discipline, evidence-driven audit trail, postmark dateline now fired |
 | Cadence | Patch versions multi-per-week; minor versions monthly | Monthly issues, occasionally drops of 2–4 |
 | What just shipped | Cache-warmth (jcode borrow), V5 futures (6 modules), Office channel, LLaDA local image gen | 372–375 four-issue drop, design-language extensions (ledger stock, postmark field, asterisk-stamp, numbered-catalog, graphite seed, WIRED decode) |

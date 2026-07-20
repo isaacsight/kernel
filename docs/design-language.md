@@ -785,5 +785,5 @@ shared with the TikTok grammar, a quiet cross-medium tie-in.
 
 (The seasonal accent move shipped: cobalt, ivy, pool are seeded
 in `src/content/issues/accents.ts` alongside tomato, brick, olive,
-amethyst, oxblood, coffee — nine seeds total, each with a default
-spread-type binding.)
+amethyst, oxblood, coffee, celadon, graphite — eleven seeds total,
+each with a default spread-type binding.)

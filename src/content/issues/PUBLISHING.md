@@ -30,7 +30,7 @@ colophon, masthead, dateline, bulletin) — not app vocabulary
 ```
 src/content/issues/
 ├── index.ts         ← the archive + all type definitions
-├── 360.ts ... 368.ts ← frozen snapshots, one per issue
+├── 360.ts ... 426.ts ← frozen snapshots, one per issue
 └── PUBLISHING.md    ← this file
 ```
 
@@ -110,20 +110,23 @@ If none fit, **add a new spread type** — don't force a format. See §V.
 
 ### 3. What paper stock? (`coverStock`)
 
-Five options: `cream` · `butter` · `kraft` · `ivory` · `ink`
+Six options: `cream` · `butter` · `kraft` · `ivory` · `ink` · `ledger`
 
 Pick the one whose material quality reinforces the topic. Cream is the
 default; butter is lamplight-warm; kraft is fashion/field-report;
 ivory is lab-bench or press-preview white; ink is manifesto / archival
-/ nocturnal.
+/ nocturnal; ledger is pale graph-ruled accountant's paper for the
+audit register (introduced 372: THE AUDIT).
 
 ### 4. What cover layout? (`coverLayout`)
 
-Three options:
+Five options:
 
 - `classic` — centered, monument bottom-right (default)
 - `monument-hero` — issue number IS the cover art, headline shrinks (use when the number is thematic: anniversary, absence, milestone)
 - `asymmetric-left` — left-aligned lockup, editorial-column rhythm (fashion, culture, dispatch)
+- `ledger-rule` — horizontal rules + numbered totals across the cover; the cover IS the audit (introduced 372; pairs with `coverStock: 'ledger'`)
+- `numbered-catalog` — monument-hero number + a 1–N catalog lockup as secondary art (introduced 375; suits issues whose argument IS the numbered route)
 
 ### 4.5. What accent? (THE INK CABINET — introduced 371)
 
@@ -148,6 +151,8 @@ issue's personality calls for a different register.
 | `amethyst` | When the issue is about kernel.chat itself — mastheads, anniversaries |
 | `oxblood` | Literature, wine, memory, endings |
 | `coffee` | Interviews, craft, slow work |
+| `celadon` | Goryeo-glaze grey-jade (청자/비색) — Korean lifestyle features: Seoul, slow living, hanji warmth, craft; the 여백 register |
+| `graphite` | Pencil-lead grey — audits, ledgers, accounting registers (introduced 372, paired with ledger stock) |
 
 ```ts
 accent: 'cobalt'          // named seed (preferred)
@@ -417,10 +422,11 @@ Match the existing style — title line is `ISSUE <N> — <TITLE>`,
 followed by a 2–3 paragraph body explaining identity decisions and
 any new types / components introduced.
 
-Always include:
+Always include a co-author trailer crediting whichever model pressed
+the issue. Under the Steward's Delta, Fable 5 holds the editor's chair:
 
 ```
-Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
 ```
 
 ---
@@ -475,11 +481,10 @@ branch — only main publishes.
 
 ---
 
-_Last updated: ISSUE 425 · DEC 2026 (ONE OF ONE — the second
-`sequence` instance. Five stations carry the fashion short’s real order
-from call through street, with verified production receipts and five
-new issue-only mixed-media plates. The site extends Sequence with an
-optional visual plate but adds no new interaction shape. The artifact
-edition is image-led and full-height; no film frame or video embed is
-reused. Prior: 424 THE STUDIO THAT STAYS HOME (`plate`, studio grammar)
-and 423 THE SIXTEEN THAT SPEAK (`plate`, routing grammar).)_
+_Last updated: ISSUE 426 · JAN 2027 (THE WEATHER OVER THE QUEUE — a
+`forecast` for compute: shared generation queues have weather, the
+quote exact and the arrival a season. Drafted artifact-first as an
+operable dispatch board that reproduces the real July 19, 2026 job
+registry — 37 departures, seven still running and six still queued at
+press time. Ink stock, `ledger-rule` cover, cobalt accent. Prior: 425
+ONE OF ONE (`sequence`) and 424 THE STUDIO THAT STAYS HOME (`plate`).)_
