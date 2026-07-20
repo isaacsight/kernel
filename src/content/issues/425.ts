@@ -182,7 +182,7 @@ export const ISSUE_425: IssueRecord = {
     verified: 'greenlight, routing, Palmier handoff, delivery master, refined-edit QC, and five new issue-only editorial plates',
     adherence: 'second Sequence instance; established ARIA tabs plus previous/next shortcuts; premium paper motion is CSS-only and collapses completely under reduced motion; optional visual plates add no new interaction shape',
     readCut: 'film frames and video embed refused; five original mixed-media plates commissioned exclusively for the issue',
-    pressed: 'XII·26 · source record read 2026-07-19',
+    pressed: 'artifacts/425-one-of-one.html · XII·26 · source record read 2026-07-19',
   },
 
   credits: {

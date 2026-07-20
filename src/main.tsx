@@ -10,6 +10,15 @@ import './i18n'
 import './critical.css'
 import('./index.css')
 
+// ─── Dev-only editorial guardrail ───────────────────────────────
+// Audit every issue's raw-hex accent for POPEYE-safety once at boot.
+// Dynamic-imported behind DEV so it never enters the production bundle.
+if (import.meta.env.DEV) {
+  import('./content/issues').then(({ ALL_ISSUES, auditAccents }) => {
+    auditAccents(ALL_ISSUES)
+  })
+}
+
 // ─── Boot sequence ──────────────────────────────────────────────
 // Auth tokens must be fully processed BEFORE React renders.
 // Otherwise useAuth sees no session → LoginGate flashes.

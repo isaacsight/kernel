@@ -20,6 +20,8 @@ jobs:
       - run: npm ci
       - name: Design adherence — no raw hex in the editorial design-system layer
         run: npm run lint:adherence
+      - name: Editorial law — artifact-first, no POPEYE naming, no emoji
+        run: npm run lint:editorial
       - run: npx tsc --noEmit
       - name: Unit tests (root vitest — 498 tests)
         run: npx vitest run

@@ -91,7 +91,7 @@ export const ISSUE_364: IssueRecord = {
         title: 'Japanese design keeps winning.',
         titleJp: '日本のデザイン、続行',
         body: [
-          'Uniqlo, MUJI, HHKB, Teenage Engineering, POPEYE itself. The American design class is fifteen years behind a lineage it refuses to acknowledge. 2027 is the year that stops being funny.',
+          'Uniqlo, MUJI, HHKB, Teenage Engineering. The American design class is fifteen years behind a lineage it refuses to acknowledge. 2027 is the year that stops being funny.',
           'The Japanese answer to "should this have a logo?" has been "probably not" for half a century. The rest of us are about to discover that it was correct.',
         ],
       },

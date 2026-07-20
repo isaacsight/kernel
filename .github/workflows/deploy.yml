@@ -25,6 +25,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Design adherence — no raw hex in the editorial design-system layer
+        run: npm run lint:adherence
+
+      - name: Editorial law — artifact-first, no POPEYE naming, no emoji
+        run: npm run lint:editorial
+
       - name: Type-check
         run: npx tsc --noEmit
 
@@ -37,6 +43,9 @@ jobs:
           VITE_STRIPE_KERNEL_PRICE_ID: ${{ secrets.VITE_STRIPE_KERNEL_PRICE_ID }}
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
+
+      - name: Build artifact index
+        run: npm run artifacts:index
 
       - name: Include editorial artifacts
         run: |

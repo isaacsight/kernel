@@ -13,13 +13,13 @@
 
 **Two surfaces, one publication:**
 1. **kbot** — open-source terminal AI agent (`@kernel.chat/kbot`
-   on npm). Currently **v4.1.0**. ~100 specialty skills curated
+   on npm). Currently **v4.5.0**. ~100 specialty skills curated
    from 670 in v4.0 with a public audit trail. Local-first, BYOK,
    MIT.
 2. **kernel.chat** — editorial magazine. Currently on
-   **ISSUE 375 — THE SIX BORROWS**. Sixteen issues in the
-   catalog. POPEYE-grammar anchored, PAPERSKY + WIRED decoded as
-   editorial neighbours.
+   **ISSUE 426 — THE WEATHER OVER THE QUEUE**. Sixty-seven issues
+   in the catalog. POPEYE-grammar anchored, PAPERSKY + WIRED decoded
+   as editorial neighbours.
 
 **Discipline (same on both surfaces):** count what gets read; cut
 what doesn't; file the audit in public; keep the manuscripts in

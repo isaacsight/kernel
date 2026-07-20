@@ -77,6 +77,51 @@
   Added "Made to Order" to `IssueColophon.tsx`'s link row (the shared
   cover/issue footer) and "MADE TO ORDER →" to `MagazineFrame.tsx`'s
   inner-page footer, so every surface routes to `/atelier`.
+## Session 2026-07-20 — Editorial-system audit + remediation
+
+- Audited kernel.chat's editorial system (content model, the 20-type
+  spread union, Ink Cabinet, render pipeline, the "laws," enforcement).
+  Type layer + router exhaustiveness are healthy; the gaps were
+  enforcement and doc drift. Remediated across five workstreams:
+- **Docs:** fixed PUBLISHING.md drift (stocks 5→6, layouts 3→5, ink
+  cabinet 9→11 seeds, dir diagram, last-updated→426, commit trailer→
+  Fable 5); refreshed CLAUDE.md + KERNEL.md currency to ISSUE 426 /
+  kbot v4.5.0 (KERNEL numbers-only — left the 2026-04-29 snapshot dates
+  untouched per Isaac); design-language.md "nine seeds"→eleven.
+- **Validators:** `isPopeyeSafe` was dead code with a false "runs in
+  dev" docblock. Wired a new `auditAccents()` (POPEYE-safety on raw-hex
+  accents) from `main.tsx` behind `import.meta.env.DEV`. Did NOT wire an
+  auto contrast gate — it false-positives on house tomato-on-cream
+  (~3.25:1) and lifted ink-stock accents; corrected those docblocks
+  instead. Added `accents.test.ts` (16 tests) — first accent-util tests.
+- **Enforcement:** new `scripts/check-editorial.mjs` (artifact-first
+  presence + no-POPEYE-naming + no-emoji, comment-stripped). Wired into
+  `ci.yml` AND `deploy.yml` — the fast law-checks now GATE the publish
+  (previously ci.yml ran parallel to deploy and didn't block it).
+- **Content:** removed 3 POPEYE leaks from rendered copy (413
+  jargon→GRAMMAR-SAFE; 364 list trim; 379 sentence cut) per Isaac's
+  "fix both"; added 425's missing artifact citation.
+- **Missing artifact:** authored `artifacts/421-the-harmonic-series.html`
+  (fourier issue — the only 419+ gap). Self-contained operable rig,
+  CSP-clean, celadon-on-ivory, honesty core intact, partials = depth
+  axis. Verified in-browser (renders on-grammar, no console errors,
+  ledger counts only real actions). Cited it in 421.ts.
+- Then took on the four out-of-scope items too:
+  - **Refactor:** split index.ts (1632 lines) → schema.ts (types) +
+    a 169-line registry; `export * from './schema'` keeps every import
+    unchanged. tsc + full vite build clean.
+  - **Tests:** added registry.test.ts (catalog invariants, 67-issue
+    masthead, accent validity) + feature-render.smoke.test.tsx (16/20
+    components from real data). Suite 498 → 786 passing. The 4
+    canvas/audio shapes (plate/bore/fourier/audit) need jsdom mocks —
+    follow-up.
+  - **Artifacts index:** scripts/build-artifact-index.mjs generates a
+    CSP-safe, house-grammar artifacts/index.html (titles from each
+    issue's `feature`), wired into deploy.yml before the copy.
+  - **kernel-chat-site/:** investigated — gitignored, excluded in
+    vitest.config, inert. No action (untracked; left for Isaac to rm).
+- Shipped as branch `fix/editorial-enforcement` (9 evidence-cited
+  commits). Final gate all green (786 tests). Pushed + PR opened.
 
 ## Session 2026-07-19 — `One of One` completed
 

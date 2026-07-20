@@ -51,17 +51,19 @@ export interface InkSeed {
   fit: string
 }
 
-/** The named seeds — 9 anchors the magazine has verified as
+/** The named seeds — 11 anchors the magazine has verified as
  *  POPEYE-safe. Each is magazine-register: earth-grounded,
  *  CMYK-reachable, readable on ivory and ink alike. Issues can
  *  reference by name OR by the seed's hex directly.
  *
- *  Trimmed from an initial 12-seed proposal: terracotta, slate
- *  blue, and ochre were cut — terracotta overlapped brick, slate
- *  blue overlapped cobalt, ochre overlapped kraft (the paper
- *  stock already carries that yellow-brown register). Less is
- *  more; curators get sharper issues when they have fewer but
- *  more distinct choices. */
+ *  The core nine were trimmed from an initial 12-seed proposal:
+ *  terracotta, slate blue, and ochre were cut — terracotta
+ *  overlapped brick, slate blue overlapped cobalt, ochre overlapped
+ *  kraft (the paper stock already carries that yellow-brown
+ *  register). Less is more; curators get sharper issues when they
+ *  have fewer but more distinct choices. Graphite was added later
+ *  (372: THE AUDIT, paired with ledger stock) and celadon after it
+ *  (the Korean-lifestyle 여백 register) — bringing the cabinet to 11. */
 export const INK_SEEDS = {
   // ── warm reds ───────────────────────────────────────────────
   tomato: {
@@ -223,7 +225,8 @@ export function resolveAccentHex(
 }
 
 /* ──────────────────────────────────────────────────────────────
-   POPEYE-safe validator — called at issue-file load time in dev.
+   POPEYE-safe validator — called by auditAccents() at app boot in
+   dev (wired from src/main.tsx behind import.meta.env.DEV).
 
    Rejects values that would read as off-key in the magazine's
    warm, paper-register grammar:
@@ -280,10 +283,11 @@ export function isPopeyeSafe(hex: string): { ok: boolean; reason?: string } {
    Contrast-ratio check — replaces the hand-curated compat matrix.
 
    Given an accent hex and a paper-stock hex, return the WCAG
-   relative-luminance contrast ratio. Values below 3.5 log a
-   dev-time warning ("accent disappears against paper"). This
-   replaces a maintenance-drift compat table with a function that
-   stays accurate as new seeds or stocks are added.
+   relative-luminance contrast ratio. A utility for tooling and
+   tests — NOT an automatic dev gate: the runtime relies on each
+   stock's --issue-accent-lift for legibility, and a raw-hex 3.5
+   threshold would false-positive on the house tomato-on-cream
+   pairing (~3.25:1) that is obviously fine as large spot type.
    ────────────────────────────────────────────────────────────── */
 
 function relativeLuminance(hex: string): number {
@@ -301,9 +305,10 @@ export function contrastRatio(accentHex: string, stockHex: string): number {
   return (a + 0.05) / (b + 0.05)
 }
 
-/** Stock-hex lookup for the five paper stocks. Kept in sync with
- *  the --pop-* tokens in src/index.css. Used by the runtime
- *  warning when an accent × stock pair is under-contrast. */
+/** Stock-hex lookup for the six paper stocks. Kept in sync with
+ *  the --pop-* tokens in src/index.css. Available to contrastRatio()
+ *  for tooling and tests (see the note there — it is not a runtime
+ *  gate). */
 export const STOCK_HEX: Record<'cream' | 'butter' | 'kraft' | 'ivory' | 'ink' | 'ledger', string> = {
   cream: '#F3E9D2',
   butter: '#EFD9A0',
@@ -311,4 +316,50 @@ export const STOCK_HEX: Record<'cream' | 'butter' | 'kraft' | 'ivory' | 'ink' | 
   ivory: '#FAF9F6',
   ink: '#1F1E1D',
   ledger: '#F2EFE2',
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Dev-time accent audit — the guardrail the docblocks above promise.
+
+   Wired from the app entry (src/main.tsx) behind import.meta.env.DEV,
+   so it runs once at boot in development and never enters a
+   production build. For every issue it validates a RAW-HEX accent
+   (accent: '#9E3A2B') with isPopeyeSafe — the one accent path that
+   isn't already curated. Named seeds are trusted (INK_SEEDS is
+   POPEYE-safe by construction); seed-PR review remains their gate.
+
+   Deliberately does NOT auto-check accent×stock contrast: the
+   runtime lifts each accent per stock (--issue-accent-lift), so a
+   raw-hex contrast gate would false-positive on correct issues
+   (tomato-on-cream ~3.25:1, cobalt-on-ink ~2:1). contrastRatio
+   stays a utility for tooling and tests instead.
+
+   Nothing throws — this reports, it does not block. Returns the
+   warnings (also console.warn'd) so it is testable without spying.
+   ────────────────────────────────────────────────────────────── */
+
+/** The structural subset of an issue the accent audit needs. Kept
+ *  local so the audit never has to import the full IssueRecord. */
+export interface AuditableIssue {
+  number: string
+  accent?: IssueAccent
+}
+
+export function auditAccents(issues: AuditableIssue[]): string[] {
+  const warnings: string[] = []
+  for (const issue of issues) {
+    // Only raw-hex accents need validating — named seeds are curated
+    // POPEYE-safe by construction. This arms the raw-hex path that
+    // accents.ts documents (accent: '#9E3A2B').
+    if (issue.accent && !(issue.accent in INK_SEEDS)) {
+      const verdict = isPopeyeSafe(issue.accent)
+      if (!verdict.ok) {
+        warnings.push(
+          `ISSUE ${issue.number}: raw-hex accent "${issue.accent}" is not POPEYE-safe — ${verdict.reason}`,
+        )
+      }
+    }
+  }
+  for (const w of warnings) console.warn(`[accents] ${w}`)
+  return warnings
 }
