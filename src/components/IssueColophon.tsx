@@ -37,13 +37,13 @@ export function IssueColophon({ issue }: IssueColophonProps) {
         <hr className="pop-rule pop-rule--soft" />
 
         <div className="pop-colophon-links">
-          <a href="#/about">About</a>
-          <a href="#/atelier">Made to Order</a>
-          <a href="#/issues">Back Issues</a>
-          <a href="#/figma">Figma Spec</a>
-          <a href="#/refusals">The Refusals</a>
-          <a href="#/privacy">Privacy</a>
-          <a href="#/terms">Terms</a>
+          <a href="/about">About</a>
+          <a href="/atelier">Made to Order</a>
+          <a href="/issues">Back Issues</a>
+          <a href="/figma">Figma Spec</a>
+          <a href="/refusals">The Refusals</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
         </div>
 
         <p className="pop-folio pop-colophon-copy">

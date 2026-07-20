@@ -360,23 +360,29 @@ Browse:
 ## VII. Publishing
 
 **Main is the only publisher.** Pushing to `main` triggers the CI
-deployer (`.github/workflows/deploy.yml`), which type-checks, builds
-with the production secrets, and publishes `dist/` to `gh-pages`
-stamped with the source commit. Live within ~90 seconds.
+deployer (`.github/workflows/deploy.yml`), which runs the law gates,
+type-checks, builds with the production secrets, regenerates the
+sitemap and artifact index, and publishes `dist/` to Cloudflare
+Pages (project `kernel-chat`). Live within ~90 seconds.
 
 ```bash
 git push origin main     # that IS the deploy
 ```
 
-**Verify by provenance, not asset hashes** — CI builds carry env
-secrets a local build lacks, so the same commit produces different
-asset fingerprints in different environments. Check that gh-pages
-was built from your commit:
+**Verify by reading the press, not asset hashes** — CI builds carry
+env secrets a local build lacks, so the same commit produces
+different asset fingerprints in different environments. Check the
+run and the live routes:
 
 ```bash
-git fetch origin gh-pages
-git log FETCH_HEAD --oneline -1   # message reads "deploy: <your main SHA>"
+gh run list --workflow=deploy.yml --limit 1   # completed · success
+curl -s -o /dev/null -w '%{http_code}\n' https://kernel.chat/issues
 ```
+
+Deep links serve real 200s — the SPA fallback is `public/_redirects`
+(`/* /index.html 200`); real files (artifacts, plates, sitemap) are
+served ahead of it. Legacy `/#/…` citations resolve client-side via
+`src/utils/legacyHashRedirect.ts`.
 
 **Emergency re-publish** (CI hiccup, cache poison): re-run the same
 pipeline by hand — `gh workflow run deploy.yml`. There is no other
@@ -384,6 +390,16 @@ path: the manual `npm run deploy` script was **retired** per
 ISSUE 399's own prescription (two uncoordinated writers on one
 target; last write wins). The script now prints a refusal and
 points here.
+
+**Rollback to GitHub Pages** (Cloudflare outage or reversed
+cutover): `gh workflow run deploy-gh-pages.yml`, then point
+kernel.chat DNS back at GitHub Pages. The `gh-pages` branch,
+`public/404.html` hash shim, and `public/CNAME` are kept for exactly
+this path.
+
+**Domain cutover state:** kernel.chat is a custom domain on the
+Cloudflare Pages project; the DNS records point at Pages. The
+GitHub Pages site remains configured but unrouted.
 
 ### If your branch is NOT main
 

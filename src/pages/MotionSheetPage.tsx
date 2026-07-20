@@ -402,7 +402,7 @@ export function MotionSheetPage() {
       </aside>
       <header className="motion-masthead">
         <div className="motion-topline">
-          <a href="#/">kernel.chat</a>
+          <a href="/">kernel.chat</a>
           <span>INTERACTION STUDIES · VOL. I</span>
           <span>JUL 2026 · BYOK</span>
         </div>
@@ -439,7 +439,7 @@ export function MotionSheetPage() {
       <footer className="motion-footer">
         <strong>kernel.chat</strong>
         <p>Motion should reveal structure, reward curiosity, and know when to sit still.</p>
-        <div><span>END OF STUDIES · VOL. I</span><a href="#/">RETURN TO THE MAGAZINE ↗</a></div>
+        <div><span>END OF STUDIES · VOL. I</span><a href="/">RETURN TO THE MAGAZINE ↗</a></div>
       </footer>
     </main>
   )

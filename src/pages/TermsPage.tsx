@@ -75,7 +75,7 @@ export function TermsPage() {
       <p>
         Kernel stores your conversations to provide continuity across sessions. It analyzes your
         messages to build a memory profile, knowledge graph, and multi-agent perception model
-        (see our <a href="#/privacy">Privacy Policy</a> for details on the Convergence system).
+        (see our <a href="/privacy">Privacy Policy</a> for details on the Convergence system).
         This analysis is solely to improve your experience with Kernel.
       </p>
 
@@ -317,7 +317,7 @@ export function TermsPage() {
       <h2>20. Entire Agreement</h2>
 
       <p>
-        These terms, together with the <a href="#/privacy">Privacy Policy</a>, constitute the
+        These terms, together with the <a href="/privacy">Privacy Policy</a>, constitute the
         entire agreement between you and Isaac Hernandez regarding your use of Kernel. These
         terms supersede any prior agreements or understandings, whether written or oral, relating
         to the service.

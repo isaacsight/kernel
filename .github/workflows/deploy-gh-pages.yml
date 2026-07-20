@@ -1,12 +1,15 @@
-name: Deploy to Cloudflare Pages
+name: Rollback deploy to GitHub Pages
 
+# Emergency path only. The press runs on Cloudflare Pages
+# (deploy.yml); this workflow re-publishes to the gh-pages branch by
+# hand if Cloudflare is down or the cutover has to be reversed.
+# Run it, then point kernel.chat DNS back at GitHub Pages.
 on:
-  push:
-    branches: [main]
   workflow_dispatch: {}
 
 permissions:
-  contents: read
+  contents: write
+  pages: write
 
 jobs:
   deploy:
@@ -54,9 +57,10 @@ jobs:
           mkdir -p dist/artifacts
           cp artifacts/*.html dist/artifacts/
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=kernel-chat
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: kernel.chat
+          enable_jekyll: false

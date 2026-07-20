@@ -49,7 +49,7 @@ export function PalmierSuitePage() {
   return (
     <main className="ps-shell">
       <header className="ps-header">
-        <a className="ps-brand" href="#/">PALMIER <span>PRO</span></a>
+        <a className="ps-brand" href="/">PALMIER <span>PRO</span></a>
         <div className="ps-header-meta"><span>Production system</span><span>32 tools</span><span>18 engine adapters</span></div>
       </header>
 

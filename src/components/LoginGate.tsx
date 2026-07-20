@@ -239,9 +239,9 @@ export function LoginGate() {
 
                   <p className="ka-gate-legal">
                     {t('modal.legalAgreement')}{' '}
-                    <a href="#/terms">{t('modal.termsLink')}</a>
+                    <a href="/terms">{t('modal.termsLink')}</a>
                     {' & '}
-                    <a href="#/privacy">{t('modal.privacyLink')}</a>
+                    <a href="/privacy">{t('modal.privacyLink')}</a>
                   </p>
                 </>
               )}

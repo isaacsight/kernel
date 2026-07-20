@@ -28,7 +28,7 @@ test.describe('Authentication', () => {
   })
 
   test('redirects unauthenticated users from protected routes', async ({ page }) => {
-    await page.goto('/#/admin')
+    await page.goto('/admin')
     await page.waitForSelector('.ka-gate, .ka-landing, .engine-body', { timeout: 15000 })
     // Should not show admin page
     const admin = await page.$('.admin-page')

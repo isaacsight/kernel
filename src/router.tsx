@@ -1,9 +1,10 @@
 import { Suspense } from 'react'
-import { createHashRouter, Navigate, useRouteError } from 'react-router-dom'
+import { createBrowserRouter, Navigate, useRouteError } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { KernelLoading } from './components/KernelLoading'
 import { lazyRetry } from './utils/lazyRetry'
+import { resolveLegacyHash } from './utils/legacyHashRedirect'
 
 // Lazy-load pages
 const LandingPage = lazyRetry(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })))
@@ -35,14 +36,23 @@ function RootErrorPage() {
       <h1>Something went wrong</h1>
       <pre>{message}</pre>
       <pre className="pop-error-stack">{error?.stack || JSON.stringify(error, null, 2)}</pre>
-      <button onClick={() => window.location.hash = '#/'}>
+      <button onClick={() => window.location.assign('/')}>
         Go Home
       </button>
     </div>
   )
 }
 
-export const router = createHashRouter([
+// Legacy hash citations (/#/issues/421) must resolve BEFORE the
+// router captures location — module scope runs at import time, ahead
+// of main.tsx's boot sequence. Auth hashes (#access_token=…) are
+// ignored by the resolver and left for the OAuth interceptor.
+const legacyPath = resolveLegacyHash(window.location)
+if (legacyPath) {
+  window.history.replaceState({}, '', legacyPath)
+}
+
+export const router = createBrowserRouter([
   {
     path: '/palmier-suite',
     element: withErrorBoundary(

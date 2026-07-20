@@ -14,7 +14,7 @@ interface PreviouslyStripProps {
  */
 export function PreviouslyStrip({ previous }: PreviouslyStripProps) {
   return (
-    <a href="#/issues" className="pop-previously">
+    <a href="/issues" className="pop-previously">
       <span className="pop-folio">PREVIOUSLY</span>
       <span className="pop-previously-body">
         ISSUE {previous.number} · {previous.month} {previous.year}

@@ -12,6 +12,7 @@
     "lint:adherence": "node scripts/check-adherence.mjs",
     "lint:editorial": "node scripts/check-editorial.mjs",
     "artifacts:index": "node scripts/build-artifact-index.mjs",
+    "sitemap": "node scripts/build-sitemap.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
