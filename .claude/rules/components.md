@@ -45,22 +45,34 @@ MUST:
 2. Respect `prefers-reduced-motion` (the site-wide override in
    `src/index.css` collapses `animation-duration` to 0.01ms)
 3. Be CSS-only — **no JS animation libraries, no Framer Motion, no
-   `requestAnimationFrame`** — with ONE ratified exception, the
-   working-model exception (ISSUE 419), which covers the `plate`
-   (`PlateFeature`), `bore` (`BoreFeature`, ISSUE 420), and
-   `fourier` (`FourierFeature`, ISSUE 421) shapes — and, as
-   amended by ISSUE 422 (the APPARATUS REGISTER, merger ruling),
-   the `audit` (`AuditFeature`) shape, whose whole feature carries
-   the full artifact contract on-site (springs, proximity masks,
-   magnetic dispatch) confined to that feature and meaning-first.
-   Inside those spreads' frames, script may move the model's own
-   signal (a pulse, a probe, a plate drawing itself), under the
-   four constraints in `docs/interaction-language.md` rule 3 as
-   amended: confined to the frame; timer-robust (every step
-   advances via a rAF-vs-setTimeout race, never rAF alone — rAF
-   provably stalls in throttled/background tabs and embedded
-   panes); collapsed by reduced-motion; ambient amplitude even
-   inside the frame (≤4px)
+   `requestAnimationFrame`** — with TWO ratified exceptions:
+   - the working-model exception (ISSUE 419), which covers the
+     `plate` (`PlateFeature`), `bore` (`BoreFeature`, ISSUE 420),
+     and `fourier` (`FourierFeature`, ISSUE 421) shapes — and, as
+     amended by ISSUE 422 (the APPARATUS REGISTER, merger ruling),
+     the `audit` (`AuditFeature`) shape, whose whole feature carries
+     the full artifact contract on-site (springs, proximity masks,
+     magnetic dispatch) confined to that feature and meaning-first.
+     Inside those spreads' frames, script may move the model's own
+     signal (a pulse, a probe, a plate drawing itself), under the
+     four constraints in `docs/interaction-language.md` rule 3 as
+     amended: confined to the frame; timer-robust (every step
+     advances via a rAF-vs-setTimeout race, never rAF alone — rAF
+     provably stalls in throttled/background tabs and embedded
+     panes); collapsed by reduced-motion; ambient amplitude even
+     inside the frame (≤4px)
+   - the walkable-room exception (THE STACKS, `/archive`, 2026-07-20
+     design review): a room is inherently a working model — bodies
+     drift in a WebGL space via `@react-three/fiber`'s `useFrame`.
+     Confined to `src/stacks/` (never spills into a shared
+     component); `prefers-reduced-motion` fully collapses the drift
+     and the scroll-driven camera easing to a static, fully
+     navigable resting layout — same collapse contract as the
+     working-model exception, enforced in React state rather than
+     CSS since the surface is a `<canvas>`; the real DOM ledger
+     beside the canvas is the CSS-only resting structure required by
+     this section and stays present and complete with the canvas
+     layer entirely absent (no WebGL2, JS disabled)
 4. Not trigger layout/repaint hotspots — animate only `opacity` and
    `transform`
 
