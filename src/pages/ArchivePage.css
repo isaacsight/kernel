@@ -44,3 +44,10 @@
 }
 .stacks-ledger a:hover,
 .stacks-ledger a:focus-visible { color: var(--pop-tomato); }
+
+/* One viewport of descent per volume; the ledger scrolls with it.
+   The lockup echoes the canvas layer's room positions. */
+.stacks-volume { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+@media (prefers-reduced-motion: reduce) {
+  .stacks-volume { min-height: 0; }
+}
