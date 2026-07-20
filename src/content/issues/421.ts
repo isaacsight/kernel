@@ -12,6 +12,11 @@
    THE SHAPE (twelfth): `fourier` — the WAVEFORM summation control,
    which summates sine waves, maps constellation phase circles, and
    triggers a local Web Audio synthesis bank.
+
+   Artifact edition (artifact-language.md §V.5): the standalone
+   operable rig is filed at artifacts/421-the-harmonic-series.html —
+   the partial count recast as the depth axis, celadon on ivory,
+   honesty core intact (backfilled 2026-07-20).
    ────────────────────────────────────────────────────────────── */
 
 import type { IssueRecord } from './index'
