@@ -46,10 +46,15 @@ export function Layout() {
   }, [location.pathname])
 
   return (
-    <div className="site-wrapper">
-      <main className="site-main">
-        <Outlet />
-      </main>
-    </div>
+    <>
+      <a className="pop-skip-link" href="#feature-well">
+        Skip to the feature well
+      </a>
+      <div className="site-wrapper">
+        <main className="site-main" id="feature-well" tabIndex={-1}>
+          <Outlet />
+        </main>
+      </div>
+    </>
   )
 }

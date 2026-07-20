@@ -29495,3 +29495,27 @@ h4 {
   }
 }
 
+
+/* ── Skip link — the keyboard reader's shortcut past the masthead ──
+   Off-canvas until focused; surfaces in folio grammar on Tab. */
+.pop-skip-link {
+    position: fixed;
+    top: -100px;
+    left: 16px;
+    z-index: 1000;
+    padding: 12px 18px;
+    background: var(--pop-ink);
+    color: var(--pop-cream);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--pop-tomato);
+    transition: top 120ms ease;
+}
+.pop-skip-link:focus {
+    top: 16px;
+    outline: 2px solid var(--pop-tomato);
+    outline-offset: 2px;
+}

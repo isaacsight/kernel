@@ -594,12 +594,17 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
   appearance: none;
   -webkit-appearance: none;
   background: none;
   border: 0;
-  padding: 0;
+  /* 44px touch target; padding + negative margin keep the optical
+     position of the mark unchanged. */
+  min-height: 44px;
+  padding: 14px 12px;
+  margin: -10px -12px;
+  margin-top: -6px;
+  white-space: nowrap;
   cursor: pointer;
   opacity: 0.6;
   transition: color 0.2s, opacity 0.2s;
