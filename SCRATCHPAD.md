@@ -2571,3 +2571,72 @@ Removed the Canvas page and Creative Studio from the website, replacing it with 
   but does not copy it during build. Deployment now explicitly copies all
   filed `artifacts/*.html` into `dist/artifacts/` before Pages publication;
   this restores the magazine's artifact editions as first-class live files.
+
+## Session 2026-07-19 — kernel.chat web-design skill
+
+- Added the repo-local `.agents/skills/kernel-chat-web-design/` skill so
+  issue design, interaction, motion, artifact work, responsive review, and
+  publishing trigger one kernel.chat-specific operating contract.
+- The 125-line `SKILL.md` routes agents to the five canonical laws instead
+  of duplicating them, then enforces an editorial-sentence-first workflow,
+  identity differentiation, artifact-first rendering, smallest-truthful-
+  apparatus selection, mobile-first composition, premium-paper motion,
+  clean implementation boundaries, and production proof.
+- Added `references/review-rubric.md`: hard gates for editorial truth,
+  system integrity, ARIA interaction, reduced motion, self-contained
+  artifacts, mobile, and deployment; a 30-point craft score; evidence
+  commands; and regression questions drawn from ISSUE 425's real seams.
+- The skill explicitly catches two recent failure modes: repository-root
+  artifacts that work in Vite development but are absent from `dist`, and
+  artifact HTML that references external assets despite the self-contained
+  filing law. It also distinguishes passing CI from live-route proof.
+- UI metadata lives in `agents/openai.yaml`. The official skill validator
+  passed in an isolated `uv` environment with PyYAML; both skill files are
+  under the 500-line progressive-disclosure ceiling and contain no TODOs.
+
+## Session 2026-07-19 — kernel.chat design-skill expansion
+
+- Audited the available design catalog and kept the existing motion stack
+  (`motion-design`, micro-interaction, GSAP, and animation review skills)
+  instead of creating overlapping replacements.
+- Added `.agents/skills/kernel-chat-art-direction/` for the missing pre-code
+  discipline: editorial sentence, material metaphor, dominant composition,
+  cover system, typography, coherent original-media grammar, responsive
+  recomposition, motion intent, and an explicit anti-generic test.
+- Added `.agents/skills/kernel-chat-design-qa/` for post-code proof. Its
+  Playwright runner captures desktop, mobile, reduced-motion, and print
+  evidence; records structure, overflow, missing media, target sizes, and
+  runtime errors; and writes a machine-readable `audit.json` report.
+- Updated `kernel-chat-web-design` to route work through art direction,
+  implementation, specialist motion, and design QA as distinct phases.
+- All three skills passed the official skill validator. A read-only live
+  forward test against ISSUE 425 returned HTTP 200 at 1440px and 390px,
+  zero horizontal overflow, zero broken images, zero runtime errors, and
+  zero active reduced-motion animations. It also reported the 13px-tall
+  Back to top control as a craft-level target-size warning.
+
+## Session 2026-07-19 — design skills exposed to Claude Code
+
+- The three kernel.chat design skills (art-direction, web-design,
+  design-qa) from commit f6cb701d9 lived only in `.agents/skills/` and
+  were invisible to Claude Code. Symlinked them into `.claude/skills/`
+  (commit 23ac1ce03) — one source of truth, both runtimes; harness
+  confirmed pickup mid-session.
+- Independently verified the parallel session's claims: skills read as
+  described, audit-page.mjs parses and RUNS against live ISSUE 425 —
+  zero overflow / broken media, one real flag: "Back to top" control at
+  98x13px (undersized). Spawned a fix task chip for it.
+- Identified but not built: motion-integration skill (house handoff to
+  gsap-*) and cover-as-OG-asset art direction.
+
+## Session 2026-07-19 — ISSUE 426 pressed
+
+- ISSUE 426 "THE WEATHER OVER THE QUEUE" drafted artifact-first and
+  committed (a0d501832): operable dispatch board, seeded sky 426-0719,
+  real 37-row July 19 registry as the floor, forecast spread with five
+  propositions, cobalt on ink, back-cover cyanotype plate. design-qa
+  clean; tsc + build green. Artifact filed private (first-press):
+  https://claude.ai/code/artifact/e8f3e8da-bb6e-4005-88f1-1046bfe7cf8a
+- Site deploy NOT pushed: main is 42 commits behind this branch and
+  push-to-main is the deploy; awaiting Isaac's call on shipping the
+  whole branch.

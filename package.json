@@ -37,7 +37,10 @@
     "video:palmier:qc": "node tools/palmier/qc-export.mjs",
     "video:palmier:master": "node tools/palmier/master-export.mjs",
     "video:palmier:cuts": "node tools/palmier/cut-sheet.mjs",
-    "video:palmier:bed": "node tools/palmier/build-room-bed.mjs"
+    "video:palmier:bed": "node tools/palmier/build-room-bed.mjs",
+    "video:palmier:plan": "node tools/palmier/content-plan.mjs",
+    "video:palmier:suite": "node tools/palmier/suite.mjs",
+    "test:palmier": "npx vitest run tools/palmier/suite.test.mjs"
   },
   "homepage": "https://kernel.chat",
   "dependencies": {
