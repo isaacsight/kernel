@@ -25,6 +25,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Design adherence — no raw hex in the editorial design-system layer
+        run: npm run lint:adherence
+
+      - name: Editorial law — artifact-first, no POPEYE naming, no emoji
+        run: npm run lint:editorial
+
       - name: Type-check
         run: npx tsc --noEmit
 
