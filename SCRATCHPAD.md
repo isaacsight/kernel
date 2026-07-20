@@ -31,8 +31,22 @@
   CSP-clean, celadon-on-ivory, honesty core intact, partials = depth
   axis. Verified in-browser (renders on-grammar, no console errors,
   ledger counts only real actions). Cited it in 421.ts.
-- Final gate green: adherence · editorial (67 issues) · tsc · 16/16
-  accent tests. Nothing committed (Isaac hasn't asked).
+- Then took on the four out-of-scope items too:
+  - **Refactor:** split index.ts (1632 lines) → schema.ts (types) +
+    a 169-line registry; `export * from './schema'` keeps every import
+    unchanged. tsc + full vite build clean.
+  - **Tests:** added registry.test.ts (catalog invariants, 67-issue
+    masthead, accent validity) + feature-render.smoke.test.tsx (16/20
+    components from real data). Suite 498 → 786 passing. The 4
+    canvas/audio shapes (plate/bore/fourier/audit) need jsdom mocks —
+    follow-up.
+  - **Artifacts index:** scripts/build-artifact-index.mjs generates a
+    CSP-safe, house-grammar artifacts/index.html (titles from each
+    issue's `feature`), wired into deploy.yml before the copy.
+  - **kernel-chat-site/:** investigated — gitignored, excluded in
+    vitest.config, inert. No action (untracked; left for Isaac to rm).
+- Shipped as branch `fix/editorial-enforcement` (9 evidence-cited
+  commits). Final gate all green (786 tests). Pushed + PR opened.
 
 ## Session 2026-07-19 — `One of One` completed
 
