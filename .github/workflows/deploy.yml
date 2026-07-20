@@ -44,6 +44,9 @@ jobs:
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
 
+      - name: Build artifact index
+        run: npm run artifacts:index
+
       - name: Include editorial artifacts
         run: |
           mkdir -p dist/artifacts
