@@ -21,6 +21,7 @@ const PrototypePage = lazyRetry(() => import('./pages/PrototypePage').then(m => 
 const CreativeCanvasPage = lazyRetry(() => import('./pages/CreativeCanvasPage').then(m => ({ default: m.CreativeCanvasPage })))
 const MotionSheetPage = lazyRetry(() => import('./pages/MotionSheetPage').then(m => ({ default: m.MotionSheetPage })))
 const PalmierSuitePage = lazyRetry(() => import('./pages/PalmierSuitePage').then(m => ({ default: m.PalmierSuitePage })))
+const AtelierPage = lazyRetry(() => import('./pages/AtelierPage').then(m => ({ default: m.AtelierPage })))
 
 function withErrorBoundary(element: React.ReactNode) {
   return <ErrorBoundary>{element}</ErrorBoundary>
@@ -105,6 +106,11 @@ export const router = createHashRouter([
       { path: 'pressroom', element: withErrorBoundary(
         <Suspense fallback={<div className="ka-page-loading">Loading the pressroom...</div>}>
           <PressroomPage />
+        </Suspense>
+      ) },
+      { path: 'atelier', element: withErrorBoundary(
+        <Suspense fallback={<div className="ka-page-loading">Loading the atelier...</div>}>
+          <AtelierPage />
         </Suspense>
       ) },
       { path: 'about', element: withErrorBoundary(

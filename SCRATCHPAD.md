@@ -2,6 +2,34 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-20 — The Atelier (/atelier)
+
+- Opened the made-to-order desk: kernel.chat now takes commissions for
+  bespoke systems, hardware and software. Named THE ATELIER
+  (オーダーメイド) after deciding "commissions page" was too much
+  brochure and not enough experience.
+- Built `src/pages/AtelierPage.tsx` + `AtelierPage.css` as an
+  experience in the house interaction language: a commission dial
+  (ARIA radiogroup, four positions — Workstation 作業台 / Instrument
+  道具 / Floor 編集部 / Room 部屋), the five stages as a sequence
+  (Letter → Estimate → Deposit → Build → Handover), and a writable
+  commission slip (session-only, unrecorded) that composes the actual
+  mailto letter to hello@kernel.chat. Print stacks all states with
+  per-state running labels.
+- Standing terms on the page: fixed estimate before build (no posted
+  rate card — "the meter tells the truth"), half on commission /
+  balance on handover, client owns everything, BYOK, every handover
+  ships its audit trail. Each build may become an issue feature,
+  anonymized unless the client takes the byline.
+- Route `/atelier` wired in `router.tsx`; browser title in
+  `Layout.tsx`. Verified: `npx tsc --noEmit` clean, `npm run build`
+  clean, Playwright smoke on the preview server (dial, stages, slip,
+  composed mailto, zero page errors).
+- Environment note: `node_modules` needed `npm install
+  --ignore-scripts` in this container — the `canvas` devDependency's
+  prebuilt binary fetch fails and its source build wants cairo.
+  The site build does not need canvas.
+
 ## Session 2026-07-19 — `One of One` completed
 
 - Recovered the interrupted `one-of-one-2027` Palmier production from
