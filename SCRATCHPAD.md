@@ -30,6 +30,13 @@
   --ignore-scripts` in this container — the `canvas` devDependency's
   prebuilt binary fetch fails and its source build wants cairo.
   The site build does not need canvas.
+- Simulated a full visitor journey with Playwright (desktop keyboard
+  navigation of the dial + stages, mobile tap + reflow check) —
+  confirmed dial→subject wiring, zero page errors, no mobile
+  horizontal overflow. Found the page had no on-site discovery path.
+  Added "Made to Order" to `IssueColophon.tsx`'s link row (the shared
+  cover/issue footer) and "MADE TO ORDER →" to `MagazineFrame.tsx`'s
+  inner-page footer, so every surface routes to `/atelier`.
 
 ## Session 2026-07-19 — `One of One` completed
 

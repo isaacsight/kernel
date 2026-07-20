@@ -129,6 +129,9 @@ export function MagazineFrame({
               <a href="#/about" className="pop-folio pop-frame-back pop-frame-back--alt">
                 ABOUT →
               </a>
+              <a href="#/atelier" className="pop-folio pop-frame-back pop-frame-back--alt">
+                MADE TO ORDER →
+              </a>
               <a href="#/issues" className="pop-folio pop-frame-back pop-frame-back--alt">
                 ISSUES →
               </a>
