@@ -2,6 +2,21 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-20 (cont.) — Atelier deposit terms fixed
+
+- After THE ATELIER shipped (PR #59, merged), the user flagged the real
+  problem: "half on commission" doesn't protect against fronting
+  hardware cost on THE WORKSTATION / THE ROOM commissions if parts
+  exceed half the estimate.
+- Split the deposit into two lines everywhere it's described (THE
+  DEPOSIT stage body, the Standing terms list, and the WORKSTATION/
+  ROOM spec sheets): hardware and materials are billed at cost and
+  due before anything is ordered — never fronted; labor stays half
+  on commission / half on handover.
+- Verified with Playwright against the rebuilt preview server: deposit
+  stage body, standing-terms list items, and the workstation spec
+  sheet all render the new copy with zero page errors.
+
 ## Session 2026-07-20 — The Atelier (/atelier)
 
 - Opened the made-to-order desk: kernel.chat now takes commissions for
