@@ -51,3 +51,9 @@
 @media (prefers-reduced-motion: reduce) {
   .stacks-volume { min-height: 0; }
 }
+
+/* .pop-folio hardcodes ink-on-cream; the room is ink-on-ink, so
+   override it here rather than in the shared editorial stylesheet. */
+.stacks-room .pop-folio {
+  color: var(--pop-cream);
+}

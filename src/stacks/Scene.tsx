@@ -52,6 +52,13 @@ function SheetBody({ issue, home, still, onOpen }: {
     return g
   }, [])
 
+  useEffect(() => {
+    return () => {
+      texture.dispose()
+      geometry.dispose()
+    }
+  }, [texture, geometry])
+
   useFrame(({ clock }) => {
     if (!mesh.current) return
     const t = still ? 0 : clock.elapsedTime
