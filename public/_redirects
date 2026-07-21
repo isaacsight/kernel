@@ -1,4 +1,8 @@
 # Cloudflare Pages SPA fallback. Real files in the upload manifest
 # (artifacts/*.html, sitemap.xml, issue plates) are served before this
 # rule applies, so only unmatched paths fall through to the app shell.
-/* /index.html 200
+# Destination is the bare root, not /index.html — Cloudflare's own
+# documented 200-status "Proxying" examples target a path, not a
+# filename, and /index.html directly 308s (its own HTML-normalization
+# redirect), which can prevent the fallback resolving to a final 200.
+/* / 200
