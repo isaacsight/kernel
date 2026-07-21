@@ -42,6 +42,10 @@
       "import": "./dist/adapters/edgar/index.js",
       "types": "./dist/adapters/edgar/index.d.ts"
     },
+    "./adapters/alpaca": {
+      "import": "./dist/adapters/alpaca/index.js",
+      "types": "./dist/adapters/alpaca/index.d.ts"
+    },
     "./exporters/annex-iv": {
       "import": "./dist/exporters/annex-iv.js",
       "types": "./dist/exporters/annex-iv.d.ts"
@@ -54,7 +58,7 @@
     "mcp": "tsx src/cli.ts mcp",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:live": "vitest run --reporter=verbose test/polymarket.live.test.ts",
+    "test:live": "vitest run --reporter=verbose test/polymarket.live.test.ts test/alpaca.live.test.ts",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build && npm test"
   },
@@ -93,6 +97,8 @@
     "audit",
     "mcp",
     "polymarket",
+    "alpaca",
+    "brokerage",
     "compliance-as-code"
   ],
   "dependencies": {

@@ -28,6 +28,7 @@ import {
 } from "./verifier/index.js";
 import { polymarketQuery } from "./tools/polymarket-query.js";
 import { edgarQuery } from "./tools/edgar-query.js";
+import { alpacaQuery } from "./tools/alpaca-query.js";
 import { exportAnnexIv } from "./exporters/annex-iv.js";
 import { writeFile } from "node:fs/promises";
 
@@ -304,6 +305,101 @@ const edgarQueryTool: KbotToolDefinition = {
 };
 
 /**
+ * alpaca_query — read-only access to an Alpaca brokerage account (account
+ * info, positions, order status) via the full kbot-finance audit substrate.
+ * Same wiring shape as polymarket-query.ts / edgar-query.ts. Defaults to
+ * Alpaca's paper-trading endpoint; no order placement in v1 — the AI layer
+ * cannot move money through this tool.
+ */
+const alpacaQueryTool: KbotToolDefinition = {
+  name: "alpaca_query",
+  description:
+    "Query an Alpaca brokerage account — mode=account for account info, mode=positions for all open positions, mode=position_by_symbol for one position, mode=orders for recent order status. Read-only, defaults to the paper-trading endpoint. Requires KBOT_FINANCE_ALPACA_KEY_ID + KBOT_FINANCE_ALPACA_SECRET_KEY (or APCA_API_KEY_ID + APCA_API_SECRET_KEY). AI never places orders through this tool. Audit log at ~/.kbot/audit/polymarket.jsonl.",
+  parameters: {
+    mode: {
+      type: "string",
+      description: "'account', 'positions', 'position_by_symbol', or 'orders'.",
+      required: true,
+    },
+    symbol: {
+      type: "string",
+      description: "Ticker symbol (required when mode='position_by_symbol').",
+    },
+    status: {
+      type: "string",
+      description: "'open', 'closed', or 'all' when mode='orders'. Default 'open'.",
+      default: "open",
+    },
+    limit: {
+      type: "number",
+      description: "Max orders to return when mode='orders'. Default 25.",
+      default: 25,
+    },
+    jurisdiction: {
+      type: "string",
+      description: "Verifier jurisdiction tag (US/EU/UK/SG/HK/UAE/GLOBAL). Default US.",
+      default: "US",
+    },
+  },
+  tier: "free",
+  async execute(args) {
+    try {
+      const mode = args["mode"];
+      if (
+        mode !== "account" &&
+        mode !== "positions" &&
+        mode !== "position_by_symbol" &&
+        mode !== "orders"
+      ) {
+        return `Error: mode must be 'account', 'positions', 'position_by_symbol', or 'orders' (got: ${String(mode)})`;
+      }
+      const symbol = typeof args["symbol"] === "string" ? args["symbol"] : undefined;
+      if (mode === "position_by_symbol" && !symbol) {
+        return "Error: symbol is required when mode='position_by_symbol'";
+      }
+      const status =
+        typeof args["status"] === "string" ? (args["status"] as "open" | "closed" | "all") : "open";
+      const limit = typeof args["limit"] === "number" ? args["limit"] : 25;
+      const jurisdiction =
+        typeof args["jurisdiction"] === "string"
+          ? (args["jurisdiction"] as "US" | "EU" | "UK" | "SG" | "HK" | "UAE" | "GLOBAL")
+          : "US";
+
+      const auditLog = await getAuditLog();
+      const result = await alpacaQuery(
+        {
+          mode,
+          ...(symbol ? { symbol } : {}),
+          status,
+          limit,
+          data_as_of: nowISO(),
+        },
+        {
+          auditLog,
+          rules: defaultRules(),
+          verifierContext: { session_id: sessionId(), state: {}, jurisdiction },
+        },
+      );
+
+      if (!result.ok) {
+        return `Error (${result.stage}): ${JSON.stringify(result.detail, null, 2)}`;
+      }
+
+      const summary = {
+        request_hash: result.response.request_hash,
+        engine_version: result.response.engine_version,
+        produced_at: result.response.produced_at,
+        byte_identical_replayable: result.response.byte_identical_replayable,
+        ...result.response.value,
+      };
+      return JSON.stringify(summary, null, 2);
+    } catch (e) {
+      return `Error: ${(e as Error).message}`;
+    }
+  },
+};
+
+/**
  * annex_iv_export — emit an EU AI Act Annex IV technical-documentation
  * bundle from the audit log. Same artifact satisfies Fed SR 26-02
  * technical documentation. Writes the rendered markdown to disk.
@@ -372,6 +468,7 @@ const annexIvExportTool: KbotToolDefinition = {
 export const kbotFinanceTools: readonly KbotToolDefinition[] = [
   polymarketQueryTool,
   edgarQueryTool,
+  alpacaQueryTool,
   annexIvExportTool,
   auditLogVerifyTool,
 ];

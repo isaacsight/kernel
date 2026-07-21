@@ -20,10 +20,10 @@
 The open-source substrate for AI agents operating in audited environments —
 content-addressed request envelopes, hash-chained append-only audit log,
 jurisdiction-aware regulatory verifier (rules-as-code), MCP server, and
-engine adapters (Polymarket, SEC EDGAR, more coming). The AI Intelligence
-Layer never produces the source-of-truth number — deterministic engines
-do, humans approve at material gates, every action is replayable
-byte-for-byte under audit.
+engine adapters (Polymarket, SEC EDGAR, Alpaca brokerage, more coming). The
+AI Intelligence Layer never produces the source-of-truth number —
+deterministic engines do, humans approve at material gates, every action
+is replayable byte-for-byte under audit.
 
 Apache 2.0. Node 22+. Replit-importable.
 
@@ -48,9 +48,10 @@ A reference implementation of three layers that together form an
 AI-Native Capital Markets Operating System:
 
 1. **Deterministic engine adapters** — call known-good engines (Polymarket
-   Gamma in v0.1; QuantLib, NautilusTrader, Aeron, alts-NAV in later versions).
-   The AI agent cannot compute the number — it can only request one inside a
-   content-addressed envelope.
+   Gamma and SEC EDGAR in v0.1; Alpaca brokerage read-only in v0.2; QuantLib,
+   NautilusTrader, Aeron, alts-NAV in later versions). The AI agent cannot
+   compute the number — it can only request one inside a content-addressed
+   envelope.
 
 2. **Regulatory verifier** — Norm-AI-pattern rules-as-code. Every action
    passes through before reaching the engine. Failures emit adverse-action
@@ -82,9 +83,17 @@ cd packages/kbot-finance
 npm install
 npm run demo        # live end-to-end
 npm test            # unit + integration
-npm run test:live   # explicit live-smoke against Gamma
+npm run test:live   # explicit live-smoke against Gamma + Alpaca (skips Alpaca without keys)
 KBOT_FINANCE_OFFLINE=1 npm test  # CI without network
 ```
+
+The Alpaca adapter needs a free paper-trading key pair
+(`KBOT_FINANCE_ALPACA_KEY_ID` + `KBOT_FINANCE_ALPACA_SECRET_KEY`, or the
+`APCA_API_KEY_ID` / `APCA_API_SECRET_KEY` convention Alpaca's own SDKs use)
+— sign up at [alpaca.markets](https://alpaca.markets). Defaults to the
+paper-trading endpoint; set `KBOT_FINANCE_ALPACA_BASE` to switch to live
+only after a compliance sign-off, per the read-only-unless-signed-off
+pattern this package uses for every brokerage adapter.
 
 ## Architecture (one diagram)
 
@@ -133,8 +142,12 @@ import {
   makeKellyCapRule,
   // Engines
   polymarket,
+  edgar,
+  alpaca,
   // Tools
   polymarketQuery,
+  edgarQuery,
+  alpacaQuery,
 } from "@kernel.chat/kbot-finance";
 ```
 
@@ -181,8 +194,14 @@ src/
       client.ts                  # HTTPS client; never throws across boundary
       commands.ts                # listMarkets / getMarket / listEvents
       index.ts
+    edgar/
+      types.ts / client.ts / commands.ts / index.ts   # SEC filings, read-only
+    alpaca/
+      types.ts / client.ts / commands.ts / index.ts   # brokerage, read-only
   tools/
     polymarket-query.ts          # The kbot-shaped tool wiring all layers
+    edgar-query.ts
+    alpaca-query.ts
   demo.ts                        # End-to-end script (npm run demo)
   index.ts                       # Public surface
 test/
@@ -191,6 +210,7 @@ test/
   verifier.test.ts
   governance.test.ts
   polymarket.live.test.ts        # LIVE SMOKE — hits real Gamma
+  alpaca.live.test.ts            # LIVE SMOKE — hits real Alpaca paper API
 ```
 
 ## Strategic positioning
