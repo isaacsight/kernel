@@ -1,0 +1,4 @@
+# Cloudflare Pages SPA fallback. Real files in the upload manifest
+# (artifacts/*.html, sitemap.xml, issue plates) are served before this
+# rule applies, so only unmatched paths fall through to the app shell.
+/* /index.html 200

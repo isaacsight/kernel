@@ -41,8 +41,8 @@ if (hash && hash.includes('access_token=')) {
     await supabase.auth.setSession({ access_token, refresh_token })
   }
 
-  // Replace hash with clean route so the router works
-  window.history.replaceState({}, '', window.location.pathname + '#/')
+  // Replace hash with the clean path so the router works
+  window.history.replaceState({}, '', window.location.pathname)
 }
 
 // Also handle PKCE ?code= in query params
@@ -58,7 +58,7 @@ if (searchParams.has('code')) {
     } else {
       console.log('[Auth] PKCE exchange success')
       // Only clean URL on success
-      window.history.replaceState({}, '', window.location.pathname + (window.location.hash || '#/'))
+      window.history.replaceState({}, '', window.location.pathname + window.location.hash)
     }
   } catch (err) {
     console.error('[Auth] PKCE exchange threw:', err)
@@ -171,7 +171,7 @@ deferLoad(() => {
       posthog.init(POSTHOG_KEY, {
         api_host: 'https://us.i.posthog.com',
         autocapture: true,
-        capture_pageview: true,
+        capture_pageview: 'history_change',
         persistence: 'localStorage',
       })
     })

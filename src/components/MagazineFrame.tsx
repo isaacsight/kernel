@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ISSUE } from '../content/issue'
 import type { IssueRecord } from '../content/issues'
 import { PopIcon } from './ornaments'
@@ -58,12 +59,13 @@ export function MagazineFrame({
     return () => { document.body.classList.remove('ka-scrollable-page') }
   }, [])
 
+  const navigate = useNavigate()
   const stockClass = `pop-stock-${stock}`
   const issue = issueOverride ?? ISSUE
   const folio = page === undefined ? kicker : `${kicker} · P. ${String(page).padStart(2, '0')}`
 
   const goHome = () => {
-    window.location.hash = '#/'
+    navigate('/')
   }
 
   return (
@@ -126,13 +128,13 @@ export function MagazineFrame({
               >
                 ← BACK TO COVER
               </button>
-              <a href="#/about" className="pop-folio pop-frame-back pop-frame-back--alt">
+              <a href="/about" className="pop-folio pop-frame-back pop-frame-back--alt">
                 ABOUT →
               </a>
-              <a href="#/atelier" className="pop-folio pop-frame-back pop-frame-back--alt">
+              <a href="/atelier" className="pop-folio pop-frame-back pop-frame-back--alt">
                 MADE TO ORDER →
               </a>
-              <a href="#/issues" className="pop-folio pop-frame-back pop-frame-back--alt">
+              <a href="/issues" className="pop-folio pop-frame-back pop-frame-back--alt">
                 ISSUES →
               </a>
             </div>

@@ -2,6 +2,35 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-20 — UX anti-pattern audit → real URLs (PR #62)
+
+- Ran the design-QA audit against live kernel.chat. Editorial surface
+  healthy (no overflow, alt clean, reduced-motion complete, focus
+  visible). The real anti-patterns: (1) artifact index + 421 were
+  404 live (fixed by merging fix/editorial-enforcement → main, now
+  200); (2) every deep link served HTTP 404 → hash bounce; (3) the
+  outline:none / clickable-div debt all sits in UNROUTED legacy
+  surfaces — EnginePage is the parked chat product, not junk.
+- Merge to main taught check-editorial.mjs the documented-exception
+  path: ARTIFACT_WAIVER ("no separate artifact edition" in rendered
+  colophon copy) — 427 uses it legitimately.
+- **PR #62 (`feat/real-urls-cloudflare`)**, three commits:
+  1. createBrowserRouter + legacyHashRedirect.ts (module-scope, BEFORE
+     router creation — the router captures location at import time, a
+     boot-sequence shim renders the wrong route); _redirects; sitemap
+     generator (scripts/build-sitemap.mjs, 77 URLs); PostHog
+     capture_pageview 'history_change'; deploy.yml → Cloudflare Pages
+     (wrangler-action v3, project kernel-chat); deploy-gh-pages.yml
+     rollback; e2e path URLs; PUBLISHING.md §VII rewritten.
+  2. Cut nine dead pages (4,068 lines) incl. PricingPage; engine
+     tree parked, untouched.
+  3. A11y: back-to-top 98×13 → 122×44 (nowrap needed — 40px-wide
+     colophon column wraps padded labels); skip link → #feature-well.
+- **BLOCKED on Isaac before merge:** create CF Pages project
+  `kernel-chat` + repo secrets CLOUDFLARE_API_TOKEN /
+  CLOUDFLARE_ACCOUNT_ID; DNS cutover after pages.dev verifies.
+- Gates at branch head: tsc clean, 794/794 tests, 236KB gzip.
+
 ## Session 2026-07-20 (cont.) — ISSUE 427: THE MOAT IS REALITY
 
 - Pressed ISSUE 427 · FEB 2027 from a reader-supplied transcript of

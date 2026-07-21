@@ -60,7 +60,7 @@ export function IssueArchiveNav({ issue, prev, next, isCurrent = false }: IssueA
           </div>
 
           <div className="pop-archive-nav-cell pop-archive-nav-cell--center">
-            <a href="#/issues" className="pop-folio pop-archive-nav-back">
+            <a href="/issues" className="pop-folio pop-archive-nav-back">
               ALL BACK ISSUES
             </a>
           </div>
