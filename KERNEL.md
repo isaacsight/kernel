@@ -172,6 +172,10 @@ kernel.chat/                        ← repo root
 │   │       ├── 360.ts ... 375.ts   ← every published issue
 │   │       └── …
 │   ├── pages/                      ← routes (IssueDetailPage, EnginePage, …)
+│   ├── stacks/                     ← THE STACKS (/archive): the back catalog
+│   │                                  as a walkable room; bodies resolve in
+│   │                                  bodies.ts (M1 sheets; M2 instruments,
+│   │                                  M3 monuments, M4 scans)
 │   ├── engine/                     ← AI orchestration (when the magazine
 │   │                                  hosts an interactive surface)
 │   └── components/MagazineFrame.tsx← masthead/folio rendering

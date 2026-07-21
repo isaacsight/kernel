@@ -355,6 +355,12 @@ Browse:
 - `/issues/<N-1>` — the prior issue, which now shows as `PREVIOUSLY`
 - Check mobile breakpoint (≤640px) — the cover should still read
 
+The back catalog also stands as THE STACKS at `/archive` — a walkable
+room over the same registry; the flat catalog at `/issues` remains
+first-class. New issues need no extra work to appear there: bodies
+resolve from `ALL_ISSUES` via `src/stacks/bodies.ts`, which is the one
+seam later milestones (instruments, monuments, scans) extend.
+
 ---
 
 ## VII. Publishing
