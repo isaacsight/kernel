@@ -36,4 +36,20 @@ describe('groupIntoVolumes', () => {
     expect(vols[0].labelJp.endsWith('十二月')).toBe(true)   // DEC sorts newest
     expect(vols[11].labelJp.endsWith('一月')).toBe(true)    // JAN sorts oldest
   })
+
+  it('normalizes full-word months to their 3-letter abbreviation (registry has APRIL/JUNE alongside APR/JUN)', () => {
+    const vols = groupIntoVolumes([issue('370', 'APRIL', '2026')])
+    expect(vols[0].label).toBe('APR 2026')
+    expect(vols[0].labelJp).toBe('二〇二六年四月')
+  })
+
+  it('groups a full-word month issue with its abbreviated-month siblings, not into a separate bucket', () => {
+    const vols = groupIntoVolumes([
+      issue('392', 'JUNE', '2026'),
+      issue('395', 'JUN', '2026'),
+    ])
+    expect(vols).toHaveLength(1)
+    expect(vols[0].label).toBe('JUN 2026')
+    expect(vols[0].issues.map((i) => i.number)).toEqual(['395', '392'])
+  })
 })

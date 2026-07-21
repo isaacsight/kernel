@@ -23,8 +23,17 @@ function yearJp(year: string): string {
   return year.split('').map((d) => DIGIT_JP[d] ?? d).join('')
 }
 
+/** The registry is not uniform: most issues carry a 3-letter month
+ *  ('JUL'), but a run of 18 April issues and 2 June issues spell the
+ *  month out in full ('APRIL', 'JUNE'). Every full name's first three
+ *  letters equal the standard abbreviation, so normalize on that
+ *  instead of touching twenty content files. */
+function normalizeMonth(month: string): string {
+  return month.toUpperCase().slice(0, 3)
+}
+
 function monthIndex(month: string): number {
-  return MONTH_ORDER.indexOf(month.toUpperCase())
+  return MONTH_ORDER.indexOf(normalizeMonth(month))
 }
 
 export function groupIntoVolumes(issues: IssueRecord[]): Volume[] {
@@ -41,7 +50,7 @@ export function groupIntoVolumes(issues: IssueRecord[]): Volume[] {
       const sorted = [...group].sort((a, b) => Number(b.number) - Number(a.number))
       const { month, year } = sorted[0]
       return {
-        label: `${month.toUpperCase()} ${year}`,
+        label: `${normalizeMonth(month)} ${year}`,
         labelJp: `${yearJp(year)}年${MONTH_JP[monthIndex(month)]}`,
         issues: sorted,
       }
