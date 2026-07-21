@@ -1,8 +1,27 @@
-# Cloudflare Pages SPA fallback. Real files in the upload manifest
-# (artifacts/*.html, sitemap.xml, issue plates) are served before this
-# rule applies, so only unmatched paths fall through to the app shell.
-# Destination is the bare root, not /index.html — Cloudflare's own
-# documented 200-status "Proxying" examples target a path, not a
-# filename, and /index.html directly 308s (its own HTML-normalization
-# redirect), which can prevent the fallback resolving to a final 200.
-/* / 200
+# Cloudflare Pages SPA fallback.
+#
+# Deliberately NOT a blanket `/* / 200` — on this deployment that
+# wildcard intercepted /assets/*.js and /assets/*.css too (verified:
+# the hashed bundle requests returned the SPA shell's text/html
+# instead of the real file, even though the files were confirmed
+# present in the upload manifest and the rule itself was confirmed
+# registered by Cloudflare). Enumerating every real app route instead
+# means /assets/* and other real static paths never touch a
+# _redirects rule at all and fall straight through to normal static
+# serving. Keep this list in sync with src/router.tsx.
+/palmier-suite    / 200
+/motion-sheet     / 200
+/canvas-creative  / 200
+/studio           / 200
+/issues           / 200
+/issues/*         / 200
+/archive          / 200
+/launch/*         / 200
+/refusals         / 200
+/pressroom        / 200
+/atelier          / 200
+/about            / 200
+/figma            / 200
+/prototype        / 200
+/privacy          / 200
+/terms            / 200
