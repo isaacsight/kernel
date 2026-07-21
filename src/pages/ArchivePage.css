@@ -1,0 +1,59 @@
+/* src/pages/ArchivePage.css — THE STACKS room chrome.
+   Tokens only; the dark ground is the ink stock. */
+.stacks-room {
+  position: relative;
+  min-height: 100vh;
+  background: var(--pop-ink);
+  color: var(--pop-cream);
+}
+.stacks-room canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+.stacks-masthead {
+  position: relative;
+  z-index: 2;
+  padding: 24px;
+}
+.stacks-masthead a { color: var(--pop-cream); }
+.stacks-ledger {
+  position: relative;
+  z-index: 2;
+  max-width: 420px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.stacks-volume-lockup {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.stacks-ledger ul { list-style: none; margin: 0; padding: 0; }
+.stacks-ledger a {
+  display: inline-block;
+  padding: 8px 0;
+  color: var(--pop-cream);
+  text-decoration: none;
+}
+.stacks-ledger a:hover,
+.stacks-ledger a:focus-visible { color: var(--pop-tomato); }
+
+/* One viewport of descent per volume; the ledger scrolls with it.
+   The lockup echoes the canvas layer's room positions. */
+.stacks-volume { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+@media (prefers-reduced-motion: reduce) {
+  .stacks-volume { min-height: 0; }
+}
+
+/* .pop-folio hardcodes ink-on-cream; the room is ink-on-ink, so
+   override it here rather than in the shared editorial stylesheet. */
+.stacks-room .pop-folio {
+  color: var(--pop-cream);
+}

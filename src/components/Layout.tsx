@@ -28,6 +28,7 @@ function titleForPath(pathname: string): string {
         : `${issueLabel(param)} · kernel.chat`
     case 'launch':
       return `${issueLabel(param)} · Launch · kernel.chat`
+    case 'archive': return 'The Stacks · kernel.chat'
     case 'refusals': return 'Refusals · kernel.chat'
     case 'pressroom': return 'The Pressroom · kernel.chat'
     case 'about': return 'About · kernel.chat'

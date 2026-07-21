@@ -2,6 +2,53 @@
 
 > This file persists context between Claude Code sessions.
 
+## Session 2026-07-20 (cont.) — THE STACKS M1 ships (feat/the-stacks)
+
+- Isaac showed the SUKIMA project (claygarden.jp/series) — floating
+  scanned-clay objects in a dark void, scroll-descent into bilingual
+  spreads — and asked for the equivalent on kernel.chat. Brainstormed
+  to a spec (docs/superpowers/specs/2026-07-20-the-stacks-design.md):
+  a new room at `/archive`, volumes grouped by cover month, four body
+  kinds resolved by one seam (`bodyFor`) — sheets now, instruments/
+  monuments/scans in M2–M4. Planned as 7 TDD tasks
+  (docs/superpowers/plans/2026-07-20-the-stacks-m1.md), executed via
+  subagent-driven-development on branch `feat/the-stacks` (based on
+  PR #62's real-URLs branch — the room assumes real paths).
+- **Motion-law conflict, resolved by Isaac:** the drifting bodies need
+  rAF (`useFrame`), but `.claude/rules/components.md` restricts the
+  editorial surface to CSS-only motion except a named exception list.
+  Isaac's call: ratify a new "walkable-room exception" alongside the
+  existing plate/bore/fourier/audit one — same collapse contract
+  (reduced-motion → static, fully navigable), confined to
+  `src/stacks/`. Committed to the rules file before Task 5.
+- **Two real bugs caught by review, not by me:** (1) PR #62's
+  `deploy.yml`/`package.json` referenced `scripts/build-sitemap.mjs`,
+  but the file was never actually git-added — sat untracked on disk
+  from the earlier session. Would have broken CI. Fixed directly on
+  `feat/real-urls-cloudflare` (commit 758813af6). (2) The issue
+  registry isn't uniformly abbreviated — 18 issues spell out `'APRIL'`
+  and 2 spell out `'JUNE'` instead of the 3-letter form every other
+  issue uses. `volumes.ts`'s month lookup assumed uniformity, so
+  ~20 issues (a third of the catalog) got broken JP labels and
+  miskeyed grouping buckets. Task 6's design-QA audit surfaced it
+  (`"JUNE 2026二〇二六年undefined"`); fixed by normalizing on the
+  first 3 letters rather than touching 20 content files, with 2
+  regression tests. Verified against all 68 real issues: zero
+  `undefined`/`NaN` in any label.
+- Shipped: `src/stacks/{volumes,bodies,coverPainter,coverTheme,
+  webgl,Scene}.ts`, `src/pages/ArchivePage.{tsx,css}`, e2e coverage,
+  colophon entry link. r3f/@react-three/three confined to the lazy
+  `/archive` chunk — main bundle held at 236.42KB gzip (budget
+  300KB), independently confirmed by grepping the built output for
+  three.js symbols (zero in the main chunk).
+- Gates at close: adherence + editorial clean, tsc clean, 810/810
+  tests, e2e 4/4, design-QA audit clean on `/archive` (desktop +
+  mobile). M2 (instruments), M3 (monuments), M4 (first scan — KERNEL
+  PRESS Edition №001) remain, per the spec's milestone sequence.
+- Still blocked on Isaac for PR #62 (unrelated to this branch): create
+  Cloudflare Pages project `kernel-chat` + 2 repo secrets, then DNS
+  cutover.
+
 ## Session 2026-07-20 — UX anti-pattern audit → real URLs (PR #62)
 
 - Ran the design-QA audit against live kernel.chat. Editorial surface
