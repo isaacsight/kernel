@@ -27,6 +27,8 @@ export * from "./governance.js";
 export * from "./verifier/index.js";
 export * as polymarket from "./adapters/polymarket/index.js";
 export * as edgar from "./adapters/edgar/index.js";
+export * as alpaca from "./adapters/alpaca/index.js";
 export * from "./tools/polymarket-query.js";
 export * from "./tools/edgar-query.js";
+export * from "./tools/alpaca-query.js";
 export * from "./exporters/annex-iv.js";

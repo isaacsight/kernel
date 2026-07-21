@@ -30,6 +30,7 @@ Which part of the package?
 - [ ] Regulatory verifier (`src/verifier/`)
 - [ ] Polymarket adapter
 - [ ] SEC EDGAR adapter
+- [ ] Alpaca brokerage adapter
 - [ ] MCP server (`src/mcp-server.ts`)
 - [ ] kbot integration (`src/kbot-tool.ts`)
 - [ ] Annex IV exporter (`src/exporters/annex-iv.ts`)

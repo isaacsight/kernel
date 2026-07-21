@@ -20,6 +20,7 @@ describe("kbot-finance tool registry surface", () => {
   it("exports the v0.2 tool set", () => {
     const names = kbotFinanceTools.map((t) => t.name).sort();
     expect(names).toEqual([
+      "alpaca_query",
       "annex_iv_export",
       "audit_log_verify",
       "edgar_query",
@@ -49,6 +50,23 @@ describe("kbot-finance tool registry surface", () => {
     const r = await tool.execute({ mode: "by_id" });
     expect(r.startsWith("Error:")).toBe(true);
     expect(r).toContain("market_id is required");
+  });
+
+  it("alpaca_query rejects invalid mode with a clear Error message", async () => {
+    const tool = kbotFinanceTools.find((t) => t.name === "alpaca_query");
+    expect(tool).toBeDefined();
+    if (!tool) return;
+    const r = await tool.execute({ mode: "nonsense" });
+    expect(r.startsWith("Error:")).toBe(true);
+    expect(r).toContain("mode must be");
+  });
+
+  it("alpaca_query requires symbol when mode=position_by_symbol", async () => {
+    const tool = kbotFinanceTools.find((t) => t.name === "alpaca_query");
+    if (!tool) return;
+    const r = await tool.execute({ mode: "position_by_symbol" });
+    expect(r.startsWith("Error:")).toBe(true);
+    expect(r).toContain("symbol is required");
   });
 
   it("audit_log_verify reports ok on a fresh log path", async () => {
