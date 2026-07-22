@@ -43,9 +43,10 @@
     "video:palmier:cuts": "node tools/palmier/cut-sheet.mjs",
     "video:palmier:bed": "node tools/palmier/build-room-bed.mjs",
     "video:palmier:plan": "node tools/palmier/content-plan.mjs",
+    "video:compile-shots": "node tools/shot-compiler.mjs",
     "video:palmier:suite": "node tools/palmier/suite.mjs",
     "test:palmier": "npx vitest run tools/palmier/suite.test.mjs",
-    "test:cinematic": "npx vitest run tools/cinematic-storyboard.test.mjs"
+    "test:cinematic": "npx vitest run tools/cinematic-storyboard.test.mjs tools/shot-compiler.test.mjs"
   },
   "homepage": "https://kernel.chat",
   "dependencies": {

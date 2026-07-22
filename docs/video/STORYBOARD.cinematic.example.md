@@ -5,6 +5,13 @@ arc: Signal → Pursuit → Refusal → Transformation → Proof → Quiet
 audience: kernel.chat readers and creative-tool builders
 mode: autonomous
 rhythm: impact → pursuit → stillness → transformation → proof → hold
+visual_world: "Cinematic macro paper-craft noir with tangible fibers, warm practical light, deep ink shadow, and one tomato-red signal"
+continuity_subject: "The same small tomato-red folded-paper animal, sharp triangular ears, one white paper eye, no anatomy changes"
+continuity_location: "One coherent nocturnal paper city connected to the same warm workshop"
+palette: "Ivory paper, brown-black ink, tomato red, and warm practical amber only"
+material: "Hand-cut paper with visible fibers, crisp folds, miniature practical construction"
+lens_family: "Anamorphic macro family with shallow depth of field and consistent oval bokeh"
+candidates: 4
 ---
 
 ## Frame 1 — The signal escapes

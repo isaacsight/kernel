@@ -115,3 +115,23 @@ npm run lint:cinematic -- path/to/STORYBOARD.md
 The gate rejects missing shot fields, cinematic frames made only from layout reveals, and films without a cinematic/hybrid majority. Warnings identify weak camera verbs and incomplete depth plans.
 
 The lint is intentionally semantic and conservative. Passing it does not make a shot good. Failing it means the plan has not yet described a shot.
+
+## Compile
+
+Once the gate passes, compile the storyboard into an executable production plan:
+
+```bash
+npm run video:compile-shots -- path/to/STORYBOARD.md --output=shot-plan.json
+```
+
+The compiler adds the layer that a preset picker cannot:
+
+- film-wide subject, location, palette, material, and lens locks;
+- per-shot routing between generated video and deterministic HyperFrames work;
+- separate keyframe and motion prompts;
+- four deliberately different candidates instead of four accidental retries;
+- hard-reject criteria followed by a 100-point selection rubric;
+- estimated batch cost with both keyframe and paid-generation approval gates intact;
+- a finishing handoff for the selected shot.
+
+The output is a local JSON plan. Compilation never submits a paid request. A generation runner may consume the plan later, but it must preserve the existing explicit cost-confirm contract.
