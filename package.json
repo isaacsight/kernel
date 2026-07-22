@@ -11,6 +11,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:adherence": "node scripts/check-adherence.mjs",
     "lint:editorial": "node scripts/check-editorial.mjs",
+    "lint:cinematic": "node tools/cinematic-storyboard.mjs",
     "artifacts:index": "node scripts/build-artifact-index.mjs",
     "sitemap": "node scripts/build-sitemap.mjs",
     "preview": "vite preview",
@@ -43,7 +44,8 @@
     "video:palmier:bed": "node tools/palmier/build-room-bed.mjs",
     "video:palmier:plan": "node tools/palmier/content-plan.mjs",
     "video:palmier:suite": "node tools/palmier/suite.mjs",
-    "test:palmier": "npx vitest run tools/palmier/suite.test.mjs"
+    "test:palmier": "npx vitest run tools/palmier/suite.test.mjs",
+    "test:cinematic": "npx vitest run tools/cinematic-storyboard.test.mjs"
   },
   "homepage": "https://kernel.chat",
   "dependencies": {
