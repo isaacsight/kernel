@@ -135,3 +135,23 @@ The compiler adds the layer that a preset picker cannot:
 - a finishing handoff for the selected shot.
 
 The output is a local JSON plan. Compilation never submits a paid request. A generation runner may consume the plan later, but it must preserve the existing explicit cost-confirm contract.
+
+## Creative graph
+
+The shot plan can become a reusable GALLEY canvas workflow:
+
+```bash
+npm run video:compile-graph -- path/to/STORYBOARD.md --output=creative-graph.json
+```
+
+This incorporates the strongest idea from node-based creative environments—models as inspectable steps—while adding production guarantees that a general canvas does not provide automatically:
+
+- every node carries typed lineage back to its brief, shot, continuity source, batch, cost, and approval state;
+- generated shots expand into approved keyframe → candidate batch → blind critic → selected take;
+- the critic sees the work and rubric, not the model brand, limiting reputation bias;
+- rejected candidates remain attached to the decision instead of disappearing from history;
+- deterministic and generated shots coexist in the same directed acyclic graph;
+- sound direction joins the master as a first-class dependency;
+- the final master requires a receipt containing sources, prompts, routes, costs, rejections, scores, and approvals.
+
+The graph uses the existing Creative Canvas node contract and can be loaded through its external state bridge. Its audit rejects cycles, dangling links, missing lineage, missing batch members, and masters without a receipt policy.

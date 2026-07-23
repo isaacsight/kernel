@@ -136,6 +136,22 @@ interface StudioNode {
   videoUrl?: string
   result?: string
   status?: 'idle' | 'running' | 'done' | 'error'
+  lineage?: {
+    role: string
+    origin?: string
+    shotId?: string
+    continuitySource?: string
+    batchId?: string
+    candidateId?: string
+    candidateIndex?: number
+    estimatedUsd?: number
+    approval?: string
+    immutable?: boolean
+    blindToModel?: boolean
+    threshold?: number
+    receiptRequired?: boolean
+    [key: string]: unknown
+  }
 }
 
 interface StudioEdge {
@@ -277,6 +293,7 @@ interface ExternalCanvasState {
     imageUrl?: string
     result?: string
     status?: StudioNode['status']
+    lineage?: StudioNode['lineage']
     data?: { value?: string; agentId?: string; modelId?: string; output?: string }
   }>
   edges?: Array<{ id: string; from?: string; to?: string; fromNode?: string; toNode?: string }>
@@ -316,6 +333,7 @@ function normalizeExternalState(state: ExternalCanvasState): { nodes: StudioNode
       imageUrl: node.imageUrl,
       result: node.result ?? node.data?.output,
       status: node.status ?? 'idle',
+      lineage: node.lineage,
     }
   })
   const edges = state.edges
